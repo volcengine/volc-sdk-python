@@ -10,6 +10,7 @@ from volc.Policy import SecurityToken2, InnerToken, ComplexEncoder
 from volc.auth.SignerV4 import SignerV4
 from volc.base.Request import Request
 from volc.util.Util import *
+from volc import VERSION
 
 
 class Service(object):
@@ -149,6 +150,7 @@ class Service(object):
 
         mheaders = self.merge(api_info.header, self.service_info.header)
         mheaders['Host'] = self.service_info.host
+        mheaders['User-Agent'] = 'volc-sdk-python/' + VERSION        
         r.set_headers(mheaders)
 
         mquery = self.merge(api_info.query, params)
