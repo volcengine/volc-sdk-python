@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
-from ttvcloud.iam.IamService import IamService
+from volc.iam.IamService import IamService
 
 if __name__ == '__main__':
     iam_service = IamService()
@@ -9,7 +9,7 @@ if __name__ == '__main__':
     # call below method if you dont set ak and sk in $HOME/.vcloud/config
     iam_service.set_ak('ak')
     iam_service.set_sk('sk')
-    iam_service.set_host('host')
+    iam_service.set_host('hosts')
 
     params = dict()
     params['Limit'] = 5

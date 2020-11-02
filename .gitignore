@@ -4,3 +4,4 @@ venv/
 build/
 dist/
 ttvcloud.egg-info/
+volc.egg-info/

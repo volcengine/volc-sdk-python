@@ -3,15 +3,15 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="ttvcloud",
+    name="volc",
     version="0.0.31",
-    keywords=("pip", "ttvcloud", "vcloud-sdk-python"),
-    description="The TTvcloud SDK for Python",
+    keywords=("pip", "volc", "volc-sdk-python"),
+    description="The Volcengine SDK for Python",
     license="MIT Licence",
 
-    url="https://github.com/TTvcloud/vcloud-sdk-python",
+    url="https://github.com/Volcengine/volc-sdk-python",
     author="TTVcloud SDK",
-    author_email="vcloudplatform@bytedance.com",
+    author_email="volcplatform@bytedance.com",
 
     packages=find_packages(),
     include_package_data=True,

@@ -6,10 +6,10 @@ from collections import OrderedDict
 
 import requests
 
-from ttvcloud.Policy import SecurityToken2, InnerToken, ComplexEncoder
-from ttvcloud.auth.SignerV4 import SignerV4
-from ttvcloud.base.Request import Request
-from ttvcloud.util.Util import *
+from volc.Policy import SecurityToken2, InnerToken, ComplexEncoder
+from volc.auth.SignerV4 import SignerV4
+from volc.base.Request import Request
+from volc.util.Util import *
 
 
 class Service(object):
