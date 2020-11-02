@@ -10,7 +10,7 @@ setup(
     license="MIT Licence",
 
     url="https://github.com/Volcengine/volc-sdk-python",
-    author="TTVcloud SDK",
+    author="Volcengine SDK",
     author_email="volcplatform@bytedance.com",
 
     packages=find_packages(),
