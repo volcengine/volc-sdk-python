@@ -12,7 +12,6 @@ except:
 from volc.auth.MetaData import MetaData
 from volc.util.Util import Util
 
-
 class SignerV4(object):
     @staticmethod
     def sign(request, credentials):
@@ -59,7 +58,6 @@ class SignerV4(object):
         query['X-Algorithm'] = md.algorithm
         query['X-SignedHeaders'] = md.signed_headers
         query['X-SignedQueries'] = ''
-
         query['X-SignedQueries'] = ';'.join(sorted(query.keys()))
 
         hashed_canon_req = SignerV4.hashed_simple_canonical_request_v4(request, md)
