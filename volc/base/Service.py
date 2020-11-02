@@ -20,14 +20,14 @@ class Service(object):
         self.init()
 
     def init(self):
-        if 'VCLOUD_ACCESSKEY' in os.environ and 'VCLOUD_SECRETKEY' in os.environ:
-            self.service_info.set_ak(os.environ['VCLOUD_ACCESSKEY'])
-            self.service_info.set_sk(os.environ['VCLOUD_SECRETKEY'])
+        if 'VOLC_ACCESSKEY' in os.environ and 'VOLC_SECRETKEY' in os.environ:
+            self.service_info.set_ak(os.environ['VOLC_ACCESSKEY'])
+            self.service_info.set_sk(os.environ['VOLC_SECRETKEY'])
         else:
             if os.environ.get('HOME', None) is None:
                 return
 
-            path = os.environ['HOME'] + '/.vcloud/config'
+            path = os.environ['HOME'] + '/.volc/config'
             if os.path.isfile(path):
                 with open(path, 'r') as f:
                     j = json.load(f)
