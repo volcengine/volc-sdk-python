@@ -1,0 +1,6 @@
+*.pyc
+venv/
+.idea/
+build/
+dist/
+ttvcloud.egg-info/
