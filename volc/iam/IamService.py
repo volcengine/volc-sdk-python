@@ -2,10 +2,10 @@
 import json
 import threading
 
-from ttvcloud.ApiInfo import ApiInfo
-from ttvcloud.Credentials import Credentials
-from ttvcloud.base.Service import Service
-from ttvcloud.ServiceInfo import ServiceInfo
+from volc.ApiInfo import ApiInfo
+from volc.Credentials import Credentials
+from volc.base.Service import Service
+from volc.ServiceInfo import ServiceInfo
 
 
 class IamService(Service):
