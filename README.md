@@ -3,12 +3,12 @@
 require python verion >= 2.7
 
 ```
-    pip install --user ttvcloud
+    pip install --user volc
 ```
 
-如果已经安装ttvcloud包，则用下面命令升级即可
+如果已经安装volc包，则用下面命令升级即可
 ```
-    pip install --upgrade ttvcloud
+    pip install --upgrade volc
 ```
 
 
