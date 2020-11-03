@@ -78,8 +78,14 @@ class Service(object):
         if resp.status_code == 200:
             return resp.text
         else:
-            return ''
-
+            raise Exception(resp.text)
+    
+    def encodeForm(self, form):
+        values = []
+        for key in form:
+            values.append(key + '=' + form[key])
+        return '&'.join(values)
+    
     def post(self, api, params, form):
         if not (api in self.api_info):
             raise Exception("no such api")
@@ -87,16 +93,17 @@ class Service(object):
         r = self.prepare_request(api_info, params)
         r.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         r.form = self.merge(api_info.form, form)
-
+        r.body = self.encodeForm(r.form)
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
-        resp = self.session.post(url, headers=r.headers, data=r.form,
+        
+        resp = self.session.post(url, headers=r.headers, data=r.body,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
             return resp.text
         else:
-            return ''
+            raise Exception(resp.text)
 
     def json(self, api, params, body):
         if not (api in self.api_info):
@@ -111,10 +118,11 @@ class Service(object):
         url = r.build()
         resp = self.session.post(url, headers=r.headers, data=r.body,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
+        print(resp)
         if resp.status_code == 200:
             return json.dumps(resp.json())
         else:
-            return ''
+            raise Exception(resp.text)
 
     def put(self, url, file_path, headers):
         with open(file_path, 'rb') as f:
