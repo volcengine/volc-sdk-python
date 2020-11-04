@@ -82,12 +82,6 @@ class Service(object):
         else:
             raise Exception(resp.text)
     
-    def encodeForm(self, form):
-        values = []
-        for key in form:
-            values.append(key + '=' + form[key])
-        return '&'.join(values)
-    
     def post(self, api, params, form):
         if not (api in self.api_info):
             raise Exception("no such api")
