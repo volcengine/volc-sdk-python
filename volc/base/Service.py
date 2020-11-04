@@ -12,6 +12,8 @@ from volc.base.Request import Request
 from volc.util.Util import *
 from volc import VERSION
 
+from urllib.parse import urlencode
+
 
 class Service(object):
     def __init__(self, service_info, api_info):
@@ -93,12 +95,12 @@ class Service(object):
         r = self.prepare_request(api_info, params)
         r.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         r.form = self.merge(api_info.form, form)
-        r.body = self.encodeForm(r.form)
+        r.body = urlencode(r.form)
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
         
-        resp = self.session.post(url, headers=r.headers, data=r.body,
+        resp = self.session.post(url, headers=r.headers, data=r.form,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
             return resp.text
@@ -117,8 +119,7 @@ class Service(object):
 
         url = r.build()
         resp = self.session.post(url, headers=r.headers, data=r.body,
-                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
-        print(resp)
+                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))        
         if resp.status_code == 200:
             return json.dumps(resp.json())
         else:
