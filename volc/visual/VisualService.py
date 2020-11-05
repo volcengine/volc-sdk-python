@@ -25,7 +25,7 @@ class VisualService(Service):
 
     @staticmethod
     def get_service_info():
-        service_info = ServiceInfo("volcengineapi-boe.byted.org", {},
+        service_info = ServiceInfo("open.volcengineapi.com", {},
                                    Credentials('', '', 'cv', 'cn-north-1'), 10, 10)
         return service_info
 
