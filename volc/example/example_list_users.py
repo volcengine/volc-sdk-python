@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
     # call below method if you dont set ak and sk in $HOME/.volc/config
     iam_service.set_ak('ak')
-    iam_service.set_sk('sk')    
+    iam_service.set_sk('sk')     
 
     params = dict()
     params['Limit'] = 5
