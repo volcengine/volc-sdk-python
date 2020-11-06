@@ -21,8 +21,8 @@ class Service(object):
 
     def init(self):
         if 'VCLOUD_ACCESSKEY' in os.environ and 'VCLOUD_SECRETKEY' in os.environ:
-            self.service_info.set_ak(os.environ['VCLOUD_ACCESSKEY'])
-            self.service_info.set_sk(os.environ['VCLOUD_SECRETKEY'])
+            self.service_info.credentials.set_ak(os.environ['VCLOUD_ACCESSKEY'])
+            self.service_info.credentials.set_sk(os.environ['VCLOUD_SECRETKEY'])
         else:
             if os.environ.get('HOME', None) is None:
                 return

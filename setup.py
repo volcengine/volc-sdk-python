@@ -16,5 +16,5 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     platforms="any",
-    install_requires=["requests", "pytz", "pycryptodome"]
+    install_requires=["requests", "pytz", "pycryptodome", "protobuf", "google-api-python-client"]
 )
