@@ -31,13 +31,13 @@ class VodService(Service):
     @staticmethod
     def get_service_info(region):
         service_info_map = {
-            # 'cn-north-1': ServiceInfo("vod.bytedanceapi.com", {'Accept': 'application/json'},
+            # 'cn-north-1': ServiceInfo("vod.volcengineapi.com", {'Accept': 'application/json'},
             #                           Credentials('', '', 'vod', 'cn-north-1'), 5, 5),
-            'cn-north-1': ServiceInfo("staging-openapi-boe.byted.org", {'Accept': 'application/json'},
+            'cn-north-1': ServiceInfo("volcengineapi-boe.byted.org", {'Accept': 'application/json'},
                                       Credentials('', '', 'vod', 'cn-north-1'), 5, 5),
-            'ap-singapore-1': ServiceInfo("vod.ap-singapore-1.bytedanceapi.com", {'Accept': 'application/json'},
+            'ap-singapore-1': ServiceInfo("vod.ap-singapore-1.volcengineapi.com", {'Accept': 'application/json'},
                                           Credentials('', '', 'vod', 'ap-singapore-1'), 5, 5),
-            'us-east-1': ServiceInfo("vod.us-east-1.bytedanceapi.com", {'Accept': 'application/json'},
+            'us-east-1': ServiceInfo("vod.us-east-1.volcengineapi.com", {'Accept': 'application/json'},
                                      Credentials('', '', 'vod', 'us-east-1'), 5, 5),
         }
         service_info = service_info_map.get(region, None)

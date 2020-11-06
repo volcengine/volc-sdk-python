@@ -22,7 +22,7 @@ from volc.models.vod.response.response_vod_pb2 import *
 
 
 #
-# Generated from protobuf service <code>Vcloud.Service.Vod.VodPlayService</code>
+# Generated from protobuf service <code>VodPlayService</code>
 #
 class VodPlayService(VodService):
 
@@ -33,16 +33,19 @@ class VodPlayService(VodService):
     # @return VodGetPlayInfoResponse
     # @raise Exception
     def get_play_info(self, request: VodGetPlayInfoRequest) -> VodGetPlayInfoResponse:
-        
         try:
-            params = dict()
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
             res = self.get("GetPlayInfo", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetPlayInfoResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
             return Parse(res, VodGetPlayInfoResponse(), True)
-        except Exception:
-            Parse(res, VodGetPlayInfoResponse(), True)
-            raise
 
     #
     # GetOriginalPlayInfo.
@@ -52,14 +55,17 @@ class VodPlayService(VodService):
     # @raise Exception
     def get_original_play_info(self, request: VodGetOriginalPlayInfoRequest) -> VodGetOriginalPlayInfoResponse:
         try:
-            params = dict()
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
             res = self.get("GetOriginalPlayInfo", params)
-            if res == '':
-                raise Exception("InternalError")
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetOriginalPlayInfoResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
             return Parse(res, VodGetOriginalPlayInfoResponse(), True)
-        except Exception:
-            raise
 
 # end of service interface

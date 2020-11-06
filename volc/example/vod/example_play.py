@@ -24,20 +24,20 @@ if __name__ == '__main__':
         else:
             print(resp.ResponseMetadata.Error)
     print('*' * 100)
-
-    try:
-        vid = 'v0c2c369007abu04ru8riko30uo9n73g'
-        req2 = VodGetOriginalPlayInfoRequest()
-        req2.Vid = vid
-        req2.Ssl = '1'
-        resp2 = vod_service.get_original_play_info(req2)
-    except Exception:
-        raise
-    else:
-        print(resp2)
-        if resp2.ResponseMetadata.Error.Code == '':
-            print(resp2.Result.MainPlayUrl)
-        else:
-            print(resp2.ResponseMetadata.Error)
-
-    print('*' * 100)
+    #
+    # try:
+    #     vid = 'v0c2c369007abu04ru8riko30uo9n73g'
+    #     req2 = VodGetOriginalPlayInfoRequest()
+    #     req2.Vid = vid
+    #     req2.Ssl = '1'
+    #     resp2 = vod_service.get_original_play_info(req2)
+    # except Exception:
+    #     raise
+    # else:
+    #     print(resp2)
+    #     if resp2.ResponseMetadata.Error.Code == '':
+    #         print(resp2.Result.MainPlayUrl)
+    #     else:
+    #         print(resp2.ResponseMetadata.Error)
+    #
+    # print('*' * 100)
