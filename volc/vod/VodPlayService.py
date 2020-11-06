@@ -16,6 +16,7 @@ from volc.const.Const import *
 from volc.Policy import *
 from volc.util.Util import *
 from google.protobuf.json_format import *
+from volc.vod.VodService import VodService
 from volc.models.vod.request.request_vod_pb2 import *
 from volc.models.vod.response.response_vod_pb2 import *
 
@@ -23,7 +24,7 @@ from volc.models.vod.response.response_vod_pb2 import *
 #
 # Generated from protobuf service <code>Vcloud.Service.Vod.VodPlayService</code>
 #
-class VodPlayService(Service):
+class VodPlayService(VodService):
 
     #
     # GetPlayInfo.
@@ -32,15 +33,15 @@ class VodPlayService(Service):
     # @return VodGetPlayInfoResponse
     # @raise Exception
     def get_play_info(self, request: VodGetPlayInfoRequest) -> VodGetPlayInfoResponse:
+        
         try:
             params = dict()
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
             res = self.get("GetPlayInfo", params)
-            if res == '':
-                raise Exception("InternalError")
             return Parse(res, VodGetPlayInfoResponse(), True)
         except Exception:
+            Parse(res, VodGetPlayInfoResponse(), True)
             raise
 
     #
