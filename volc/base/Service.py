@@ -3,13 +3,15 @@ import json
 import os
 import time
 from collections import OrderedDict
+from urllib.parse import urlencode
 
 import requests
 
-from ttvcloud.Policy import SecurityToken2, InnerToken, ComplexEncoder
-from ttvcloud.auth.SignerV4 import SignerV4
-from ttvcloud.base.Request import Request
-from ttvcloud.util.Util import *
+from volc.Policy import SecurityToken2, InnerToken, ComplexEncoder
+from volc.auth.SignerV4 import SignerV4
+from volc.base.Request import Request
+from volc.util.Util import *
+from volc import VERSION
 
 
 class Service(object):
@@ -27,7 +29,7 @@ class Service(object):
             if os.environ.get('HOME', None) is None:
                 return
 
-            path = os.environ['HOME'] + '/.vcloud/config'
+            path = os.environ['HOME'] + '/.volc/config'
             if os.path.isfile(path):
                 with open(path, 'r') as f:
                     j = json.load(f)
@@ -77,8 +79,8 @@ class Service(object):
         if resp.status_code == 200:
             return resp.text
         else:
-            return ''
-
+            raise Exception(resp.text)
+    
     def post(self, api, params, form):
         if not (api in self.api_info):
             raise Exception("no such api")
@@ -86,16 +88,17 @@ class Service(object):
         r = self.prepare_request(api_info, params)
         r.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         r.form = self.merge(api_info.form, form)
-
+        r.body = urlencode(r.form)
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
+        
         resp = self.session.post(url, headers=r.headers, data=r.form,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
             return resp.text
         else:
-            return ''
+            raise Exception(resp.text)
 
     def json(self, api, params, body):
         if not (api in self.api_info):
@@ -109,11 +112,11 @@ class Service(object):
 
         url = r.build()
         resp = self.session.post(url, headers=r.headers, data=r.body,
-                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
+                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))        
         if resp.status_code == 200:
             return json.dumps(resp.json())
         else:
-            return ''
+            raise Exception(resp.text)
 
     def put(self, url, file_path, headers):
         with open(file_path, 'rb') as f:
@@ -149,6 +152,7 @@ class Service(object):
 
         mheaders = self.merge(api_info.header, self.service_info.header)
         mheaders['Host'] = self.service_info.host
+        mheaders['User-Agent'] = 'volc-sdk-python/' + VERSION        
         r.set_headers(mheaders)
 
         mquery = self.merge(api_info.query, params)

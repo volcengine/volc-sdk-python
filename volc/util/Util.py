@@ -9,9 +9,8 @@ from functools import reduce
 
 from Crypto.Cipher import AES
 
+from volc.const.Const import LETTER_RUNES
 from zlib import crc32
-
-from ttvcloud.const.Const import LETTER_RUNES
 
 try:
     from urllib import quote
