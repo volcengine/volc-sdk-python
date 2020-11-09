@@ -9,7 +9,7 @@ from functools import reduce
 
 from Crypto.Cipher import AES
 
-from volc.const.Const import LETTER_RUNES
+from volcengine.const.Const import LETTER_RUNES
 from zlib import crc32
 
 try:

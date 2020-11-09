@@ -1,7 +1,7 @@
 # coding:utf-8
 
 from setuptools import setup, find_packages
-from volc import VERSION
+from volcengine import VERSION
 
 setup(
     name="volcengine",

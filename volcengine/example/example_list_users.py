@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volc.iam.IamService import IamService
+from volcengine.iam.IamService import IamService
 
 if __name__ == '__main__':
     iam_service = IamService()

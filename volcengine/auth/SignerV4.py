@@ -9,8 +9,8 @@ try:
 except:
     from urllib.parse import urlencode
 
-from volc.auth.MetaData import MetaData
-from volc.util.Util import Util
+from volcengine.auth.MetaData import MetaData
+from volcengine.util.Util import Util
 
 class SignerV4(object):
     @staticmethod

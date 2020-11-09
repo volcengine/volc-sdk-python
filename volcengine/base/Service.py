@@ -7,11 +7,11 @@ from urllib.parse import urlencode
 
 import requests
 
-from volc.Policy import SecurityToken2, InnerToken, ComplexEncoder
-from volc.auth.SignerV4 import SignerV4
-from volc.base.Request import Request
-from volc.util.Util import *
-from volc import VERSION
+from volcengine.Policy import SecurityToken2, InnerToken, ComplexEncoder
+from volcengine.auth.SignerV4 import SignerV4
+from volcengine.base.Request import Request
+from volcengine.util.Util import *
+from volcengine import VERSION
 
 
 class Service(object):
