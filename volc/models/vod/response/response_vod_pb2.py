@@ -22,9 +22,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='vod/response/response_vod.proto',
   package='Vcloud.Models.Vod',
   syntax='proto3',
-  serialized_options=b'\n#com.bytedanceapi.model.vod.responseB\013VodResponseP\001Z9github.com/TTvcloud/vcloud-sdk-golang/models/vod/response\240\001\001\330\001\001\312\002\032Vcloud\\Models\\Vod\\Response\342\002\031Vcloud\\Models\\GPBMetadata',
+  serialized_options=b'\n#com.bytedanceapi.model.vod.responseB\013VodResponseP\001Z9github.com/volcengine/volc-sdk-golang/models/vod/response\240\001\001\330\001\001\312\002\032Vcloud\\Models\\Vod\\Response\342\002\031Vcloud\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1fvod/response/response_vod.proto\x12\x11Vcloud.Models.Vod\x1a\x0f\x62\x61se/base.proto\x1a\x1bvod/business/vod_play.proto\x1a\x1cvod/business/vod_media.proto\x1a\x1dvod/business/vod_upload.proto\x1a\x1fvod/business/vod_workflow.proto\"\x91\x01\n\x16VodGetPlayInfoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12\x37\n\x06Result\x18\x02 \x01(\x0b\x32\'.Vcloud.Models.Vod.VodGetPlayInfoResult\"\xa1\x01\n\x1eVodGetOriginalPlayInfoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Vcloud.Models.Vod.VodGetOriginalPlayInfoResult\"\x84\x01\n\x13UploadVideoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12-\n\x06Result\x18\x02 \x01(\x0b\x32\x1d.Vcloud.Models.Vod.CommitData\"\x8b\x01\n\x1bQueryUploadTaskInfoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12,\n\x06Result\x18\x02 \x01(\x0b\x32\x1c.Vcloud.Models.Vod.QueryData\"\x8d\x01\n\x15GetVideoInfosResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12\x34\n\x06Result\x18\x02 \x01(\x0b\x32$.Vcloud.Models.Vod.GetVideoInfosData\"Y\n\x17UpdateVideoInfoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\"\x8d\x01\n\x15GetRecPostersResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12\x34\n\x06Result\x18\x02 \x01(\x0b\x32$.Vcloud.Models.Vod.GetRecPostersData\"b\n UpdateVideoPublishStatusResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\"\x95\x01\n\x18VodStartWorkflowResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12\x39\n\x06Result\x18\x02 \x01(\x0b\x32).Vcloud.Models.Vod.VodStartWorkflowResultB\xae\x01\n#com.bytedanceapi.model.vod.responseB\x0bVodResponseP\x01Z9github.com/TTvcloud/vcloud-sdk-golang/models/vod/response\xa0\x01\x01\xd8\x01\x01\xca\x02\x1aVcloud\\Models\\Vod\\Response\xe2\x02\x19Vcloud\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1fvod/response/response_vod.proto\x12\x11Vcloud.Models.Vod\x1a\x0f\x62\x61se/base.proto\x1a\x1bvod/business/vod_play.proto\x1a\x1cvod/business/vod_media.proto\x1a\x1dvod/business/vod_upload.proto\x1a\x1fvod/business/vod_workflow.proto\"\x91\x01\n\x16VodGetPlayInfoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12\x37\n\x06Result\x18\x02 \x01(\x0b\x32\'.Vcloud.Models.Vod.VodGetPlayInfoResult\"\xa1\x01\n\x1eVodGetOriginalPlayInfoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Vcloud.Models.Vod.VodGetOriginalPlayInfoResult\"\x84\x01\n\x13UploadVideoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12-\n\x06Result\x18\x02 \x01(\x0b\x32\x1d.Vcloud.Models.Vod.CommitData\"\x8b\x01\n\x1bQueryUploadTaskInfoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12,\n\x06Result\x18\x02 \x01(\x0b\x32\x1c.Vcloud.Models.Vod.QueryData\"\x93\x01\n\x18VodGetVideoInfosResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12\x37\n\x06Result\x18\x02 \x01(\x0b\x32\'.Vcloud.Models.Vod.VodGetVideoInfosData\"\\\n\x1aVodUpdateVideoInfoResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\"\x99\x01\n\x1fVodGetRecommendedPosterResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12\x36\n\x06Result\x18\x02 \x01(\x0b\x32&.Vcloud.Models.Vod.VodGetRecPosterData\"e\n#VodUpdateVideoPublishStatusResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\"\x95\x01\n\x18VodStartWorkflowResponse\x12>\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32$.Vcloud.Models.Base.ResponseMetadata\x12\x39\n\x06Result\x18\x02 \x01(\x0b\x32).Vcloud.Models.Vod.VodStartWorkflowResultB\xae\x01\n#com.bytedanceapi.model.vod.responseB\x0bVodResponseP\x01Z9github.com/volcengine/volc-sdk-golang/models/vod/response\xa0\x01\x01\xd8\x01\x01\xca\x02\x1aVcloud\\Models\\Vod\\Response\xe2\x02\x19Vcloud\\Models\\GPBMetadatab\x06proto3'
   ,
   dependencies=[base_dot_base__pb2.DESCRIPTOR,vod_dot_business_dot_vod__play__pb2.DESCRIPTOR,vod_dot_business_dot_vod__media__pb2.DESCRIPTOR,vod_dot_business_dot_vod__upload__pb2.DESCRIPTOR,vod_dot_business_dot_vod__workflow__pb2.DESCRIPTOR,])
 
@@ -187,23 +187,23 @@ _QUERYUPLOADTASKINFORESPONSE = _descriptor.Descriptor(
 )
 
 
-_GETVIDEOINFOSRESPONSE = _descriptor.Descriptor(
-  name='GetVideoInfosResponse',
-  full_name='Vcloud.Models.Vod.GetVideoInfosResponse',
+_VODGETVIDEOINFOSRESPONSE = _descriptor.Descriptor(
+  name='VodGetVideoInfosResponse',
+  full_name='Vcloud.Models.Vod.VodGetVideoInfosResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ResponseMetadata', full_name='Vcloud.Models.Vod.GetVideoInfosResponse.ResponseMetadata', index=0,
+      name='ResponseMetadata', full_name='Vcloud.Models.Vod.VodGetVideoInfosResponse.ResponseMetadata', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Result', full_name='Vcloud.Models.Vod.GetVideoInfosResponse.Result', index=1,
+      name='Result', full_name='Vcloud.Models.Vod.VodGetVideoInfosResponse.Result', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -222,20 +222,20 @@ _GETVIDEOINFOSRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=784,
-  serialized_end=925,
+  serialized_end=931,
 )
 
 
-_UPDATEVIDEOINFORESPONSE = _descriptor.Descriptor(
-  name='UpdateVideoInfoResponse',
-  full_name='Vcloud.Models.Vod.UpdateVideoInfoResponse',
+_VODUPDATEVIDEOINFORESPONSE = _descriptor.Descriptor(
+  name='VodUpdateVideoInfoResponse',
+  full_name='Vcloud.Models.Vod.VodUpdateVideoInfoResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ResponseMetadata', full_name='Vcloud.Models.Vod.UpdateVideoInfoResponse.ResponseMetadata', index=0,
+      name='ResponseMetadata', full_name='Vcloud.Models.Vod.VodUpdateVideoInfoResponse.ResponseMetadata', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -253,28 +253,28 @@ _UPDATEVIDEOINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=927,
-  serialized_end=1016,
+  serialized_start=933,
+  serialized_end=1025,
 )
 
 
-_GETRECPOSTERSRESPONSE = _descriptor.Descriptor(
-  name='GetRecPostersResponse',
-  full_name='Vcloud.Models.Vod.GetRecPostersResponse',
+_VODGETRECOMMENDEDPOSTERRESPONSE = _descriptor.Descriptor(
+  name='VodGetRecommendedPosterResponse',
+  full_name='Vcloud.Models.Vod.VodGetRecommendedPosterResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ResponseMetadata', full_name='Vcloud.Models.Vod.GetRecPostersResponse.ResponseMetadata', index=0,
+      name='ResponseMetadata', full_name='Vcloud.Models.Vod.VodGetRecommendedPosterResponse.ResponseMetadata', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Result', full_name='Vcloud.Models.Vod.GetRecPostersResponse.Result', index=1,
+      name='Result', full_name='Vcloud.Models.Vod.VodGetRecommendedPosterResponse.Result', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -292,21 +292,21 @@ _GETRECPOSTERSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1019,
-  serialized_end=1160,
+  serialized_start=1028,
+  serialized_end=1181,
 )
 
 
-_UPDATEVIDEOPUBLISHSTATUSRESPONSE = _descriptor.Descriptor(
-  name='UpdateVideoPublishStatusResponse',
-  full_name='Vcloud.Models.Vod.UpdateVideoPublishStatusResponse',
+_VODUPDATEVIDEOPUBLISHSTATUSRESPONSE = _descriptor.Descriptor(
+  name='VodUpdateVideoPublishStatusResponse',
+  full_name='Vcloud.Models.Vod.VodUpdateVideoPublishStatusResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ResponseMetadata', full_name='Vcloud.Models.Vod.UpdateVideoPublishStatusResponse.ResponseMetadata', index=0,
+      name='ResponseMetadata', full_name='Vcloud.Models.Vod.VodUpdateVideoPublishStatusResponse.ResponseMetadata', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -324,8 +324,8 @@ _UPDATEVIDEOPUBLISHSTATUSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1162,
-  serialized_end=1260,
+  serialized_start=1183,
+  serialized_end=1284,
 )
 
 
@@ -363,8 +363,8 @@ _VODSTARTWORKFLOWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1263,
-  serialized_end=1412,
+  serialized_start=1287,
+  serialized_end=1436,
 )
 
 _VODGETPLAYINFORESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
@@ -375,22 +375,22 @@ _UPLOADVIDEORESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_
 _UPLOADVIDEORESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__upload__pb2._COMMITDATA
 _QUERYUPLOADTASKINFORESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
 _QUERYUPLOADTASKINFORESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__upload__pb2._QUERYDATA
-_GETVIDEOINFOSRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
-_GETVIDEOINFOSRESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__media__pb2._GETVIDEOINFOSDATA
-_UPDATEVIDEOINFORESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
-_GETRECPOSTERSRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
-_GETRECPOSTERSRESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__media__pb2._GETRECPOSTERSDATA
-_UPDATEVIDEOPUBLISHSTATUSRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
+_VODGETVIDEOINFOSRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
+_VODGETVIDEOINFOSRESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__media__pb2._VODGETVIDEOINFOSDATA
+_VODUPDATEVIDEOINFORESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
+_VODGETRECOMMENDEDPOSTERRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
+_VODGETRECOMMENDEDPOSTERRESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__media__pb2._VODGETRECPOSTERDATA
+_VODUPDATEVIDEOPUBLISHSTATUSRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
 _VODSTARTWORKFLOWRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
 _VODSTARTWORKFLOWRESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__workflow__pb2._VODSTARTWORKFLOWRESULT
 DESCRIPTOR.message_types_by_name['VodGetPlayInfoResponse'] = _VODGETPLAYINFORESPONSE
 DESCRIPTOR.message_types_by_name['VodGetOriginalPlayInfoResponse'] = _VODGETORIGINALPLAYINFORESPONSE
 DESCRIPTOR.message_types_by_name['UploadVideoResponse'] = _UPLOADVIDEORESPONSE
 DESCRIPTOR.message_types_by_name['QueryUploadTaskInfoResponse'] = _QUERYUPLOADTASKINFORESPONSE
-DESCRIPTOR.message_types_by_name['GetVideoInfosResponse'] = _GETVIDEOINFOSRESPONSE
-DESCRIPTOR.message_types_by_name['UpdateVideoInfoResponse'] = _UPDATEVIDEOINFORESPONSE
-DESCRIPTOR.message_types_by_name['GetRecPostersResponse'] = _GETRECPOSTERSRESPONSE
-DESCRIPTOR.message_types_by_name['UpdateVideoPublishStatusResponse'] = _UPDATEVIDEOPUBLISHSTATUSRESPONSE
+DESCRIPTOR.message_types_by_name['VodGetVideoInfosResponse'] = _VODGETVIDEOINFOSRESPONSE
+DESCRIPTOR.message_types_by_name['VodUpdateVideoInfoResponse'] = _VODUPDATEVIDEOINFORESPONSE
+DESCRIPTOR.message_types_by_name['VodGetRecommendedPosterResponse'] = _VODGETRECOMMENDEDPOSTERRESPONSE
+DESCRIPTOR.message_types_by_name['VodUpdateVideoPublishStatusResponse'] = _VODUPDATEVIDEOPUBLISHSTATUSRESPONSE
 DESCRIPTOR.message_types_by_name['VodStartWorkflowResponse'] = _VODSTARTWORKFLOWRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -422,33 +422,33 @@ QueryUploadTaskInfoResponse = _reflection.GeneratedProtocolMessageType('QueryUpl
   })
 _sym_db.RegisterMessage(QueryUploadTaskInfoResponse)
 
-GetVideoInfosResponse = _reflection.GeneratedProtocolMessageType('GetVideoInfosResponse', (_message.Message,), {
-  'DESCRIPTOR' : _GETVIDEOINFOSRESPONSE,
+VodGetVideoInfosResponse = _reflection.GeneratedProtocolMessageType('VodGetVideoInfosResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETVIDEOINFOSRESPONSE,
   '__module__' : 'vod.response.response_vod_pb2'
-  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.GetVideoInfosResponse)
+  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.VodGetVideoInfosResponse)
   })
-_sym_db.RegisterMessage(GetVideoInfosResponse)
+_sym_db.RegisterMessage(VodGetVideoInfosResponse)
 
-UpdateVideoInfoResponse = _reflection.GeneratedProtocolMessageType('UpdateVideoInfoResponse', (_message.Message,), {
-  'DESCRIPTOR' : _UPDATEVIDEOINFORESPONSE,
+VodUpdateVideoInfoResponse = _reflection.GeneratedProtocolMessageType('VodUpdateVideoInfoResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODUPDATEVIDEOINFORESPONSE,
   '__module__' : 'vod.response.response_vod_pb2'
-  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.UpdateVideoInfoResponse)
+  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.VodUpdateVideoInfoResponse)
   })
-_sym_db.RegisterMessage(UpdateVideoInfoResponse)
+_sym_db.RegisterMessage(VodUpdateVideoInfoResponse)
 
-GetRecPostersResponse = _reflection.GeneratedProtocolMessageType('GetRecPostersResponse', (_message.Message,), {
-  'DESCRIPTOR' : _GETRECPOSTERSRESPONSE,
+VodGetRecommendedPosterResponse = _reflection.GeneratedProtocolMessageType('VodGetRecommendedPosterResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETRECOMMENDEDPOSTERRESPONSE,
   '__module__' : 'vod.response.response_vod_pb2'
-  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.GetRecPostersResponse)
+  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.VodGetRecommendedPosterResponse)
   })
-_sym_db.RegisterMessage(GetRecPostersResponse)
+_sym_db.RegisterMessage(VodGetRecommendedPosterResponse)
 
-UpdateVideoPublishStatusResponse = _reflection.GeneratedProtocolMessageType('UpdateVideoPublishStatusResponse', (_message.Message,), {
-  'DESCRIPTOR' : _UPDATEVIDEOPUBLISHSTATUSRESPONSE,
+VodUpdateVideoPublishStatusResponse = _reflection.GeneratedProtocolMessageType('VodUpdateVideoPublishStatusResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODUPDATEVIDEOPUBLISHSTATUSRESPONSE,
   '__module__' : 'vod.response.response_vod_pb2'
-  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.UpdateVideoPublishStatusResponse)
+  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.VodUpdateVideoPublishStatusResponse)
   })
-_sym_db.RegisterMessage(UpdateVideoPublishStatusResponse)
+_sym_db.RegisterMessage(VodUpdateVideoPublishStatusResponse)
 
 VodStartWorkflowResponse = _reflection.GeneratedProtocolMessageType('VodStartWorkflowResponse', (_message.Message,), {
   'DESCRIPTOR' : _VODSTARTWORKFLOWRESPONSE,

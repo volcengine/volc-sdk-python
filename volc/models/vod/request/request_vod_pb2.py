@@ -19,9 +19,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='vod/request/request_vod.proto',
   package='Vcloud.Models.Vod',
   syntax='proto3',
-  serialized_options=b'\n\"com.bytedanceapi.model.vod.requestB\nVodRequestP\001Z8github.com/TTvcloud/vcloud-sdk-golang/models/vod/request\240\001\001\330\001\001\312\002\031Vcloud\\Models\\Vod\\Request\342\002\031Vcloud\\Models\\GPBMetadata',
+  serialized_options=b'\n\"com.bytedanceapi.model.vod.requestB\nVodRequestP\001Z8github.com/volcengine/volc-sdk-golang/models/vod/request\240\001\001\330\001\001\312\002\031Vcloud\\Models\\Vod\\Request\342\002\031Vcloud\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dvod/request/request_vod.proto\x12\x11Vcloud.Models.Vod\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fvod/business/vod_workflow.proto\"\x98\x01\n\x15VodGetPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\"I\n\x1dVodGetOriginalPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\"e\n\x15VodUploadVideoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\",\n\x1cGetRecommendedPostersRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\">\n\x1fUpdateVideoPublishStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"\xe2\x01\n\x16UpdateVideoInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12/\n\tPosterUri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05Title\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x44\x65scription\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04Tags\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"$\n\x14GetVideoInfosRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"\x94\x01\n\x17VodStartWorkflowRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12\x30\n\x05Input\x18\x03 \x01(\x0b\x32!.Vcloud.Models.Vod.WorkflowParams\x12\x10\n\x08Priority\x18\x04 \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\tB\xaa\x01\n\"com.bytedanceapi.model.vod.requestB\nVodRequestP\x01Z8github.com/TTvcloud/vcloud-sdk-golang/models/vod/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x19Vcloud\\Models\\Vod\\Request\xe2\x02\x19Vcloud\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1dvod/request/request_vod.proto\x12\x11Vcloud.Models.Vod\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fvod/business/vod_workflow.proto\"\x98\x01\n\x15VodGetPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\"I\n\x1dVodGetOriginalPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\"e\n\x15VodUploadVideoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\".\n\x1eVodGetRecommendedPosterRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"A\n\"VodUpdateVideoPublishStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"\xe5\x01\n\x19VodUpdateVideoInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12/\n\tPosterUri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05Title\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x44\x65scription\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04Tags\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\'\n\x17VodGetVideoInfosRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"\x94\x01\n\x17VodStartWorkflowRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12\x30\n\x05Input\x18\x03 \x01(\x0b\x32!.Vcloud.Models.Vod.WorkflowParams\x12\x10\n\x08Priority\x18\x04 \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\tB\xaa\x01\n\"com.bytedanceapi.model.vod.requestB\nVodRequestP\x01Z8github.com/volcengine/volc-sdk-golang/models/vod/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x19Vcloud\\Models\\Vod\\Request\xe2\x02\x19Vcloud\\Models\\GPBMetadatab\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,vod_dot_business_dot_vod__workflow__pb2.DESCRIPTOR,])
 
@@ -208,16 +208,16 @@ _VODUPLOADVIDEOREQUEST = _descriptor.Descriptor(
 )
 
 
-_GETRECOMMENDEDPOSTERSREQUEST = _descriptor.Descriptor(
-  name='GetRecommendedPostersRequest',
-  full_name='Vcloud.Models.Vod.GetRecommendedPostersRequest',
+_VODGETRECOMMENDEDPOSTERREQUEST = _descriptor.Descriptor(
+  name='VodGetRecommendedPosterRequest',
+  full_name='Vcloud.Models.Vod.VodGetRecommendedPosterRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Vids', full_name='Vcloud.Models.Vod.GetRecommendedPostersRequest.Vids', index=0,
+      name='Vids', full_name='Vcloud.Models.Vod.VodGetRecommendedPosterRequest.Vids', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -236,27 +236,27 @@ _GETRECOMMENDEDPOSTERSREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=450,
-  serialized_end=494,
+  serialized_end=496,
 )
 
 
-_UPDATEVIDEOPUBLISHSTATUSREQUEST = _descriptor.Descriptor(
-  name='UpdateVideoPublishStatusRequest',
-  full_name='Vcloud.Models.Vod.UpdateVideoPublishStatusRequest',
+_VODUPDATEVIDEOPUBLISHSTATUSREQUEST = _descriptor.Descriptor(
+  name='VodUpdateVideoPublishStatusRequest',
+  full_name='Vcloud.Models.Vod.VodUpdateVideoPublishStatusRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Vid', full_name='Vcloud.Models.Vod.UpdateVideoPublishStatusRequest.Vid', index=0,
+      name='Vid', full_name='Vcloud.Models.Vod.VodUpdateVideoPublishStatusRequest.Vid', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Status', full_name='Vcloud.Models.Vod.UpdateVideoPublishStatusRequest.Status', index=1,
+      name='Status', full_name='Vcloud.Models.Vod.VodUpdateVideoPublishStatusRequest.Status', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -274,49 +274,49 @@ _UPDATEVIDEOPUBLISHSTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=496,
-  serialized_end=558,
+  serialized_start=498,
+  serialized_end=563,
 )
 
 
-_UPDATEVIDEOINFOREQUEST = _descriptor.Descriptor(
-  name='UpdateVideoInfoRequest',
-  full_name='Vcloud.Models.Vod.UpdateVideoInfoRequest',
+_VODUPDATEVIDEOINFOREQUEST = _descriptor.Descriptor(
+  name='VodUpdateVideoInfoRequest',
+  full_name='Vcloud.Models.Vod.VodUpdateVideoInfoRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Vid', full_name='Vcloud.Models.Vod.UpdateVideoInfoRequest.Vid', index=0,
+      name='Vid', full_name='Vcloud.Models.Vod.VodUpdateVideoInfoRequest.Vid', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='PosterUri', full_name='Vcloud.Models.Vod.UpdateVideoInfoRequest.PosterUri', index=1,
+      name='PosterUri', full_name='Vcloud.Models.Vod.VodUpdateVideoInfoRequest.PosterUri', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Title', full_name='Vcloud.Models.Vod.UpdateVideoInfoRequest.Title', index=2,
+      name='Title', full_name='Vcloud.Models.Vod.VodUpdateVideoInfoRequest.Title', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Description', full_name='Vcloud.Models.Vod.UpdateVideoInfoRequest.Description', index=3,
+      name='Description', full_name='Vcloud.Models.Vod.VodUpdateVideoInfoRequest.Description', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Tags', full_name='Vcloud.Models.Vod.UpdateVideoInfoRequest.Tags', index=4,
+      name='Tags', full_name='Vcloud.Models.Vod.VodUpdateVideoInfoRequest.Tags', index=4,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -334,21 +334,21 @@ _UPDATEVIDEOINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=561,
-  serialized_end=787,
+  serialized_start=566,
+  serialized_end=795,
 )
 
 
-_GETVIDEOINFOSREQUEST = _descriptor.Descriptor(
-  name='GetVideoInfosRequest',
-  full_name='Vcloud.Models.Vod.GetVideoInfosRequest',
+_VODGETVIDEOINFOSREQUEST = _descriptor.Descriptor(
+  name='VodGetVideoInfosRequest',
+  full_name='Vcloud.Models.Vod.VodGetVideoInfosRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Vids', full_name='Vcloud.Models.Vod.GetVideoInfosRequest.Vids', index=0,
+      name='Vids', full_name='Vcloud.Models.Vod.VodGetVideoInfosRequest.Vids', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -366,8 +366,8 @@ _GETVIDEOINFOSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=789,
-  serialized_end=825,
+  serialized_start=797,
+  serialized_end=836,
 )
 
 
@@ -426,22 +426,22 @@ _VODSTARTWORKFLOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=828,
-  serialized_end=976,
+  serialized_start=839,
+  serialized_end=987,
 )
 
-_UPDATEVIDEOINFOREQUEST.fields_by_name['PosterUri'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
-_UPDATEVIDEOINFOREQUEST.fields_by_name['Title'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
-_UPDATEVIDEOINFOREQUEST.fields_by_name['Description'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
-_UPDATEVIDEOINFOREQUEST.fields_by_name['Tags'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_VODUPDATEVIDEOINFOREQUEST.fields_by_name['PosterUri'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_VODUPDATEVIDEOINFOREQUEST.fields_by_name['Title'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_VODUPDATEVIDEOINFOREQUEST.fields_by_name['Description'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_VODUPDATEVIDEOINFOREQUEST.fields_by_name['Tags'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _VODSTARTWORKFLOWREQUEST.fields_by_name['Input'].message_type = vod_dot_business_dot_vod__workflow__pb2._WORKFLOWPARAMS
 DESCRIPTOR.message_types_by_name['VodGetPlayInfoRequest'] = _VODGETPLAYINFOREQUEST
 DESCRIPTOR.message_types_by_name['VodGetOriginalPlayInfoRequest'] = _VODGETORIGINALPLAYINFOREQUEST
 DESCRIPTOR.message_types_by_name['VodUploadVideoRequest'] = _VODUPLOADVIDEOREQUEST
-DESCRIPTOR.message_types_by_name['GetRecommendedPostersRequest'] = _GETRECOMMENDEDPOSTERSREQUEST
-DESCRIPTOR.message_types_by_name['UpdateVideoPublishStatusRequest'] = _UPDATEVIDEOPUBLISHSTATUSREQUEST
-DESCRIPTOR.message_types_by_name['UpdateVideoInfoRequest'] = _UPDATEVIDEOINFOREQUEST
-DESCRIPTOR.message_types_by_name['GetVideoInfosRequest'] = _GETVIDEOINFOSREQUEST
+DESCRIPTOR.message_types_by_name['VodGetRecommendedPosterRequest'] = _VODGETRECOMMENDEDPOSTERREQUEST
+DESCRIPTOR.message_types_by_name['VodUpdateVideoPublishStatusRequest'] = _VODUPDATEVIDEOPUBLISHSTATUSREQUEST
+DESCRIPTOR.message_types_by_name['VodUpdateVideoInfoRequest'] = _VODUPDATEVIDEOINFOREQUEST
+DESCRIPTOR.message_types_by_name['VodGetVideoInfosRequest'] = _VODGETVIDEOINFOSREQUEST
 DESCRIPTOR.message_types_by_name['VodStartWorkflowRequest'] = _VODSTARTWORKFLOWREQUEST
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -466,33 +466,33 @@ VodUploadVideoRequest = _reflection.GeneratedProtocolMessageType('VodUploadVideo
   })
 _sym_db.RegisterMessage(VodUploadVideoRequest)
 
-GetRecommendedPostersRequest = _reflection.GeneratedProtocolMessageType('GetRecommendedPostersRequest', (_message.Message,), {
-  'DESCRIPTOR' : _GETRECOMMENDEDPOSTERSREQUEST,
+VodGetRecommendedPosterRequest = _reflection.GeneratedProtocolMessageType('VodGetRecommendedPosterRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETRECOMMENDEDPOSTERREQUEST,
   '__module__' : 'vod.request.request_vod_pb2'
-  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.GetRecommendedPostersRequest)
+  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.VodGetRecommendedPosterRequest)
   })
-_sym_db.RegisterMessage(GetRecommendedPostersRequest)
+_sym_db.RegisterMessage(VodGetRecommendedPosterRequest)
 
-UpdateVideoPublishStatusRequest = _reflection.GeneratedProtocolMessageType('UpdateVideoPublishStatusRequest', (_message.Message,), {
-  'DESCRIPTOR' : _UPDATEVIDEOPUBLISHSTATUSREQUEST,
+VodUpdateVideoPublishStatusRequest = _reflection.GeneratedProtocolMessageType('VodUpdateVideoPublishStatusRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODUPDATEVIDEOPUBLISHSTATUSREQUEST,
   '__module__' : 'vod.request.request_vod_pb2'
-  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.UpdateVideoPublishStatusRequest)
+  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.VodUpdateVideoPublishStatusRequest)
   })
-_sym_db.RegisterMessage(UpdateVideoPublishStatusRequest)
+_sym_db.RegisterMessage(VodUpdateVideoPublishStatusRequest)
 
-UpdateVideoInfoRequest = _reflection.GeneratedProtocolMessageType('UpdateVideoInfoRequest', (_message.Message,), {
-  'DESCRIPTOR' : _UPDATEVIDEOINFOREQUEST,
+VodUpdateVideoInfoRequest = _reflection.GeneratedProtocolMessageType('VodUpdateVideoInfoRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODUPDATEVIDEOINFOREQUEST,
   '__module__' : 'vod.request.request_vod_pb2'
-  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.UpdateVideoInfoRequest)
+  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.VodUpdateVideoInfoRequest)
   })
-_sym_db.RegisterMessage(UpdateVideoInfoRequest)
+_sym_db.RegisterMessage(VodUpdateVideoInfoRequest)
 
-GetVideoInfosRequest = _reflection.GeneratedProtocolMessageType('GetVideoInfosRequest', (_message.Message,), {
-  'DESCRIPTOR' : _GETVIDEOINFOSREQUEST,
+VodGetVideoInfosRequest = _reflection.GeneratedProtocolMessageType('VodGetVideoInfosRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETVIDEOINFOSREQUEST,
   '__module__' : 'vod.request.request_vod_pb2'
-  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.GetVideoInfosRequest)
+  # @@protoc_insertion_point(class_scope:Vcloud.Models.Vod.VodGetVideoInfosRequest)
   })
-_sym_db.RegisterMessage(GetVideoInfosRequest)
+_sym_db.RegisterMessage(VodGetVideoInfosRequest)
 
 VodStartWorkflowRequest = _reflection.GeneratedProtocolMessageType('VodStartWorkflowRequest', (_message.Message,), {
   'DESCRIPTOR' : _VODSTARTWORKFLOWREQUEST,
