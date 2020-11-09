@@ -9,9 +9,8 @@ try:
 except:
     from urllib.parse import urlencode
 
-from ttvcloud.auth.MetaData import MetaData
-from ttvcloud.util.Util import Util
-
+from volc.auth.MetaData import MetaData
+from volc.util.Util import Util
 
 class SignerV4(object):
     @staticmethod
@@ -59,7 +58,6 @@ class SignerV4(object):
         query['X-Algorithm'] = md.algorithm
         query['X-SignedHeaders'] = md.signed_headers
         query['X-SignedQueries'] = ''
-
         query['X-SignedQueries'] = ';'.join(sorted(query.keys()))
 
         hashed_canon_req = SignerV4.hashed_simple_canonical_request_v4(request, md)
