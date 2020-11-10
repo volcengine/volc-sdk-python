@@ -80,7 +80,7 @@ class Service(object):
             return resp.text
         else:
             raise Exception(resp.text)
-    
+
     def post(self, api, params, form):
         if not (api in self.api_info):
             raise Exception("no such api")
@@ -92,7 +92,7 @@ class Service(object):
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
-        
+
         resp = self.session.post(url, headers=r.headers, data=r.form,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
@@ -112,7 +112,7 @@ class Service(object):
 
         url = r.build()
         resp = self.session.post(url, headers=r.headers, data=r.body,
-                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))        
+                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
             return json.dumps(resp.json())
         else:
@@ -152,7 +152,7 @@ class Service(object):
 
         mheaders = self.merge(api_info.header, self.service_info.header)
         mheaders['Host'] = self.service_info.host
-        mheaders['User-Agent'] = 'volc-sdk-python/' + VERSION        
+        mheaders['User-Agent'] = 'volc-sdk-python/' + VERSION
         r.set_headers(mheaders)
 
         mquery = self.merge(api_info.query, params)
