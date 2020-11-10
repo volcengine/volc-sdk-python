@@ -11,7 +11,7 @@ setup(
     license="MIT Licence",
 
     url="https://github.com/Volcengine/volc-sdk-python",
-    author="Volcengine SDK",    
+    author="Volcengine SDK",
 
     packages=find_packages(),
     include_package_data=True,
