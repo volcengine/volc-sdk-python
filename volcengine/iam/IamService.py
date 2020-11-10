@@ -2,10 +2,10 @@
 import json
 import threading
 
-from volc.ApiInfo import ApiInfo
-from volc.Credentials import Credentials
-from volc.base.Service import Service
-from volc.ServiceInfo import ServiceInfo
+from volcengine.ApiInfo import ApiInfo
+from volcengine.Credentials import Credentials
+from volcengine.base.Service import Service
+from volcengine.ServiceInfo import ServiceInfo
 
 
 class IamService(Service):

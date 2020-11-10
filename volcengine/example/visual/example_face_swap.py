@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volc.visual.VisualService import VisualService
+from volcengine.visual.VisualService import VisualService
 
 if __name__ == '__main__':
     visual_service = VisualService()
@@ -14,8 +14,10 @@ if __name__ == '__main__':
     params = dict()
 
     form = {
-        "image_base64": "image_base64_str"
+        "image_base64": "image_base64_str",
+        "template_base64": "template_base64_str",
+        "action_id": "faceswap"
     }
 
-    resp = visual_service.ocr_normal(form)
+    resp = visual_service.face_swap(form)
     print(resp)

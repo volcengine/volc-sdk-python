@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volc.visual.VisualService import VisualService
+from volcengine.visual.VisualService import VisualService
 
 if __name__ == '__main__':
     visual_service = VisualService()
@@ -14,10 +14,8 @@ if __name__ == '__main__':
     params = dict()
 
     form = {
-        "image_base64": "image_base64_str",
-        "template_base64": "template_base64_str",
-        "action_id": "faceswap"
+        "image_base64": "image_base64_str"
     }
 
-    resp = visual_service.face_swap(form)
+    resp = visual_service.bank_card(form)
     print(resp)
