@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volc.visual.VisualService import VisualService
+from volcengine.visual.VisualService import VisualService
 
 if __name__ == '__main__':
     visual_service = VisualService()
@@ -17,5 +17,5 @@ if __name__ == '__main__':
         "image_base64": "image_base64_str"
     }
 
-    resp = visual_service.jpcartoon(form)
+    resp = visual_service.jpcartoon_cut(form)
     print(resp)

@@ -1,12 +1,12 @@
 # coding:utf-8
 
 from setuptools import setup, find_packages
-from volc import VERSION
+from volcengine import VERSION
 
 setup(
-    name="volc",
+    name="volcengine",
     version=VERSION,
-    keywords=("pip", "volc", "volc-sdk-python"),
+    keywords=("pip", "volcengine", "volc-sdk-python"),
     description="The Volcengine SDK for Python",
     license="MIT Licence",
 
