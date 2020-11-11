@@ -3,7 +3,11 @@ import json
 import os
 import time
 from collections import OrderedDict
-from urllib.parse import urlencode
+try:
+    from urllib.parse import urlencode
+except ImportError:
+     from urllib import urlencode
+
 
 import requests
 

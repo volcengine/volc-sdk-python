@@ -2,5 +2,5 @@ pytz==2020.4
 requests==2.22.0
 pycryptodome==3.9.9
 protobuf==3.12.4
-setuptools~=50.3.2
+setuptools
 google==3.0.0
