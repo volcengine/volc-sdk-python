@@ -3,5 +3,4 @@ venv/
 .idea/
 build/
 dist/
-ttvcloud.egg-info/
-volc.egg-info/
+*.egg-info/
