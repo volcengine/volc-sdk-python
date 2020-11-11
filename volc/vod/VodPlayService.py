@@ -36,6 +36,11 @@ class VodPlayService(VodService):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
             res = self.get("GetPlayInfo", params)
         except Exception as Argument:
             try:
@@ -57,6 +62,11 @@ class VodPlayService(VodService):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
             res = self.get("GetOriginalPlayInfo", params)
         except Exception as Argument:
             try:
