@@ -123,6 +123,7 @@ class VodUploadService(VodService):
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), VodCommitUploadInfoResponse(), True)
+                print(resp)
             except Exception:
                 raise Argument
             else:
@@ -130,4 +131,4 @@ class VodUploadService(VodService):
         else:
             return Parse(res, VodCommitUploadInfoResponse(), True)
 
-# end of service interface
+    # end of service interface

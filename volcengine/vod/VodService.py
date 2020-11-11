@@ -1,7 +1,10 @@
 # coding:utf-8
 
 from __future__ import print_function
+
 import threading
+from zlib import crc32
+
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
 from volcengine.ServiceInfo import ServiceInfo
@@ -54,21 +57,25 @@ class VodService(Service):
                                            {}),
             "RedirectPlay": ApiInfo("GET", "/", {"Action": "RedirectPlay", "Version": "2020-08-01"}, {}, {}),
             "StartWorkflow": ApiInfo("POST", "/", {"Action": "StartWorkflow", "Version": "2020-08-01"}, {}, {}),
-            "UploadMediaByUrl": ApiInfo("GET", "/", {"Action": "UploadMediaByUrl", "Version": "2018-01-01"}, {}, {}),
-            "ApplyUpload": ApiInfo("GET", "/", {"Action": "ApplyUpload", "Version": "2018-01-01"}, {}, {}),
-            "CommitUpload": ApiInfo("POST", "/", {"Action": "CommitUpload", "Version": "2018-01-01"}, {}, {}),
             "SetVideoPublishStatus": ApiInfo("POST", "/", {"Action": "SetVideoPublishStatus", "Version": "2018-01-01"},
                                              {}, {}),
             "GetCdnDomainWeights": ApiInfo("GET", "/", {"Action": "GetCdnDomainWeights", "Version": "2019-07-01"}, {},
                                            {}),
             "ModifyVideoInfo": ApiInfo("POST", "/", {"Action": "ModifyVideoInfo", "Version": "2018-01-01"}, {}, {}),
-            "UploadVideoByUrl": ApiInfo("GET", "/", {"Action": "UploadVideoByUrl", "Version": "2020-08-01"}, {}, {}),
+            "UploadMediaByUrl": ApiInfo("GET", "/", {"Action": "UploadVideoByUrl", "Version": "2020-08-01"}, {}, {}),
             "QueryUploadTaskInfo": ApiInfo("GET", "/", {"Action": "QueryUploadTaskInfo", "Version": "2020-08-01"}, {},
                                            {}),
             # TODO 测试完毕后把Header去掉
             "ApplyUploadInfo": ApiInfo("GET", "/", {"Action": "ApplyUploadInfo", "Version": "2020-08-01"}, {},
                                        {"X-TT-ENV": "boe_husky_feature"}),
-            "CommitUploadInfo": ApiInfo("POST", "/", {"Action": "CommitUploadInfo", "Version": "2020-08-01"}, {},
+            "CommitUploadInfo": ApiInfo("GET", "/", {"Action": "CommitUploadInfo", "Version": "2020-08-01"}, {},
                                         {"X-TT-ENV": "boe_husky_feature"}),
         }
         return api_info
+
+    @staticmethod
+    def crc32(file_path):
+        prev = 0
+        for eachLine in open(file_path, "rb"):
+            prev = crc32(eachLine, prev)
+        return prev & 0xFFFFFFFF
