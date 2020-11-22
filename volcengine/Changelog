@@ -1,5 +1,9 @@
 ### Change log
 
+2020-11-22 Bumped to version v1.0.1
+- Update README.md.
+- Update dependency library,Compatible with python2 and python3.
+
 2020-11-09 Bumped to version v1.0.0
 - Add iam sdk.
 - Add visual sdk.
