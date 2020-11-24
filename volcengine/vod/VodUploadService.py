@@ -130,14 +130,4 @@ class VodUploadService(VodService):
         else:
             return Parse(res, VodCommitUploadInfoResponse(), True)
 
-    # end of service interface
-
-    def get_upload_sts2_with_expired_time(self, expired_time):
-        actions = ["vod:ApplyUploadInfo", "vod:CommitUploadInfo"]
-        resources = []
-        statement = Statement.new_allow_statement(actions, resources)
-        inline_policy = Policy([statement])
-        return self.sign_sts2(inline_policy, expired_time)
-
-    def get_upload_sts2(self):
-        return self.get_upload_sts2_with_expired_time(60 * 60)
+# end of service interface

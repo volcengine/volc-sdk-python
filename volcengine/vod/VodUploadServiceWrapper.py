@@ -1,6 +1,7 @@
 import os
 import time
 
+from volcengine.Policy import Statement, Policy
 from volcengine.models.vod.request.request_vod_pb2 import VodCommitUploadInfoRequest, VodApplyUploadInfoRequest
 from volcengine.vod.VodService import VodService
 from volcengine.vod.VodUploadService import VodUploadService
@@ -59,3 +60,13 @@ class VodUploadServiceWrapper(VodUploadService):
         avg_speed = float(file_size) / float(cost)
 
         return oid, session_key, avg_speed
+
+    def get_upload_sts2_with_expired_time(self, expired_time):
+        actions = ["vod:ApplyUploadInfo", "vod:CommitUploadInfo"]
+        resources = []
+        statement = Statement.new_allow_statement(actions, resources)
+        inline_policy = Policy([statement])
+        return self.sign_sts2(inline_policy, expired_time)
+
+    def get_upload_sts2(self):
+        return self.get_upload_sts2_with_expired_time(60 * 60)
