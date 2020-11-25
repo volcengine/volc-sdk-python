@@ -11,22 +11,6 @@ if __name__ == '__main__':
     # vod_service.set_sk('sk')
     try:
         vid = 'v0c2c369007abu04ru8riko30uo9n73g'
-        req = VodGetPlayInfoRequest()
-        req.Vid = vid
-        req.Ssl = '1'
-        resp = vod_service.get_play_info(req)
-    except Exception:
-        raise
-    else:
-        print(resp)
-        if resp.ResponseMetadata.Error.Code == '':
-            print(resp.Result.PlayInfoList[0].MainPlayUrl)
-        else:
-            print(resp.ResponseMetadata.Error)
-    print('*' * 100)
-
-    try:
-        vid = 'v0c2c369007abu04ru8riko30uo9n73g'
         req2 = VodGetOriginalPlayInfoRequest()
         req2.Vid = vid
         req2.Ssl = '1'
