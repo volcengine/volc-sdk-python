@@ -27,7 +27,7 @@ if __name__ == '__main__':
         print(resp)
         if resp.ResponseMetadata.Error.Code == '':
             print(resp.Result.Data)
-            print(resp.Result.Data.VideoInfoList[0].State)
+            print(resp.Result.Data.MediaInfoList[0].State)
         else:
             print(resp.ResponseMetadata.Error)
             print(resp.ResponseMetadata.RequestId)
