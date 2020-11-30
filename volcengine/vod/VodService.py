@@ -55,7 +55,7 @@ class VodService(Service):
             "GetPlayInfo": ApiInfo("GET", "/", {"Action": "GetPlayInfo", "Version": "2020-08-01"}, {}, {}),
             "GetOriginalPlayInfo": ApiInfo("GET", "/", {"Action": "GetOriginalPlayInfo", "Version": "2020-08-01"}, {},
                                            {}),
-            "StartWorkflow": ApiInfo("POST", "/", {"Action": "StartWorkflow", "Version": "2020-08-01"}, {}, {}),
+            "StartWorkflow": ApiInfo("GET", "/", {"Action": "StartWorkflow", "Version": "2020-08-01"}, {}, {}),
             "UpdateMediaPublishStatus": ApiInfo("GET", "/",
                                                 {"Action": "UpdateMediaPublishStatus", "Version": "2020-08-01"},
                                                 {}, {}),
