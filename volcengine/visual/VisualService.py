@@ -38,6 +38,10 @@ class VisualService(Service):
             "FaceSwap": ApiInfo("POST", "/", {"Action": "FaceSwap", "Version": "2020-08-26"}, {}, {}),
             "OCRNormal": ApiInfo("POST", "/", {"Action": "OCRNormal", "Version": "2020-08-26"}, {}, {}),
             "BankCard": ApiInfo("POST", "/", {"Action": "BankCard", "Version": "2020-08-26"}, {}, {}),
+            "HumanSegment": ApiInfo("POST", "/", {"Action": "HumanSegment", "Version": "2020-08-26"}, {}, {}),
+            "GeneralSegment": ApiInfo("POST", "/", {"Action": "GeneralSegment", "Version": "2020-08-26"}, {}, {}),
+            "EnhancePhoto": ApiInfo("POST", "/", {"Action": "EnhancePhoto", "Version": "2020-08-26"}, {}, {}),
+            "ConvertPhoto": ApiInfo("POST", "/", {"Action": "ConvertPhoto", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -93,6 +97,34 @@ class VisualService(Service):
     def bank_card(self, form):
         try:
             res_json = self.common_handler("BankCard", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def human_segment(self, form):
+        try:
+            res_json = self.common_handler("HumanSegment", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def general_segment(self, form):
+        try:
+            res_json = self.common_handler("GeneralSegment", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def enhance_photo(self, form):
+        try:
+            res_json = self.common_handler("EnhancePhoto", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def convert_photo(self, form):
+        try:
+            res_json = self.common_handler("ConvertPhoto", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
