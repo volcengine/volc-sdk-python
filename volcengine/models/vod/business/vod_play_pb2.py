@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n!com.volcengine.model.vod.businessB\007VodPlayP\001Z9github.com/volcengine/volc-sdk-golang/models/vod/business\240\001\001\330\001\001\302\002\000\312\002\030Volc\\Models\\Vod\\Business\342\002\027Volc\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1bvod/business/vod_play.proto\x12\x1eVolcengine.Models.Vod.Business\x1a\x1dvod/business/vod_common.proto\"\xe7\x02\n\x14VodGetPlayInfoResult\x12\x45\n\x07Version\x18\n \x01(\x0e\x32\x34.Volcengine.Models.Vod.Business.VodVideoModelVersion\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\x05\x12\x11\n\tPosterUrl\x18\x03 \x01(\t\x12\x10\n\x08\x44uration\x18\x04 \x01(\x02\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x16\n\x0e\x45nableAdaptive\x18\x06 \x01(\x08\x12\x12\n\nTotalCount\x18\x07 \x01(\x05\x12\x45\n\x0c\x41\x64\x61ptiveInfo\x18\x08 \x01(\x0b\x32/.Volcengine.Models.Vod.Business.VodAdaptiveInfo\x12\x41\n\x0cPlayInfoList\x18\t \x03(\x0b\x32+.Volcengine.Models.Vod.Business.VodPlayInfo\"\xd8\x01\n\x1cVodGetOriginalPlayInfoResult\x12\x10\n\x08\x46ileType\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x02\x12\x0c\n\x04Size\x18\x03 \x01(\x01\x12\x0e\n\x06Height\x18\x04 \x01(\x05\x12\r\n\x05Width\x18\x05 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\r\n\x05\x43odec\x18\x07 \x01(\t\x12\x0f\n\x07\x42itrate\x18\x08 \x01(\x05\x12\x0b\n\x03Md5\x18\t \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\n \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x0b \x01(\t*\xc4\x01\n\x14VodVideoModelVersion\x12!\n\x1dUndefinedVodVideoModelVersion\x10\x00\x12\"\n\x1eInternalV1VodVideoModelVersion\x10\x01\x12\"\n\x1eInternalV2VodVideoModelVersion\x10\x02\x12\"\n\x1eInternalV3VodVideoModelVersion\x10\x03\x12\x1d\n\x19ToBV1VodVideoModelVersion\x10\x04\x42\xa7\x01\n!com.volcengine.model.vod.businessB\x07VodPlayP\x01Z9github.com/volcengine/volc-sdk-golang/models/vod/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02\x18Volc\\Models\\Vod\\Business\xe2\x02\x17Volc\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1bvod/business/vod_play.proto\x12\x1eVolcengine.Models.Vod.Business\x1a\x1dvod/business/vod_common.proto\"\xe3\x02\n\x10VodPlayInfoModel\x12\x45\n\x07Version\x18\n \x01(\x0e\x32\x34.Volcengine.Models.Vod.Business.VodVideoModelVersion\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\x05\x12\x11\n\tPosterUrl\x18\x03 \x01(\t\x12\x10\n\x08\x44uration\x18\x04 \x01(\x02\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x16\n\x0e\x45nableAdaptive\x18\x06 \x01(\x08\x12\x12\n\nTotalCount\x18\x07 \x01(\x05\x12\x45\n\x0c\x41\x64\x61ptiveInfo\x18\x08 \x01(\x0b\x32/.Volcengine.Models.Vod.Business.VodAdaptiveInfo\x12\x41\n\x0cPlayInfoList\x18\t \x03(\x0b\x32+.Volcengine.Models.Vod.Business.VodPlayInfo\"\xd8\x01\n\x1cVodGetOriginalPlayInfoResult\x12\x10\n\x08\x46ileType\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x02\x12\x0c\n\x04Size\x18\x03 \x01(\x01\x12\x0e\n\x06Height\x18\x04 \x01(\x05\x12\r\n\x05Width\x18\x05 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\r\n\x05\x43odec\x18\x07 \x01(\t\x12\x0f\n\x07\x42itrate\x18\x08 \x01(\x05\x12\x0b\n\x03Md5\x18\t \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\n \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x0b \x01(\t*\xc4\x01\n\x14VodVideoModelVersion\x12!\n\x1dUndefinedVodVideoModelVersion\x10\x00\x12\"\n\x1eInternalV1VodVideoModelVersion\x10\x01\x12\"\n\x1eInternalV2VodVideoModelVersion\x10\x02\x12\"\n\x1eInternalV3VodVideoModelVersion\x10\x03\x12\x1d\n\x19ToBV1VodVideoModelVersion\x10\x04\x42\xa7\x01\n!com.volcengine.model.vod.businessB\x07VodPlayP\x01Z9github.com/volcengine/volc-sdk-golang/models/vod/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02\x18Volc\\Models\\Vod\\Business\xe2\x02\x17Volc\\Models\\GPBMetadatab\x06proto3'
   ,
   dependencies=[vod_dot_business_dot_vod__common__pb2.DESCRIPTOR,])
 
@@ -60,8 +60,8 @@ _VODVIDEOMODELVERSION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=676,
-  serialized_end=872,
+  serialized_start=672,
+  serialized_end=868,
 )
 _sym_db.RegisterEnumDescriptor(_VODVIDEOMODELVERSION)
 
@@ -74,79 +74,79 @@ ToBV1VodVideoModelVersion = 4
 
 
 
-_VODGETPLAYINFORESULT = _descriptor.Descriptor(
-  name='VodGetPlayInfoResult',
-  full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult',
+_VODPLAYINFOMODEL = _descriptor.Descriptor(
+  name='VodPlayInfoModel',
+  full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Version', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.Version', index=0,
+      name='Version', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.Version', index=0,
       number=10, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Vid', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.Vid', index=1,
+      name='Vid', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.Vid', index=1,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Status', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.Status', index=2,
+      name='Status', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.Status', index=2,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='PosterUrl', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.PosterUrl', index=3,
+      name='PosterUrl', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.PosterUrl', index=3,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Duration', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.Duration', index=4,
+      name='Duration', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.Duration', index=4,
       number=4, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='FileType', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.FileType', index=5,
+      name='FileType', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.FileType', index=5,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='EnableAdaptive', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.EnableAdaptive', index=6,
+      name='EnableAdaptive', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.EnableAdaptive', index=6,
       number=6, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='TotalCount', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.TotalCount', index=7,
+      name='TotalCount', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.TotalCount', index=7,
       number=7, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='AdaptiveInfo', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.AdaptiveInfo', index=8,
+      name='AdaptiveInfo', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.AdaptiveInfo', index=8,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='PlayInfoList', full_name='Volcengine.Models.Vod.Business.VodGetPlayInfoResult.PlayInfoList', index=9,
+      name='PlayInfoList', full_name='Volcengine.Models.Vod.Business.VodPlayInfoModel.PlayInfoList', index=9,
       number=9, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -165,7 +165,7 @@ _VODGETPLAYINFORESULT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=95,
-  serialized_end=454,
+  serialized_end=450,
 )
 
 
@@ -266,24 +266,24 @@ _VODGETORIGINALPLAYINFORESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=457,
-  serialized_end=673,
+  serialized_start=453,
+  serialized_end=669,
 )
 
-_VODGETPLAYINFORESULT.fields_by_name['Version'].enum_type = _VODVIDEOMODELVERSION
-_VODGETPLAYINFORESULT.fields_by_name['AdaptiveInfo'].message_type = vod_dot_business_dot_vod__common__pb2._VODADAPTIVEINFO
-_VODGETPLAYINFORESULT.fields_by_name['PlayInfoList'].message_type = vod_dot_business_dot_vod__common__pb2._VODPLAYINFO
-DESCRIPTOR.message_types_by_name['VodGetPlayInfoResult'] = _VODGETPLAYINFORESULT
+_VODPLAYINFOMODEL.fields_by_name['Version'].enum_type = _VODVIDEOMODELVERSION
+_VODPLAYINFOMODEL.fields_by_name['AdaptiveInfo'].message_type = vod_dot_business_dot_vod__common__pb2._VODADAPTIVEINFO
+_VODPLAYINFOMODEL.fields_by_name['PlayInfoList'].message_type = vod_dot_business_dot_vod__common__pb2._VODPLAYINFO
+DESCRIPTOR.message_types_by_name['VodPlayInfoModel'] = _VODPLAYINFOMODEL
 DESCRIPTOR.message_types_by_name['VodGetOriginalPlayInfoResult'] = _VODGETORIGINALPLAYINFORESULT
 DESCRIPTOR.enum_types_by_name['VodVideoModelVersion'] = _VODVIDEOMODELVERSION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-VodGetPlayInfoResult = _reflection.GeneratedProtocolMessageType('VodGetPlayInfoResult', (_message.Message,), {
-  'DESCRIPTOR' : _VODGETPLAYINFORESULT,
+VodPlayInfoModel = _reflection.GeneratedProtocolMessageType('VodPlayInfoModel', (_message.Message,), {
+  'DESCRIPTOR' : _VODPLAYINFOMODEL,
   '__module__' : 'vod.business.vod_play_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.VodGetPlayInfoResult)
+  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.VodPlayInfoModel)
   })
-_sym_db.RegisterMessage(VodGetPlayInfoResult)
+_sym_db.RegisterMessage(VodPlayInfoModel)
 
 VodGetOriginalPlayInfoResult = _reflection.GeneratedProtocolMessageType('VodGetOriginalPlayInfoResult', (_message.Message,), {
   'DESCRIPTOR' : _VODGETORIGINALPLAYINFORESULT,
