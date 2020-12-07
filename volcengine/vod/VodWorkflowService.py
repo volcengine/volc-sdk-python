@@ -26,6 +26,15 @@ from volcengine.models.vod.response.response_vod_pb2 import *
 #
 class VodWorkflowService(VodService):
 
+    _instance_lock = threading.Lock()
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(VodWorkflowService, "_instance"):
+            with VodWorkflowService._instance_lock:
+                if not hasattr(VodWorkflowService, "_instance"):
+                    VodWorkflowService._instance = object.__new__(cls)
+        return VodWorkflowService._instance
+
     #
     # StartWorkflow.
     #

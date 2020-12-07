@@ -26,6 +26,15 @@ from volcengine.models.vod.response.response_vod_pb2 import *
 #
 class VodPlayService(VodService):
 
+    _instance_lock = threading.Lock()
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(VodPlayService, "_instance"):
+            with VodPlayService._instance_lock:
+                if not hasattr(VodPlayService, "_instance"):
+                    VodPlayService._instance = object.__new__(cls)
+        return VodPlayService._instance
+
     #
     # GetPlayInfo.
     #

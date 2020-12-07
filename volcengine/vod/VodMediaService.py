@@ -26,6 +26,15 @@ from volcengine.models.vod.response.response_vod_pb2 import *
 #
 class VodMediaService(VodService):
 
+    _instance_lock = threading.Lock()
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(VodMediaService, "_instance"):
+            with VodMediaService._instance_lock:
+                if not hasattr(VodMediaService, "_instance"):
+                    VodMediaService._instance = object.__new__(cls)
+        return VodMediaService._instance
+
     #
     # UpdateMediaInfo.
     #
