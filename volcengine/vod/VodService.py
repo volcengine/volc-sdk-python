@@ -12,6 +12,14 @@ from volcengine.base.Service import Service
 
 
 class VodService(Service):
+    _instance_lock = threading.Lock()
+
+    def __new__(cls, *args, **kwargs):
+        if not hasattr(cls, "_instance"):
+            with cls._instance_lock:
+                if not hasattr(cls, "_instance"):
+                    cls._instance = object.__new__(cls)
+        return cls._instance
 
     def __init__(self, region='cn-north-1'):
         self.service_info = VodService.get_service_info(region)

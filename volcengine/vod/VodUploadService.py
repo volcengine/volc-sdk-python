@@ -26,15 +26,6 @@ from volcengine.models.vod.response.response_vod_pb2 import *
 #
 class VodUploadService(VodService):
 
-    _instance_lock = threading.Lock()
-
-    def __new__(cls, *args, **kwargs):
-        if not hasattr(VodUploadService, "_instance"):
-            with VodUploadService._instance_lock:
-                if not hasattr(VodUploadService, "_instance"):
-                    VodUploadService._instance = object.__new__(cls)
-        return VodUploadService._instance
-
     #
     # UploadMediaByUrl.
     #
