@@ -30,7 +30,6 @@ class VodService(Service):
         self.lock = threading.Lock()
         super(VodService, self).__init__(self.service_info, self.api_info)
 
-    # TODO 测试完毕修改回来
     @staticmethod
     def get_service_info(region):
         service_info_map = {
@@ -61,7 +60,7 @@ class VodService(Service):
             "GetMediaInfos": ApiInfo("GET", "/", {"Action": "GetMediaInfos", "Version": "2020-08-01"}, {}, {}),
             "GetRecommendedPoster": ApiInfo("GET", "/", {"Action": "GetRecommendedPoster", "Version": "2020-08-01"}, {},
                                             {}),
-            "UploadMediaByUrl": ApiInfo("GET", "/", {"Action": "UploadVideoByUrl", "Version": "2020-08-01"}, {}, {}),
+            "UploadMediaByUrl": ApiInfo("GET", "/", {"Action": "UploadMediaByUrl", "Version": "2020-08-01"}, {}, {}),
             "QueryUploadTaskInfo": ApiInfo("GET", "/", {"Action": "QueryUploadTaskInfo", "Version": "2020-08-01"}, {},
                                            {}),
             "ApplyUploadInfo": ApiInfo("GET", "/", {"Action": "ApplyUploadInfo", "Version": "2020-08-01"}, {}, {}),
