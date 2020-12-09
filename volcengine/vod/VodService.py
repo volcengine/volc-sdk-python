@@ -34,9 +34,7 @@ class VodService(Service):
     @staticmethod
     def get_service_info(region):
         service_info_map = {
-            # 'cn-north-1': ServiceInfo("vod.volcengineapi.com", {'Accept': 'application/json'},
-            #                           Credentials('', '', 'vod', 'cn-north-1'), 5, 5),
-            'cn-north-1': ServiceInfo("volcengineapi-boe.byted.org", {'Accept': 'application/json'},
+            'cn-north-1': ServiceInfo("vod.volcengineapi.com", {'Accept': 'application/json'},
                                       Credentials('', '', 'vod', 'cn-north-1'), 5, 5),
             'ap-singapore-1': ServiceInfo("vod.ap-singapore-1.volcengineapi.com", {'Accept': 'application/json'},
                                           Credentials('', '', 'vod', 'ap-singapore-1'), 5, 5),
