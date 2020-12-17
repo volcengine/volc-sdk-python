@@ -11,7 +11,7 @@ if __name__ == '__main__':
     # vod_service_wrapper.set_ak('ak')
     # vod_service_wrapper.set_sk('sk')
     try:
-        vid = 'v0c2c369007abu04ru8riko30uo9n73g'
+        vid = 'your vid'
         req3 = VodGetPlayInfoRequest()
         req3.Vid = vid
         resp3 = vod_service_wrapper.get_play_auth_token(req3)

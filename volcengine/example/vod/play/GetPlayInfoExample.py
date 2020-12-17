@@ -10,7 +10,7 @@ if __name__ == '__main__':
     # vod_service.set_ak('ak')
     # vod_service.set_sk('sk')
     try:
-        vid = 'v0c2c369007abu04ru8riko30uo9n73g'
+        vid = 'your vid'
         req = VodGetPlayInfoRequest()
         req.Vid = vid
         req.Ssl = '1'
