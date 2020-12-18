@@ -52,30 +52,4 @@ class VodPlayService(VodService):
         else:
             return Parse(res, VodGetPlayInfoResponse(), True)
 
-    #
-    # GetOriginalPlayInfo.
-    #
-    # @param request VodGetOriginalPlayInfoRequest
-    # @return VodGetOriginalPlayInfoResponse
-    # @raise Exception
-    def get_original_play_info(self, request: VodGetOriginalPlayInfoRequest) -> VodGetOriginalPlayInfoResponse:
-        try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
-            res = self.get("GetOriginalPlayInfo", params)
-        except Exception as Argument:
-            try:
-                resp = Parse(Argument.__str__(), VodGetOriginalPlayInfoResponse(), True)
-            except Exception:
-                raise Argument
-            else:
-                raise Exception(resp.ResponseMetadata.Error.Code)
-        else:
-            return Parse(res, VodGetOriginalPlayInfoResponse(), True)
-
 # end of service interface

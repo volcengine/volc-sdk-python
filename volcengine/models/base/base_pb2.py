@@ -18,21 +18,13 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='base/base.proto',
   package='Volcengine.Models.Base',
   syntax='proto3',
-  serialized_options=b'\n\031com.volcengine.model.baseB\004BaseP\001Z1github.com/volcengine/volc-sdk-golang/models/base\240\001\001\330\001\001\302\002\000\312\002\020Volc\\Models\\Base\342\002\027Volc\\Models\\GPBMetadata',
+  serialized_options=b'\n\031com.volcengine.model.baseB\004BaseP\001Z1github.com/volcengine/volc-sdk-golang/models/base\240\001\001\330\001\001\302\002\000\312\002\020Volc\\Models\\Base\342\002\034Volc\\Models\\Base\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0f\x62\x61se/base.proto\x12\x16Volcengine.Models.Base\x1a google/protobuf/descriptor.proto\"\x9d\x01\n\x10ResponseMetadata\x12\x11\n\tRequestId\x18\x01 \x01(\t\x12\x0e\n\x06\x41\x63tion\x18\x02 \x01(\t\x12\x0f\n\x07Version\x18\x03 \x01(\t\x12\x0f\n\x07Service\x18\x04 \x01(\t\x12\x0e\n\x06Region\x18\x05 \x01(\t\x12\x34\n\x05\x45rror\x18\x06 \x01(\x0b\x32%.Volcengine.Models.Base.ResponseError\".\n\rResponseError\x12\x0c\n\x04\x43ode\x18\x01 \x01(\t\x12\x0f\n\x07Message\x18\x02 \x01(\t:6\n\x0cproduct_type\x12\x1c.google.protobuf.FileOptions\x18\x90N \x01(\t\x88\x01\x01\x42\x8c\x01\n\x19\x63om.volcengine.model.baseB\x04\x42\x61seP\x01Z1github.com/volcengine/volc-sdk-golang/models/base\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02\x10Volc\\Models\\Base\xe2\x02\x17Volc\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x0f\x62\x61se/base.proto\x12\x16Volcengine.Models.Base\x1a google/protobuf/descriptor.proto\"\x9d\x01\n\x10ResponseMetadata\x12\x11\n\tRequestId\x18\x01 \x01(\t\x12\x0e\n\x06\x41\x63tion\x18\x02 \x01(\t\x12\x0f\n\x07Version\x18\x03 \x01(\t\x12\x0f\n\x07Service\x18\x04 \x01(\t\x12\x0e\n\x06Region\x18\x05 \x01(\t\x12\x34\n\x05\x45rror\x18\x06 \x01(\x0b\x32%.Volcengine.Models.Base.ResponseError\".\n\rResponseError\x12\x0c\n\x04\x43ode\x18\x01 \x01(\t\x12\x0f\n\x07Message\x18\x02 \x01(\tB\x91\x01\n\x19\x63om.volcengine.model.baseB\x04\x42\x61seP\x01Z1github.com/volcengine/volc-sdk-golang/models/base\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02\x10Volc\\Models\\Base\xe2\x02\x1cVolc\\Models\\Base\\GPBMetadatab\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_descriptor__pb2.DESCRIPTOR,])
 
 
-PRODUCT_TYPE_FIELD_NUMBER = 10000
-product_type = _descriptor.FieldDescriptor(
-  name='product_type', full_name='Volcengine.Models.Base.product_type', index=0,
-  number=10000, type=9, cpp_type=9, label=1,
-  has_default_value=False, default_value=b"".decode('utf-8'),
-  message_type=None, enum_type=None, containing_type=None,
-  is_extension=True, extension_scope=None,
-  serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key)
 
 
 _RESPONSEMETADATA = _descriptor.Descriptor(
@@ -143,7 +135,6 @@ _RESPONSEERROR = _descriptor.Descriptor(
 _RESPONSEMETADATA.fields_by_name['Error'].message_type = _RESPONSEERROR
 DESCRIPTOR.message_types_by_name['ResponseMetadata'] = _RESPONSEMETADATA
 DESCRIPTOR.message_types_by_name['ResponseError'] = _RESPONSEERROR
-DESCRIPTOR.extensions_by_name['product_type'] = product_type
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ResponseMetadata = _reflection.GeneratedProtocolMessageType('ResponseMetadata', (_message.Message,), {
@@ -160,7 +151,6 @@ ResponseError = _reflection.GeneratedProtocolMessageType('ResponseError', (_mess
   })
 _sym_db.RegisterMessage(ResponseError)
 
-google_dot_protobuf_dot_descriptor__pb2.FileOptions.RegisterExtension(product_type)
 
 DESCRIPTOR._options = None
 # @@protoc_insertion_point(module_scope)
