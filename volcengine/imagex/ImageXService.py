@@ -131,7 +131,7 @@ class ImageXService(Service):
         for d in img_datas:
             oid = store_infos[idx]['StoreUri']
             auth = store_infos[idx]['Auth']
-            url = 'http://{}/{}'.format(host, oid)
+            url = 'https://{}/{}'.format(host, oid)
             headers = {'Content-CRC32': hex(crc32(d) & 0xFFFFFFFF)[2:], 'Authorization': auth}
             upload_status, resp = self.put_data(url, d, headers)
             if not upload_status:
