@@ -1,5 +1,9 @@
 ### Change log
 
+2020-12-22 Bumped to version v1.0.2
+- Add vod sdk.
+- Add ImageX sdk.
+
 2020-11-22 Bumped to version v1.0.1
 - Update README.md.
 - Update dependency library,Compatible with python2 and python3.
