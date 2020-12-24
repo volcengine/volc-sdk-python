@@ -42,6 +42,14 @@ class VisualService(Service):
             "GeneralSegment": ApiInfo("POST", "/", {"Action": "GeneralSegment", "Version": "2020-08-26"}, {}, {}),
             "EnhancePhoto": ApiInfo("POST", "/", {"Action": "EnhancePhoto", "Version": "2020-08-26"}, {}, {}),
             "ConvertPhoto": ApiInfo("POST", "/", {"Action": "ConvertPhoto", "Version": "2020-08-26"}, {}, {}),
+            "VideoSceneDetect": ApiInfo("POST", "/", {"Action": "VideoSceneDetect", "Version": "2020-08-26"}, {}, {}),
+            "OverResolution": ApiInfo("POST", "/", {"Action": "OverResolution", "Version": "2020-08-26"}, {}, {}),
+            "GoodsSegment": ApiInfo("POST", "/", {"Action": "GoodsSegment", "Version": "2020-08-26"}, {}, {}),
+            "ImageOutpaint": ApiInfo("POST", "/", {"Action": "ImageOutpaint", "Version": "2020-08-26"}, {}, {}),
+            "ImageInpaint": ApiInfo("POST", "/", {"Action": "ImageInpaint", "Version": "2020-08-26"}, {}, {}),
+            "ImageCut": ApiInfo("POST", "/", {"Action": "ImageCut", "Version": "2020-08-26"}, {}, {}),
+            "EntityDetect": ApiInfo("POST", "/", {"Action": "EntityDetectment", "Version": "2020-08-26"}, {}, {}),
+            "GoodsDetect": ApiInfo("POST", "/", {"Action": "GoodsDetect", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -125,6 +133,62 @@ class VisualService(Service):
     def convert_photo(self, form):
         try:
             res_json = self.common_handler("ConvertPhoto", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_scene_detect(self, form):
+        try:
+            res_json = self.common_handler("VideoSceneDetect", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def over_resolution(self, form):
+        try:
+            res_json = self.common_handler("OverResolution", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def goods_segment(self, form):
+        try:
+            res_json = self.common_handler("GoodsSegment", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_outpaint(self, form):
+        try:
+            res_json = self.common_handler("ImageOutpaint", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_inpaint(self, form):
+        try:
+            res_json = self.common_handler("ImageInpaint", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_cut(self, form):
+        try:
+            res_json = self.common_handler("ImageCut", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def entity_detect(self, form):
+        try:
+            res_json = self.common_handler("EntityDetect", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def goods_detect(self, form):
+        try:
+            res_json = self.common_handler("GoodsDetect", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
