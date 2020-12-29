@@ -99,7 +99,6 @@ class Service(object):
 
         url = r.build()
 
-        print("headers: {}, data: {}".format(r.headers, r.form))
         resp = self.session.post(url, headers=r.headers, data=r.form, files=files,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
