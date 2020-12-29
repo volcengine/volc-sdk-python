@@ -6,7 +6,7 @@ from collections import OrderedDict
 try:
     from urllib.parse import urlencode
 except ImportError:
-     from urllib import urlencode
+    from urllib import urlencode
 
 
 import requests
@@ -27,8 +27,10 @@ class Service(object):
 
     def init(self):
         if 'VCLOUD_ACCESSKEY' in os.environ and 'VCLOUD_SECRETKEY' in os.environ:
-            self.service_info.credentials.set_ak(os.environ['VCLOUD_ACCESSKEY'])
-            self.service_info.credentials.set_sk(os.environ['VCLOUD_SECRETKEY'])
+            self.service_info.credentials.set_ak(
+                os.environ['VCLOUD_ACCESSKEY'])
+            self.service_info.credentials.set_sk(
+                os.environ['VCLOUD_SECRETKEY'])
         else:
             if os.environ.get('HOME', None) is None:
                 return
@@ -85,7 +87,7 @@ class Service(object):
         else:
             raise Exception(resp.text)
 
-    def post(self, api, params, form):
+    def post(self, api, params, form, files=None):
         if not (api in self.api_info):
             raise Exception("no such api")
         api_info = self.api_info[api]
@@ -98,7 +100,7 @@ class Service(object):
         url = r.build()
 
         print("headers: {}, data: {}".format(r.headers, r.form))
-        resp = self.session.post(url, headers=r.headers, data=r.form,
+        resp = self.session.post(url, headers=r.headers, data=r.form, files=files,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
             return resp.text
@@ -199,8 +201,10 @@ class Service(object):
         if policy is None:
             inner_token.policy_string = ''
         else:
-            inner_token.policy_string = json.dumps(policy, cls=ComplexEncoder, sort_keys=True).replace(' ', '')
-        inner_token.signed_secret_access_key = Util.aes_encrypt_cbc_with_base64(sts.secret_access_key, key)
+            inner_token.policy_string = json.dumps(
+                policy, cls=ComplexEncoder, sort_keys=True).replace(' ', '')
+        inner_token.signed_secret_access_key = Util.aes_encrypt_cbc_with_base64(
+            sts.secret_access_key, key)
         inner_token.expired_time = expire
 
         sign_str = '{}|{}|{}|{}|{}'.format(inner_token.lt_access_key_id, inner_token.access_key_id,
