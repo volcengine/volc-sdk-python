@@ -38,6 +38,8 @@ api_info = {
         ApiInfo("GET", "/", {"Action": "ApplyImageUpload", "Version": IMAGEX_API_VERSION}, {}, {}),
     "CommitImageUpload":
         ApiInfo("POST", "/", {"Action": "CommitImageUpload", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "DeleteImageUploadFiles":
+        ApiInfo("POST", "/", {"Action": "DeleteImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
     "UpdateImageUploadFiles":
         ApiInfo("POST", "/", {"Action": "UpdateImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
     "PreviewImageUploadFile":
@@ -161,6 +163,21 @@ class ImageXService(Service):
         statement = Statement.new_allow_statement(actions, resources)
         inline_policy = Policy([statement])
         return self.sign_sts2(inline_policy, expire)
+
+    def delete_images(self, service_id, uris):
+        query = {
+            'ServiceId': service_id
+        }
+        body = {
+            'StoreUris': uris
+        }
+        res = self.json('DeleteImageUploadFiles', query, json.dumps(body))
+        if res == '':
+            raise Exception("DeleteImageUploadFiles: empty response")
+        res_json = json.loads(res)
+        if 'Error' in res_json['ResponseMetadata']:
+            raise Exception(res_json['ResponseMetadata'])
+        return res_json['Result']
 
     # action=0: refresh
     # action=1: disable
