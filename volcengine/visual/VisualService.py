@@ -48,7 +48,7 @@ class VisualService(Service):
             "ImageOutpaint": ApiInfo("POST", "/", {"Action": "ImageOutpaint", "Version": "2020-08-26"}, {}, {}),
             "ImageInpaint": ApiInfo("POST", "/", {"Action": "ImageInpaint", "Version": "2020-08-26"}, {}, {}),
             "ImageCut": ApiInfo("POST", "/", {"Action": "ImageCut", "Version": "2020-08-26"}, {}, {}),
-            "EntityDetect": ApiInfo("POST", "/", {"Action": "EntityDetectment", "Version": "2020-08-26"}, {}, {}),
+            "EntityDetect": ApiInfo("POST", "/", {"Action": "EntityDetect", "Version": "2020-08-26"}, {}, {}),
             "GoodsDetect": ApiInfo("POST", "/", {"Action": "GoodsDetect", "Version": "2020-08-26"}, {}, {}),
             "VideoSummarizationSubmitTask": ApiInfo("POST", "/", {"Action": "VideoSummarizationSubmitTask", "Version": "2020-08-26"}, {}, {}),
             "VideoSummarizationQueryTask": ApiInfo("GET", "/", {"Action": "VideoSummarizationQueryTask", "Version": "2020-08-26"}, {}, {}),
