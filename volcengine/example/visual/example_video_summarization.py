@@ -11,19 +11,14 @@ if __name__ == '__main__':
     # call below method if you dont set ak and sk in $HOME/.volc/config
     visual_service.set_ak('ak')
     visual_service.set_sk('sk')
-    data = None
-    with open("filepath", "rb") as f:
-        data = f.read()
 
     form = {
         "result_duration": 5,
-        "result_width": 1280
-    }
-    files = {
-        "video": data
+        "result_width": 1280,
+        "video_url": ""
     }
 
-    resp = visual_service.video_summarization_submit_task(form, files)
+    resp = visual_service.video_summarization_submit_task(form)
     print(resp)
 
     params = dict()

@@ -87,7 +87,7 @@ class Service(object):
         else:
             raise Exception(resp.text)
 
-    def post(self, api, params, form, files=None):
+    def post(self, api, params, form):
         if not (api in self.api_info):
             raise Exception("no such api")
         api_info = self.api_info[api]
@@ -99,7 +99,7 @@ class Service(object):
 
         url = r.build()
 
-        resp = self.session.post(url, headers=r.headers, data=r.form, files=files,
+        resp = self.session.post(url, headers=r.headers, data=r.form,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
             return resp.text

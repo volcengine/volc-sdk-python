@@ -11,20 +11,15 @@ if __name__ == '__main__':
     # call below method if you dont set ak and sk in $HOME/.volc/config
     visual_service.set_ak('ak')
     visual_service.set_sk('sk')
-    data = None
-    with open("filepath", "rb") as f:
-        data = f.read()
 
     form = {
         "strategy": "STATIC_CROPPING",
         "aspect_ratio": 1,
         "crop_size": 1,
-    }
-    files = {
-        "video": data
+        "video_url": ""
     }
 
-    resp = visual_service.video_retargeting_submit_task(form, files)
+    resp = visual_service.video_retargeting_submit_task(form)
     print(resp)
 
     params = dict()

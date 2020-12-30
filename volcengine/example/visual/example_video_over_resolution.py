@@ -11,18 +11,13 @@ if __name__ == '__main__':
     # call below method if you dont set ak and sk in $HOME/.volc/config
     visual_service.set_ak('ak')
     visual_service.set_sk('sk')
-    data = None
-    with open("filepath", "rb") as f:
-        data = f.read()
 
     form = {
-        "output_resolution": "360p、480p、720p or 1080p"
-    }
-    files = {
-        "video": data
+        "output_resolution": "360p、480p、720p or 1080p",
+        "video_url": ""
     }
 
-    resp = visual_service.video_over_resollution_submit_task(form, files)
+    resp = visual_service.video_over_resolution_submit_task(form)
     print(resp)
 
     params = dict()
@@ -31,5 +26,5 @@ if __name__ == '__main__':
         "task_id": "get from submit_task resp"
     }
 
-    resp = visual_service.video_over_resollution_query_task(params)
+    resp = visual_service.video_over_resolution_query_task(params)
     print(resp)
