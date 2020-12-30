@@ -13,18 +13,10 @@ if __name__ == '__main__':
     visual_service.set_sk('sk')
 
     form = {
-        "output_resolution": "360p、480p、720p or 1080p",
+        "result_duration": 5,
+        "result_width": 1280,
         "video_url": ""
     }
 
-    resp = visual_service.video_over_resolution_submit_task(form)
-    print(resp)
-
-    params = dict()
-
-    params = {
-        "task_id": "get from submit_task resp"
-    }
-
-    resp = visual_service.video_over_resolution_query_task(params)
+    resp = visual_service.video_summarization_submit_task(form)
     print(resp)

@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import time
+import base64
 
 from volcengine.visual.VisualService import VisualService
 
@@ -13,20 +14,9 @@ if __name__ == '__main__':
     visual_service.set_sk('sk')
 
     form = {
-        "strategy": "STATIC_CROPPING",
-        "aspect_ratio": 1,
-        "crop_size": 1,
+        "method": "search",
         "video_url": ""
     }
 
-    resp = visual_service.video_retargeting_submit_task(form)
-    print(resp)
-
-    params = dict()
-
-    params = {
-        "task_id": "get from submit_task resp"
-    }
-
-    resp = visual_service.video_retargeting_query_task(params)
+    resp = visual_service.video_inpaint_submit_task(form)
     print(resp)

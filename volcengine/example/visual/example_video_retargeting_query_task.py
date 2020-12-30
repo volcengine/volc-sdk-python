@@ -12,20 +12,11 @@ if __name__ == '__main__':
     visual_service.set_ak('ak')
     visual_service.set_sk('sk')
 
-    form = {
-        "result_duration": 5,
-        "result_width": 1280,
-        "video_url": ""
-    }
-
-    resp = visual_service.video_summarization_submit_task(form)
-    print(resp)
-
     params = dict()
 
     params = {
         "task_id": "get from submit_task resp"
     }
 
-    resp = visual_service.video_summarization_query_task(params)
+    resp = visual_service.video_retargeting_query_task(params)
     print(resp)
