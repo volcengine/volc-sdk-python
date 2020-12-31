@@ -61,10 +61,10 @@ class VisualService(Service):
         }
         return api_info
 
-    def common_handler(self, api, form, files=None):
+    def common_handler(self, api, form):
         params = dict()
         try:
-            res = self.post(api, params, form, files)
+            res = self.post(api, params, form)
             res_json = json.loads(res)
             return res_json
         except Exception as e:
@@ -214,10 +214,10 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
-    def video_summarization_submit_task(self, form, files):
+    def video_summarization_submit_task(self, form):
         try:
             res_json = self.common_handler(
-                "VideoSummarizationSubmitTask", form, files)
+                "VideoSummarizationSubmitTask", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
@@ -230,15 +230,15 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
-    def video_over_resollution_submit_task(self, form, files):
+    def video_over_resolution_submit_task(self, form):
         try:
             res_json = self.common_handler(
-                "VideoOverResolutionSubmitTask", form, files)
+                "VideoOverResolutionSubmitTask", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def video_over_resollution_query_task(self, params):
+    def video_over_resolution_query_task(self, params):
         try:
             res_json = self.common_get_handler(
                 "VideoOverResolutionQueryTask", params)
@@ -246,10 +246,10 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
-    def video_retargeting_submit_task(self, form, files):
+    def video_retargeting_submit_task(self, form):
         try:
             res_json = self.common_handler(
-                "VideoRetargetingSubmitTask", form, files)
+                "VideoRetargetingSubmitTask", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
@@ -262,10 +262,10 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
-    def video_inpaint_submit_task(self, form, files):
+    def video_inpaint_submit_task(self, form):
         try:
             res_json = self.common_handler(
-                "VideoInpaintSubmitTask", form, files)
+                "VideoInpaintSubmitTask", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
