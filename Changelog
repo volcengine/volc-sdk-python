@@ -1,5 +1,8 @@
 ### Change log
 
+2020-12-30 Bumped to version v1.0.3
+- ImageX:add delete api.
+
 2020-12-22 Bumped to version v1.0.2
 - Add vod sdk.
 - Add ImageX sdk.
