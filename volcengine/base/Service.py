@@ -94,7 +94,7 @@ class Service(object):
         r = self.prepare_request(api_info, params)
         r.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         r.form = self.merge(api_info.form, form)
-        r.body = urlencode(r.form)
+        r.body = urlencode(r.form, True)
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
