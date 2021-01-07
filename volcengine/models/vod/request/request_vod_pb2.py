@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n com.volcengine.model.vod.requestB\nVodRequestP\001Z8github.com/volcengine/volc-sdk-golang/models/vod/request\240\001\001\330\001\001\312\002\027Volc\\Models\\Vod\\Request\342\002\033Volc\\Models\\Vod\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dvod/request/request_vod.proto\x12\x1dVolcengine.Models.Vod.Request\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fvod/business/vod_workflow.proto\x1a\x1dvod/business/vod_upload.proto\"\x98\x01\n\x15VodGetPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\"I\n\x1dVodGetOriginalPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\"m\n\x13VodUrlUploadRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\x07URLSets\x18\x02 \x03(\x0b\x32\x32.Volcengine.Models.Vod.Business.VodUrlUploadURLSet\"/\n\x1dVodQueryUploadTaskInfoRequest\x12\x0e\n\x06JobIds\x18\x01 \x01(\t\"T\n\x19VodApplyUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x10\n\x08\x46ileSize\x18\x03 \x01(\x01\"e\n\x15VodUploadMediaRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"l\n\x1aVodCommitUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"=\n\x17VodUrlUploadJsonRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0f\n\x07URLSets\x18\x02 \x01(\t\".\n\x1eVodGetRecommendedPosterRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"A\n\"VodUpdateMediaPublishStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"\xe5\x01\n\x19VodUpdateMediaInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12/\n\tPosterUri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05Title\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x44\x65scription\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04Tags\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\'\n\x17VodGetMediaInfosRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"\xa1\x01\n\x17VodStartWorkflowRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12=\n\x05Input\x18\x03 \x01(\x0b\x32..Volcengine.Models.Vod.Business.WorkflowParams\x12\x10\n\x08Priority\x18\x04 \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\tB\xa8\x01\n com.volcengine.model.vod.requestB\nVodRequestP\x01Z8github.com/volcengine/volc-sdk-golang/models/vod/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x17Volc\\Models\\Vod\\Request\xe2\x02\x1bVolc\\Models\\Vod\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1dvod/request/request_vod.proto\x12\x1dVolcengine.Models.Vod.Request\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fvod/business/vod_workflow.proto\x1a\x1dvod/business/vod_upload.proto\"\xac\x01\n\x15VodGetPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\x12\x12\n\nNeedThumbs\x18\t \x01(\t\"I\n\x1dVodGetOriginalPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\"m\n\x13VodUrlUploadRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\x07URLSets\x18\x02 \x03(\x0b\x32\x32.Volcengine.Models.Vod.Business.VodUrlUploadURLSet\"/\n\x1dVodQueryUploadTaskInfoRequest\x12\x0e\n\x06JobIds\x18\x01 \x01(\t\"T\n\x19VodApplyUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x10\n\x08\x46ileSize\x18\x03 \x01(\x01\"e\n\x15VodUploadMediaRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"l\n\x1aVodCommitUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"=\n\x17VodUrlUploadJsonRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0f\n\x07URLSets\x18\x02 \x01(\t\".\n\x1eVodGetRecommendedPosterRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"A\n\"VodUpdateMediaPublishStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"\xe5\x01\n\x19VodUpdateMediaInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12/\n\tPosterUri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05Title\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x44\x65scription\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04Tags\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\'\n\x17VodGetMediaInfosRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"\xa1\x01\n\x17VodStartWorkflowRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12=\n\x05Input\x18\x03 \x01(\x0b\x32..Volcengine.Models.Vod.Business.WorkflowParams\x12\x10\n\x08Priority\x18\x04 \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\tB\xa8\x01\n com.volcengine.model.vod.requestB\nVodRequestP\x01Z8github.com/volcengine/volc-sdk-golang/models/vod/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x17Volc\\Models\\Vod\\Request\xe2\x02\x1bVolc\\Models\\Vod\\GPBMetadatab\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,vod_dot_business_dot_vod__workflow__pb2.DESCRIPTOR,vod_dot_business_dot_vod__upload__pb2.DESCRIPTOR,])
 
@@ -93,6 +93,13 @@ _VODGETPLAYINFOREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='NeedThumbs', full_name='Volcengine.Models.Vod.Request.VodGetPlayInfoRequest.NeedThumbs', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -106,7 +113,7 @@ _VODGETPLAYINFOREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=161,
-  serialized_end=313,
+  serialized_end=333,
 )
 
 
@@ -151,8 +158,8 @@ _VODGETORIGINALPLAYINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=315,
-  serialized_end=388,
+  serialized_start=335,
+  serialized_end=408,
 )
 
 
@@ -190,8 +197,8 @@ _VODURLUPLOADREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=390,
-  serialized_end=499,
+  serialized_start=410,
+  serialized_end=519,
 )
 
 
@@ -222,8 +229,8 @@ _VODQUERYUPLOADTASKINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=501,
-  serialized_end=548,
+  serialized_start=521,
+  serialized_end=568,
 )
 
 
@@ -268,8 +275,8 @@ _VODAPPLYUPLOADINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=550,
-  serialized_end=634,
+  serialized_start=570,
+  serialized_end=654,
 )
 
 
@@ -321,8 +328,8 @@ _VODUPLOADMEDIAREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=636,
-  serialized_end=737,
+  serialized_start=656,
+  serialized_end=757,
 )
 
 
@@ -374,8 +381,8 @@ _VODCOMMITUPLOADINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=739,
-  serialized_end=847,
+  serialized_start=759,
+  serialized_end=867,
 )
 
 
@@ -413,8 +420,8 @@ _VODURLUPLOADJSONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=849,
-  serialized_end=910,
+  serialized_start=869,
+  serialized_end=930,
 )
 
 
@@ -445,8 +452,8 @@ _VODGETRECOMMENDEDPOSTERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=912,
-  serialized_end=958,
+  serialized_start=932,
+  serialized_end=978,
 )
 
 
@@ -484,8 +491,8 @@ _VODUPDATEMEDIAPUBLISHSTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=960,
-  serialized_end=1025,
+  serialized_start=980,
+  serialized_end=1045,
 )
 
 
@@ -544,8 +551,8 @@ _VODUPDATEMEDIAINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1028,
-  serialized_end=1257,
+  serialized_start=1048,
+  serialized_end=1277,
 )
 
 
@@ -576,8 +583,8 @@ _VODGETMEDIAINFOSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1259,
-  serialized_end=1298,
+  serialized_start=1279,
+  serialized_end=1318,
 )
 
 
@@ -636,8 +643,8 @@ _VODSTARTWORKFLOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1301,
-  serialized_end=1462,
+  serialized_start=1321,
+  serialized_end=1482,
 )
 
 _VODURLUPLOADREQUEST.fields_by_name['URLSets'].message_type = vod_dot_business_dot_vod__upload__pb2._VODURLUPLOADURLSET

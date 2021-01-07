@@ -111,8 +111,6 @@ class VodUploadService(VodService):
     # @return VodCommitUploadInfoResponse
     # @raise Exception
     def commit_upload_info(self, request: VodCommitUploadInfoRequest) -> VodCommitUploadInfoResponse:
-        self.service_info.connection_timeout = 8
-        self.service_info.socket_timeout = 8
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
