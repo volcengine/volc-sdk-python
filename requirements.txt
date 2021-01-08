@@ -1,10 +1,6 @@
-certifi==2020.12.5
-chardet==4.0.0
-crypto==1.4.1
-idna==2.10
-Naked==0.1.31
-pytz==2020.5
-PyYAML==5.3.1
-requests==2.25.1
-shellescape==3.8.1
-urllib3==1.26.2
+pytz==2020.4
+requests==2.22.0
+pycryptodome==3.9.9
+protobuf==3.12.4
+setuptools
+google==3.0.0
