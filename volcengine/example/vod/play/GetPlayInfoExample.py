@@ -2,10 +2,10 @@
 from __future__ import print_function
 
 from volcengine.models.vod.request.request_vod_pb2 import *
-from volcengine.vod.VodPlayService import VodPlayService
+from volcengine.vod.VodService import VodService
 
 if __name__ == '__main__':
-    vod_service = VodPlayService()
+    vod_service = VodService()
     # call below method if you dont set ak and sk in $HOME/.vcloud/config
     # vod_service.set_ak('ak')
     # vod_service.set_sk('sk')
