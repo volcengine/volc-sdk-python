@@ -26,9 +26,9 @@ class Service(object):
         self.init()
 
     def init(self):
-        if 'VCLOUD_ACCESSKEY' in os.environ and 'VCLOUD_SECRETKEY' in os.environ:
-            self.service_info.credentials.set_ak(os.environ['VCLOUD_ACCESSKEY'])
-            self.service_info.credentials.set_sk(os.environ['VCLOUD_SECRETKEY'])
+        if 'VOLC_ACCESSKEY' in os.environ and 'VOLC_SECRETKEY' in os.environ:
+            self.service_info.credentials.set_ak(os.environ['VOLC_ACCESSKEY'])
+            self.service_info.credentials.set_sk(os.environ['VOLC_SECRETKEY'])
         else:
             if os.environ.get('HOME', None) is None:
                 return
@@ -92,7 +92,7 @@ class Service(object):
         r = self.prepare_request(api_info, params)
         r.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         r.form = self.merge(api_info.form, form)
-        r.body = urlencode(r.form)
+        r.body = urlencode(r.form, True)
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
