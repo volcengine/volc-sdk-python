@@ -1,5 +1,9 @@
 ### Change log
 
+2021-01-20 Bumped to version v1.0.4
+- Add new visual apis.
+- Add adblock sdk.
+
 2020-12-30 Bumped to version v1.0.3
 - ImageX:add delete api.
 
