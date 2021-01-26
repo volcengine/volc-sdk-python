@@ -1,10 +1,10 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volcengine.vod.VodUploadServiceWrapper import VodUploadServiceWrapper
+from volcengine.vod.VodService import VodService
 
 if __name__ == '__main__':
-    vod_service = VodUploadServiceWrapper()
+    vod_service = VodService()
 
     # call below method if you dont set ak and sk in $HOME/.vcloud/config
     vod_service.set_ak('your ak')

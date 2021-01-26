@@ -3,31 +3,27 @@ from __future__ import print_function
 
 import json
 
-from volcengine.models.vod.request.request_vod_pb2 import VodUploadMediaRequest
+from volcengine.models.vod.request.request_vod_pb2 import VodCommitUploadInfoRequest
 from volcengine.util.Functions import Function
-from volcengine.vod.VodUploadServiceWrapper import VodUploadServiceWrapper
+from volcengine.vod.VodService import VodService
 
 if __name__ == '__main__':
-    vod_service = VodUploadServiceWrapper()
+    vod_service = VodService()
 
     # call below method if you dont set ak and sk in $HOME/.vcloud/config
     vod_service.set_ak('your ak')
     vod_service.set_sk('your sk')
 
-    space_name = 'your space name'
-    file_path = 'your file path'
-
-    get_meta_function = Function.get_meta_func()
-    snapshot_function = Function.get_snapshot_func(2.3)
-
+    space_name = 'your space'
+    session = ''
     try:
-        req = VodUploadMediaRequest()
+        req = VodCommitUploadInfoRequest()
         req.SpaceName = space_name
-        req.FilePath = file_path
+        req.SessionKey = session
+        get_meta_function = Function.get_meta_func()
+        snapshot_function = Function.get_snapshot_func(2.3)
         req.Functions = json.dumps([get_meta_function, snapshot_function])
-        req.CallbackArgs = ''
-
-        resp = vod_service.upload_media(req)
+        resp = vod_service.commit_upload_info(req)
     except Exception:
         raise
     else:
