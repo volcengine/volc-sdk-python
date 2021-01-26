@@ -34,6 +34,18 @@ service_info_map = {
 }
 
 api_info = {
+    # 模板管理
+    "CreateImageTemplate":
+        ApiInfo("POST", "/", {"Action": "CreateImageTemplate", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "DeleteImageTemplate":
+        ApiInfo("POST", "/", {"Action": "DeleteImageTemplate", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "PreviewImageTemplate":
+        ApiInfo("POST", "/", {"Action": "PreviewImageTemplate", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageTemplate":
+        ApiInfo("GET", "/", {"Action": "GetImageTemplate", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetAllImageTemplates":
+        ApiInfo("GET", "/", {"Action": "GetAllImageTemplates", "Version": IMAGEX_API_VERSION}, {}, {}),
+    # 资源管理相关
     "ApplyImageUpload":
         ApiInfo("GET", "/", {"Action": "ApplyImageUpload", "Version": IMAGEX_API_VERSION}, {}, {}),
     "CommitImageUpload":
@@ -43,7 +55,13 @@ api_info = {
     "UpdateImageUploadFiles":
         ApiInfo("POST", "/", {"Action": "UpdateImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
     "PreviewImageUploadFile":
-        ApiInfo("GET", "/", {"Action": "PreviewImageUploadFile", "Version": IMAGEX_API_VERSION}, {}, {})
+        ApiInfo("GET", "/", {"Action": "PreviewImageUploadFile", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageUploadFile":
+        ApiInfo("GET", "/", {"Action": "GetImageUploadFile", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageUploadFiles":
+        ApiInfo("GET", "/", {"Action": "GetImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageUpdateFiles":
+        ApiInfo("GET", "/", {"Action": "GetImageUpdateFiles", "Version": IMAGEX_API_VERSION}, {}, {})
 }
 
 
@@ -116,7 +134,6 @@ class ImageXService(Service):
 
         commit_upload_request = {
             'ServiceId': params['ServiceId'],
-            'SkipMeta': str(params.get('SkipMeta', False))
         }
         commit_upload_body = {
             'SessionKey': session_key,
@@ -213,3 +230,17 @@ class ImageXService(Service):
         if 'Error' in res_json['ResponseMetadata']:
             raise Exception(res_json['ResponseMetadata'])
         return res_json['Result']
+
+    def imagex_get(self, action, params, doseq=0):
+        res = self.get(action, params, doseq)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def imagex_post(self, action, params, body):
+        res = self.json(action, params, body)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
