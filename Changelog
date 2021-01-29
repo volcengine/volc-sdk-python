@@ -1,5 +1,8 @@
 ### Change log
 
+2021-01-29 Bumped to version v1.0.6
+- Fix vod init bug.
+
 2021-01-28 Bumped to version v1.0.5
 - Added sts2_ak support
 - Added common imagex api
