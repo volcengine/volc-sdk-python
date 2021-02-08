@@ -6,7 +6,7 @@ from collections import OrderedDict
 try:
     from urllib.parse import urlencode
 except ImportError:
-     from urllib import urlencode
+    from urllib import urlencode
 
 
 import requests
@@ -92,7 +92,7 @@ class Service(object):
         r = self.prepare_request(api_info, params)
         r.headers['Content-Type'] = 'application/x-www-form-urlencoded'
         r.form = self.merge(api_info.form, form)
-        r.body = urlencode(r.form)
+        r.body = urlencode(r.form, True)
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
@@ -198,8 +198,10 @@ class Service(object):
         if policy is None:
             inner_token.policy_string = ''
         else:
-            inner_token.policy_string = json.dumps(policy, cls=ComplexEncoder, sort_keys=True).replace(' ', '')
-        inner_token.signed_secret_access_key = Util.aes_encrypt_cbc_with_base64(sts.secret_access_key, key)
+            inner_token.policy_string = json.dumps(
+                policy, cls=ComplexEncoder, sort_keys=True).replace(' ', '')
+        inner_token.signed_secret_access_key = Util.aes_encrypt_cbc_with_base64(
+            sts.secret_access_key, key)
         inner_token.expired_time = expire
 
         sign_str = '{}|{}|{}|{}|{}'.format(inner_token.lt_access_key_id, inner_token.access_key_id,
