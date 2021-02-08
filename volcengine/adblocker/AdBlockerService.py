@@ -35,8 +35,18 @@ class AdBlockService(Service):
         return api_info
 
     def ad_block(self, params, body):
-        res = self.json("AdBlock", params, json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
+        try:
+            res = self.json("AdBlock", params, json.dumps(body))
+            if res == '':
+                raise Exception("empty response")
+            res_json = json.loads(res)
+            return res_json
+        except Exception:
+            res = self.json("AdBlock", params, json.dumps(body))
+            if res == '':
+                raise Exception("empty response")
+            res_json = json.loads(res)
+            return res_json
+
+
+
