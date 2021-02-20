@@ -24,7 +24,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n!com.volcengine.model.vod.responseB\013VodResponseP\001Z9github.com/volcengine/volc-sdk-golang/models/vod/response\240\001\001\330\001\001\312\002\030Volc\\Models\\Vod\\Response\342\002\033Volc\\Models\\Vod\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1fvod/response/response_vod.proto\x12\x1eVolcengine.Models.Vod.Response\x1a\x0f\x62\x61se/base.proto\x1a\x1bvod/business/vod_play.proto\x1a\x1cvod/business/vod_media.proto\x1a\x1dvod/business/vod_upload.proto\x1a\x1fvod/business/vod_workflow.proto\"\x9e\x01\n\x16VodGetPlayInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12@\n\x06Result\x18\x02 \x01(\x0b\x32\x30.Volcengine.Models.Vod.Business.VodPlayInfoModel\"\xb2\x01\n\x1eVodGetOriginalPlayInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Models.Vod.Business.VodGetOriginalPlayInfoResult\"\x9b\x01\n\x16VodUploadMediaResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12=\n\x06Result\x18\x02 \x01(\x0b\x32-.Volcengine.Models.Vod.Business.VodCommitData\"\xa2\x01\n\x1eVodQueryUploadTaskInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x01(\x0b\x32,.Volcengine.Models.Vod.Business.VodQueryData\"\x9e\x01\n\x14VodUrlUploadResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Models.Vod.Business.VodUrlResponseData\"\xaa\x01\n\x1aVodApplyUploadInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12H\n\x06Result\x18\x02 \x01(\x0b\x32\x38.Volcengine.Models.Vod.Business.VodApplyUploadInfoResult\"\xac\x01\n\x1bVodCommitUploadInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Models.Vod.Business.VodCommitUploadInfoResult\"\xa4\x01\n\x18VodGetMediaInfosResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Models.Vod.Business.VodGetMediaInfosData\"`\n\x1aVodUpdateMediaInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\"\xaa\x01\n\x1fVodGetRecommendedPosterResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Models.Vod.Business.VodGetRecPosterData\"i\n#VodUpdateMediaPublishStatusResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\"\xa6\x01\n\x18VodStartWorkflowResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Models.Vod.Business.VodStartWorkflowResultB\xac\x01\n!com.volcengine.model.vod.responseB\x0bVodResponseP\x01Z9github.com/volcengine/volc-sdk-golang/models/vod/response\xa0\x01\x01\xd8\x01\x01\xca\x02\x18Volc\\Models\\Vod\\Response\xe2\x02\x1bVolc\\Models\\Vod\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1fvod/response/response_vod.proto\x12\x1eVolcengine.Models.Vod.Response\x1a\x0f\x62\x61se/base.proto\x1a\x1bvod/business/vod_play.proto\x1a\x1cvod/business/vod_media.proto\x1a\x1dvod/business/vod_upload.proto\x1a\x1fvod/business/vod_workflow.proto\"\x9e\x01\n\x16VodGetPlayInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12@\n\x06Result\x18\x02 \x01(\x0b\x32\x30.Volcengine.Models.Vod.Business.VodPlayInfoModel\"\xb2\x01\n\x1eVodGetOriginalPlayInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Models.Vod.Business.VodGetOriginalPlayInfoResult\"\x9b\x01\n\x16VodUploadMediaResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12=\n\x06Result\x18\x02 \x01(\x0b\x32-.Volcengine.Models.Vod.Business.VodCommitData\"\xa2\x01\n\x1eVodQueryUploadTaskInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x01(\x0b\x32,.Volcengine.Models.Vod.Business.VodQueryData\"\x9e\x01\n\x14VodUrlUploadResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Models.Vod.Business.VodUrlResponseData\"\xaa\x01\n\x1aVodApplyUploadInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12H\n\x06Result\x18\x02 \x01(\x0b\x32\x38.Volcengine.Models.Vod.Business.VodApplyUploadInfoResult\"\xac\x01\n\x1bVodCommitUploadInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Models.Vod.Business.VodCommitUploadInfoResult\"\xa4\x01\n\x18VodGetMediaInfosResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Models.Vod.Business.VodGetMediaInfosData\"`\n\x1aVodUpdateMediaInfoResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\"\xaa\x01\n\x1fVodGetRecommendedPosterResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Models.Vod.Business.VodGetRecPosterData\"i\n#VodUpdateMediaPublishStatusResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\"\xa0\x01\n\x16VodDeleteMediaResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Models.Vod.Business.VodDeleteMediaData\"\xaa\x01\n\x1bVodDeleteTranscodesResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12G\n\x06Result\x18\x02 \x01(\x0b\x32\x37.Volcengine.Models.Vod.Business.VodDeleteTranscodesData\"\xa6\x01\n\x18VodStartWorkflowResponse\x12\x42\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32(.Volcengine.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Models.Vod.Business.VodStartWorkflowResultB\xac\x01\n!com.volcengine.model.vod.responseB\x0bVodResponseP\x01Z9github.com/volcengine/volc-sdk-golang/models/vod/response\xa0\x01\x01\xd8\x01\x01\xca\x02\x18Volc\\Models\\Vod\\Response\xe2\x02\x1bVolc\\Models\\Vod\\GPBMetadatab\x06proto3'
   ,
   dependencies=[base_dot_base__pb2.DESCRIPTOR,vod_dot_business_dot_vod__play__pb2.DESCRIPTOR,vod_dot_business_dot_vod__media__pb2.DESCRIPTOR,vod_dot_business_dot_vod__upload__pb2.DESCRIPTOR,vod_dot_business_dot_vod__workflow__pb2.DESCRIPTOR,])
 
@@ -446,6 +446,84 @@ _VODUPDATEMEDIAPUBLISHSTATUSRESPONSE = _descriptor.Descriptor(
 )
 
 
+_VODDELETEMEDIARESPONSE = _descriptor.Descriptor(
+  name='VodDeleteMediaResponse',
+  full_name='Volcengine.Models.Vod.Response.VodDeleteMediaResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ResponseMetadata', full_name='Volcengine.Models.Vod.Response.VodDeleteMediaResponse.ResponseMetadata', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Result', full_name='Volcengine.Models.Vod.Response.VodDeleteMediaResponse.Result', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1927,
+  serialized_end=2087,
+)
+
+
+_VODDELETETRANSCODESRESPONSE = _descriptor.Descriptor(
+  name='VodDeleteTranscodesResponse',
+  full_name='Volcengine.Models.Vod.Response.VodDeleteTranscodesResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ResponseMetadata', full_name='Volcengine.Models.Vod.Response.VodDeleteTranscodesResponse.ResponseMetadata', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Result', full_name='Volcengine.Models.Vod.Response.VodDeleteTranscodesResponse.Result', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2090,
+  serialized_end=2260,
+)
+
+
 _VODSTARTWORKFLOWRESPONSE = _descriptor.Descriptor(
   name='VodStartWorkflowResponse',
   full_name='Volcengine.Models.Vod.Response.VodStartWorkflowResponse',
@@ -480,8 +558,8 @@ _VODSTARTWORKFLOWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1927,
-  serialized_end=2093,
+  serialized_start=2263,
+  serialized_end=2429,
 )
 
 _VODGETPLAYINFORESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
@@ -504,6 +582,10 @@ _VODUPDATEMEDIAINFORESPONSE.fields_by_name['ResponseMetadata'].message_type = ba
 _VODGETRECOMMENDEDPOSTERRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
 _VODGETRECOMMENDEDPOSTERRESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__media__pb2._VODGETRECPOSTERDATA
 _VODUPDATEMEDIAPUBLISHSTATUSRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
+_VODDELETEMEDIARESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
+_VODDELETEMEDIARESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__media__pb2._VODDELETEMEDIADATA
+_VODDELETETRANSCODESRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
+_VODDELETETRANSCODESRESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__media__pb2._VODDELETETRANSCODESDATA
 _VODSTARTWORKFLOWRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
 _VODSTARTWORKFLOWRESPONSE.fields_by_name['Result'].message_type = vod_dot_business_dot_vod__workflow__pb2._VODSTARTWORKFLOWRESULT
 DESCRIPTOR.message_types_by_name['VodGetPlayInfoResponse'] = _VODGETPLAYINFORESPONSE
@@ -517,6 +599,8 @@ DESCRIPTOR.message_types_by_name['VodGetMediaInfosResponse'] = _VODGETMEDIAINFOS
 DESCRIPTOR.message_types_by_name['VodUpdateMediaInfoResponse'] = _VODUPDATEMEDIAINFORESPONSE
 DESCRIPTOR.message_types_by_name['VodGetRecommendedPosterResponse'] = _VODGETRECOMMENDEDPOSTERRESPONSE
 DESCRIPTOR.message_types_by_name['VodUpdateMediaPublishStatusResponse'] = _VODUPDATEMEDIAPUBLISHSTATUSRESPONSE
+DESCRIPTOR.message_types_by_name['VodDeleteMediaResponse'] = _VODDELETEMEDIARESPONSE
+DESCRIPTOR.message_types_by_name['VodDeleteTranscodesResponse'] = _VODDELETETRANSCODESRESPONSE
 DESCRIPTOR.message_types_by_name['VodStartWorkflowResponse'] = _VODSTARTWORKFLOWRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -596,6 +680,20 @@ VodUpdateMediaPublishStatusResponse = _reflection.GeneratedProtocolMessageType('
   # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Response.VodUpdateMediaPublishStatusResponse)
   })
 _sym_db.RegisterMessage(VodUpdateMediaPublishStatusResponse)
+
+VodDeleteMediaResponse = _reflection.GeneratedProtocolMessageType('VodDeleteMediaResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODDELETEMEDIARESPONSE,
+  '__module__' : 'vod.response.response_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Response.VodDeleteMediaResponse)
+  })
+_sym_db.RegisterMessage(VodDeleteMediaResponse)
+
+VodDeleteTranscodesResponse = _reflection.GeneratedProtocolMessageType('VodDeleteTranscodesResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODDELETETRANSCODESRESPONSE,
+  '__module__' : 'vod.response.response_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Response.VodDeleteTranscodesResponse)
+  })
+_sym_db.RegisterMessage(VodDeleteTranscodesResponse)
 
 VodStartWorkflowResponse = _reflection.GeneratedProtocolMessageType('VodStartWorkflowResponse', (_message.Message,), {
   'DESCRIPTOR' : _VODSTARTWORKFLOWRESPONSE,

@@ -63,6 +63,8 @@ class VodServiceConfig(Service):
                                            {}),
             "ApplyUploadInfo": ApiInfo("GET", "/", {"Action": "ApplyUploadInfo", "Version": "2020-08-01"}, {}, {}),
             "CommitUploadInfo": ApiInfo("GET", "/", {"Action": "CommitUploadInfo", "Version": "2020-08-01"}, {}, {}),
+            "DeleteMedia": ApiInfo("GET", "/", {"Action": "DeleteMedia", "Version": "2020-08-01"}, {}, {}),
+            "DeleteTranscodes": ApiInfo("GET", "/", {"Action": "DeleteTranscodes", "Version": "2020-08-01"}, {}, {}),
         }
         return api_info
 
