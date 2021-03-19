@@ -7,7 +7,6 @@ from volcengine.Credentials import Credentials
 from volcengine.base.Service import Service
 from volcengine.ServiceInfo import ServiceInfo
 
-
 class AdBlockService(Service):
     _instance_lock = threading.Lock()
 
