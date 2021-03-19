@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     params = dict()
     req = {
-         'AppId': 3332,
+         'AppId': 1,
          'Service': "chat",
          'Parameters': '{"uid":123411, "operate_time":1609818934, "chat_text":"a"}'
     }

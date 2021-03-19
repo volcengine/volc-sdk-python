@@ -36,7 +36,6 @@ class AdBlockService(Service):
 
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def ad_block(self, params, body):
-        print '1'
         res = self.json("AdBlock", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
