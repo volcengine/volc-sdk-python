@@ -10,9 +10,9 @@ if __name__ == '__main__':
 
     params = dict()
     req = {
-         'app_id': 3332,
-         'service': "chat",
-         'parameters': '{"uid":123411, "operate_time":1609818934, "chat_text":"a"}'
+         'AppId': 3332,
+         'Service': "chat",
+         'Parameters': '{"uid":123411, "operate_time":1609818934, "chat_text":"a"}'
     }
 
     resp = adblocker.ad_block(params, req)

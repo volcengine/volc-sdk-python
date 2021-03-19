@@ -1,11 +1,12 @@
 import json
 import threading
-
+import redo
 
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
 from volcengine.base.Service import Service
 from volcengine.ServiceInfo import ServiceInfo
+from requests import exceptions
 
 
 class RiskDetectService(Service):
@@ -31,19 +32,32 @@ class RiskDetectService(Service):
 
     @staticmethod
     def get_api_info():
-        api_info = {"RiskDetection": ApiInfo("POST", "/", {"Action": "RiskDetection", "Version": "2021-02-02"}, {}, {})}
+        api_info = {"RiskDetection": ApiInfo("POST", "/", {"Action": "RiskDetection", "Version": "2021-02-02"}, {}, {}),
+                    "AsyncRiskDetection": ApiInfo("POST", "/", {"Action": "AsyncRiskDetection", "Version": "2021-02-25"}, {}, {}),
+                    "RiskResult": ApiInfo("GET", "/", {"Action": "RiskResult", "Version": "2021-03-10"}, {}, {})}
+
         return api_info
 
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def risk_detect(self, params, body):
-        try:
-            res = self.json("RiskDetection", params, json.dumps(body))
-            if res == '':
-                raise Exception("empty response")
-            res_json = json.loads(res)
-            return res_json
-        except Exception:
-            res = self.json("RiskDetection", params, json.dumps(body))
-            if res == '':
-                raise Exception("empty response")
-            res_json = json.loads(res)
-            return res_json
+        res = self.json("RiskDetection", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def async_risk_detect(self, params, body):
+        res = self.json("AsyncRiskDetection", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def risk_result(self, params, body):
+        res = self.get("RiskResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
