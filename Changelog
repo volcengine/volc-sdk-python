@@ -1,5 +1,10 @@
 ### Change log
 
+2021-03-24 Bumped to version v1.0.8
+- Added async and risk result.
+- Added more abblocker support.
+- Added media delete api.
+
 2021-02-04 Bumped to version v1.0.7
 - Add cloud-edit sdk.
 
