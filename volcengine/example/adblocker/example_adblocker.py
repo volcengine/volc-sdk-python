@@ -1,8 +1,5 @@
 
-from __future__ import print_function
-
 from volcengine.adblocker.AdBlockerService import AdBlockService
-
 
 if __name__ == '__main__':
     adblocker = AdBlockService()
@@ -13,10 +10,10 @@ if __name__ == '__main__':
 
     params = dict()
     req = {
-         'app_id': 3332,
-         'service': "chat",
-         'parameters': '{"uid":123411, "operate_time":1609818934, "chat_text":"a"}'
+         'AppId': 1,
+         'Service': "chat",
+         'Parameters': '{"uid":123411, "operate_time":1609818934, "chat_text":"a"}'
     }
 
     resp = adblocker.ad_block(params, req)
-    print(resp)
+    print resp

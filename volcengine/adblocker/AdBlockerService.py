@@ -6,8 +6,8 @@ from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
 from volcengine.base.Service import Service
 from volcengine.ServiceInfo import ServiceInfo
-
-
+import redo
+from requests import exceptions
 class AdBlockService(Service):
     _instance_lock = threading.Lock()
 
@@ -34,9 +34,13 @@ class AdBlockService(Service):
         api_info = {"AdBlock": ApiInfo("POST", "/", {"Action": "AdBlock", "Version": "2021-01-06"}, {}, {})}
         return api_info
 
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def ad_block(self, params, body):
         res = self.json("AdBlock", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
+
+
+
