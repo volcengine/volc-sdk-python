@@ -420,6 +420,57 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetRecommendedPosterResponse(), True)
 
     #
+    # DeleteMedia.
+    #
+    # @param request VodDeleteMediaRequest
+    # @return VodDeleteMediaResponse
+    # @raise Exception
+    def delete_media(self, request: VodDeleteMediaRequest) -> VodDeleteMediaResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("DeleteMedia", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDeleteMediaResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDeleteMediaResponse(), True)
+
+    # DeleteTranscodes.
+    #
+    # @param request VodDeleteTranscodesRequest
+    # @return VodDeleteTranscodesResponse
+    # @raise Exception
+    def delete_transcodes(self, request: VodDeleteTranscodesRequest) -> VodDeleteTranscodesResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("DeleteTranscodes", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDeleteTranscodesResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDeleteTranscodesResponse(), True)
+
+    #
     # StartWorkflow.
     #
     # @param request VodStartWorkflowRequest
