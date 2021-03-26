@@ -33,7 +33,6 @@ class SmsService(Service):
     def get_api_info():
         api_info = {
             "SendSms": ApiInfo("POST", "/", {"Action": "SendSms", "Version": "2020-01-01"}, {}, {}),
-            # "SendBatchSms": ApiInfo("POST", "/", {"Action": "SendBatchSms", "Version": "2020-01-01"}, {}, {}),
         }
         return api_info
 
