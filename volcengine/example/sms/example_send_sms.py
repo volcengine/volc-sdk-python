@@ -14,12 +14,12 @@ if __name__ == '__main__':
     # sms_service.set_host('host')
 
     body = {
-        "SmsAccount": "049c2666",
-        "Sign": "火山测试",
-        "TemplateID": "ST_60505c68",
+        "SmsAccount": "smsAccount",
+        "Sign": "sign",
+        "TemplateID": "ST_xxx",
         "TemplateParam": {"code": "1234"},
-        "PhoneNumbers": "18800001234,18800001235",
-        "Tag": "123456",
+        "PhoneNumbers": "188xxxxxxxx",
+        "Tag": "tag",
     }
 
     body = json.dumps(body)
