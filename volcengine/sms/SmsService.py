@@ -41,4 +41,5 @@ class SmsService(Service):
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
+
         return res_json
