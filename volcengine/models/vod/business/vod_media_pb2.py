@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n!com.volcengine.model.vod.businessB\010VodMediaP\001Z9github.com/volcengine/volc-sdk-golang/models/vod/business\240\001\001\330\001\001\302\002\000\312\002\030Volc\\Models\\Vod\\Business\342\002\033Volc\\Models\\Vod\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1cvod/business/vod_media.proto\x12\x1eVolcengine.Models.Vod.Business\x1a\x1dvod/business/vod_common.proto\"\xa3\x01\n\x11VodMediaBasicInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\r\n\x05Title\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\x12\x11\n\tPosterUri\x18\x05 \x01(\t\x12\x15\n\rPublishStatus\x18\x06 \x01(\t\x12\x0c\n\x04Tags\x18\x07 \x03(\t\x12\x12\n\nCreateTime\x18\x08 \x01(\t\"\xe1\x01\n\x0cVodMediaInfo\x12\x44\n\tBasicInfo\x18\x01 \x01(\x0b\x32\x31.Volcengine.Models.Vod.Business.VodMediaBasicInfo\x12\x41\n\nSourceInfo\x18\x02 \x01(\x0b\x32-.Volcengine.Models.Vod.Business.VodSourceInfo\x12H\n\x0eTranscodeInfos\x18\x03 \x03(\x0b\x32\x30.Volcengine.Models.Vod.Business.VodTranscodeInfo\"q\n\x14VodGetMediaInfosData\x12\x43\n\rMediaInfoList\x18\x01 \x03(\x0b\x32,.Volcengine.Models.Vod.Business.VodMediaInfo\x12\x14\n\x0cNotExistVids\x18\x02 \x03(\t\"2\n\x10VodStoreUriGroup\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x11\n\tStoreUris\x18\x02 \x03(\t\"u\n\x13VodGetRecPosterData\x12H\n\x0eStoreUriGroups\x18\x01 \x03(\x0b\x32\x30.Volcengine.Models.Vod.Business.VodStoreUriGroup\x12\x14\n\x0cNotExistVids\x18\x02 \x03(\t\"*\n\x12VodDeleteMediaData\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\"2\n\x17VodDeleteTranscodesData\x12\x17\n\x0fNotExistFileIds\x18\x01 \x03(\tB\xac\x01\n!com.volcengine.model.vod.businessB\x08VodMediaP\x01Z9github.com/volcengine/volc-sdk-golang/models/vod/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02\x18Volc\\Models\\Vod\\Business\xe2\x02\x1bVolc\\Models\\Vod\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1cvod/business/vod_media.proto\x12\x1eVolcengine.Models.Vod.Business\x1a\x1dvod/business/vod_common.proto\"\xa3\x01\n\x11VodMediaBasicInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\r\n\x05Title\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\x12\x11\n\tPosterUri\x18\x05 \x01(\t\x12\x15\n\rPublishStatus\x18\x06 \x01(\t\x12\x0c\n\x04Tags\x18\x07 \x03(\t\x12\x12\n\nCreateTime\x18\x08 \x01(\t\"\xe1\x01\n\x0cVodMediaInfo\x12\x44\n\tBasicInfo\x18\x01 \x01(\x0b\x32\x31.Volcengine.Models.Vod.Business.VodMediaBasicInfo\x12\x41\n\nSourceInfo\x18\x02 \x01(\x0b\x32-.Volcengine.Models.Vod.Business.VodSourceInfo\x12H\n\x0eTranscodeInfos\x18\x03 \x03(\x0b\x32\x30.Volcengine.Models.Vod.Business.VodTranscodeInfo\"q\n\x14VodGetMediaInfosData\x12\x43\n\rMediaInfoList\x18\x01 \x03(\x0b\x32,.Volcengine.Models.Vod.Business.VodMediaInfo\x12\x14\n\x0cNotExistVids\x18\x02 \x03(\t\"2\n\x10VodStoreUriGroup\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x11\n\tStoreUris\x18\x02 \x03(\t\"u\n\x13VodGetRecPosterData\x12H\n\x0eStoreUriGroups\x18\x01 \x03(\x0b\x32\x30.Volcengine.Models.Vod.Business.VodStoreUriGroup\x12\x14\n\x0cNotExistVids\x18\x02 \x03(\t\"*\n\x12VodDeleteMediaData\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\"2\n\x17VodDeleteTranscodesData\x12\x17\n\x0fNotExistFileIds\x18\x01 \x03(\t\"\xa3\x01\n\x13VodGetMediaListData\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\rMediaInfoList\x18\x02 \x03(\x0b\x32,.Volcengine.Models.Vod.Business.VodMediaInfo\x12\x12\n\nTotalCount\x18\x03 \x01(\x05\x12\x0e\n\x06Offset\x18\x04 \x01(\x05\x12\x10\n\x08PageSize\x18\x05 \x01(\x05\x42\xac\x01\n!com.volcengine.model.vod.businessB\x08VodMediaP\x01Z9github.com/volcengine/volc-sdk-golang/models/vod/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02\x18Volc\\Models\\Vod\\Business\xe2\x02\x1bVolc\\Models\\Vod\\GPBMetadatab\x06proto3'
   ,
   dependencies=[vod_dot_business_dot_vod__common__pb2.DESCRIPTOR,])
 
@@ -334,11 +334,72 @@ _VODDELETETRANSCODESDATA = _descriptor.Descriptor(
   serialized_end=869,
 )
 
+
+_VODGETMEDIALISTDATA = _descriptor.Descriptor(
+  name='VodGetMediaListData',
+  full_name='Volcengine.Models.Vod.Business.VodGetMediaListData',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Models.Vod.Business.VodGetMediaListData.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='MediaInfoList', full_name='Volcengine.Models.Vod.Business.VodGetMediaListData.MediaInfoList', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='TotalCount', full_name='Volcengine.Models.Vod.Business.VodGetMediaListData.TotalCount', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Offset', full_name='Volcengine.Models.Vod.Business.VodGetMediaListData.Offset', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='PageSize', full_name='Volcengine.Models.Vod.Business.VodGetMediaListData.PageSize', index=4,
+      number=5, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=872,
+  serialized_end=1035,
+)
+
 _VODMEDIAINFO.fields_by_name['BasicInfo'].message_type = _VODMEDIABASICINFO
 _VODMEDIAINFO.fields_by_name['SourceInfo'].message_type = vod_dot_business_dot_vod__common__pb2._VODSOURCEINFO
 _VODMEDIAINFO.fields_by_name['TranscodeInfos'].message_type = vod_dot_business_dot_vod__common__pb2._VODTRANSCODEINFO
 _VODGETMEDIAINFOSDATA.fields_by_name['MediaInfoList'].message_type = _VODMEDIAINFO
 _VODGETRECPOSTERDATA.fields_by_name['StoreUriGroups'].message_type = _VODSTOREURIGROUP
+_VODGETMEDIALISTDATA.fields_by_name['MediaInfoList'].message_type = _VODMEDIAINFO
 DESCRIPTOR.message_types_by_name['VodMediaBasicInfo'] = _VODMEDIABASICINFO
 DESCRIPTOR.message_types_by_name['VodMediaInfo'] = _VODMEDIAINFO
 DESCRIPTOR.message_types_by_name['VodGetMediaInfosData'] = _VODGETMEDIAINFOSDATA
@@ -346,6 +407,7 @@ DESCRIPTOR.message_types_by_name['VodStoreUriGroup'] = _VODSTOREURIGROUP
 DESCRIPTOR.message_types_by_name['VodGetRecPosterData'] = _VODGETRECPOSTERDATA
 DESCRIPTOR.message_types_by_name['VodDeleteMediaData'] = _VODDELETEMEDIADATA
 DESCRIPTOR.message_types_by_name['VodDeleteTranscodesData'] = _VODDELETETRANSCODESDATA
+DESCRIPTOR.message_types_by_name['VodGetMediaListData'] = _VODGETMEDIALISTDATA
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 VodMediaBasicInfo = _reflection.GeneratedProtocolMessageType('VodMediaBasicInfo', (_message.Message,), {
@@ -396,6 +458,13 @@ VodDeleteTranscodesData = _reflection.GeneratedProtocolMessageType('VodDeleteTra
   # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.VodDeleteTranscodesData)
   })
 _sym_db.RegisterMessage(VodDeleteTranscodesData)
+
+VodGetMediaListData = _reflection.GeneratedProtocolMessageType('VodGetMediaListData', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETMEDIALISTDATA,
+  '__module__' : 'vod.business.vod_media_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.VodGetMediaListData)
+  })
+_sym_db.RegisterMessage(VodGetMediaListData)
 
 
 DESCRIPTOR._options = None
