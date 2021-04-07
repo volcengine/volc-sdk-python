@@ -11,6 +11,10 @@ from retry import retry
 from zlib import crc32
 import os
 import time
+import datetime
+import pytz
+from volcengine.util.Util import Util
+
 from volcengine.models.vod.request.request_vod_pb2 import *
 from volcengine.models.vod.response.response_vod_pb2 import *
 
@@ -22,6 +26,42 @@ LargeFileSize = 1024 * 1024 * 1024
 # Generated from protobuf service <code>VodService</code>
 #
 class VodService(VodServiceConfig):
+    def create_hls_drm_auth_token(self, auth_algorithm, expire_seconds):
+        try:
+            if expire_seconds == 0:
+                raise Exception("invalid expire")
+            # TODO:
+            deadline = int(time.time()) + expire_seconds
+            deadTime = time.strftime('%Y%m%d', time.localtime(deadline))
+            key1 = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
+            key = Util.to_hex(Util.hmac_sha256(key1, 'vod'))
+            signDataString = '&'.join([auth_algorithm, '1.0', str(deadline)])
+            if auth_algorithm == 'HMAC-SHA1':
+                signBytes = Util.hmac_sha1(bytes(key, encoding='utf-8'), signDataString)
+            elif auth_algorithm == 'HMAC-SHA256':
+                signBytes = Util.hmac_sha256(bytes(key, encoding='utf-8'), signDataString)
+            else:
+                raise Exception('invalid authAlgorithm')
+            sign = base64.b64encode(signBytes).decode('utf-8')
+            token = ':'.join([auth_algorithm, '1.0', str(deadline), self.service_info.credentials.ak, sign])
+            params = dict()
+            params['token'] = token
+            getAuth = self.get_sign_url("GetHlsDecryptionKey", params)
+            return getAuth
+        except Exception as e:
+            raise e
+
+    def get_sha1_hls_drm_auth_token(self, expire_seconds):
+        try:
+            return self.create_hls_drm_auth_token('HMAC-SHA1', expire_seconds)
+        except Exception as Argument:
+            raise Argument
+
+    def get_sha256_hls_drm_auth_token(self, expire_seconds):
+        try:
+            return self.create_hls_drm_auth_token('HMAC-SHA256', expire_seconds)
+        except Exception as Argument:
+            raise Argument
 
     def get_play_auth_token(self, request: VodGetPlayInfoRequest):
         try:
