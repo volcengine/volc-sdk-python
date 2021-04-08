@@ -11,8 +11,6 @@ from retry import retry
 from zlib import crc32
 import os
 import time
-import datetime
-import pytz
 from volcengine.util.Util import Util
 
 from volcengine.models.vod.request.request_vod_pb2 import *
@@ -46,6 +44,7 @@ class VodService(VodServiceConfig):
             token = ':'.join([auth_algorithm, '1.0', str(deadline), self.service_info.credentials.ak, sign])
             params = dict()
             params['token'] = token
+            params['X-Expires'] = str(expire_seconds)
             getAuth = self.get_sign_url("GetHlsDecryptionKey", params)
             return getAuth
         except Exception as e:
@@ -63,7 +62,7 @@ class VodService(VodServiceConfig):
         except Exception as Argument:
             raise Argument
 
-    def get_play_auth_token(self, request: VodGetPlayInfoRequest):
+    def get_play_auth_token(self, request: VodGetPlayInfoRequest, expire: int):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -72,6 +71,8 @@ class VodService(VodServiceConfig):
                     continue
                 else:
                     params[k] = json.dumps(v)
+            if expire > 0:
+                params['X-Expires'] = str(expire)
             token = self.get_sign_url('GetPlayInfo', params)
             ret = {'TokenVersion': 'V2', 'GetPlayInfoToken': token}
             data = json.dumps(ret)

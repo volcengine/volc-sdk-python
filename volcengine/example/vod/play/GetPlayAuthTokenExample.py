@@ -8,13 +8,14 @@ if __name__ == '__main__':
 
     vod_service = VodService()
     # call below method if you dont set ak and sk in $HOME/.vcloud/config
-    # vod_service.set_ak('ak')
-    # vod_service.set_sk('sk')
+    vod_service.set_ak('your ak')
+    vod_service.set_sk('your sk')
     try:
         vid = 'your vid'
         req = VodGetPlayInfoRequest()
         req.Vid = vid
-        resp = vod_service.get_play_auth_token(req)
+        expire = 60  # seconds
+        resp = vod_service.get_play_auth_token(req, expire)
     except Exception:
         raise
     else:
