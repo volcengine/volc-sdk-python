@@ -4,6 +4,11 @@
 # coding:utf-8
 
 from __future__ import print_function
+
+import datetime
+
+import pytz
+
 from volcengine.Policy import *
 from google.protobuf.json_format import *
 from volcengine.vod.VodServiceConfig import VodServiceConfig
@@ -28,20 +33,17 @@ class VodService(VodServiceConfig):
         try:
             if expire_seconds == 0:
                 raise Exception("invalid expire")
-            # TODO:
-            deadline = int(time.time()) + expire_seconds
-            deadTime = time.strftime('%Y%m%d', time.localtime(deadline))
+            deadline = int(datetime.datetime.now().timestamp()) + expire_seconds
+            deadTime = datetime.datetime.utcfromtimestamp(deadline).strftime("%Y%m%dT%H%M%SZ")
             key1 = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
             key = Util.to_hex(Util.hmac_sha256(key1, 'vod'))
-            signDataString = '&'.join([auth_algorithm, '1.0', str(deadline)])
+            signDataString = '&'.join([auth_algorithm, '2.0', str(deadline)])
             if auth_algorithm == 'HMAC-SHA1':
                 signBytes = Util.hmac_sha1(bytes(key, encoding='utf-8'), signDataString)
-            elif auth_algorithm == 'HMAC-SHA256':
-                signBytes = Util.hmac_sha256(bytes(key, encoding='utf-8'), signDataString)
             else:
                 raise Exception('invalid authAlgorithm')
             sign = base64.b64encode(signBytes).decode('utf-8')
-            token = ':'.join([auth_algorithm, '1.0', str(deadline), self.service_info.credentials.ak, sign])
+            token = ':'.join([auth_algorithm, '2.0', str(deadline), self.service_info.credentials.ak, sign])
             params = dict()
             params['token'] = token
             params['X-Expires'] = str(expire_seconds)
@@ -53,12 +55,6 @@ class VodService(VodServiceConfig):
     def get_sha1_hls_drm_auth_token(self, expire_seconds):
         try:
             return self.create_hls_drm_auth_token('HMAC-SHA1', expire_seconds)
-        except Exception as Argument:
-            raise Argument
-
-    def get_sha256_hls_drm_auth_token(self, expire_seconds):
-        try:
-            return self.create_hls_drm_auth_token('HMAC-SHA256', expire_seconds)
         except Exception as Argument:
             raise Argument
 
