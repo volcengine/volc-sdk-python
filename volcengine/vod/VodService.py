@@ -445,6 +445,7 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodDeleteMediaResponse(), True)
 
+    #
     # DeleteTranscodes.
     #
     # @param request VodDeleteTranscodesRequest
