@@ -1,5 +1,9 @@
 ### Change log
 
+2021-04-20 Bumped to version v1.0.11
+- Added store keys res.
+- Added pcdn and barrageMask into sdk.
+
 2021-04-08 Bumped to version v1.0.10
 - Added nlp sdk.
 
