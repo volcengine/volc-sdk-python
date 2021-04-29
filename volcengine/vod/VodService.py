@@ -2,13 +2,7 @@
 # source: VodService
 # DO NOT EDIT!
 # coding:utf-8
-
 from __future__ import print_function
-
-import datetime
-
-import pytz
-
 from volcengine.Policy import *
 from google.protobuf.json_format import *
 from volcengine.vod.VodServiceConfig import VodServiceConfig
@@ -16,8 +10,8 @@ from retry import retry
 from zlib import crc32
 import os
 import time
+import datetime
 from volcengine.util.Util import Util
-
 from volcengine.models.vod.request.request_vod_pb2 import *
 from volcengine.models.vod.response.response_vod_pb2 import *
 
@@ -29,6 +23,7 @@ LargeFileSize = 1024 * 1024 * 1024
 # Generated from protobuf service <code>VodService</code>
 #
 class VodService(VodServiceConfig):
+
     def create_hls_drm_auth_token(self, auth_algorithm, expire_seconds):
         try:
             if expire_seconds == 0:
