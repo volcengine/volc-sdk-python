@@ -40,7 +40,7 @@ class VodService(VodServiceConfig):
             sign = base64.b64encode(signBytes).decode('utf-8')
             token = ':'.join([auth_algorithm, '2.0', str(deadline), self.service_info.credentials.ak, sign])
             params = dict()
-            params['Token'] = token
+            params['DrmAuthToken'] = token
             params['X-Expires'] = str(expire_seconds)
             getAuth = self.get_sign_url("GetHlsDecryptionKey", params)
             return getAuth
@@ -242,6 +242,58 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodGetPlayInfoResponse(), True)
+
+    #
+    # GetPrivateDrmPlayAuth.
+    #
+    # @param request VodGetPrivateDrmPlayAuthRequest
+    # @return VodGetPrivateDrmPlayAuthResponse
+    # @raise Exception
+    def get_private_drm_play_auth(self, request: VodGetPrivateDrmPlayAuthRequest) -> VodGetPrivateDrmPlayAuthResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetPrivateDrmPlayAuth", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetPrivateDrmPlayAuthResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetPrivateDrmPlayAuthResponse(), True)
+
+    #
+    # GetHlsDrmSecretKey.
+    #
+    # @param request VodGetHlsDrmSecretKeyRequest
+    # @return VodGetHlsDrmSecretKeyResponse
+    # @raise Exception
+    def get_hls_drm_secret_key(self, request: VodGetHlsDrmSecretKeyRequest) -> VodGetHlsDrmSecretKeyResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetHlsDrmSecretKey", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetHlsDrmSecretKeyResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetHlsDrmSecretKeyResponse(), True)
 
     #
     # UploadMediaByUrl.
