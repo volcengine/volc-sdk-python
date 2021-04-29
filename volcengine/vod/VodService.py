@@ -45,7 +45,7 @@ class VodService(VodServiceConfig):
             sign = base64.b64encode(signBytes).decode('utf-8')
             token = ':'.join([auth_algorithm, '2.0', str(deadline), self.service_info.credentials.ak, sign])
             params = dict()
-            params['token'] = token
+            params['Token'] = token
             params['X-Expires'] = str(expire_seconds)
             getAuth = self.get_sign_url("GetHlsDecryptionKey", params)
             return getAuth
