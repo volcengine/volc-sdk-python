@@ -2,7 +2,6 @@
 # source: VodService
 # DO NOT EDIT!
 # coding:utf-8
-
 from __future__ import print_function
 from volcengine.Policy import *
 from google.protobuf.json_format import *
@@ -445,6 +444,7 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodDeleteMediaResponse(), True)
 
+    #
     # DeleteTranscodes.
     #
     # @param request VodDeleteTranscodesRequest
@@ -495,6 +495,84 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodGetMediaListResponse(), True)
+
+    #
+    # GetSubtitleInfoList.
+    #
+    # @param request VodGetSubtitleInfoListRequest
+    # @return VodGetSubtitleInfoListResponse
+    # @raise Exception
+    def get_subtitle_info_list(self, request: VodGetSubtitleInfoListRequest) -> VodGetSubtitleInfoListResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetSubtitleInfoList", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetSubtitleInfoListResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetSubtitleInfoListResponse(), True)
+
+    #
+    # UpdateSubtitleStatus.
+    #
+    # @param request VodUpdateSubtitleStatusRequest
+    # @return VodUpdateSubtitleStatusResponse
+    # @raise Exception
+    def update_subtitle_status(self, request: VodUpdateSubtitleStatusRequest) -> VodUpdateSubtitleStatusResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("UpdateSubtitleStatus", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateSubtitleStatusResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateSubtitleStatusResponse(), True)
+
+    #
+    # UpdateSubtitleInfo.
+    #
+    # @param request VodUpdateSubtitleInfoRequest
+    # @return VodUpdateSubtitleInfoResponse
+    # @raise Exception
+    def update_subtitle_info(self, request: VodUpdateSubtitleInfoRequest) -> VodUpdateSubtitleInfoResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("UpdateSubtitleInfo", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateSubtitleInfoResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateSubtitleInfoResponse(), True)
 
     #
     # StartWorkflow.
