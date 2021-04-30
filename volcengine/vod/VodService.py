@@ -30,8 +30,11 @@ class VodService(VodServiceConfig):
                 raise Exception("invalid expire")
             deadline = int(datetime.datetime.now().timestamp()) + expire_seconds
             deadTime = datetime.datetime.utcfromtimestamp(deadline).strftime("%Y%m%dT%H%M%SZ")
-            key1 = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
-            key = Util.to_hex(Util.hmac_sha256(key1, 'vod'))
+            kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
+            kRegion = Util.hmac_sha256(kDate, self.service_info.credentials.region)
+            kService = Util.hmac_sha256(kRegion, 'vod')
+            kCredentials = Util.hmac_sha256((kService, 'request'))
+            key = Util.to_hex(kCredentials)
             signDataString = '&'.join([auth_algorithm, '2.0', str(deadline)])
             if auth_algorithm == 'HMAC-SHA1':
                 signBytes = Util.hmac_sha1(bytes(key, encoding='utf-8'), signDataString)
