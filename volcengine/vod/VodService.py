@@ -273,12 +273,12 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetPrivateDrmPlayAuthResponse(), True)
 
     #
-    # GetHlsDrmSecretKey.
+    # GetHlsDecryptionKey.
     #
-    # @param request VodGetHlsDrmSecretKeyRequest
-    # @return VodGetHlsDrmSecretKeyResponse
+    # @param request VodGetHlsDecryptionKeyRequest
+    # @return VodGetHlsDecryptionKeyResponse
     # @raise Exception
-    def get_hls_drm_secret_key(self, request: VodGetHlsDrmSecretKeyRequest) -> VodGetHlsDrmSecretKeyResponse:
+    def get_hls_decryption_key(self, request: VodGetHlsDecryptionKeyRequest) -> VodGetHlsDecryptionKeyResponse:
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -287,16 +287,16 @@ class VodService(VodServiceConfig):
                     continue
                 else:
                     params[k] = json.dumps(v)
-            res = self.get("GetHlsDrmSecretKey", params)
+            res = self.get("GetHlsDecryptionKey", params)
         except Exception as Argument:
             try:
-                resp = Parse(Argument.__str__(), VodGetHlsDrmSecretKeyResponse(), True)
+                resp = Parse(Argument.__str__(), VodGetHlsDecryptionKeyResponse(), True)
             except Exception:
                 raise Argument
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return Parse(res, VodGetHlsDrmSecretKeyResponse(), True)
+            return Parse(res, VodGetHlsDecryptionKeyResponse(), True)
 
     #
     # UploadMediaByUrl.
