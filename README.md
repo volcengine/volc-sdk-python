@@ -71,3 +71,4 @@ require python verion >= 2.7
 ## SDK服务目录及实例
 
 - 【视觉智能】请点击[这里](volcengine/visual/README.md)
+- 【智能语义】请点击[这里](volcengine/nlp/README.md)
