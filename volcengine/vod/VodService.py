@@ -12,8 +12,8 @@ import os
 import time
 import datetime
 from volcengine.util.Util import Util
-from volcengine.models.vod.request.request_vod_pb2 import *
-from volcengine.models.vod.response.response_vod_pb2 import *
+from volcengine.vod.models.request.request_vod_pb2 import *
+from volcengine.vod.models.response.response_vod_pb2 import *
 
 MinChunkSize = 1024 * 1024 * 20
 LargeFileSize = 1024 * 1024 * 1024

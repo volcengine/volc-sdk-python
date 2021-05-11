@@ -15,11 +15,11 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='vod/business/vod_workflow.proto',
-  package='Volcengine.Models.Vod.Business',
+  package='Volcengine.Vod.Models.Business',
   syntax='proto3',
-  serialized_options=b'\n!com.volcengine.model.vod.businessB\013VodWorkflowP\001Z9github.com/volcengine/volc-sdk-golang/models/vod/business\240\001\001\330\001\001\312\002\030Volc\\Models\\Vod\\Business\342\002\033Volc\\Models\\Vod\\GPBMetadata',
+  serialized_options=b'\n)com.volcengine.service.vod.model.businessB\013VodWorkflowP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1fvod/business/vod_workflow.proto\x12\x1eVolcengine.Models.Vod.Business\"\'\n\x16VodStartWorkflowResult\x12\r\n\x05RunId\x18\x01 \x01(\t\"\xdc\x01\n\x0eWorkflowParams\x12\x46\n\x0eOverrideParams\x18\x01 \x01(\x0b\x32..Volcengine.Models.Vod.Business.OverrideParams\x12P\n\tCondition\x18\x02 \x03(\x0b\x32=.Volcengine.Models.Vod.Business.WorkflowParams.ConditionEntry\x1a\x30\n\x0e\x43onditionEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x08:\x02\x38\x01\"\xb0\x02\n\x0eOverrideParams\x12:\n\x04Logo\x18\x01 \x03(\x0b\x32,.Volcengine.Models.Vod.Business.LogoOverride\x12N\n\x0eTranscodeVideo\x18\x02 \x03(\x0b\x32\x36.Volcengine.Models.Vod.Business.TranscodeVideoOverride\x12N\n\x0eTranscodeAudio\x18\x03 \x03(\x0b\x32\x36.Volcengine.Models.Vod.Business.TranscodeAudioOverride\x12\x42\n\x08Snapshot\x18\x04 \x03(\x0b\x32\x30.Volcengine.Models.Vod.Business.SnapshotOverride\"\x95\x01\n\x0cLogoOverride\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x44\n\x04Vars\x18\x02 \x03(\x0b\x32\x36.Volcengine.Models.Vod.Business.LogoOverride.VarsEntry\x1a+\n\tVarsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"`\n\x16TranscodeVideoOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Models.Vod.Business.Clip\"*\n\x04\x43lip\x12\x11\n\tStartTime\x18\x01 \x01(\x05\x12\x0f\n\x07\x45ndTime\x18\x02 \x01(\x05\"`\n\x16TranscodeAudioOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Models.Vod.Business.Clip\"R\n\x10SnapshotOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x12\n\nOffsetTime\x18\x02 \x01(\x05\x12\x16\n\x0eOffsetTimeList\x18\x03 \x03(\x05\x42\xac\x01\n!com.volcengine.model.vod.businessB\x0bVodWorkflowP\x01Z9github.com/volcengine/volc-sdk-golang/models/vod/business\xa0\x01\x01\xd8\x01\x01\xca\x02\x18Volc\\Models\\Vod\\Business\xe2\x02\x1bVolc\\Models\\Vod\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1fvod/business/vod_workflow.proto\x12\x1eVolcengine.Vod.Models.Business\"\'\n\x16VodStartWorkflowResult\x12\r\n\x05RunId\x18\x01 \x01(\t\"\xdc\x01\n\x0eWorkflowParams\x12\x46\n\x0eOverrideParams\x18\x01 \x01(\x0b\x32..Volcengine.Vod.Models.Business.OverrideParams\x12P\n\tCondition\x18\x02 \x03(\x0b\x32=.Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry\x1a\x30\n\x0e\x43onditionEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x08:\x02\x38\x01\"\xb0\x02\n\x0eOverrideParams\x12:\n\x04Logo\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.LogoOverride\x12N\n\x0eTranscodeVideo\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeVideoOverride\x12N\n\x0eTranscodeAudio\x18\x03 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeAudioOverride\x12\x42\n\x08Snapshot\x18\x04 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.SnapshotOverride\"\x95\x01\n\x0cLogoOverride\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x44\n\x04Vars\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.LogoOverride.VarsEntry\x1a+\n\tVarsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"`\n\x16TranscodeVideoOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\"*\n\x04\x43lip\x12\x11\n\tStartTime\x18\x01 \x01(\x05\x12\x0f\n\x07\x45ndTime\x18\x02 \x01(\x05\"`\n\x16TranscodeAudioOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\"R\n\x10SnapshotOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x12\n\nOffsetTime\x18\x02 \x01(\x05\x12\x16\n\x0eOffsetTimeList\x18\x03 \x03(\x05\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x0bVodWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
 )
 
 
@@ -27,14 +27,14 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _VODSTARTWORKFLOWRESULT = _descriptor.Descriptor(
   name='VodStartWorkflowResult',
-  full_name='Volcengine.Models.Vod.Business.VodStartWorkflowResult',
+  full_name='Volcengine.Vod.Models.Business.VodStartWorkflowResult',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='RunId', full_name='Volcengine.Models.Vod.Business.VodStartWorkflowResult.RunId', index=0,
+      name='RunId', full_name='Volcengine.Vod.Models.Business.VodStartWorkflowResult.RunId', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -59,21 +59,21 @@ _VODSTARTWORKFLOWRESULT = _descriptor.Descriptor(
 
 _WORKFLOWPARAMS_CONDITIONENTRY = _descriptor.Descriptor(
   name='ConditionEntry',
-  full_name='Volcengine.Models.Vod.Business.WorkflowParams.ConditionEntry',
+  full_name='Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='Volcengine.Models.Vod.Business.WorkflowParams.ConditionEntry.key', index=0,
+      name='key', full_name='Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='value', full_name='Volcengine.Models.Vod.Business.WorkflowParams.ConditionEntry.value', index=1,
+      name='value', full_name='Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry.value', index=1,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
@@ -97,21 +97,21 @@ _WORKFLOWPARAMS_CONDITIONENTRY = _descriptor.Descriptor(
 
 _WORKFLOWPARAMS = _descriptor.Descriptor(
   name='WorkflowParams',
-  full_name='Volcengine.Models.Vod.Business.WorkflowParams',
+  full_name='Volcengine.Vod.Models.Business.WorkflowParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='OverrideParams', full_name='Volcengine.Models.Vod.Business.WorkflowParams.OverrideParams', index=0,
+      name='OverrideParams', full_name='Volcengine.Vod.Models.Business.WorkflowParams.OverrideParams', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Condition', full_name='Volcengine.Models.Vod.Business.WorkflowParams.Condition', index=1,
+      name='Condition', full_name='Volcengine.Vod.Models.Business.WorkflowParams.Condition', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -136,35 +136,35 @@ _WORKFLOWPARAMS = _descriptor.Descriptor(
 
 _OVERRIDEPARAMS = _descriptor.Descriptor(
   name='OverrideParams',
-  full_name='Volcengine.Models.Vod.Business.OverrideParams',
+  full_name='Volcengine.Vod.Models.Business.OverrideParams',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Logo', full_name='Volcengine.Models.Vod.Business.OverrideParams.Logo', index=0,
+      name='Logo', full_name='Volcengine.Vod.Models.Business.OverrideParams.Logo', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='TranscodeVideo', full_name='Volcengine.Models.Vod.Business.OverrideParams.TranscodeVideo', index=1,
+      name='TranscodeVideo', full_name='Volcengine.Vod.Models.Business.OverrideParams.TranscodeVideo', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='TranscodeAudio', full_name='Volcengine.Models.Vod.Business.OverrideParams.TranscodeAudio', index=2,
+      name='TranscodeAudio', full_name='Volcengine.Vod.Models.Business.OverrideParams.TranscodeAudio', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Snapshot', full_name='Volcengine.Models.Vod.Business.OverrideParams.Snapshot', index=3,
+      name='Snapshot', full_name='Volcengine.Vod.Models.Business.OverrideParams.Snapshot', index=3,
       number=4, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -189,21 +189,21 @@ _OVERRIDEPARAMS = _descriptor.Descriptor(
 
 _LOGOOVERRIDE_VARSENTRY = _descriptor.Descriptor(
   name='VarsEntry',
-  full_name='Volcengine.Models.Vod.Business.LogoOverride.VarsEntry',
+  full_name='Volcengine.Vod.Models.Business.LogoOverride.VarsEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='Volcengine.Models.Vod.Business.LogoOverride.VarsEntry.key', index=0,
+      name='key', full_name='Volcengine.Vod.Models.Business.LogoOverride.VarsEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='value', full_name='Volcengine.Models.Vod.Business.LogoOverride.VarsEntry.value', index=1,
+      name='value', full_name='Volcengine.Vod.Models.Business.LogoOverride.VarsEntry.value', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -227,21 +227,21 @@ _LOGOOVERRIDE_VARSENTRY = _descriptor.Descriptor(
 
 _LOGOOVERRIDE = _descriptor.Descriptor(
   name='LogoOverride',
-  full_name='Volcengine.Models.Vod.Business.LogoOverride',
+  full_name='Volcengine.Vod.Models.Business.LogoOverride',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='TemplateId', full_name='Volcengine.Models.Vod.Business.LogoOverride.TemplateId', index=0,
+      name='TemplateId', full_name='Volcengine.Vod.Models.Business.LogoOverride.TemplateId', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Vars', full_name='Volcengine.Models.Vod.Business.LogoOverride.Vars', index=1,
+      name='Vars', full_name='Volcengine.Vod.Models.Business.LogoOverride.Vars', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -266,21 +266,21 @@ _LOGOOVERRIDE = _descriptor.Descriptor(
 
 _TRANSCODEVIDEOOVERRIDE = _descriptor.Descriptor(
   name='TranscodeVideoOverride',
-  full_name='Volcengine.Models.Vod.Business.TranscodeVideoOverride',
+  full_name='Volcengine.Vod.Models.Business.TranscodeVideoOverride',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='TemplateId', full_name='Volcengine.Models.Vod.Business.TranscodeVideoOverride.TemplateId', index=0,
+      name='TemplateId', full_name='Volcengine.Vod.Models.Business.TranscodeVideoOverride.TemplateId', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Clip', full_name='Volcengine.Models.Vod.Business.TranscodeVideoOverride.Clip', index=1,
+      name='Clip', full_name='Volcengine.Vod.Models.Business.TranscodeVideoOverride.Clip', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -305,21 +305,21 @@ _TRANSCODEVIDEOOVERRIDE = _descriptor.Descriptor(
 
 _CLIP = _descriptor.Descriptor(
   name='Clip',
-  full_name='Volcengine.Models.Vod.Business.Clip',
+  full_name='Volcengine.Vod.Models.Business.Clip',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='StartTime', full_name='Volcengine.Models.Vod.Business.Clip.StartTime', index=0,
+      name='StartTime', full_name='Volcengine.Vod.Models.Business.Clip.StartTime', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='EndTime', full_name='Volcengine.Models.Vod.Business.Clip.EndTime', index=1,
+      name='EndTime', full_name='Volcengine.Vod.Models.Business.Clip.EndTime', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -344,21 +344,21 @@ _CLIP = _descriptor.Descriptor(
 
 _TRANSCODEAUDIOOVERRIDE = _descriptor.Descriptor(
   name='TranscodeAudioOverride',
-  full_name='Volcengine.Models.Vod.Business.TranscodeAudioOverride',
+  full_name='Volcengine.Vod.Models.Business.TranscodeAudioOverride',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='TemplateId', full_name='Volcengine.Models.Vod.Business.TranscodeAudioOverride.TemplateId', index=0,
+      name='TemplateId', full_name='Volcengine.Vod.Models.Business.TranscodeAudioOverride.TemplateId', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Clip', full_name='Volcengine.Models.Vod.Business.TranscodeAudioOverride.Clip', index=1,
+      name='Clip', full_name='Volcengine.Vod.Models.Business.TranscodeAudioOverride.Clip', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -383,28 +383,28 @@ _TRANSCODEAUDIOOVERRIDE = _descriptor.Descriptor(
 
 _SNAPSHOTOVERRIDE = _descriptor.Descriptor(
   name='SnapshotOverride',
-  full_name='Volcengine.Models.Vod.Business.SnapshotOverride',
+  full_name='Volcengine.Vod.Models.Business.SnapshotOverride',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='TemplateId', full_name='Volcengine.Models.Vod.Business.SnapshotOverride.TemplateId', index=0,
+      name='TemplateId', full_name='Volcengine.Vod.Models.Business.SnapshotOverride.TemplateId', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='OffsetTime', full_name='Volcengine.Models.Vod.Business.SnapshotOverride.OffsetTime', index=1,
+      name='OffsetTime', full_name='Volcengine.Vod.Models.Business.SnapshotOverride.OffsetTime', index=1,
       number=2, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='OffsetTimeList', full_name='Volcengine.Models.Vod.Business.SnapshotOverride.OffsetTimeList', index=2,
+      name='OffsetTimeList', full_name='Volcengine.Vod.Models.Business.SnapshotOverride.OffsetTimeList', index=2,
       number=3, type=5, cpp_type=1, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -450,7 +450,7 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 VodStartWorkflowResult = _reflection.GeneratedProtocolMessageType('VodStartWorkflowResult', (_message.Message,), {
   'DESCRIPTOR' : _VODSTARTWORKFLOWRESULT,
   '__module__' : 'vod.business.vod_workflow_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.VodStartWorkflowResult)
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodStartWorkflowResult)
   })
 _sym_db.RegisterMessage(VodStartWorkflowResult)
 
@@ -459,12 +459,12 @@ WorkflowParams = _reflection.GeneratedProtocolMessageType('WorkflowParams', (_me
   'ConditionEntry' : _reflection.GeneratedProtocolMessageType('ConditionEntry', (_message.Message,), {
     'DESCRIPTOR' : _WORKFLOWPARAMS_CONDITIONENTRY,
     '__module__' : 'vod.business.vod_workflow_pb2'
-    # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.WorkflowParams.ConditionEntry)
+    # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry)
     })
   ,
   'DESCRIPTOR' : _WORKFLOWPARAMS,
   '__module__' : 'vod.business.vod_workflow_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.WorkflowParams)
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.WorkflowParams)
   })
 _sym_db.RegisterMessage(WorkflowParams)
 _sym_db.RegisterMessage(WorkflowParams.ConditionEntry)
@@ -472,7 +472,7 @@ _sym_db.RegisterMessage(WorkflowParams.ConditionEntry)
 OverrideParams = _reflection.GeneratedProtocolMessageType('OverrideParams', (_message.Message,), {
   'DESCRIPTOR' : _OVERRIDEPARAMS,
   '__module__' : 'vod.business.vod_workflow_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.OverrideParams)
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.OverrideParams)
   })
 _sym_db.RegisterMessage(OverrideParams)
 
@@ -481,12 +481,12 @@ LogoOverride = _reflection.GeneratedProtocolMessageType('LogoOverride', (_messag
   'VarsEntry' : _reflection.GeneratedProtocolMessageType('VarsEntry', (_message.Message,), {
     'DESCRIPTOR' : _LOGOOVERRIDE_VARSENTRY,
     '__module__' : 'vod.business.vod_workflow_pb2'
-    # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.LogoOverride.VarsEntry)
+    # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.LogoOverride.VarsEntry)
     })
   ,
   'DESCRIPTOR' : _LOGOOVERRIDE,
   '__module__' : 'vod.business.vod_workflow_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.LogoOverride)
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.LogoOverride)
   })
 _sym_db.RegisterMessage(LogoOverride)
 _sym_db.RegisterMessage(LogoOverride.VarsEntry)
@@ -494,28 +494,28 @@ _sym_db.RegisterMessage(LogoOverride.VarsEntry)
 TranscodeVideoOverride = _reflection.GeneratedProtocolMessageType('TranscodeVideoOverride', (_message.Message,), {
   'DESCRIPTOR' : _TRANSCODEVIDEOOVERRIDE,
   '__module__' : 'vod.business.vod_workflow_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.TranscodeVideoOverride)
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.TranscodeVideoOverride)
   })
 _sym_db.RegisterMessage(TranscodeVideoOverride)
 
 Clip = _reflection.GeneratedProtocolMessageType('Clip', (_message.Message,), {
   'DESCRIPTOR' : _CLIP,
   '__module__' : 'vod.business.vod_workflow_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.Clip)
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.Clip)
   })
 _sym_db.RegisterMessage(Clip)
 
 TranscodeAudioOverride = _reflection.GeneratedProtocolMessageType('TranscodeAudioOverride', (_message.Message,), {
   'DESCRIPTOR' : _TRANSCODEAUDIOOVERRIDE,
   '__module__' : 'vod.business.vod_workflow_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.TranscodeAudioOverride)
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.TranscodeAudioOverride)
   })
 _sym_db.RegisterMessage(TranscodeAudioOverride)
 
 SnapshotOverride = _reflection.GeneratedProtocolMessageType('SnapshotOverride', (_message.Message,), {
   'DESCRIPTOR' : _SNAPSHOTOVERRIDE,
   '__module__' : 'vod.business.vod_workflow_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Models.Vod.Business.SnapshotOverride)
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.SnapshotOverride)
   })
 _sym_db.RegisterMessage(SnapshotOverride)
 
