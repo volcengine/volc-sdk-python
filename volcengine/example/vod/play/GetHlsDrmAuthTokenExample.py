@@ -1,7 +1,6 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volcengine.models.vod.request.request_vod_pb2 import *
 from volcengine.vod.VodService import VodService
 
 if __name__ == '__main__':
@@ -11,11 +10,8 @@ if __name__ == '__main__':
     vod_service.set_ak('your ak')
     vod_service.set_sk('your sk')
     try:
-        vid = 'your vid'
-        req = VodGetPlayInfoRequest()
-        req.Vid = vid
-        expire = 60  # seconds
-        resp = vod_service.get_play_auth_token(req, expire)
+        expireSeconds = 60000
+        resp = vod_service.get_sha1_hls_drm_auth_token(expireSeconds)
     except Exception:
         raise
     else:
