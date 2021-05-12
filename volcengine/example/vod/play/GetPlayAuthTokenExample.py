@@ -1,8 +1,8 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volcengine.models.vod.request.request_vod_pb2 import *
 from volcengine.vod.VodService import VodService
+from volcengine.vod.models.request.request_vod_pb2 import VodGetPlayInfoRequest
 
 if __name__ == '__main__':
 

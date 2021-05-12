@@ -3,9 +3,9 @@ from __future__ import print_function
 
 import json
 
-from volcengine.models.vod.request.request_vod_pb2 import VodCommitUploadInfoRequest
 from volcengine.util.Functions import Function
 from volcengine.vod.VodService import VodService
+from volcengine.vod.models.request.request_vod_pb2 import VodCommitUploadInfoRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
