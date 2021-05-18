@@ -5,8 +5,8 @@ if __name__ == '__main__':
     gameProtector = GameProtectService()
 
     # call below method if you dont set ak and sk in $HOME/.volc/config
-    gameProtector.set_ak('***REMOVED***')
-    gameProtector.set_sk('***REMOVED***')
+    gameProtector.set_ak('ak')
+    gameProtector.set_sk('sk')
 
     params = {
         'AppId': 218745,
