@@ -13,3 +13,6 @@ requests==2.25.1
 retry==0.9.2
 shellescape==3.8.1
 urllib3==1.26.2
+setuptools~=51.1.1
+google~=3.0.0
+six~=1.0
