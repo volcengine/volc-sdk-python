@@ -1,5 +1,11 @@
 ### Change log
 
+2021-05-19 Bumped to version v1.0.12
+- Add hls drm utils for vod
+- Add a new product 'game_protect' api to get risk result on gaming scenes.
+- Add retry after http error
+- Support upload material
+
 2021-04-20 Bumped to version v1.0.11
 - Added store keys res.
 - Added pcdn and barrageMask into sdk.
