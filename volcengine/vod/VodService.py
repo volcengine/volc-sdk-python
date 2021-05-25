@@ -10,8 +10,10 @@ from retry import retry
 from zlib import crc32
 import os
 import time
-from volcengine.models.vod.request.request_vod_pb2 import *
-from volcengine.models.vod.response.response_vod_pb2 import *
+import datetime
+from volcengine.util.Util import Util
+from volcengine.vod.models.request.request_vod_pb2 import *
+from volcengine.vod.models.response.response_vod_pb2 import *
 
 MinChunkSize = 1024 * 1024 * 20
 LargeFileSize = 1024 * 1024 * 1024
@@ -22,7 +24,39 @@ LargeFileSize = 1024 * 1024 * 1024
 #
 class VodService(VodServiceConfig):
 
-    def get_play_auth_token(self, request: VodGetPlayInfoRequest):
+    def create_hls_drm_auth_token(self, auth_algorithm, expire_seconds):
+        try:
+            if expire_seconds == 0:
+                raise Exception("invalid expire")
+            deadline = int(datetime.datetime.now().timestamp()) + expire_seconds
+            deadTime = datetime.datetime.utcfromtimestamp(deadline).strftime("%Y%m%dT%H%M%SZ")
+            kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
+            kRegion = Util.hmac_sha256(kDate, self.service_info.credentials.region)
+            kService = Util.hmac_sha256(kRegion, 'vod')
+            kCredentials = Util.hmac_sha256(kService, 'request')
+            key = Util.to_hex(kCredentials)
+            signDataString = '&'.join([auth_algorithm, '2.0', str(deadline)])
+            if auth_algorithm == 'HMAC-SHA1':
+                signBytes = Util.hmac_sha1(bytes(key, encoding='utf-8'), signDataString)
+            else:
+                raise Exception('invalid authAlgorithm')
+            sign = base64.b64encode(signBytes).decode('utf-8')
+            token = ':'.join([auth_algorithm, '2.0', str(deadline), self.service_info.credentials.ak, sign])
+            params = dict()
+            params['DrmAuthToken'] = token
+            params['X-Expires'] = str(expire_seconds)
+            getAuth = self.get_sign_url("GetHlsDecryptionKey", params)
+            return getAuth
+        except Exception as e:
+            raise e
+
+    def get_sha1_hls_drm_auth_token(self, expire_seconds):
+        try:
+            return self.create_hls_drm_auth_token('HMAC-SHA1', expire_seconds)
+        except Exception as Argument:
+            raise Argument
+
+    def get_play_auth_token(self, request: VodGetPlayInfoRequest, expire: int):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -31,8 +65,29 @@ class VodService(VodServiceConfig):
                     continue
                 else:
                     params[k] = json.dumps(v)
+            if expire > 0:
+                params['X-Expires'] = str(expire)
             token = self.get_sign_url('GetPlayInfo', params)
             ret = {'TokenVersion': 'V2', 'GetPlayInfoToken': token}
+            data = json.dumps(ret)
+        except Exception as Argument:
+            raise Argument
+        else:
+            if sys.version_info[0] == 3:
+                return base64.b64encode(data.encode('utf-8')).decode('utf-8')
+            else:
+                return base64.b64encode(data.decode('utf-8'))
+
+    def get_subtitle_auth_token(self, request: VodGetSubtitleInfoListRequest, expire: int):
+        try:
+            if request.Vid == "":
+                raise Exception("Vid is None")
+            params = {"Vid": request.Vid}
+            params["Status"] = "Published"
+            if expire > 0:
+                params['X-Expires'] = str(expire)
+            token = self.get_sign_url('GetSubtitleInfoList', params)
+            ret = {'GetSubtitleAuthToken': token}
             data = json.dumps(ret)
         except Exception as Argument:
             raise Argument
@@ -209,6 +264,58 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodGetPlayInfoResponse(), True)
+
+    #
+    # GetPrivateDrmPlayAuth.
+    #
+    # @param request VodGetPrivateDrmPlayAuthRequest
+    # @return VodGetPrivateDrmPlayAuthResponse
+    # @raise Exception
+    def get_private_drm_play_auth(self, request: VodGetPrivateDrmPlayAuthRequest) -> VodGetPrivateDrmPlayAuthResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetPrivateDrmPlayAuth", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetPrivateDrmPlayAuthResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetPrivateDrmPlayAuthResponse(), True)
+
+    #
+    # GetHlsDecryptionKey.
+    #
+    # @param request VodGetHlsDecryptionKeyRequest
+    # @return VodGetHlsDecryptionKeyResponse
+    # @raise Exception
+    def get_hls_decryption_key(self, request: VodGetHlsDecryptionKeyRequest) -> VodGetHlsDecryptionKeyResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetHlsDecryptionKey", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetHlsDecryptionKeyResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetHlsDecryptionKeyResponse(), True)
 
     #
     # UploadMediaByUrl.

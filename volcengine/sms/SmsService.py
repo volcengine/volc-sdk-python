@@ -6,6 +6,7 @@ from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
 from volcengine.base.Service import Service
 from volcengine.ServiceInfo import ServiceInfo
+from retry import retry
 
 
 class SmsService(Service):
@@ -25,7 +26,7 @@ class SmsService(Service):
 
     @staticmethod
     def get_service_info():
-        service_info = ServiceInfo("open.volcengineapi.com", {'Accept': 'application/json'},
+        service_info = ServiceInfo("sms.volcengineapi.com", {'Accept': 'application/json'},
                                    Credentials('', '', 'volcSMS', 'cn-north-1'), 5, 5)
         return service_info
 
@@ -36,6 +37,7 @@ class SmsService(Service):
         }
         return api_info
 
+    @retry(tries=2, delay=0)
     def send_sms(self, body):
         res = self.json('SendSms', {}, body)
         if res == '':
