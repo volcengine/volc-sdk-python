@@ -1,9 +1,9 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volcengine.models.vod.request.request_vod_pb2 import *
-from volcengine.models.vod.business.vod_workflow_pb2 import *
 from volcengine.vod.VodService import VodService
+from volcengine.vod.models.business.vod_workflow_pb2 import WorkflowParams
+from volcengine.vod.models.request.request_vod_pb2 import VodStartWorkflowRequest
 
 if __name__ == '__main__':
     vod_service = VodService()

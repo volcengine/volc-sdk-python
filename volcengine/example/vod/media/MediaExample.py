@@ -1,8 +1,10 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volcengine.models.vod.request.request_vod_pb2 import *
 from volcengine.vod.VodService import VodService
+from volcengine.vod.models.request.request_vod_pb2 import VodGetMediaInfosRequest, VodGetRecommendedPosterRequest, \
+    VodUpdateMediaPublishStatusRequest, VodUpdateMediaInfoRequest, VodDeleteMediaRequest, VodDeleteTranscodesRequest, \
+    VodGetSubtitleInfoListRequest, VodUpdateSubtitleStatusRequest, VodUpdateSubtitleInfoRequest, VodGetMediaListRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -124,14 +126,14 @@ if __name__ == '__main__':
         req7.StartTime = '1999-01-01T00:00:00Z'
         req7.EndTime = '2021-04-01T00:00:00Z'
         req7.Offset = '0'
-        req7.Offset = '10'
+        req7.PageSize = '10'
         resp7 = vod_service.get_media_list(req7)
     except Exception:
         raise
     else:
         print(resp7)
         if resp7.ResponseMetadata.Error.Code == '':
-            print('update media info success')
+            print(resp7.Result)
         else:
             print(resp7.ResponseMetadata.Error)
 
@@ -142,7 +144,9 @@ if __name__ == '__main__':
         req8.Vid = 'vid'
         req8.FileIds = 'fileIds'
         req8.Formats = 'format'
-        req8.Languages = 'language'        #Desc/Asc
+        req8.Languages = 'language'
+        req8.LanguageIds = 'languageIds'
+        req8.SubtitleIds = 'subtitleIds'
         req8.Status = 'Published' #Published/Unpublished
         req8.Title = 'title'
         req8.Tag = 'tag'
@@ -165,9 +169,9 @@ if __name__ == '__main__':
     try:
         req9 = VodUpdateSubtitleStatusRequest()
         req9.Vid = 'vid'
-        req9.FileIds = 'fileIds'
-        req9.Formats = 'format'
-        req9.Languages = 'language'
+        req9.FileIds = 'fileId1,fileId2'
+        req9.Formats = 'format1,format2'
+        req9.Languages = 'language1,language2'
         req9.Status = 'Published'          #Published/Unpublished
 
         resp9 = vod_service.update_subtitle_status(req9)
