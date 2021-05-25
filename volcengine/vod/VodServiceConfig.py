@@ -66,6 +66,11 @@ class VodServiceConfig(Service):
             "DeleteMedia": ApiInfo("GET", "/", {"Action": "DeleteMedia", "Version": "2020-08-01"}, {}, {}),
             "DeleteTranscodes": ApiInfo("GET", "/", {"Action": "DeleteTranscodes", "Version": "2020-08-01"}, {}, {}),
             "GetMediaList": ApiInfo("GET", "/", {"Action": "GetMediaList", "Version": "2020-08-01"}, {}, {}),
+            "GetHlsDecryptionKey": ApiInfo("GET", "/", {"Action": "GetHlsDecryptionKey", "Version": "2020-08-01"}, {},
+                                           {}),
+            "GetPrivateDrmPlayAuth": ApiInfo("GET", "/", {"Action": "GetPrivateDrmPlayAuth", "Version": "2020-08-01"},
+                                             {},
+                                             {}),
         }
         return api_info
 

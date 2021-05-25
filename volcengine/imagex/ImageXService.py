@@ -14,6 +14,7 @@ IMAGEX_SERVICE_NAME = "ImageX"
 IMAGEX_API_VERSION = "2018-08-01"
 
 ResourceServiceIdTRN = "trn:ImageX:*:*:ServiceId/%s"
+ResourceStoreKeyTRN = "trn:ImageX:*:*:StoreKeys/%s"
 
 service_info_map = {
     REGION_CN_NORTH1: ServiceInfo(
@@ -168,17 +169,22 @@ class ImageXService(Service):
         else:
             return base64.b64encode(data.decode('utf-8'))
 
-    def get_upload_auth(self, service_ids, expire=60*60):
-        actions = ['ImageX:ApplyImageUpload', 'ImageX:CommitImageUpload']
-        resources = []
+    def get_upload_auth(self, service_ids, expire=60*60, key_ptn=''):
+        apply_res = []
+        commit_res = []
         if len(service_ids) == 0:
-            resources.append(ResourceServiceIdTRN % '*')
+            apply_res.append(ResourceServiceIdTRN % '*')
+            commit_res.append(ResourceServiceIdTRN % '*')
         else:
             for sid in service_ids:
-                resources.append(ResourceServiceIdTRN % sid)
+                apply_res.append(ResourceServiceIdTRN % sid)
+                commit_res.append(ResourceServiceIdTRN % sid)
+        apply_res.append(ResourceStoreKeyTRN % key_ptn)
 
-        statement = Statement.new_allow_statement(actions, resources)
-        inline_policy = Policy([statement])
+        inline_policy = Policy([
+            Statement.new_allow_statement(['ImageX:ApplyImageUpload'], apply_res),
+            Statement.new_allow_statement(['ImageX:CommitImageUpload'], commit_res)
+        ])
         return self.sign_sts2(inline_policy, expire)
 
     def delete_images(self, service_id, uris):

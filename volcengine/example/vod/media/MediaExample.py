@@ -1,8 +1,10 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volcengine.models.vod.request.request_vod_pb2 import *
 from volcengine.vod.VodService import VodService
+from volcengine.vod.models.request.request_vod_pb2 import VodGetMediaInfosRequest, VodGetRecommendedPosterRequest, \
+    VodUpdateMediaPublishStatusRequest, VodUpdateMediaInfoRequest, VodDeleteMediaRequest, VodDeleteTranscodesRequest, \
+    VodGetMediaListRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -124,7 +126,7 @@ if __name__ == '__main__':
         req7.StartTime = '1999-01-01T00:00:00Z'
         req7.EndTime = '2021-04-01T00:00:00Z'
         req7.Offset = '0'
-        req7.Offset = '10'
+        req7.PageSize = '10'
         resp7 = vod_service.get_media_list(req7)
     except Exception:
         raise
