@@ -69,6 +69,11 @@ class VodServiceConfig(Service):
             "GetSubtitleInfoList": ApiInfo("GET", "/", {"Action": "GetSubtitleInfoList", "Version": "2020-08-01"}, {}, {}),
             "UpdateSubtitleStatus": ApiInfo("GET", "/", {"Action": "UpdateSubtitleStatus", "Version": "2020-08-01"}, {}, {}),
             "UpdateSubtitleInfo": ApiInfo("GET", "/", {"Action": "UpdateSubtitleInfo", "Version": "2020-08-01"}, {}, {}),
+            "GetHlsDecryptionKey": ApiInfo("GET", "/", {"Action": "GetHlsDecryptionKey", "Version": "2020-08-01"}, {},
+                                           {}),
+            "GetPrivateDrmPlayAuth": ApiInfo("GET", "/", {"Action": "GetPrivateDrmPlayAuth", "Version": "2020-08-01"},
+                                             {},
+                                             {}),
         }
         return api_info
 
