@@ -1,5 +1,9 @@
 ### Change log
 
+2021-05-24 Bumped to version v1.0.14
+- Add get media list
+- Support material upload
+
 2021-05-24 Bumped to version v1.0.13
 - Add essay_auto_grade api
 
