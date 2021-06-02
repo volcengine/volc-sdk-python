@@ -33,7 +33,7 @@ class VodService(VodServiceConfig):
             kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
             kRegion = Util.hmac_sha256(kDate, self.service_info.credentials.region)
             kService = Util.hmac_sha256(kRegion, 'vod')
-            kCredentials = Util.hmac_sha256(kService, 'request')
+            kCredentials = Util.hmac_sha256((kService, 'request'))
             key = Util.to_hex(kCredentials)
             signDataString = '&'.join([auth_algorithm, '2.0', str(deadline)])
             if auth_algorithm == 'HMAC-SHA1':
@@ -557,6 +557,32 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodDeleteTranscodesResponse(), True)
+
+    #
+    # GetMediaList.
+    #
+    # @param request VodGetMediaListRequest
+    # @return VodGetMediaListResponse
+    # @raise Exception
+    def get_media_list(self, request: VodGetMediaListRequest) -> VodGetMediaListResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetMediaList", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetMediaListResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetMediaListResponse(), True)
 
     #
     # StartWorkflow.
