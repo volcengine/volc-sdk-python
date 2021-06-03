@@ -33,7 +33,7 @@ class VodService(VodServiceConfig):
             kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
             kRegion = Util.hmac_sha256(kDate, self.service_info.credentials.region)
             kService = Util.hmac_sha256(kRegion, 'vod')
-            kCredentials = Util.hmac_sha256((kService, 'request'))
+            kCredentials = Util.hmac_sha256(kService, 'request')
             key = Util.to_hex(kCredentials)
             signDataString = '&'.join([auth_algorithm, '2.0', str(deadline)])
             if auth_algorithm == 'HMAC-SHA1':
