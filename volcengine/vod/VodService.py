@@ -98,7 +98,7 @@ class VodService(VodServiceConfig):
                 return base64.b64encode(data.decode('utf-8'))
 
     def upload_media(self, request):
-        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath)
+        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "")
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
         req.SessionKey = session_key
