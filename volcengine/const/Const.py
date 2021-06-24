@@ -12,6 +12,7 @@ HTTP = 'http'
 HTTPS = 'https'
 
 FILE_TYPE_VIDEO = 'video'
+FILE_TYPE_MEDIA = 'media'
 FILE_TYPE_IMAGE = 'image'
 FILE_TYPE_OBJECT = 'object'
 
@@ -43,3 +44,10 @@ RESOURCE_WATERMARK_FORMAT = 'trn:vod::*:watermark/%s'
 ACTION_VOD_GET_PLAY_INFO = "vod:GetPlayInfo"
 
 STAR = '*'
+
+CATEGORY_VIDEO = "video"
+CATEGORY_AUDIO = "audio"
+CATEGORY_IMAGE = "image"
+CATEGORY_DYNAMICIMG = "dynamic_img"
+CATEGORY_SUBTITLE = "subtitle"
+CATEGORY_FONT = "font"
