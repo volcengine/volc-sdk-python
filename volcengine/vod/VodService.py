@@ -84,7 +84,7 @@ class VodService(VodServiceConfig):
                 raise Exception("Vid is None")
             params = {"Vid": request.Vid}
             params["Status"] = "Published"
-            if expire > 0:
+	        if expire > 0:
                 params['X-Expires'] = str(expire)
             token = self.get_sign_url('GetSubtitleInfoList', params)
             ret = {'GetSubtitleAuthToken': token}
@@ -112,12 +112,13 @@ class VodService(VodServiceConfig):
             raise Exception(resp.ResponseMetadata.Error)
         return resp
 
-    def upload_tob(self, space_name, file_path):
+    def upload_tob(self, space_name, file_path, file_type):
         if not os.path.isfile(file_path):
             raise Exception("no such file on file path")
 
         apply_req = VodApplyUploadInfoRequest()
         apply_req.SpaceName = space_name
+        apply_req.FileType = file_type
         resp = self.apply_upload_info(apply_req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
@@ -237,6 +238,22 @@ class VodService(VodServiceConfig):
 
     def get_upload_sts2(self):
         return self.get_upload_sts2_with_expired_time(60 * 60)
+
+    def upload_material(self, request):
+        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType):
+
+        req = VodCommitUploadInfoRequest()
+        req.SpaceName = request.SpaceName
+        req.SessionKey = session_key
+        req.Functions = request.Functions
+        req.CallbackArgs = request.CallbackArgs
+
+        resp = self.commit_upload_info(req)
+        if resp.ResponseMetadata.Error.Code != '':
+            print(resp.ResponseMetadata.RequestId)
+            raise Exception(resp.ResponseMetadata.Error)
+        return resp
+
 
 
     #
