@@ -78,8 +78,27 @@ class VodService(VodServiceConfig):
             else:
                 return base64.b64encode(data.decode('utf-8'))
 
+    def get_subtitle_auth_token(self, request: VodGetSubtitleInfoListRequest, expire: int):
+        try:
+            if request.Vid == "":
+                raise Exception("Vid is None")
+            params = {"Vid": request.Vid}
+            params["Status"] = "Published"
+            if expire > 0:
+                params['X-Expires'] = str(expire)
+            token = self.get_sign_url('GetSubtitleInfoList', params)
+            ret = {'GetSubtitleAuthToken': token}
+            data = json.dumps(ret)
+        except Exception as Argument:
+            raise Argument
+        else:
+            if sys.version_info[0] == 3:
+                return base64.b64encode(data.encode('utf-8')).decode('utf-8')
+            else:
+                return base64.b64encode(data.decode('utf-8'))
+
     def upload_media(self, request):
-        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "")
+        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath)
 
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
@@ -93,28 +112,12 @@ class VodService(VodServiceConfig):
             raise Exception(resp.ResponseMetadata.Error)
         return resp
 
-    def upload_material(self, request):
-        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType)
-
-        req = VodCommitUploadInfoRequest()
-        req.SpaceName = request.SpaceName
-        req.SessionKey = session_key
-        req.Functions = request.Functions
-        req.CallbackArgs = request.CallbackArgs
-
-        resp = self.commit_upload_info(req)
-        if resp.ResponseMetadata.Error.Code != '':
-            print(resp.ResponseMetadata.RequestId)
-            raise Exception(resp.ResponseMetadata.Error)
-        return resp
-
-    def upload_tob(self, space_name, file_path, file_type):
+    def upload_tob(self, space_name, file_path):
         if not os.path.isfile(file_path):
             raise Exception("no such file on file path")
 
         apply_req = VodApplyUploadInfoRequest()
         apply_req.SpaceName = space_name
-        apply_req.FileType = file_type
         resp = self.apply_upload_info(apply_req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
@@ -573,6 +576,110 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodDeleteTranscodesResponse(), True)
+
+    #
+    # GetMediaList.
+    #
+    # @param request VodGetMediaListRequest
+    # @return VodGetMediaListResponse
+    # @raise Exception
+    def get_media_list(self, request: VodGetMediaListRequest) -> VodGetMediaListResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetMediaList", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetMediaListResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetMediaListResponse(), True)
+
+    #
+    # GetSubtitleInfoList.
+    #
+    # @param request VodGetSubtitleInfoListRequest
+    # @return VodGetSubtitleInfoListResponse
+    # @raise Exception
+    def get_subtitle_info_list(self, request: VodGetSubtitleInfoListRequest) -> VodGetSubtitleInfoListResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetSubtitleInfoList", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetSubtitleInfoListResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetSubtitleInfoListResponse(), True)
+
+    #
+    # UpdateSubtitleStatus.
+    #
+    # @param request VodUpdateSubtitleStatusRequest
+    # @return VodUpdateSubtitleStatusResponse
+    # @raise Exception
+    def update_subtitle_status(self, request: VodUpdateSubtitleStatusRequest) -> VodUpdateSubtitleStatusResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("UpdateSubtitleStatus", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateSubtitleStatusResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateSubtitleStatusResponse(), True)
+
+    #
+    # UpdateSubtitleInfo.
+    #
+    # @param request VodUpdateSubtitleInfoRequest
+    # @return VodUpdateSubtitleInfoResponse
+    # @raise Exception
+    def update_subtitle_info(self, request: VodUpdateSubtitleInfoRequest) -> VodUpdateSubtitleInfoResponse:
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("UpdateSubtitleInfo", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateSubtitleInfoResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateSubtitleInfoResponse(), True)
 
     #
     # StartWorkflow.
