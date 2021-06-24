@@ -206,15 +206,3 @@ if __name__ == '__main__':
             print(resp10.ResponseMetadata.Error)
 
     print('*' * 100)
-
-    try:
-        req11 = VodGetSubtitleInfoListRequest()
-        req11.Vid = 'vid'
-
-        token = vod_service.get_subtitle_auth_token(req11, 60)
-    except Exception:
-        raise
-    else:
-        print(token)
-
-    print('*' * 100)
