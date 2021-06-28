@@ -4,7 +4,7 @@ from __future__ import print_function
 from volcengine.vod.VodService import VodService
 from volcengine.vod.models.request.request_vod_pb2 import VodGetMediaInfosRequest, VodGetRecommendedPosterRequest, \
     VodUpdateMediaPublishStatusRequest, VodUpdateMediaInfoRequest, VodDeleteMediaRequest, VodDeleteTranscodesRequest, \
-    VodGetMediaListRequest
+    VodGetSubtitleInfoListRequest, VodUpdateSubtitleStatusRequest, VodUpdateSubtitleInfoRequest, VodGetMediaListRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     else:
         print(resp7)
         if resp7.ResponseMetadata.Error.Code == '':
-            print('update media info success')
+            print(resp7.Result)
         else:
             print(resp7.ResponseMetadata.Error)
 
