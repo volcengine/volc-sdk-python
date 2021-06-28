@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n)com.volcengine.service.vod.model.businessB\tVodCommonP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dvod/business/vod_common.proto\x12\x1eVolcengine.Vod.Models.Business\"\xf4\x01\n\rVodSourceInfo\x12\x0e\n\x06\x46ileId\x18\x01 \x01(\t\x12\x0b\n\x03Md5\x18\x02 \x01(\t\x12\x10\n\x08\x46ileType\x18\x03 \x01(\t\x12\r\n\x05\x43odec\x18\x04 \x01(\t\x12\x0e\n\x06Height\x18\x05 \x01(\x05\x12\r\n\x05Width\x18\x06 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x07 \x01(\t\x12\x10\n\x08\x44uration\x18\x08 \x01(\x02\x12\x0c\n\x04Size\x18\t \x01(\x01\x12\x10\n\x08StoreUri\x18\n \x01(\t\x12\x12\n\nDefinition\x18\x0b \x01(\t\x12\x0f\n\x07\x42itrate\x18\x0c \x01(\x05\x12\x0b\n\x03\x46ps\x18\r \x01(\x02\x12\x12\n\nCreateTime\x18\x0e \x01(\t\"Z\n\x12VodAudioStreamMeta\x12\r\n\x05\x43odec\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x02\x12\x12\n\nSampleRate\x18\x03 \x01(\x05\x12\x0f\n\x07\x42itrate\x18\x04 \x01(\x05\"\x86\x01\n\x12VodVideoStreamMeta\x12\r\n\x05\x43odec\x18\x01 \x01(\t\x12\x0e\n\x06Height\x18\x02 \x01(\x05\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x10\n\x08\x44uration\x18\x04 \x01(\x02\x12\x12\n\nDefinition\x18\x05 \x01(\t\x12\x0f\n\x07\x42itrate\x18\x06 \x01(\x05\x12\x0b\n\x03\x46ps\x18\x07 \x01(\x02\"\xd4\x02\n\x10VodTranscodeInfo\x12\x0e\n\x06\x46ileId\x18\x01 \x01(\t\x12\x0b\n\x03Md5\x18\x02 \x01(\t\x12\x10\n\x08\x46ileType\x18\x03 \x01(\t\x12\x10\n\x08LogoType\x18\x04 \x01(\t\x12\x0f\n\x07\x45ncrypt\x18\x05 \x01(\x08\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\x10\n\x08\x44uration\x18\x07 \x01(\x02\x12\x0c\n\x04Size\x18\x08 \x01(\x01\x12\x10\n\x08StoreUri\x18\t \x01(\t\x12K\n\x0fVideoStreamMeta\x18\n \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodVideoStreamMeta\x12K\n\x0f\x41udioStreamMeta\x18\x0b \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodAudioStreamMeta\x12\x12\n\nCreateTime\x18\x0c \x01(\t\"S\n\x0fVodAdaptiveInfo\x12\x13\n\x0bMainPlayUrl\x18\x01 \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x02 \x01(\t\x12\x14\n\x0c\x41\x64\x61ptiveType\x18\x03 \x01(\t\"\xf7\x02\n\x0bVodPlayInfo\x12\x0e\n\x06\x46ileId\x18\x01 \x01(\t\x12\x0b\n\x03Md5\x18\x02 \x01(\t\x12\x10\n\x08\x46ileType\x18\x03 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x04 \x01(\t\x12\r\n\x05\x43odec\x18\x05 \x01(\t\x12\x12\n\nDefinition\x18\x06 \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\x07 \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x08 \x01(\t\x12\x0f\n\x07\x42itrate\x18\t \x01(\x05\x12\r\n\x05Width\x18\n \x01(\x05\x12\x0e\n\x06Height\x18\x0b \x01(\x05\x12\x0c\n\x04Size\x18\x0c \x01(\x01\x12\x11\n\tCheckInfo\x18\r \x01(\t\x12\x12\n\nIndexRange\x18\x0e \x01(\t\x12\x11\n\tInitRange\x18\x0f \x01(\t\x12\x10\n\x08PlayAuth\x18\x10 \x01(\t\x12\x12\n\nPlayAuthId\x18\x11 \x01(\t\x12\x10\n\x08LogoType\x18\x12 \x01(\t\x12\x0f\n\x07Quality\x18\x13 \x01(\t\x12\x19\n\x11\x42\x61rrageMaskOffset\x18\x14 \x01(\t\"\xa0\x01\n\x0cVodThumbInfo\x12\x12\n\nCaptureNum\x18\x01 \x01(\x05\x12\x11\n\tStoreUrls\x18\x02 \x03(\t\x12\x11\n\tCellWidth\x18\x03 \x01(\x05\x12\x12\n\nCellHeight\x18\x04 \x01(\x05\x12\x0f\n\x07ImgXLen\x18\x05 \x01(\x05\x12\x0f\n\x07ImgYLen\x18\x06 \x01(\x05\x12\x10\n\x08Interval\x18\x07 \x01(\x01\x12\x0e\n\x06\x46ormat\x18\x08 \x01(\tB\xcd\x01\n)com.volcengine.service.vod.model.businessB\tVodCommonP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1dvod/business/vod_common.proto\x12\x1eVolcengine.Vod.Models.Business\"\xf4\x01\n\rVodSourceInfo\x12\x0e\n\x06\x46ileId\x18\x01 \x01(\t\x12\x0b\n\x03Md5\x18\x02 \x01(\t\x12\x10\n\x08\x46ileType\x18\x03 \x01(\t\x12\r\n\x05\x43odec\x18\x04 \x01(\t\x12\x0e\n\x06Height\x18\x05 \x01(\x05\x12\r\n\x05Width\x18\x06 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x07 \x01(\t\x12\x10\n\x08\x44uration\x18\x08 \x01(\x02\x12\x0c\n\x04Size\x18\t \x01(\x01\x12\x10\n\x08StoreUri\x18\n \x01(\t\x12\x12\n\nDefinition\x18\x0b \x01(\t\x12\x0f\n\x07\x42itrate\x18\x0c \x01(\x05\x12\x0b\n\x03\x46ps\x18\r \x01(\x02\x12\x12\n\nCreateTime\x18\x0e \x01(\t\"Z\n\x12VodAudioStreamMeta\x12\r\n\x05\x43odec\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x02\x12\x12\n\nSampleRate\x18\x03 \x01(\x05\x12\x0f\n\x07\x42itrate\x18\x04 \x01(\x05\"\x86\x01\n\x12VodVideoStreamMeta\x12\r\n\x05\x43odec\x18\x01 \x01(\t\x12\x0e\n\x06Height\x18\x02 \x01(\x05\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x10\n\x08\x44uration\x18\x04 \x01(\x02\x12\x12\n\nDefinition\x18\x05 \x01(\t\x12\x0f\n\x07\x42itrate\x18\x06 \x01(\x05\x12\x0b\n\x03\x46ps\x18\x07 \x01(\x02\"\xd4\x02\n\x10VodTranscodeInfo\x12\x0e\n\x06\x46ileId\x18\x01 \x01(\t\x12\x0b\n\x03Md5\x18\x02 \x01(\t\x12\x10\n\x08\x46ileType\x18\x03 \x01(\t\x12\x10\n\x08LogoType\x18\x04 \x01(\t\x12\x0f\n\x07\x45ncrypt\x18\x05 \x01(\x08\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\x10\n\x08\x44uration\x18\x07 \x01(\x02\x12\x0c\n\x04Size\x18\x08 \x01(\x01\x12\x10\n\x08StoreUri\x18\t \x01(\t\x12K\n\x0fVideoStreamMeta\x18\n \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodVideoStreamMeta\x12K\n\x0f\x41udioStreamMeta\x18\x0b \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodAudioStreamMeta\x12\x12\n\nCreateTime\x18\x0c \x01(\t\"S\n\x0fVodAdaptiveInfo\x12\x13\n\x0bMainPlayUrl\x18\x01 \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x02 \x01(\t\x12\x14\n\x0c\x41\x64\x61ptiveType\x18\x03 \x01(\t\"\xf7\x02\n\x0bVodPlayInfo\x12\x0e\n\x06\x46ileId\x18\x01 \x01(\t\x12\x0b\n\x03Md5\x18\x02 \x01(\t\x12\x10\n\x08\x46ileType\x18\x03 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x04 \x01(\t\x12\r\n\x05\x43odec\x18\x05 \x01(\t\x12\x12\n\nDefinition\x18\x06 \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\x07 \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x08 \x01(\t\x12\x0f\n\x07\x42itrate\x18\t \x01(\x05\x12\r\n\x05Width\x18\n \x01(\x05\x12\x0e\n\x06Height\x18\x0b \x01(\x05\x12\x0c\n\x04Size\x18\x0c \x01(\x01\x12\x11\n\tCheckInfo\x18\r \x01(\t\x12\x12\n\nIndexRange\x18\x0e \x01(\t\x12\x11\n\tInitRange\x18\x0f \x01(\t\x12\x10\n\x08PlayAuth\x18\x10 \x01(\t\x12\x12\n\nPlayAuthId\x18\x11 \x01(\t\x12\x10\n\x08LogoType\x18\x12 \x01(\t\x12\x0f\n\x07Quality\x18\x13 \x01(\t\x12\x19\n\x11\x42\x61rrageMaskOffset\x18\x14 \x01(\t\"\xa0\x01\n\x0cVodThumbInfo\x12\x12\n\nCaptureNum\x18\x01 \x01(\x05\x12\x11\n\tStoreUrls\x18\x02 \x03(\t\x12\x11\n\tCellWidth\x18\x03 \x01(\x05\x12\x12\n\nCellHeight\x18\x04 \x01(\x05\x12\x0f\n\x07ImgXLen\x18\x05 \x01(\x05\x12\x0f\n\x07ImgYLen\x18\x06 \x01(\x05\x12\x10\n\x08Interval\x18\x07 \x01(\x01\x12\x0e\n\x06\x46ormat\x18\x08 \x01(\t\"\x80\x02\n\x0fVodSubtitleInfo\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x02 \x01(\t\x12\x10\n\x08Language\x18\x03 \x01(\t\x12\x12\n\nLanguageId\x18\x04 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x05 \x01(\t\x12\x12\n\nSubtitleId\x18\x06 \x01(\t\x12\r\n\x05Title\x18\x07 \x01(\t\x12\x0b\n\x03Tag\x18\x08 \x01(\t\x12\x0e\n\x06Status\x18\t \x01(\t\x12\x0e\n\x06Source\x18\n \x01(\t\x12\x10\n\x08StoreUri\x18\x0b \x01(\t\x12\x13\n\x0bSubtitleUrl\x18\x0c \x01(\t\x12\x12\n\nCreateTime\x18\r \x01(\t\x12\x0f\n\x07Version\x18\x0e \x01(\tB\xcd\x01\n)com.volcengine.service.vod.model.businessB\tVodCommonP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
 )
 
 
@@ -675,6 +675,129 @@ _VODTHUMBINFO = _descriptor.Descriptor(
   serialized_end=1508,
 )
 
+
+_VODSUBTITLEINFO = _descriptor.Descriptor(
+  name='VodSubtitleInfo',
+  full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Vid', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.Vid', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='FileId', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.FileId', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Language', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.Language', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='LanguageId', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.LanguageId', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Format', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.Format', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='SubtitleId', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.SubtitleId', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Title', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.Title', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Tag', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.Tag', index=7,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Status', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.Status', index=8,
+      number=9, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Source', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.Source', index=9,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='StoreUri', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.StoreUri', index=10,
+      number=11, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='SubtitleUrl', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.SubtitleUrl', index=11,
+      number=12, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='CreateTime', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.CreateTime', index=12,
+      number=13, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Version', full_name='Volcengine.Vod.Models.Business.VodSubtitleInfo.Version', index=13,
+      number=14, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1511,
+  serialized_end=1767,
+)
+
 _VODTRANSCODEINFO.fields_by_name['VideoStreamMeta'].message_type = _VODVIDEOSTREAMMETA
 _VODTRANSCODEINFO.fields_by_name['AudioStreamMeta'].message_type = _VODAUDIOSTREAMMETA
 DESCRIPTOR.message_types_by_name['VodSourceInfo'] = _VODSOURCEINFO
@@ -684,6 +807,7 @@ DESCRIPTOR.message_types_by_name['VodTranscodeInfo'] = _VODTRANSCODEINFO
 DESCRIPTOR.message_types_by_name['VodAdaptiveInfo'] = _VODADAPTIVEINFO
 DESCRIPTOR.message_types_by_name['VodPlayInfo'] = _VODPLAYINFO
 DESCRIPTOR.message_types_by_name['VodThumbInfo'] = _VODTHUMBINFO
+DESCRIPTOR.message_types_by_name['VodSubtitleInfo'] = _VODSUBTITLEINFO
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 VodSourceInfo = _reflection.GeneratedProtocolMessageType('VodSourceInfo', (_message.Message,), {
@@ -734,6 +858,13 @@ VodThumbInfo = _reflection.GeneratedProtocolMessageType('VodThumbInfo', (_messag
   # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodThumbInfo)
   })
 _sym_db.RegisterMessage(VodThumbInfo)
+
+VodSubtitleInfo = _reflection.GeneratedProtocolMessageType('VodSubtitleInfo', (_message.Message,), {
+  'DESCRIPTOR' : _VODSUBTITLEINFO,
+  '__module__' : 'vod.business.vod_common_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodSubtitleInfo)
+  })
+_sym_db.RegisterMessage(VodSubtitleInfo)
 
 
 DESCRIPTOR._options = None
