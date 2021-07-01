@@ -58,6 +58,17 @@ class VisualService(Service):
             "VideoRetargetingQueryTask": ApiInfo("GET", "/", {"Action": "VideoRetargetingQueryTask", "Version": "2020-08-26"}, {}, {}),
             "VideoInpaintSubmitTask": ApiInfo("POST", "/", {"Action": "VideoInpaintSubmitTask", "Version": "2020-08-26"}, {}, {}),
             "VideoInpaintQueryTask": ApiInfo("GET", "/", {"Action": "VideoInpaintQueryTask", "Version": "2020-08-26"}, {}, {}),
+            "CarPlateDetection": ApiInfo("POST", "/", {"Action": "CarPlateDetection", "Version": "2020-08-26"}, {}, {}),
+            "DistortionFree": ApiInfo("POST", "/", {"Action": "DistortionFree", "Version": "2020-08-26"}, {}, {}),
+            "StretchRecovery": ApiInfo("POST", "/", {"Action": "StretchRecovery", "Version": "2020-08-26"}, {}, {}),
+            "ImageFlow": ApiInfo("POST", "/", {"Action": "ImageFlow", "Version": "2020-08-26"}, {}, {}),
+            "ImageScore": ApiInfo("POST", "/", {"Action": "ImageScore", "Version": "2020-08-26"}, {}, {}),
+            "PoemMaterial": ApiInfo("POST", "/", {"Action": "PoemMaterial", "Version": "2020-08-26"}, {}, {}),
+            "EmoticonEdit": ApiInfo("POST", "/", {"Action": "EmoticonEdit", "Version": "2020-08-26"}, {}, {}),
+            "EyeClose2Open": ApiInfo("POST", "/", {"Action": "EyeClose2Open", "Version": "2020-08-26"}, {}, {}),
+            "CarSegment": ApiInfo("POST", "/", {"Action": "CarSegment", "Version": "2020-08-26"}, {}, {}),
+            "CarDetection": ApiInfo("POST", "/", {"Action": "CarDetection", "Version": "2020-08-26"}, {}, {}),
+            "SkySegment": ApiInfo("POST", "/", {"Action": "SkySegment", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -274,6 +285,83 @@ class VisualService(Service):
         try:
             res_json = self.common_get_handler(
                 "VideoInpaintQueryTask", params)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def car_plate_detection(self, form):
+        try:
+            res_json = self.common_handler("CarPlateDetection", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def distortion_free(self, form):
+        try:
+            res_json = self.common_handler("DistortionFree", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def stretch_recovery(self, form):
+        try:
+            res_json = self.common_handler("StretchRecovery", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_flow(self, form):
+        try:
+            res_json = self.common_handler("ImageFlow", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_score(self, form):
+        try:
+            res_json = self.common_handler("ImageScore", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def poem_material(self, form):
+        try:
+            res_json = self.common_handler("PoemMaterial", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def emoticon_edit(self, form):
+        try:
+            res_json = self.common_handler("EmoticonEdit", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def eye_close2open(self, form):
+        try:
+            res_json = self.common_handler("EyeClose2Open", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def car_segment(self, form):
+        try:
+            res_json = self.common_handler("CarSegment", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def car_detection(self, form):
+        try:
+            res_json = self.common_handler("CarDetection", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def sky_segment(self, form):
+        try:
+            res_json = self.common_handler("SkySegment", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
