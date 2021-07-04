@@ -69,6 +69,9 @@ class VisualService(Service):
             "CarSegment": ApiInfo("POST", "/", {"Action": "CarSegment", "Version": "2020-08-26"}, {}, {}),
             "CarDetection": ApiInfo("POST", "/", {"Action": "CarDetection", "Version": "2020-08-26"}, {}, {}),
             "SkySegment": ApiInfo("POST", "/", {"Action": "SkySegment", "Version": "2020-08-26"}, {}, {}),
+            "ImageSearchImageAdd": ApiInfo("POST", "/", {"Action": "ImageSearchImageAdd", "Version": "2020-08-26"}, {}, {}),
+            "ImageSearchImageDelete": ApiInfo("POST", "/", {"Action": "ImageSearchImageDelete", "Version": "2020-08-26"}, {}, {}),
+            "ImageSearchImageSearch": ApiInfo("POST", "/", {"Action": "ImageSearchImageSearch", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -362,6 +365,27 @@ class VisualService(Service):
     def sky_segment(self, form):
         try:
             res_json = self.common_handler("SkySegment", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_search_image_add(self, form):
+        try:
+            res_json = self.common_handler("ImageSearchImageAdd", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_search_image_delete(self, form):
+        try:
+            res_json = self.common_handler("ImageSearchImageDelete", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    
+    def image_search_image_search(self, form):
+        try:
+            res_json = self.common_handler("ImageSearchImageSearch", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
