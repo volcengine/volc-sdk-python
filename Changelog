@@ -1,5 +1,8 @@
 ### Change log
 
+2021-07-08 Bumped to version v1.0.16
+- Fixed base json for dict type
+
 2021-06-03 Bumped to version v1.0.15
 - Hotfix for vod service 
 
