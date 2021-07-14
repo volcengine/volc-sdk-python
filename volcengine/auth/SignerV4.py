@@ -1,7 +1,7 @@
 # coding : utf-8
 import datetime
 import sys
-import json
+
 import pytz
 
 try:
@@ -86,13 +86,7 @@ class SignerV4(object):
 
     @staticmethod
     def hashed_canonical_request_v4(request, meta):
-        # 当content_type=json时request.body内部是个dict，
-        # 为了进行正确签名需要将其转成json进行hash
-        if type(request.body) == dict:
-            body_hash = Util.sha256(json.dumps(request.body))
-        else:
-            body_hash = Util.sha256(request.body)
-
+        body_hash = Util.sha256(request.body)
         request.headers['X-Content-Sha256'] = body_hash
 
         signed_headers = dict()
