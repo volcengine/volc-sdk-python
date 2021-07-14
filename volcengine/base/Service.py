@@ -115,8 +115,7 @@ class Service(object):
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
-        # 发送content-type为json的http body
-        resp = self.session.post(url, headers=r.headers, json=r.body,
+        resp = self.session.post(url, headers=r.headers, data=r.body,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
         if resp.status_code == 200:
             return json.dumps(resp.json())
