@@ -1,4 +1,6 @@
 ### Change log
+2021-07-14 Bumped to version v1.0.17
+- Revert fixed base json for dict type
 
 2021-07-08 Bumped to version v1.0.16
 - Fixed base json for dict type
