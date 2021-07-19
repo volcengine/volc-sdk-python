@@ -111,6 +111,10 @@ class ImageXService(Service):
 
     # upload image data
     def upload_image_data(self, params, img_datas):
+        for data in img_datas:
+            if not isinstance(data, bytes):
+                raise Exception("upload of non-bytes not supported")
+            
         apply_upload_request = {
             'ServiceId': params['ServiceId'],
             'SessionKey': params.get('SessionKey', ''),
@@ -152,7 +156,9 @@ class ImageXService(Service):
             oid = store_infos[idx]['StoreUri']
             auth = store_infos[idx]['Auth']
             url = 'https://{}/{}'.format(host, oid)
-            headers = {'Content-CRC32': hex(crc32(d) & 0xFFFFFFFF)[2:], 'Authorization': auth}
+            check_sum = crc32(d) & 0xFFFFFFFF
+            check_sum = "%08x" % check_sum
+            headers = {'Content-CRC32': check_sum, 'Authorization': auth}
             upload_status, resp = self.put_data(url, d, headers)
             if not upload_status:
                 raise Exception("upload %s error %s" % (url, resp))
