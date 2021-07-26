@@ -12,10 +12,9 @@ if __name__ == '__main__':
 
     params = dict()
 
-    form = {
-        "text": "例如会让部件磨损大，使得寿命降低，而且还带来动力降低，油耗越来越高，抖动大等。以前一箱油能跑380公里的，如今却只能跑到350了，无疑也增加了开车成本。",
-        "max_len": 5
+    body = {
+        "content": "好就不见"
     }
 
-    resp = nlp_service.text_summarization(form)
+    resp = nlp_service.novel_correction(body)
     print(resp)

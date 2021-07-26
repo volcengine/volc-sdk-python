@@ -38,6 +38,7 @@ class NLPService(Service):
             "SentimentAnalysis": ApiInfo("POST", "/", {"Action": "SentimentAnalysis", "Version": "2020-12-01"}, {}, {}),
             "TextSummarization": ApiInfo("POST", "/", {"Action": "TextSummarization", "Version": "2020-12-01"}, {}, {}),
             "EssayAutoGrade": ApiInfo("POST", "/", {"Action": "EssayAutoGrade", "Version": "2021-05-20"}, {}, {}),
+            "NovelCorrection": ApiInfo("POST", "/", {"Action": "NovelCorrection", "Version": "2021-07-22"}, {}, {}),
         }
         return api_info
 
@@ -94,6 +95,13 @@ class NLPService(Service):
     def essay_auto_grade(self, body):
         try:
             res_json = self.common_json_handler("EssayAutoGrade", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def novel_correction(self, body):
+        try:
+            res_json = self.common_json_handler("NovelCorrection", body)
             return res_json
         except Exception as e:
             raise Exception(str(e))
