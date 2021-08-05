@@ -1,5 +1,10 @@
 ### Change log
 
+2021-07-14 Bumped to version v1.0.19
+- Added sms
+- Added ocr
+- Added nlp
+
 2021-07-14 Bumped to version v1.0.18
 - Fixed cr32
 
