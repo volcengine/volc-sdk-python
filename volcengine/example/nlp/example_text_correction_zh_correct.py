@@ -13,7 +13,7 @@ if __name__ == '__main__':
     params = dict()
 
     form = {
-        "content": "易烊千玺条纹茄克周冬雨粉色露肩群活力亮相"
+        "content": "粉色露肩群活力亮相"
     }
 
     resp = nlp_service.text_correction_zh_correct(form)
