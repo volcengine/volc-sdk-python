@@ -1,5 +1,19 @@
 ### Change log
 
+2021-07-14 Bumped to version v1.0.19
+- Added sms
+- Added ocr
+- Added nlp
+
+2021-07-14 Bumped to version v1.0.18
+- Fixed cr32
+
+2021-07-14 Bumped to version v1.0.17
+- Revert fixed base json for dict type
+
+2021-07-08 Bumped to version v1.0.16
+- Fixed base json for dict type
+
 2021-06-03 Bumped to version v1.0.15
 - Hotfix for vod service 
 

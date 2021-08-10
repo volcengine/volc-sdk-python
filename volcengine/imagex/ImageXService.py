@@ -37,32 +37,48 @@ service_info_map = {
 api_info = {
     # 模板管理
     "CreateImageTemplate":
-        ApiInfo("POST", "/", {"Action": "CreateImageTemplate", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("POST", "/", {"Action": "CreateImageTemplate",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "DeleteImageTemplate":
-        ApiInfo("POST", "/", {"Action": "DeleteImageTemplate", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("POST", "/", {"Action": "DeleteImageTemplate",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "PreviewImageTemplate":
-        ApiInfo("POST", "/", {"Action": "PreviewImageTemplate", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("POST", "/", {"Action": "PreviewImageTemplate",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageTemplate":
-        ApiInfo("GET", "/", {"Action": "GetImageTemplate", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("GET", "/", {"Action": "GetImageTemplate",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetAllImageTemplates":
-        ApiInfo("GET", "/", {"Action": "GetAllImageTemplates", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("GET", "/", {"Action": "GetAllImageTemplates",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     # 资源管理相关
     "ApplyImageUpload":
-        ApiInfo("GET", "/", {"Action": "ApplyImageUpload", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("GET", "/", {"Action": "ApplyImageUpload",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "CommitImageUpload":
-        ApiInfo("POST", "/", {"Action": "CommitImageUpload", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("POST", "/", {"Action": "CommitImageUpload",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "DeleteImageUploadFiles":
-        ApiInfo("POST", "/", {"Action": "DeleteImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("POST", "/", {"Action": "DeleteImageUploadFiles",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "UpdateImageUploadFiles":
-        ApiInfo("POST", "/", {"Action": "UpdateImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("POST", "/", {"Action": "UpdateImageUploadFiles",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "PreviewImageUploadFile":
-        ApiInfo("GET", "/", {"Action": "PreviewImageUploadFile", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("GET", "/", {"Action": "PreviewImageUploadFile",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageUploadFile":
-        ApiInfo("GET", "/", {"Action": "GetImageUploadFile", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("GET", "/", {"Action": "GetImageUploadFile",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageUploadFiles":
-        ApiInfo("GET", "/", {"Action": "GetImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
+        ApiInfo("GET", "/", {"Action": "GetImageUploadFiles",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageUpdateFiles":
-        ApiInfo("GET", "/", {"Action": "GetImageUpdateFiles", "Version": IMAGEX_API_VERSION}, {}, {})
+        ApiInfo("GET", "/", {"Action": "GetImageUpdateFiles",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageOCR":
+        ApiInfo("POST", "/", {"Action": "GetImageOCR",
+                "Version": IMAGEX_API_VERSION}, {}, {})
 }
 
 
@@ -111,6 +127,10 @@ class ImageXService(Service):
 
     # upload image data
     def upload_image_data(self, params, img_datas):
+        for data in img_datas:
+            if not isinstance(data, bytes):
+                raise Exception("upload of non-bytes not supported")
+
         apply_upload_request = {
             'ServiceId': params['ServiceId'],
             'SessionKey': params.get('SessionKey', ''),
@@ -127,7 +147,8 @@ class ImageXService(Service):
         if len(addr['UploadHosts']) == 0:
             raise Exception("no upload host found, reqid %s" % reqid)
         elif len(addr['StoreInfos']) != len(img_datas):
-            raise Exception("store info len %d != upload num %d, reqid %s" % (len(result['StoreInfos']), len(img_datas), reqid))
+            raise Exception("store info len %d != upload num %d, reqid %s" % (
+                len(result['StoreInfos']), len(img_datas), reqid))
 
         session_key = addr['SessionKey']
         host = addr['UploadHosts'][0]
@@ -141,7 +162,8 @@ class ImageXService(Service):
             'Functions': params.get('Functions', []),
             'OptionInfos': params.get('OptionInfos', [])
         }
-        resp = self.commit_upload(commit_upload_request, json.dumps(commit_upload_body))
+        resp = self.commit_upload(
+            commit_upload_request, json.dumps(commit_upload_body))
         if 'Error' in resp['ResponseMetadata']:
             raise Exception(resp['ResponseMetadata'])
         return resp['Result']
@@ -152,7 +174,9 @@ class ImageXService(Service):
             oid = store_infos[idx]['StoreUri']
             auth = store_infos[idx]['Auth']
             url = 'https://{}/{}'.format(host, oid)
-            headers = {'Content-CRC32': hex(crc32(d) & 0xFFFFFFFF)[2:], 'Authorization': auth}
+            check_sum = crc32(d) & 0xFFFFFFFF
+            check_sum = "%08x" % check_sum
+            headers = {'Content-CRC32': check_sum, 'Authorization': auth}
             upload_status, resp = self.put_data(url, d, headers)
             if not upload_status:
                 raise Exception("upload %s error %s" % (url, resp))
@@ -162,7 +186,8 @@ class ImageXService(Service):
         apply_token = self.get_sign_url('ApplyImageUpload', params)
         commit_token = self.get_sign_url('CommitImageUpload', params)
 
-        ret = {'Version': 'v1', 'ApplyUploadToken': apply_token, 'CommitUploadToken': commit_token}
+        ret = {'Version': 'v1', 'ApplyUploadToken': apply_token,
+               'CommitUploadToken': commit_token}
         data = json.dumps(ret)
         if sys.version_info[0] == 3:
             return base64.b64encode(data.encode('utf-8')).decode('utf-8')
@@ -182,8 +207,10 @@ class ImageXService(Service):
         apply_res.append(ResourceStoreKeyTRN % key_ptn)
 
         inline_policy = Policy([
-            Statement.new_allow_statement(['ImageX:ApplyImageUpload'], apply_res),
-            Statement.new_allow_statement(['ImageX:CommitImageUpload'], commit_res)
+            Statement.new_allow_statement(
+                ['ImageX:ApplyImageUpload'], apply_res),
+            Statement.new_allow_statement(
+                ['ImageX:CommitImageUpload'], commit_res)
         ])
         return self.sign_sts2(inline_policy, expire)
 
@@ -246,6 +273,13 @@ class ImageXService(Service):
 
     def imagex_post(self, action, params, body):
         res = self.json(action, params, body)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def get_image_ocr(self, action, params):
+        res = self.post(action, params, {})
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
