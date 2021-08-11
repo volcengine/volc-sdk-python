@@ -13,7 +13,7 @@ if __name__ == '__main__':
         "LoopNumber": 1,
         "IsShowProgram": 0,
         "LoopVideo": [{
-            "VideoCoverImage": "t",
+            "VideoCoverImage": "",
             "VideoName": "test.mp4",
             "VideoVid": "",
             "Index": 1
