@@ -8,7 +8,7 @@ if __name__ == '__main__':
     livesaasService.set_sk('SK')
 
     body = {
-        'Name': "sadada",
+        'Name': "test",
         'LiveTime': 1628067360,
         'CoverImage': "",
         'IsReplayAutoOnlineEnable': 1,

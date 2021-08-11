@@ -11,7 +11,7 @@ if __name__ == '__main__':
         "ActivityId": 1,
         "Media": {
             "Name": "test",
-            "Vid": "xxx"
+            "Vid": ""
         }
     }
 

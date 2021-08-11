@@ -13,9 +13,9 @@ if __name__ == '__main__':
         "LoopNumber": 1,
         "IsShowProgram": 0,
         "LoopVideo": [{
-            "VideoCoverImage": "tos-cn-v-c1801c/1d8aa8be39484140a7affbce0daa8929",
-            "VideoName": "download (3).mp4",
-            "VideoVid": "v02a49g10000c45l963c77ubrcg01ffg",
+            "VideoCoverImage": "t",
+            "VideoName": "test.mp4",
+            "VideoVid": "",
             "Index": 1
         }]
     }

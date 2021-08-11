@@ -10,7 +10,7 @@ if __name__ == '__main__':
     body = {
         "ActivityId": 1,
         "IsStartLoopVideo": 1,
-        "LineId": 120208
+        "LineId": 1
     }
 
     resp = livesaasService.update_loop_video_status_api(body)

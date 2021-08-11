@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
     body = {
         "ActivityId": 1,
-        "MediaId": 611988,
+        "MediaId": 1,
         "OnlineStatus": 2
     }
 
