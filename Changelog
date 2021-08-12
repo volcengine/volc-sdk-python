@@ -1,6 +1,14 @@
 ### Change log
 
-2021-07-14 Bumped to version v1.0.19
+2021-08-12 Bumped to version v1.0.19
+- added more livesaas api
+    - 新增3个直播间管理类接口
+    - 新增8个直播控制类接口
+    - 新增3个回放管理类接口
+    - 新增2个评论类接口
+    - 新增1个客户端SDK类接口
+
+2021-08-05 Bumped to version v1.0.19
 - Added sms
 - Added ocr
 - Added nlp
