@@ -15,4 +15,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.get_sdk_token_api(body)
+    # resp = await livesaasService.async_get_sdk_token_api(body)
     print(resp)

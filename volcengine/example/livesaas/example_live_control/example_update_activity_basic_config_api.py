@@ -98,4 +98,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.update_activity_basic_config_api(body)
+    # resp = await livesaasService.async_update_activity_basic_config_api(body)
     print(resp)

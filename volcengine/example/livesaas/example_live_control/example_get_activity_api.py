@@ -12,5 +12,6 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.get_activity_api(params)
+    # resp = await livesaasService.async_get_activity_api(params)
     print(resp)
 

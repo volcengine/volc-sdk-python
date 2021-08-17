@@ -19,4 +19,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.create_activity_api(body)
+    # resp = await livesaasService.async_create_activity_api(body)
     print(resp)

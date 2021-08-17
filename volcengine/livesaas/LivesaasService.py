@@ -8,6 +8,8 @@ from volcengine.ServiceInfo import ServiceInfo
 from volcengine.base.Service import Service
 from volcengine.const.Const import *
 from volcengine.Policy import *
+import aiohttp
+from volcengine.auth.SignerV4 import SignerV4
 
 LIVESAAS_SERVICE_NAME = "livesaas"
 LIVESAAS_API_VERSION = "2020-06-01"
@@ -80,10 +82,53 @@ class LivesaasService(Service):
     def get_api_info():
         return api_info
 
+    async def async_json(self, api, params, body):
+        if not (api in self.api_info):
+            raise Exception("no such api")
+        api_info = self.api_info[api]
+        r = self.prepare_request(api_info, params)
+        r.headers['Content-Type'] = 'application/json'
+        r.body = body
+        timeout = aiohttp.ClientTimeout(connect=self.service_info.connection_timeout, sock_connect=self.service_info.socket_timeout)
+
+        SignerV4.sign(r, self.service_info.credentials)
+
+        url = r.build()
+        async with aiohttp.request("POST", url, headers=r.headers, data=r.body, timeout=timeout) as r:
+            resp = await r.text(encoding="utf-8")
+            if r.status == 200:
+                return resp
+            else:
+                raise Exception(resp)
+
+    async def async_get(self, api, params):
+        if not (api in self.api_info):
+            raise Exception("no such api")
+        api_info = self.api_info[api]
+        r = self.prepare_request(api_info, params)
+        timeout = aiohttp.ClientTimeout(connect=self.service_info.connection_timeout, sock_connect=self.service_info.socket_timeout)
+
+        SignerV4.sign(r, self.service_info.credentials)
+
+        url = r.build()
+        async with aiohttp.request("GET", url, headers=r.headers, timeout=timeout) as r:
+            resp = await r.text(encoding="utf-8")
+            if r.status == 200:
+                return resp
+            else:
+                raise Exception(resp)
+
     # ========================= 直播间管理类接口 =========================
     # CreateActivityAPI
     def create_activity_api(self, body):
         res = self.json('CreateActivityAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("CreateActivityAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_create_activity_api(self, body):
+        res = await self.async_json('CreateActivityAPI', dict(), json.dumps(body))
         if res == '':
             raise Exception("CreateActivityAPI: empty response")
         res_json = json.loads(res)
@@ -97,9 +142,23 @@ class LivesaasService(Service):
         res_json = json.loads(res)
         return res_json
 
+    async def async_delete_activity_api(self, body):
+        res = await self.async_json('DeleteActivityAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("DeleteActivityAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
     # ListActivityAPI
     def list_activity_api(self, params):
         res = self.get('ListActivityAPI', params)
+        if res == '':
+            raise Exception("ListActivityAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_list_activity_api(self, params):
+        res = await self.async_get('ListActivityAPI', params)
         if res == '':
             raise Exception("ListActivityAPI: empty response")
         res_json = json.loads(res)
@@ -114,9 +173,23 @@ class LivesaasService(Service):
         res_json = json.loads(res)
         return res_json
 
+    async def async_update_activity_status_api(self, body):
+        res = await self.async_json('UpdateActivityStatusAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("UpdateActivityStatusAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
     # UpdatePullToPushAPI
     def update_pull_to_push_api(self, body):
         res = self.json('UpdatePullToPushAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("UpdatePullToPushAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_update_pull_to_push_api(self, body):
+        res = await self.async_json('UpdatePullToPushAPI', dict(), json.dumps(body))
         if res == '':
             raise Exception("UpdatePullToPushAPI: empty response")
         res_json = json.loads(res)
@@ -130,9 +203,23 @@ class LivesaasService(Service):
         res_json = json.loads(res)
         return res_json
 
+    async def async_get_activity_api(self, params):
+        res = await self.async_get('GetActivityAPI', params)
+        if res == '':
+            raise Exception("GetActivityAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
     # GetStreamsAPI
     def get_streams_api(self, params):
         res = self.get('GetStreamsAPI', params)
+        if res == '':
+            raise Exception("GetStreamsAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_get_streams_api(self, params):
+        res = await self.async_get('GetStreamsAPI', params)
         if res == '':
             raise Exception("GetStreamsAPI: empty response")
         res_json = json.loads(res)
@@ -146,9 +233,23 @@ class LivesaasService(Service):
         res_json = json.loads(res)
         return res_json
 
+    async def async_update_activity_basic_config_api(self, body):
+        res = await self.async_json('UpdateActivityBasicConfigAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("UpdateActivityBasicConfigAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
     # GetActivityBasicConfigAPI
     def get_activity_basic_config_api(self, params):
         res = self.get('GetActivityBasicConfigAPI', params)
+        if res == '':
+            raise Exception("GetActivityBasicConfigAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_get_activity_basic_config_api(self, params):
+        res = await self.async_get('GetActivityBasicConfigAPI', params)
         if res == '':
             raise Exception("GetActivityBasicConfigAPI: empty response")
         res_json = json.loads(res)
@@ -162,9 +263,23 @@ class LivesaasService(Service):
         res_json = json.loads(res)
         return res_json
 
+    async def async_update_loop_video_api(self, body):
+        res = await self.async_json('UpdateLoopVideoAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("UpdateLoopVideoAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
     # UpdateLoopVideoStatusAPI
     def update_loop_video_status_api(self, body):
         res = self.json('UpdateLoopVideoStatusAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("UpdateLoopVideoStatusAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_update_loop_video_status_api(self, body):
+        res = await self.async_json('UpdateLoopVideoStatusAPI', dict(), json.dumps(body))
         if res == '':
             raise Exception("UpdateLoopVideoStatusAPI: empty response")
         res_json = json.loads(res)
@@ -179,6 +294,13 @@ class LivesaasService(Service):
         res_json = json.loads(res)
         return res_json
 
+    async def async_upload_replay_api(self, body):
+        res = await self.async_json('UploadReplayAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("UploadReplayAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
     # UpdateMediaOnlineStatusAPI
     def update_media_online_status_api(self, body):
         res = self.json('UpdateMediaOnlineStatusAPI', dict(), json.dumps(body))
@@ -187,9 +309,23 @@ class LivesaasService(Service):
         res_json = json.loads(res)
         return res_json
 
+    async def async_update_media_online_status_api(self, body):
+        res = await self.async_json('UpdateMediaOnlineStatusAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("UpdateMediaOnlineStatusAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
     # ListMediasAPI
     def list_medias_api(self, params):
         res = self.get('ListMediasAPI', params)
+        if res == '':
+            raise Exception("ListMediasAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_list_medias_api(self, params):
+        res = await self.async_get('ListMediasAPI', params)
         if res == '':
             raise Exception("ListMediasAPI: empty response")
         res_json = json.loads(res)
@@ -204,9 +340,23 @@ class LivesaasService(Service):
         res_json = json.loads(res)
         return res_json
 
+    async def async_presenter_chat_api(self, body):
+        res = await self.async_json('PresenterChatAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("PresenterChatAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
     # DeleteChatAPI
     def delete_chat_api(self, body):
         res = self.json('DeleteChatAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("DeleteChatAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_delete_chat_api(self, body):
+        res = await self.async_json('DeleteChatAPI', dict(), json.dumps(body))
         if res == '':
             raise Exception("DeleteChatAPI: empty response")
         res_json = json.loads(res)
@@ -216,6 +366,13 @@ class LivesaasService(Service):
     # GetSDKTokenAPI
     def get_sdk_token_api(self, body):
         res = self.json('GetSDKTokenAPI', dict(), json.dumps(body))
+        if res == '':
+            raise Exception("GetSDKTokenAPI: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    async def async_get_sdk_token_api(self, body):
+        res = await self.async_json('GetSDKTokenAPI', dict(), json.dumps(body))
         if res == '':
             raise Exception("GetSDKTokenAPI: empty response")
         res_json = json.loads(res)
