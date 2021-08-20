@@ -13,4 +13,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.presenter_chat_api(body)
+    # resp = await livesaasService.async_presenter_chat_api(body)
     print(resp)

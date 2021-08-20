@@ -16,4 +16,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.upload_replay_api(body)
+    # resp = await livesaasService.async_upload_replay_api(body)
     print(resp)

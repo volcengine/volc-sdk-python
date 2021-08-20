@@ -12,4 +12,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.delete_activity_api(body)
+    # resp = await livesaasService.async_delete_activity_api(body)
     print(resp)

@@ -18,4 +18,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.update_pull_to_push_api(body)
+    # resp = await livesaasService.async_update_pull_to_push_api(body)
     print(resp)

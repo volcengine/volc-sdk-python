@@ -13,4 +13,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.delete_chat_api(body)
+    # resp = await livesaasService.async_delete_chat_api(body)
     print(resp)

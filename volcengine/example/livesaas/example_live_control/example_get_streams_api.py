@@ -12,4 +12,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.get_streams_api(params)
+    # resp = await livesaasService.async_get_streams_api(params)
     print(resp)

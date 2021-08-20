@@ -21,4 +21,5 @@ if __name__ == '__main__':
     }
 
     resp = livesaasService.update_loop_video_api(body)
+    # resp = await livesaasService.async_update_loop_video_api(body)
     print(resp)
