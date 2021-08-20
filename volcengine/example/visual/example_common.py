@@ -11,8 +11,9 @@ if __name__ == '__main__':
     visual_service.set_sk('sk')
     # visual_service.set_host('host')
 
-    # below shows some common sdk using examples
-    # you could find other examples in example/visual directory
+    # below shows the sdk usage for all common apis,
+    # if you cannot find the needed one, please check other example files in the same dir
+    # or contact us for further help
     form = dict()
     form["image_base64"] = "image_base64_str"
 
@@ -65,9 +66,10 @@ if __name__ == '__main__':
     # form["return_foreground_image"] = 0
     # resp = visual_service.human_segment(form)
 
-    # 图像漫画风
-    # form["rotation"] = 0
-    # resp = visual_service.jpcartoon_cut(form)
+    # 人像漫画风
+    # form["cartoon_type"] = "jpcartoon_head"
+    # form["rotation"] = 0 # this param is valid only when cartoon_type == jpcartoon_head
+    # resp = visual_service.jpcartoon(form)
 
     # 人脸融合
     # form["template_base64"] = "template_base64_str"
