@@ -76,4 +76,37 @@ if __name__ == '__main__':
     # form["action_id"] = "faceswap"
     # resp = visual_service.face_swap(form)
 
+    # 通用OCR
+    # resp = visual_service.ocr_normal(form)
+
+    # 身份证OCR
+    # resp = visual_service.id_card(form)
+
+    # 银行卡OCR
+    # resp = visual_service.bank_card(form)
+
+    # 营业执照OCR
+    # resp = visual_service.clue_license(form)
+
+    # 驾驶证OCR
+    # resp = visual_service.driving_license(form)
+
+    # 行驶证OCR
+    # resp = visual_service.vehicle_license(form)
+
+    # 出租车票OCR
+    # resp = visual_service.taxi_invoice(form)
+
+    # 火车票OCR
+    # resp = visual_service.train_ticket(form)
+
+    # 行程单OCR
+    # resp = visual_service.flight_invoice(form)
+
+    # 增值税发票OCR
+    # resp = visual_service.vat_invoice(form)
+
+    # 定额发票OCR
+    # resp = visual_service.quota_invoice(form)
+
     print(resp)
