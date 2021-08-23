@@ -72,6 +72,14 @@ class VisualService(Service):
             "ImageSearchImageAdd": ApiInfo("POST", "/", {"Action": "ImageSearchImageAdd", "Version": "2020-08-26"}, {}, {}),
             "ImageSearchImageDelete": ApiInfo("POST", "/", {"Action": "ImageSearchImageDelete", "Version": "2020-08-26"}, {}, {}),
             "ImageSearchImageSearch": ApiInfo("POST", "/", {"Action": "ImageSearchImageSearch", "Version": "2020-08-26"}, {}, {}),
+            "ClueLicense": ApiInfo("POST", "/", {"Action": "OcrClueLicense", "Version": "2020-08-26"}, {}, {}),
+            "DrivingLicense": ApiInfo("POST", "/", {"Action": "DrivingLicense", "Version": "2020-08-26"}, {}, {}),
+            "VehicleLicense": ApiInfo("POST", "/", {"Action": "VehicleLicense", "Version": "2020-08-26"}, {}, {}),
+            "TaxiInvoice": ApiInfo("POST", "/", {"Action": "OcrTaxiInvoice", "Version": "2020-08-26"}, {}, {}),
+            "TrainTicket": ApiInfo("POST", "/", {"Action": "OcrTrainTicket", "Version": "2020-08-26"}, {}, {}),
+            "FlightInvoice": ApiInfo("POST", "/", {"Action": "OcrFlightInvoice", "Version": "2020-08-26"}, {}, {}),
+            "VatInvoice": ApiInfo("POST", "/", {"Action": "OcrVatInvoice", "Version": "2020-08-26"}, {}, {}),
+            "QuotaInvoice": ApiInfo("POST", "/", {"Action": "OcrQuotaInvoice", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -386,6 +394,62 @@ class VisualService(Service):
     def image_search_image_search(self, form):
         try:
             res_json = self.common_handler("ImageSearchImageSearch", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    
+    def clue_license(self, form):
+        try:
+            res_json = self.common_handler("ClueLicense", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def driving_license(self, form):
+        try:
+            res_json = self.common_handler("DrivingLicense", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def vehicle_license(self, form):
+        try:
+            res_json = self.common_handler("VehicleLicense", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    
+    def taxi_invoice(self, form):
+        try:
+            res_json = self.common_handler("TaxiInvoice", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def train_ticket(self, form):
+        try:
+            res_json = self.common_handler("TrainTicket", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def flight_invoice(self, form):
+        try:
+            res_json = self.common_handler("FlightInvoice", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    
+    def vat_invoice(self, form):
+        try:
+            res_json = self.common_handler("VatInvoice", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    
+    def quota_invoice(self, form):
+        try:
+            res_json = self.common_handler("QuotaInvoice", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
