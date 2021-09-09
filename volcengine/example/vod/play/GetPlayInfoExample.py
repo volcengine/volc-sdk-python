@@ -14,6 +14,7 @@ if __name__ == '__main__':
         req = VodGetPlayInfoRequest()
         req.Vid = vid
         req.Ssl = '1'
+        req.UnionInfo = 'your unionInfo'
         resp = vod_service.get_play_info(req)
     except Exception:
         raise
