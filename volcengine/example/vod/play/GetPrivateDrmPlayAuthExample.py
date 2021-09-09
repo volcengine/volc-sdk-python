@@ -15,6 +15,8 @@ if __name__ == '__main__':
         req = VodGetPrivateDrmPlayAuthRequest()
         req.Vid = vid
         req.DrmType = 'your drm type'
+        req.PlayAuthIds = 'a,b,c (your PlayAuthIds)'
+        req.UnionInfo = 'your unionInfo'
         resp = vod_service.get_private_drm_play_auth(req)
     except Exception:
         raise
