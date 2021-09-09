@@ -14,6 +14,7 @@ if __name__ == '__main__':
         vid = 'your vid'
         req = VodGetPrivateDrmPlayAuthRequest()
         req.Vid = vid
+        req.DrmType = 'your drm type'
         expire = 60  # seconds
         resp = vod_service.get_private_drm_play_auth_token(req, expire)
     except Exception:
