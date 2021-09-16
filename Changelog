@@ -2,6 +2,7 @@
 
 2021-09-14 Bumped to version v1.0.23
 - Add rtc sdk
+- Add private drm for vod
 
 2021-08-24 Bumped to version v1.0.22
 - ocr sdk
