@@ -24,6 +24,22 @@ LargeFileSize = 1024 * 1024 * 1024
 #
 class VodService(VodServiceConfig):
 
+    def get_private_drm_play_auth_token(self, request: VodGetPrivateDrmPlayAuthRequest, expire: int):
+        try:
+            jsonData = MessageToJson(request, False, True)
+            params = json.loads(jsonData)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            if expire > 0:
+                params['X-Expires'] = str(expire)
+            data = self.get_sign_url('GetPrivateDrmPlayAuth', params)
+            return data
+        except Exception as Argument:
+            raise Argument
+
     def create_hls_drm_auth_token(self, auth_algorithm, expire_seconds):
         try:
             if expire_seconds == 0:
