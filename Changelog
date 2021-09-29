@@ -1,5 +1,8 @@
 ### Change log
 
+2021-09-29 Bumped to version v1.0.24
+- Fixed large file upload
+
 2021-09-16 Bumped to version v1.0.23
 - Add rtc sdk
 - Add private drm for vod
