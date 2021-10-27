@@ -177,9 +177,14 @@ class VodService(VodServiceConfig):
         with open(file_path, 'rb') as f:
             for i in range(0, last_num):
                 data = f.read(MinChunkSize)
-                part = self.upload_part(host, oid, auth, upload_id, i, data, is_large_file)
+                part_number = i
+                if is_large_file:
+                    part_number = i + 1
+                part = self.upload_part(host, oid, auth, upload_id, part_number, data, is_large_file)
                 parts.append(part)
             data = f.read()
+            if is_large_file:
+                last_num = last_num + 1
             part = self.upload_part(host, oid, auth, upload_id, last_num, data, is_large_file)
             parts.append(part)
         return self.upload_merge_part(host, oid, auth, upload_id, parts, is_large_file)
@@ -731,4 +736,3 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodStartWorkflowResponse(), True)
-
