@@ -54,7 +54,7 @@ if __name__ == '__main__':
     req = {
         'AppId': 5461,
         'Service': "mobile_status",
-        'Parameters': '{"operate_time":1609818934, "mobile": "18810502019"}'
+        'Parameters': '{"operate_time":1609818934, "mobile": ""}'
     }
 
     mobileResp = riskDetector.mobile_status(params, req)
