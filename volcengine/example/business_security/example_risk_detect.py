@@ -40,4 +40,23 @@ if __name__ == '__main__':
     req = dict()
 
     resultResp = riskDetector.risk_result(params, req)
-    print(resultResp)
+
+    params = dict()
+    req = {
+         'AppId': 5461,
+         'Service': "account_risk",
+         'Parameters': '{"operate_time":1609818934, "mobile_sha1": "d6e94212f0655d2ce19d047169365a67a1db85bf"}'
+    }
+
+    resp = riskDetector.account_risk(params, req)
+
+    params = dict()
+    req = {
+        'AppId': 5461,
+        'Service': "mobile_status",
+        'Parameters': '{"operate_time":1609818934, "mobile": "18810502019"}'
+    }
+
+    mobileResp = riskDetector.mobile_status(params, req)
+
+    print(mobileResp)
