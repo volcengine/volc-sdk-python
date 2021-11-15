@@ -1,5 +1,9 @@
 ### Change log
 
+2021-10-29 Bumped to version v1.0.26
+- added new service mobile status 
+- added account risk
+
 2021-10-27 Bumped to version v1.0.25
 - Vod修正大文件上传配置
 - Vod添加HDR支持
