@@ -34,7 +34,9 @@ class RiskDetectService(Service):
     def get_api_info():
         api_info = {"RiskDetection": ApiInfo("POST", "/", {"Action": "RiskDetection", "Version": "2021-02-02"}, {}, {}),
                     "AsyncRiskDetection": ApiInfo("POST", "/", {"Action": "AsyncRiskDetection", "Version": "2021-02-25"}, {}, {}),
-                    "RiskResult": ApiInfo("GET", "/", {"Action": "RiskResult", "Version": "2021-03-10"}, {}, {})}
+                    "RiskResult": ApiInfo("GET", "/", {"Action": "RiskResult", "Version": "2021-03-10"}, {}, {}),
+                    "AccountRisk": ApiInfo("POST", "/", {"Action": "AccountRisk", "Version": "2020-12-25"}, {}, {}),
+                    "MobileStatus": ApiInfo("POST", "/", {"Action": "MobileStatus", "Version": "2020-12-25"}, {}, {})}
 
         return api_info
 
@@ -57,6 +59,24 @@ class RiskDetectService(Service):
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def risk_result(self, params, body):
         res = self.get("RiskResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def account_risk(self, params, body):
+        res = self.json("AccountRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def mobile_status(self, params, body):
+        res = self.json("MobileStatus", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
