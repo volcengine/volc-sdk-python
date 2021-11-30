@@ -32,22 +32,53 @@ class ContentSecurityService(Service):
 
     @staticmethod
     def get_api_info():
-        api_info = {"VideoRisk": ApiInfo("POST", "/", {"Action": "VideoRisk", "Version": "2021-11-29"}, {}, {}),
-                    "VideoResult": ApiInfo("GET", "/", {"Action": "VideoResult", "Version": "2021-11-29"}, {}, {})}
+        api_info = {"AsyncVideoRisk": ApiInfo("POST", "/", {"Action": "AsyncVideoRisk", "Version": "2021-11-29"}, {}, {}),
+                    "VideoResult": ApiInfo("GET", "/", {"Action": "VideoResult", "Version": "2021-11-29"}, {}, {}),
+                    "ImageContentRisk": ApiInfo("POST", "/", {"Action": "ImageContentRisk", "Version": "2021-11-29"}, {}, {}),
+                    "AsyncImageRisk": ApiInfo("POST", "/", {"Action": "AsyncImageRisk", "Version": "2021-11-29"}, {}, {}),
+                    "ImageResult": ApiInfo("POST", "/", {"Action": "GetImageResult", "Version": "2021-11-29"}, {}, {}),
+                    }
 
         return api_info
 
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def video_risk(self, params, body):
-        res = self.json("VideoRisk", params, json.dumps(body))
+    def async_video_risk(self, params, body):
+        res = self.json("AsyncVideoRisk", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
 
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def video_result(self, params, body):
         res = self.get("VideoResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def image_content_risk(self, params, body):
+        res = self.json("ImageContentRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def async_image_risk(self, params, body):
+        res = self.json("AsyncImageRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def image_result(self, params, body):
+        res = self.get("ImageResult", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
