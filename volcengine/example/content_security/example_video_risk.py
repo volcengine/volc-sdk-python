@@ -43,16 +43,16 @@ if __name__ == '__main__':
         'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"https://image.uc.cn/s/wemedia/s/upload/2021/Wfmt7d1f82edu22/c2ea0890c3045dad785944b01dd87540.png\", \"data_id\": \"image123\", \"account_id\": \"2000000409\"}"
     }
 
-    resp3 = riskDetector.async_image_risk(params, req)
+    resp3 = riskDetector.async_image_risk(params, reqImage)
     print resp3
 
     params = {
         'AppId': 3332,
         'Service': "image_content_risk",
-        'DataId': "image123"
+        'DataId': "123image"
     }
     req = dict()
 
-    resp4 = riskDetector.video_result(params, req)
+    resp4 = riskDetector.image_result(params, req)
     print resp4
 

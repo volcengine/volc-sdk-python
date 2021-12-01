@@ -36,7 +36,7 @@ class ContentSecurityService(Service):
                     "VideoResult": ApiInfo("GET", "/", {"Action": "VideoResult", "Version": "2021-11-29"}, {}, {}),
                     "ImageContentRisk": ApiInfo("POST", "/", {"Action": "ImageContentRisk", "Version": "2021-11-29"}, {}, {}),
                     "AsyncImageRisk": ApiInfo("POST", "/", {"Action": "AsyncImageRisk", "Version": "2021-11-29"}, {}, {}),
-                    "ImageResult": ApiInfo("POST", "/", {"Action": "GetImageResult", "Version": "2021-11-29"}, {}, {}),
+                    "ImageResult": ApiInfo("GET", "/", {"Action": "GetImageResult", "Version": "2021-11-29"}, {}, {}),
                     }
 
         return api_info
