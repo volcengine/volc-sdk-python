@@ -1,5 +1,10 @@
 ### Change log
 
+2021-12-16 Bumped to version v1.0.27
+- element_verify
+- Dev rds postgresql
+- Implemented CDN apis
+
 2021-10-29 Bumped to version v1.0.26
 - added new service mobile status 
 - added account risk
