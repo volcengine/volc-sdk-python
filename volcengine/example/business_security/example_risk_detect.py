@@ -60,3 +60,14 @@ if __name__ == '__main__':
     mobileResp = riskDetector.mobile_status(params, req)
 
     print(mobileResp)
+
+    params = dict()
+    req = {
+        'AppId': 5461,
+        'Service': "idcard_two_element_verify",
+        'Parameters': '{"operate_time":1609818934, "idcard_no": "", "idcard_name":""}'
+    }
+
+    idcardTwoElementResp = riskDetector.element_verify(params, req)
+
+    print(idcardTwoElementResp)
