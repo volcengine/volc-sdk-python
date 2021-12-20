@@ -24,7 +24,7 @@ LargeFileSize = 1024 * 1024 * 1024
 #
 class VodService(VodServiceConfig):
 
-    def get_private_drm_play_auth_token(self, request: VodGetPrivateDrmPlayAuthRequest, expire: int):
+    def get_private_drm_play_auth_token(self, request, expire):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -72,7 +72,7 @@ class VodService(VodServiceConfig):
         except Exception as Argument:
             raise Argument
 
-    def get_play_auth_token(self, request: VodGetPlayInfoRequest, expire: int):
+    def get_play_auth_token(self, request, expire):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -94,7 +94,7 @@ class VodService(VodServiceConfig):
             else:
                 return base64.b64encode(data.decode('utf-8'))
 
-    def get_subtitle_auth_token(self, request: VodGetSubtitleInfoListRequest, expire: int):
+    def get_subtitle_auth_token(self, request, expire):
         try:
             if request.Vid == "":
                 raise Exception("Vid is None")
@@ -275,7 +275,7 @@ class VodService(VodServiceConfig):
     # @param request VodGetPlayInfoRequest
     # @return VodGetPlayInfoResponse
     # @raise Exception
-    def get_play_info(self, request: VodGetPlayInfoRequest) -> VodGetPlayInfoResponse:
+    def get_play_info(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -301,7 +301,7 @@ class VodService(VodServiceConfig):
     # @param request VodGetPrivateDrmPlayAuthRequest
     # @return VodGetPrivateDrmPlayAuthResponse
     # @raise Exception
-    def get_private_drm_play_auth(self, request: VodGetPrivateDrmPlayAuthRequest) -> VodGetPrivateDrmPlayAuthResponse:
+    def get_private_drm_play_auth(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -327,7 +327,7 @@ class VodService(VodServiceConfig):
     # @param request VodGetHlsDecryptionKeyRequest
     # @return VodGetHlsDecryptionKeyResponse
     # @raise Exception
-    def get_hls_decryption_key(self, request: VodGetHlsDecryptionKeyRequest) -> VodGetHlsDecryptionKeyResponse:
+    def get_hls_decryption_key(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -353,7 +353,7 @@ class VodService(VodServiceConfig):
     # @param request VodUrlUploadRequest
     # @return VodUrlUploadResponse
     # @raise Exception
-    def upload_media_by_url(self, request: VodUrlUploadRequest) -> VodUrlUploadResponse:
+    def upload_media_by_url(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -379,7 +379,7 @@ class VodService(VodServiceConfig):
     # @param request VodQueryUploadTaskInfoRequest
     # @return VodQueryUploadTaskInfoResponse
     # @raise Exception
-    def query_upload_task_info(self, request: VodQueryUploadTaskInfoRequest) -> VodQueryUploadTaskInfoResponse:
+    def query_upload_task_info(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -405,7 +405,7 @@ class VodService(VodServiceConfig):
     # @param request VodApplyUploadInfoRequest
     # @return VodApplyUploadInfoResponse
     # @raise Exception
-    def apply_upload_info(self, request: VodApplyUploadInfoRequest) -> VodApplyUploadInfoResponse:
+    def apply_upload_info(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -431,7 +431,7 @@ class VodService(VodServiceConfig):
     # @param request VodCommitUploadInfoRequest
     # @return VodCommitUploadInfoResponse
     # @raise Exception
-    def commit_upload_info(self, request: VodCommitUploadInfoRequest) -> VodCommitUploadInfoResponse:
+    def commit_upload_info(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -457,7 +457,7 @@ class VodService(VodServiceConfig):
     # @param request VodUpdateMediaInfoRequest
     # @return VodUpdateMediaInfoResponse
     # @raise Exception
-    def update_media_info(self, request: VodUpdateMediaInfoRequest) -> VodUpdateMediaInfoResponse:
+    def update_media_info(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -483,7 +483,7 @@ class VodService(VodServiceConfig):
     # @param request VodUpdateMediaPublishStatusRequest
     # @return VodUpdateMediaPublishStatusResponse
     # @raise Exception
-    def update_media_publish_status(self, request: VodUpdateMediaPublishStatusRequest) -> VodUpdateMediaPublishStatusResponse:
+    def update_media_publish_status(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -509,7 +509,7 @@ class VodService(VodServiceConfig):
     # @param request VodGetMediaInfosRequest
     # @return VodGetMediaInfosResponse
     # @raise Exception
-    def get_media_infos(self, request: VodGetMediaInfosRequest) -> VodGetMediaInfosResponse:
+    def get_media_infos(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -535,7 +535,7 @@ class VodService(VodServiceConfig):
     # @param request VodGetRecommendedPosterRequest
     # @return VodGetRecommendedPosterResponse
     # @raise Exception
-    def get_recommended_poster(self, request: VodGetRecommendedPosterRequest) -> VodGetRecommendedPosterResponse:
+    def get_recommended_poster(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -561,7 +561,7 @@ class VodService(VodServiceConfig):
     # @param request VodDeleteMediaRequest
     # @return VodDeleteMediaResponse
     # @raise Exception
-    def delete_media(self, request: VodDeleteMediaRequest) -> VodDeleteMediaResponse:
+    def delete_media(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -587,7 +587,7 @@ class VodService(VodServiceConfig):
     # @param request VodDeleteTranscodesRequest
     # @return VodDeleteTranscodesResponse
     # @raise Exception
-    def delete_transcodes(self, request: VodDeleteTranscodesRequest) -> VodDeleteTranscodesResponse:
+    def delete_transcodes(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -613,7 +613,7 @@ class VodService(VodServiceConfig):
     # @param request VodGetMediaListRequest
     # @return VodGetMediaListResponse
     # @raise Exception
-    def get_media_list(self, request: VodGetMediaListRequest) -> VodGetMediaListResponse:
+    def get_media_list(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -639,7 +639,7 @@ class VodService(VodServiceConfig):
     # @param request VodGetSubtitleInfoListRequest
     # @return VodGetSubtitleInfoListResponse
     # @raise Exception
-    def get_subtitle_info_list(self, request: VodGetSubtitleInfoListRequest) -> VodGetSubtitleInfoListResponse:
+    def get_subtitle_info_list(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -665,7 +665,7 @@ class VodService(VodServiceConfig):
     # @param request VodUpdateSubtitleStatusRequest
     # @return VodUpdateSubtitleStatusResponse
     # @raise Exception
-    def update_subtitle_status(self, request: VodUpdateSubtitleStatusRequest) -> VodUpdateSubtitleStatusResponse:
+    def update_subtitle_status(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -691,7 +691,7 @@ class VodService(VodServiceConfig):
     # @param request VodUpdateSubtitleInfoRequest
     # @return VodUpdateSubtitleInfoResponse
     # @raise Exception
-    def update_subtitle_info(self, request: VodUpdateSubtitleInfoRequest) -> VodUpdateSubtitleInfoResponse:
+    def update_subtitle_info(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
@@ -717,7 +717,7 @@ class VodService(VodServiceConfig):
     # @param request VodStartWorkflowRequest
     # @return VodStartWorkflowResponse
     # @raise Exception
-    def start_workflow(self, request: VodStartWorkflowRequest) -> VodStartWorkflowResponse:
+    def start_workflow(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
             params = json.loads(jsonData)
