@@ -11,6 +11,8 @@ except:
 
 from volcengine.auth.MetaData import MetaData
 from volcengine.util.Util import Util
+from volcengine.base.Request import Request
+from volcengine.auth.SignResult import SignResult
 
 class SignerV4(object):
     @staticmethod
@@ -67,6 +69,57 @@ class SignerV4(object):
 
         query['X-Signature'] = sign
         return urlencode(query)
+
+    @staticmethod
+    def sign_only(param, credentials):
+        request = Request()
+        request.host = param.host
+        request.method = param.method
+        request.path = param.path
+        request.body = param.body
+        request.query = param.query
+        request.headers = param.header_list
+
+        format_date = param.date.strftime("%Y%m%dT%H%M%SZ")
+        date = format_date[:8]
+        request.headers['X-Date'] = format_date
+        md = MetaData()
+        md.set_algorithm('HMAC-SHA256')
+        md.set_service(credentials.service)
+        md.set_region(credentials.region)
+        md.set_date(date)
+        md.set_credential_scope('/'.join([md.date, md.region, md.service, 'request']))
+
+        if param.is_sign_url:
+            md.set_signed_headers('')
+            md.set_credential_scope('/'.join([md.date, md.region, md.service, 'request']))
+            query = request.query
+            query['X-Date'] = format_date
+            query['X-NotSignBody'] = ''
+            query['X-Credential'] = credentials.ak + '/' + md.credential_scope
+            query['X-Algorithm'] = md.algorithm
+            query['X-SignedHeaders'] = md.signed_headers
+            query['X-SignedQueries'] = ''
+            query['X-SignedQueries'] = ';'.join(sorted(query.keys()))
+            hashed_canon_req = SignerV4.hashed_simple_canonical_request_v4(request, md)
+        else:
+            hashed_canon_req = SignerV4.hashed_canonical_request_v4(request, md)
+
+        signing_str = '\n'.join([md.algorithm, format_date, md.credential_scope, hashed_canon_req])
+        signing_key = SignerV4.get_signing_secret_key_v4(credentials.sk, md.date, md.region, md.service)
+        sign = SignerV4.signature_v4(signing_key, signing_str)
+
+        result = SignResult()
+        result.xdate = format_date
+        result.xAlgorithm = md.algorithm
+        if param.is_sign_url:
+            result.xSignedQueries = request.query['X-SignedQueries']
+        result.xSignedHeaders = md.signed_headers
+        result.xCredential = credentials.ak + '/' + md.credential_scope
+        result.xSignature = sign
+        result.authorization = result.xAlgorithm + " Credential=" + result.xCredential + ", SignedHeaders=" + md.signed_headers + ", Signature=" + result.xSignature
+
+        return result
 
     @staticmethod
     def hashed_simple_canonical_request_v4(request, meta):

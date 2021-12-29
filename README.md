@@ -1,74 +1,57 @@
-# 火山引擎开发者Python SDK
+<h1 align="center">火山引擎SDK for Python</h1> 
+欢迎使用火山引擎SDK for Python，本文档为您介绍如何获取及调用SDK。
 
-## 安装（建议）
-require python verion >= 2.7
+## 前置准备
+### 服务开通
+请确保您已开通了您需要访问的服务。您可前往[火山引擎控制台](https://console.volcengine.com/ )，在左侧菜单中选择或在顶部搜索栏中搜索您需要使用的服务，进入服务控制台内完成开通流程。
+### 获取安全凭证
+Access Key（访问密钥）是访问火山引擎服务的安全凭证，包含Access Key ID（简称为AK）和Secret Access Key（简称为SK）两部分。您可登录[火山引擎控制台](https://console.volcengine.com/ )，前往“[访问控制](https://console.volcengine.com/iam )”的“[访问密钥](https://console.volcengine.com/iam/keymanage/ )”中创建及管理您的Access Key。更多信息可参考[访问密钥帮助文档](https://www.volcengine.com/docs/6291/65568 )。
+### 环境检查
+Python版本需要不低于2.7。
 
+## 获取与安装
+
+使用pip安装SDK for Python：
 ```
     pip install --user volcengine
 ```
-
-如果已经安装volcengine包，则用下面命令升级即可
+如果已经安装volcengine包，则用下面命令升级即可：
 ```
     pip install --upgrade volcengine
 ```
 
-## 关于AK/SK
+## 相关配置
+### 安全凭证配置
+火山引擎SDK for Python支持以下几种方式进行凭证管理：
 
-### AK/SK 注册申请流程
+*注意：代码中Your AK及Your SK需要分别替换为您的AK及SK。*
 
-主账户和有权限的子用户可以新建AK密钥，操作如下：
-
-1.使用帐号/密码登录控制台；
-
-2.选择一级菜单“访问控制”->选择二级菜单“密钥管理”；
-
-3.页面中展示主账号的访问密钥列表，每个IAM用户最多可同时拥有2个访问密钥，如果当前IAM用户的访问密钥数量未达到上限，则可以点击新建密钥按钮；
-
-4.点击新建密钥按钮，弹出新建密钥弹窗，点击查看AccessKey详情，可直接查看访问密钥信息。
-
-### 通过API申请AK/SK
-
-[生成访问密匙](https://www.volcengine.cn/docs/6291/65578)
-
-### AK/SK在sdk中的使用
-
-- (option 1 推荐) 在代码里显示调用方法set_ak/set_sk，例：
+**方式一**：在Client中设置AK/SK **（推荐）**
   ```python
       iam_service = IamService()
-      # call below method if you dont set ak and sk in $HOME/.volc/config
-      iam_service.set_ak('ak')
-      iam_service.set_sk('sk')
+      iam_service.set_ak('Your AK')
+      iam_service.set_sk('Your SK')
   ```
 
-- (option 2) 在当前环境变量中分别设置 
+**方式二**：从环境变量加载AK/SK
   ```bash
-  VOLC_ACCESSKEY="your ak"  
-  VOLC_SECRETKEY="your sk"
+  VOLC_ACCESSKEY="Your AK"  
+  VOLC_SECRETKEY="Your SK"
   ```
-- (option 3) json格式放在～/.volc/config中，格式为：
+**方式三**：从HOME文件加载AK/SK
+
+在本地的~/.volc/config中添加如下内容：
   ```json
-    {"ak":"your ak","sk":"your sk"}
+    {
+      "ak": "Your AK",
+      "sk": "Your SK"
+    }
   ```
 
-## 地域Region设置
 
-- 目前已开放三个地域设置，分别为
 
-  ```
-  - cn-north-1 (默认)
-  - ap-singapore-1
-  - us-east-1
-  ```
-
-- 默认为cn-north-1，如果需要调用其它地域服务，请在初始化函数getInstance中传入指定地域region，例如：
-  
-  ```
-  iam_service = IamService('us-east-1')
-  ```
-
-- 注意：IAM模块目前只开放cn-north-1区域
-
-## SDK服务目录及实例
+##其它资源
+###部分SDK服务目录及示例
 
 - 【视觉智能】请点击[这里](volcengine/visual/README.md)
 - 【智能语义】请点击[这里](volcengine/nlp/README.md)
