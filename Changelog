@@ -1,5 +1,8 @@
 ### Change log
 
+2021-12-30 Bumped to version v1.0.28
+- Refactored signing method
+
 2021-12-16 Bumped to version v1.0.27
 - element_verify
 - Dev rds postgresql
