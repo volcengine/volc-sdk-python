@@ -46,7 +46,7 @@ class VodService(VodServiceConfig):
             deadline = int(time.mktime(datetime.datetime.now().timetuple())) + expire_seconds
             deadTime = datetime.datetime.utcfromtimestamp(deadline).strftime("%Y%m%dT%H%M%SZ")
             if sys.version_info[0] == 3:
-                kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk  , encoding='utf-8'), deadTime)
+                kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
             else:
                 kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk.encode('utf-8')), deadTime)
             kRegion = Util.hmac_sha256(kDate, self.service_info.credentials.region)
