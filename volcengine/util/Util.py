@@ -100,7 +100,7 @@ class Util(object):
             crypt = generator.encrypt(Util.pad(orig_data).encode('utf-8'))
             return base64.b64encode(crypt).decode()
         else:
-            crypt = generator.encrypt(Util.pad(orig_data)).encode('utf-8')
+            crypt = generator.encrypt(Util.pad(orig_data))
             return base64.b64encode(crypt)
 
     @staticmethod
