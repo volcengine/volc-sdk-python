@@ -35,10 +35,6 @@ class VodServiceConfig(Service):
         service_info_map = {
             'cn-north-1': ServiceInfo("vod.volcengineapi.com", {'Accept': 'application/json'},
                                       Credentials('', '', 'vod', 'cn-north-1'), 10, 10),
-            'ap-singapore-1': ServiceInfo("vod.ap-singapore-1.volcengineapi.com", {'Accept': 'application/json'},
-                                          Credentials('', '', 'vod', 'ap-singapore-1'), 10, 10),
-            'us-east-1': ServiceInfo("vod.us-east-1.volcengineapi.com", {'Accept': 'application/json'},
-                                     Credentials('', '', 'vod', 'us-east-1'), 10, 10),
         }
         service_info = service_info_map.get(region, None)
         if not service_info:

@@ -176,7 +176,7 @@ class SignerV4(object):
         if sys.version_info[0] == 3:
             kdate = Util.hmac_sha256(bytes(sk, encoding='utf-8'), date)
         else:
-            kdate = Util.hmac_sha256(sk, date)
+            kdate = Util.hmac_sha256(sk.encode('utf-8'), date)
         kregion = Util.hmac_sha256(kdate, region)
         kservice = Util.hmac_sha256(kregion, service)
         return Util.hmac_sha256(kservice, 'request')

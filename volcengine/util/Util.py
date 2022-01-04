@@ -41,7 +41,7 @@ class Util(object):
         if sys.version_info[0] == 3:
             return hmac.new(key, bytes(content, encoding='utf-8'), hashlib.sha256).digest()
         else:
-            return hmac.new(key, content, hashlib.sha256).digest()
+            return hmac.new(key, bytes(content.encode('utf-8')), hashlib.sha256).digest()
 
     @staticmethod
     def hmac_sha1(key, content):
@@ -49,7 +49,7 @@ class Util(object):
         if sys.version_info[0] == 3:
             return hmac.new(key, bytes(content, encoding='utf-8'), hashlib.sha1).digest()
         else:
-            return hmac.new(key, content, hashlib.sha1).digest()
+            return hmac.new(key, bytes(content.encode('utf-8')), hashlib.sha1).digest()
 
     @staticmethod
     def sha256(content):
