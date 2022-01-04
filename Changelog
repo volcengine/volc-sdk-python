@@ -1,5 +1,8 @@
 ### Change log
 
+2022-01-04 Bumped to version v1.0.29
+- Vod python2.7 support
+
 2021-12-30 Bumped to version v1.0.28
 - Refactored signing method
 
