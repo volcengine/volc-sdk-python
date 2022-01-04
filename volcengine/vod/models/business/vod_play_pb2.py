@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n)com.volcengine.service.vod.model.businessB\007VodPlayP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1bvod/business/vod_play.proto\x12\x1eVolcengine.Vod.Models.Business\x1a\x1dvod/business/vod_common.proto\"\x8e\x04\n\x10VodPlayInfoModel\x12H\n\x07Version\x18\n \x01(\x0e\x32\x37.Volcengine.Vod.Models.Business.VodPlayInfoModelVersion\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\x05\x12\x11\n\tPosterUrl\x18\x03 \x01(\t\x12\x10\n\x08\x44uration\x18\x04 \x01(\x02\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x16\n\x0e\x45nableAdaptive\x18\x06 \x01(\x08\x12\x12\n\nTotalCount\x18\x07 \x01(\x05\x12\x45\n\x0c\x41\x64\x61ptiveInfo\x18\x08 \x01(\x0b\x32/.Volcengine.Vod.Models.Business.VodAdaptiveInfo\x12\x41\n\x0cPlayInfoList\x18\t \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodPlayInfo\x12\x43\n\rThumbInfoList\x18\x0b \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodThumbInfo\x12\x16\n\x0e\x42\x61rrageMaskUrl\x18\x0c \x01(\t\x12I\n\x10SubtitleInfoList\x18\r \x03(\x0b\x32/.Volcengine.Vod.Models.Business.VodSubtitleInfo\"\xd8\x01\n\x1cVodGetOriginalPlayInfoResult\x12\x10\n\x08\x46ileType\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x02\x12\x0c\n\x04Size\x18\x03 \x01(\x01\x12\x0e\n\x06Height\x18\x04 \x01(\x05\x12\r\n\x05Width\x18\x05 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\r\n\x05\x43odec\x18\x07 \x01(\t\x12\x0f\n\x07\x42itrate\x18\x08 \x01(\x05\x12\x0b\n\x03Md5\x18\t \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\n \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x0b \x01(\t\"H\n\x19VodPrivateDrmPlayAuthInfo\x12\x12\n\nPlayAuthId\x18\x01 \x01(\t\x12\x17\n\x0fPlayAuthContent\x18\x02 \x01(\t\"u\n\x1eVodGetPrivateDrmPlayAuthResult\x12S\n\x10PlayAuthInfoList\x18\x01 \x03(\x0b\x32\x39.Volcengine.Vod.Models.Business.VodPrivateDrmPlayAuthInfo\"1\n\x1cVodGetHlsDecryptionKeyResult\x12\x11\n\tSecretKey\x18\x01 \x01(\t*\xd6\x01\n\x17VodPlayInfoModelVersion\x12$\n UndefinedVodPlayInfoModelVersion\x10\x00\x12%\n!InternalV1VodPlayInfoModelVersion\x10\x01\x12%\n!InternalV2VodPlayInfoModelVersion\x10\x02\x12%\n!InternalV3VodPlayInfoModelVersion\x10\x03\x12 \n\x1cToBV1VodPlayInfoModelVersion\x10\x04\x42\xcb\x01\n)com.volcengine.service.vod.model.businessB\x07VodPlayP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1bvod/business/vod_play.proto\x12\x1eVolcengine.Vod.Models.Business\x1a\x1dvod/business/vod_common.proto\"\x8e\x04\n\x10VodPlayInfoModel\x12H\n\x07Version\x18\n \x01(\x0e\x32\x37.Volcengine.Vod.Models.Business.VodPlayInfoModelVersion\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\x05\x12\x11\n\tPosterUrl\x18\x03 \x01(\t\x12\x10\n\x08\x44uration\x18\x04 \x01(\x02\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x16\n\x0e\x45nableAdaptive\x18\x06 \x01(\x08\x12\x12\n\nTotalCount\x18\x07 \x01(\x05\x12\x45\n\x0c\x41\x64\x61ptiveInfo\x18\x08 \x01(\x0b\x32/.Volcengine.Vod.Models.Business.VodAdaptiveInfo\x12\x41\n\x0cPlayInfoList\x18\t \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodPlayInfo\x12\x43\n\rThumbInfoList\x18\x0b \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodThumbInfo\x12\x16\n\x0e\x42\x61rrageMaskUrl\x18\x0c \x01(\t\x12I\n\x10SubtitleInfoList\x18\r \x03(\x0b\x32/.Volcengine.Vod.Models.Business.VodSubtitleInfo\"\xd8\x01\n\x1cVodGetOriginalPlayInfoResult\x12\x10\n\x08\x46ileType\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x02\x12\x0c\n\x04Size\x18\x03 \x01(\x01\x12\x0e\n\x06Height\x18\x04 \x01(\x05\x12\r\n\x05Width\x18\x05 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\r\n\x05\x43odec\x18\x07 \x01(\t\x12\x0f\n\x07\x42itrate\x18\x08 \x01(\x05\x12\x0b\n\x03Md5\x18\t \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\n \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x0b \x01(\t\"H\n\x19VodPrivateDrmPlayAuthInfo\x12\x12\n\nPlayAuthId\x18\x01 \x01(\t\x12\x17\n\x0fPlayAuthContent\x18\x02 \x01(\t\"u\n\x1eVodGetPrivateDrmPlayAuthResult\x12S\n\x10PlayAuthInfoList\x18\x01 \x03(\x0b\x32\x39.Volcengine.Vod.Models.Business.VodPrivateDrmPlayAuthInfo\"1\n\x1cVodGetHlsDecryptionKeyResult\x12\x11\n\tSecretKey\x18\x01 \x01(\t\"t\n!VodPlayInfoWithLiveTimeShiftScene\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\x02 \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x03 \x01(\t\x12\x11\n\tUrlExpire\x18\x04 \x01(\x01\"\x85\x01\n*VodGetPlayInfoWithLiveTimeShiftSceneResult\x12W\n\x0cPlayInfoList\x18\x01 \x03(\x0b\x32\x41.Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftScene*\xd6\x01\n\x17VodPlayInfoModelVersion\x12$\n UndefinedVodPlayInfoModelVersion\x10\x00\x12%\n!InternalV1VodPlayInfoModelVersion\x10\x01\x12%\n!InternalV2VodPlayInfoModelVersion\x10\x02\x12%\n!InternalV3VodPlayInfoModelVersion\x10\x03\x12 \n\x1cToBV1VodPlayInfoModelVersion\x10\x04\x42\xcb\x01\n)com.volcengine.service.vod.model.businessB\x07VodPlayP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
   ,
   dependencies=[vod_dot_business_dot_vod__common__pb2.DESCRIPTOR,])
 
@@ -60,8 +60,8 @@ _VODPLAYINFOMODELVERSION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1087,
-  serialized_end=1301,
+  serialized_start=1341,
+  serialized_end=1555,
 )
 _sym_db.RegisterEnumDescriptor(_VODPLAYINFOMODELVERSION)
 
@@ -394,17 +394,105 @@ _VODGETHLSDECRYPTIONKEYRESULT = _descriptor.Descriptor(
   serialized_end=1084,
 )
 
+
+_VODPLAYINFOWITHLIVETIMESHIFTSCENE = _descriptor.Descriptor(
+  name='VodPlayInfoWithLiveTimeShiftScene',
+  full_name='Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftScene',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='StoreUri', full_name='Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftScene.StoreUri', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='MainPlayUrl', full_name='Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftScene.MainPlayUrl', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='BackupPlayUrl', full_name='Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftScene.BackupPlayUrl', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='UrlExpire', full_name='Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftScene.UrlExpire', index=3,
+      number=4, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1086,
+  serialized_end=1202,
+)
+
+
+_VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESULT = _descriptor.Descriptor(
+  name='VodGetPlayInfoWithLiveTimeShiftSceneResult',
+  full_name='Volcengine.Vod.Models.Business.VodGetPlayInfoWithLiveTimeShiftSceneResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='PlayInfoList', full_name='Volcengine.Vod.Models.Business.VodGetPlayInfoWithLiveTimeShiftSceneResult.PlayInfoList', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1205,
+  serialized_end=1338,
+)
+
 _VODPLAYINFOMODEL.fields_by_name['Version'].enum_type = _VODPLAYINFOMODELVERSION
 _VODPLAYINFOMODEL.fields_by_name['AdaptiveInfo'].message_type = vod_dot_business_dot_vod__common__pb2._VODADAPTIVEINFO
 _VODPLAYINFOMODEL.fields_by_name['PlayInfoList'].message_type = vod_dot_business_dot_vod__common__pb2._VODPLAYINFO
 _VODPLAYINFOMODEL.fields_by_name['ThumbInfoList'].message_type = vod_dot_business_dot_vod__common__pb2._VODTHUMBINFO
 _VODPLAYINFOMODEL.fields_by_name['SubtitleInfoList'].message_type = vod_dot_business_dot_vod__common__pb2._VODSUBTITLEINFO
 _VODGETPRIVATEDRMPLAYAUTHRESULT.fields_by_name['PlayAuthInfoList'].message_type = _VODPRIVATEDRMPLAYAUTHINFO
+_VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESULT.fields_by_name['PlayInfoList'].message_type = _VODPLAYINFOWITHLIVETIMESHIFTSCENE
 DESCRIPTOR.message_types_by_name['VodPlayInfoModel'] = _VODPLAYINFOMODEL
 DESCRIPTOR.message_types_by_name['VodGetOriginalPlayInfoResult'] = _VODGETORIGINALPLAYINFORESULT
 DESCRIPTOR.message_types_by_name['VodPrivateDrmPlayAuthInfo'] = _VODPRIVATEDRMPLAYAUTHINFO
 DESCRIPTOR.message_types_by_name['VodGetPrivateDrmPlayAuthResult'] = _VODGETPRIVATEDRMPLAYAUTHRESULT
 DESCRIPTOR.message_types_by_name['VodGetHlsDecryptionKeyResult'] = _VODGETHLSDECRYPTIONKEYRESULT
+DESCRIPTOR.message_types_by_name['VodPlayInfoWithLiveTimeShiftScene'] = _VODPLAYINFOWITHLIVETIMESHIFTSCENE
+DESCRIPTOR.message_types_by_name['VodGetPlayInfoWithLiveTimeShiftSceneResult'] = _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESULT
 DESCRIPTOR.enum_types_by_name['VodPlayInfoModelVersion'] = _VODPLAYINFOMODELVERSION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -442,6 +530,20 @@ VodGetHlsDecryptionKeyResult = _reflection.GeneratedProtocolMessageType('VodGetH
   # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodGetHlsDecryptionKeyResult)
   })
 _sym_db.RegisterMessage(VodGetHlsDecryptionKeyResult)
+
+VodPlayInfoWithLiveTimeShiftScene = _reflection.GeneratedProtocolMessageType('VodPlayInfoWithLiveTimeShiftScene', (_message.Message,), {
+  'DESCRIPTOR' : _VODPLAYINFOWITHLIVETIMESHIFTSCENE,
+  '__module__' : 'vod.business.vod_play_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftScene)
+  })
+_sym_db.RegisterMessage(VodPlayInfoWithLiveTimeShiftScene)
+
+VodGetPlayInfoWithLiveTimeShiftSceneResult = _reflection.GeneratedProtocolMessageType('VodGetPlayInfoWithLiveTimeShiftSceneResult', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESULT,
+  '__module__' : 'vod.business.vod_play_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodGetPlayInfoWithLiveTimeShiftSceneResult)
+  })
+_sym_db.RegisterMessage(VodGetPlayInfoWithLiveTimeShiftSceneResult)
 
 
 DESCRIPTOR._options = None

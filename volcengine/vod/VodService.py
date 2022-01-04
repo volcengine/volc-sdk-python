@@ -24,12 +24,11 @@ LargeFileSize = 1024 * 1024 * 1024
 #
 class VodService(VodServiceConfig):
 
-    def get_private_drm_play_auth_token(self, request: VodGetPrivateDrmPlayAuthRequest, expire: int):
+    def get_private_drm_play_auth_token(self, request, expire):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -44,16 +43,22 @@ class VodService(VodServiceConfig):
         try:
             if expire_seconds == 0:
                 raise Exception("invalid expire")
-            deadline = int(datetime.datetime.now().timestamp()) + expire_seconds
+            deadline = int(time.mktime(datetime.datetime.now().timetuple())) + expire_seconds
             deadTime = datetime.datetime.utcfromtimestamp(deadline).strftime("%Y%m%dT%H%M%SZ")
-            kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
+            if sys.version_info[0] == 3:
+                kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk, encoding='utf-8'), deadTime)
+            else:
+                kDate = Util.hmac_sha256(bytes(self.service_info.credentials.sk.encode('utf-8')), deadTime)
             kRegion = Util.hmac_sha256(kDate, self.service_info.credentials.region)
             kService = Util.hmac_sha256(kRegion, 'vod')
             kCredentials = Util.hmac_sha256(kService, 'request')
             key = Util.to_hex(kCredentials)
             signDataString = '&'.join([auth_algorithm, '2.0', str(deadline)])
             if auth_algorithm == 'HMAC-SHA1':
-                signBytes = Util.hmac_sha1(bytes(key, encoding='utf-8'), signDataString)
+                if sys.version_info[0] == 3:
+                    signBytes = Util.hmac_sha1(bytes(key, encoding='utf-8'), signDataString)
+                else:
+                    signBytes = Util.hmac_sha1(bytes(key.encode('utf-8')), signDataString)
             else:
                 raise Exception('invalid authAlgorithm')
             sign = base64.b64encode(signBytes).decode('utf-8')
@@ -72,12 +77,11 @@ class VodService(VodServiceConfig):
         except Exception as Argument:
             raise Argument
 
-    def get_play_auth_token(self, request: VodGetPlayInfoRequest, expire: int):
+    def get_play_auth_token(self, request, expire):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -94,7 +98,7 @@ class VodService(VodServiceConfig):
             else:
                 return base64.b64encode(data.decode('utf-8'))
 
-    def get_subtitle_auth_token(self, request: VodGetSubtitleInfoListRequest, expire: int):
+    def get_subtitle_auth_token(self, request, expire):
         try:
             if request.Vid == "":
                 raise Exception("Vid is None")
@@ -275,12 +279,11 @@ class VodService(VodServiceConfig):
     # @param request VodGetPlayInfoRequest
     # @return VodGetPlayInfoResponse
     # @raise Exception
-    def get_play_info(self, request: VodGetPlayInfoRequest) -> VodGetPlayInfoResponse:
+    def get_play_info(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -301,12 +304,11 @@ class VodService(VodServiceConfig):
     # @param request VodGetPrivateDrmPlayAuthRequest
     # @return VodGetPrivateDrmPlayAuthResponse
     # @raise Exception
-    def get_private_drm_play_auth(self, request: VodGetPrivateDrmPlayAuthRequest) -> VodGetPrivateDrmPlayAuthResponse:
+    def get_private_drm_play_auth(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -327,12 +329,11 @@ class VodService(VodServiceConfig):
     # @param request VodGetHlsDecryptionKeyRequest
     # @return VodGetHlsDecryptionKeyResponse
     # @raise Exception
-    def get_hls_decryption_key(self, request: VodGetHlsDecryptionKeyRequest) -> VodGetHlsDecryptionKeyResponse:
+    def get_hls_decryption_key(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -348,17 +349,41 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetHlsDecryptionKeyResponse(), True)
 
     #
+    # GetPlayInfoWithLiveTimeShiftScene.
+    #
+    # @param request VodGetPlayInfoWithLiveTimeShiftSceneRequest
+    # @return VodGetPlayInfoWithLiveTimeShiftSceneResponse
+    # @raise Exception
+    def get_play_info_with_live_time_shift_scene(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetPlayInfoWithLiveTimeShiftScene", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetPlayInfoWithLiveTimeShiftSceneResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetPlayInfoWithLiveTimeShiftSceneResponse(), True)
+
+    #
     # UploadMediaByUrl.
     #
     # @param request VodUrlUploadRequest
     # @return VodUrlUploadResponse
     # @raise Exception
-    def upload_media_by_url(self, request: VodUrlUploadRequest) -> VodUrlUploadResponse:
+    def upload_media_by_url(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -379,12 +404,11 @@ class VodService(VodServiceConfig):
     # @param request VodQueryUploadTaskInfoRequest
     # @return VodQueryUploadTaskInfoResponse
     # @raise Exception
-    def query_upload_task_info(self, request: VodQueryUploadTaskInfoRequest) -> VodQueryUploadTaskInfoResponse:
+    def query_upload_task_info(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -405,12 +429,11 @@ class VodService(VodServiceConfig):
     # @param request VodApplyUploadInfoRequest
     # @return VodApplyUploadInfoResponse
     # @raise Exception
-    def apply_upload_info(self, request: VodApplyUploadInfoRequest) -> VodApplyUploadInfoResponse:
+    def apply_upload_info(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -431,12 +454,11 @@ class VodService(VodServiceConfig):
     # @param request VodCommitUploadInfoRequest
     # @return VodCommitUploadInfoResponse
     # @raise Exception
-    def commit_upload_info(self, request: VodCommitUploadInfoRequest) -> VodCommitUploadInfoResponse:
+    def commit_upload_info(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -457,12 +479,11 @@ class VodService(VodServiceConfig):
     # @param request VodUpdateMediaInfoRequest
     # @return VodUpdateMediaInfoResponse
     # @raise Exception
-    def update_media_info(self, request: VodUpdateMediaInfoRequest) -> VodUpdateMediaInfoResponse:
+    def update_media_info(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -483,12 +504,11 @@ class VodService(VodServiceConfig):
     # @param request VodUpdateMediaPublishStatusRequest
     # @return VodUpdateMediaPublishStatusResponse
     # @raise Exception
-    def update_media_publish_status(self, request: VodUpdateMediaPublishStatusRequest) -> VodUpdateMediaPublishStatusResponse:
+    def update_media_publish_status(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -509,12 +529,11 @@ class VodService(VodServiceConfig):
     # @param request VodGetMediaInfosRequest
     # @return VodGetMediaInfosResponse
     # @raise Exception
-    def get_media_infos(self, request: VodGetMediaInfosRequest) -> VodGetMediaInfosResponse:
+    def get_media_infos(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -535,12 +554,11 @@ class VodService(VodServiceConfig):
     # @param request VodGetRecommendedPosterRequest
     # @return VodGetRecommendedPosterResponse
     # @raise Exception
-    def get_recommended_poster(self, request: VodGetRecommendedPosterRequest) -> VodGetRecommendedPosterResponse:
+    def get_recommended_poster(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -561,12 +579,11 @@ class VodService(VodServiceConfig):
     # @param request VodDeleteMediaRequest
     # @return VodDeleteMediaResponse
     # @raise Exception
-    def delete_media(self, request: VodDeleteMediaRequest) -> VodDeleteMediaResponse:
+    def delete_media(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -587,12 +604,11 @@ class VodService(VodServiceConfig):
     # @param request VodDeleteTranscodesRequest
     # @return VodDeleteTranscodesResponse
     # @raise Exception
-    def delete_transcodes(self, request: VodDeleteTranscodesRequest) -> VodDeleteTranscodesResponse:
+    def delete_transcodes(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -613,12 +629,11 @@ class VodService(VodServiceConfig):
     # @param request VodGetMediaListRequest
     # @return VodGetMediaListResponse
     # @raise Exception
-    def get_media_list(self, request: VodGetMediaListRequest) -> VodGetMediaListResponse:
+    def get_media_list(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -639,12 +654,11 @@ class VodService(VodServiceConfig):
     # @param request VodGetSubtitleInfoListRequest
     # @return VodGetSubtitleInfoListResponse
     # @raise Exception
-    def get_subtitle_info_list(self, request: VodGetSubtitleInfoListRequest) -> VodGetSubtitleInfoListResponse:
+    def get_subtitle_info_list(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -665,12 +679,11 @@ class VodService(VodServiceConfig):
     # @param request VodUpdateSubtitleStatusRequest
     # @return VodUpdateSubtitleStatusResponse
     # @raise Exception
-    def update_subtitle_status(self, request: VodUpdateSubtitleStatusRequest) -> VodUpdateSubtitleStatusResponse:
+    def update_subtitle_status(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -691,12 +704,11 @@ class VodService(VodServiceConfig):
     # @param request VodUpdateSubtitleInfoRequest
     # @return VodUpdateSubtitleInfoResponse
     # @raise Exception
-    def update_subtitle_info(self, request: VodUpdateSubtitleInfoRequest) -> VodUpdateSubtitleInfoResponse:
+    def update_subtitle_info(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -712,17 +724,166 @@ class VodService(VodServiceConfig):
             return Parse(res, VodUpdateSubtitleInfoResponse(), True)
 
     #
+    # GetAuditFramesForAudit.
+    #
+    # @param request VodGetAuditFramesForAuditRequest
+    # @return VodGetAuditFramesForAuditResponse
+    # @raise Exception
+    def get_audit_frames_for_audit(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetAuditFramesForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAuditFramesForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAuditFramesForAuditResponse(), True)
+
+    #
+    # GetMLFramesForAudit.
+    #
+    # @param request VodGetMLFramesForAuditRequest
+    # @return VodGetMLFramesForAuditResponse
+    # @raise Exception
+    def get_m_l_frames_for_audit(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetMLFramesForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetMLFramesForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetMLFramesForAuditResponse(), True)
+
+    #
+    # GetBetterFramesForAudit.
+    #
+    # @param request VodGetBetterFramesForAuditRequest
+    # @return VodGetBetterFramesForAuditResponse
+    # @raise Exception
+    def get_better_frames_for_audit(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetBetterFramesForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetBetterFramesForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetBetterFramesForAuditResponse(), True)
+
+    #
+    # GetAudioInfoForAudit.
+    #
+    # @param request VodGetAudioInfoForAuditRequest
+    # @return VodGetAudioInfoForAuditResponse
+    # @raise Exception
+    def get_audio_info_for_audit(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetAudioInfoForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAudioInfoForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAudioInfoForAuditResponse(), True)
+
+    #
+    # GetAutomaticSpeechRecognitionForAudit.
+    #
+    # @param request VodGetAutomaticSpeechRecognitionForAuditRequest
+    # @return VodGetAutomaticSpeechRecognitionForAuditResponse
+    # @raise Exception
+    def get_automatic_speech_recognition_for_audit(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetAutomaticSpeechRecognitionForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAutomaticSpeechRecognitionForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAutomaticSpeechRecognitionForAuditResponse(), True)
+
+    #
+    # GetAudioEventDetectionForAudit.
+    #
+    # @param request VodGetAudioEventDetectionForAuditRequest
+    # @return VodGetAudioEventDetectionForAuditResponse
+    # @raise Exception
+    def get_audio_event_detection_for_audit(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("GetAudioEventDetectionForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAudioEventDetectionForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAudioEventDetectionForAuditResponse(), True)
+
+    #
     # StartWorkflow.
     #
     # @param request VodStartWorkflowRequest
     # @return VodStartWorkflowResponse
     # @raise Exception
-    def start_workflow(self, request: VodStartWorkflowRequest) -> VodStartWorkflowResponse:
+    def start_workflow(self, request):
         try:
-            jsonData = MessageToJson(request, False, True)
-            params = json.loads(jsonData)
+            params = MessageToDict(request, False, True)
             for k, v in params.items():
-                if isinstance(v, (int, float, bool, str)) is True:
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
                     continue
                 else:
                     params[k] = json.dumps(v)
@@ -736,3 +897,4 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodStartWorkflowResponse(), True)
+
