@@ -54,7 +54,7 @@ class Util(object):
     @staticmethod
     def sha256(content):
         # type(content) == <class 'str'>
-        return hashlib.sha256(content).hexdigest()
+        return hashlib.sha256(content.encode('utf-8')).hexdigest()
 
     @staticmethod
     def to_hex(content):
