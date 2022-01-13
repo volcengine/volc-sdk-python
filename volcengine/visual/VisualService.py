@@ -26,7 +26,7 @@ class VisualService(Service):
     @staticmethod
     def get_service_info():
         service_info = ServiceInfo("visual.volcengineapi.com", {},
-                                   Credentials('', '', 'cv', 'cn-north-1'), 10, 10)
+                                   Credentials('', '', 'cv', 'cn-north-1'), 10, 30)
         return service_info
 
     @staticmethod
@@ -80,6 +80,14 @@ class VisualService(Service):
             "FlightInvoice": ApiInfo("POST", "/", {"Action": "OcrFlightInvoice", "Version": "2020-08-26"}, {}, {}),
             "VatInvoice": ApiInfo("POST", "/", {"Action": "OcrVatInvoice", "Version": "2020-08-26"}, {}, {}),
             "QuotaInvoice": ApiInfo("POST", "/", {"Action": "OcrQuotaInvoice", "Version": "2020-08-26"}, {}, {}),
+            "HairStyle": ApiInfo("POST", "/", {"Action": "HairStyle", "Version": "2020-08-26"}, {}, {}),
+            "FacePretty": ApiInfo("POST", "/", {"Action": "FacePretty", "Version": "2020-08-26"}, {}, {}),
+            "ImageAnimation": ApiInfo("POST", "/", {"Action": "ImageAnimation", "Version": "2020-08-26"}, {}, {}),
+            "CoverVideo": ApiInfo("POST", "/", {"Action": "CoverVideo", "Version": "2020-08-26"}, {}, {}),
+            "DollyZoom": ApiInfo("POST", "/", {"Action": "DollyZoom", "Version": "2020-08-26"}, {}, {}),
+            "PotraitEffect": ApiInfo("POST", "/", {"Action": "PotraitEffect", "Version": "2020-08-26"}, {}, {}),
+            "ImageStyleConversion": ApiInfo("POST", "/", {"Action": "ImageStyleConversion", "Version": "2020-08-26"}, {}, {}),
+            "3DGameCartoon": ApiInfo("POST", "/", {"Action": "3DGameCartoon", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -450,6 +458,62 @@ class VisualService(Service):
     def quota_invoice(self, form):
         try:
             res_json = self.common_handler("QuotaInvoice", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def hair_style(self, form):
+        try:
+            res_json = self.common_handler("HairStyle", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def face_pretty(self, form):
+        try:
+            res_json = self.common_handler("FacePretty", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_animation(self, form):
+        try:
+            res_json = self.common_handler("ImageAnimation", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cover_video(self, form):
+        try:
+            res_json = self.common_handler("CoverVideo", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def dolly_zoom(self, form):
+        try:
+            res_json = self.common_handler("DollyZoom", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def potrait_effect(self, form):
+        try:
+            res_json = self.common_handler("PotraitEffect", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_style_conversion(self, form):
+        try:
+            res_json = self.common_handler("ImageStyleConversion", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def three_d_game_cartoon(self, form):
+        try:
+            res_json = self.common_handler("3DGameCartoon", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
