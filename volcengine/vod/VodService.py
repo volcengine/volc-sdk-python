@@ -26,12 +26,21 @@ class VodService(VodServiceConfig):
 
     def get_private_drm_play_auth_token(self, request, expire):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             if expire > 0:
                 params['X-Expires'] = str(expire)
             data = self.get_sign_url('GetPrivateDrmPlayAuth', params)
@@ -79,12 +88,21 @@ class VodService(VodServiceConfig):
 
     def get_play_auth_token(self, request, expire):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             if expire > 0:
                 params['X-Expires'] = str(expire)
             token = self.get_sign_url('GetPlayInfo', params)
@@ -281,12 +299,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_play_info(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetPlayInfo", params)
         except Exception as Argument:
             try:
@@ -306,12 +333,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_private_drm_play_auth(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetPrivateDrmPlayAuth", params)
         except Exception as Argument:
             try:
@@ -331,12 +367,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_hls_decryption_key(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetHlsDecryptionKey", params)
         except Exception as Argument:
             try:
@@ -356,12 +401,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_play_info_with_live_time_shift_scene(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetPlayInfoWithLiveTimeShiftScene", params)
         except Exception as Argument:
             try:
@@ -381,12 +435,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def upload_media_by_url(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("UploadMediaByUrl", params)
         except Exception as Argument:
             try:
@@ -406,12 +469,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def query_upload_task_info(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("QueryUploadTaskInfo", params)
         except Exception as Argument:
             try:
@@ -431,12 +503,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def apply_upload_info(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("ApplyUploadInfo", params)
         except Exception as Argument:
             try:
@@ -456,12 +537,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def commit_upload_info(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("CommitUploadInfo", params)
         except Exception as Argument:
             try:
@@ -481,12 +571,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def update_media_info(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("UpdateMediaInfo", params)
         except Exception as Argument:
             try:
@@ -506,12 +605,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def update_media_publish_status(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("UpdateMediaPublishStatus", params)
         except Exception as Argument:
             try:
@@ -531,12 +639,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_media_infos(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetMediaInfos", params)
         except Exception as Argument:
             try:
@@ -556,12 +673,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_recommended_poster(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetRecommendedPoster", params)
         except Exception as Argument:
             try:
@@ -581,12 +707,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def delete_media(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("DeleteMedia", params)
         except Exception as Argument:
             try:
@@ -606,12 +741,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def delete_transcodes(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("DeleteTranscodes", params)
         except Exception as Argument:
             try:
@@ -631,12 +775,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_media_list(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetMediaList", params)
         except Exception as Argument:
             try:
@@ -656,12 +809,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_subtitle_info_list(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetSubtitleInfoList", params)
         except Exception as Argument:
             try:
@@ -681,12 +843,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def update_subtitle_status(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("UpdateSubtitleStatus", params)
         except Exception as Argument:
             try:
@@ -706,12 +877,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def update_subtitle_info(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("UpdateSubtitleInfo", params)
         except Exception as Argument:
             try:
@@ -731,12 +911,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_audit_frames_for_audit(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetAuditFramesForAudit", params)
         except Exception as Argument:
             try:
@@ -756,12 +945,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_m_l_frames_for_audit(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetMLFramesForAudit", params)
         except Exception as Argument:
             try:
@@ -781,12 +979,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_better_frames_for_audit(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetBetterFramesForAudit", params)
         except Exception as Argument:
             try:
@@ -806,12 +1013,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_audio_info_for_audit(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetAudioInfoForAudit", params)
         except Exception as Argument:
             try:
@@ -831,12 +1047,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_automatic_speech_recognition_for_audit(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetAutomaticSpeechRecognitionForAudit", params)
         except Exception as Argument:
             try:
@@ -856,12 +1081,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def get_audio_event_detection_for_audit(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("GetAudioEventDetectionForAudit", params)
         except Exception as Argument:
             try:
@@ -881,12 +1115,21 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def start_workflow(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("StartWorkflow", params)
         except Exception as Argument:
             try:
