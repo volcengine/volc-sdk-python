@@ -53,7 +53,6 @@ class Util(object):
 
     @staticmethod
     def sha256(content):
-        # type(content) == <class 'str'>
         return hashlib.sha256(content).hexdigest()
 
     @staticmethod

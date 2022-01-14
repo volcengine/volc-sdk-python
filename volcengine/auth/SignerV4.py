@@ -135,11 +135,17 @@ class SignerV4(object):
         canoncial_request = '\n'.join(
             [request.method, Util.norm_uri(request.path), Util.norm_query(request.query), '\n',
              meta.signed_headers, body_hash])
-        return Util.sha256(canoncial_request)
+        if sys.version_info[0] == 3:
+            return Util.sha256(canoncial_request.decode('utf-8'))
+        else:
+            return Util.sha256(canoncial_request)
 
     @staticmethod
     def hashed_canonical_request_v4(request, meta):
-        body_hash = Util.sha256(request.body)
+        if sys.version_info[0] == 3:
+            body_hash = Util.sha256(request.body.decode('utf-8'))
+        else:
+            body_hash = Util.sha256(request.body)
         request.headers['X-Content-Sha256'] = body_hash
 
         signed_headers = dict()
