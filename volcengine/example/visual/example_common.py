@@ -109,4 +109,28 @@ if __name__ == '__main__':
     # 定额发票OCR
     # resp = visual_service.quota_invoice(form)
 
+    # 发型编辑
+    # resp = visual_service.hair_style(form)
+
+    # 智能变美
+    # resp = visual_service.face_pretty(form)
+
+    # 活照片
+    # resp = visual_service.image_animation(form)
+
+    # 视频选封面
+    # resp = visual_service.cover_video(form)
+
+    # 希区柯克
+    # resp = visual_service.dolly_zoom(form)
+
+    # 人像特效
+    # resp = visual_service.potrait_effect(form)
+
+    # 图像风格转换
+    # resp = visual_service.image_style_conversion(form)
+
+    # 3d游戏风
+    # resp = visual_service.three_d_game_cartoon(form)
+
     print(resp)

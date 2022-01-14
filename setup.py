@@ -16,5 +16,5 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     platforms="any",
-    install_requires=["requests", "pytz", "pycryptodome", "protobuf", "google", "six"]
+    install_requires=["requests", "retry", "pytz", "pycryptodome", "protobuf", "google", "six"]
 )
