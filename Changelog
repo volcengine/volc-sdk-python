@@ -1,5 +1,9 @@
 ### Change log
 
+2022-01-14 Bumped to version v1.0.31
+- Fixed for python2.7
+
+
 2022-01-13 Bumped to version v1.0.30
 - Add sdk for 8 apis
 
