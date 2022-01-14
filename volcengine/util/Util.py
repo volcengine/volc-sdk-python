@@ -54,7 +54,7 @@ class Util(object):
     @staticmethod
     def sha256(content):
         if sys.version_info[0] == 3:
-            return hashlib.sha256(content.decode('utf-8')).hexdigest()
+            return hashlib.sha256(content.encode('utf-8')).hexdigest()
         else:
             return hashlib.sha256(content).hexdigest()
 
