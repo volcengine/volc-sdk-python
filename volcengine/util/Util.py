@@ -53,8 +53,11 @@ class Util(object):
 
     @staticmethod
     def sha256(content):
-        if sys.version_info[0] == 3:
-            return hashlib.sha256(content.encode('utf-8')).hexdigest()
+        if isinstance(content, (str, unicode)) is True:
+            if sys.version_info[0] == 3:
+                return hashlib.sha256(content.encode('utf-8')).hexdigest()
+            else:
+                return hashlib.sha256(content).hexdigest()
         else:
             return hashlib.sha256(content).hexdigest()
 
