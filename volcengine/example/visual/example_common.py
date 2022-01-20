@@ -133,4 +133,10 @@ if __name__ == '__main__':
     # 3d游戏风
     # resp = visual_service.three_d_game_cartoon(form)
 
+    # 头发抠图
+    # resp = visual_service.hair_segment(form)
+    # form["mode"] = 0
+    # form["refine_mask"] = 0
+    # form["flip_test"] = 0
+
     print(resp)
