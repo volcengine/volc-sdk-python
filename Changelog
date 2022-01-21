@@ -1,5 +1,10 @@
 ### Change log
 
+2022-01-21 Bumped to version v1.0.33
+- Added vod start workflow
+- Added 闲时转码
+
+
 2022-01-20 Bumped to version v1.0.32
 - Visual add new api 
 
