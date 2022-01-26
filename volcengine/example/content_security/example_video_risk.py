@@ -5,54 +5,55 @@ if __name__ == '__main__':
     riskDetector = ContentSecurityService()
 
     # call below method if you dont set ak and sk in $HOME/.volc/config
-    riskDetector.set_ak('***REMOVED***')
-    riskDetector.set_sk('***REMOVED***')
+    riskDetector.set_ak('AK')
+    riskDetector.set_sk('SK')
 
-    params = dict()
-    req = {
-         'AppId': 3332,
-         'Service': "video_risk",
-         'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"http://fc-video-store.vivo.com.cn/fc-author-video-store/V050000000000V_0IkeMgwD.mp4\", \"data_id\": \"123\", \"account_id\": \"2000000409\"}"
-    }
-
-    resp = riskDetector.async_video_risk(params, req)
-    print resp
+    # params = dict()
+    # req = {
+    #      'AppId': 3332,
+    #      'Service': "video_risk",
+    #      'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"http://fc-video-store.vivo.com.cn/fc-author-video-store/V050000000000V_0IkeMgwD.mp4\", \"data_id\": \"123\", \"account_id\": \"2000000409\"}"
+    # }
+    #
+    # resp = riskDetector.async_video_risk(params, req)
+    # print resp
 
     params = {
         'AppId': 3332,
         'Service': "video_risk",
-        'DataId': "123"
+        'DataId': "test123321"
     }
     req = dict()
 
     resp1 = riskDetector.video_result(params, req)
     print resp1
 
-    params = dict()
-    req = {
-        'AppId': 3332,
-        'Service': "image_content_risk",
-        'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"https://image.uc.cn/s/wemedia/s/upload/2021/Wfmt7d1f82edu22/c2ea0890c3045dad785944b01dd87540.png\", \"data_id\": \"123\", \"account_id\": \"2000000409\"}"
-    }
+    # params = dict()
+    # req = {
+    #     'AppId': 3332,
+    #     'Service': "image_content_risk",
+    #     'Parameters': "{\"operate_time\": 1642130700, \"url\": \"http://i1.go2yd.com/corpimage.php?url=V_0EgT0Rf6J2&docid=V_0EgT0RgU&source=vivobrowser&type=_990x557\", \"data_id\": \"test12345\", \"account_id\": \"2000001223\"}"
+    # }
+    #
+    # resp2 = riskDetector.image_content_risk(params, req)
+    # print resp2
 
-    resp2 = riskDetector.image_content_risk(params, req)
-
-    reqImage = {
-        'AppId': 3332,
-        'Service': "image_content_risk",
-        'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"https://image.uc.cn/s/wemedia/s/upload/2021/Wfmt7d1f82edu22/c2ea0890c3045dad785944b01dd87540.png\", \"data_id\": \"image123\", \"account_id\": \"2000000409\"}"
-    }
-
-    resp3 = riskDetector.async_image_risk(params, reqImage)
-    print resp3
-
-    params = {
-        'AppId': 3332,
-        'Service': "image_content_risk",
-        'DataId': "123image"
-    }
-    req = dict()
-
-    resp4 = riskDetector.image_result(params, req)
-    print resp4
+    # reqImage = {
+    #     'AppId': 3332,
+    #     'Service': "image_content_risk",
+    #     'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"https://image.uc.cn/s/wemedia/s/upload/2021/Wfmt7d1f82edu22/c2ea0890c3045dad785944b01dd87540.png\", \"data_id\": \"image123\", \"account_id\": \"2000000409\"}"
+    # }
+    #
+    # resp3 = riskDetector.async_image_risk(params, reqImage)
+    # print resp3
+    #
+    # params = {
+    #     'AppId': 3332,
+    #     'Service': "image_content_risk",
+    #     'DataId': "123image"
+    # }
+    # req = dict()
+    #
+    # resp4 = riskDetector.image_result(params, req)
+    # print resp4
 

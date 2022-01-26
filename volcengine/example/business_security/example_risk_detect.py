@@ -43,12 +43,12 @@ if __name__ == '__main__':
 
     params = dict()
     req = {
-         'AppId': 5461,
+         'AppId': 222572,
          'Service': "account_risk",
-         'Parameters': '{"operate_time":1609818934, "mobile_sha1": "fee831dd2756c863b052de0725719d4246a387dc", "ip": "218.6.209.45"}'
+         'Parameters': '{"operate_time":1609818934, "mobile": "15959215326"}'
     }
 
-    resp = riskDetector.account_risk(params, req)
+    resp = riskDetector.risk_detect(params, req)
 
     print resp
     # params = dict()
