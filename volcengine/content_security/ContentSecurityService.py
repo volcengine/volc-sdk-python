@@ -37,6 +37,9 @@ class ContentSecurityService(Service):
                     "ImageContentRisk": ApiInfo("POST", "/", {"Action": "ImageContentRisk", "Version": "2021-11-29"}, {}, {}),
                     "AsyncImageRisk": ApiInfo("POST", "/", {"Action": "AsyncImageRisk", "Version": "2021-11-29"}, {}, {}),
                     "ImageResult": ApiInfo("GET", "/", {"Action": "GetImageResult", "Version": "2021-11-29"}, {}, {}),
+                    "TextRisk": ApiInfo("POST", "/", {"Action": "TextRisk", "Version": "2022-01-26"}, {}, {}),
+                    "CreateCustomContents": ApiInfo("POST", "/", {"Action": "CreateCustomContents", "Version": "2022-01-22"}, {}, {}),
+                    "UploadCustomContents": ApiInfo("POST", "/", {"Action": "UploadCustomContents", "Version": "2022-02-07"}, {}, {})
                     }
 
         return api_info
@@ -79,6 +82,29 @@ class ContentSecurityService(Service):
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def image_result(self, params, body):
         res = self.get("ImageResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def text_risk(self, params, body):
+        res = self.json("TextRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def create_custom_contents(self, params, body):
+        res = self.json("CreateCustomContents", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def upload_custom_contents(self, params, body):
+        res = self.json("UploadCustomContents", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

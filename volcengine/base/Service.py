@@ -139,8 +139,11 @@ class Service(object):
 
     def prepare_request(self, api_info, params, doseq=0):
         for key in params:
-            if type(params[key]) == int or type(params[key]) == float:
+            if type(params[key]) == int or type(params[key]) == float or type(params[key]) == bool:
                 params[key] = str(params[key])
+            elif sys.version_info[0] != 3:
+                if type(params[key]) == unicode:
+                    params[key] = params[key].encode('utf-8')
             elif type(params[key]) == list:
                 if not doseq:
                     params[key] = ','.join(params[key])

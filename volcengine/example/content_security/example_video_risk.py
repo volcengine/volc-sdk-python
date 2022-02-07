@@ -1,4 +1,4 @@
-
+# coding=utf-8
 from volcengine.content_security.ContentSecurityService import ContentSecurityService
 
 if __name__ == '__main__':
@@ -8,15 +8,15 @@ if __name__ == '__main__':
     riskDetector.set_ak('AK')
     riskDetector.set_sk('SK')
 
-    # params = dict()
-    # req = {
-    #      'AppId': 3332,
-    #      'Service': "video_risk",
-    #      'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"http://fc-video-store.vivo.com.cn/fc-author-video-store/V050000000000V_0IkeMgwD.mp4\", \"data_id\": \"123\", \"account_id\": \"2000000409\"}"
-    # }
-    #
-    # resp = riskDetector.async_video_risk(params, req)
-    # print resp
+    params = dict()
+    req = {
+         'AppId': 3332,
+         'Service': "video_risk",
+         'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"\", \"data_id\": \"123\", \"account_id\": \"2000000409\"}"
+    }
+
+    resp = riskDetector.async_video_risk(params, req)
+    print resp
 
     params = {
         'AppId': 3332,
@@ -28,32 +28,63 @@ if __name__ == '__main__':
     resp1 = riskDetector.video_result(params, req)
     print resp1
 
-    # params = dict()
-    # req = {
-    #     'AppId': 3332,
-    #     'Service': "image_content_risk",
-    #     'Parameters': "{\"operate_time\": 1642130700, \"url\": \"http://i1.go2yd.com/corpimage.php?url=V_0EgT0Rf6J2&docid=V_0EgT0RgU&source=vivobrowser&type=_990x557\", \"data_id\": \"test12345\", \"account_id\": \"2000001223\"}"
-    # }
-    #
-    # resp2 = riskDetector.image_content_risk(params, req)
-    # print resp2
+    params = dict()
+    req = {
+        'AppId': 3332,
+        'Service': "image_content_risk",
+        'Parameters': "{\"operate_time\": 1642130700, \"url\": \"\", \"data_id\": \"test12345\", \"account_id\": \"2000001223\"}"
+    }
 
-    # reqImage = {
-    #     'AppId': 3332,
-    #     'Service': "image_content_risk",
-    #     'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"https://image.uc.cn/s/wemedia/s/upload/2021/Wfmt7d1f82edu22/c2ea0890c3045dad785944b01dd87540.png\", \"data_id\": \"image123\", \"account_id\": \"2000000409\"}"
-    # }
-    #
-    # resp3 = riskDetector.async_image_risk(params, reqImage)
-    # print resp3
-    #
-    # params = {
-    #     'AppId': 3332,
-    #     'Service': "image_content_risk",
-    #     'DataId': "123image"
-    # }
-    # req = dict()
-    #
-    # resp4 = riskDetector.image_result(params, req)
-    # print resp4
+    resp2 = riskDetector.image_content_risk(params, req)
+    print resp2
 
+    reqImage = {
+        'AppId': 3332,
+        'Service': "image_content_risk",
+        'Parameters': "{\"operate_time\": 1617960951, \"ip\": \"127.0.0.9\", \"did\":1357924680, \"url\": \"\", \"data_id\": \"image123\", \"account_id\": \"2000000409\"}"
+    }
+
+    resp3 = riskDetector.async_image_risk(params, reqImage)
+    print resp3
+
+    params = {
+        'AppId': 3332,
+        'Service': "image_content_risk",
+        'DataId': "123image"
+    }
+    req = dict()
+
+    resp4 = riskDetector.image_result(params, req)
+    print resp4
+
+    params = dict()
+    reqText = {
+        'AppId': 5461,
+        'Service': "text_risk",
+        'Parameters': "{\"operate_time\": 1617960951, \"text\": \"加我微信看一些小黄片\", \"account_id\": \"2000000409\"}"
+    }
+
+    resp5 = riskDetector.text_risk(params, reqText)
+    print resp5
+
+    params = dict()
+    reqCreateCustomContentsReq = {
+        'app_id': 5461,
+        'name': "test_7",
+        'decision': "PASS",
+        'description': "test"
+    }
+
+    resp = riskDetector.create_custom_contents(params, reqCreateCustomContentsReq)
+    print resp
+
+    params = dict()
+    reqUploadCustomContentsReq = {
+        'app_id': 5461,
+        'name': "test_7",
+        'modify_type': 1,
+        'contents': ["1", "2", "3", "5"],
+    }
+
+    resp = riskDetector.upload_custom_contents(params, reqUploadCustomContentsReq)
+    print resp
