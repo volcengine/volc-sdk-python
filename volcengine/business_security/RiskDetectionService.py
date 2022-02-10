@@ -37,7 +37,11 @@ class RiskDetectService(Service):
                     "RiskResult": ApiInfo("GET", "/", {"Action": "RiskResult", "Version": "2021-03-10"}, {}, {}),
                     "AccountRisk": ApiInfo("POST", "/", {"Action": "AccountRisk", "Version": "2020-12-25"}, {}, {}),
                     "MobileStatus": ApiInfo("POST", "/", {"Action": "MobileStatus", "Version": "2020-12-25"}, {}, {}),
-                    "ElementVerify": ApiInfo("POST", "/", {"Action": "ElementVerify", "Version": "2021-11-23"}, {}, {})}
+                    "ElementVerify": ApiInfo("POST", "/", {"Action": "ElementVerify", "Version": "2021-11-23"}, {}, {}),
+                    "MobileSecondSale": ApiInfo("POST", "/", {"Action": "MobileSecondSale", "Version": "2022-02-08"}, {}, {}),
+                    "MobileEmptyCheck": ApiInfo("POST", "/", {"Action": "MobileEmptyCheck", "Version": "2022-02-08"}, {}, {}),
+                    "MobileOnlineStatus": ApiInfo("POST", "/", {"Action": "MobileOnlineStatus", "Version": "2022-02-08"}, {}, {}),
+                    "MobileOnlineTime": ApiInfo("POST", "/", {"Action": "MobileOnlineTime", "Version": "2022-02-08"}, {}, {})}
 
         return api_info
 
@@ -91,3 +95,38 @@ class RiskDetectService(Service):
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def mobile_second_sale(self, params, body):
+        res = self.json("MobileSecondSale", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def mobile_empty_check(self, params, body):
+        res = self.json("MobileEmptyCheck", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def mobile_online_status(self, params, body):
+        res = self.json("MobileOnlineStatus", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def mobile_online_time(self, params, body):
+        res = self.json("MobileOnlineTime", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)

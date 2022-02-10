@@ -12,7 +12,7 @@ if __name__ == '__main__':
     req = {
          'AppId': 222572,
          'Service': "account_risk",
-         'Parameters': '{"operate_time":1609818934, "mobile": "15959215326"}'
+         'Parameters': '{"operate_time":1609818934, "mobile": "12312341234"}'
     }
 
     resp = riskDetector.risk_detect(params, req)
@@ -70,3 +70,47 @@ if __name__ == '__main__':
     idcardTwoElementResp = riskDetector.element_verify(params, req)
 
     print(idcardTwoElementResp)
+
+    params = dict()
+    req = {
+        'AppId': 5461,
+        'Service': "mobile_status",
+        'Parameters': '{"operate_time":1609818934, "mobile": "12312341234", "since_date":"20210101"}'
+    }
+
+    mobileSecondSale = riskDetector.mobile_second_sale(params, req)
+
+    print(mobileSecondSale)
+
+    params = dict()
+    req = {
+        'AppId': 5461,
+        'Service': "mobile_status",
+        'Parameters': '{"operate_time":1609818934, "mobile": "12312341234"}'
+    }
+
+    mobileEmptyCheck = riskDetector.mobile_empty_check(params, req)
+
+    print(mobileEmptyCheck)
+
+    params = dict()
+    req = {
+        'AppId': 5461,
+        'Service': "mobile_status",
+        'Parameters': '{"operate_time":1609818934, "mobile": "12312341234"}'
+    }
+
+    mobileOnlineStatus = riskDetector.mobile_online_status(params, req)
+
+    print(mobileOnlineStatus)
+
+    params = dict()
+    req = {
+        'AppId': 5461,
+        'Service': "mobile_status",
+        'Parameters': '{"operate_time":1609818934, "mobile": "12312341234"}'
+    }
+
+    mobileOnlineTime = riskDetector.mobile_online_time(params, req)
+
+    print(mobileOnlineTime)
