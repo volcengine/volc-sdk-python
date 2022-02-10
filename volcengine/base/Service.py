@@ -1,5 +1,8 @@
 # coding: utf-8
+import configparser
 import json
+import logging
+from json.decoder import JSONDecodeError
 import os
 import time
 from collections import OrderedDict
@@ -32,15 +35,32 @@ class Service(object):
         else:
             if os.environ.get('HOME', None) is None:
                 return
-
-            path = os.environ['HOME'] + '/.volc/config'
-            if os.path.isfile(path):
-                with open(path, 'r') as f:
-                    j = json.load(f)
+            # 先尝试从credentials中读取ak、sk，credentials不存在则从config中读取
+            path_ini = os.environ['HOME'] + '/.volc/credentials'
+            path_json = os.environ['HOME'] + '/.volc/config'
+            if os.path.isfile(path_ini):
+                conf = configparser.ConfigParser()
+                conf.read(path_ini)
+                default_section, ak_option, sk_option = "default", "access_key_id", "secret_access_key"
+                if conf.has_section(default_section):
+                    if conf.has_option(default_section, ak_option):
+                        ak = conf.get(default_section, ak_option)
+                        self.service_info.credentials.set_ak(ak)
+                    if conf.has_option(default_section, sk_option):
+                        sk = conf.get(default_section, sk_option)
+                        self.service_info.credentials.set_sk(sk)
+            elif os.path.isfile(path_json):
+                with open(path_json, 'r') as f:
+                    try:
+                        j = json.load(f)
+                    except JSONDecodeError:
+                        logging.warning("%s is not json file", path_json)
+                        return
                     if 'ak' in j:
                         self.service_info.credentials.set_ak(j['ak'])
                     if 'sk' in j:
                         self.service_info.credentials.set_sk(j['sk'])
+
 
     def set_ak(self, ak):
         self.service_info.credentials.set_ak(ak)
