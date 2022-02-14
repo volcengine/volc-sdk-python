@@ -12,10 +12,10 @@ class Function:
         return {'Name': 'AddOptionInfo', 'Input': {'Title': title, 'Tags': tags, 'Description': description}}
 
     @staticmethod
-    def get_add_option_info_func(title, tags, description, category, record_type, format_input):
+    def get_add_option_info_func(title, tags, description, category, record_type, format_input, classification_id=0):
         return {'Name': 'AddOptionInfo',
                 'Input': {'Title': title, 'Tags': tags, 'Description': description, 'Category': category,
-                          'RecordType': record_type, 'Format': format_input}}
+                          'RecordType': record_type, 'Format': format_input, 'ClassificationId': classification_id}}
 
     @staticmethod
     def get_start_workflow_func(template_id):
