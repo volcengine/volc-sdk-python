@@ -283,20 +283,20 @@ class CDNService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def describe_accounting_data(self, params=None):
+    def describe_cdn_service(self, params=None):
         if params is None:
             params = {}
-        action = "DescribeAccountingData"
+        action = "DescribeCdnService"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
         return res_json
 
-    def describe_cdn_service(self, params=None):
+    def describe_accounting_data(self, params=None):
         if params is None:
             params = {}
-        action = "DescribeCdnService"
+        action = "DescribeAccountingData"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
@@ -383,7 +383,7 @@ class CDNService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def describe_i_p_info(self, params=None):
+    def describe_ip_info(self, params=None):
         if params is None:
             params = {}
         action = "DescribeIPInfo"
@@ -423,20 +423,20 @@ class CDNService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def delete_resource_tags(self, params=None):
+    def list_resource_tags(self, params=None):
         if params is None:
             params = {}
-        action = "DeleteResourceTags"
+        action = "ListResourceTags"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
         return res_json
 
-    def list_resource_tags(self, params=None):
+    def delete_resource_tags(self, params=None):
         if params is None:
             params = {}
-        action = "ListResourceTags"
+        action = "DeleteResourceTags"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)

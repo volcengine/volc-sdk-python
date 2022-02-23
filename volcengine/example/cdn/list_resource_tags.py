@@ -8,12 +8,6 @@ if __name__ == '__main__':
     svc = CDNService()
     svc.set_ak(ak)
     svc.set_sk(sk)
-    now = int(datetime.datetime.now().strftime("%s"))
-    body = {
-        'StartTime': now - 3600,
-        'EndTime': now,
-        'Domain': 'example.com',
-    }
 
-    resp = svc.describe_cdn_accounting_data(body)
+    resp = svc.list_resource_tags()
     print(resp)
