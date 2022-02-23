@@ -10,7 +10,7 @@ SERVICE_VERSION = "2021-03-01"
 
 service_info_map = {
     "cn-north-1": ServiceInfo("cdn.volcengineapi.com", {'accept': 'application/json', },
-                              Credentials('', '', "CDN", "cn-north-1"), 60, 60, "https"),
+                              Credentials('', '', "CDN", "cn-north-1"), 60 * 5, 60 * 5, "https"),
 }
 
 api_info = {
