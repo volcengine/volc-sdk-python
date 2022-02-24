@@ -88,6 +88,7 @@ class VisualService(Service):
             "PotraitEffect": ApiInfo("POST", "/", {"Action": "PotraitEffect", "Version": "2020-08-26"}, {}, {}),
             "ImageStyleConversion": ApiInfo("POST", "/", {"Action": "ImageStyleConversion", "Version": "2020-08-26"}, {}, {}),
             "3DGameCartoon": ApiInfo("POST", "/", {"Action": "3DGameCartoon", "Version": "2020-08-26"}, {}, {}),
+            "HairSegment": ApiInfo("POST", "/", {"Action": "HairSegment", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -514,6 +515,13 @@ class VisualService(Service):
     def three_d_game_cartoon(self, form):
         try:
             res_json = self.common_handler("3DGameCartoon", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def hair_segment(self, form):
+        try:
+            res_json = self.common_handler("HairSegment", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
