@@ -1,5 +1,9 @@
 ### Change log
 
+2022-02-24 Bumped to version v1.0.35
+- Added cr and cp client
+- Fixed mobile status v2
+
 2022-02-10 Bumped to version v1.0.34
 - Added 号码核验二期需求
 - Added content security services
