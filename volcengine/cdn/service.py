@@ -57,11 +57,14 @@ api_info = {
     # 获取区域和 ISP 列表: https://www.volcengine.com/docs/6454/70445
     "DescribeCdnRegionAndIsp": ApiInfo("POST", "/", {"Action": "DescribeCdnRegionAndIsp", "Version": SERVICE_VERSION},
                                        {}, {}),
+    # （Deprecated）查询域名排行数据: https://www.volcengine.com/docs/6454/70447?type=preview
+    "DescribeCdnDomainTopData": ApiInfo("POST", "/", {"Action": "DescribeCdnDomainTopData", "Version": SERVICE_VERSION},
+                                        {}, {}),
+    # 查询账号计费方式: https://www.volcengine.com/docs/6454/78999
+    "DescribeCdnService": ApiInfo("POST", "/", {"Action": "DescribeCdnService", "Version": SERVICE_VERSION}, {}, {}),
     # 获取计费指标的细分数据: https://www.volcengine.com/docs/6454/96167
     "DescribeAccountingData": ApiInfo("POST", "/", {"Action": "DescribeAccountingData", "Version": SERVICE_VERSION}, {},
                                       {}),
-    # 查询账号计费方式: https://www.volcengine.com/docs/6454/78999
-    "DescribeCdnService": ApiInfo("POST", "/", {"Action": "DescribeCdnService", "Version": SERVICE_VERSION}, {}, {}),
     # 提交刷新任务: https://www.volcengine.com/docs/6454/70438
     "SubmitRefreshTask": ApiInfo("POST", "/", {"Action": "SubmitRefreshTask", "Version": SERVICE_VERSION}, {}, {}),
     # 提交预热任务: https://www.volcengine.com/docs/6454/70436
@@ -90,10 +93,10 @@ api_info = {
     "AddResourceTags": ApiInfo("POST", "/", {"Action": "AddResourceTags", "Version": SERVICE_VERSION}, {}, {}),
     # 更新资源标签: https://www.volcengine.com/docs/6454/80313
     "UpdateResourceTags": ApiInfo("POST", "/", {"Action": "UpdateResourceTags", "Version": SERVICE_VERSION}, {}, {}),
-    # 删除资源标签: https://www.volcengine.com/docs/6454/80316
-    "DeleteResourceTags": ApiInfo("POST", "/", {"Action": "DeleteResourceTags", "Version": SERVICE_VERSION}, {}, {}),
     # 查询标签清单: https://www.volcengine.com/docs/6454/80315
     "ListResourceTags": ApiInfo("POST", "/", {"Action": "ListResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+    # 删除资源标签: https://www.volcengine.com/docs/6454/80316
+    "DeleteResourceTags": ApiInfo("POST", "/", {"Action": "DeleteResourceTags", "Version": SERVICE_VERSION}, {}, {}),
 }
 
 
@@ -277,6 +280,16 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "DescribeCdnRegionAndIsp"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_cdn_domain_top_data(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeCdnDomainTopData"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
