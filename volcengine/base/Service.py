@@ -2,7 +2,6 @@
 import configparser
 import json
 import logging
-from json.decoder import JSONDecodeError
 import os
 import time
 from collections import OrderedDict
@@ -53,7 +52,7 @@ class Service(object):
                 with open(path_json, 'r') as f:
                     try:
                         j = json.load(f)
-                    except JSONDecodeError:
+                    except Exception:
                         logging.warning("%s is not json file", path_json)
                         return
                     if 'ak' in j:
