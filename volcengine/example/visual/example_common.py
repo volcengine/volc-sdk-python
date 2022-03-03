@@ -139,4 +139,22 @@ if __name__ == '__main__':
     # form["refine_mask"] = 0
     # form["flip_test"] = 0
 
+    # 印章识别
+    # resp = visual_service.ocr_seal(form)
+
+    # pdf识别
+    # resp = visual_service.ocr_pdf(form)
+
+    # 高速公路过路费
+    # resp = visual_service.ocr_pass_invoice(form)
+
+    # 商标证
+    # resp = visual_service.ocr_trade(form)
+
+    # 软件著作权
+    # resp = visual_service.ocr_ruanzhu(form)
+
+    # 化妆品生产许可证
+    # resp = visual_service.ocr_cosmetic_product(form)
+
     print(resp)
