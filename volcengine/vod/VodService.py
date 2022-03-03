@@ -394,40 +394,6 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetHlsDecryptionKeyResponse(), True)
 
     #
-    # GetPlayInfoWithLiveTimeShiftScene.
-    #
-    # @param request VodGetPlayInfoWithLiveTimeShiftSceneRequest
-    # @return VodGetPlayInfoWithLiveTimeShiftSceneResponse
-    # @raise Exception
-    def get_play_info_with_live_time_shift_scene(self, request):
-        try:
-            if sys.version_info[0] == 3:
-                jsonData = MessageToJson(request, False, True)
-                params = json.loads(jsonData)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            else:
-                params = MessageToDict(request, False, True)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str, unicode)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            res = self.get("GetPlayInfoWithLiveTimeShiftScene", params)
-        except Exception as Argument:
-            try:
-                resp = Parse(Argument.__str__(), VodGetPlayInfoWithLiveTimeShiftSceneResponse(), True)
-            except Exception:
-                raise Argument
-            else:
-                raise Exception(resp.ResponseMetadata.Error.Code)
-        else:
-            return Parse(res, VodGetPlayInfoWithLiveTimeShiftSceneResponse(), True)
-
-    #
     # UploadMediaByUrl.
     #
     # @param request VodUrlUploadRequest
@@ -904,12 +870,12 @@ class VodService(VodServiceConfig):
             return Parse(res, VodUpdateSubtitleInfoResponse(), True)
 
     #
-    # GetAuditFramesForAudit.
+    # CreateVideoClassification.
     #
-    # @param request VodGetAuditFramesForAuditRequest
-    # @return VodGetAuditFramesForAuditResponse
+    # @param request VodCreateVideoClassificationRequest
+    # @return VodCreateVideoClassificationResponse
     # @raise Exception
-    def get_audit_frames_for_audit(self, request):
+    def create_video_classification(self, request):
         try:
             if sys.version_info[0] == 3:
                 jsonData = MessageToJson(request, False, True)
@@ -926,24 +892,24 @@ class VodService(VodServiceConfig):
                         continue
                     else:
                         params[k] = json.dumps(v)
-            res = self.get("GetAuditFramesForAudit", params)
+            res = self.get("CreateVideoClassification", params)
         except Exception as Argument:
             try:
-                resp = Parse(Argument.__str__(), VodGetAuditFramesForAuditResponse(), True)
+                resp = Parse(Argument.__str__(), VodCreateVideoClassificationResponse(), True)
             except Exception:
                 raise Argument
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return Parse(res, VodGetAuditFramesForAuditResponse(), True)
+            return Parse(res, VodCreateVideoClassificationResponse(), True)
 
     #
-    # GetMLFramesForAudit.
+    # UpdateVideoClassification.
     #
-    # @param request VodGetMLFramesForAuditRequest
-    # @return VodGetMLFramesForAuditResponse
+    # @param request VodUpdateVideoClassificationRequest
+    # @return VodUpdateVideoClassificationResponse
     # @raise Exception
-    def get_m_l_frames_for_audit(self, request):
+    def update_video_classification(self, request):
         try:
             if sys.version_info[0] == 3:
                 jsonData = MessageToJson(request, False, True)
@@ -960,24 +926,24 @@ class VodService(VodServiceConfig):
                         continue
                     else:
                         params[k] = json.dumps(v)
-            res = self.get("GetMLFramesForAudit", params)
+            res = self.get("UpdateVideoClassification", params)
         except Exception as Argument:
             try:
-                resp = Parse(Argument.__str__(), VodGetMLFramesForAuditResponse(), True)
+                resp = Parse(Argument.__str__(), VodUpdateVideoClassificationResponse(), True)
             except Exception:
                 raise Argument
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return Parse(res, VodGetMLFramesForAuditResponse(), True)
+            return Parse(res, VodUpdateVideoClassificationResponse(), True)
 
     #
-    # GetBetterFramesForAudit.
+    # DeleteVideoClassification.
     #
-    # @param request VodGetBetterFramesForAuditRequest
-    # @return VodGetBetterFramesForAuditResponse
+    # @param request VodDeleteVideoClassificationRequest
+    # @return VodDeleteVideoClassificationResponse
     # @raise Exception
-    def get_better_frames_for_audit(self, request):
+    def delete_video_classification(self, request):
         try:
             if sys.version_info[0] == 3:
                 jsonData = MessageToJson(request, False, True)
@@ -994,24 +960,24 @@ class VodService(VodServiceConfig):
                         continue
                     else:
                         params[k] = json.dumps(v)
-            res = self.get("GetBetterFramesForAudit", params)
+            res = self.get("DeleteVideoClassification", params)
         except Exception as Argument:
             try:
-                resp = Parse(Argument.__str__(), VodGetBetterFramesForAuditResponse(), True)
+                resp = Parse(Argument.__str__(), VodDeleteVideoClassificationResponse(), True)
             except Exception:
                 raise Argument
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return Parse(res, VodGetBetterFramesForAuditResponse(), True)
+            return Parse(res, VodDeleteVideoClassificationResponse(), True)
 
     #
-    # GetAudioInfoForAudit.
+    # ListVideoClassifications.
     #
-    # @param request VodGetAudioInfoForAuditRequest
-    # @return VodGetAudioInfoForAuditResponse
+    # @param request VodListVideoClassificationsRequest
+    # @return VodListVideoClassificationsResponse
     # @raise Exception
-    def get_audio_info_for_audit(self, request):
+    def list_video_classifications(self, request):
         try:
             if sys.version_info[0] == 3:
                 jsonData = MessageToJson(request, False, True)
@@ -1028,84 +994,16 @@ class VodService(VodServiceConfig):
                         continue
                     else:
                         params[k] = json.dumps(v)
-            res = self.get("GetAudioInfoForAudit", params)
+            res = self.get("ListVideoClassifications", params)
         except Exception as Argument:
             try:
-                resp = Parse(Argument.__str__(), VodGetAudioInfoForAuditResponse(), True)
+                resp = Parse(Argument.__str__(), VodListVideoClassificationsResponse(), True)
             except Exception:
                 raise Argument
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return Parse(res, VodGetAudioInfoForAuditResponse(), True)
-
-    #
-    # GetAutomaticSpeechRecognitionForAudit.
-    #
-    # @param request VodGetAutomaticSpeechRecognitionForAuditRequest
-    # @return VodGetAutomaticSpeechRecognitionForAuditResponse
-    # @raise Exception
-    def get_automatic_speech_recognition_for_audit(self, request):
-        try:
-            if sys.version_info[0] == 3:
-                jsonData = MessageToJson(request, False, True)
-                params = json.loads(jsonData)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            else:
-                params = MessageToDict(request, False, True)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str, unicode)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            res = self.get("GetAutomaticSpeechRecognitionForAudit", params)
-        except Exception as Argument:
-            try:
-                resp = Parse(Argument.__str__(), VodGetAutomaticSpeechRecognitionForAuditResponse(), True)
-            except Exception:
-                raise Argument
-            else:
-                raise Exception(resp.ResponseMetadata.Error.Code)
-        else:
-            return Parse(res, VodGetAutomaticSpeechRecognitionForAuditResponse(), True)
-
-    #
-    # GetAudioEventDetectionForAudit.
-    #
-    # @param request VodGetAudioEventDetectionForAuditRequest
-    # @return VodGetAudioEventDetectionForAuditResponse
-    # @raise Exception
-    def get_audio_event_detection_for_audit(self, request):
-        try:
-            if sys.version_info[0] == 3:
-                jsonData = MessageToJson(request, False, True)
-                params = json.loads(jsonData)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            else:
-                params = MessageToDict(request, False, True)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str, unicode)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            res = self.get("GetAudioEventDetectionForAudit", params)
-        except Exception as Argument:
-            try:
-                resp = Parse(Argument.__str__(), VodGetAudioEventDetectionForAuditResponse(), True)
-            except Exception:
-                raise Argument
-            else:
-                raise Exception(resp.ResponseMetadata.Error.Code)
-        else:
-            return Parse(res, VodGetAudioEventDetectionForAuditResponse(), True)
+            return Parse(res, VodListVideoClassificationsResponse(), True)
 
     #
     # StartWorkflow.
