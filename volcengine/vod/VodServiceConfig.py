@@ -90,8 +90,8 @@ class VodServiceConfig(Service):
             "CreateCdnRefreshTask": ApiInfo("GET", "/", {"Action": "CreateCdnRefreshTask", "Version": "2021-01-01"}, {}, {}),
             "CreateCdnPreloadTask": ApiInfo("GET", "/", {"Action": "CreateCdnPreloadTask", "Version": "2021-01-01"}, {}, {}),
             # 回调管理
-            "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "CreateSpace", "Version": "2021-12-01"}, {}, {}),
-            "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "CreateSpace", "Version": "2021-12-01"}, {}, {}),
+            "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
+            "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2021-01-01"}, {}, {}),
 
         }
         return api_info
