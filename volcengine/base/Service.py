@@ -1,5 +1,4 @@
 # coding: utf-8
-import configparser
 import json
 import logging
 import os
@@ -9,7 +8,10 @@ try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
-
+try:
+    import configparser
+except ImportError:
+    import ConfigParser
 
 import requests
 
@@ -38,7 +40,7 @@ class Service(object):
             path_ini = os.environ['HOME'] + '/.volc/credentials'
             path_json = os.environ['HOME'] + '/.volc/config'
             if os.path.isfile(path_ini):
-                conf = configparser.ConfigParser()
+                conf = ConfigParser.ConfigParser()
                 conf.read(path_ini)
                 default_section, ak_option, sk_option = "default", "access_key_id", "secret_access_key"
                 if conf.has_section(default_section):
