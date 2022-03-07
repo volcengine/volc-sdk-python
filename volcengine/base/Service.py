@@ -1,5 +1,4 @@
 # coding: utf-8
-import configparser
 import json
 import logging
 import os
@@ -10,6 +9,10 @@ try:
 except ImportError:
     from urllib import urlencode
 
+try:
+    import configparser as configparser
+except ImportError:
+    import ConfigParser as configparser
 
 import requests
 
