@@ -82,7 +82,7 @@ class VodServiceConfig(Service):
             "CreateSpace": ApiInfo("GET", "/", {"Action": "CreateSpace", "Version": "2021-01-01"}, {}, {}),
             "ListSpace": ApiInfo("GET", "/", {"Action": "ListSpace", "Version": "2021-01-01"}, {}, {}),
             # "GetSpaceDetail": ApiInfo("GET", "/", {"Action": "GetSpaceDetail", "Version": "2022-01-01"}, {}, {}),
-            "GetSpaceConfig": ApiInfo("GET", "/", {"Action": "GetSpaceConfig", "Version": "2021-01-01"}, {}, {}),
+            # "GetSpaceConfig": ApiInfo("GET", "/", {"Action": "GetSpaceConfig", "Version": "2022-01-01"}, {}, {}),
             "UpdateSpace": ApiInfo("GET", "/", {"Action": "UpdateSpace", "Version": "2021-01-01"}, {}, {}),
             "UpdateSpaceUploadConfig": ApiInfo("GET", "/", {"Action": "UpdateSpaceUploadConfig", "Version": "2022-01-01"}, {}, {}),
             # 分发加速

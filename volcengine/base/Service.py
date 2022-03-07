@@ -12,7 +12,6 @@ try:
     import configparser
 except ImportError:
     import ConfigParser
-
 import requests
 
 from volcengine.Policy import SecurityToken2, InnerToken, ComplexEncoder
@@ -40,7 +39,7 @@ class Service(object):
             path_ini = os.environ['HOME'] + '/.volc/credentials'
             path_json = os.environ['HOME'] + '/.volc/config'
             if os.path.isfile(path_ini):
-                conf = ConfigParser.ConfigParser()
+                conf = configparser.ConfigParser()
                 conf.read(path_ini)
                 default_section, ak_option, sk_option = "default", "access_key_id", "secret_access_key"
                 if conf.has_section(default_section):
