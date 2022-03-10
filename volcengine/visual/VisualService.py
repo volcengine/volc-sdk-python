@@ -95,6 +95,10 @@ class VisualService(Service):
             "OCRRuanzhu": ApiInfo("POST", "/", {"Action": "OCRRuanzhu", "Version": "2020-12-21"}, {}, {}),
             "OCRCosmeticProduct": ApiInfo("POST", "/", {"Action": "OCRCosmeticProduct", "Version": "2020-12-21"}, {}, {}),
             "OCRPdf": ApiInfo("POST", "/", {"Action": "OCRPdf", "Version": "2021-08-23"}, {}, {}),
+            "VideoUpload": ApiInfo("POST", "/", {"Action": "VideoUpload", "Version": "2020-08-26"}, {}, {}),
+            "VideoCoverSelection": ApiInfo("POST", "/", {"Action": "VideoCoverSelection", "Version": "2020-08-26"}, {}, {}),
+            "VideoHighlightExtractionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionSubmitTask", "Version": "2020-08-26"}, {}, {}),
+            "VideoHighlightExtractionQueryTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
 
         }
         return api_info
@@ -571,6 +575,34 @@ class VisualService(Service):
     def ocr_pdf(self, form):
         try:
             res_json = self.common_handler("OCRPdf", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_upload(self, form):
+        try:
+            res_json = self.common_handler("VideoUpload", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_cover_selection(self, form):
+        try:
+            res_json = self.common_handler("VideoCoverSelection", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_highlight_extraction_submit_task(self, form):
+        try:
+            res_json = self.common_handler("VideoHighlightExtractionSubmitTask", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_highlight_extraction_query_task(self, form):
+        try:
+            res_json = self.common_handler("VideoHighlightExtractionQueryTask", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
