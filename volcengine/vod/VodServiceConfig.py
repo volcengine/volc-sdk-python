@@ -33,8 +33,10 @@ class VodServiceConfig(Service):
     @staticmethod
     def get_service_info(region):
         service_info_map = {
-            'cn-north-1': ServiceInfo("vod.volcengineapi.com", {'Accept': 'application/json'},
+            'cn-north-1': ServiceInfo("volcengineapi-boe.byted.org", {'Accept': 'application/json'},
                                       Credentials('', '', 'vod', 'cn-north-1'), 10, 10),
+            # 'cn-north-1': ServiceInfo("vod.volcengineapi.com", {'Accept': 'application/json'},
+            #                           Credentials('', '', 'vod', 'cn-north-1'), 10, 10),
         }
         service_info = service_info_map.get(region, None)
         if not service_info:
@@ -76,6 +78,7 @@ class VodServiceConfig(Service):
             "UpdateVideoClassification": ApiInfo("GET", "/", {"Action": "UpdateVideoClassification", "Version": "2021-01-01"}, {}, {}),
             "DeleteVideoClassification": ApiInfo("GET", "/", {"Action": "DeleteVideoClassification", "Version": "2021-01-01"}, {}, {}),
             "ListVideoClassifications": ApiInfo("GET", "/", {"Action": "ListVideoClassifications", "Version": "2021-01-01"}, {}, {}),
+            "ListSnapshots": ApiInfo("GET", "/", {"Action": "ListSnapshots", "Version": "2021-01-01"}, {}, {}),
             # 转码
             "StartWorkflow": ApiInfo("GET", "/", {"Action": "StartWorkflow", "Version": "2020-08-01"}, {}, {}),
             # # 空间管理
