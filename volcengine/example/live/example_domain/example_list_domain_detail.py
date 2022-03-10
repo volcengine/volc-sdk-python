@@ -10,8 +10,8 @@ if __name__ == '__main__':
     live_service.set_ak(ak)
     live_service.set_sk(sk)
     body = {
-
+        "PageNum": 1,
+        "PageSize": 10,
     }
-    body = json.dumps(body)
     resp = live_service.list_domain_detail(body)
     print(resp)

@@ -140,7 +140,7 @@ class LiveService(Service):
 
     def list_common_trans_preset_detail(self, params):
         action = "ListCommonTransPresetDetail"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -148,7 +148,7 @@ class LiveService(Service):
 
     def update_callback(self, params):
         action = "UpdateCallback"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -156,7 +156,7 @@ class LiveService(Service):
 
     def describe_callback(self, params):
         action = "DescribeCallback"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -164,7 +164,7 @@ class LiveService(Service):
 
     def delete_callback(self, params):
         action = "DeleteCallback"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -172,7 +172,7 @@ class LiveService(Service):
 
     def create_domain(self, params):
         action = "CreateDomain"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -180,7 +180,7 @@ class LiveService(Service):
 
     def delete_domain(self, params):
         action = "DeleteDomain"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -188,7 +188,7 @@ class LiveService(Service):
 
     def list_domain_detail(self, params):
         action = "ListDomainDetail"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -196,7 +196,7 @@ class LiveService(Service):
 
     def describe_domain(self, params):
         action = "DescribeDomain"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -204,7 +204,7 @@ class LiveService(Service):
 
     def enable_domain(self, params):
         action = "EnableDomain"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -212,7 +212,7 @@ class LiveService(Service):
 
     def disable_domain(self, params):
         action = "DisableDomain"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -220,7 +220,7 @@ class LiveService(Service):
 
     def manager_pull_push_domain_bind(self, params):
         action = "ManagerPullPushDomainBind"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -228,7 +228,7 @@ class LiveService(Service):
 
     def update_auth_key(self, params):
         action = "UpdateAuthKey"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -236,7 +236,7 @@ class LiveService(Service):
 
     def enable_auth(self, params):
         action = "EnableAuth"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -244,7 +244,7 @@ class LiveService(Service):
 
     def disable_auth(self, params):
         action = "DisableAuth"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -252,7 +252,7 @@ class LiveService(Service):
 
     def describe_auth(self, params):
         action = "DescribeAuth"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -260,7 +260,7 @@ class LiveService(Service):
 
     def forbid_stream(self, params):
         action = "ForbidStream"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -268,7 +268,7 @@ class LiveService(Service):
 
     def resume_stream(self, params):
         action = "ResumeStream"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -276,7 +276,7 @@ class LiveService(Service):
 
     def list_cert(self, params):
         action = "ListCert"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -284,7 +284,7 @@ class LiveService(Service):
 
     def create_cert(self, params):
         action = "CreateCert"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -292,7 +292,7 @@ class LiveService(Service):
 
     def describe_cert_detail_secret(self, params):
         action = "DescribeCertDetailSecret"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -300,7 +300,7 @@ class LiveService(Service):
 
     def update_cert(self, params):
         action = "UpdateCert"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -308,7 +308,7 @@ class LiveService(Service):
 
     def bind_cert(self, params):
         action = "BindCert"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -316,7 +316,7 @@ class LiveService(Service):
 
     def un_bind_cert(self, params):
         action = "UnbindCert"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -324,7 +324,7 @@ class LiveService(Service):
 
     def delete_cert(self, params):
         action = "DeleteCert"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -332,7 +332,7 @@ class LiveService(Service):
 
     def update_referer(self, params):
         action = "UpdateReferer"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -340,7 +340,7 @@ class LiveService(Service):
 
     def delete_referer(self, params):
         action = "DeleteReferer"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -348,7 +348,7 @@ class LiveService(Service):
 
     def describe_referer(self, params):
         action = "DescribeReferer"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -356,7 +356,7 @@ class LiveService(Service):
 
     def create_record_preset(self, params):
         action = "CreateRecordPreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -364,7 +364,7 @@ class LiveService(Service):
 
     def update_record_preset(self, params):
         action = "UpdateRecordPreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -372,7 +372,7 @@ class LiveService(Service):
 
     def delete_record_preset(self, params):
         action = "DeleteRecordPreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -380,7 +380,7 @@ class LiveService(Service):
 
     def list_vhost_record_preset(self, params):
         action = "ListVhostRecordPreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -388,7 +388,7 @@ class LiveService(Service):
 
     def create_transcode_preset(self, params):
         action = "CreateTranscodePreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -396,7 +396,7 @@ class LiveService(Service):
 
     def update_transcode_preset(self, params):
         action = "UpdateTranscodePreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -404,7 +404,7 @@ class LiveService(Service):
 
     def delete_transcode_preset(self, params):
         action = "DeleteTranscodePreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -412,7 +412,7 @@ class LiveService(Service):
 
     def create_snapshot_preset(self, params):
         action = "CreateSnapshotPreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -420,7 +420,7 @@ class LiveService(Service):
 
     def update_snapshot_preset(self, params):
         action = "UpdateSnapshotPreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -428,7 +428,7 @@ class LiveService(Service):
 
     def delete_snapshot_preset(self, params):
         action = "DeleteSnapshotPreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -436,7 +436,7 @@ class LiveService(Service):
 
     def list_vhost_snapshot_preset(self, params):
         action = "ListVhostSnapshotPreset"
-        res = self.json(action, [], json.dumps(params))
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)

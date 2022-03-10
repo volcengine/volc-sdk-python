@@ -10,8 +10,8 @@ if __name__ == '__main__':
     live_service.set_ak(ak)
     live_service.set_sk(sk)
     body = {
-
+        "MessageType": "record",
+        "Vhost": "vhost",
     }
-    body = json.dumps(body)
     resp = live_service.delete_callback(body)
     print(resp)

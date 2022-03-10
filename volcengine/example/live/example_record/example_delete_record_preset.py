@@ -10,8 +10,9 @@ if __name__ == '__main__':
     live_service.set_ak(ak)
     live_service.set_sk(sk)
     body = {
-
+        "Vhost": "",
+        "App": "",
+        "Preset": "preset",
     }
-    body = json.dumps(body)
     resp = live_service.delete_record_preset(body)
     print(resp)
