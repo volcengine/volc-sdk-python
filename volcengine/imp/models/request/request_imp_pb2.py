@@ -11,7 +11,6 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from volcengine.imp.models.business import imp_common_pb2 as imp_dot_business_dot_imp__common__pb2
 
 
@@ -21,9 +20,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n(com.volcengine.service.imp.model.requestB\nImpRequestP\001Z@github.com/volcengine/volc-sdk-golang/service/imp/models/request\240\001\001\330\001\001\312\002\037Volc\\Service\\Imp\\Models\\Request\342\002#Volc\\Service\\Imp\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dimp/request/request_imp.proto\x12\x1dVolcengine.Imp.Models.Request\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1dimp/business/imp_common.proto\"}\n\x13ImpSubmitJobRequest\x12<\n\tInputPath\x18\x01 \x01(\x0b\x32).Volcengine.Imp.Models.Business.InputPath\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\"\"\n\x11ImpKillJobRequest\x12\r\n\x05JobId\x18\x01 \x01(\t\"\'\n\x15ImpRetrieveJobRequest\x12\x0e\n\x06JobIds\x18\x01 \x03(\tB\xc8\x01\n(com.volcengine.service.imp.model.requestB\nImpRequestP\x01Z@github.com/volcengine/volc-sdk-golang/service/imp/models/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x1fVolc\\Service\\Imp\\Models\\Request\xe2\x02#Volc\\Service\\Imp\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1dimp/request/request_imp.proto\x12\x1dVolcengine.Imp.Models.Request\x1a\x1dimp/business/imp_common.proto\"\x80\x01\n\x13ImpSubmitJobRequest\x12?\n\tInputPath\x18\x01 \x01(\x0b\x32,.Volcengine.Imp.Models.Business.ImpInputPath\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\"\"\n\x11ImpKillJobRequest\x12\r\n\x05JobId\x18\x01 \x01(\t\"\'\n\x15ImpRetrieveJobRequest\x12\x0e\n\x06JobIds\x18\x01 \x03(\tB\xc8\x01\n(com.volcengine.service.imp.model.requestB\nImpRequestP\x01Z@github.com/volcengine/volc-sdk-golang/service/imp/models/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x1fVolc\\Service\\Imp\\Models\\Request\xe2\x02#Volc\\Service\\Imp\\Models\\GPBMetadatab\x06proto3'
   ,
-  dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,imp_dot_business_dot_imp__common__pb2.DESCRIPTOR,])
+  dependencies=[imp_dot_business_dot_imp__common__pb2.DESCRIPTOR,])
 
 
 
@@ -69,8 +68,8 @@ _IMPSUBMITJOBREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=127,
-  serialized_end=252,
+  serialized_start=96,
+  serialized_end=224,
 )
 
 
@@ -101,8 +100,8 @@ _IMPKILLJOBREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=254,
-  serialized_end=288,
+  serialized_start=226,
+  serialized_end=260,
 )
 
 
@@ -133,11 +132,11 @@ _IMPRETRIEVEJOBREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=290,
-  serialized_end=329,
+  serialized_start=262,
+  serialized_end=301,
 )
 
-_IMPSUBMITJOBREQUEST.fields_by_name['InputPath'].message_type = imp_dot_business_dot_imp__common__pb2._INPUTPATH
+_IMPSUBMITJOBREQUEST.fields_by_name['InputPath'].message_type = imp_dot_business_dot_imp__common__pb2._IMPINPUTPATH
 DESCRIPTOR.message_types_by_name['ImpSubmitJobRequest'] = _IMPSUBMITJOBREQUEST
 DESCRIPTOR.message_types_by_name['ImpKillJobRequest'] = _IMPKILLJOBREQUEST
 DESCRIPTOR.message_types_by_name['ImpRetrieveJobRequest'] = _IMPRETRIEVEJOBREQUEST

@@ -8,10 +8,12 @@ try:
     from urllib.parse import urlencode
 except ImportError:
     from urllib import urlencode
+
 try:
-    import configparser
+    import configparser as configparser
 except ImportError:
-    import ConfigParser
+    import ConfigParser as configparser
+
 import requests
 
 from volcengine.Policy import SecurityToken2, InnerToken, ComplexEncoder

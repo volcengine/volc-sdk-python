@@ -904,6 +904,210 @@ class VodService(VodServiceConfig):
             return Parse(res, VodUpdateSubtitleInfoResponse(), True)
 
     #
+    # GetAuditFramesForAudit.
+    #
+    # @param request VodGetAuditFramesForAuditRequest
+    # @return VodGetAuditFramesForAuditResponse
+    # @raise Exception
+    def get_audit_frames_for_audit(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetAuditFramesForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAuditFramesForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAuditFramesForAuditResponse(), True)
+
+    #
+    # GetMLFramesForAudit.
+    #
+    # @param request VodGetMLFramesForAuditRequest
+    # @return VodGetMLFramesForAuditResponse
+    # @raise Exception
+    def get_m_l_frames_for_audit(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetMLFramesForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetMLFramesForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetMLFramesForAuditResponse(), True)
+
+    #
+    # GetBetterFramesForAudit.
+    #
+    # @param request VodGetBetterFramesForAuditRequest
+    # @return VodGetBetterFramesForAuditResponse
+    # @raise Exception
+    def get_better_frames_for_audit(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetBetterFramesForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetBetterFramesForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetBetterFramesForAuditResponse(), True)
+
+    #
+    # GetAudioInfoForAudit.
+    #
+    # @param request VodGetAudioInfoForAuditRequest
+    # @return VodGetAudioInfoForAuditResponse
+    # @raise Exception
+    def get_audio_info_for_audit(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetAudioInfoForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAudioInfoForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAudioInfoForAuditResponse(), True)
+
+    #
+    # GetAutomaticSpeechRecognitionForAudit.
+    #
+    # @param request VodGetAutomaticSpeechRecognitionForAuditRequest
+    # @return VodGetAutomaticSpeechRecognitionForAuditResponse
+    # @raise Exception
+    def get_automatic_speech_recognition_for_audit(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetAutomaticSpeechRecognitionForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAutomaticSpeechRecognitionForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAutomaticSpeechRecognitionForAuditResponse(), True)
+
+    #
+    # GetAudioEventDetectionForAudit.
+    #
+    # @param request VodGetAudioEventDetectionForAuditRequest
+    # @return VodGetAudioEventDetectionForAuditResponse
+    # @raise Exception
+    def get_audio_event_detection_for_audit(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetAudioEventDetectionForAudit", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAudioEventDetectionForAuditResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAudioEventDetectionForAuditResponse(), True)
+
+    #
     # CreateVideoClassification.
     #
     # @param request VodCreateVideoClassificationRequest
@@ -1142,6 +1346,74 @@ class VodService(VodServiceConfig):
             return Parse(res, VodListSpaceResponse(), True)
 
     #
+    # GetSpaceDetail.
+    #
+    # @param request VodGetSpaceDetailRequest
+    # @return VodGetSpaceDetailResponse
+    # @raise Exception
+    def get_space_detail(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetSpaceDetail", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetSpaceDetailResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetSpaceDetailResponse(), True)
+
+    #
+    # GetSpaceConfig.
+    #
+    # @param request VodGetSpaceConfigRequest
+    # @return VodGetSpaceConfigResponse
+    # @raise Exception
+    def get_space_config(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetSpaceConfig", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetSpaceConfigResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetSpaceConfigResponse(), True)
+
+    #
     # UpdateSpace.
     #
     # @param request VodUpdateSpaceRequest
@@ -1378,5 +1650,4 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodSetCallbackEventResponse(), True)
-
 
