@@ -11,7 +11,7 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from volcengine.base.models.base import base_pb2 as base_dot_base__pb2
+from volcengine.imp.models.base import base_pb2 as base_dot_base__pb2
 from volcengine.imp.models.business import imp_common_pb2 as imp_dot_business_dot_imp__common__pb2
 
 
@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n)com.volcengine.service.imp.model.responseB\013ImpResponseP\001ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/response\240\001\001\330\001\001\312\002 Volc\\Service\\Imp\\Models\\Response\342\002#Volc\\Service\\Imp\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1fimp/response/response_imp.proto\x12\x1eVolcengine.Imp.Models.Response\x1a\x0f\x62\x61se/base.proto\x1a\x1dimp/business/imp_common.proto\"o\n\x14ImpSubmitJobResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x0e\n\x06Result\x18\x02 \x01(\t\"]\n\x12ImpKillJobResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\x95\x02\n\x16ImpRetrieveJobResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12R\n\x06Result\x18\x02 \x03(\x0b\x32\x42.Volcengine.Imp.Models.Response.ImpRetrieveJobResponse.ResultEntry\x1a^\n\x0bResultEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12>\n\x05value\x18\x02 \x01(\x0b\x32/.Volcengine.Imp.Models.Business.ImpJobExecution:\x02\x38\x01\x42\xcc\x01\n)com.volcengine.service.imp.model.responseB\x0bImpResponseP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/response\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Imp\\Models\\Response\xe2\x02#Volc\\Service\\Imp\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1fimp/response/response_imp.proto\x12\x1eVolcengine.Imp.Models.Response\x1a\x0f\x62\x61se/base.proto\x1a\x1dimp/business/imp_common.proto\"n\n\x14ImpSubmitJobResponse\x12\x46\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32,.Volcengine.Vod.Models.Base.ResponseMetadata\x12\x0e\n\x06Result\x18\x02 \x01(\t\"\\\n\x12ImpKillJobResponse\x12\x46\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32,.Volcengine.Vod.Models.Base.ResponseMetadata\"\x91\x02\n\x16ImpRetrieveJobResponse\x12\x46\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32,.Volcengine.Vod.Models.Base.ResponseMetadata\x12R\n\x06Result\x18\x02 \x03(\x0b\x32\x42.Volcengine.Imp.Models.Response.ImpRetrieveJobResponse.ResultEntry\x1a[\n\x0bResultEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12;\n\x05value\x18\x02 \x01(\x0b\x32,.Volcengine.Imp.Models.Business.JobExecution:\x02\x38\x01\x42\xcc\x01\n)com.volcengine.service.imp.model.responseB\x0bImpResponseP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/response\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Imp\\Models\\Response\xe2\x02#Volc\\Service\\Imp\\Models\\GPBMetadatab\x06proto3'
   ,
   dependencies=[base_dot_base__pb2.DESCRIPTOR,imp_dot_business_dot_imp__common__pb2.DESCRIPTOR,])
 
@@ -63,7 +63,7 @@ _IMPSUBMITJOBRESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=115,
-  serialized_end=226,
+  serialized_end=225,
 )
 
 
@@ -94,8 +94,8 @@ _IMPKILLJOBRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=228,
-  serialized_end=321,
+  serialized_start=227,
+  serialized_end=319,
 )
 
 
@@ -133,8 +133,8 @@ _IMPRETRIEVEJOBRESPONSE_RESULTENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=507,
-  serialized_end=601,
+  serialized_start=504,
+  serialized_end=595,
 )
 
 _IMPRETRIEVEJOBRESPONSE = _descriptor.Descriptor(
@@ -171,13 +171,13 @@ _IMPRETRIEVEJOBRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=324,
-  serialized_end=601,
+  serialized_start=322,
+  serialized_end=595,
 )
 
 _IMPSUBMITJOBRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
 _IMPKILLJOBRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
-_IMPRETRIEVEJOBRESPONSE_RESULTENTRY.fields_by_name['value'].message_type = imp_dot_business_dot_imp__common__pb2._IMPJOBEXECUTION
+_IMPRETRIEVEJOBRESPONSE_RESULTENTRY.fields_by_name['value'].message_type = imp_dot_business_dot_imp__common__pb2._JOBEXECUTION
 _IMPRETRIEVEJOBRESPONSE_RESULTENTRY.containing_type = _IMPRETRIEVEJOBRESPONSE
 _IMPRETRIEVEJOBRESPONSE.fields_by_name['ResponseMetadata'].message_type = base_dot_base__pb2._RESPONSEMETADATA
 _IMPRETRIEVEJOBRESPONSE.fields_by_name['Result'].message_type = _IMPRETRIEVEJOBRESPONSE_RESULTENTRY

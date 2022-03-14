@@ -19,43 +19,43 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n)com.volcengine.service.imp.model.businessB\013ImpWorkflowP\001ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/business\240\001\001\330\001\001\312\002 Volc\\Service\\Imp\\Models\\Business\342\002#Volc\\Service\\Imp\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dimp/business/imp_common.proto\x12\x1eVolcengine.Imp.Models.Business\"U\n\x0cImpInputPath\x12\x0c\n\x04Type\x18\x01 \x01(\t\x12\x11\n\tTosBucket\x18\x02 \x01(\t\x12\x14\n\x0cVodSpaceName\x18\x03 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x04 \x01(\t\"\xcb\x01\n\x0cImpJobOutput\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x12\n\nProperties\x18\x02 \x01(\t\x12\x0c\n\x04\x43ode\x18\x03 \x01(\t\x12\x15\n\rFileMessageId\x18\x04 \x01(\t\x12\x10\n\x08TaskType\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x12\n\nActivityId\x18\x07 \x01(\t\x12\x11\n\tStartTime\x18\x08 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\t \x01(\t\x12\x14\n\x0cTemplateName\x18\n \x01(\t\"\xe9\x01\n\x0fImpJobExecution\x12\r\n\x05JobId\x18\x01 \x01(\t\x12?\n\tInputPath\x18\x02 \x01(\x0b\x32,.Volcengine.Imp.Models.Business.ImpInputPath\x12<\n\x06Output\x18\x03 \x03(\x0b\x32,.Volcengine.Imp.Models.Business.ImpJobOutput\x12\x0e\n\x06Status\x18\x04 \x01(\t\x12\x10\n\x08\x43reateAt\x18\x05 \x01(\t\x12\x12\n\nFinishedAt\x18\x06 \x01(\t\x12\x12\n\nTemplateId\x18\x07 \x01(\tB\xcc\x01\n)com.volcengine.service.imp.model.businessB\x0bImpWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Imp\\Models\\Business\xe2\x02#Volc\\Service\\Imp\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1dimp/business/imp_common.proto\x12\x1eVolcengine.Imp.Models.Business\"R\n\tInputPath\x12\x0c\n\x04Type\x18\x01 \x01(\t\x12\x11\n\tTosBucket\x18\x02 \x01(\t\x12\x14\n\x0cVodSpaceName\x18\x03 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x04 \x01(\t\"\xc8\x01\n\tJobOutput\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x12\n\nProperties\x18\x02 \x01(\t\x12\x0c\n\x04\x43ode\x18\x03 \x01(\t\x12\x15\n\rFileMessageId\x18\x04 \x01(\t\x12\x10\n\x08TaskType\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x12\n\nActivityId\x18\x07 \x01(\t\x12\x11\n\tStartTime\x18\x08 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\t \x01(\t\x12\x14\n\x0cTemplateName\x18\n \x01(\t\"\xe0\x01\n\x0cJobExecution\x12\r\n\x05JobId\x18\x01 \x01(\t\x12<\n\tInputPath\x18\x02 \x01(\x0b\x32).Volcengine.Imp.Models.Business.InputPath\x12\x39\n\x06Output\x18\x03 \x03(\x0b\x32).Volcengine.Imp.Models.Business.JobOutput\x12\x0e\n\x06Status\x18\x04 \x01(\t\x12\x10\n\x08\x43reateAt\x18\x05 \x01(\t\x12\x12\n\nFinishedAt\x18\x06 \x01(\t\x12\x12\n\nTemplateId\x18\x07 \x01(\tB\xcc\x01\n)com.volcengine.service.imp.model.businessB\x0bImpWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Imp\\Models\\Business\xe2\x02#Volc\\Service\\Imp\\Models\\GPBMetadatab\x06proto3'
 )
 
 
 
 
-_IMPINPUTPATH = _descriptor.Descriptor(
-  name='ImpInputPath',
-  full_name='Volcengine.Imp.Models.Business.ImpInputPath',
+_INPUTPATH = _descriptor.Descriptor(
+  name='InputPath',
+  full_name='Volcengine.Imp.Models.Business.InputPath',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Type', full_name='Volcengine.Imp.Models.Business.ImpInputPath.Type', index=0,
+      name='Type', full_name='Volcengine.Imp.Models.Business.InputPath.Type', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='TosBucket', full_name='Volcengine.Imp.Models.Business.ImpInputPath.TosBucket', index=1,
+      name='TosBucket', full_name='Volcengine.Imp.Models.Business.InputPath.TosBucket', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='VodSpaceName', full_name='Volcengine.Imp.Models.Business.ImpInputPath.VodSpaceName', index=2,
+      name='VodSpaceName', full_name='Volcengine.Imp.Models.Business.InputPath.VodSpaceName', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='FileId', full_name='Volcengine.Imp.Models.Business.ImpInputPath.FileId', index=3,
+      name='FileId', full_name='Volcengine.Imp.Models.Business.InputPath.FileId', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -74,83 +74,83 @@ _IMPINPUTPATH = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=65,
-  serialized_end=150,
+  serialized_end=147,
 )
 
 
-_IMPJOBOUTPUT = _descriptor.Descriptor(
-  name='ImpJobOutput',
-  full_name='Volcengine.Imp.Models.Business.ImpJobOutput',
+_JOBOUTPUT = _descriptor.Descriptor(
+  name='JobOutput',
+  full_name='Volcengine.Imp.Models.Business.JobOutput',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='TemplateId', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.TemplateId', index=0,
+      name='TemplateId', full_name='Volcengine.Imp.Models.Business.JobOutput.TemplateId', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Properties', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.Properties', index=1,
+      name='Properties', full_name='Volcengine.Imp.Models.Business.JobOutput.Properties', index=1,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Code', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.Code', index=2,
+      name='Code', full_name='Volcengine.Imp.Models.Business.JobOutput.Code', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='FileMessageId', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.FileMessageId', index=3,
+      name='FileMessageId', full_name='Volcengine.Imp.Models.Business.JobOutput.FileMessageId', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='TaskType', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.TaskType', index=4,
+      name='TaskType', full_name='Volcengine.Imp.Models.Business.JobOutput.TaskType', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Status', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.Status', index=5,
+      name='Status', full_name='Volcengine.Imp.Models.Business.JobOutput.Status', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='ActivityId', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.ActivityId', index=6,
+      name='ActivityId', full_name='Volcengine.Imp.Models.Business.JobOutput.ActivityId', index=6,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='StartTime', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.StartTime', index=7,
+      name='StartTime', full_name='Volcengine.Imp.Models.Business.JobOutput.StartTime', index=7,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='EndTime', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.EndTime', index=8,
+      name='EndTime', full_name='Volcengine.Imp.Models.Business.JobOutput.EndTime', index=8,
       number=9, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='TemplateName', full_name='Volcengine.Imp.Models.Business.ImpJobOutput.TemplateName', index=9,
+      name='TemplateName', full_name='Volcengine.Imp.Models.Business.JobOutput.TemplateName', index=9,
       number=10, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -168,63 +168,63 @@ _IMPJOBOUTPUT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=153,
-  serialized_end=356,
+  serialized_start=150,
+  serialized_end=350,
 )
 
 
-_IMPJOBEXECUTION = _descriptor.Descriptor(
-  name='ImpJobExecution',
-  full_name='Volcengine.Imp.Models.Business.ImpJobExecution',
+_JOBEXECUTION = _descriptor.Descriptor(
+  name='JobExecution',
+  full_name='Volcengine.Imp.Models.Business.JobExecution',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='JobId', full_name='Volcengine.Imp.Models.Business.ImpJobExecution.JobId', index=0,
+      name='JobId', full_name='Volcengine.Imp.Models.Business.JobExecution.JobId', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='InputPath', full_name='Volcengine.Imp.Models.Business.ImpJobExecution.InputPath', index=1,
+      name='InputPath', full_name='Volcengine.Imp.Models.Business.JobExecution.InputPath', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Output', full_name='Volcengine.Imp.Models.Business.ImpJobExecution.Output', index=2,
+      name='Output', full_name='Volcengine.Imp.Models.Business.JobExecution.Output', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='Status', full_name='Volcengine.Imp.Models.Business.ImpJobExecution.Status', index=3,
+      name='Status', full_name='Volcengine.Imp.Models.Business.JobExecution.Status', index=3,
       number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='CreateAt', full_name='Volcengine.Imp.Models.Business.ImpJobExecution.CreateAt', index=4,
+      name='CreateAt', full_name='Volcengine.Imp.Models.Business.JobExecution.CreateAt', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='FinishedAt', full_name='Volcengine.Imp.Models.Business.ImpJobExecution.FinishedAt', index=5,
+      name='FinishedAt', full_name='Volcengine.Imp.Models.Business.JobExecution.FinishedAt', index=5,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='TemplateId', full_name='Volcengine.Imp.Models.Business.ImpJobExecution.TemplateId', index=6,
+      name='TemplateId', full_name='Volcengine.Imp.Models.Business.JobExecution.TemplateId', index=6,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -242,37 +242,37 @@ _IMPJOBEXECUTION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=359,
-  serialized_end=592,
+  serialized_start=353,
+  serialized_end=577,
 )
 
-_IMPJOBEXECUTION.fields_by_name['InputPath'].message_type = _IMPINPUTPATH
-_IMPJOBEXECUTION.fields_by_name['Output'].message_type = _IMPJOBOUTPUT
-DESCRIPTOR.message_types_by_name['ImpInputPath'] = _IMPINPUTPATH
-DESCRIPTOR.message_types_by_name['ImpJobOutput'] = _IMPJOBOUTPUT
-DESCRIPTOR.message_types_by_name['ImpJobExecution'] = _IMPJOBEXECUTION
+_JOBEXECUTION.fields_by_name['InputPath'].message_type = _INPUTPATH
+_JOBEXECUTION.fields_by_name['Output'].message_type = _JOBOUTPUT
+DESCRIPTOR.message_types_by_name['InputPath'] = _INPUTPATH
+DESCRIPTOR.message_types_by_name['JobOutput'] = _JOBOUTPUT
+DESCRIPTOR.message_types_by_name['JobExecution'] = _JOBEXECUTION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-ImpInputPath = _reflection.GeneratedProtocolMessageType('ImpInputPath', (_message.Message,), {
-  'DESCRIPTOR' : _IMPINPUTPATH,
+InputPath = _reflection.GeneratedProtocolMessageType('InputPath', (_message.Message,), {
+  'DESCRIPTOR' : _INPUTPATH,
   '__module__' : 'imp.business.imp_common_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.ImpInputPath)
+  # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.InputPath)
   })
-_sym_db.RegisterMessage(ImpInputPath)
+_sym_db.RegisterMessage(InputPath)
 
-ImpJobOutput = _reflection.GeneratedProtocolMessageType('ImpJobOutput', (_message.Message,), {
-  'DESCRIPTOR' : _IMPJOBOUTPUT,
+JobOutput = _reflection.GeneratedProtocolMessageType('JobOutput', (_message.Message,), {
+  'DESCRIPTOR' : _JOBOUTPUT,
   '__module__' : 'imp.business.imp_common_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.ImpJobOutput)
+  # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.JobOutput)
   })
-_sym_db.RegisterMessage(ImpJobOutput)
+_sym_db.RegisterMessage(JobOutput)
 
-ImpJobExecution = _reflection.GeneratedProtocolMessageType('ImpJobExecution', (_message.Message,), {
-  'DESCRIPTOR' : _IMPJOBEXECUTION,
+JobExecution = _reflection.GeneratedProtocolMessageType('JobExecution', (_message.Message,), {
+  'DESCRIPTOR' : _JOBEXECUTION,
   '__module__' : 'imp.business.imp_common_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.ImpJobExecution)
+  # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.JobExecution)
   })
-_sym_db.RegisterMessage(ImpJobExecution)
+_sym_db.RegisterMessage(JobExecution)
 
 
 DESCRIPTOR._options = None
