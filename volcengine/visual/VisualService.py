@@ -595,14 +595,16 @@ class VisualService(Service):
 
     def video_highlight_extraction_submit_task(self, form):
         try:
-            res_json = self.common_handler("VideoHighlightExtractionSubmitTask", form)
+            res_json = self.common_handler(
+                "VideoHighlightExtractionSubmitTask", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def video_highlight_extraction_query_task(self, form):
+    def video_highlight_extraction_query_task(self, params):
         try:
-            res_json = self.common_handler("VideoHighlightExtractionQueryTask", form)
+            res_json = self.common_get_handler(
+                "VideoHighlightExtractionQueryTask", params)
             return res_json
         except Exception as e:
             raise Exception(str(e))
