@@ -98,7 +98,7 @@ class VisualService(Service):
             "VideoUpload": ApiInfo("POST", "/", {"Action": "VideoUpload", "Version": "2020-08-26"}, {}, {}),
             "VideoCoverSelection": ApiInfo("POST", "/", {"Action": "VideoCoverSelection", "Version": "2020-08-26"}, {}, {}),
             "VideoHighlightExtractionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionSubmitTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoHighlightExtractionQueryTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
+            "VideoHighlightExtractionQueryTask": ApiInfo("GET", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
 
         }
         return api_info
