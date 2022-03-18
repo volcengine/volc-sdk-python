@@ -13,6 +13,7 @@ if __name__ == '__main__':
     # vod_service.set_ak('your ak')
     # vod_service.set_sk('your sk')
 
+    '''
     try:
         vids = 'vid1,vid2'
         req = VodGetMediaInfosRequest()
@@ -208,6 +209,7 @@ if __name__ == '__main__':
             print(resp11.ResponseMetadata.Error)
 
     print('*' * 100)
+    '''
 
     try:
         req12 = VodListSnapshotsRequest()
