@@ -5,7 +5,7 @@ from volcengine.vod.VodService import VodService
 from volcengine.vod.models.request.request_vod_pb2 import VodGetMediaInfosRequest, VodGetRecommendedPosterRequest, \
     VodUpdateMediaPublishStatusRequest, VodUpdateMediaInfoRequest, VodDeleteMediaRequest, VodDeleteTranscodesRequest, \
     VodGetMediaListRequest, VodCreateVideoClassificationRequest, VodUpdateVideoClassificationRequest, \
-    VodDeleteVideoClassificationRequest, VodListVideoClassificationsRequest
+    VodDeleteVideoClassificationRequest, VodListVideoClassificationsRequest, VodListSnapshotsRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -13,6 +13,7 @@ if __name__ == '__main__':
     # vod_service.set_ak('your ak')
     # vod_service.set_sk('your sk')
 
+    '''
     try:
         vids = 'vid1,vid2'
         req = VodGetMediaInfosRequest()
@@ -206,5 +207,21 @@ if __name__ == '__main__':
             print(resp11.Result)
         else:
             print(resp11.ResponseMetadata.Error)
+
+    print('*' * 100)
+    '''
+
+    try:
+        req12 = VodListSnapshotsRequest()
+        req12.Vid = "your vid"
+        resp12 = vod_service.list_snapshots(req12)
+    except Exception:
+        raise
+    else:
+        print(resp12)
+        if resp12.ResponseMetadata.Error.Code == '':
+            print(resp12.Result)
+        else:
+            print(resp12.ResponseMetadata.Error)
 
     print('*' * 100)
