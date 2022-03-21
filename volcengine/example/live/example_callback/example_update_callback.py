@@ -14,10 +14,8 @@ if __name__ == '__main__':
         "Vhost": "vhost",
         "CallbackDetailList": [
             {
-                "Duration": 10,
-                "Splice": 1,
-                "RecordObject": "",
-                "Format": "",
+                "CallbackType": "callBackType",
+                "URL":"demoUrl",
             },
         ],
     }
