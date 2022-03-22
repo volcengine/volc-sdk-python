@@ -13,5 +13,5 @@ if __name__ == '__main__':
         "App": "app",
         "SceneType": "push",
     }
-    resp = live_service.enable_domain(body)
+    resp = live_service.enable_auth(body)
     print(resp)

@@ -14,5 +14,5 @@ if __name__ == '__main__':
         "App": "app",
         "SceneType": "push",
     }
-    resp = live_service.disable_domain(body)
+    resp = live_service.disable_auth(body)
     print(resp)
