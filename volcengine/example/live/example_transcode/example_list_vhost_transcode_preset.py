@@ -12,5 +12,5 @@ if __name__ == '__main__':
     body = {
         "Vhost": "",
     }
-    resp = live_service.list_vhost_record_preset(body)
+    resp = live_service.list_vhost_transcode_preset(body)
     print(resp)

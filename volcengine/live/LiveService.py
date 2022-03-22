@@ -9,7 +9,6 @@ from volcengine.base.Service import Service
 from volcengine.const.Const import REGION_CN_NORTH1
 
 LIVE_SERVICE_VERSION = "2020-08-01"
-
 service_info_map = {
     REGION_CN_NORTH1: ServiceInfo("live.volcengineapi.com", {'Accept': 'application/json', },
                                   Credentials('', '', "live", REGION_CN_NORTH1), 5, 5, "https"),
@@ -403,6 +402,14 @@ class LiveService(Service):
 
     def delete_transcode_preset(self, params):
         action = "DeleteTranscodePreset"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def list_vhost_transcode_preset(self, params):
+        action = "ListVhostTransCodePreset"
         res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
