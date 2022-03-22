@@ -95,7 +95,8 @@ class VisualService(Service):
             "OCRRuanzhu": ApiInfo("POST", "/", {"Action": "OCRRuanzhu", "Version": "2020-12-21"}, {}, {}),
             "OCRCosmeticProduct": ApiInfo("POST", "/", {"Action": "OCRCosmeticProduct", "Version": "2020-12-21"}, {}, {}),
             "OCRPdf": ApiInfo("POST", "/", {"Action": "OCRPdf", "Version": "2021-08-23"}, {}, {}),
-
+            "OCRTable": ApiInfo("POST", "/", {"Action": "OCRTable", "Version": "2021-08-23"}, {}, {}),
+            
         }
         return api_info
 
@@ -571,6 +572,13 @@ class VisualService(Service):
     def ocr_pdf(self, form):
         try:
             res_json = self.common_handler("OCRPdf", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_table(self, form):
+        try:
+            res_json = self.common_handler("OCRTable", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
