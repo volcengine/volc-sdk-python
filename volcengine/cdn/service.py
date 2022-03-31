@@ -50,6 +50,16 @@ api_info = {
     # 获取访问统计的排行数据: https://www.volcengine.com/docs/6454/96145
     "DescribeEdgeTopNrtData": ApiInfo("POST", "/", {"Action": "DescribeEdgeTopNrtData", "Version": SERVICE_VERSION}, {},
                                       {}),
+    # 获取回源数据的统计排序: https://www.volcengine.com/docs/6454/104892
+    "DescribeOriginTopNrtData": ApiInfo("POST", "/", {"Action": "DescribeOriginTopNrtData", "Version": SERVICE_VERSION},
+                                        {}, {}),
+    # 获取访问状态码的统计排序: https://www.volcengine.com/docs/6454/104888
+    "DescribeEdgeTopStatusCode": ApiInfo("POST", "/",
+                                         {"Action": "DescribeEdgeTopStatusCode", "Version": SERVICE_VERSION}, {}, {}),
+    # 获取回源状态码的统计排序: https://www.volcengine.com/docs/6454/104891
+    "DescribeOriginTopStatusCode": ApiInfo("POST", "/",
+                                           {"Action": "DescribeOriginTopStatusCode", "Version": SERVICE_VERSION}, {},
+                                           {}),
     # 获取热点及访客排行数据: https://www.volcengine.com/docs/6454/79322
     "DescribeEdgeTopStatisticalData": ApiInfo("POST", "/",
                                               {"Action": "DescribeEdgeTopStatisticalData", "Version": SERVICE_VERSION},
@@ -260,6 +270,36 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "DescribeEdgeTopNrtData"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_origin_top_nrt_data(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeOriginTopNrtData"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_edge_top_status_code(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeEdgeTopStatusCode"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_origin_top_status_code(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeOriginTopStatusCode"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
