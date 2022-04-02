@@ -136,7 +136,7 @@ class VodService(VodServiceConfig):
                 return base64.b64encode(data.decode('utf-8'))
 
     def upload_media(self, request):
-        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "")
+        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "", request.FileName)
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
         req.SessionKey = session_key
@@ -148,12 +148,13 @@ class VodService(VodServiceConfig):
             raise Exception(resp.ResponseMetadata.Error)
         return resp
 
-    def upload_tob(self, space_name, file_path, file_type):
+    def upload_tob(self, space_name, file_path, file_type, file_name):
         if not os.path.isfile(file_path):
             raise Exception("no such file on file path")
         apply_req = VodApplyUploadInfoRequest()
         apply_req.SpaceName = space_name
         apply_req.FileType = file_type
+        apply_req.FileName = file_name
         resp = self.apply_upload_info(apply_req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
@@ -277,7 +278,8 @@ class VodService(VodServiceConfig):
         return self.get_upload_sts2_with_expired_time(60 * 60)
 
     def upload_material(self, request):
-        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType)
+        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType,
+                                                      request.FileName)
 
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
@@ -1446,4 +1448,3 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodSetCallbackEventResponse(), True)
-
