@@ -157,4 +157,6 @@ if __name__ == '__main__':
     # 化妆品生产许可证
     # resp = visual_service.ocr_cosmetic_product(form)
 
+    # 表格识别
+    # resp = visual_service.ocr_table(form)
     print(resp)
