@@ -136,7 +136,7 @@ class VodService(VodServiceConfig):
                 return base64.b64encode(data.decode('utf-8'))
 
     def upload_media(self, request):
-        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "")
+        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "", request.FileName)
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
         req.SessionKey = session_key
@@ -148,12 +148,13 @@ class VodService(VodServiceConfig):
             raise Exception(resp.ResponseMetadata.Error)
         return resp
 
-    def upload_tob(self, space_name, file_path, file_type):
+    def upload_tob(self, space_name, file_path, file_type, file_name):
         if not os.path.isfile(file_path):
             raise Exception("no such file on file path")
         apply_req = VodApplyUploadInfoRequest()
         apply_req.SpaceName = space_name
         apply_req.FileType = file_type
+        apply_req.FileName = file_name
         resp = self.apply_upload_info(apply_req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
@@ -277,7 +278,8 @@ class VodService(VodServiceConfig):
         return self.get_upload_sts2_with_expired_time(60 * 60)
 
     def upload_material(self, request):
-        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType)
+        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType,
+                                                              request.FileName)
 
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
@@ -1414,40 +1416,6 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetSpaceDetailResponse(), True)
 
     #
-    # GetSpaceConfig.
-    #
-    # @param request VodGetSpaceConfigRequest
-    # @return VodGetSpaceConfigResponse
-    # @raise Exception
-    def get_space_config(self, request):
-        try:
-            if sys.version_info[0] == 3:
-                jsonData = MessageToJson(request, False, True)
-                params = json.loads(jsonData)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            else:
-                params = MessageToDict(request, False, True)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str, unicode)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            res = self.get("GetSpaceConfig", params)
-        except Exception as Argument:
-            try:
-                resp = Parse(Argument.__str__(), VodGetSpaceConfigResponse(), True)
-            except Exception:
-                raise Argument
-            else:
-                raise Exception(resp.ResponseMetadata.Error.Code)
-        else:
-            return Parse(res, VodGetSpaceConfigResponse(), True)
-
-    #
     # UpdateSpace.
     #
     # @param request VodUpdateSpaceRequest
@@ -1616,6 +1584,40 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodCreateCdnPreloadTaskResponse(), True)
+
+    #
+    # ListCdnAccessLog.
+    #
+    # @param request VodListCdnAccessLogRequest
+    # @return VodListCdnAccessLogResponse
+    # @raise Exception
+    def list_cdn_access_log(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ListCdnAccessLog", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodListCdnAccessLogResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodListCdnAccessLogResponse(), True)
 
     #
     # AddCallbackSubscription.
