@@ -78,6 +78,9 @@ api_info = {
                 "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageOCR":
         ApiInfo("POST", "/", {"Action": "GetImageOCR",
+                "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetSegmentImage":
+        ApiInfo("POST", "/", {"Action": "GetSegmentImage",
                 "Version": IMAGEX_API_VERSION}, {}, {})
 }
 
@@ -279,6 +282,13 @@ class ImageXService(Service):
         return res_json
 
     def get_image_ocr(self, action, params):
+        res = self.post(action, params, {})
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def get_image_segment(self, action, params):
         res = self.post(action, params, {})
         if res == '':
             raise Exception("%s: empty response" % action)
