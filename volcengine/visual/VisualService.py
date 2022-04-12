@@ -95,11 +95,10 @@ class VisualService(Service):
             "OCRRuanzhu": ApiInfo("POST", "/", {"Action": "OCRRuanzhu", "Version": "2020-12-21"}, {}, {}),
             "OCRCosmeticProduct": ApiInfo("POST", "/", {"Action": "OCRCosmeticProduct", "Version": "2020-12-21"}, {}, {}),
             "OCRPdf": ApiInfo("POST", "/", {"Action": "OCRPdf", "Version": "2021-08-23"}, {}, {}),
-            "VideoUpload": ApiInfo("POST", "/", {"Action": "VideoUpload", "Version": "2020-08-26"}, {}, {}),
+            "OCRTable": ApiInfo("POST", "/", {"Action": "OCRTable", "Version": "2021-08-23"}, {}, {}),
             "VideoCoverSelection": ApiInfo("POST", "/", {"Action": "VideoCoverSelection", "Version": "2020-08-26"}, {}, {}),
             "VideoHighlightExtractionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionSubmitTask", "Version": "2020-08-26"}, {}, {}),
             "VideoHighlightExtractionQueryTask": ApiInfo("GET", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
-
         }
         return api_info
 
@@ -579,9 +578,9 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
-    def video_upload(self, form):
+    def ocr_table(self, form):
         try:
-            res_json = self.common_handler("VideoUpload", form)
+            res_json = self.common_handler("OCRTable", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))

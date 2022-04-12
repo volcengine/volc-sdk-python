@@ -1,5 +1,13 @@
 ### Change log
 
+2022-03-31 Bumped to version v1.0.39
+- Added notify client
+- Added api for cr
+- Upgraded api for vod
+
+2022-03-18 Bumped to version v1.0.38
+- Added some apis of space\callback\cdn for vod
+
 2022-03-08 Bumped to version v1.0.37
 - fixed configparser import
 
