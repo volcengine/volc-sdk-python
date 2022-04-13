@@ -13,7 +13,6 @@ if __name__ == '__main__':
     visual_service.set_sk('sk')
 
     form = {
-        "video_id": "get from upload_video resp"
         "video_url": ""
     }
 
