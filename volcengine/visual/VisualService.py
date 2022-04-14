@@ -96,7 +96,9 @@ class VisualService(Service):
             "OCRCosmeticProduct": ApiInfo("POST", "/", {"Action": "OCRCosmeticProduct", "Version": "2020-12-21"}, {}, {}),
             "OCRPdf": ApiInfo("POST", "/", {"Action": "OCRPdf", "Version": "2021-08-23"}, {}, {}),
             "OCRTable": ApiInfo("POST", "/", {"Action": "OCRTable", "Version": "2021-08-23"}, {}, {}),
-            
+            "VideoCoverSelection": ApiInfo("POST", "/", {"Action": "VideoCoverSelection", "Version": "2020-08-26"}, {}, {}),
+            "VideoHighlightExtractionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionSubmitTask", "Version": "2020-08-26"}, {}, {}),
+            "VideoHighlightExtractionQueryTask": ApiInfo("GET", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -579,6 +581,29 @@ class VisualService(Service):
     def ocr_table(self, form):
         try:
             res_json = self.common_handler("OCRTable", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_cover_selection(self, form):
+        try:
+            res_json = self.common_handler("VideoCoverSelection", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_highlight_extraction_submit_task(self, form):
+        try:
+            res_json = self.common_handler(
+                "VideoHighlightExtractionSubmitTask", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_highlight_extraction_query_task(self, params):
+        try:
+            res_json = self.common_get_handler(
+                "VideoHighlightExtractionQueryTask", params)
             return res_json
         except Exception as e:
             raise Exception(str(e))
