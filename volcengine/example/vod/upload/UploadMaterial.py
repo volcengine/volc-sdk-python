@@ -72,6 +72,7 @@ if __name__ == '__main__':
         req.FilePath = file_path
         req.Functions = json.dumps([get_meta_function, snapshot_function, add_option_function])
         req.CallbackArgs = ''
+        req.FileName = ''
 
         resp = vod_service.upload_material(req)
     except Exception:
@@ -111,6 +112,7 @@ if __name__ == '__main__':
         req.FilePath = file_path
         req.Functions = json.dumps([get_meta_function, add_option_function])
         req.CallbackArgs = ''
+        req.FileName = ''
 
         resp = vod_service.upload_material(req)
     except Exception:
