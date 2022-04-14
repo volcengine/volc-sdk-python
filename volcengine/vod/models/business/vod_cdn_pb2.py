@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n)com.volcengine.service.vod.model.businessB\006VodCdnP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1avod/business/vod_cdn.proto\x12\x1eVolcengine.Vod.Models.Business\"\xcd\x01\n\x13VodDomainConfigInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12P\n\x10PlayInstanceInfo\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodDomainInstanceInfos\x12Q\n\x11ImageInstanceInfo\x18\x03 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodDomainInstanceInfos\"\xb5\x01\n\x16VodDomainInstanceInfos\x12L\n\rByteInstances\x18\x01 \x03(\x0b\x32\x35.Volcengine.Vod.Models.Business.VodDomainInstanceInfo\x12M\n\x0eOtherInstances\x18\x02 \x03(\x0b\x32\x35.Volcengine.Vod.Models.Business.VodDomainInstanceInfo\"\x9a\x01\n\x15VodDomainInstanceInfo\x12\x12\n\nInstanceId\x18\x01 \x01(\t\x12?\n\x07\x44omains\x18\x02 \x03(\x0b\x32..Volcengine.Vod.Models.Business.VodDomainoInfo\x12\x16\n\x0e\x43\x61nSelfEditing\x18\x03 \x01(\x08\x12\x14\n\x0c\x43onfigStatus\x18\x04 \x01(\t\"\xe1\x01\n\x0eVodDomainoInfo\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\x12\r\n\x05\x43name\x18\x02 \x01(\t\x12\x14\n\x0c\x43onfigStatus\x18\x03 \x01(\t\x12\x13\n\x0b\x43nameStatus\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\x12M\n\x0b\x43\x65rtificate\x18\x06 \x01(\x0b\x32\x38.Volcengine.Vod.Models.Business.VodDomainCertificateInfo\x12\x12\n\nCreateTime\x18\x07 \x01(\t\x12\x12\n\nUpdateTime\x18\x08 \x01(\t\"\x8f\x01\n\x18VodDomainCertificateInfo\x12\x15\n\rCertificateId\x18\x01 \x01(\t\x12\x17\n\x0f\x43\x65rtificateName\x18\x02 \x01(\t\x12\x16\n\x0e\x43\x65rtificatePub\x18\x03 \x01(\t\x12\x16\n\x0e\x43\x65rtificatePri\x18\x04 \x01(\t\x12\x13\n\x0bHttpsStatus\x18\x05 \x01(\t\"(\n\x16VodCreateCdnTaskResult\x12\x0e\n\x06TaskId\x18\x01 \x01(\tB\xca\x01\n)com.volcengine.service.vod.model.businessB\x06VodCdnP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1avod/business/vod_cdn.proto\x12\x1eVolcengine.Vod.Models.Business\"\xcd\x01\n\x13VodDomainConfigInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12P\n\x10PlayInstanceInfo\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodDomainInstanceInfos\x12Q\n\x11ImageInstanceInfo\x18\x03 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodDomainInstanceInfos\"\xb5\x01\n\x16VodDomainInstanceInfos\x12L\n\rByteInstances\x18\x01 \x03(\x0b\x32\x35.Volcengine.Vod.Models.Business.VodDomainInstanceInfo\x12M\n\x0eOtherInstances\x18\x02 \x03(\x0b\x32\x35.Volcengine.Vod.Models.Business.VodDomainInstanceInfo\"\x9a\x01\n\x15VodDomainInstanceInfo\x12\x12\n\nInstanceId\x18\x01 \x01(\t\x12?\n\x07\x44omains\x18\x02 \x03(\x0b\x32..Volcengine.Vod.Models.Business.VodDomainoInfo\x12\x16\n\x0e\x43\x61nSelfEditing\x18\x03 \x01(\x08\x12\x14\n\x0c\x43onfigStatus\x18\x04 \x01(\t\"\xe1\x01\n\x0eVodDomainoInfo\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\x12\r\n\x05\x43name\x18\x02 \x01(\t\x12\x14\n\x0c\x43onfigStatus\x18\x03 \x01(\t\x12\x13\n\x0b\x43nameStatus\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\x12M\n\x0b\x43\x65rtificate\x18\x06 \x01(\x0b\x32\x38.Volcengine.Vod.Models.Business.VodDomainCertificateInfo\x12\x12\n\nCreateTime\x18\x07 \x01(\t\x12\x12\n\nUpdateTime\x18\x08 \x01(\t\"\x8f\x01\n\x18VodDomainCertificateInfo\x12\x15\n\rCertificateId\x18\x01 \x01(\t\x12\x17\n\x0f\x43\x65rtificateName\x18\x02 \x01(\t\x12\x16\n\x0e\x43\x65rtificatePub\x18\x03 \x01(\t\x12\x16\n\x0e\x43\x65rtificatePri\x18\x04 \x01(\t\x12\x13\n\x0bHttpsStatus\x18\x05 \x01(\t\"(\n\x16VodCreateCdnTaskResult\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\"s\n\x0eVodContentInfo\x12\x0e\n\x06ItemId\x18\x01 \x01(\t\x12\x0b\n\x03Url\x18\x02 \x01(\t\x12\x0e\n\x06Status\x18\x03 \x01(\t\x12\x10\n\x08TaskType\x18\x04 \x01(\t\x12\x12\n\nCreateTime\x18\x05 \x01(\x01\x12\x0e\n\x06TaskId\x18\x06 \x01(\t\"\x8f\x01\n\x10VodCdnTaskResult\x12\x12\n\nTotalCount\x18\x01 \x01(\x05\x12\x0f\n\x07PageNum\x18\x02 \x01(\x05\x12\x10\n\x08PageSize\x18\x03 \x01(\x05\x12\x44\n\x0c\x43ontentInfos\x18\x04 \x03(\x0b\x32..Volcengine.Vod.Models.Business.VodContentInfoB\xca\x01\n)com.volcengine.service.vod.model.businessB\x06VodCdnP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
 )
 
 
@@ -335,18 +335,141 @@ _VODCREATECDNTASKRESULT = _descriptor.Descriptor(
   serialized_end=1025,
 )
 
+
+_VODCONTENTINFO = _descriptor.Descriptor(
+  name='VodContentInfo',
+  full_name='Volcengine.Vod.Models.Business.VodContentInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ItemId', full_name='Volcengine.Vod.Models.Business.VodContentInfo.ItemId', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Url', full_name='Volcengine.Vod.Models.Business.VodContentInfo.Url', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Status', full_name='Volcengine.Vod.Models.Business.VodContentInfo.Status', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='TaskType', full_name='Volcengine.Vod.Models.Business.VodContentInfo.TaskType', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='CreateTime', full_name='Volcengine.Vod.Models.Business.VodContentInfo.CreateTime', index=4,
+      number=5, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='TaskId', full_name='Volcengine.Vod.Models.Business.VodContentInfo.TaskId', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1027,
+  serialized_end=1142,
+)
+
+
+_VODCDNTASKRESULT = _descriptor.Descriptor(
+  name='VodCdnTaskResult',
+  full_name='Volcengine.Vod.Models.Business.VodCdnTaskResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='TotalCount', full_name='Volcengine.Vod.Models.Business.VodCdnTaskResult.TotalCount', index=0,
+      number=1, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='PageNum', full_name='Volcengine.Vod.Models.Business.VodCdnTaskResult.PageNum', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='PageSize', full_name='Volcengine.Vod.Models.Business.VodCdnTaskResult.PageSize', index=2,
+      number=3, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ContentInfos', full_name='Volcengine.Vod.Models.Business.VodCdnTaskResult.ContentInfos', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1145,
+  serialized_end=1288,
+)
+
 _VODDOMAINCONFIGINFO.fields_by_name['PlayInstanceInfo'].message_type = _VODDOMAININSTANCEINFOS
 _VODDOMAINCONFIGINFO.fields_by_name['ImageInstanceInfo'].message_type = _VODDOMAININSTANCEINFOS
 _VODDOMAININSTANCEINFOS.fields_by_name['ByteInstances'].message_type = _VODDOMAININSTANCEINFO
 _VODDOMAININSTANCEINFOS.fields_by_name['OtherInstances'].message_type = _VODDOMAININSTANCEINFO
 _VODDOMAININSTANCEINFO.fields_by_name['Domains'].message_type = _VODDOMAINOINFO
 _VODDOMAINOINFO.fields_by_name['Certificate'].message_type = _VODDOMAINCERTIFICATEINFO
+_VODCDNTASKRESULT.fields_by_name['ContentInfos'].message_type = _VODCONTENTINFO
 DESCRIPTOR.message_types_by_name['VodDomainConfigInfo'] = _VODDOMAINCONFIGINFO
 DESCRIPTOR.message_types_by_name['VodDomainInstanceInfos'] = _VODDOMAININSTANCEINFOS
 DESCRIPTOR.message_types_by_name['VodDomainInstanceInfo'] = _VODDOMAININSTANCEINFO
 DESCRIPTOR.message_types_by_name['VodDomainoInfo'] = _VODDOMAINOINFO
 DESCRIPTOR.message_types_by_name['VodDomainCertificateInfo'] = _VODDOMAINCERTIFICATEINFO
 DESCRIPTOR.message_types_by_name['VodCreateCdnTaskResult'] = _VODCREATECDNTASKRESULT
+DESCRIPTOR.message_types_by_name['VodContentInfo'] = _VODCONTENTINFO
+DESCRIPTOR.message_types_by_name['VodCdnTaskResult'] = _VODCDNTASKRESULT
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 VodDomainConfigInfo = _reflection.GeneratedProtocolMessageType('VodDomainConfigInfo', (_message.Message,), {
@@ -390,6 +513,20 @@ VodCreateCdnTaskResult = _reflection.GeneratedProtocolMessageType('VodCreateCdnT
   # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodCreateCdnTaskResult)
   })
 _sym_db.RegisterMessage(VodCreateCdnTaskResult)
+
+VodContentInfo = _reflection.GeneratedProtocolMessageType('VodContentInfo', (_message.Message,), {
+  'DESCRIPTOR' : _VODCONTENTINFO,
+  '__module__' : 'vod.business.vod_cdn_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodContentInfo)
+  })
+_sym_db.RegisterMessage(VodContentInfo)
+
+VodCdnTaskResult = _reflection.GeneratedProtocolMessageType('VodCdnTaskResult', (_message.Message,), {
+  'DESCRIPTOR' : _VODCDNTASKRESULT,
+  '__module__' : 'vod.business.vod_cdn_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodCdnTaskResult)
+  })
+_sym_db.RegisterMessage(VodCdnTaskResult)
 
 
 DESCRIPTOR._options = None

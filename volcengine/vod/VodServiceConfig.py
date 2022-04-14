@@ -90,6 +90,7 @@ class VodServiceConfig(Service):
             "ListDomain": ApiInfo("GET", "/", {"Action": "ListDomain", "Version": "2021-01-01"}, {}, {}),
             "CreateCdnRefreshTask": ApiInfo("GET", "/", {"Action": "CreateCdnRefreshTask", "Version": "2021-01-01"}, {}, {}),
             "CreateCdnPreloadTask": ApiInfo("GET", "/", {"Action": "CreateCdnPreloadTask", "Version": "2021-01-01"}, {}, {}),
+            "ListCdnTasks": ApiInfo("GET", "/", {"Action": "ListCdnTasks", "Version": "2021-01-01"}, {}, {}),
             # 回调管理
             "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
             "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2021-01-01"}, {}, {}),

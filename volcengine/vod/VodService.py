@@ -279,7 +279,7 @@ class VodService(VodServiceConfig):
 
     def upload_material(self, request):
         oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType,
-                                                      request.FileName)
+                                                              request.FileName)
 
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
@@ -1618,6 +1618,40 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodCreateCdnPreloadTaskResponse(), True)
+
+    #
+    # ListCdnTasks.
+    #
+    # @param request VodListCdnTasksRequest
+    # @return VodListCdnTasksResponse
+    # @raise Exception
+    def list_cdn_tasks(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ListCdnTasks", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodListCdnTasksResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodListCdnTasksResponse(), True)
 
     #
     # AddCallbackSubscription.
