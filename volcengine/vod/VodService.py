@@ -1720,4 +1720,3 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodSetCallbackEventResponse(), True)
-
