@@ -9,20 +9,20 @@ from volcengine.ServiceInfo import ServiceInfo
 from requests import exceptions
 
 
-class BasicImageRegistryService(Service):
+class ImageRegistryService(Service):
     _instance_lock = threading.Lock()
 
     def __new__(cls, *args, **kwargs):
-        if not hasattr(BasicImageRegistryService, "_instance"):
-            with BasicImageRegistryService._instance_lock:
-                if not hasattr(BasicImageRegistryService, "_instance"):
-                    BasicImageRegistryService._instance = object.__new__(cls)
-        return BasicImageRegistryService._instance
+        if not hasattr(ImageRegistryService, "_instance"):
+            with ImageRegistryService._instance_lock:
+                if not hasattr(ImageRegistryService, "_instance"):
+                    ImageRegistryService._instance = object.__new__(cls)
+        return ImageRegistryService._instance
 
     def __init__(self):
-        self.service_info = BasicImageRegistryService.get_service_info()
-        self.api_info = BasicImageRegistryService.get_api_info()
-        super(BasicImageRegistryService, self).__init__(
+        self.service_info = ImageRegistryService.get_service_info()
+        self.api_info = ImageRegistryService.get_api_info()
+        super(ImageRegistryService, self).__init__(
             self.service_info, self.api_info)
 
     @staticmethod
@@ -68,7 +68,7 @@ class BasicImageRegistryService(Service):
         return api_info
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def delete_namespace(self, params, body):
+    def delete_namespace_basic(self, params, body):
         res = self.json("DeleteNamespaceBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -76,7 +76,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def create_namespace(self, params, body):
+    def create_namespace_basic(self, params, body):
         res = self.json("CreateNamespaceBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -84,7 +84,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def validate_namespace(self, params, body):
+    def validate_namespace_basic(self, params, body):
         res = self.json("ValidateNamespaceBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -92,7 +92,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def get_namespace(self, params, body):
+    def get_namespace_basic(self, params, body):
         res = self.json("GetNamespaceBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -100,7 +100,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def list_namespaces(self, params, body):
+    def list_namespaces_basic(self, params, body):
         res = self.json("ListNamespacesBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -108,7 +108,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def validate_repository(self, params, body):
+    def validate_repository_basic(self, params, body):
         res = self.json("ValidateRepositoryBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -116,7 +116,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def delete_repository(self, params, body):
+    def delete_repository_basic(self, params, body):
         res = self.json("DeleteRepositoryBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -124,7 +124,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def create_repository(self, params, body):
+    def create_repository_basic(self, params, body):
         res = self.json("CreateRepositoryBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -132,7 +132,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def update_repository(self, params, body):
+    def update_repository_basic(self, params, body):
         res = self.json("UpdateRepositoryBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -140,7 +140,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def get_repository(self, params, body):
+    def get_repository_basic(self, params, body):
         res = self.json("GetRepositoryBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -148,7 +148,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def list_repositories(self, params, body):
+    def list_repositories_basic(self, params, body):
         res = self.json("ListRepositoriesBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -156,7 +156,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def delete_tag(self, params, body):
+    def delete_tag_basic(self, params, body):
         res = self.json("DeleteTagBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -164,7 +164,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def list_tags(self, params, body):
+    def list_tags_basic(self, params, body):
         res = self.json("ListTagsBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -172,7 +172,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def get_tag(self, params, body):
+    def get_tag_basic(self, params, body):
         res = self.json("GetTagBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -180,7 +180,7 @@ class BasicImageRegistryService(Service):
         return res_json
 
     @ redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
-    def get_tag_addition(self, params, body):
+    def get_tag_addition_basic(self, params, body):
         res = self.json("GetTagAdditionBasic", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
