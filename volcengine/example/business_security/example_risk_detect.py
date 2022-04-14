@@ -70,3 +70,25 @@ if __name__ == '__main__':
     idcardTwoElementResp = riskDetector.element_verify(params, req)
 
     print(idcardTwoElementResp)
+
+    params = dict()
+    req = {
+        'AppId': 5461,
+        'Service': "mobile_address",
+        'Parameters': '{"operate_time":1609818934, "mobile": ""}'
+    }
+
+    mobileStatusV2Resp = riskDetector.mobile_status_v2(params, req)
+
+    print(mobileStatusV2Resp)
+
+    params = dict()
+    req = {
+        'AppId': 5461,
+        'Service': "mobile_two_element_verify",
+        'Parameters': '{"operate_time":1609818934, "mobile": "", "idcard_name": ""}'
+    }
+
+    elementV2resp = riskDetector.element_verify_v2(params, req)
+
+    print(elementV2resp)
