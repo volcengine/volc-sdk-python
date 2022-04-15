@@ -1,5 +1,9 @@
 ### Change log
 
+2022-04-14 Bumped to version v1.0.40
+- Refactored apis for cr
+- Added apis for vod\cdn\visual
+
 2022-03-31 Bumped to version v1.0.39
 - Added notify client
 - Added api for cr
