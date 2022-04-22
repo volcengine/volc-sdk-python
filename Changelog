@@ -1,5 +1,8 @@
 ### Change log
 
+2022-04-22 Bumped to version v1.0.41
+- Added service live
+
 2022-04-14 Bumped to version v1.0.40
 - Refactored apis for cr
 - Added apis for vod\cdn\visual
