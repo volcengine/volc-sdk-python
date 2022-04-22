@@ -4,7 +4,8 @@ from __future__ import print_function
 from volcengine.vod.VodService import VodService
 from volcengine.vod.models.request.request_vod_pb2 import VodGetMediaInfosRequest, VodGetRecommendedPosterRequest, \
     VodUpdateMediaPublishStatusRequest, VodUpdateMediaInfoRequest, VodDeleteMediaRequest, VodDeleteTranscodesRequest, \
-    VodGetSubtitleInfoListRequest, VodUpdateSubtitleStatusRequest, VodUpdateSubtitleInfoRequest, VodGetMediaListRequest
+    VodGetMediaListRequest, VodCreateVideoClassificationRequest, VodUpdateVideoClassificationRequest, \
+    VodDeleteVideoClassificationRequest, VodListVideoClassificationsRequest, VodListSnapshotsRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -12,6 +13,7 @@ if __name__ == '__main__':
     # vod_service.set_ak('your ak')
     # vod_service.set_sk('your sk')
 
+    '''
     try:
         vids = 'vid1,vid2'
         req = VodGetMediaInfosRequest()
@@ -62,11 +64,12 @@ if __name__ == '__main__':
     print('*' * 100)
 
     try:
-        vid = 'vid'
-        tags = 'aaa,bbb'
         req4 = VodUpdateMediaInfoRequest()
-        req4.Vid = vid
-        req4.Tags.value = tags
+        req4.Vid = 'vid'
+        req4.Title.value = 'title'
+        req4.Description.value = 'description'
+        req4.Tags.value = 'tag1,tag2'
+        req4.ClassificationId.value = 0
         resp4 = vod_service.update_media_info(req4)
     except Exception:
         raise
@@ -127,6 +130,7 @@ if __name__ == '__main__':
         req7.EndTime = '2021-04-01T00:00:00Z'
         req7.Offset = '0'
         req7.PageSize = '10'
+        req7.ClassificationId = 1
         resp7 = vod_service.get_media_list(req7)
     except Exception:
         raise
@@ -136,5 +140,88 @@ if __name__ == '__main__':
             print(resp7.Result)
         else:
             print(resp7.ResponseMetadata.Error)
+
+    print('*' * 100)
+
+    try:
+        req8 = VodCreateVideoClassificationRequest()
+        req8.SpaceName = 'your space'
+        req8.Level = 1
+        req8.ParentId = 0
+        req8.Classification = 'your classification'
+        resp8 = vod_service.create_video_classification(req8)
+    except Exception:
+        raise
+    else:
+        print(resp8)
+        if resp8.ResponseMetadata.Error.Code == '':
+            print(resp8.Result)
+        else:
+            print(resp8.ResponseMetadata.Error)
+
+    print('*' * 100)
+
+    try:
+        req9 = VodUpdateVideoClassificationRequest()
+        req9.SpaceName = 'your space'
+        req9.ClassificationId = 0
+        req9.Classification = 'your classification'
+        resp9 = vod_service.update_video_classification(req9)
+    except Exception:
+        raise
+    else:
+        print(resp9)
+        if resp9.ResponseMetadata.Error.Code == '':
+            print(resp9.Result)
+        else:
+            print(resp9.ResponseMetadata.Error)
+
+    print('*' * 100)
+
+    try:
+        req10 = VodDeleteVideoClassificationRequest()
+        req10.SpaceName = 'your space'
+        req10.ClassificationId = 0
+        resp10 = vod_service.delete_video_classification(req10)
+    except Exception:
+        raise
+    else:
+        print(resp10)
+        if resp10.ResponseMetadata.Error.Code == '':
+            print(resp10.Result)
+        else:
+            print(resp10.ResponseMetadata.Error)
+
+    print('*' * 100)
+
+    try:
+        req11 = VodListVideoClassificationsRequest()
+        req11.SpaceName = 'your space'
+        req11.ClassificationId = 0
+        resp11 = vod_service.list_video_classifications(req11)
+    except Exception:
+        raise
+    else:
+        print(resp11)
+        if resp11.ResponseMetadata.Error.Code == '':
+            print(resp11.Result)
+        else:
+            print(resp11.ResponseMetadata.Error)
+
+    print('*' * 100)
+    '''
+
+    try:
+        req12 = VodListSnapshotsRequest()
+        req12.Vid = "your vid"
+        resp12 = vod_service.list_snapshots(req12)
+    except Exception:
+        raise
+    else:
+        print(resp12)
+        if resp12.ResponseMetadata.Error.Code == '':
+            print(resp12.Result)
+        else:
+            print(resp12.ResponseMetadata.Error)
 
     print('*' * 100)

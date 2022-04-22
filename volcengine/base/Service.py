@@ -1,8 +1,6 @@
 # coding: utf-8
-import configparser
 import json
 import logging
-from json.decoder import JSONDecodeError
 import os
 import time
 from collections import OrderedDict
@@ -11,6 +9,10 @@ try:
 except ImportError:
     from urllib import urlencode
 
+try:
+    import configparser as configparser
+except ImportError:
+    import ConfigParser as configparser
 
 import requests
 
@@ -53,7 +55,7 @@ class Service(object):
                 with open(path_json, 'r') as f:
                     try:
                         j = json.load(f)
-                    except JSONDecodeError:
+                    except Exception:
                         logging.warning("%s is not json file", path_json)
                         return
                     if 'ak' in j:

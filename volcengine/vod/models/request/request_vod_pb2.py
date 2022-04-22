@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n(com.volcengine.service.vod.model.requestB\nVodRequestP\001Z@github.com/volcengine/volc-sdk-golang/service/vod/models/request\240\001\001\330\001\001\312\002\037Volc\\Service\\Vod\\Models\\Request\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dvod/request/request_vod.proto\x12\x1dVolcengine.Vod.Models.Request\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fvod/business/vod_workflow.proto\x1a\x1dvod/business/vod_upload.proto\"\x80\x02\n\x15VodGetPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\x12\x12\n\nNeedThumbs\x18\t \x01(\t\x12\x17\n\x0fNeedBarrageMask\x18\n \x01(\t\x12\x0f\n\x07\x43\x64nType\x18\x0b \x01(\t\x12\x11\n\tUnionInfo\x18\x0c \x01(\t\x12\x15\n\rHDRDefinition\x18\r \x01(\t\"I\n\x1dVodGetOriginalPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\"g\n\x1fVodGetPrivateDrmPlayAuthRequest\x12\x0f\n\x07\x44rmType\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x13\n\x0bPlayAuthIds\x18\x03 \x01(\t\x12\x11\n\tUnionInfo\x18\x04 \x01(\t\"Q\n\x1dVodGetHlsDecryptionKeyRequest\x12\x14\n\x0c\x44rmAuthToken\x18\x01 \x01(\t\x12\n\n\x02\x41k\x18\x02 \x01(\t\x12\x0e\n\x06Source\x18\x03 \x01(\t\"\x98\x01\n+VodGetPlayInfoWithLiveTimeShiftSceneRequest\x12\x11\n\tStoreUris\x18\x01 \x01(\t\x12\x11\n\tSpaceName\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\x12\x17\n\x0f\x45xpireTimestamp\x18\x04 \x01(\t\x12\x1d\n\x15NeedComposeBucketName\x18\x05 \x01(\t\"m\n\x13VodUrlUploadRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\x07URLSets\x18\x02 \x03(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodUrlUploadURLSet\"/\n\x1dVodQueryUploadTaskInfoRequest\x12\x0e\n\x06JobIds\x18\x01 \x01(\t\"f\n\x19VodApplyUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x10\n\x08\x46ileSize\x18\x03 \x01(\x01\x12\x10\n\x08\x46ileType\x18\x04 \x01(\t\"e\n\x15VodUploadMediaRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"z\n\x18VodUploadMaterialRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\"l\n\x1aVodCommitUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"=\n\x17VodUrlUploadJsonRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0f\n\x07URLSets\x18\x02 \x01(\t\".\n\x1eVodGetRecommendedPosterRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"A\n\"VodUpdateMediaPublishStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"\xe5\x01\n\x19VodUpdateMediaInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12/\n\tPosterUri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05Title\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x44\x65scription\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04Tags\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"\'\n\x17VodGetMediaInfosRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\";\n\x15VodDeleteMediaRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x02 \x01(\t\"P\n\x1aVodDeleteTranscodesRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\"\xab\x01\n\x16VodGetMediaListRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x0e\n\x06Status\x18\x03 \x01(\t\x12\r\n\x05Order\x18\x04 \x01(\t\x12\x0c\n\x04Tags\x18\x05 \x01(\t\x12\x11\n\tStartTime\x18\x06 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x07 \x01(\t\x12\x0e\n\x06Offset\x18\x08 \x01(\t\x12\x10\n\x08PageSize\x18\t \x01(\t\"\xe6\x01\n\x1dVodGetSubtitleInfoListRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x11\n\tLanguages\x18\x03 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x04 \x01(\t\x12\x13\n\x0bLanguageIds\x18\x05 \x01(\t\x12\x13\n\x0bSubtitleIds\x18\x06 \x01(\t\x12\x0e\n\x06Status\x18\x07 \x01(\t\x12\r\n\x05Title\x18\x08 \x01(\t\x12\x0b\n\x03Tag\x18\t \x01(\t\x12\x0e\n\x06Offset\x18\n \x01(\t\x12\x10\n\x08PageSize\x18\x0b \x01(\t\x12\x0b\n\x03Ssl\x18\x0c \x01(\t\"r\n\x1eVodUpdateSubtitleStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x11\n\tLanguages\x18\x03 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\"\xb5\x01\n\x1cVodUpdateSubtitleInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x02 \x01(\t\x12\x10\n\x08Language\x18\x03 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x04 \x01(\t\x12+\n\x05Title\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12)\n\x03Tag\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"w\n VodGetAuditFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x19\n\x11MinNumberOfFrames\x18\x03 \x01(\t\x12\x19\n\x11MaxNumberOfFrames\x18\x04 \x01(\t\"\xa1\x02\n\x1dVodGetMLFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x10\n\x08\x46rameOpt\x18\x03 \x01(\t\x12\x10\n\x08\x46rameFps\x18\x04 \x01(\t\x12\x16\n\x0eNumberOfFrames\x18\x05 \x01(\t\x12\x14\n\x0c\x43utTimeMills\x18\x06 \x01(\t\x12\x16\n\x0eNeedFirstFrame\x18\x07 \x01(\t\x12\x15\n\rNeedLastFrame\x18\x08 \x01(\t\x12\x15\n\rStartTimeMill\x18\t \x01(\t\x12\x13\n\x0b\x45ndTimeMill\x18\n \x01(\t\x12\x19\n\x11MinNumberOfFrames\x18\x0b \x01(\t\x12\x19\n\x11MaxNumberOfFrames\x18\x0c \x01(\t\"U\n!VodGetBetterFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x11\n\tCoverRate\x18\x03 \x01(\t\"?\n\x1eVodGetAudioInfoForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"P\n/VodGetAutomaticSpeechRecognitionForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"I\n(VodGetAudioEventDetectionForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"\xbc\x01\n\x17VodStartWorkflowRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12=\n\x05Input\x18\x03 \x01(\x0b\x32..Volcengine.Vod.Models.Business.WorkflowParams\x12\x10\n\x08Priority\x18\x04 \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x06 \x01(\x08\x42\xc8\x01\n(com.volcengine.service.vod.model.requestB\nVodRequestP\x01Z@github.com/volcengine/volc-sdk-golang/service/vod/models/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x1fVolc\\Service\\Vod\\Models\\Request\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1dvod/request/request_vod.proto\x12\x1dVolcengine.Vod.Models.Request\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fvod/business/vod_workflow.proto\x1a\x1dvod/business/vod_upload.proto\"\xaf\x02\n\x15VodGetPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\x12\x12\n\nNeedThumbs\x18\t \x01(\t\x12\x17\n\x0fNeedBarrageMask\x18\n \x01(\t\x12\x0f\n\x07\x43\x64nType\x18\x0b \x01(\t\x12\x11\n\tUnionInfo\x18\x0c \x01(\t\x12\x15\n\rHDRDefinition\x18\r \x01(\t\x12\x11\n\tPlayScene\x18\x0e \x01(\t\x12\x1a\n\x12\x44rmExpireTimestamp\x18\x0f \x01(\t\"I\n\x1dVodGetOriginalPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\"g\n\x1fVodGetPrivateDrmPlayAuthRequest\x12\x0f\n\x07\x44rmType\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x13\n\x0bPlayAuthIds\x18\x03 \x01(\t\x12\x11\n\tUnionInfo\x18\x04 \x01(\t\"Q\n\x1dVodGetHlsDecryptionKeyRequest\x12\x14\n\x0c\x44rmAuthToken\x18\x01 \x01(\t\x12\n\n\x02\x41k\x18\x02 \x01(\t\x12\x0e\n\x06Source\x18\x03 \x01(\t\"\x98\x01\n+VodGetPlayInfoWithLiveTimeShiftSceneRequest\x12\x11\n\tStoreUris\x18\x01 \x01(\t\x12\x11\n\tSpaceName\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\x12\x17\n\x0f\x45xpireTimestamp\x18\x04 \x01(\t\x12\x1d\n\x15NeedComposeBucketName\x18\x05 \x01(\t\"m\n\x13VodUrlUploadRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\x07URLSets\x18\x02 \x03(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodUrlUploadURLSet\"/\n\x1dVodQueryUploadTaskInfoRequest\x12\x0e\n\x06JobIds\x18\x01 \x01(\t\"x\n\x19VodApplyUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x10\n\x08\x46ileSize\x18\x03 \x01(\x01\x12\x10\n\x08\x46ileType\x18\x04 \x01(\t\x12\x10\n\x08\x46ileName\x18\x05 \x01(\t\"w\n\x15VodUploadMediaRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x10\n\x08\x46ileName\x18\x05 \x01(\t\"\x8c\x01\n\x18VodUploadMaterialRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08\x46ileName\x18\x06 \x01(\t\"l\n\x1aVodCommitUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"=\n\x17VodUrlUploadJsonRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0f\n\x07URLSets\x18\x02 \x01(\t\".\n\x1eVodGetRecommendedPosterRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"A\n\"VodUpdateMediaPublishStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"\x9c\x02\n\x19VodUpdateMediaInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12/\n\tPosterUri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05Title\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x44\x65scription\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04Tags\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x10\x43lassificationId\x18\x06 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\"\'\n\x17VodGetMediaInfosRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\";\n\x15VodDeleteMediaRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x02 \x01(\t\"P\n\x1aVodDeleteTranscodesRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\"\xc6\x01\n\x16VodGetMediaListRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x0e\n\x06Status\x18\x03 \x01(\t\x12\r\n\x05Order\x18\x04 \x01(\t\x12\x0c\n\x04Tags\x18\x05 \x01(\t\x12\x11\n\tStartTime\x18\x06 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x07 \x01(\t\x12\x0e\n\x06Offset\x18\x08 \x01(\t\x12\x10\n\x08PageSize\x18\t \x01(\t\x12\x19\n\x11\x43lassificationIds\x18\n \x01(\t\"\xe6\x01\n\x1dVodGetSubtitleInfoListRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x11\n\tLanguages\x18\x03 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x04 \x01(\t\x12\x13\n\x0bLanguageIds\x18\x05 \x01(\t\x12\x13\n\x0bSubtitleIds\x18\x06 \x01(\t\x12\x0e\n\x06Status\x18\x07 \x01(\t\x12\r\n\x05Title\x18\x08 \x01(\t\x12\x0b\n\x03Tag\x18\t \x01(\t\x12\x0e\n\x06Offset\x18\n \x01(\t\x12\x10\n\x08PageSize\x18\x0b \x01(\t\x12\x0b\n\x03Ssl\x18\x0c \x01(\t\"r\n\x1eVodUpdateSubtitleStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x11\n\tLanguages\x18\x03 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\"\xb5\x01\n\x1cVodUpdateSubtitleInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x02 \x01(\t\x12\x10\n\x08Language\x18\x03 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x04 \x01(\t\x12+\n\x05Title\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12)\n\x03Tag\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"q\n#VodCreateVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\r\n\x05Level\x18\x02 \x01(\x05\x12\x10\n\x08ParentId\x18\x03 \x01(\x03\x12\x16\n\x0e\x43lassification\x18\x04 \x01(\t\"j\n#VodUpdateVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\x12\x16\n\x0e\x43lassification\x18\x03 \x01(\t\"R\n#VodDeleteVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\"Q\n\"VodListVideoClassificationsRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\"w\n VodGetAuditFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x19\n\x11MinNumberOfFrames\x18\x03 \x01(\t\x12\x19\n\x11MaxNumberOfFrames\x18\x04 \x01(\t\"\xa1\x02\n\x1dVodGetMLFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x10\n\x08\x46rameOpt\x18\x03 \x01(\t\x12\x10\n\x08\x46rameFps\x18\x04 \x01(\t\x12\x16\n\x0eNumberOfFrames\x18\x05 \x01(\t\x12\x14\n\x0c\x43utTimeMills\x18\x06 \x01(\t\x12\x16\n\x0eNeedFirstFrame\x18\x07 \x01(\t\x12\x15\n\rNeedLastFrame\x18\x08 \x01(\t\x12\x15\n\rStartTimeMill\x18\t \x01(\t\x12\x13\n\x0b\x45ndTimeMill\x18\n \x01(\t\x12\x19\n\x11MinNumberOfFrames\x18\x0b \x01(\t\x12\x19\n\x11MaxNumberOfFrames\x18\x0c \x01(\t\"U\n!VodGetBetterFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x11\n\tCoverRate\x18\x03 \x01(\t\"?\n\x1eVodGetAudioInfoForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"P\n/VodGetAutomaticSpeechRecognitionForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"I\n(VodGetAudioEventDetectionForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"&\n\x17VodListSnapshotsRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\"\xbc\x01\n\x17VodStartWorkflowRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12=\n\x05Input\x18\x03 \x01(\x0b\x32..Volcengine.Vod.Models.Business.WorkflowParams\x12\x10\n\x08Priority\x18\x04 \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x06 \x01(\x08\"v\n\x15VodCreateSpaceRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x13\n\x0bProjectName\x18\x02 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x03 \x01(\t\x12\x0e\n\x06Region\x18\x04 \x01(\t\x12\x10\n\x08UserName\x18\x05 \x01(\t\"-\n\x18VodGetSpaceDetailRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\"4\n\x13VodListSpaceRequest\x12\x0e\n\x06Offset\x18\x01 \x01(\x01\x12\r\n\x05Limit\x18\x02 \x01(\x01\"-\n\x18VodGetSpaceConfigRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\"u\n\x15VodUpdateSpaceRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x19\n\x11SourceProjectName\x18\x02 \x01(\t\x12\x19\n\x11TargetProjectName\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\"^\n!VodUpdateSpaceUploadConfigRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x11\n\tConfigKey\x18\x02 \x01(\t\x12\x13\n\x0b\x43onfigValue\x18\x03 \x01(\t\")\n\x14VodListDomainRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\"O\n\x1eVodCreateCdnRefreshTaskRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Urls\x18\x02 \x01(\t\x12\x0c\n\x04Type\x18\x03 \x01(\t\"A\n\x1eVodCreateCdnPreloadTaskRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Urls\x18\x02 \x01(\t\"\xb8\x01\n\x16VodListCdnTasksRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06TaskId\x18\x02 \x01(\t\x12\x12\n\nDomainName\x18\x03 \x01(\t\x12\x10\n\x08TaskType\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\x12\x11\n\tStartTime\x18\x06 \x01(\x03\x12\x0f\n\x07\x45ndTime\x18\x07 \x01(\x03\x12\x0f\n\x07PageNum\x18\x08 \x01(\x05\x12\x10\n\x08PageSize\x18\t \x01(\x05\"C\n!VodAddCallbackSubscriptionRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Url\x18\x02 \x01(\t\"?\n\x1aVodSetCallbackEventRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06\x45vents\x18\x02 \x01(\tB\xc8\x01\n(com.volcengine.service.vod.model.requestB\nVodRequestP\x01Z@github.com/volcengine/volc-sdk-golang/service/vod/models/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x1fVolc\\Service\\Vod\\Models\\Request\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,vod_dot_business_dot_vod__workflow__pb2.DESCRIPTOR,vod_dot_business_dot_vod__upload__pb2.DESCRIPTOR,])
 
@@ -128,6 +128,20 @@ _VODGETPLAYINFOREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='PlayScene', full_name='Volcengine.Vod.Models.Request.VodGetPlayInfoRequest.PlayScene', index=13,
+      number=14, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='DrmExpireTimestamp', full_name='Volcengine.Vod.Models.Request.VodGetPlayInfoRequest.DrmExpireTimestamp', index=14,
+      number=15, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -141,7 +155,7 @@ _VODGETPLAYINFOREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=161,
-  serialized_end=417,
+  serialized_end=464,
 )
 
 
@@ -186,8 +200,8 @@ _VODGETORIGINALPLAYINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=419,
-  serialized_end=492,
+  serialized_start=466,
+  serialized_end=539,
 )
 
 
@@ -239,8 +253,8 @@ _VODGETPRIVATEDRMPLAYAUTHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=494,
-  serialized_end=597,
+  serialized_start=541,
+  serialized_end=644,
 )
 
 
@@ -285,8 +299,8 @@ _VODGETHLSDECRYPTIONKEYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=599,
-  serialized_end=680,
+  serialized_start=646,
+  serialized_end=727,
 )
 
 
@@ -345,8 +359,8 @@ _VODGETPLAYINFOWITHLIVETIMESHIFTSCENEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=683,
-  serialized_end=835,
+  serialized_start=730,
+  serialized_end=882,
 )
 
 
@@ -384,8 +398,8 @@ _VODURLUPLOADREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=837,
-  serialized_end=946,
+  serialized_start=884,
+  serialized_end=993,
 )
 
 
@@ -416,8 +430,8 @@ _VODQUERYUPLOADTASKINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=948,
-  serialized_end=995,
+  serialized_start=995,
+  serialized_end=1042,
 )
 
 
@@ -457,6 +471,13 @@ _VODAPPLYUPLOADINFOREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='FileName', full_name='Volcengine.Vod.Models.Request.VodApplyUploadInfoRequest.FileName', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -469,8 +490,8 @@ _VODAPPLYUPLOADINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=997,
-  serialized_end=1099,
+  serialized_start=1044,
+  serialized_end=1164,
 )
 
 
@@ -510,6 +531,13 @@ _VODUPLOADMEDIAREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='FileName', full_name='Volcengine.Vod.Models.Request.VodUploadMediaRequest.FileName', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -522,8 +550,8 @@ _VODUPLOADMEDIAREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1101,
-  serialized_end=1202,
+  serialized_start=1166,
+  serialized_end=1285,
 )
 
 
@@ -570,6 +598,13 @@ _VODUPLOADMATERIALREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='FileName', full_name='Volcengine.Vod.Models.Request.VodUploadMaterialRequest.FileName', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -582,8 +617,8 @@ _VODUPLOADMATERIALREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1204,
-  serialized_end=1326,
+  serialized_start=1288,
+  serialized_end=1428,
 )
 
 
@@ -635,8 +670,8 @@ _VODCOMMITUPLOADINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1328,
-  serialized_end=1436,
+  serialized_start=1430,
+  serialized_end=1538,
 )
 
 
@@ -674,8 +709,8 @@ _VODURLUPLOADJSONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1438,
-  serialized_end=1499,
+  serialized_start=1540,
+  serialized_end=1601,
 )
 
 
@@ -706,8 +741,8 @@ _VODGETRECOMMENDEDPOSTERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1501,
-  serialized_end=1547,
+  serialized_start=1603,
+  serialized_end=1649,
 )
 
 
@@ -745,8 +780,8 @@ _VODUPDATEMEDIAPUBLISHSTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1549,
-  serialized_end=1614,
+  serialized_start=1651,
+  serialized_end=1716,
 )
 
 
@@ -793,6 +828,13 @@ _VODUPDATEMEDIAINFOREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ClassificationId', full_name='Volcengine.Vod.Models.Request.VodUpdateMediaInfoRequest.ClassificationId', index=5,
+      number=6, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -805,8 +847,8 @@ _VODUPDATEMEDIAINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1617,
-  serialized_end=1846,
+  serialized_start=1719,
+  serialized_end=2003,
 )
 
 
@@ -837,8 +879,8 @@ _VODGETMEDIAINFOSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1848,
-  serialized_end=1887,
+  serialized_start=2005,
+  serialized_end=2044,
 )
 
 
@@ -876,8 +918,8 @@ _VODDELETEMEDIAREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1889,
-  serialized_end=1948,
+  serialized_start=2046,
+  serialized_end=2105,
 )
 
 
@@ -922,8 +964,8 @@ _VODDELETETRANSCODESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1950,
-  serialized_end=2030,
+  serialized_start=2107,
+  serialized_end=2187,
 )
 
 
@@ -998,6 +1040,13 @@ _VODGETMEDIALISTREQUEST = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ClassificationIds', full_name='Volcengine.Vod.Models.Request.VodGetMediaListRequest.ClassificationIds', index=9,
+      number=10, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -1010,8 +1059,8 @@ _VODGETMEDIALISTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2033,
-  serialized_end=2204,
+  serialized_start=2190,
+  serialized_end=2388,
 )
 
 
@@ -1119,8 +1168,8 @@ _VODGETSUBTITLEINFOLISTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2207,
-  serialized_end=2437,
+  serialized_start=2391,
+  serialized_end=2621,
 )
 
 
@@ -1179,8 +1228,8 @@ _VODUPDATESUBTITLESTATUSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2439,
-  serialized_end=2553,
+  serialized_start=2623,
+  serialized_end=2737,
 )
 
 
@@ -1246,8 +1295,185 @@ _VODUPDATESUBTITLEINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2556,
-  serialized_end=2737,
+  serialized_start=2740,
+  serialized_end=2921,
+)
+
+
+_VODCREATEVIDEOCLASSIFICATIONREQUEST = _descriptor.Descriptor(
+  name='VodCreateVideoClassificationRequest',
+  full_name='Volcengine.Vod.Models.Request.VodCreateVideoClassificationRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodCreateVideoClassificationRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Level', full_name='Volcengine.Vod.Models.Request.VodCreateVideoClassificationRequest.Level', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ParentId', full_name='Volcengine.Vod.Models.Request.VodCreateVideoClassificationRequest.ParentId', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Classification', full_name='Volcengine.Vod.Models.Request.VodCreateVideoClassificationRequest.Classification', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2923,
+  serialized_end=3036,
+)
+
+
+_VODUPDATEVIDEOCLASSIFICATIONREQUEST = _descriptor.Descriptor(
+  name='VodUpdateVideoClassificationRequest',
+  full_name='Volcengine.Vod.Models.Request.VodUpdateVideoClassificationRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodUpdateVideoClassificationRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ClassificationId', full_name='Volcengine.Vod.Models.Request.VodUpdateVideoClassificationRequest.ClassificationId', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Classification', full_name='Volcengine.Vod.Models.Request.VodUpdateVideoClassificationRequest.Classification', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3038,
+  serialized_end=3144,
+)
+
+
+_VODDELETEVIDEOCLASSIFICATIONREQUEST = _descriptor.Descriptor(
+  name='VodDeleteVideoClassificationRequest',
+  full_name='Volcengine.Vod.Models.Request.VodDeleteVideoClassificationRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodDeleteVideoClassificationRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ClassificationId', full_name='Volcengine.Vod.Models.Request.VodDeleteVideoClassificationRequest.ClassificationId', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3146,
+  serialized_end=3228,
+)
+
+
+_VODLISTVIDEOCLASSIFICATIONSREQUEST = _descriptor.Descriptor(
+  name='VodListVideoClassificationsRequest',
+  full_name='Volcengine.Vod.Models.Request.VodListVideoClassificationsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodListVideoClassificationsRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ClassificationId', full_name='Volcengine.Vod.Models.Request.VodListVideoClassificationsRequest.ClassificationId', index=1,
+      number=2, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3230,
+  serialized_end=3311,
 )
 
 
@@ -1299,8 +1525,8 @@ _VODGETAUDITFRAMESFORAUDITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2739,
-  serialized_end=2858,
+  serialized_start=3313,
+  serialized_end=3432,
 )
 
 
@@ -1408,8 +1634,8 @@ _VODGETMLFRAMESFORAUDITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2861,
-  serialized_end=3150,
+  serialized_start=3435,
+  serialized_end=3724,
 )
 
 
@@ -1454,8 +1680,8 @@ _VODGETBETTERFRAMESFORAUDITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3152,
-  serialized_end=3237,
+  serialized_start=3726,
+  serialized_end=3811,
 )
 
 
@@ -1493,8 +1719,8 @@ _VODGETAUDIOINFOFORAUDITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3239,
-  serialized_end=3302,
+  serialized_start=3813,
+  serialized_end=3876,
 )
 
 
@@ -1532,8 +1758,8 @@ _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3304,
-  serialized_end=3384,
+  serialized_start=3878,
+  serialized_end=3958,
 )
 
 
@@ -1571,8 +1797,40 @@ _VODGETAUDIOEVENTDETECTIONFORAUDITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3386,
-  serialized_end=3459,
+  serialized_start=3960,
+  serialized_end=4033,
+)
+
+
+_VODLISTSNAPSHOTSREQUEST = _descriptor.Descriptor(
+  name='VodListSnapshotsRequest',
+  full_name='Volcengine.Vod.Models.Request.VodListSnapshotsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Vid', full_name='Volcengine.Vod.Models.Request.VodListSnapshotsRequest.Vid', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4035,
+  serialized_end=4073,
 )
 
 
@@ -1638,8 +1896,553 @@ _VODSTARTWORKFLOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3462,
-  serialized_end=3650,
+  serialized_start=4076,
+  serialized_end=4264,
+)
+
+
+_VODCREATESPACEREQUEST = _descriptor.Descriptor(
+  name='VodCreateSpaceRequest',
+  full_name='Volcengine.Vod.Models.Request.VodCreateSpaceRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodCreateSpaceRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ProjectName', full_name='Volcengine.Vod.Models.Request.VodCreateSpaceRequest.ProjectName', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Description', full_name='Volcengine.Vod.Models.Request.VodCreateSpaceRequest.Description', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Region', full_name='Volcengine.Vod.Models.Request.VodCreateSpaceRequest.Region', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='UserName', full_name='Volcengine.Vod.Models.Request.VodCreateSpaceRequest.UserName', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4266,
+  serialized_end=4384,
+)
+
+
+_VODGETSPACEDETAILREQUEST = _descriptor.Descriptor(
+  name='VodGetSpaceDetailRequest',
+  full_name='Volcengine.Vod.Models.Request.VodGetSpaceDetailRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodGetSpaceDetailRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4386,
+  serialized_end=4431,
+)
+
+
+_VODLISTSPACEREQUEST = _descriptor.Descriptor(
+  name='VodListSpaceRequest',
+  full_name='Volcengine.Vod.Models.Request.VodListSpaceRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Offset', full_name='Volcengine.Vod.Models.Request.VodListSpaceRequest.Offset', index=0,
+      number=1, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Limit', full_name='Volcengine.Vod.Models.Request.VodListSpaceRequest.Limit', index=1,
+      number=2, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4433,
+  serialized_end=4485,
+)
+
+
+_VODGETSPACECONFIGREQUEST = _descriptor.Descriptor(
+  name='VodGetSpaceConfigRequest',
+  full_name='Volcengine.Vod.Models.Request.VodGetSpaceConfigRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodGetSpaceConfigRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4487,
+  serialized_end=4532,
+)
+
+
+_VODUPDATESPACEREQUEST = _descriptor.Descriptor(
+  name='VodUpdateSpaceRequest',
+  full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='SourceProjectName', full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceRequest.SourceProjectName', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='TargetProjectName', full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceRequest.TargetProjectName', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Description', full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceRequest.Description', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4534,
+  serialized_end=4651,
+)
+
+
+_VODUPDATESPACEUPLOADCONFIGREQUEST = _descriptor.Descriptor(
+  name='VodUpdateSpaceUploadConfigRequest',
+  full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceUploadConfigRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceUploadConfigRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ConfigKey', full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceUploadConfigRequest.ConfigKey', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='ConfigValue', full_name='Volcengine.Vod.Models.Request.VodUpdateSpaceUploadConfigRequest.ConfigValue', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4653,
+  serialized_end=4747,
+)
+
+
+_VODLISTDOMAINREQUEST = _descriptor.Descriptor(
+  name='VodListDomainRequest',
+  full_name='Volcengine.Vod.Models.Request.VodListDomainRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodListDomainRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4749,
+  serialized_end=4790,
+)
+
+
+_VODCREATECDNREFRESHTASKREQUEST = _descriptor.Descriptor(
+  name='VodCreateCdnRefreshTaskRequest',
+  full_name='Volcengine.Vod.Models.Request.VodCreateCdnRefreshTaskRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodCreateCdnRefreshTaskRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Urls', full_name='Volcengine.Vod.Models.Request.VodCreateCdnRefreshTaskRequest.Urls', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Type', full_name='Volcengine.Vod.Models.Request.VodCreateCdnRefreshTaskRequest.Type', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4792,
+  serialized_end=4871,
+)
+
+
+_VODCREATECDNPRELOADTASKREQUEST = _descriptor.Descriptor(
+  name='VodCreateCdnPreloadTaskRequest',
+  full_name='Volcengine.Vod.Models.Request.VodCreateCdnPreloadTaskRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodCreateCdnPreloadTaskRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Urls', full_name='Volcengine.Vod.Models.Request.VodCreateCdnPreloadTaskRequest.Urls', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4873,
+  serialized_end=4938,
+)
+
+
+_VODLISTCDNTASKSREQUEST = _descriptor.Descriptor(
+  name='VodListCdnTasksRequest',
+  full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='TaskId', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.TaskId', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='DomainName', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.DomainName', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='TaskType', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.TaskType', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Status', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.Status', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='StartTime', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.StartTime', index=5,
+      number=6, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='EndTime', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.EndTime', index=6,
+      number=7, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='PageNum', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.PageNum', index=7,
+      number=8, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='PageSize', full_name='Volcengine.Vod.Models.Request.VodListCdnTasksRequest.PageSize', index=8,
+      number=9, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4941,
+  serialized_end=5125,
+)
+
+
+_VODADDCALLBACKSUBSCRIPTIONREQUEST = _descriptor.Descriptor(
+  name='VodAddCallbackSubscriptionRequest',
+  full_name='Volcengine.Vod.Models.Request.VodAddCallbackSubscriptionRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodAddCallbackSubscriptionRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Url', full_name='Volcengine.Vod.Models.Request.VodAddCallbackSubscriptionRequest.Url', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5127,
+  serialized_end=5194,
+)
+
+
+_VODSETCALLBACKEVENTREQUEST = _descriptor.Descriptor(
+  name='VodSetCallbackEventRequest',
+  full_name='Volcengine.Vod.Models.Request.VodSetCallbackEventRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='SpaceName', full_name='Volcengine.Vod.Models.Request.VodSetCallbackEventRequest.SpaceName', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Events', full_name='Volcengine.Vod.Models.Request.VodSetCallbackEventRequest.Events', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=5196,
+  serialized_end=5259,
 )
 
 _VODURLUPLOADREQUEST.fields_by_name['URLSets'].message_type = vod_dot_business_dot_vod__upload__pb2._VODURLUPLOADURLSET
@@ -1647,6 +2450,7 @@ _VODUPDATEMEDIAINFOREQUEST.fields_by_name['PosterUri'].message_type = google_dot
 _VODUPDATEMEDIAINFOREQUEST.fields_by_name['Title'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _VODUPDATEMEDIAINFOREQUEST.fields_by_name['Description'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _VODUPDATEMEDIAINFOREQUEST.fields_by_name['Tags'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_VODUPDATEMEDIAINFOREQUEST.fields_by_name['ClassificationId'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT64VALUE
 _VODUPDATESUBTITLEINFOREQUEST.fields_by_name['Title'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _VODUPDATESUBTITLEINFOREQUEST.fields_by_name['Tag'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _VODSTARTWORKFLOWREQUEST.fields_by_name['Input'].message_type = vod_dot_business_dot_vod__workflow__pb2._WORKFLOWPARAMS
@@ -1672,13 +2476,30 @@ DESCRIPTOR.message_types_by_name['VodGetMediaListRequest'] = _VODGETMEDIALISTREQ
 DESCRIPTOR.message_types_by_name['VodGetSubtitleInfoListRequest'] = _VODGETSUBTITLEINFOLISTREQUEST
 DESCRIPTOR.message_types_by_name['VodUpdateSubtitleStatusRequest'] = _VODUPDATESUBTITLESTATUSREQUEST
 DESCRIPTOR.message_types_by_name['VodUpdateSubtitleInfoRequest'] = _VODUPDATESUBTITLEINFOREQUEST
+DESCRIPTOR.message_types_by_name['VodCreateVideoClassificationRequest'] = _VODCREATEVIDEOCLASSIFICATIONREQUEST
+DESCRIPTOR.message_types_by_name['VodUpdateVideoClassificationRequest'] = _VODUPDATEVIDEOCLASSIFICATIONREQUEST
+DESCRIPTOR.message_types_by_name['VodDeleteVideoClassificationRequest'] = _VODDELETEVIDEOCLASSIFICATIONREQUEST
+DESCRIPTOR.message_types_by_name['VodListVideoClassificationsRequest'] = _VODLISTVIDEOCLASSIFICATIONSREQUEST
 DESCRIPTOR.message_types_by_name['VodGetAuditFramesForAuditRequest'] = _VODGETAUDITFRAMESFORAUDITREQUEST
 DESCRIPTOR.message_types_by_name['VodGetMLFramesForAuditRequest'] = _VODGETMLFRAMESFORAUDITREQUEST
 DESCRIPTOR.message_types_by_name['VodGetBetterFramesForAuditRequest'] = _VODGETBETTERFRAMESFORAUDITREQUEST
 DESCRIPTOR.message_types_by_name['VodGetAudioInfoForAuditRequest'] = _VODGETAUDIOINFOFORAUDITREQUEST
 DESCRIPTOR.message_types_by_name['VodGetAutomaticSpeechRecognitionForAuditRequest'] = _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITREQUEST
 DESCRIPTOR.message_types_by_name['VodGetAudioEventDetectionForAuditRequest'] = _VODGETAUDIOEVENTDETECTIONFORAUDITREQUEST
+DESCRIPTOR.message_types_by_name['VodListSnapshotsRequest'] = _VODLISTSNAPSHOTSREQUEST
 DESCRIPTOR.message_types_by_name['VodStartWorkflowRequest'] = _VODSTARTWORKFLOWREQUEST
+DESCRIPTOR.message_types_by_name['VodCreateSpaceRequest'] = _VODCREATESPACEREQUEST
+DESCRIPTOR.message_types_by_name['VodGetSpaceDetailRequest'] = _VODGETSPACEDETAILREQUEST
+DESCRIPTOR.message_types_by_name['VodListSpaceRequest'] = _VODLISTSPACEREQUEST
+DESCRIPTOR.message_types_by_name['VodGetSpaceConfigRequest'] = _VODGETSPACECONFIGREQUEST
+DESCRIPTOR.message_types_by_name['VodUpdateSpaceRequest'] = _VODUPDATESPACEREQUEST
+DESCRIPTOR.message_types_by_name['VodUpdateSpaceUploadConfigRequest'] = _VODUPDATESPACEUPLOADCONFIGREQUEST
+DESCRIPTOR.message_types_by_name['VodListDomainRequest'] = _VODLISTDOMAINREQUEST
+DESCRIPTOR.message_types_by_name['VodCreateCdnRefreshTaskRequest'] = _VODCREATECDNREFRESHTASKREQUEST
+DESCRIPTOR.message_types_by_name['VodCreateCdnPreloadTaskRequest'] = _VODCREATECDNPRELOADTASKREQUEST
+DESCRIPTOR.message_types_by_name['VodListCdnTasksRequest'] = _VODLISTCDNTASKSREQUEST
+DESCRIPTOR.message_types_by_name['VodAddCallbackSubscriptionRequest'] = _VODADDCALLBACKSUBSCRIPTIONREQUEST
+DESCRIPTOR.message_types_by_name['VodSetCallbackEventRequest'] = _VODSETCALLBACKEVENTREQUEST
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 VodGetPlayInfoRequest = _reflection.GeneratedProtocolMessageType('VodGetPlayInfoRequest', (_message.Message,), {
@@ -1835,6 +2656,34 @@ VodUpdateSubtitleInfoRequest = _reflection.GeneratedProtocolMessageType('VodUpda
   })
 _sym_db.RegisterMessage(VodUpdateSubtitleInfoRequest)
 
+VodCreateVideoClassificationRequest = _reflection.GeneratedProtocolMessageType('VodCreateVideoClassificationRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODCREATEVIDEOCLASSIFICATIONREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodCreateVideoClassificationRequest)
+  })
+_sym_db.RegisterMessage(VodCreateVideoClassificationRequest)
+
+VodUpdateVideoClassificationRequest = _reflection.GeneratedProtocolMessageType('VodUpdateVideoClassificationRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODUPDATEVIDEOCLASSIFICATIONREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodUpdateVideoClassificationRequest)
+  })
+_sym_db.RegisterMessage(VodUpdateVideoClassificationRequest)
+
+VodDeleteVideoClassificationRequest = _reflection.GeneratedProtocolMessageType('VodDeleteVideoClassificationRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODDELETEVIDEOCLASSIFICATIONREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodDeleteVideoClassificationRequest)
+  })
+_sym_db.RegisterMessage(VodDeleteVideoClassificationRequest)
+
+VodListVideoClassificationsRequest = _reflection.GeneratedProtocolMessageType('VodListVideoClassificationsRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODLISTVIDEOCLASSIFICATIONSREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodListVideoClassificationsRequest)
+  })
+_sym_db.RegisterMessage(VodListVideoClassificationsRequest)
+
 VodGetAuditFramesForAuditRequest = _reflection.GeneratedProtocolMessageType('VodGetAuditFramesForAuditRequest', (_message.Message,), {
   'DESCRIPTOR' : _VODGETAUDITFRAMESFORAUDITREQUEST,
   '__module__' : 'vod.request.request_vod_pb2'
@@ -1877,12 +2726,103 @@ VodGetAudioEventDetectionForAuditRequest = _reflection.GeneratedProtocolMessageT
   })
 _sym_db.RegisterMessage(VodGetAudioEventDetectionForAuditRequest)
 
+VodListSnapshotsRequest = _reflection.GeneratedProtocolMessageType('VodListSnapshotsRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODLISTSNAPSHOTSREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodListSnapshotsRequest)
+  })
+_sym_db.RegisterMessage(VodListSnapshotsRequest)
+
 VodStartWorkflowRequest = _reflection.GeneratedProtocolMessageType('VodStartWorkflowRequest', (_message.Message,), {
   'DESCRIPTOR' : _VODSTARTWORKFLOWREQUEST,
   '__module__' : 'vod.request.request_vod_pb2'
   # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodStartWorkflowRequest)
   })
 _sym_db.RegisterMessage(VodStartWorkflowRequest)
+
+VodCreateSpaceRequest = _reflection.GeneratedProtocolMessageType('VodCreateSpaceRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODCREATESPACEREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodCreateSpaceRequest)
+  })
+_sym_db.RegisterMessage(VodCreateSpaceRequest)
+
+VodGetSpaceDetailRequest = _reflection.GeneratedProtocolMessageType('VodGetSpaceDetailRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETSPACEDETAILREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodGetSpaceDetailRequest)
+  })
+_sym_db.RegisterMessage(VodGetSpaceDetailRequest)
+
+VodListSpaceRequest = _reflection.GeneratedProtocolMessageType('VodListSpaceRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODLISTSPACEREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodListSpaceRequest)
+  })
+_sym_db.RegisterMessage(VodListSpaceRequest)
+
+VodGetSpaceConfigRequest = _reflection.GeneratedProtocolMessageType('VodGetSpaceConfigRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETSPACECONFIGREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodGetSpaceConfigRequest)
+  })
+_sym_db.RegisterMessage(VodGetSpaceConfigRequest)
+
+VodUpdateSpaceRequest = _reflection.GeneratedProtocolMessageType('VodUpdateSpaceRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODUPDATESPACEREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodUpdateSpaceRequest)
+  })
+_sym_db.RegisterMessage(VodUpdateSpaceRequest)
+
+VodUpdateSpaceUploadConfigRequest = _reflection.GeneratedProtocolMessageType('VodUpdateSpaceUploadConfigRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODUPDATESPACEUPLOADCONFIGREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodUpdateSpaceUploadConfigRequest)
+  })
+_sym_db.RegisterMessage(VodUpdateSpaceUploadConfigRequest)
+
+VodListDomainRequest = _reflection.GeneratedProtocolMessageType('VodListDomainRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODLISTDOMAINREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodListDomainRequest)
+  })
+_sym_db.RegisterMessage(VodListDomainRequest)
+
+VodCreateCdnRefreshTaskRequest = _reflection.GeneratedProtocolMessageType('VodCreateCdnRefreshTaskRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODCREATECDNREFRESHTASKREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodCreateCdnRefreshTaskRequest)
+  })
+_sym_db.RegisterMessage(VodCreateCdnRefreshTaskRequest)
+
+VodCreateCdnPreloadTaskRequest = _reflection.GeneratedProtocolMessageType('VodCreateCdnPreloadTaskRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODCREATECDNPRELOADTASKREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodCreateCdnPreloadTaskRequest)
+  })
+_sym_db.RegisterMessage(VodCreateCdnPreloadTaskRequest)
+
+VodListCdnTasksRequest = _reflection.GeneratedProtocolMessageType('VodListCdnTasksRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODLISTCDNTASKSREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodListCdnTasksRequest)
+  })
+_sym_db.RegisterMessage(VodListCdnTasksRequest)
+
+VodAddCallbackSubscriptionRequest = _reflection.GeneratedProtocolMessageType('VodAddCallbackSubscriptionRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODADDCALLBACKSUBSCRIPTIONREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodAddCallbackSubscriptionRequest)
+  })
+_sym_db.RegisterMessage(VodAddCallbackSubscriptionRequest)
+
+VodSetCallbackEventRequest = _reflection.GeneratedProtocolMessageType('VodSetCallbackEventRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODSETCALLBACKEVENTREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodSetCallbackEventRequest)
+  })
+_sym_db.RegisterMessage(VodSetCallbackEventRequest)
 
 
 DESCRIPTOR._options = None

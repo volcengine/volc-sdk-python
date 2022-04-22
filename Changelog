@@ -1,5 +1,28 @@
 ### Change log
 
+2022-04-14 Bumped to version v1.0.40
+- Refactored apis for cr
+- Added apis for vod\cdn\visual
+
+2022-03-31 Bumped to version v1.0.39
+- Added notify client
+- Added api for cr
+- Upgraded api for vod
+
+2022-03-18 Bumped to version v1.0.38
+- Added some apis of space\callback\cdn for vod
+
+2022-03-08 Bumped to version v1.0.37
+- fixed configparser import
+
+2022-03-03 Bumped to version v1.0.36
+- 新增视觉-ocr能力为印章识别、pdf文字识别、高速公路过路费票据识别、商标证识别、软件著作权证书识别、化妆品生产许可证识别，已测试完成
+- Add Video-Classification for VOD
+- Fix BaseService for Python2.7
+- Implement related example for cdn apis
+- Add new cdn apis
+
+
 2022-02-24 Bumped to version v1.0.35
 - Added cr and cp client
 - Fixed mobile status v2
