@@ -10,7 +10,8 @@ from volcengine.const.Const import REGION_CN_NORTH1
 
 LIVE_SERVICE_VERSION = "2020-08-01"
 service_info_map = {
-    REGION_CN_NORTH1: ServiceInfo("live.volcengineapi.com", {'Accept': 'application/json', },
+    #volcengineapi-boe.byted.org   live.volcengineapi.com
+    REGION_CN_NORTH1: ServiceInfo("volcengineapi-boe.byted.org", {'Accept': 'application/json', },
                                   Credentials('', '', "live", REGION_CN_NORTH1), 5, 5, "https"),
 }
 
@@ -127,7 +128,7 @@ api_info = {
                                     {"Action": "DescribeSnapshotData", "Version": LIVE_SERVICE_VERSION}, {},
                                     {}),
 
-    "DescribeLiveDomainLog": ApiInfo("POST", "/",
+    "DescribeLiveDomainLog": ApiInfo("GET", "/",
                                      {"Action": "DescribeLiveDomainLog", "Version": LIVE_SERVICE_VERSION}, {},
                                      {}),
     "DescribePushStreamMetrics": ApiInfo("POST", "/",
@@ -148,7 +149,7 @@ api_info = {
                                                {"Action": "DescribeLiveMetricBandwidthData",
                                                 "Version": LIVE_SERVICE_VERSION}, {},
                                                {}),
-    "DescribePlayStreamList": ApiInfo("POST", "/",
+    "DescribePlayStreamList": ApiInfo("GET", "/",
                                       {"Action": "DescribePlayStreamList",
                                        "Version": LIVE_SERVICE_VERSION}, {},
                                       {}),
@@ -543,7 +544,8 @@ class LiveService(Service):
 
     def describe_live_domain_log(self, params):
         action = "DescribeLiveDomainLog"
-        res = self.json(action, dict(), json.dumps(params))
+        res = self.get(action, params)
+        # res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
