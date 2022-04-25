@@ -10,8 +10,7 @@ from volcengine.const.Const import REGION_CN_NORTH1
 
 LIVE_SERVICE_VERSION = "2020-08-01"
 service_info_map = {
-    #volcengineapi-boe.byted.org   live.volcengineapi.com
-    REGION_CN_NORTH1: ServiceInfo("volcengineapi-boe.byted.org", {'Accept': 'application/json', },
+    REGION_CN_NORTH1: ServiceInfo("live.volcengineapi.com", {'Accept': 'application/json', },
                                   Credentials('', '', "live", REGION_CN_NORTH1), 5, 5, "https"),
 }
 
