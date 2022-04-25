@@ -1416,40 +1416,6 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetSpaceDetailResponse(), True)
 
     #
-    # GetSpaceConfig.
-    #
-    # @param request VodGetSpaceConfigRequest
-    # @return VodGetSpaceConfigResponse
-    # @raise Exception
-    def get_space_config(self, request):
-        try:
-            if sys.version_info[0] == 3:
-                jsonData = MessageToJson(request, False, True)
-                params = json.loads(jsonData)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            else:
-                params = MessageToDict(request, False, True)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str, unicode)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            res = self.get("GetSpaceConfig", params)
-        except Exception as Argument:
-            try:
-                resp = Parse(Argument.__str__(), VodGetSpaceConfigResponse(), True)
-            except Exception:
-                raise Argument
-            else:
-                raise Exception(resp.ResponseMetadata.Error.Code)
-        else:
-            return Parse(res, VodGetSpaceConfigResponse(), True)
-
-    #
     # UpdateSpace.
     #
     # @param request VodUpdateSpaceRequest
@@ -1654,6 +1620,74 @@ class VodService(VodServiceConfig):
             return Parse(res, VodListCdnTasksResponse(), True)
 
     #
+    # ListCdnAccessLog.
+    #
+    # @param request VodListCdnAccessLogRequest
+    # @return VodListCdnAccessLogResponse
+    # @raise Exception
+    def list_cdn_access_log(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ListCdnAccessLog", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodListCdnAccessLogResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodListCdnAccessLogResponse(), True)
+
+    #
+    # DescribeVodDomainBandwidthData.
+    #
+    # @param request VodDescribeVodDomainBandwidthDataRequest
+    # @return VodDescribeVodDomainBandwidthDataResponse
+    # @raise Exception
+    def describe_vod_domain_bandwidth_data(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeVodDomainBandwidthData", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDescribeVodDomainBandwidthDataResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDescribeVodDomainBandwidthDataResponse(), True)
+
+    #
     # AddCallbackSubscription.
     #
     # @param request VodAddCallbackSubscriptionRequest
@@ -1720,3 +1754,4 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodSetCallbackEventResponse(), True)
+
