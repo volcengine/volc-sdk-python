@@ -46,8 +46,6 @@ api_info = {
                                          {},
                                          {}),
     "UpdateAuthKey": ApiInfo("POST", "/", {"Action": "UpdateAuthKey", "Version": LIVE_SERVICE_VERSION}, {}, {}),
-    "EnableAuth": ApiInfo("POST", "/", {"Action": "EnableAuth", "Version": LIVE_SERVICE_VERSION}, {}, {}),
-    "DisableAuth": ApiInfo("POST", "/", {"Action": "DisableAuth", "Version": LIVE_SERVICE_VERSION}, {}, {}),
     "DescribeAuth": ApiInfo("POST", "/", {"Action": "DescribeAuth", "Version": LIVE_SERVICE_VERSION}, {}, {}),
     "ForbidStream": ApiInfo("POST", "/", {"Action": "ForbidStream", "Version": LIVE_SERVICE_VERSION}, {},
                             {}),
@@ -57,9 +55,6 @@ api_info = {
                         {}),
     "CreateCert": ApiInfo("POST", "/", {"Action": "CreateCert", "Version": LIVE_SERVICE_VERSION}, {},
                           {}),
-    "DescribeCertDetailSecret": ApiInfo("POST", "/",
-                                        {"Action": "DescribeCertDetailSecret", "Version": LIVE_SERVICE_VERSION}, {},
-                                        {}),
     "UpdateCert": ApiInfo("POST", "/", {"Action": "UpdateCert", "Version": LIVE_SERVICE_VERSION}, {},
                           {}),
     "BindCert": ApiInfo("POST", "/", {"Action": "BindCert", "Version": LIVE_SERVICE_VERSION}, {},
@@ -277,22 +272,6 @@ class LiveService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def enable_auth(self, params):
-        action = "EnableAuth"
-        res = self.json(action, dict(), json.dumps(params))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
-    def disable_auth(self, params):
-        action = "DisableAuth"
-        res = self.json(action, dict(), json.dumps(params))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
     def describe_auth(self, params):
         action = "DescribeAuth"
         res = self.json(action, dict(), json.dumps(params))
@@ -327,14 +306,6 @@ class LiveService(Service):
 
     def create_cert(self, params):
         action = "CreateCert"
-        res = self.json(action, dict(), json.dumps(params))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
-    def describe_cert_detail_secret(self, params):
-        action = "DescribeCertDetailSecret"
         res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
