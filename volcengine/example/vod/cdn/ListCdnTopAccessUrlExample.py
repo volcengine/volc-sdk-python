@@ -11,7 +11,6 @@ if __name__ == '__main__':
     vod_service.set_sk('your sk')
     try:
         req = VodListCdnTopAccessUrlRequest()
-        req.SpaceName = 'your space name'
         req.Domains = 'your domian'
         req.StartTimestamp = 0
         req.EndTimestamp = 0
