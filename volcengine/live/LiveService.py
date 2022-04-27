@@ -563,7 +563,7 @@ class LiveService(Service):
 
     def describe_play_stream_list(self, params):
         action = "DescribePlayStreamList"
-        res = self.json(action, dict(), json.dumps(params))
+        res = self.get(action, params)
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
