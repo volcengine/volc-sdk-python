@@ -89,12 +89,12 @@ def example_describe_live_domain_log(live_service):
 # 示例 - 查询推流监控数据
 def example_describe_push_stream_metrics(live_service):
     body = {
-        # "Domain": "example.com",
-        # "App": "example_app",
-        # "Stream": "example_stream",
+        "Domain": "example.com",
+        "App": "example_app",
+        "Stream": "example_stream",
         "StartTime": "2022-04-21T00:00:00Z",
         "EndTime": "2022-04-23T23:59:59Z",
-        # "Aggregation": 30,
+        "Aggregation": 30,
     }
     resp = live_service.describe_push_stream_metrics(body)
     print(resp)
