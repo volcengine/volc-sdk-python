@@ -46,8 +46,6 @@ api_info = {
                                          {},
                                          {}),
     "UpdateAuthKey": ApiInfo("POST", "/", {"Action": "UpdateAuthKey", "Version": LIVE_SERVICE_VERSION}, {}, {}),
-    "EnableAuth": ApiInfo("POST", "/", {"Action": "EnableAuth", "Version": LIVE_SERVICE_VERSION}, {}, {}),
-    "DisableAuth": ApiInfo("POST", "/", {"Action": "DisableAuth", "Version": LIVE_SERVICE_VERSION}, {}, {}),
     "DescribeAuth": ApiInfo("POST", "/", {"Action": "DescribeAuth", "Version": LIVE_SERVICE_VERSION}, {}, {}),
     "ForbidStream": ApiInfo("POST", "/", {"Action": "ForbidStream", "Version": LIVE_SERVICE_VERSION}, {},
                             {}),
@@ -57,9 +55,6 @@ api_info = {
                         {}),
     "CreateCert": ApiInfo("POST", "/", {"Action": "CreateCert", "Version": LIVE_SERVICE_VERSION}, {},
                           {}),
-    "DescribeCertDetailSecret": ApiInfo("POST", "/",
-                                        {"Action": "DescribeCertDetailSecret", "Version": LIVE_SERVICE_VERSION}, {},
-                                        {}),
     "UpdateCert": ApiInfo("POST", "/", {"Action": "UpdateCert", "Version": LIVE_SERVICE_VERSION}, {},
                           {}),
     "BindCert": ApiInfo("POST", "/", {"Action": "BindCert", "Version": LIVE_SERVICE_VERSION}, {},
@@ -107,6 +102,51 @@ api_info = {
     "ListVhostSnapshotPreset": ApiInfo("POST", "/",
                                        {"Action": "ListVhostSnapshotPreset", "Version": LIVE_SERVICE_VERSION}, {},
                                        {}),
+    "DescribeLiveBandwidthData": ApiInfo("POST", "/",
+                                         {"Action": "DescribeLiveBandwidthData", "Version": LIVE_SERVICE_VERSION}, {},
+                                         {}),
+    "DescribeLiveTrafficData": ApiInfo("POST", "/",
+                                       {"Action": "DescribeLiveTrafficData", "Version": LIVE_SERVICE_VERSION}, {},
+                                       {}),
+    "DescribeLiveP95PeakBandwidthData": ApiInfo("POST", "/",
+                                                {"Action": "DescribeLiveP95PeakBandwidthData",
+                                                 "Version": LIVE_SERVICE_VERSION}, {},
+                                                {}),
+    "DescribeRecordData": ApiInfo("POST", "/",
+                                  {"Action": "DescribeRecordData", "Version": LIVE_SERVICE_VERSION}, {},
+                                  {}),
+    "DescribeTranscodeData": ApiInfo("POST", "/",
+                                     {"Action": "DescribeTranscodeData", "Version": LIVE_SERVICE_VERSION}, {},
+                                     {}),
+    "DescribeSnapshotData": ApiInfo("POST", "/",
+                                    {"Action": "DescribeSnapshotData", "Version": LIVE_SERVICE_VERSION}, {},
+                                    {}),
+
+    "DescribeLiveDomainLog": ApiInfo("GET", "/",
+                                     {"Action": "DescribeLiveDomainLog", "Version": LIVE_SERVICE_VERSION}, {},
+                                     {}),
+    "DescribePushStreamMetrics": ApiInfo("POST", "/",
+                                         {"Action": "DescribePushStreamMetrics", "Version": LIVE_SERVICE_VERSION}, {},
+                                         {}),
+    "DescribeLiveStreamSessions": ApiInfo("POST", "/",
+                                          {"Action": "DescribeLiveStreamSessions", "Version": LIVE_SERVICE_VERSION}, {},
+                                          {}),
+    "DescribePlayResponseStatusStat": ApiInfo("POST", "/",
+                                              {"Action": "DescribePlayResponseStatusStat",
+                                               "Version": LIVE_SERVICE_VERSION}, {},
+                                              {}),
+    "DescribeLiveMetricTrafficData": ApiInfo("POST", "/",
+                                             {"Action": "DescribeLiveMetricTrafficData",
+                                              "Version": LIVE_SERVICE_VERSION}, {},
+                                             {}),
+    "DescribeLiveMetricBandwidthData": ApiInfo("POST", "/",
+                                               {"Action": "DescribeLiveMetricBandwidthData",
+                                                "Version": LIVE_SERVICE_VERSION}, {},
+                                               {}),
+    "DescribePlayStreamList": ApiInfo("GET", "/",
+                                      {"Action": "DescribePlayStreamList",
+                                       "Version": LIVE_SERVICE_VERSION}, {},
+                                      {}),
 }
 
 
@@ -232,22 +272,6 @@ class LiveService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def enable_auth(self, params):
-        action = "EnableAuth"
-        res = self.json(action, dict(), json.dumps(params))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
-    def disable_auth(self, params):
-        action = "DisableAuth"
-        res = self.json(action, dict(), json.dumps(params))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
     def describe_auth(self, params):
         action = "DescribeAuth"
         res = self.json(action, dict(), json.dumps(params))
@@ -282,14 +306,6 @@ class LiveService(Service):
 
     def create_cert(self, params):
         action = "CreateCert"
-        res = self.json(action, dict(), json.dumps(params))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
-    def describe_cert_detail_secret(self, params):
-        action = "DescribeCertDetailSecret"
         res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
@@ -443,6 +459,111 @@ class LiveService(Service):
     def list_vhost_snapshot_preset(self, params):
         action = "ListVhostSnapshotPreset"
         res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_bandwidth_data(self, params):
+        action = "DescribeLiveBandwidthData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_traffic_data(self, params):
+        action = "DescribeLiveTrafficData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_P95Peak_bandwidth_data(self, params):
+        action = "DescribeLiveP95PeakBandwidthData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_record_data(self, params):
+        action = "DescribeRecordData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_transcode_data(self, params):
+        action = "DescribeTranscodeData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_snapshot_data(self, params):
+        action = "DescribeSnapshotData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_domain_log(self, params):
+        action = "DescribeLiveDomainLog"
+        res = self.get(action, params)
+        # res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_push_stream_metrics(self, params):
+        action = "DescribePushStreamMetrics"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_stream_sessions(self, params):
+        action = "DescribeLiveStreamSessions"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_play_response_status_stat(self, params):
+        action = "DescribePlayResponseStatusStat"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_metric_traffic_data(self, params):
+        action = "DescribeLiveMetricTrafficData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_metric_bandwidth_data(self, params):
+        action = "DescribeLiveMetricBandwidthData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_play_stream_list(self, params):
+        action = "DescribePlayStreamList"
+        res = self.get(action, params)
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
