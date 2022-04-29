@@ -89,6 +89,16 @@ class VisualService(Service):
             "ImageStyleConversion": ApiInfo("POST", "/", {"Action": "ImageStyleConversion", "Version": "2020-08-26"}, {}, {}),
             "3DGameCartoon": ApiInfo("POST", "/", {"Action": "3DGameCartoon", "Version": "2020-08-26"}, {}, {}),
             "HairSegment": ApiInfo("POST", "/", {"Action": "HairSegment", "Version": "2020-08-26"}, {}, {}),
+            "OcrSeal": ApiInfo("POST", "/", {"Action": "OcrSeal", "Version": "2021-08-23"}, {}, {}),
+            "OcrPassInvoice": ApiInfo("POST", "/", {"Action": "OcrPassInvoice", "Version": "2021-08-23"}, {}, {}),
+            "OCRTrade": ApiInfo("POST", "/", {"Action": "OCRTrade", "Version": "2020-12-21"}, {}, {}),
+            "OCRRuanzhu": ApiInfo("POST", "/", {"Action": "OCRRuanzhu", "Version": "2020-12-21"}, {}, {}),
+            "OCRCosmeticProduct": ApiInfo("POST", "/", {"Action": "OCRCosmeticProduct", "Version": "2020-12-21"}, {}, {}),
+            "OCRPdf": ApiInfo("POST", "/", {"Action": "OCRPdf", "Version": "2021-08-23"}, {}, {}),
+            "OCRTable": ApiInfo("POST", "/", {"Action": "OCRTable", "Version": "2021-08-23"}, {}, {}),
+            "VideoCoverSelection": ApiInfo("POST", "/", {"Action": "VideoCoverSelection", "Version": "2020-08-26"}, {}, {}),
+            "VideoHighlightExtractionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionSubmitTask", "Version": "2020-08-26"}, {}, {}),
+            "VideoHighlightExtractionQueryTask": ApiInfo("GET", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
         }
         return api_info
 
@@ -522,6 +532,78 @@ class VisualService(Service):
     def hair_segment(self, form):
         try:
             res_json = self.common_handler("HairSegment", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_seal(self, form):
+        try:
+            res_json = self.common_handler("OcrSeal", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_pass_invoice(self, form):
+        try:
+            res_json = self.common_handler("OcrPassInvoice", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_trade(self, form):
+        try:
+            res_json = self.common_handler("OCRTrade", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    
+    def ocr_ruanzhu(self, form):
+        try:
+            res_json = self.common_handler("OCRRuanzhu", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_cosmetic_product(self, form):
+        try:
+            res_json = self.common_handler("OCRCosmeticProduct", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_pdf(self, form):
+        try:
+            res_json = self.common_handler("OCRPdf", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_table(self, form):
+        try:
+            res_json = self.common_handler("OCRTable", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_cover_selection(self, form):
+        try:
+            res_json = self.common_handler("VideoCoverSelection", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_highlight_extraction_submit_task(self, form):
+        try:
+            res_json = self.common_handler(
+                "VideoHighlightExtractionSubmitTask", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_highlight_extraction_query_task(self, params):
+        try:
+            res_json = self.common_get_handler(
+                "VideoHighlightExtractionQueryTask", params)
             return res_json
         except Exception as e:
             raise Exception(str(e))
