@@ -12,7 +12,6 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from volcengine.vod.models.business import vod_common_pb2 as vod_dot_business_dot_vod__common__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -21,9 +20,8 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n)com.volcengine.service.vod.model.businessB\010VodSpaceP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1cvod/business/vod_space.proto\x12\x1eVolcengine.Vod.Models.Business\x1a\x1dvod/business/vod_common.proto\"\xd0\x01\n\x0cVodSpaceInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\x12\x13\n\x0bProjectName\x18\x04 \x01(\t\x12\x12\n\nBucketName\x18\x05 \x01(\t\x12\x14\n\x0c\x42ucketStatus\x18\x06 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x07 \x01(\t\x12\x10\n\x08UserName\x18\x08 \x01(\t\x12\x11\n\tCreatedAt\x18\t \x01(\t\x12\x0c\n\x04Type\x18\n \x01(\t\x12\x16\n\x0eMediaSyncLevel\x18\x0b \x01(\t\"\xa4\x01\n\x12VodSpaceConfigInfo\x12\x11\n\tAccountID\x18\x01 \x01(\r\x12\x12\n\nInstanceID\x18\x02 \x01(\t\x12\x11\n\tSpaceName\x18\x03 \x01(\t\x12\x0e\n\x06Status\x18\x04 \x01(\t\x12\x44\n\x07\x43onfigs\x18\x05 \x03(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodCommonConfigInfo*p\n\x17VodSpaceUploadConfigKey\x12$\n UndefinedVodSpaceUploadConfigKey\x10\x00\x12/\n+CustomUploadFilePathVodSpaceUploadConfigKey\x10\x01\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodSpaceP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
-  ,
-  dependencies=[vod_dot_business_dot_vod__common__pb2.DESCRIPTOR,])
+  serialized_pb=b'\n\x1cvod/business/vod_space.proto\x12\x1eVolcengine.Vod.Models.Business\"\xd0\x01\n\x0cVodSpaceInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\x12\x13\n\x0bProjectName\x18\x04 \x01(\t\x12\x12\n\nBucketName\x18\x05 \x01(\t\x12\x14\n\x0c\x42ucketStatus\x18\x06 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x07 \x01(\t\x12\x10\n\x08UserName\x18\x08 \x01(\t\x12\x11\n\tCreatedAt\x18\t \x01(\t\x12\x0c\n\x04Type\x18\n \x01(\t\x12\x16\n\x0eMediaSyncLevel\x18\x0b \x01(\t*\xa3\x01\n\x17VodSpaceUploadConfigKey\x12$\n UndefinedVodSpaceUploadConfigKey\x10\x00\x12/\n+CustomUploadFilePathVodSpaceUploadConfigKey\x10\x01\x12\x31\n-AutoPublishAfterUploadVodSpaceUploadConfigKey\x10\x02\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodSpaceP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
+)
 
 _VODSPACEUPLOADCONFIGKEY = _descriptor.EnumDescriptor(
   name='VodSpaceUploadConfigKey',
@@ -42,17 +40,23 @@ _VODSPACEUPLOADCONFIGKEY = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='AutoPublishAfterUploadVodSpaceUploadConfigKey', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=473,
-  serialized_end=585,
+  serialized_start=276,
+  serialized_end=439,
 )
 _sym_db.RegisterEnumDescriptor(_VODSPACEUPLOADCONFIGKEY)
 
 VodSpaceUploadConfigKey = enum_type_wrapper.EnumTypeWrapper(_VODSPACEUPLOADCONFIGKEY)
 UndefinedVodSpaceUploadConfigKey = 0
 CustomUploadFilePathVodSpaceUploadConfigKey = 1
+AutoPublishAfterUploadVodSpaceUploadConfigKey = 2
 
 
 
@@ -146,73 +150,11 @@ _VODSPACEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=96,
-  serialized_end=304,
+  serialized_start=65,
+  serialized_end=273,
 )
 
-
-_VODSPACECONFIGINFO = _descriptor.Descriptor(
-  name='VodSpaceConfigInfo',
-  full_name='Volcengine.Vod.Models.Business.VodSpaceConfigInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='AccountID', full_name='Volcengine.Vod.Models.Business.VodSpaceConfigInfo.AccountID', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='InstanceID', full_name='Volcengine.Vod.Models.Business.VodSpaceConfigInfo.InstanceID', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='SpaceName', full_name='Volcengine.Vod.Models.Business.VodSpaceConfigInfo.SpaceName', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='Status', full_name='Volcengine.Vod.Models.Business.VodSpaceConfigInfo.Status', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='Configs', full_name='Volcengine.Vod.Models.Business.VodSpaceConfigInfo.Configs', index=4,
-      number=5, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=307,
-  serialized_end=471,
-)
-
-_VODSPACECONFIGINFO.fields_by_name['Configs'].message_type = vod_dot_business_dot_vod__common__pb2._VODCOMMONCONFIGINFO
 DESCRIPTOR.message_types_by_name['VodSpaceInfo'] = _VODSPACEINFO
-DESCRIPTOR.message_types_by_name['VodSpaceConfigInfo'] = _VODSPACECONFIGINFO
 DESCRIPTOR.enum_types_by_name['VodSpaceUploadConfigKey'] = _VODSPACEUPLOADCONFIGKEY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -222,13 +164,6 @@ VodSpaceInfo = _reflection.GeneratedProtocolMessageType('VodSpaceInfo', (_messag
   # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodSpaceInfo)
   })
 _sym_db.RegisterMessage(VodSpaceInfo)
-
-VodSpaceConfigInfo = _reflection.GeneratedProtocolMessageType('VodSpaceConfigInfo', (_message.Message,), {
-  'DESCRIPTOR' : _VODSPACECONFIGINFO,
-  '__module__' : 'vod.business.vod_space_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodSpaceConfigInfo)
-  })
-_sym_db.RegisterMessage(VodSpaceConfigInfo)
 
 
 DESCRIPTOR._options = None
