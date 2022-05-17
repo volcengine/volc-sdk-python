@@ -530,9 +530,8 @@ class VerenderService(Service):
 
         return self._call_json('GetWorkspaceHardwareSpecifications', param)
 
-    # @ param time_type 支持 last_day, last_week, last_month, last_year, all, by_hour, by_day, by_month
-    # @ param start_time 和 endtime格式应当符合RFC3339, 比如 2022-05-01T00:00:00+08:00,
-    #         并且当time_type为by_hour|by_day|by_month时，start_time和end_time必须指定
+    # @ param time_type 目前支持 last_day, last_week, last_month, last_year, all
+    # @ param start_time 和 end_time 当前不生效
     def get_account_statistics(self, time_type, start_time=None, end_time=None, workspace_ids=None, user_ids=None):
         param = {
             'TimeType': time_type
@@ -723,8 +722,8 @@ class VerenderService(Service):
 
         return self._call_json('GetFrames', param)
 
-    # filter_conditions = {
-    #   'RequestLayers': [
+    # layer_requests = {
+    #   'LayerRequests': [
     #       {
     #           'LayerIndex': 0,
     #           'PageNum': 1,
