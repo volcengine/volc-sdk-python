@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n)com.volcengine.service.vod.model.businessB\010VodSpaceP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1cvod/business/vod_space.proto\x12\x1eVolcengine.Vod.Models.Business\"\xd0\x01\n\x0cVodSpaceInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\x12\x13\n\x0bProjectName\x18\x04 \x01(\t\x12\x12\n\nBucketName\x18\x05 \x01(\t\x12\x14\n\x0c\x42ucketStatus\x18\x06 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x07 \x01(\t\x12\x10\n\x08UserName\x18\x08 \x01(\t\x12\x11\n\tCreatedAt\x18\t \x01(\t\x12\x0c\n\x04Type\x18\n \x01(\t\x12\x16\n\x0eMediaSyncLevel\x18\x0b \x01(\t*p\n\x17VodSpaceUploadConfigKey\x12$\n UndefinedVodSpaceUploadConfigKey\x10\x00\x12/\n+CustomUploadFilePathVodSpaceUploadConfigKey\x10\x01\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodSpaceP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1cvod/business/vod_space.proto\x12\x1eVolcengine.Vod.Models.Business\"\xd0\x01\n\x0cVodSpaceInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\x12\x13\n\x0bProjectName\x18\x04 \x01(\t\x12\x12\n\nBucketName\x18\x05 \x01(\t\x12\x14\n\x0c\x42ucketStatus\x18\x06 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x07 \x01(\t\x12\x10\n\x08UserName\x18\x08 \x01(\t\x12\x11\n\tCreatedAt\x18\t \x01(\t\x12\x0c\n\x04Type\x18\n \x01(\t\x12\x16\n\x0eMediaSyncLevel\x18\x0b \x01(\t*\xa3\x01\n\x17VodSpaceUploadConfigKey\x12$\n UndefinedVodSpaceUploadConfigKey\x10\x00\x12/\n+CustomUploadFilePathVodSpaceUploadConfigKey\x10\x01\x12\x31\n-AutoPublishAfterUploadVodSpaceUploadConfigKey\x10\x02\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodSpaceP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3'
 )
 
 _VODSPACEUPLOADCONFIGKEY = _descriptor.EnumDescriptor(
@@ -40,17 +40,23 @@ _VODSPACEUPLOADCONFIGKEY = _descriptor.EnumDescriptor(
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='AutoPublishAfterUploadVodSpaceUploadConfigKey', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=275,
-  serialized_end=387,
+  serialized_start=276,
+  serialized_end=439,
 )
 _sym_db.RegisterEnumDescriptor(_VODSPACEUPLOADCONFIGKEY)
 
 VodSpaceUploadConfigKey = enum_type_wrapper.EnumTypeWrapper(_VODSPACEUPLOADCONFIGKEY)
 UndefinedVodSpaceUploadConfigKey = 0
 CustomUploadFilePathVodSpaceUploadConfigKey = 1
+AutoPublishAfterUploadVodSpaceUploadConfigKey = 2
 
 
 
