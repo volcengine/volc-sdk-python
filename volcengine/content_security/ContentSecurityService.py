@@ -39,7 +39,16 @@ class ContentSecurityService(Service):
                     "ImageResult": ApiInfo("GET", "/", {"Action": "GetImageResult", "Version": "2021-11-29"}, {}, {}),
                     "TextRisk": ApiInfo("POST", "/", {"Action": "TextRisk", "Version": "2022-01-26"}, {}, {}),
                     "CreateCustomContents": ApiInfo("POST", "/", {"Action": "CreateCustomContents", "Version": "2022-01-22"}, {}, {}),
-                    "UploadCustomContents": ApiInfo("POST", "/", {"Action": "UploadCustomContents", "Version": "2022-02-07"}, {}, {})
+                    "UploadCustomContents": ApiInfo("POST", "/", {"Action": "UploadCustomContents", "Version": "2022-02-07"}, {}, {}),
+                    "EnableCustomContents": ApiInfo("PUT", "/", {"Action": "EnableCustomContents", "Version": "2022-04-28"}, {}, {}),
+                    "DisableCustomContents": ApiInfo("PUT", "/", {"Action": "DisableCustomContents", "Version": "2022-04-28"}, {}, {}),
+                    "DeleteCustomContents": ApiInfo("PUT", "/", {"Action": "DeleteCustomContents", "Version": "2022-04-28"}, {}, {}),
+                    "AsyncAudioRisk": ApiInfo("POST", "/", {"Action": "AsyncAudioRisk", "Version": "2022-04-01"}, {}, {}),
+                    "GetAudioResult": ApiInfo("GET", "/", {"Action": "GetAudioResult", "Version": "2022-04-01"}, {}, {}),
+                    "AsyncLiveVideoRisk": ApiInfo("POST", "/", {"Action": "AsyncLiveVideoRisk", "Version": "2022-04-25"}, {}, {}),
+                    "GetVideoLiveResult": ApiInfo("GET", "/", {"Action": "GetVideoLiveResult", "Version": "2022-04-25"}, {}, {}),
+                    "AsyncLiveAudioRisk": ApiInfo("POST", "/", {"Action": "AsyncLiveAudioRisk", "Version": "2022-04-25"}, {}, {}),
+                    "GetAudioLiveResult": ApiInfo("GET", "/", {"Action": "GetAudioLiveResult", "Version": "2022-04-25"}, {}, {})
                     }
 
         return api_info
@@ -105,6 +114,69 @@ class ContentSecurityService(Service):
 
     def upload_custom_contents(self, params, body):
         res = self.json("UploadCustomContents", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def enable_custom_contents(self, params, body):
+        res = self.json("EnableCustomContents", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def disable_custom_contents(self, params, body):
+        res = self.json("DisableCustomContents", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def delete_custom_contents(self, params, body):
+        res = self.json("DeleteCustomContents", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def async_live_video_risk(self, params, body):
+        res = self.json("AsyncLiveVideoRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def async_audio_risk(self, params, body):
+        res = self.json("AsyncAudioRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def audio_result(self, params, body):
+        res = self.get("GetAudioResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def async_live_audio_risk(self, params, body):
+        res = self.json("AsyncLiveAudioRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def live_audio_result(self, params, body):
+        res = self.get("GetVideoLiveResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def live_video_result(self, params, body):
+        res = self.get("GetAudioLiveResult", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
