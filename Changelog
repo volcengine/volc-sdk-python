@@ -1,5 +1,11 @@
 ### Change log
 
+2022-05-20 Bumped to version v1.0.44
+- Added verender service
+
+2022-05-12 Bumped to version v1.0.43
+- Added apis for Vod\security
+
 2022-04-28 Bumped to version v1.0.42
 - Added apis for live
 
