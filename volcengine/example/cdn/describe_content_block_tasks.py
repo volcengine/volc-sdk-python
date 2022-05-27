@@ -16,5 +16,5 @@ if __name__ == '__main__':
     }
     print(body)
 
-    resp = svc.describe_edge_nrt_data_summary(body)
+    resp = svc.describe_content_block_tasks(body)
     print(resp)

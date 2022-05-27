@@ -12,7 +12,7 @@ if __name__ == '__main__':
     body = {
         'StartTime': now - 86400,
         'EndTime': now,
-        'Metric': 'pv',
+        'Metric': 'clientIp',
         'Domain': 'example.com',
     }
     print(body)
