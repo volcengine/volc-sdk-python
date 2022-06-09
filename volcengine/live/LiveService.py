@@ -147,6 +147,10 @@ api_info = {
                                       {"Action": "DescribePlayStreamList",
                                        "Version": LIVE_SERVICE_VERSION}, {},
                                       {}),
+    "DescribePullToPushBandwidthData":ApiInfo("POST", "/",
+                                               {"Action": "DescribePullToPushBandwidthData",
+                                                "Version": LIVE_SERVICE_VERSION}, {},
+                                               {}),
 }
 
 
@@ -564,6 +568,14 @@ class LiveService(Service):
     def describe_play_stream_list(self, params):
         action = "DescribePlayStreamList"
         res = self.get(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_pull_to_push_bandwidth_data(self, params):
+        action = "DescribePullToPushBandwidthData"
+        res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
