@@ -12,10 +12,8 @@ if __name__ == '__main__':
     body = {
         'StartTime': now - 3600,
         'EndTime': now,
-        'Metric': 'pv',
         'Domain': 'example.com',
-        'Interval': '5min',
     }
 
-    resp = svc.describe_cdn_origin_data(body)
+    resp = svc.describe_cdn_access_log(body)
     print(resp)
