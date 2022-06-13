@@ -12,6 +12,7 @@ if __name__ == '__main__':
     body = {
         'StartTime': now - 3600,
         'EndTime': now,
+        'Metric': 'flux',
         'Domain': 'example.com',
     }
 

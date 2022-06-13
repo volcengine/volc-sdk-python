@@ -17,5 +17,5 @@ if __name__ == '__main__':
     }
     print(body)
 
-    resp = svc.describe_edge_top_nrt_data(body)
+    resp = svc.describe_origin_top_nrt_data(body)
     print(resp)
