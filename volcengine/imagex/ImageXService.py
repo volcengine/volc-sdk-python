@@ -340,14 +340,14 @@ class ImageXService(Service):
         res = self.get(action, params, doseq)
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
+        res_json = json.loads(json.dumps(res))
         return res_json
 
     def imagex_post(self, action, params, body):
         res = self.json(action, params, body)
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
+        res_json = json.loads(json.dumps(res))
         return res_json
 
     def get_image_ocr(self, action, params):
@@ -372,14 +372,14 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
 
     def get_image_erase_models(self, action, params):
         res = self.imagex_get(action, params)
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
 
     def get_image_erase_result(self, action, params):
@@ -407,7 +407,7 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
 
     def get_image_bg_fill_result(self, action, params):
@@ -423,7 +423,7 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
 
     def get_image_duplicate_detection(self, action, params):
@@ -436,7 +436,7 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
 
     def get_denoising_image(self, action, params):
@@ -451,7 +451,7 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
 
     def get_image_comic_result(self, action, params):
@@ -462,7 +462,7 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(json))
+        res_json = json.loads(res)
         return res_json
 
     def get_image_super_resolution_result(self, action, params):
@@ -474,23 +474,7 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
-        return res_json
-
-    def get_image_smart_crop_result(self, action, params):
-        body = {
-            'ServiceId': params['ServiceId'],
-            'StoreUri': params['StoreUri'],
-            'Policy': params['Policy'],
-            'Scene': params['Scene'],
-            'Sigma': params['Sigma'],
-            'Width': params['Width'],
-            'Height': params['Height']
-        }
-        res = self.imagex_post(action, params, json.dumps(body))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
 
     def get_mosaic_image(self, action, params):
@@ -503,7 +487,7 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
 
     def get_license_plate_detection(self, action, params):
@@ -513,5 +497,5 @@ class ImageXService(Service):
         res = self.imagex_post(action, params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
-        res_json = json.loads(json.dumps(res))
+        res_json = json.loads(res)
         return res_json
