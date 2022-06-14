@@ -129,6 +129,7 @@ class Uploader:
         self.host = host
         self.store_infos = store_infos
         self.datas = datas
+
         self.queue = queue.Queue()
         self.queue_lock = threading.Lock()
 
