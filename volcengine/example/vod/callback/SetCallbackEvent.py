@@ -12,6 +12,9 @@ if __name__ == '__main__':
     try:
         req = VodSetCallbackEventRequest()
         req.SpaceName = 'your space name'
+        # AuthEnabled 1: enable;0: disable
+        req.AuthEnabled = '1'
+        req.PrivateKey = 'your private key'
         resp = vod_service.set_callback_event(req)
     except Exception:
         raise

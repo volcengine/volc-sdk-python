@@ -98,7 +98,7 @@ class VodServiceConfig(Service):
             "ListCdnStatusData": ApiInfo("GET", "/", {"Action": "ListCdnStatusData", "Version": "2022-01-01"}, {}, {}),
             # 回调管理
             "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
-            "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2021-01-01"}, {}, {}),
+            "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2022-01-01"}, {}, {}),
 
         }
         return api_info
