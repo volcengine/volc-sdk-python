@@ -10,11 +10,9 @@ if __name__ == '__main__':
     svc.set_sk(sk)
 
     body = {
-        'Domain': 'example.com',
         'ServiceType': 'web',
-        'ResourceTag': 'key:val',
-        'PageNum': 3,
-        'PageSize': 50
+        'PageNum': 1,
+        'PageSize': 100
     }
 
     resp = svc.list_cdn_domains(body)
