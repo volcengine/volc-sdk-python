@@ -294,6 +294,40 @@ class VodService(VodServiceConfig):
         return resp
 
     #
+    # GetAllPlayInfo.
+    #
+    # @param request VodGetAllPlayInfoRequest
+    # @return VodGetAllPlayInfoResponse
+    # @raise Exception
+    def get_all_play_info(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetAllPlayInfo", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetAllPlayInfoResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAllPlayInfoResponse(), True)
+
+    #
     # GetPlayInfo.
     #
     # @param request VodGetPlayInfoRequest
@@ -1720,6 +1754,108 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodDescribeVodDomainBandwidthDataResponse(), True)
+
+    #
+    # ListCdnUsageData.
+    #
+    # @param request VodListCdnUsageDataRequest
+    # @return VodCdnStatisticsCommonResponse
+    # @raise Exception
+    def list_cdn_usage_data(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ListCdnUsageData", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodCdnStatisticsCommonResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodCdnStatisticsCommonResponse(), True)
+
+    #
+    # ListCdnStatusData.
+    #
+    # @param request VodListCdnStatusDataRequest
+    # @return VodCdnStatisticsCommonResponse
+    # @raise Exception
+    def list_cdn_status_data(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ListCdnStatusData", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodCdnStatisticsCommonResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodCdnStatisticsCommonResponse(), True)
+
+    #
+    # DescribeIpInfo.
+    #
+    # @param request VodDescribeIPInfoRequest
+    # @return VodDescribeIPInfoResponse
+    # @raise Exception
+    def describe_ip_info(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeIpInfo", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDescribeIPInfoResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDescribeIPInfoResponse(), True)
 
     #
     # AddCallbackSubscription.

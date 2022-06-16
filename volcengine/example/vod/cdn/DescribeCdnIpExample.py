@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 from volcengine.vod.VodService import VodService
-from volcengine.vod.models.request.request_vod_pb2 import VodSetCallbackEventRequest
+from volcengine.vod.models.request.request_vod_pb2 import VodDescribeIPInfoRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -10,16 +10,12 @@ if __name__ == '__main__':
     vod_service.set_ak('your ak')
     vod_service.set_sk('your sk')
     try:
-        req = VodSetCallbackEventRequest()
-        req.SpaceName = 'your space name'
-        # AuthEnabled 1: enable;0: disable
-        req.AuthEnabled = '1'
-        req.PrivateKey = 'your private key'
-        resp = vod_service.set_callback_event(req)
+        req = VodDescribeIPInfoRequest()
+        req.Ips = "1.1.1.1"
+        resp = vod_service.describe_ip_info(req)
     except Exception:
         raise
     else:
         print(resp)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.Error)
-            
