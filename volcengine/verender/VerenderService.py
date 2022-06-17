@@ -5,7 +5,7 @@ import os
 import redo
 import threading
 
-import boto3
+import minio
 from requests import exceptions
 
 from volcengine.ApiInfo import ApiInfo
@@ -342,12 +342,23 @@ class VerenderService(Service):
         return api_info_map
 
     @staticmethod
-    def get_s3_client(ak, sk, endpoint):
-        return boto3.client(
-            aws_access_key_id=ak,
-            aws_secret_access_key=sk,
-            region_name='cn-north-1',
-            service_name='s3', use_ssl=True, endpoint_url=endpoint)
+    def get_minio_client(endpoint, ak, sk, token):
+        addr = endpoint
+        secure = True
+        if endpoint[:8] == "https://":
+            addr = endpoint[8:]
+        elif endpoint[:7] == "http://":
+            addr = endpoint[7:]
+            secure = False
+
+        return minio.Minio(
+            addr,
+            access_key=ak,
+            secret_key=sk,
+            session_token=token,
+            secure=secure,
+            region=VerenderService._DEFAULT_REGION
+        )
 
     @redo.retriable(retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout),
                     sleeptime=0.1, jitter=0.01, attempts=2)
@@ -361,17 +372,19 @@ class VerenderService(Service):
             endpoint = store_info['Result']['cluster_endpoint']
             ak = store_info['Result']['access_key']
             sk = store_info['Result']['secret_key']
+            token = store_info['Result']['bucket_token']
+            bucket = store_info['Result']['bucket_name']
         except Exception as ex:
             raise Exception('get storage access for {} error {}'.format(workspace_id, str(ex)))
 
-        s3_files = []
-        cli = VerenderService.get_s3_client(ak, sk, endpoint)
+        objects = []
+        cli = VerenderService.get_minio_client(endpoint, ak, sk, token)
         for file_path in file_list:
-            s3_file_name = os.path.basename(file_path)
-            cli.upload_file(file_path, store_info['Result'].get('bucket_name'), s3_file_name)
-            s3_files.append(s3_file_name)
+            object = os.path.basename(file_path)
+            cli.fput_object(bucket, object, file_path)
+            objects.append(object)
 
-        return s3_files
+        return objects
 
 
     @redo.retriable(retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout),
@@ -632,7 +645,7 @@ class VerenderService(Service):
     #     'Tryout': true, --true表示先试渲染, false表示正式渲染
     #     'TryoutFrames': ['1', '2', '3'], --试渲染的帧列表, Tryout为true时才有意义, 类型为string
     #     'MayaProjectPath': '', --maya工程里mel文件的路径, 需要先上传到存储，非必选
-    #     'SceneFile': 'test_legency_render.ma', --渲染工程的路径，需要先上传到存储
+    #     'SceneFile': 'test_legency_render.ma', --渲染工程的路径，需要先上传到存储后再提交渲染任务
     #     'OutputFormat': 'PNG', --渲染结果格式, 支持PNG和EXR
     #     'Resolutions': [
     #         {
@@ -666,13 +679,7 @@ class VerenderService(Service):
     #     ], --用户选择的执行渲染的硬件规格, 非必选
     #     'UseLegacyRenderLayers': true --maya渲染工程是否使用传统层, 非必选
     # }
-    def create_render_job(self, workspace_id, render_job_cfg, local_scene_file, local_maya_project_path=None):
-        scene_file = self.upload_file(workspace_id, [local_scene_file])
-        render_job_cfg['SceneFile'] = scene_file[0]
-        if local_maya_project_path:
-            maya_project_path = self.upload_file(workspace_id, [local_maya_project_path])
-            render_job_cfg['MayaProjectPath'] = maya_project_path[0]
-
+    def create_render_job(self, workspace_id, render_job_cfg):
         param = {
             'WorkspaceId': workspace_id
         }
