@@ -1,5 +1,8 @@
 ### Change log
 
+2022-06-17 Bumped to version v1.0.46
+- Added aps for imagex\vod
+
 2022-06-09 Bumped to version v1.0.45
 - Fixed apis for cdn
 - Added api for security
