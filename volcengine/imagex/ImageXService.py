@@ -100,12 +100,6 @@ api_info = {
     "GetImageBgFillResult":
         ApiInfo("POST", "/", {"Action": "GetImageBgFillResult",
                 "Version": IMAGEX_API_VERSION}, {}, {}),
-    "GetImageDuplicateDetection":
-        ApiInfo("POST", "/", {"Action": "GetImageDuplicateDetection",
-                "Version": IMAGEX_API_VERSION}, {}, {}),
-    "GetDenoisingImage":
-        ApiInfo("POST", "/", {"Action": "GetDenoisingImage",
-                "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageComicResult":
         ApiInfo("POST", "/", {"Action": "GetImageComicResult",
                 "Version": IMAGEX_API_VERSION}, {}, {}),
@@ -114,9 +108,6 @@ api_info = {
                 "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageSmartCropResult":
         ApiInfo("POST", "/", {"Action": "GetImageSmartCropResult",
-                "Version": IMAGEX_API_VERSION}, {}, {}),
-    "GetMosaicImage":
-        ApiInfo("POST", "/", {"Action": "GetMosaicImage",
                 "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetLicensePlateDetection":
         ApiInfo("POST", "/", {"Action": "GetLicensePlateDetection",
@@ -351,152 +342,111 @@ class ImageXService(Service):
         res_json = json.loads(json.dumps(res))
         return res_json
 
-    def get_image_ocr(self, action, params):
-        res = self.post(action, params, {})
+    def get_image_ocr(self, params):
+        res = self.post('GetImageOCR', params, {})
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetImageOCR')
         res_json = json.loads(res)
         return res_json
 
-    def get_image_segment(self, action, params):
-        res = self.post(action, params, {})
+    def get_image_segment(self, params):
+        res = self.post('GetSegmentImage', params, {})
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetSegmentImage')
         res_json = json.loads(res)
         return res_json
 
-    def get_image_quality(self, action, params):
+    def get_image_quality(self, params):
         body = {
             'ImageUrl': params['ImageUrl'],
-            'VqType': params['VqType']
+            'VqType':  params.get('VqType', None)
         }
-        res = self.imagex_post(action, params, json.dumps(body))
+        res = self.imagex_post('GetImageQuality', params, json.dumps(body))
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetImageQuality')
         res_json = json.loads(res)
         return res_json
 
-    def get_image_erase_models(self, action, params):
-        res = self.imagex_get(action, params)
+    def get_image_erase_models(self, params):
+        res = self.imagex_get('GetImageEraseModels', params)
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetImageEraseModels')
         res_json = json.loads(res)
         return res_json
 
-    def get_image_erase_result(self, action, params):
+    def get_image_erase_result(self, params):
         body = {
             'ServiceId': params['ServiceId'],
             'StoreUri': params['StoreUri'],
             'Model': params['Model'],
-            'BBox': params['BBox']
+            'BBox': params.get('BBox', None)
         }
-        res = self.imagex_post(action, params, json.dumps(body))
+        res = self.imagex_post('GetImageEraseResult', params, json.dumps(body))
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetImageEraseResult')
         res_json = json.loads(res)
         return res_json
 
-    def get_image_enhance_result(self, action, params):
+    def get_image_enhance_result(self, params):
         body = {
             'ServiceId': params['ServiceId'],
             'StoreUri': params['StoreUri'],
             'Model': params['Model'],
-            'DisableAr': params['DisableAr'],
-            'DisableSharp': params['DisableSharp'],
-            'Resolution': params['Resolution']
+            'DisableAr': params.get('DisableAr', None),
+            'DisableSharp': params.get('DisableSharp', None),
+            'Resolution': params.get('Resolution', None)
         }
-        res = self.imagex_post(action, params, json.dumps(body))
+        res = self.imagex_post('GetImageEnhanceResult', params, json.dumps(body))
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetImageEnhanceResult')
         res_json = json.loads(res)
         return res_json
 
-    def get_image_bg_fill_result(self, action, params):
+    def get_image_bg_fill_result(self, params):
         body = {
             'ServiceId': params['ServiceId'],
             'StoreUri': params['StoreUri'],
             'Model': params['Model'],
-            'Top': params['Top'],
-            'Bottom': params['Bottom'],
-            'Left': params['Left'],
-            'Right': params['Right']
+            'Top': params.get('Top', None),
+            'Bottom': params.get('Bottom', None),
+            'Left': params.get('Left', None),
+            'Right': params.get('Right', None)
         }
-        res = self.imagex_post(action, params, json.dumps(body))
+        res = self.imagex_post('GetImageBgFillResult', params, json.dumps(body))
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetImageBgFillResult')
         res_json = json.loads(res)
         return res_json
 
-    def get_image_duplicate_detection(self, action, params):
-        body = {
-            'ServiceId': params['ServiceId'],
-            'Urls': params['Urls'],
-            'Async': params['Async'],
-            'Callback': params['Callback']
-        }
-        res = self.imagex_post(action, params, json.dumps(body))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
-    def get_denoising_image(self, action, params):
-        body = {
-            'ServiceId': params['ServiceId'],
-            'StoreUri': params['StoreUri'],
-            'ImageUrl': params['ImageUrl'],
-            'OutFormat': params['OutFormat'],
-            'Intensity': params['Intensity'],
-            'CanDemotion': params['CanDemotion']
-        }
-        res = self.imagex_post(action, params, json.dumps(body))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
-    def get_image_comic_result(self, action, params):
+    def get_image_comic_result(self, params):
         body = {
             'ServiceId': params['ServiceId'],
             'StoreUri': params['StoreUri']
         }
-        res = self.imagex_post(action, params, json.dumps(body))
+        res = self.imagex_post('GetImageComicResult', params, json.dumps(body))
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetImageComicResult')
         res_json = json.loads(res)
         return res_json
 
-    def get_image_super_resolution_result(self, action, params):
+    def get_image_super_resolution_result(self, params):
         body = {
             'ServiceId': params['ServiceId'],
             'StoreUri': params['StoreUri'],
-            'Multiple': params['Multiple']
+            'Multiple': params.get('Multiple', None)
         }
-        res = self.imagex_post(action, params, json.dumps(body))
+        res = self.imagex_post('GetImageSuperResolutionResult', params, json.dumps(body))
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetImageSuperResolutionResult')
         res_json = json.loads(res)
         return res_json
 
-    def get_mosaic_image(self, action, params):
-        body = {
-            'OriImgUri': params['OriImgUri'],
-            'Locations': params['Locations'],
-            'MosaicUri': params['MosaicUri'],
-            'LocType': params['LocType'],
-        }
-        res = self.imagex_post(action, params, json.dumps(body))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
-    def get_license_plate_detection(self, action, params):
+    def get_license_plate_detection(self, params):
         body = {
             'ImageUri': params['ImageUri']
         }
-        res = self.imagex_post(action, params, json.dumps(body))
+        res = self.imagex_post('GetLicensePlateDetection', params, json.dumps(body))
         if res == '':
-            raise Exception("%s: empty response" % action)
+            raise Exception("%s: empty response" % 'GetLicensePlateDetection')
         res_json = json.loads(res)
         return res_json

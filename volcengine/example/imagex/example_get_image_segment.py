@@ -21,5 +21,5 @@ if __name__ == '__main__':
         'Size': 0
     }
 
-    resp = imagex_service.get_image_segment("GetSegmentImage", params)
+    resp = imagex_service.get_image_segment(params)
     print(resp)

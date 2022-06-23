@@ -14,5 +14,5 @@ if __name__ == '__main__':
     params['Scene'] = "license"
     params['StoreUri'] = "xx"
 
-    resp = imagex_service.get_image_ocr("GetImageOCR", params)
+    resp = imagex_service.get_image_ocr(params)
     print(resp)
