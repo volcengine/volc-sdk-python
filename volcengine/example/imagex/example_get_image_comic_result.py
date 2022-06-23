@@ -13,5 +13,5 @@ if __name__ == '__main__':
     params['ServiceId'] = 'service id'
     params['StoreUri'] = 'xx'
 
-    resp = imagex_service.get_image_comic_result('GetImageComicResult', params)
+    resp = imagex_service.get_image_comic_result(params)
     print(resp)

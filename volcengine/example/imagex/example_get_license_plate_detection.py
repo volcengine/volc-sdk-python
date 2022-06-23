@@ -13,5 +13,5 @@ if __name__ == '__main__':
     params['ServiceId'] = 'service id'
     params['ImageUri'] = ''
 
-    resp = imagex_service.get_license_plate_detection('GetLicensePlateDetection', params)
+    resp = imagex_service.get_license_plate_detection(params)
     print(resp)

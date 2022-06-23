@@ -18,5 +18,5 @@ if __name__ == '__main__':
     params['Left'] = 0.0
     params['Right'] = 0.0
 
-    resp = imagex_service.get_image_bg_fill_result('GetImageBgFillResult', params)
+    resp = imagex_service.get_image_bg_fill_result(params)
     print(resp)

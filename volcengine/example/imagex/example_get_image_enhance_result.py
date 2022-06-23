@@ -17,5 +17,5 @@ if __name__ == '__main__':
     params['DisableSharp'] = False
     params['Resolution'] = ''
 
-    resp = imagex_service.get_image_enhance_result('GetImageEnhanceResult', params)
+    resp = imagex_service.get_image_enhance_result(params)
     print(resp)

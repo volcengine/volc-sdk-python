@@ -14,5 +14,5 @@ if __name__ == '__main__':
     params['StoreUri'] = 'xx'
     params['Model'] = ''
 
-    resp = imagex_service.get_image_erase_result('GetImageEraseResult', params)
+    resp = imagex_service.get_image_erase_result(params)
     print(resp)

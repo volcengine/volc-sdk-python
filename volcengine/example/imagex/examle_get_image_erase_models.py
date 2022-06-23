@@ -13,5 +13,5 @@ if __name__ == '__main__':
     params = dict()
     params['Type'] = 0
 
-    resp = imagex_service.get_image_erase_models('GetImageEraseModels', params)
+    resp = imagex_service.get_image_erase_models(params)
     print(resp)

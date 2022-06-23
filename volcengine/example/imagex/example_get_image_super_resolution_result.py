@@ -14,5 +14,5 @@ if __name__ == '__main__':
     params['StoreUri'] = 'xx'
     params['Multiple'] = 2.0
 
-    resp = imagex_service.get_image_super_resolution_result('GetImageSuperResolutionResult', params)
+    resp = imagex_service.get_image_super_resolution_result(params)
     print(resp)
