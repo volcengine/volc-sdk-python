@@ -14,7 +14,6 @@ if __name__ == '__main__':
         req.Domains = 'your domian'
         req.StartTimestamp = 0
         req.EndTimestamp = 0
-        req.SortType = 'your sort type'
         resp = vod_service.list_cdn_status_data(req)
     except Exception:
         raise

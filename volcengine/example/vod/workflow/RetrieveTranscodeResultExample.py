@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 from volcengine.vod.VodService import VodService
-from volcengine.vod.models.request.request_vod_pb2 import VodListCdnUsageDataRequest
+from volcengine.vod.models.request.request_vod_pb2 import VodRetrieveTranscodeResultRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -10,14 +10,16 @@ if __name__ == '__main__':
     vod_service.set_ak('your ak')
     vod_service.set_sk('your sk')
     try:
-        req = VodListCdnUsageDataRequest()
-        req.Domains = 'your domian'
-        req.StartTimestamp = 0
-        req.EndTimestamp = 0
-        resp = vod_service.list_cdn_usage_data(req)
+        req = VodRetrieveTranscodeResultRequest()
+        req.Vid = 'your vid'
+        req.ResultType = 'your resultType'
+        resp = vod_service.retrieve_transcode_result(req)
     except Exception:
         raise
     else:
         print(resp)
-        if resp.ResponseMetadata.Error.Code != '':
+        if resp.ResponseMetadata.Error.Code == '':
+            print(resp.Result)
+        else:
             print(resp.ResponseMetadata.Error)
+
