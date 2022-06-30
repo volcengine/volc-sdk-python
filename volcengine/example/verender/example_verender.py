@@ -70,8 +70,9 @@ class VerenderExample(object):
         self.verender.download_statistic_details(start_time, end_time, save_file, workspace_ids=workspace_ids)
 
     def create_one_render_job(self):
+        workspace_id = 1442
         user_info = self.verender.get_current_user()["Result"]
-        scene_file = "/tmp/test.ma"
+        scene_file = self.verender.upload_file(workspace_id, ["/tmp/test.ma"])[0]
         render_job_cfg = {
             'UserName': user_info['UserName'],
             'Title': 'test-render-job-1',
@@ -79,6 +80,7 @@ class VerenderExample(object):
             'DccVersion': '',
             'Renderer': 'redshift',
             'RendererVersion': '',
+            'SceneFile': scene_file,
             'Tryout': False,
             'TryoutFrames': [1, 2, 3],
             'OutputFormat': 'PNG',
@@ -89,9 +91,8 @@ class VerenderExample(object):
                 'legacy_layer'
             ]
         }
-        workspace_id = 1442
 
-        resp = self.verender.create_render_job(workspace_id, render_job_cfg, scene_file)
+        resp = self.verender.create_render_job(workspace_id, render_job_cfg)
         print(resp)
 
     def list_all_render_jobs(self):
