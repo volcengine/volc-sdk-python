@@ -16,4 +16,5 @@ urllib3==1.26.2
 setuptools>=44.1.1
 google>=3.0.0
 six>=1.0
+protobuf~=3.11.0
 minio~=7.1.9
