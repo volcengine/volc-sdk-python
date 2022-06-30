@@ -16,8 +16,8 @@ if __name__ == '__main__':
         req.DomainName = 'your domain'
         req.TaskType = 'your task type'
         req.Status = 'your status'
-        req.StartTime = 0
-        req.EndTime = 0
+        req.StartTimestamp = 0
+        req.EndTimestamp = 0
         req.PageNum = 1
         req.PageSize = 10
         resp = vod_service.list_cdn_tasks(req)

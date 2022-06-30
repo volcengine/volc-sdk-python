@@ -45,15 +45,20 @@ class SecretNumberService(Service):
     def get_api_info():
         api_info = {
             "BindAXB": ApiInfo("POST", "/", {"Action": "BindAXB", "Version": "2020-09-01"}, {}, {}),
-            "SelectNumberAndBindAXB": ApiInfo("POST", "/", {"Action": "SelectNumberAndBindAXB", "Version": "2020-09-01"}, {}, {}),
+            "SelectNumberAndBindAXB": ApiInfo("POST", "/",
+                                              {"Action": "SelectNumberAndBindAXB", "Version": "2020-09-01"}, {}, {}),
             "UnbindAXB": ApiInfo("POST", "/", {"Action": "UnbindAXB", "Version": "2020-09-01"}, {}, {}),
             "QuerySubscription": ApiInfo("POST", "/", {"Action": "QuerySubscription", "Version": "2020-09-01"}, {}, {}),
-            "QuerySubscriptionForList": ApiInfo("POST", "/", {"Action": "QuerySubscriptionForList", "Version": "2020-09-01"}, {}, {}),
+            "QuerySubscriptionForList": ApiInfo("POST", "/",
+                                                {"Action": "QuerySubscriptionForList", "Version": "2020-09-01"}, {},
+                                                {}),
             "UpgradeAXToAXB": ApiInfo("POST", "/", {"Action": "UpgradeAXToAXB", "Version": "2020-09-01"}, {}, {}),
             "UpdateAXB": ApiInfo("POST", "/", {"Action": "UpdateAXB", "Version": "2020-09-01"}, {}, {}),
             "BindAXN": ApiInfo("POST", "/", {"Action": "BindAXN", "Version": "2020-09-01"}, {}, {}),
             "UpdateAXN": ApiInfo("POST", "/", {"Action": "UpdateAXN", "Version": "2020-09-01"}, {}, {}),
             "UnbindAXN": ApiInfo("POST", "/", {"Action": "UnbindAXN", "Version": "2020-09-01"}, {}, {}),
+            "Click2Call": ApiInfo("POST", "/", {"Action": "Click2Call", "Version": "2021-09-01"}, {}, {}),
+            "Click2CallLite": ApiInfo("POST", "/", {"Action": "Click2CallLite", "Version": "2021-09-01"}, {}, {}),
         }
         return api_info
 
@@ -118,7 +123,7 @@ class SecretNumberService(Service):
         try:
             return self.common_handler("UpdateAXB", form)
         except Exception as e:
-            raise Exception(str(e))\
+            raise Exception(str(e))
 
     @retry(tries=2, delay=0)
     def bind_axn(self, form):
@@ -138,5 +143,19 @@ class SecretNumberService(Service):
     def unbind_axn(self, form):
         try:
             return self.common_handler("UnbindAXN", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def click2_call(self, form):
+        try:
+            return self.common_handler("Click2Call", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def click2_call_lite(self, form):
+        try:
+            return self.common_handler("Click2CallLite", form)
         except Exception as e:
             raise Exception(str(e))

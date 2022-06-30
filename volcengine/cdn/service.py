@@ -97,6 +97,8 @@ api_info = {
                                     {}),
     # 获取 IP 归属信息: https://www.volcengine.com/docs/6454/75233
     "DescribeIPInfo": ApiInfo("POST", "/", {"Action": "DescribeIPInfo", "Version": SERVICE_VERSION}, {}, {}),
+    # 批量获取 IP 归属信息: https://www.volcengine.com/docs/6454/106852
+    "DescribeIPListInfo": ApiInfo("POST", "/", {"Action": "DescribeIPListInfo", "Version": SERVICE_VERSION}, {}, {}),
     # 获取回源节点 IP 列表: https://www.volcengine.com/docs/6454/75273
     "DescribeCdnUpperIp": ApiInfo("POST", "/", {"Action": "DescribeCdnUpperIp", "Version": SERVICE_VERSION}, {}, {}),
     # 添加资源标签: https://www.volcengine.com/docs/6454/80308
@@ -440,6 +442,16 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "DescribeIPInfo"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_iplist_info(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeIPListInfo"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)

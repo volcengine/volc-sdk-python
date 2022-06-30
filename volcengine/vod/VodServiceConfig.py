@@ -34,7 +34,7 @@ class VodServiceConfig(Service):
     def get_service_info(region):
         service_info_map = {
             'cn-north-1': ServiceInfo("vod.volcengineapi.com", {'Accept': 'application/json'},
-                                      Credentials('', '', 'vod', 'cn-north-1'), 10, 10),
+                                      Credentials('', '', 'vod', 'cn-north-1'), 60, 60),
         }
         service_info = service_info_map.get(region, None)
         if not service_info:
@@ -47,6 +47,7 @@ class VodServiceConfig(Service):
         api_info = {
             # 播放
             "GetPlayInfo": ApiInfo("GET", "/", {"Action": "GetPlayInfo", "Version": "2020-08-01"}, {}, {}),
+            "GetAllPlayInfo": ApiInfo("GET", "/", {"Action": "GetAllPlayInfo", "Version": "2022-01-01"}, {}, {}),
             "GetPrivateDrmPlayAuth": ApiInfo("GET", "/", {"Action": "GetPrivateDrmPlayAuth", "Version": "2020-08-01"}, {}, {}),
             "GetHlsDecryptionKey": ApiInfo("GET", "/", {"Action": "GetHlsDecryptionKey", "Version": "2020-08-01"}, {}, {}),
             "GetPlayInfoWithLiveTimeShiftScene": ApiInfo("GET", "/", {"Action": "GetPlayInfoWithLiveTimeShiftScene", "Version": "2021-11-01"}, {}, {}),
@@ -79,21 +80,28 @@ class VodServiceConfig(Service):
             "ListSnapshots": ApiInfo("GET", "/", {"Action": "ListSnapshots", "Version": "2021-01-01"}, {}, {}),
             # 转码
             "StartWorkflow": ApiInfo("GET", "/", {"Action": "StartWorkflow", "Version": "2020-08-01"}, {}, {}),
+            "RetrieveTranscodeResult": ApiInfo("GET", "/", {"Action": "RetrieveTranscodeResult", "Version": "2020-08-01"}, {}, {}),
             # 空间管理
             "CreateSpace": ApiInfo("GET", "/", {"Action": "CreateSpace", "Version": "2021-01-01"}, {}, {}),
             "ListSpace": ApiInfo("GET", "/", {"Action": "ListSpace", "Version": "2021-01-01"}, {}, {}),
             "GetSpaceDetail": ApiInfo("GET", "/", {"Action": "GetSpaceDetail", "Version": "2022-01-01"}, {}, {}),
-            # "GetSpaceConfig": ApiInfo("GET", "/", {"Action": "GetSpaceConfig", "Version": "2022-01-01"}, {}, {}),
             "UpdateSpace": ApiInfo("GET", "/", {"Action": "UpdateSpace", "Version": "2021-01-01"}, {}, {}),
             "UpdateSpaceUploadConfig": ApiInfo("GET", "/", {"Action": "UpdateSpaceUploadConfig", "Version": "2022-01-01"}, {}, {}),
             # 分发加速
             "ListDomain": ApiInfo("GET", "/", {"Action": "ListDomain", "Version": "2021-01-01"}, {}, {}),
             "CreateCdnRefreshTask": ApiInfo("GET", "/", {"Action": "CreateCdnRefreshTask", "Version": "2021-01-01"}, {}, {}),
             "CreateCdnPreloadTask": ApiInfo("GET", "/", {"Action": "CreateCdnPreloadTask", "Version": "2021-01-01"}, {}, {}),
-            "ListCdnTasks": ApiInfo("GET", "/", {"Action": "ListCdnTasks", "Version": "2021-01-01"}, {}, {}),
+            "ListCdnTasks": ApiInfo("GET", "/", {"Action": "ListCdnTasks", "Version": "2022-01-01"}, {}, {}),
+            "ListCdnAccessLog": ApiInfo("GET", "/", {"Action": "ListCdnAccessLog", "Version": "2022-01-01"}, {}, {}),
+            "ListCdnTopAccessUrl": ApiInfo("GET", "/", {"Action": "ListCdnTopAccessUrl", "Version": "2022-01-01"}, {}, {}),
+            "DescribeVodDomainBandwidthData": ApiInfo("GET", "/", {"Action": "DescribeVodDomainBandwidthData", "Version": "2020-08-01"}, {}, {}),
+            "ListCdnUsageData": ApiInfo("GET", "/", {"Action": "ListCdnUsageData", "Version": "2022-01-01"}, {}, {}),
+            "ListCdnStatusData": ApiInfo("GET", "/", {"Action": "ListCdnStatusData", "Version": "2022-01-01"}, {}, {}),
+            "DescribeIpInfo": ApiInfo("GET", "/", {"Action": "DescribeIpInfo", "Version": "2022-01-01"}, {}, {}),
+            "ListCdnPvData": ApiInfo("GET", "/", {"Action": "ListCdnPvData", "Version": "2022-01-01"}, {}, {}),
             # 回调管理
             "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
-            "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2021-01-01"}, {}, {}),
+            "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2022-01-01"}, {}, {}),
 
         }
         return api_info

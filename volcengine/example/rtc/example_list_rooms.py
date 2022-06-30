@@ -1,7 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volcengine.rtc.RtcService import RtcService
+from volcengine.example.rtc.RtcService import RtcService
 
 if __name__ == '__main__':
     # using your own AK and SK
