@@ -25,7 +25,7 @@ class RtcService(Service):
 
     @staticmethod
     def get_service_info():
-        service_info = ServiceInfo("open.volcengineapi.com", {'Accept': 'application/json'},
+        service_info = ServiceInfo("rtc.volcengineapi.com", {'Accept': 'application/json'},
                                    Credentials('', '', 'rtc', 'cn-north-1'), 5, 5)
         return service_info
 
