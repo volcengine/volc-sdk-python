@@ -1,7 +1,8 @@
 ### Change log
 
-2022-06-28 Bumped to version v1.0.48
-- Modify example for rtc
+2022-06-30 Bumped to version v1.0.48
+- Upgraded example for rtc
+- Upgraded service verender
 
 2022-06-23 Bumped to version v1.0.47
 - Added apis for imagex\vod
