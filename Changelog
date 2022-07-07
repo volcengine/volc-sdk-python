@@ -1,5 +1,8 @@
 ### Change log
 
+2022-07-07 Bumped to version v1.0.49
+- Added apis for live\rtc
+
 2022-06-30 Bumped to version v1.0.48
 - Upgraded example for rtc
 - Upgraded service verender
