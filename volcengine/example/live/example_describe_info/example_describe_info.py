@@ -184,6 +184,20 @@ def example_describe_play_stream_list(live_service):
     print(resp)
 
 
+# 示例 - 拉流转推带宽查询
+def example_describe_pull_to_push_bandwidth_data(live_service):
+    params = {
+        "DomainList": ["example.com"],
+        "DstAddrTypeList": ["live","Third"],
+        "StartTime": "2021-04-13T00:00:00+08:00",
+        "EndTime": "2021-04-14T00:00:00+08:00",
+        "Aggregation": 300,
+        "ShowDetail": True
+    }
+    resp = live_service.describe_pull_to_push_bandwidth_data(params)
+    print(resp)
+
+
 if __name__ == '__main__':
     live_service = LiveService()
     ak = ""
@@ -216,3 +230,5 @@ if __name__ == '__main__':
     example_describe_live_metric_bandwidth_data(live_service)
     # 13.拉流域名查询流列表
     example_describe_play_stream_list(live_service)
+    # 14.拉流转推带宽查询
+    example_describe_pull_to_push_bandwidth_data(live_service)
