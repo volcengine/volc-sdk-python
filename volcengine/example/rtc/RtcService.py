@@ -32,15 +32,17 @@ class RtcService(Service):
     @staticmethod
     def get_api_info():
         api_info = {
-            "ListRooms": ApiInfo("GET", "/", {"Action": "ListRooms", "Version": "2020-12-01"}, {}, {}),
+            "ListRoomInformation": ApiInfo(
+                "GET", "/", {"Action": "ListRoomInformation", "Version": "2020-12-01"}, {}, {}
+            ),
             "ListIndicators": ApiInfo("POST", "/", {"Action": "ListIndicators", "Version": "2020-12-01"}, {}, {}),
         }
         return api_info
 
-    def list_rooms(self, params):
-        res = self.get("ListRooms", params)
+    def list_room_information(self, params):
+        res = self.get("ListRoomInformation", params)
         if res == '':
-            raise Exception("ListRooms: empty response")
+            raise Exception("ListRoomInformation: empty response")
         res_json = json.loads(res)
         return res_json
 
