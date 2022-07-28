@@ -87,6 +87,7 @@ class VodServiceConfig(Service):
             "GetSpaceDetail": ApiInfo("GET", "/", {"Action": "GetSpaceDetail", "Version": "2022-01-01"}, {}, {}),
             "UpdateSpace": ApiInfo("GET", "/", {"Action": "UpdateSpace", "Version": "2021-01-01"}, {}, {}),
             "UpdateSpaceUploadConfig": ApiInfo("GET", "/", {"Action": "UpdateSpaceUploadConfig", "Version": "2022-01-01"}, {}, {}),
+            "DescribeVodSpaceStorageData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceStorageData", "Version": "2020-08-01"}, {}, {}),
             # 分发加速
             "ListDomain": ApiInfo("GET", "/", {"Action": "ListDomain", "Version": "2021-01-01"}, {}, {}),
             "CreateCdnRefreshTask": ApiInfo("GET", "/", {"Action": "CreateCdnRefreshTask", "Version": "2021-01-01"}, {}, {}),
@@ -95,6 +96,7 @@ class VodServiceConfig(Service):
             "ListCdnAccessLog": ApiInfo("GET", "/", {"Action": "ListCdnAccessLog", "Version": "2022-01-01"}, {}, {}),
             "ListCdnTopAccessUrl": ApiInfo("GET", "/", {"Action": "ListCdnTopAccessUrl", "Version": "2022-01-01"}, {}, {}),
             "DescribeVodDomainBandwidthData": ApiInfo("GET", "/", {"Action": "DescribeVodDomainBandwidthData", "Version": "2020-08-01"}, {}, {}),
+            "DescribeVodDomainTrafficData": ApiInfo("GET", "/", {"Action": "DescribeVodDomainTrafficData", "Version": "2020-08-01"}, {}, {}),
             "ListCdnUsageData": ApiInfo("GET", "/", {"Action": "ListCdnUsageData", "Version": "2022-01-01"}, {}, {}),
             "ListCdnStatusData": ApiInfo("GET", "/", {"Action": "ListCdnStatusData", "Version": "2022-01-01"}, {}, {}),
             "DescribeIpInfo": ApiInfo("GET", "/", {"Action": "DescribeIpInfo", "Version": "2022-01-01"}, {}, {}),
