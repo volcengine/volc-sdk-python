@@ -17,13 +17,15 @@ from volcengine.vod.models.business import vod_play_pb2 as vod_dot_business_dot_
 from volcengine.vod.models.business import vod_media_pb2 as vod_dot_business_dot_vod__media__pb2
 from volcengine.vod.models.business import vod_upload_pb2 as vod_dot_business_dot_vod__upload__pb2
 from volcengine.vod.models.business import vod_workflow_pb2 as vod_dot_business_dot_vod__workflow__pb2
+from volcengine.vod.models.business import vod_edit_pb2 as vod_dot_business_dot_vod__edit__pb2
 from volcengine.vod.models.business import vod_space_pb2 as vod_dot_business_dot_vod__space__pb2
 from volcengine.vod.models.business import vod_cdn_pb2 as vod_dot_business_dot_vod__cdn__pb2
 from volcengine.vod.models.business import vod_common_pb2 as vod_dot_business_dot_vod__common__pb2
 from volcengine.vod.models.business import vod_smart_strategy_pb2 as vod_dot_business_dot_vod__smart__strategy__pb2
+from volcengine.vod.models.business import vod_apps_manage_pb2 as vod_dot_business_dot_vod__apps__manage__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1fvod/response/response_vod.proto\x12\x1eVolcengine.Vod.Models.Response\x1a\x0f\x62\x61se/base.proto\x1a\x1bvod/business/vod_play.proto\x1a\x1cvod/business/vod_media.proto\x1a\x1dvod/business/vod_upload.proto\x1a\x1fvod/business/vod_workflow.proto\x1a\x1cvod/business/vod_space.proto\x1a\x1avod/business/vod_cdn.proto\x1a\x1dvod/business/vod_common.proto\x1a%vod/business/vod_smart_strategy.proto\"\xaa\x01\n\x19VodGetAllPlayInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodAllPlayInfoResult\"\xa3\x01\n\x16VodGetPlayInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12@\n\x06Result\x18\x02 \x01(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodPlayInfoModel\"\xb7\x01\n\x1eVodGetOriginalPlayInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.VodGetOriginalPlayInfoResult\"\xbb\x01\n VodGetPrivateDrmPlayAuthResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12N\n\x06Result\x18\x02 \x01(\x0b\x32>.Volcengine.Vod.Models.Business.VodGetPrivateDrmPlayAuthResult\"\xb7\x01\n\x1eVodGetHlsDecryptionKeyResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.VodGetHlsDecryptionKeyResult\"\xd3\x01\n,VodGetPlayInfoWithLiveTimeShiftSceneResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12Z\n\x06Result\x18\x02 \x01(\x0b\x32J.Volcengine.Vod.Models.Business.VodGetPlayInfoWithLiveTimeShiftSceneResult\"\xa0\x01\n\x16VodUploadMediaResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12=\n\x06Result\x18\x02 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodCommitData\"\xa7\x01\n\x1eVodQueryUploadTaskInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x01(\x0b\x32,.Volcengine.Vod.Models.Business.VodQueryData\"\xa3\x01\n\x14VodUrlUploadResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodUrlResponseData\"\xaf\x01\n\x1aVodApplyUploadInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12H\n\x06Result\x18\x02 \x01(\x0b\x32\x38.Volcengine.Vod.Models.Business.VodApplyUploadInfoResult\"\xb1\x01\n\x1bVodCommitUploadInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Vod.Models.Business.VodCommitUploadInfoResult\"\xa9\x01\n\x18VodGetMediaInfosResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodGetMediaInfosData\"e\n\x1aVodUpdateMediaInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xaf\x01\n\x1fVodGetRecommendedPosterResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodGetRecPosterData\"n\n#VodUpdateMediaPublishStatusResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xa5\x01\n\x16VodDeleteMediaResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodDeleteMediaData\"\xaf\x01\n\x1bVodDeleteTranscodesResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12G\n\x06Result\x18\x02 \x01(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodDeleteTranscodesData\"\xa7\x01\n\x17VodGetMediaListResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodGetMediaListData\"\xb5\x01\n\x1eVodGetSubtitleInfoListResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12J\n\x06Result\x18\x02 \x01(\x0b\x32:.Volcengine.Vod.Models.Business.VodGetSubtitleInfoListData\"\xb7\x01\n\x1fVodUpdateSubtitleStatusResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12K\n\x06Result\x18\x02 \x01(\x0b\x32;.Volcengine.Vod.Models.Business.VodUpdateSubtitleStatusData\"h\n\x1dVodUpdateSubtitleInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xb8\x01\n!VodGetAuditFramesForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12J\n\x06Result\x18\x02 \x01(\x0b\x32:.Volcengine.Vod.Models.Business.VodGetFramesForAuditResult\"\xb5\x01\n\x1eVodGetMLFramesForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12J\n\x06Result\x18\x02 \x01(\x0b\x32:.Volcengine.Vod.Models.Business.VodGetFramesForAuditResult\"\xbf\x01\n\"VodGetBetterFramesForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12P\n\x06Result\x18\x02 \x01(\x0b\x32@.Volcengine.Vod.Models.Business.VodGetBetterFramesForAuditResult\"\xb9\x01\n\x1fVodGetAudioInfoForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12M\n\x06Result\x18\x02 \x01(\x0b\x32=.Volcengine.Vod.Models.Business.VodGetAudioInfoForAuditResult\"\xdb\x01\n0VodGetAutomaticSpeechRecognitionForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12^\n\x06Result\x18\x02 \x01(\x0b\x32N.Volcengine.Vod.Models.Business.VodGetAutomaticSpeechRecognitionForAuditResult\"\xcd\x01\n)VodGetAudioEventDetectionForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12W\n\x06Result\x18\x02 \x01(\x0b\x32G.Volcengine.Vod.Models.Business.VodGetAudioEventDetectionForAuditResult\"\xc1\x01\n$VodCreateVideoClassificationResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12P\n\x06Result\x18\x02 \x01(\x0b\x32@.Volcengine.Vod.Models.Business.VodCreateVideoClassificationData\"o\n$VodUpdateVideoClassificationResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"o\n$VodDeleteVideoClassificationResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xbb\x01\n#VodListVideoClassificationsResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12K\n\x06Result\x18\x02 \x01(\x0b\x32;.Volcengine.Vod.Models.Business.VodVideoClassificationsData\"\xa4\x01\n\x18VodListSnapshotsResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Vod.Models.Business.VodSnapshotData\"\xab\x01\n\x18VodStartWorkflowResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodStartWorkflowResult\"\xae\x01\n\"VodRetrieveTranscodeResultResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Vod.Models.Business.TranscodeResult\"a\n\x16VodCreateSpaceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\x9d\x01\n\x14VodListSpaceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodSpaceInfo\"\xa2\x01\n\x19VodGetSpaceDetailResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x01(\x0b\x32,.Volcengine.Vod.Models.Business.VodSpaceInfo\"a\n\x16VodUpdateSpaceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"m\n\"VodUpdateSpaceUploadConfigResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xa5\x01\n\x15VodListDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodDomainConfigInfo\"\xb2\x01\n\x1fVodCreateCdnRefreshTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodCreateCdnTaskResult\"\xb2\x01\n\x1fVodCreateCdnPreloadTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodCreateCdnTaskResult\"\xa4\x01\n\x17VodListCdnTasksResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12@\n\x06Result\x18\x02 \x01(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodCdnTaskResult\"\xb1\x01\n\x1bVodListCdnAccessLogResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Vod.Models.Business.VodListCdnAccessLogResult\"\xb7\x01\n\x1eVodListCdnTopAccessUrlResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.VodListCdnTopAccessUrlResult\"\xcd\x01\n)VodDescribeVodDomainBandwidthDataResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12W\n\x06Result\x18\x02 \x01(\x0b\x32G.Volcengine.Vod.Models.Business.VodDescribeVodDomainBandwidthDataResult\"\xb7\x01\n\x1eVodCdnStatisticsCommonResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.VodCdnStatisticsCommonResult\"\xa2\x01\n\x19VodDescribeIPInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodCdnIpInfo\"m\n\"VodAddCallbackSubscriptionResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"f\n\x1bVodSetCallbackEventResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xc9\x01\n\'VodGetSmartStrategyLitePlayInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12U\n\x06Result\x18\x02 \x01(\x0b\x32\x45.Volcengine.Vod.Models.Business.VodGetSmartStrategyLitePlayInfoResultB\xcc\x01\n)com.volcengine.service.vod.model.responseB\x0bVodResponseP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/response\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Response\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1fvod/response/response_vod.proto\x12\x1eVolcengine.Vod.Models.Response\x1a\x0f\x62\x61se/base.proto\x1a\x1bvod/business/vod_play.proto\x1a\x1cvod/business/vod_media.proto\x1a\x1dvod/business/vod_upload.proto\x1a\x1fvod/business/vod_workflow.proto\x1a\x1bvod/business/vod_edit.proto\x1a\x1cvod/business/vod_space.proto\x1a\x1avod/business/vod_cdn.proto\x1a\x1dvod/business/vod_common.proto\x1a%vod/business/vod_smart_strategy.proto\x1a\"vod/business/vod_apps_manage.proto\"\xaa\x01\n\x19VodGetAllPlayInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodAllPlayInfoResult\"\xa3\x01\n\x16VodGetPlayInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12@\n\x06Result\x18\x02 \x01(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodPlayInfoModel\"\xb7\x01\n\x1eVodGetOriginalPlayInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.VodGetOriginalPlayInfoResult\"\xbb\x01\n VodGetPrivateDrmPlayAuthResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12N\n\x06Result\x18\x02 \x01(\x0b\x32>.Volcengine.Vod.Models.Business.VodGetPrivateDrmPlayAuthResult\"\xb7\x01\n\x1eVodGetHlsDecryptionKeyResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.VodGetHlsDecryptionKeyResult\"\xd3\x01\n,VodGetPlayInfoWithLiveTimeShiftSceneResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12Z\n\x06Result\x18\x02 \x01(\x0b\x32J.Volcengine.Vod.Models.Business.VodGetPlayInfoWithLiveTimeShiftSceneResult\"\xa0\x01\n\x16VodUploadMediaResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12=\n\x06Result\x18\x02 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodCommitData\"\xa7\x01\n\x1eVodQueryUploadTaskInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x01(\x0b\x32,.Volcengine.Vod.Models.Business.VodQueryData\"\xa3\x01\n\x14VodUrlUploadResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodUrlResponseData\"\xaf\x01\n\x1aVodApplyUploadInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12H\n\x06Result\x18\x02 \x01(\x0b\x32\x38.Volcengine.Vod.Models.Business.VodApplyUploadInfoResult\"\xb1\x01\n\x1bVodCommitUploadInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Vod.Models.Business.VodCommitUploadInfoResult\"\xa9\x01\n\x18VodGetMediaInfosResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodGetMediaInfosData\"e\n\x1aVodUpdateMediaInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xaf\x01\n\x1fVodGetRecommendedPosterResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodGetRecPosterData\"n\n#VodUpdateMediaPublishStatusResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xa5\x01\n\x16VodDeleteMediaResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodDeleteMediaData\"\xaf\x01\n\x1bVodDeleteTranscodesResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12G\n\x06Result\x18\x02 \x01(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodDeleteTranscodesData\"\xa7\x01\n\x17VodGetMediaListResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodGetMediaListData\"\xb5\x01\n\x1eVodGetSubtitleInfoListResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12J\n\x06Result\x18\x02 \x01(\x0b\x32:.Volcengine.Vod.Models.Business.VodGetSubtitleInfoListData\"\xb7\x01\n\x1fVodUpdateSubtitleStatusResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12K\n\x06Result\x18\x02 \x01(\x0b\x32;.Volcengine.Vod.Models.Business.VodUpdateSubtitleStatusData\"h\n\x1dVodUpdateSubtitleInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xb8\x01\n!VodGetAuditFramesForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12J\n\x06Result\x18\x02 \x01(\x0b\x32:.Volcengine.Vod.Models.Business.VodGetFramesForAuditResult\"\xb5\x01\n\x1eVodGetMLFramesForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12J\n\x06Result\x18\x02 \x01(\x0b\x32:.Volcengine.Vod.Models.Business.VodGetFramesForAuditResult\"\xbf\x01\n\"VodGetBetterFramesForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12P\n\x06Result\x18\x02 \x01(\x0b\x32@.Volcengine.Vod.Models.Business.VodGetBetterFramesForAuditResult\"\xb9\x01\n\x1fVodGetAudioInfoForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12M\n\x06Result\x18\x02 \x01(\x0b\x32=.Volcengine.Vod.Models.Business.VodGetAudioInfoForAuditResult\"\xdb\x01\n0VodGetAutomaticSpeechRecognitionForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12^\n\x06Result\x18\x02 \x01(\x0b\x32N.Volcengine.Vod.Models.Business.VodGetAutomaticSpeechRecognitionForAuditResult\"\xcd\x01\n)VodGetAudioEventDetectionForAuditResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12W\n\x06Result\x18\x02 \x01(\x0b\x32G.Volcengine.Vod.Models.Business.VodGetAudioEventDetectionForAuditResult\"\xc1\x01\n$VodCreateVideoClassificationResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12P\n\x06Result\x18\x02 \x01(\x0b\x32@.Volcengine.Vod.Models.Business.VodCreateVideoClassificationData\"o\n$VodUpdateVideoClassificationResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"o\n$VodDeleteVideoClassificationResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xbb\x01\n#VodListVideoClassificationsResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12K\n\x06Result\x18\x02 \x01(\x0b\x32;.Volcengine.Vod.Models.Business.VodVideoClassificationsData\"\xa4\x01\n\x18VodListSnapshotsResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Vod.Models.Business.VodSnapshotData\"\xab\x01\n\x18VodStartWorkflowResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodStartWorkflowResult\"\xae\x01\n\"VodRetrieveTranscodeResultResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Vod.Models.Business.TranscodeResult\"\xc0\x01\n$VodSubmitDirectEditTaskAsyncResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12O\n\x06Result\x18\x02 \x01(\x0b\x32?.Volcengine.Vod.Models.Business.SubmitDirectEditTaskAsyncResult\"\xae\x01\n\x1eVodGetDirectEditResultResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x03(\x0b\x32\x33.Volcengine.Vod.Models.Business.GetDirectEditResult\"a\n\x16VodCreateSpaceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\x9d\x01\n\x14VodListSpaceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodSpaceInfo\"\xa2\x01\n\x19VodGetSpaceDetailResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x01(\x0b\x32,.Volcengine.Vod.Models.Business.VodSpaceInfo\"a\n\x16VodUpdateSpaceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"m\n\"VodUpdateSpaceUploadConfigResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xc7\x01\n&VodDescribeVodSpaceStorageDataResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12T\n\x06Result\x18\x02 \x01(\x0b\x32\x44.Volcengine.Vod.Models.Business.VodDescribeVodSpaceStorageDataResult\"\xa5\x01\n\x15VodListDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodDomainConfigInfo\"\xb2\x01\n\x1fVodCreateCdnRefreshTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodCreateCdnTaskResult\"\xb2\x01\n\x1fVodCreateCdnPreloadTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodCreateCdnTaskResult\"\xa4\x01\n\x17VodListCdnTasksResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12@\n\x06Result\x18\x02 \x01(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodCdnTaskResult\"\xb1\x01\n\x1bVodListCdnAccessLogResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Vod.Models.Business.VodListCdnAccessLogResult\"\xb7\x01\n\x1eVodListCdnTopAccessUrlResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.VodListCdnTopAccessUrlResult\"\xcd\x01\n)VodDescribeVodDomainBandwidthDataResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12W\n\x06Result\x18\x02 \x01(\x0b\x32G.Volcengine.Vod.Models.Business.VodDescribeVodDomainBandwidthDataResult\"\xb7\x01\n\x1eVodCdnStatisticsCommonResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12L\n\x06Result\x18\x02 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.VodCdnStatisticsCommonResult\"\xa2\x01\n\x19VodDescribeIPInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodCdnIpInfo\"\xc9\x01\n\'VodDescribeVodDomainTrafficDataResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12U\n\x06Result\x18\x02 \x01(\x0b\x32\x45.Volcengine.Vod.Models.Business.VodDescribeVodDomainTrafficDataResult\"m\n\"VodAddCallbackSubscriptionResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"f\n\x1bVodSetCallbackEventResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xc9\x01\n\'VodGetSmartStrategyLitePlayInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12U\n\x06Result\x18\x02 \x01(\x0b\x32\x45.Volcengine.Vod.Models.Business.VodGetSmartStrategyLitePlayInfoResult\"\xa5\x01\n\x15VodGetAppInfoResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x43\n\x06Result\x18\x02 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodGetAppInfoResultB\xcc\x01\n)com.volcengine.service.vod.model.responseB\x0bVodResponseP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/response\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Response\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 
 
@@ -61,11 +63,14 @@ _VODLISTVIDEOCLASSIFICATIONSRESPONSE = DESCRIPTOR.message_types_by_name['VodList
 _VODLISTSNAPSHOTSRESPONSE = DESCRIPTOR.message_types_by_name['VodListSnapshotsResponse']
 _VODSTARTWORKFLOWRESPONSE = DESCRIPTOR.message_types_by_name['VodStartWorkflowResponse']
 _VODRETRIEVETRANSCODERESULTRESPONSE = DESCRIPTOR.message_types_by_name['VodRetrieveTranscodeResultResponse']
+_VODSUBMITDIRECTEDITTASKASYNCRESPONSE = DESCRIPTOR.message_types_by_name['VodSubmitDirectEditTaskAsyncResponse']
+_VODGETDIRECTEDITRESULTRESPONSE = DESCRIPTOR.message_types_by_name['VodGetDirectEditResultResponse']
 _VODCREATESPACERESPONSE = DESCRIPTOR.message_types_by_name['VodCreateSpaceResponse']
 _VODLISTSPACERESPONSE = DESCRIPTOR.message_types_by_name['VodListSpaceResponse']
 _VODGETSPACEDETAILRESPONSE = DESCRIPTOR.message_types_by_name['VodGetSpaceDetailResponse']
 _VODUPDATESPACERESPONSE = DESCRIPTOR.message_types_by_name['VodUpdateSpaceResponse']
 _VODUPDATESPACEUPLOADCONFIGRESPONSE = DESCRIPTOR.message_types_by_name['VodUpdateSpaceUploadConfigResponse']
+_VODDESCRIBEVODSPACESTORAGEDATARESPONSE = DESCRIPTOR.message_types_by_name['VodDescribeVodSpaceStorageDataResponse']
 _VODLISTDOMAINRESPONSE = DESCRIPTOR.message_types_by_name['VodListDomainResponse']
 _VODCREATECDNREFRESHTASKRESPONSE = DESCRIPTOR.message_types_by_name['VodCreateCdnRefreshTaskResponse']
 _VODCREATECDNPRELOADTASKRESPONSE = DESCRIPTOR.message_types_by_name['VodCreateCdnPreloadTaskResponse']
@@ -75,9 +80,11 @@ _VODLISTCDNTOPACCESSURLRESPONSE = DESCRIPTOR.message_types_by_name['VodListCdnTo
 _VODDESCRIBEVODDOMAINBANDWIDTHDATARESPONSE = DESCRIPTOR.message_types_by_name['VodDescribeVodDomainBandwidthDataResponse']
 _VODCDNSTATISTICSCOMMONRESPONSE = DESCRIPTOR.message_types_by_name['VodCdnStatisticsCommonResponse']
 _VODDESCRIBEIPINFORESPONSE = DESCRIPTOR.message_types_by_name['VodDescribeIPInfoResponse']
+_VODDESCRIBEVODDOMAINTRAFFICDATARESPONSE = DESCRIPTOR.message_types_by_name['VodDescribeVodDomainTrafficDataResponse']
 _VODADDCALLBACKSUBSCRIPTIONRESPONSE = DESCRIPTOR.message_types_by_name['VodAddCallbackSubscriptionResponse']
 _VODSETCALLBACKEVENTRESPONSE = DESCRIPTOR.message_types_by_name['VodSetCallbackEventResponse']
 _VODGETSMARTSTRATEGYLITEPLAYINFORESPONSE = DESCRIPTOR.message_types_by_name['VodGetSmartStrategyLitePlayInfoResponse']
+_VODGETAPPINFORESPONSE = DESCRIPTOR.message_types_by_name['VodGetAppInfoResponse']
 VodGetAllPlayInfoResponse = _reflection.GeneratedProtocolMessageType('VodGetAllPlayInfoResponse', (_message.Message,), {
   'DESCRIPTOR' : _VODGETALLPLAYINFORESPONSE,
   '__module__' : 'vod.response.response_vod_pb2'
@@ -316,6 +323,20 @@ VodRetrieveTranscodeResultResponse = _reflection.GeneratedProtocolMessageType('V
   })
 _sym_db.RegisterMessage(VodRetrieveTranscodeResultResponse)
 
+VodSubmitDirectEditTaskAsyncResponse = _reflection.GeneratedProtocolMessageType('VodSubmitDirectEditTaskAsyncResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODSUBMITDIRECTEDITTASKASYNCRESPONSE,
+  '__module__' : 'vod.response.response_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Response.VodSubmitDirectEditTaskAsyncResponse)
+  })
+_sym_db.RegisterMessage(VodSubmitDirectEditTaskAsyncResponse)
+
+VodGetDirectEditResultResponse = _reflection.GeneratedProtocolMessageType('VodGetDirectEditResultResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETDIRECTEDITRESULTRESPONSE,
+  '__module__' : 'vod.response.response_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Response.VodGetDirectEditResultResponse)
+  })
+_sym_db.RegisterMessage(VodGetDirectEditResultResponse)
+
 VodCreateSpaceResponse = _reflection.GeneratedProtocolMessageType('VodCreateSpaceResponse', (_message.Message,), {
   'DESCRIPTOR' : _VODCREATESPACERESPONSE,
   '__module__' : 'vod.response.response_vod_pb2'
@@ -350,6 +371,13 @@ VodUpdateSpaceUploadConfigResponse = _reflection.GeneratedProtocolMessageType('V
   # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Response.VodUpdateSpaceUploadConfigResponse)
   })
 _sym_db.RegisterMessage(VodUpdateSpaceUploadConfigResponse)
+
+VodDescribeVodSpaceStorageDataResponse = _reflection.GeneratedProtocolMessageType('VodDescribeVodSpaceStorageDataResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODDESCRIBEVODSPACESTORAGEDATARESPONSE,
+  '__module__' : 'vod.response.response_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Response.VodDescribeVodSpaceStorageDataResponse)
+  })
+_sym_db.RegisterMessage(VodDescribeVodSpaceStorageDataResponse)
 
 VodListDomainResponse = _reflection.GeneratedProtocolMessageType('VodListDomainResponse', (_message.Message,), {
   'DESCRIPTOR' : _VODLISTDOMAINRESPONSE,
@@ -414,6 +442,13 @@ VodDescribeIPInfoResponse = _reflection.GeneratedProtocolMessageType('VodDescrib
   })
 _sym_db.RegisterMessage(VodDescribeIPInfoResponse)
 
+VodDescribeVodDomainTrafficDataResponse = _reflection.GeneratedProtocolMessageType('VodDescribeVodDomainTrafficDataResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODDESCRIBEVODDOMAINTRAFFICDATARESPONSE,
+  '__module__' : 'vod.response.response_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Response.VodDescribeVodDomainTrafficDataResponse)
+  })
+_sym_db.RegisterMessage(VodDescribeVodDomainTrafficDataResponse)
+
 VodAddCallbackSubscriptionResponse = _reflection.GeneratedProtocolMessageType('VodAddCallbackSubscriptionResponse', (_message.Message,), {
   'DESCRIPTOR' : _VODADDCALLBACKSUBSCRIPTIONRESPONSE,
   '__module__' : 'vod.response.response_vod_pb2'
@@ -435,110 +470,127 @@ VodGetSmartStrategyLitePlayInfoResponse = _reflection.GeneratedProtocolMessageTy
   })
 _sym_db.RegisterMessage(VodGetSmartStrategyLitePlayInfoResponse)
 
+VodGetAppInfoResponse = _reflection.GeneratedProtocolMessageType('VodGetAppInfoResponse', (_message.Message,), {
+  'DESCRIPTOR' : _VODGETAPPINFORESPONSE,
+  '__module__' : 'vod.response.response_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Response.VodGetAppInfoResponse)
+  })
+_sym_db.RegisterMessage(VodGetAppInfoResponse)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n)com.volcengine.service.vod.model.responseB\013VodResponseP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/response\240\001\001\330\001\001\312\002 Volc\\Service\\Vod\\Models\\Response\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata'
-  _VODGETALLPLAYINFORESPONSE._serialized_start=336
-  _VODGETALLPLAYINFORESPONSE._serialized_end=506
-  _VODGETPLAYINFORESPONSE._serialized_start=509
-  _VODGETPLAYINFORESPONSE._serialized_end=672
-  _VODGETORIGINALPLAYINFORESPONSE._serialized_start=675
-  _VODGETORIGINALPLAYINFORESPONSE._serialized_end=858
-  _VODGETPRIVATEDRMPLAYAUTHRESPONSE._serialized_start=861
-  _VODGETPRIVATEDRMPLAYAUTHRESPONSE._serialized_end=1048
-  _VODGETHLSDECRYPTIONKEYRESPONSE._serialized_start=1051
-  _VODGETHLSDECRYPTIONKEYRESPONSE._serialized_end=1234
-  _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESPONSE._serialized_start=1237
-  _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESPONSE._serialized_end=1448
-  _VODUPLOADMEDIARESPONSE._serialized_start=1451
-  _VODUPLOADMEDIARESPONSE._serialized_end=1611
-  _VODQUERYUPLOADTASKINFORESPONSE._serialized_start=1614
-  _VODQUERYUPLOADTASKINFORESPONSE._serialized_end=1781
-  _VODURLUPLOADRESPONSE._serialized_start=1784
-  _VODURLUPLOADRESPONSE._serialized_end=1947
-  _VODAPPLYUPLOADINFORESPONSE._serialized_start=1950
-  _VODAPPLYUPLOADINFORESPONSE._serialized_end=2125
-  _VODCOMMITUPLOADINFORESPONSE._serialized_start=2128
-  _VODCOMMITUPLOADINFORESPONSE._serialized_end=2305
-  _VODGETMEDIAINFOSRESPONSE._serialized_start=2308
-  _VODGETMEDIAINFOSRESPONSE._serialized_end=2477
-  _VODUPDATEMEDIAINFORESPONSE._serialized_start=2479
-  _VODUPDATEMEDIAINFORESPONSE._serialized_end=2580
-  _VODGETRECOMMENDEDPOSTERRESPONSE._serialized_start=2583
-  _VODGETRECOMMENDEDPOSTERRESPONSE._serialized_end=2758
-  _VODUPDATEMEDIAPUBLISHSTATUSRESPONSE._serialized_start=2760
-  _VODUPDATEMEDIAPUBLISHSTATUSRESPONSE._serialized_end=2870
-  _VODDELETEMEDIARESPONSE._serialized_start=2873
-  _VODDELETEMEDIARESPONSE._serialized_end=3038
-  _VODDELETETRANSCODESRESPONSE._serialized_start=3041
-  _VODDELETETRANSCODESRESPONSE._serialized_end=3216
-  _VODGETMEDIALISTRESPONSE._serialized_start=3219
-  _VODGETMEDIALISTRESPONSE._serialized_end=3386
-  _VODGETSUBTITLEINFOLISTRESPONSE._serialized_start=3389
-  _VODGETSUBTITLEINFOLISTRESPONSE._serialized_end=3570
-  _VODUPDATESUBTITLESTATUSRESPONSE._serialized_start=3573
-  _VODUPDATESUBTITLESTATUSRESPONSE._serialized_end=3756
-  _VODUPDATESUBTITLEINFORESPONSE._serialized_start=3758
-  _VODUPDATESUBTITLEINFORESPONSE._serialized_end=3862
-  _VODGETAUDITFRAMESFORAUDITRESPONSE._serialized_start=3865
-  _VODGETAUDITFRAMESFORAUDITRESPONSE._serialized_end=4049
-  _VODGETMLFRAMESFORAUDITRESPONSE._serialized_start=4052
-  _VODGETMLFRAMESFORAUDITRESPONSE._serialized_end=4233
-  _VODGETBETTERFRAMESFORAUDITRESPONSE._serialized_start=4236
-  _VODGETBETTERFRAMESFORAUDITRESPONSE._serialized_end=4427
-  _VODGETAUDIOINFOFORAUDITRESPONSE._serialized_start=4430
-  _VODGETAUDIOINFOFORAUDITRESPONSE._serialized_end=4615
-  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITRESPONSE._serialized_start=4618
-  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITRESPONSE._serialized_end=4837
-  _VODGETAUDIOEVENTDETECTIONFORAUDITRESPONSE._serialized_start=4840
-  _VODGETAUDIOEVENTDETECTIONFORAUDITRESPONSE._serialized_end=5045
-  _VODCREATEVIDEOCLASSIFICATIONRESPONSE._serialized_start=5048
-  _VODCREATEVIDEOCLASSIFICATIONRESPONSE._serialized_end=5241
-  _VODUPDATEVIDEOCLASSIFICATIONRESPONSE._serialized_start=5243
-  _VODUPDATEVIDEOCLASSIFICATIONRESPONSE._serialized_end=5354
-  _VODDELETEVIDEOCLASSIFICATIONRESPONSE._serialized_start=5356
-  _VODDELETEVIDEOCLASSIFICATIONRESPONSE._serialized_end=5467
-  _VODLISTVIDEOCLASSIFICATIONSRESPONSE._serialized_start=5470
-  _VODLISTVIDEOCLASSIFICATIONSRESPONSE._serialized_end=5657
-  _VODLISTSNAPSHOTSRESPONSE._serialized_start=5660
-  _VODLISTSNAPSHOTSRESPONSE._serialized_end=5824
-  _VODSTARTWORKFLOWRESPONSE._serialized_start=5827
-  _VODSTARTWORKFLOWRESPONSE._serialized_end=5998
-  _VODRETRIEVETRANSCODERESULTRESPONSE._serialized_start=6001
-  _VODRETRIEVETRANSCODERESULTRESPONSE._serialized_end=6175
-  _VODCREATESPACERESPONSE._serialized_start=6177
-  _VODCREATESPACERESPONSE._serialized_end=6274
-  _VODLISTSPACERESPONSE._serialized_start=6277
-  _VODLISTSPACERESPONSE._serialized_end=6434
-  _VODGETSPACEDETAILRESPONSE._serialized_start=6437
-  _VODGETSPACEDETAILRESPONSE._serialized_end=6599
-  _VODUPDATESPACERESPONSE._serialized_start=6601
-  _VODUPDATESPACERESPONSE._serialized_end=6698
-  _VODUPDATESPACEUPLOADCONFIGRESPONSE._serialized_start=6700
-  _VODUPDATESPACEUPLOADCONFIGRESPONSE._serialized_end=6809
-  _VODLISTDOMAINRESPONSE._serialized_start=6812
-  _VODLISTDOMAINRESPONSE._serialized_end=6977
-  _VODCREATECDNREFRESHTASKRESPONSE._serialized_start=6980
-  _VODCREATECDNREFRESHTASKRESPONSE._serialized_end=7158
-  _VODCREATECDNPRELOADTASKRESPONSE._serialized_start=7161
-  _VODCREATECDNPRELOADTASKRESPONSE._serialized_end=7339
-  _VODLISTCDNTASKSRESPONSE._serialized_start=7342
-  _VODLISTCDNTASKSRESPONSE._serialized_end=7506
-  _VODLISTCDNACCESSLOGRESPONSE._serialized_start=7509
-  _VODLISTCDNACCESSLOGRESPONSE._serialized_end=7686
-  _VODLISTCDNTOPACCESSURLRESPONSE._serialized_start=7689
-  _VODLISTCDNTOPACCESSURLRESPONSE._serialized_end=7872
-  _VODDESCRIBEVODDOMAINBANDWIDTHDATARESPONSE._serialized_start=7875
-  _VODDESCRIBEVODDOMAINBANDWIDTHDATARESPONSE._serialized_end=8080
-  _VODCDNSTATISTICSCOMMONRESPONSE._serialized_start=8083
-  _VODCDNSTATISTICSCOMMONRESPONSE._serialized_end=8266
-  _VODDESCRIBEIPINFORESPONSE._serialized_start=8269
-  _VODDESCRIBEIPINFORESPONSE._serialized_end=8431
-  _VODADDCALLBACKSUBSCRIPTIONRESPONSE._serialized_start=8433
-  _VODADDCALLBACKSUBSCRIPTIONRESPONSE._serialized_end=8542
-  _VODSETCALLBACKEVENTRESPONSE._serialized_start=8544
-  _VODSETCALLBACKEVENTRESPONSE._serialized_end=8646
-  _VODGETSMARTSTRATEGYLITEPLAYINFORESPONSE._serialized_start=8649
-  _VODGETSMARTSTRATEGYLITEPLAYINFORESPONSE._serialized_end=8850
+  _VODGETALLPLAYINFORESPONSE._serialized_start=401
+  _VODGETALLPLAYINFORESPONSE._serialized_end=571
+  _VODGETPLAYINFORESPONSE._serialized_start=574
+  _VODGETPLAYINFORESPONSE._serialized_end=737
+  _VODGETORIGINALPLAYINFORESPONSE._serialized_start=740
+  _VODGETORIGINALPLAYINFORESPONSE._serialized_end=923
+  _VODGETPRIVATEDRMPLAYAUTHRESPONSE._serialized_start=926
+  _VODGETPRIVATEDRMPLAYAUTHRESPONSE._serialized_end=1113
+  _VODGETHLSDECRYPTIONKEYRESPONSE._serialized_start=1116
+  _VODGETHLSDECRYPTIONKEYRESPONSE._serialized_end=1299
+  _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESPONSE._serialized_start=1302
+  _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESPONSE._serialized_end=1513
+  _VODUPLOADMEDIARESPONSE._serialized_start=1516
+  _VODUPLOADMEDIARESPONSE._serialized_end=1676
+  _VODQUERYUPLOADTASKINFORESPONSE._serialized_start=1679
+  _VODQUERYUPLOADTASKINFORESPONSE._serialized_end=1846
+  _VODURLUPLOADRESPONSE._serialized_start=1849
+  _VODURLUPLOADRESPONSE._serialized_end=2012
+  _VODAPPLYUPLOADINFORESPONSE._serialized_start=2015
+  _VODAPPLYUPLOADINFORESPONSE._serialized_end=2190
+  _VODCOMMITUPLOADINFORESPONSE._serialized_start=2193
+  _VODCOMMITUPLOADINFORESPONSE._serialized_end=2370
+  _VODGETMEDIAINFOSRESPONSE._serialized_start=2373
+  _VODGETMEDIAINFOSRESPONSE._serialized_end=2542
+  _VODUPDATEMEDIAINFORESPONSE._serialized_start=2544
+  _VODUPDATEMEDIAINFORESPONSE._serialized_end=2645
+  _VODGETRECOMMENDEDPOSTERRESPONSE._serialized_start=2648
+  _VODGETRECOMMENDEDPOSTERRESPONSE._serialized_end=2823
+  _VODUPDATEMEDIAPUBLISHSTATUSRESPONSE._serialized_start=2825
+  _VODUPDATEMEDIAPUBLISHSTATUSRESPONSE._serialized_end=2935
+  _VODDELETEMEDIARESPONSE._serialized_start=2938
+  _VODDELETEMEDIARESPONSE._serialized_end=3103
+  _VODDELETETRANSCODESRESPONSE._serialized_start=3106
+  _VODDELETETRANSCODESRESPONSE._serialized_end=3281
+  _VODGETMEDIALISTRESPONSE._serialized_start=3284
+  _VODGETMEDIALISTRESPONSE._serialized_end=3451
+  _VODGETSUBTITLEINFOLISTRESPONSE._serialized_start=3454
+  _VODGETSUBTITLEINFOLISTRESPONSE._serialized_end=3635
+  _VODUPDATESUBTITLESTATUSRESPONSE._serialized_start=3638
+  _VODUPDATESUBTITLESTATUSRESPONSE._serialized_end=3821
+  _VODUPDATESUBTITLEINFORESPONSE._serialized_start=3823
+  _VODUPDATESUBTITLEINFORESPONSE._serialized_end=3927
+  _VODGETAUDITFRAMESFORAUDITRESPONSE._serialized_start=3930
+  _VODGETAUDITFRAMESFORAUDITRESPONSE._serialized_end=4114
+  _VODGETMLFRAMESFORAUDITRESPONSE._serialized_start=4117
+  _VODGETMLFRAMESFORAUDITRESPONSE._serialized_end=4298
+  _VODGETBETTERFRAMESFORAUDITRESPONSE._serialized_start=4301
+  _VODGETBETTERFRAMESFORAUDITRESPONSE._serialized_end=4492
+  _VODGETAUDIOINFOFORAUDITRESPONSE._serialized_start=4495
+  _VODGETAUDIOINFOFORAUDITRESPONSE._serialized_end=4680
+  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITRESPONSE._serialized_start=4683
+  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITRESPONSE._serialized_end=4902
+  _VODGETAUDIOEVENTDETECTIONFORAUDITRESPONSE._serialized_start=4905
+  _VODGETAUDIOEVENTDETECTIONFORAUDITRESPONSE._serialized_end=5110
+  _VODCREATEVIDEOCLASSIFICATIONRESPONSE._serialized_start=5113
+  _VODCREATEVIDEOCLASSIFICATIONRESPONSE._serialized_end=5306
+  _VODUPDATEVIDEOCLASSIFICATIONRESPONSE._serialized_start=5308
+  _VODUPDATEVIDEOCLASSIFICATIONRESPONSE._serialized_end=5419
+  _VODDELETEVIDEOCLASSIFICATIONRESPONSE._serialized_start=5421
+  _VODDELETEVIDEOCLASSIFICATIONRESPONSE._serialized_end=5532
+  _VODLISTVIDEOCLASSIFICATIONSRESPONSE._serialized_start=5535
+  _VODLISTVIDEOCLASSIFICATIONSRESPONSE._serialized_end=5722
+  _VODLISTSNAPSHOTSRESPONSE._serialized_start=5725
+  _VODLISTSNAPSHOTSRESPONSE._serialized_end=5889
+  _VODSTARTWORKFLOWRESPONSE._serialized_start=5892
+  _VODSTARTWORKFLOWRESPONSE._serialized_end=6063
+  _VODRETRIEVETRANSCODERESULTRESPONSE._serialized_start=6066
+  _VODRETRIEVETRANSCODERESULTRESPONSE._serialized_end=6240
+  _VODSUBMITDIRECTEDITTASKASYNCRESPONSE._serialized_start=6243
+  _VODSUBMITDIRECTEDITTASKASYNCRESPONSE._serialized_end=6435
+  _VODGETDIRECTEDITRESULTRESPONSE._serialized_start=6438
+  _VODGETDIRECTEDITRESULTRESPONSE._serialized_end=6612
+  _VODCREATESPACERESPONSE._serialized_start=6614
+  _VODCREATESPACERESPONSE._serialized_end=6711
+  _VODLISTSPACERESPONSE._serialized_start=6714
+  _VODLISTSPACERESPONSE._serialized_end=6871
+  _VODGETSPACEDETAILRESPONSE._serialized_start=6874
+  _VODGETSPACEDETAILRESPONSE._serialized_end=7036
+  _VODUPDATESPACERESPONSE._serialized_start=7038
+  _VODUPDATESPACERESPONSE._serialized_end=7135
+  _VODUPDATESPACEUPLOADCONFIGRESPONSE._serialized_start=7137
+  _VODUPDATESPACEUPLOADCONFIGRESPONSE._serialized_end=7246
+  _VODDESCRIBEVODSPACESTORAGEDATARESPONSE._serialized_start=7249
+  _VODDESCRIBEVODSPACESTORAGEDATARESPONSE._serialized_end=7448
+  _VODLISTDOMAINRESPONSE._serialized_start=7451
+  _VODLISTDOMAINRESPONSE._serialized_end=7616
+  _VODCREATECDNREFRESHTASKRESPONSE._serialized_start=7619
+  _VODCREATECDNREFRESHTASKRESPONSE._serialized_end=7797
+  _VODCREATECDNPRELOADTASKRESPONSE._serialized_start=7800
+  _VODCREATECDNPRELOADTASKRESPONSE._serialized_end=7978
+  _VODLISTCDNTASKSRESPONSE._serialized_start=7981
+  _VODLISTCDNTASKSRESPONSE._serialized_end=8145
+  _VODLISTCDNACCESSLOGRESPONSE._serialized_start=8148
+  _VODLISTCDNACCESSLOGRESPONSE._serialized_end=8325
+  _VODLISTCDNTOPACCESSURLRESPONSE._serialized_start=8328
+  _VODLISTCDNTOPACCESSURLRESPONSE._serialized_end=8511
+  _VODDESCRIBEVODDOMAINBANDWIDTHDATARESPONSE._serialized_start=8514
+  _VODDESCRIBEVODDOMAINBANDWIDTHDATARESPONSE._serialized_end=8719
+  _VODCDNSTATISTICSCOMMONRESPONSE._serialized_start=8722
+  _VODCDNSTATISTICSCOMMONRESPONSE._serialized_end=8905
+  _VODDESCRIBEIPINFORESPONSE._serialized_start=8908
+  _VODDESCRIBEIPINFORESPONSE._serialized_end=9070
+  _VODDESCRIBEVODDOMAINTRAFFICDATARESPONSE._serialized_start=9073
+  _VODDESCRIBEVODDOMAINTRAFFICDATARESPONSE._serialized_end=9274
+  _VODADDCALLBACKSUBSCRIPTIONRESPONSE._serialized_start=9276
+  _VODADDCALLBACKSUBSCRIPTIONRESPONSE._serialized_end=9385
+  _VODSETCALLBACKEVENTRESPONSE._serialized_start=9387
+  _VODSETCALLBACKEVENTRESPONSE._serialized_end=9489
+  _VODGETSMARTSTRATEGYLITEPLAYINFORESPONSE._serialized_start=9492
+  _VODGETSMARTSTRATEGYLITEPLAYINFORESPONSE._serialized_end=9693
+  _VODGETAPPINFORESPONSE._serialized_start=9696
+  _VODGETAPPINFORESPONSE._serialized_end=9861
 # @@protoc_insertion_point(module_scope)
