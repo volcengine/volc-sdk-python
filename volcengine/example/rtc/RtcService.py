@@ -32,23 +32,29 @@ class RtcService(Service):
     @staticmethod
     def get_api_info():
         api_info = {
-            "ListRoomInformation": ApiInfo(
-                "GET", "/", {"Action": "ListRoomInformation", "Version": "2020-12-01"}, {}, {}
-            ),
-            "ListIndicators": ApiInfo("POST", "/", {"Action": "ListIndicators", "Version": "2020-12-01"}, {}, {}),
+            "StartRecord": ApiInfo("POST", "/", {"Action": "StartRecord", "Version": "2022-06-01"}, {}, {}),
+            "StopRecord": ApiInfo("POST", "/", {"Action": "StopRecord", "Version": "2022-06-01"}, {}, {}),
+            "GetRecordTask": ApiInfo("GET", "/", {"Action": "GetRecordTask", "Version": "2022-06-01"}, {}, {}),
         }
         return api_info
 
-    def list_room_information(self, params):
-        res = self.get("ListRoomInformation", params)
+    def start_record(self, body):
+        res = self.json("StartRecord", {}, body)
         if res == '':
-            raise Exception("ListRoomInformation: empty response")
+            raise Exception("StartRecord: empty response")
         res_json = json.loads(res)
         return res_json
 
-    def list_indicators(self, body):
-        res = self.json("ListIndicators", {}, body)
+    def stop_record(self, body):
+        res = self.json("StopRecord", {}, body)
         if res == '':
-            raise Exception("ListIndicators: empty response")
+            raise Exception("StopRecord: empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def get_record_task(self, params):
+        res = self.get("GetRecordTask", params)
+        if res == '':
+            raise Exception("GetRecordTask: empty response")
         res_json = json.loads(res)
         return res_json
