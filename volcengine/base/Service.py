@@ -142,22 +142,22 @@ class Service(object):
         if resp.status_code == 200:
             return json.dumps(resp.json())
         else:
-            raise Exception(resp.text)
+            raise Exception(resp.text.encode("utf-8"))
 
     def put(self, url, file_path, headers):
         with open(file_path, 'rb') as f:
             resp = self.session.put(url, headers=headers, data=f)
             if resp.status_code == 200:
-                return True, resp.text
+                return True, resp.text.encode("utf-8")
             else:
-                return False, resp.text
+                return False, resp.text.encode("utf-8")
 
     def put_data(self, url, data, headers):
         resp = self.session.put(url, headers=headers, data=data)
         if resp.status_code == 200:
-            return True, resp.text
+            return True, resp.text.encode("utf-8")
         else:
-            return False, resp.text
+            return False, resp.text.encode("utf-8")
 
     def prepare_request(self, api_info, params, doseq=0):
         for key in params:
