@@ -16,4 +16,4 @@ if __name__ == '__main__':
     }
 
     resp = adblocker.ad_block(params, req)
-    print resp
+    print(resp)
