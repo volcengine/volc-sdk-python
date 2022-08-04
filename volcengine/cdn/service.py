@@ -1,3 +1,4 @@
+#  -*- coding: utf-8 -*-
 import json
 import threading
 
@@ -14,101 +15,155 @@ service_info_map = {
 }
 
 api_info = {
+
     # 添加加速域名: https://www.volcengine.com/docs/6454/97340
-    "AddCdnDomain": ApiInfo("POST", "/", {"Action": "AddCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
+    "AddCdnDomain": ApiInfo("POST", "/", {
+        "Action": "AddCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
+
     # 上线加速域名: https://www.volcengine.com/docs/6454/74667
-    "StartCdnDomain": ApiInfo("POST", "/", {"Action": "StartCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
+    "StartCdnDomain": ApiInfo("POST", "/", {
+        "Action": "StartCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
+
     # 下线加速域名: https://www.volcengine.com/docs/6454/75129
-    "StopCdnDomain": ApiInfo("POST", "/", {"Action": "StopCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
+    "StopCdnDomain": ApiInfo("POST", "/", {
+        "Action": "StopCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
+
     # 删除加速域名: https://www.volcengine.com/docs/6454/75130
-    "DeleteCdnDomain": ApiInfo("POST", "/", {"Action": "DeleteCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
+    "DeleteCdnDomain": ApiInfo("POST", "/", {
+        "Action": "DeleteCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取域名列表: https://www.volcengine.com/docs/6454/75269
-    "ListCdnDomains": ApiInfo("POST", "/", {"Action": "ListCdnDomains", "Version": SERVICE_VERSION}, {}, {}),
+    "ListCdnDomains": ApiInfo("POST", "/", {
+        "Action": "ListCdnDomains", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取域名配置详情: https://www.volcengine.com/docs/6454/80320
-    "DescribeCdnConfig": ApiInfo("POST", "/", {"Action": "DescribeCdnConfig", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeCdnConfig": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnConfig", "Version": SERVICE_VERSION}, {}, {}),
+
     # 修改加速域名配置: https://www.volcengine.com/docs/6454/97266
-    "UpdateCdnConfig": ApiInfo("POST", "/", {"Action": "UpdateCdnConfig", "Version": SERVICE_VERSION}, {}, {}),
+    "UpdateCdnConfig": ApiInfo("POST", "/", {
+        "Action": "UpdateCdnConfig", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取访问统计的细分数据: https://www.volcengine.com/docs/6454/70442
-    "DescribeCdnData": ApiInfo("POST", "/", {"Action": "DescribeCdnData", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeCdnData": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取访问统计的汇总数据: https://www.volcengine.com/docs/6454/96132
-    "DescribeEdgeNrtDataSummary": ApiInfo("POST", "/",
-                                          {"Action": "DescribeEdgeNrtDataSummary", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeEdgeNrtDataSummary": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeNrtDataSummary", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取回源统计的细分数据: https://www.volcengine.com/docs/6454/70443
-    "DescribeCdnOriginData": ApiInfo("POST", "/", {"Action": "DescribeCdnOriginData", "Version": SERVICE_VERSION}, {},
-                                     {}),
+    "DescribeCdnOriginData": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnOriginData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取回源统计的汇总数据: https://www.volcengine.com/docs/6454/96133
-    "DescribeOriginNrtDataSummary": ApiInfo("POST", "/",
-                                            {"Action": "DescribeOriginNrtDataSummary", "Version": SERVICE_VERSION}, {},
-                                            {}),
+    "DescribeOriginNrtDataSummary": ApiInfo("POST", "/", {
+        "Action": "DescribeOriginNrtDataSummary", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取省份运营商的细分数据: https://www.volcengine.com/docs/6454/75159
-    "DescribeCdnDataDetail": ApiInfo("POST", "/", {"Action": "DescribeCdnDataDetail", "Version": SERVICE_VERSION}, {},
-                                     {}),
+    "DescribeCdnDataDetail": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnDataDetail", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取独立访客的细分数据: https://www.volcengine.com/docs/6454/79321
-    "DescribeEdgeStatisticalData": ApiInfo("POST", "/",
-                                           {"Action": "DescribeEdgeStatisticalData", "Version": SERVICE_VERSION}, {},
-                                           {}),
+    "DescribeEdgeStatisticalData": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeStatisticalData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取访问统计的排行数据: https://www.volcengine.com/docs/6454/96145
-    "DescribeEdgeTopNrtData": ApiInfo("POST", "/", {"Action": "DescribeEdgeTopNrtData", "Version": SERVICE_VERSION}, {},
-                                      {}),
+    "DescribeEdgeTopNrtData": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeTopNrtData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取回源数据的统计排序: https://www.volcengine.com/docs/6454/104892
-    "DescribeOriginTopNrtData": ApiInfo("POST", "/", {"Action": "DescribeOriginTopNrtData", "Version": SERVICE_VERSION},
-                                        {}, {}),
+    "DescribeOriginTopNrtData": ApiInfo("POST", "/", {
+        "Action": "DescribeOriginTopNrtData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取访问状态码的统计排序: https://www.volcengine.com/docs/6454/104888
-    "DescribeEdgeTopStatusCode": ApiInfo("POST", "/",
-                                         {"Action": "DescribeEdgeTopStatusCode", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeEdgeTopStatusCode": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeTopStatusCode", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取回源状态码的统计排序: https://www.volcengine.com/docs/6454/104891
-    "DescribeOriginTopStatusCode": ApiInfo("POST", "/",
-                                           {"Action": "DescribeOriginTopStatusCode", "Version": SERVICE_VERSION}, {},
-                                           {}),
+    "DescribeOriginTopStatusCode": ApiInfo("POST", "/", {
+        "Action": "DescribeOriginTopStatusCode", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取热点及访客排行数据: https://www.volcengine.com/docs/6454/79322
-    "DescribeEdgeTopStatisticalData": ApiInfo("POST", "/",
-                                              {"Action": "DescribeEdgeTopStatisticalData", "Version": SERVICE_VERSION},
-                                              {}, {}),
+    "DescribeEdgeTopStatisticalData": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeTopStatisticalData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取区域和 ISP 列表: https://www.volcengine.com/docs/6454/70445
-    "DescribeCdnRegionAndIsp": ApiInfo("POST", "/", {"Action": "DescribeCdnRegionAndIsp", "Version": SERVICE_VERSION},
-                                       {}, {}),
+    "DescribeCdnRegionAndIsp": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnRegionAndIsp", "Version": SERVICE_VERSION}, {}, {}),
+
     # （Deprecated）查询域名排行数据: https://www.volcengine.com/docs/6454/70447?type=preview
-    "DescribeCdnDomainTopData": ApiInfo("POST", "/", {"Action": "DescribeCdnDomainTopData", "Version": SERVICE_VERSION},
-                                        {}, {}),
+    "DescribeCdnDomainTopData": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnDomainTopData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 查询账号计费方式: https://www.volcengine.com/docs/6454/78999
-    "DescribeCdnService": ApiInfo("POST", "/", {"Action": "DescribeCdnService", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeCdnService": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnService", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取计费指标的细分数据: https://www.volcengine.com/docs/6454/96167
-    "DescribeAccountingData": ApiInfo("POST", "/", {"Action": "DescribeAccountingData", "Version": SERVICE_VERSION}, {},
-                                      {}),
+    "DescribeAccountingData": ApiInfo("POST", "/", {
+        "Action": "DescribeAccountingData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 提交刷新任务: https://www.volcengine.com/docs/6454/70438
-    "SubmitRefreshTask": ApiInfo("POST", "/", {"Action": "SubmitRefreshTask", "Version": SERVICE_VERSION}, {}, {}),
+    "SubmitRefreshTask": ApiInfo("POST", "/", {
+        "Action": "SubmitRefreshTask", "Version": SERVICE_VERSION}, {}, {}),
+
     # 提交预热任务: https://www.volcengine.com/docs/6454/70436
-    "SubmitPreloadTask": ApiInfo("POST", "/", {"Action": "SubmitPreloadTask", "Version": SERVICE_VERSION}, {}, {}),
+    "SubmitPreloadTask": ApiInfo("POST", "/", {
+        "Action": "SubmitPreloadTask", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取刷新预热任务信息: https://www.volcengine.com/docs/6454/70437
-    "DescribeContentTasks": ApiInfo("POST", "/", {"Action": "DescribeContentTasks", "Version": SERVICE_VERSION}, {},
-                                    {}),
+    "DescribeContentTasks": ApiInfo("POST", "/", {
+        "Action": "DescribeContentTasks", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取刷新预热配额信息: https://www.volcengine.com/docs/6454/70439
-    "DescribeContentQuota": ApiInfo("POST", "/", {"Action": "DescribeContentQuota", "Version": SERVICE_VERSION}, {},
-                                    {}),
+    "DescribeContentQuota": ApiInfo("POST", "/", {
+        "Action": "DescribeContentQuota", "Version": SERVICE_VERSION}, {}, {}),
+
     # 提交封禁任务: https://www.volcengine.com/docs/6454/79890
-    "SubmitBlockTask": ApiInfo("POST", "/", {"Action": "SubmitBlockTask", "Version": SERVICE_VERSION}, {}, {}),
+    "SubmitBlockTask": ApiInfo("POST", "/", {
+        "Action": "SubmitBlockTask", "Version": SERVICE_VERSION}, {}, {}),
+
     # 提交解封任务: https://www.volcengine.com/docs/6454/79893
-    "SubmitUnblockTask": ApiInfo("POST", "/", {"Action": "SubmitUnblockTask", "Version": SERVICE_VERSION}, {}, {}),
+    "SubmitUnblockTask": ApiInfo("POST", "/", {
+        "Action": "SubmitUnblockTask", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取封禁解封任务信息: https://www.volcengine.com/docs/6454/79906
-    "DescribeContentBlockTasks": ApiInfo("POST", "/",
-                                         {"Action": "DescribeContentBlockTasks", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeContentBlockTasks": ApiInfo("POST", "/", {
+        "Action": "DescribeContentBlockTasks", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取访问日志下载链接: https://www.volcengine.com/docs/6454/70446
-    "DescribeCdnAccessLog": ApiInfo("POST", "/", {"Action": "DescribeCdnAccessLog", "Version": SERVICE_VERSION}, {},
-                                    {}),
+    "DescribeCdnAccessLog": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnAccessLog", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取 IP 归属信息: https://www.volcengine.com/docs/6454/75233
-    "DescribeIPInfo": ApiInfo("POST", "/", {"Action": "DescribeIPInfo", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeIPInfo": ApiInfo("POST", "/", {
+        "Action": "DescribeIPInfo", "Version": SERVICE_VERSION}, {}, {}),
+
     # 批量获取 IP 归属信息: https://www.volcengine.com/docs/6454/106852
-    "DescribeIPListInfo": ApiInfo("POST", "/", {"Action": "DescribeIPListInfo", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeIPListInfo": ApiInfo("POST", "/", {
+        "Action": "DescribeIPListInfo", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取回源节点 IP 列表: https://www.volcengine.com/docs/6454/75273
-    "DescribeCdnUpperIp": ApiInfo("POST", "/", {"Action": "DescribeCdnUpperIp", "Version": SERVICE_VERSION}, {}, {}),
+    "DescribeCdnUpperIp": ApiInfo("POST", "/", {
+        "Action": "DescribeCdnUpperIp", "Version": SERVICE_VERSION}, {}, {}),
+
     # 添加资源标签: https://www.volcengine.com/docs/6454/80308
-    "AddResourceTags": ApiInfo("POST", "/", {"Action": "AddResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+    "AddResourceTags": ApiInfo("POST", "/", {
+        "Action": "AddResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+
     # 更新资源标签: https://www.volcengine.com/docs/6454/80313
-    "UpdateResourceTags": ApiInfo("POST", "/", {"Action": "UpdateResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+    "UpdateResourceTags": ApiInfo("POST", "/", {
+        "Action": "UpdateResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+
     # 查询标签清单: https://www.volcengine.com/docs/6454/80315
-    "ListResourceTags": ApiInfo("POST", "/", {"Action": "ListResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+    "ListResourceTags": ApiInfo("POST", "/", {
+        "Action": "ListResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+
     # 删除资源标签: https://www.volcengine.com/docs/6454/80316
-    "DeleteResourceTags": ApiInfo("POST", "/", {"Action": "DeleteResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+    "DeleteResourceTags": ApiInfo("POST", "/", {
+        "Action": "DeleteResourceTags", "Version": SERVICE_VERSION}, {}, {}),
+
 }
 
 
@@ -448,7 +503,7 @@ class CDNService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def describe_iplist_info(self, params=None):
+    def describe_ip_list_info(self, params=None):
         if params is None:
             params = {}
         action = "DescribeIPListInfo"
@@ -457,6 +512,10 @@ class CDNService(Service):
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
         return res_json
+
+    # deprecated, use describe_ip_list_info instead
+    def describe_iplist_info(self, params=None):
+        return self.describe_ip_list_info(params)
 
     def describe_cdn_upper_ip(self, params=None):
         if params is None:
