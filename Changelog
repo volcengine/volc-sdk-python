@@ -1,5 +1,8 @@
 ### Change log
 
+2022-08-05 Bumped to version v1.0.52
+- Removed pycrypto dependency
+
 2022-08-04 Bumped to version v1.0.51
 - Added apis for sts\cdn
 
