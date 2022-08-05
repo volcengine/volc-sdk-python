@@ -4,7 +4,6 @@ decorator==4.4.2
 idna==2.10
 Naked==0.1.31
 py==1.10.0
-pycrypto==2.6.1
 pycryptodome==3.9.9
 pytz==2020.5
 PyYAML==5.3.1
