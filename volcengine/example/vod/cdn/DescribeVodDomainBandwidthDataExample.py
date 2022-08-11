@@ -16,6 +16,7 @@ if __name__ == '__main__':
         req.EndTime = ""
         req.Aggregation = 0
         req.BandwidthType = ""
+        req.Area = ""
         resp = vod_service.describe_vod_domain_bandwidth_data(req)
     except Exception:
         raise
