@@ -12,6 +12,8 @@ if __name__ == '__main__':
     try:
         req = VodAddCallbackSubscriptionRequest()
         req.SpaceName = 'your space name'
+        req.Url = 'your url'
+        req.ContentType = 'your ContentType'
         resp = vod_service.add_callback_subscription(req)
     except Exception:
         raise
