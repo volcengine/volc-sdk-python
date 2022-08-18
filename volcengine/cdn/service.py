@@ -164,6 +164,26 @@ api_info = {
     "DeleteResourceTags": ApiInfo("POST", "/", {
         "Action": "DeleteResourceTags", "Version": SERVICE_VERSION}, {}, {}),
 
+    # 上传证书: https://www.volcengine.com/docs/6454/125708
+    "AddCdnCertificate": ApiInfo("POST", "/", {
+        "Action": "AddCdnCertificate", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 查询CDN证书列表: https://www.volcengine.com/docs/6454/125709
+    "ListCertInfo": ApiInfo("POST", "/", {
+        "Action": "ListCertInfo", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 查询CDN有关联域名的证书列表: https://www.volcengine.com/docs/6454/125710
+    "ListCdnCertInfo": ApiInfo("POST", "/", {
+        "Action": "ListCdnCertInfo", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取特定证书的域名关联信息: https://www.volcengine.com/docs/6454/125711
+    "DescribeCertConfig": ApiInfo("POST", "/", {
+        "Action": "DescribeCertConfig", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 批量关联证书: https://www.volcengine.com/docs/6454/125712
+    "BatchDeployCert": ApiInfo("POST", "/", {
+        "Action": "BatchDeployCert", "Version": SERVICE_VERSION}, {}, {}),
+
 }
 
 
@@ -561,6 +581,56 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "DeleteResourceTags"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def add_cdn_certificate(self, params=None):
+        if params is None:
+            params = {}
+        action = "AddCdnCertificate"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def list_cert_info(self, params=None):
+        if params is None:
+            params = {}
+        action = "ListCertInfo"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def list_cdn_cert_info(self, params=None):
+        if params is None:
+            params = {}
+        action = "ListCdnCertInfo"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_cert_config(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeCertConfig"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def batch_deploy_cert(self, params=None):
+        if params is None:
+            params = {}
+        action = "BatchDeployCert"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
