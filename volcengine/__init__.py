@@ -1,2 +1,2 @@
 # coding:utf-8
-VERSION='v1.0.53'
+VERSION='v1.0.54'
