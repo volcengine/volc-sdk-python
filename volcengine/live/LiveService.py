@@ -147,10 +147,30 @@ api_info = {
                                       {"Action": "DescribePlayStreamList",
                                        "Version": LIVE_SERVICE_VERSION}, {},
                                       {}),
-    "DescribePullToPushBandwidthData":ApiInfo("POST", "/",
+    "DescribePullToPushBandwidthData": ApiInfo("POST", "/",
                                                {"Action": "DescribePullToPushBandwidthData",
                                                 "Version": LIVE_SERVICE_VERSION}, {},
                                                {}),
+    "CreateSnapshotAuditPreset": ApiInfo("POST", "/",
+                                         {"Action": "CreateSnapshotAuditPreset",
+                                          "Version": LIVE_SERVICE_VERSION}, {},
+                                         {}),
+    "ListVhostSnapshotAuditPreset": ApiInfo("POST", "/",
+                                            {"Action": "ListVhostSnapshotAuditPreset",
+                                             "Version": LIVE_SERVICE_VERSION}, {},
+                                            {}),
+    "UpdateSnapshotAuditPreset": ApiInfo("POST", "/",
+                                         {"Action": "UpdateSnapshotAuditPreset",
+                                          "Version": LIVE_SERVICE_VERSION}, {},
+                                         {}),
+    "DeleteSnapshotAuditPreset": ApiInfo("POST", "/",
+                                         {"Action": "DeleteSnapshotAuditPreset",
+                                          "Version": LIVE_SERVICE_VERSION}, {},
+                                         {}),
+    "DescribeLiveAuditData": ApiInfo("POST", "/",
+                                             {"Action": "DescribeLiveAuditData",
+                                              "Version": LIVE_SERVICE_VERSION}, {},
+                                             {}),
 }
 
 
@@ -575,6 +595,46 @@ class LiveService(Service):
 
     def describe_pull_to_push_bandwidth_data(self, params):
         action = "DescribePullToPushBandwidthData"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def create_snapshot_audit_preset(self, params):
+        action = "CreateSnapshotAuditPreset"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def update_snapshot_audit_preset(self, params):
+        action = "UpdateSnapshotAuditPreset"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def delete_snapshot_audit_preset(self, params):
+        action = "DeleteSnapshotAuditPreset"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def list_vhost_snapshot_audit_preset(self, params):
+        action = "ListVhostSnapshotAuditPreset"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+    
+    def describe_live_audit_data(self, params):
+        action = "DescribeLiveAuditData"
         res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)

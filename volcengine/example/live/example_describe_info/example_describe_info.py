@@ -198,6 +198,19 @@ def example_describe_pull_to_push_bandwidth_data(live_service):
     print(resp)
 
 
+# 示例 - 截图审核查询
+def example_describe_live_audit_data(live_service):
+    params = {
+        "DomainList": ["example.com", "example2.com"],
+        "DetailField": ["Domain"],
+        "StartTime": "2022-07-13T00:00:00+08:00",
+        "EndTime": "2022-07-14T00:00:00+08:00",
+        "Aggregation": 86400,
+    }
+    resp = live_service.describe_live_audit_data(params)
+    print(resp)
+
+
 if __name__ == '__main__':
     live_service = LiveService()
     ak = ""
