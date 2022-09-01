@@ -72,6 +72,9 @@ class VisualService(Service):
             "ImageSearchImageAdd": ApiInfo("POST", "/", {"Action": "ImageSearchImageAdd", "Version": "2020-08-26"}, {}, {}),
             "ImageSearchImageDelete": ApiInfo("POST", "/", {"Action": "ImageSearchImageDelete", "Version": "2020-08-26"}, {}, {}),
             "ImageSearchImageSearch": ApiInfo("POST", "/", {"Action": "ImageSearchImageSearch", "Version": "2020-08-26"}, {}, {}),
+            "ProductSearchAddImage": ApiInfo("POST", "/", {"Action": "ProductSearchAddImage", "Version": "2022-06-16"}, {}, {}),
+            "ProductSearchDeleteImage": ApiInfo("POST", "/", {"Action": "ProductSearchDeleteImage", "Version": "2022-06-16"}, {}, {}),
+            "ProductSearchSearchImage": ApiInfo("POST", "/", {"Action": "ProductSearchSearchImage", "Version": "2022-06-16"}, {}, {}),
             "ClueLicense": ApiInfo("POST", "/", {"Action": "OcrClueLicense", "Version": "2020-08-26"}, {}, {}),
             "DrivingLicense": ApiInfo("POST", "/", {"Action": "DrivingLicense", "Version": "2020-08-26"}, {}, {}),
             "VehicleLicense": ApiInfo("POST", "/", {"Action": "VehicleLicense", "Version": "2020-08-26"}, {}, {}),
@@ -413,6 +416,27 @@ class VisualService(Service):
     def image_search_image_search(self, form):
         try:
             res_json = self.common_handler("ImageSearchImageSearch", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def product_search_add_image(self, params):
+        try:
+            res_json = self.json("ProductSearchAddImage", [], json.dumps(params))
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def product_search_delete_image(self, params):
+        try:
+            res_json = self.json("ProductSearchDeleteImage", [], json.dumps(params))
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    
+    def product_search_search_image(self, params):
+        try:
+            res_json = self.json("ProductSearchSearchImage", [], json.dumps(params))
             return res_json
         except Exception as e:
             raise Exception(str(e))
