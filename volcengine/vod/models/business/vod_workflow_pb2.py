@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1fvod/business/vod_workflow.proto\x12\x1eVolcengine.Vod.Models.Business\"\'\n\x16VodStartWorkflowResult\x12\r\n\x05RunId\x18\x01 \x01(\t\"\xdc\x01\n\x0eWorkflowParams\x12\x46\n\x0eOverrideParams\x18\x01 \x01(\x0b\x32..Volcengine.Vod.Models.Business.OverrideParams\x12P\n\tCondition\x18\x02 \x03(\x0b\x32=.Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry\x1a\x30\n\x0e\x43onditionEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x08:\x02\x38\x01\"\xb0\x02\n\x0eOverrideParams\x12:\n\x04Logo\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.LogoOverride\x12N\n\x0eTranscodeVideo\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeVideoOverride\x12N\n\x0eTranscodeAudio\x18\x03 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeAudioOverride\x12\x42\n\x08Snapshot\x18\x04 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.SnapshotOverride\"\x95\x01\n\x0cLogoOverride\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x44\n\x04Vars\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.LogoOverride.VarsEntry\x1a+\n\tVarsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"`\n\x16TranscodeVideoOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\"*\n\x04\x43lip\x12\x11\n\tStartTime\x18\x01 \x01(\x05\x12\x0f\n\x07\x45ndTime\x18\x02 \x01(\x05\"`\n\x16TranscodeAudioOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\"R\n\x10SnapshotOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x12\n\nOffsetTime\x18\x02 \x01(\x05\x12\x16\n\x0eOffsetTimeList\x18\x03 \x03(\x05\"\xa5\x01\n\x0fTranscodeResult\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12>\n\nInspection\x18\x02 \x01(\x0b\x32*.Volcengine.Vod.Models.Business.Inspection\x12\x45\n\x0c\x43\x61tegoryTags\x18\x03 \x03(\x0b\x32/.Volcengine.Vod.Models.Business.CategoryTagInfo\"\x82\x01\n\nInspection\x12\x38\n\x07Quality\x18\x01 \x01(\x0b\x32\'.Volcengine.Vod.Models.Business.Quality\x12:\n\x06\x44\x65Logo\x18\x02 \x03(\x0b\x32*.Volcengine.Vod.Models.Business.DeLogoInfo\"\x88\x01\n\x07Quality\x12=\n\x06Visual\x18\x01 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VisualQuality\x12>\n\nVolumeInfo\x18\x02 \x01(\x0b\x32*.Volcengine.Vod.Models.Business.VolumeInfo\"q\n\nDeLogoInfo\x12\x13\n\x0b\x41nchorWidth\x18\x01 \x01(\x03\x12\x14\n\x0c\x41nchorHeight\x18\x02 \x01(\x03\x12\x0c\n\x04PosX\x18\x03 \x01(\x03\x12\x0c\n\x04PosY\x18\x04 \x01(\x03\x12\r\n\x05SizeX\x18\x05 \x01(\x03\x12\r\n\x05SizeY\x18\x06 \x01(\x03\"|\n\rVisualQuality\x12\x0f\n\x07VQScore\x18\x01 \x01(\x01\x12\x10\n\x08\x43ontrast\x18\x02 \x01(\x01\x12\x14\n\x0c\x43olorfulness\x18\x03 \x01(\x01\x12\x12\n\nBrightness\x18\x04 \x01(\x01\x12\x0f\n\x07Texture\x18\x05 \x01(\x01\x12\r\n\x05Noise\x18\x06 \x01(\x01\"S\n\nVolumeInfo\x12\x10\n\x08Loudness\x18\x01 \x01(\x01\x12\x0c\n\x04Peak\x18\x02 \x01(\x01\x12\x12\n\nMeanVolume\x18\x03 \x01(\x01\x12\x11\n\tMaxVolume\x18\x04 \x01(\x01\"\xd6\x01\n\x0f\x43\x61tegoryTagInfo\x12\r\n\x05TagId\x18\x01 \x01(\x03\x12\x0c\n\x04Prob\x18\x02 \x01(\x01\x12\x0f\n\x07TagName\x18\x03 \x01(\t\x12\r\n\x05Level\x18\x04 \x01(\x03\x12S\n\nParentInfo\x18\x05 \x03(\x0b\x32?.Volcengine.Vod.Models.Business.CategoryTagInfo.ParentInfoEntry\x1a\x31\n\x0fParentInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x0bVodWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1fvod/business/vod_workflow.proto\x12\x1eVolcengine.Vod.Models.Business\"\'\n\x16VodStartWorkflowResult\x12\r\n\x05RunId\x18\x01 \x01(\t\"\xdc\x01\n\x0eWorkflowParams\x12\x46\n\x0eOverrideParams\x18\x01 \x01(\x0b\x32..Volcengine.Vod.Models.Business.OverrideParams\x12P\n\tCondition\x18\x02 \x03(\x0b\x32=.Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry\x1a\x30\n\x0e\x43onditionEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x08:\x02\x38\x01\"\xb0\x02\n\x0eOverrideParams\x12:\n\x04Logo\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.LogoOverride\x12N\n\x0eTranscodeVideo\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeVideoOverride\x12N\n\x0eTranscodeAudio\x18\x03 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeAudioOverride\x12\x42\n\x08Snapshot\x18\x04 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.SnapshotOverride\"\x95\x01\n\x0cLogoOverride\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x44\n\x04Vars\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.LogoOverride.VarsEntry\x1a+\n\tVarsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x87\x01\n\x16TranscodeVideoOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\x12\x13\n\x0bOutputIndex\x18\x03 \x03(\x05\x12\x10\n\x08\x46ileName\x18\x04 \x01(\t\"*\n\x04\x43lip\x12\x11\n\tStartTime\x18\x01 \x01(\x05\x12\x0f\n\x07\x45ndTime\x18\x02 \x01(\x05\"r\n\x16TranscodeAudioOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\x12\x10\n\x08\x46ileName\x18\x03 \x01(\t\"R\n\x10SnapshotOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x12\n\nOffsetTime\x18\x02 \x01(\x05\x12\x16\n\x0eOffsetTimeList\x18\x03 \x03(\x05\"\xa5\x01\n\x0fTranscodeResult\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12>\n\nInspection\x18\x02 \x01(\x0b\x32*.Volcengine.Vod.Models.Business.Inspection\x12\x45\n\x0c\x43\x61tegoryTags\x18\x03 \x03(\x0b\x32/.Volcengine.Vod.Models.Business.CategoryTagInfo\"\x82\x01\n\nInspection\x12\x38\n\x07Quality\x18\x01 \x01(\x0b\x32\'.Volcengine.Vod.Models.Business.Quality\x12:\n\x06\x44\x65Logo\x18\x02 \x03(\x0b\x32*.Volcengine.Vod.Models.Business.DeLogoInfo\"\x88\x01\n\x07Quality\x12=\n\x06Visual\x18\x01 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VisualQuality\x12>\n\nVolumeInfo\x18\x02 \x01(\x0b\x32*.Volcengine.Vod.Models.Business.VolumeInfo\"q\n\nDeLogoInfo\x12\x13\n\x0b\x41nchorWidth\x18\x01 \x01(\x03\x12\x14\n\x0c\x41nchorHeight\x18\x02 \x01(\x03\x12\x0c\n\x04PosX\x18\x03 \x01(\x03\x12\x0c\n\x04PosY\x18\x04 \x01(\x03\x12\r\n\x05SizeX\x18\x05 \x01(\x03\x12\r\n\x05SizeY\x18\x06 \x01(\x03\"|\n\rVisualQuality\x12\x0f\n\x07VQScore\x18\x01 \x01(\x01\x12\x10\n\x08\x43ontrast\x18\x02 \x01(\x01\x12\x14\n\x0c\x43olorfulness\x18\x03 \x01(\x01\x12\x12\n\nBrightness\x18\x04 \x01(\x01\x12\x0f\n\x07Texture\x18\x05 \x01(\x01\x12\r\n\x05Noise\x18\x06 \x01(\x01\"S\n\nVolumeInfo\x12\x10\n\x08Loudness\x18\x01 \x01(\x01\x12\x0c\n\x04Peak\x18\x02 \x01(\x01\x12\x12\n\nMeanVolume\x18\x03 \x01(\x01\x12\x11\n\tMaxVolume\x18\x04 \x01(\x01\"\xd6\x01\n\x0f\x43\x61tegoryTagInfo\x12\r\n\x05TagId\x18\x01 \x01(\x03\x12\x0c\n\x04Prob\x18\x02 \x01(\x01\x12\x0f\n\x07TagName\x18\x03 \x01(\t\x12\r\n\x05Level\x18\x04 \x01(\x03\x12S\n\nParentInfo\x18\x05 \x03(\x0b\x32?.Volcengine.Vod.Models.Business.CategoryTagInfo.ParentInfoEntry\x1a\x31\n\x0fParentInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x0bVodWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 
 
@@ -187,28 +187,28 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _LOGOOVERRIDE._serialized_end=788
   _LOGOOVERRIDE_VARSENTRY._serialized_start=745
   _LOGOOVERRIDE_VARSENTRY._serialized_end=788
-  _TRANSCODEVIDEOOVERRIDE._serialized_start=790
-  _TRANSCODEVIDEOOVERRIDE._serialized_end=886
-  _CLIP._serialized_start=888
-  _CLIP._serialized_end=930
-  _TRANSCODEAUDIOOVERRIDE._serialized_start=932
-  _TRANSCODEAUDIOOVERRIDE._serialized_end=1028
-  _SNAPSHOTOVERRIDE._serialized_start=1030
-  _SNAPSHOTOVERRIDE._serialized_end=1112
-  _TRANSCODERESULT._serialized_start=1115
-  _TRANSCODERESULT._serialized_end=1280
-  _INSPECTION._serialized_start=1283
-  _INSPECTION._serialized_end=1413
-  _QUALITY._serialized_start=1416
-  _QUALITY._serialized_end=1552
-  _DELOGOINFO._serialized_start=1554
-  _DELOGOINFO._serialized_end=1667
-  _VISUALQUALITY._serialized_start=1669
-  _VISUALQUALITY._serialized_end=1793
-  _VOLUMEINFO._serialized_start=1795
-  _VOLUMEINFO._serialized_end=1878
-  _CATEGORYTAGINFO._serialized_start=1881
-  _CATEGORYTAGINFO._serialized_end=2095
-  _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_start=2046
-  _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_end=2095
+  _TRANSCODEVIDEOOVERRIDE._serialized_start=791
+  _TRANSCODEVIDEOOVERRIDE._serialized_end=926
+  _CLIP._serialized_start=928
+  _CLIP._serialized_end=970
+  _TRANSCODEAUDIOOVERRIDE._serialized_start=972
+  _TRANSCODEAUDIOOVERRIDE._serialized_end=1086
+  _SNAPSHOTOVERRIDE._serialized_start=1088
+  _SNAPSHOTOVERRIDE._serialized_end=1170
+  _TRANSCODERESULT._serialized_start=1173
+  _TRANSCODERESULT._serialized_end=1338
+  _INSPECTION._serialized_start=1341
+  _INSPECTION._serialized_end=1471
+  _QUALITY._serialized_start=1474
+  _QUALITY._serialized_end=1610
+  _DELOGOINFO._serialized_start=1612
+  _DELOGOINFO._serialized_end=1725
+  _VISUALQUALITY._serialized_start=1727
+  _VISUALQUALITY._serialized_end=1851
+  _VOLUMEINFO._serialized_start=1853
+  _VOLUMEINFO._serialized_end=1936
+  _CATEGORYTAGINFO._serialized_start=1939
+  _CATEGORYTAGINFO._serialized_end=2153
+  _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_start=2104
+  _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_end=2153
 # @@protoc_insertion_point(module_scope)
