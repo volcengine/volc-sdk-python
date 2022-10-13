@@ -1382,6 +1382,40 @@ class VodService(VodServiceConfig):
             return Parse(res, VodRetrieveTranscodeResultResponse(), True)
 
     #
+    # GetWorkflowExecution.
+    #
+    # @param request VodGetWorkflowExecutionStatusRequest
+    # @return VodGetWorkflowExecutionStatusResponse
+    # @raise Exception
+    def get_workflow_execution(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetWorkflowExecution", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetWorkflowExecutionStatusResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetWorkflowExecutionStatusResponse(), True)
+
+    #
     # CreateSpace.
     #
     # @param request VodCreateSpaceRequest
