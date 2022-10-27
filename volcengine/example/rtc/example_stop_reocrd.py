@@ -1,6 +1,8 @@
 # coding:utf-8
 from __future__ import print_function
 
+import json
+
 from volcengine.example.rtc.RtcService import RtcService
 
 if __name__ == '__main__':
@@ -16,14 +18,13 @@ if __name__ == '__main__':
     rtc_service.set_sk(SK)
 
     # You can using this API now ! Here are some Examples
-    params = dict()
-    params['AppId'] = 'Your_AppId'
-    params['StartTime'] = '2022-07-06T12:00:00+08:00'
-    params['EndTime'] = '2022-07-06T14:00:00+08:00'
-    # optional params
-    # params['RoomId'] = 'Your_RoomId'
-    # params['PageNum'] = 'PageNum'
-    # params['PageSize'] = 'PageSize'
+    body = dict()
+    body['AppId'] = 'Your_AppId'
+    body['BusinessId'] = 'Your_BusinessId'
+    body['RoomId'] = 'Your_RoomId'
+    body['TaskId'] = 'Your_TaskId'
 
-    resp = rtc_service.list_room_information(params)
+    body = json.dumps(body)
+    resp = rtc_service.stop_record(body)
     print(resp)
+
