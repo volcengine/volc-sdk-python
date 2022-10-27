@@ -1,5 +1,10 @@
 ### Change log
 
+2022-10-27 Bumped to version v1.0.61
+- Added emr service
+- Updated example for rtc
+- Updated apis for vod
+
 2022-10-13 Bumped to version v1.0.60
 - Updated apis for vod
 
