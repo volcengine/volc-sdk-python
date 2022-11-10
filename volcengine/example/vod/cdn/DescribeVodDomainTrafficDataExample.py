@@ -11,6 +11,7 @@ if __name__ == '__main__':
     vod_service.set_sk('your sk')
     try:
         req = VodDescribeVodDomainTrafficDataRequest()
+
         req.DomainList = ""
         req.StartTime = ""
         req.EndTime = ""
