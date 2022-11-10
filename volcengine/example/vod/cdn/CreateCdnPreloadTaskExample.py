@@ -11,6 +11,7 @@ if __name__ == '__main__':
     vod_service.set_sk('your sk')
     try:
         req = VodCreateCdnPreloadTaskRequest()
+
         req.SpaceName = 'your space name'
         resp = vod_service.create_cdn_preload_task(req)
     except Exception:

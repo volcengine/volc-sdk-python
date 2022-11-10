@@ -11,6 +11,7 @@ if __name__ == '__main__':
     vod_service.set_sk('your sk')
     try:
         req = VodGetPlayInfoWithLiveTimeShiftSceneRequest()
+
         req.StoreUris = 'uri1,uri2,uri3'
         req.SpaceName = 'your space name'
         req.Ssl = '0 or 1'

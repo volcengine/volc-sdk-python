@@ -1,12 +1,23 @@
 # coding:utf-8
 import json
+import sys
 import threading
+
+from google.protobuf.json_format import Parse, MessageToJson, MessageToDict
 
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
 from volcengine.ServiceInfo import ServiceInfo
 from volcengine.base.Service import Service
 from volcengine.const.Const import REGION_CN_NORTH1
+from volcengine.live.models.response.response_live_pb2 import DescribeCDNSnapshotHistoryResponse, \
+    DescribeRecordTaskFileHistoryResponse, DescribeLiveStreamInfoByPageResponse, KillStreamResponse, \
+    ForbidStreamResponse, DescribeClosedStreamInfoByPageResponse, DescribeLiveStreamStateResponse, \
+    DescribeForbiddenStreamInfoByPageResponse, ResumeStreamResponse, UpdateRelaySourceResponse, \
+    DeleteRelaySourceResponse, DescribeRelaySourceResponse, CreateVQScoreTaskResponse, DescribeVQScoreTaskResponse, \
+    ListVQScoreTaskResponse, GeneratePlayURLResponse, GeneratePushURLResponse, CreatePullToPushTaskResponse, \
+    ListPullToPushTaskResponse, UpdatePullToPushTaskResponse, StopPullToPushTaskResponse, RestartPullToPushTaskResponse, \
+    DeletePullToPushTaskResponse, UpdateDenyConfigResponse, DescribeDenyConfigResponse
 
 LIVE_SERVICE_VERSION = "2020-08-01"
 service_info_map = {
@@ -171,6 +182,98 @@ api_info = {
                                              {"Action": "DescribeLiveAuditData",
                                               "Version": LIVE_SERVICE_VERSION}, {},
                                              {}),
+    "DescribeCDNSnapshotHistory": ApiInfo("POST", "/",
+                                          {"Action": "DescribeCDNSnapshotHistory",
+                                           "Version": LIVE_SERVICE_VERSION}, {},
+                                          {}),
+    "DescribeRecordTaskFileHistory": ApiInfo("POST", "/",
+                                             {"Action": "DescribeRecordTaskFileHistory",
+                                              "Version": LIVE_SERVICE_VERSION}, {},
+                                             {}),
+    "DescribeLiveStreamInfoByPage": ApiInfo("GET", "/",
+                                            {"Action": "DescribeLiveStreamInfoByPage",
+                                             "Version": LIVE_SERVICE_VERSION}, {},
+                                            {}),
+    "KillStream": ApiInfo("POST", "/",
+                          {"Action": "KillStream",
+                           "Version": LIVE_SERVICE_VERSION}, {},
+                          {}),
+    "DescribeClosedStreamInfoByPage": ApiInfo("GET", "/",
+                                              {"Action": "DescribeClosedStreamInfoByPage",
+                                               "Version": LIVE_SERVICE_VERSION}, {},
+                                              {}),
+    "DescribeLiveStreamState": ApiInfo("GET", "/",
+                                       {"Action": "DescribeLiveStreamState",
+                                        "Version": LIVE_SERVICE_VERSION}, {},
+                                       {}),
+    "DescribeForbiddenStreamInfoByPage": ApiInfo("GET", "/",
+                                                 {"Action": "DescribeForbiddenStreamInfoByPage",
+                                                  "Version": LIVE_SERVICE_VERSION}, {},
+                                                 {}),
+    "UpdateRelaySourceV2": ApiInfo("POST", "/",
+                                   {"Action": "UpdateRelaySourceV2",
+                                    "Version": LIVE_SERVICE_VERSION}, {},
+                                   {}),
+    "DeleteRelaySourceV2": ApiInfo("POST", "/",
+                                   {"Action": "DeleteRelaySourceV2",
+                                    "Version": LIVE_SERVICE_VERSION}, {},
+                                   {}),
+    "DescribeRelaySourceV2": ApiInfo("POST", "/",
+                                     {"Action": "DescribeRelaySourceV2",
+                                      "Version": LIVE_SERVICE_VERSION}, {},
+                                     {}),
+    "CreateVQScoreTask": ApiInfo("POST", "/",
+                                 {"Action": "CreateVQScoreTask",
+                                  "Version": LIVE_SERVICE_VERSION}, {},
+                                 {}),
+    "DescribeVQScoreTask": ApiInfo("POST", "/",
+                                   {"Action": "DescribeVQScoreTask",
+                                    "Version": LIVE_SERVICE_VERSION}, {},
+                                   {}),
+    "ListVQScoreTask": ApiInfo("POST", "/",
+                               {"Action": "ListVQScoreTask",
+                                "Version": LIVE_SERVICE_VERSION}, {},
+                               {}),
+    "GeneratePlayURL": ApiInfo("POST", "/",
+                               {"Action": "GeneratePlayURL",
+                                "Version": LIVE_SERVICE_VERSION}, {},
+                               {}),
+    "GeneratePushURL": ApiInfo("POST", "/",
+                               {"Action": "GeneratePushURL",
+                                "Version": LIVE_SERVICE_VERSION}, {},
+                               {}),
+    "CreatePullToPushTask": ApiInfo("POST", "/",
+                                    {"Action": "CreatePullToPushTask",
+                                     "Version": LIVE_SERVICE_VERSION}, {},
+                                    {}),
+    "ListPullToPushTask": ApiInfo("POST", "/",
+                                  {"Action": "ListPullToPushTask",
+                                   "Version": LIVE_SERVICE_VERSION}, {},
+                                  {}),
+    "UpdatePullToPushTask": ApiInfo("POST", "/",
+                                    {"Action": "UpdatePullToPushTask",
+                                     "Version": LIVE_SERVICE_VERSION}, {},
+                                    {}),
+    "StopPullToPushTask": ApiInfo("POST", "/",
+                                  {"Action": "StopPullToPushTask",
+                                   "Version": LIVE_SERVICE_VERSION}, {},
+                                  {}),
+    "RestartPullToPushTask": ApiInfo("POST", "/",
+                                     {"Action": "RestartPullToPushTask",
+                                      "Version": LIVE_SERVICE_VERSION}, {},
+                                     {}),
+    "DeletePullToPushTask": ApiInfo("POST", "/",
+                                    {"Action": "DeletePullToPushTask",
+                                     "Version": LIVE_SERVICE_VERSION}, {},
+                                    {}),
+    "UpdateDenyConfig": ApiInfo("POST", "/",
+                                {"Action": "UpdateDenyConfig",
+                                 "Version": LIVE_SERVICE_VERSION}, {},
+                                {}),
+    "DescribeDenyConfig": ApiInfo("POST", "/",
+                                  {"Action": "DescribeDenyConfig",
+                                   "Version": LIVE_SERVICE_VERSION}, {},
+                                  {}),
 }
 
 
@@ -632,7 +735,7 @@ class LiveService(Service):
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
         return res_json
-    
+
     def describe_live_audit_data(self, params):
         action = "DescribeLiveAuditData"
         res = self.json(action, dict(), json.dumps(params))
@@ -640,3 +743,406 @@ class LiveService(Service):
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
         return res_json
+
+    def describe_c_d_n_snapshot_history(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("DescribeCDNSnapshotHistory", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeCDNSnapshotHistoryResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def describe_record_task_file_history(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("DescribeRecordTaskFileHistory", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeRecordTaskFileHistoryResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def describe_live_stream_info_by_page(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            for k, v in params.items():
+                if isinstance(v, (int, float, bool, str, unicode)) is True:
+                    continue
+                else:
+                    params[k] = json.dumps(v)
+            res = self.get("DescribeLiveStreamInfoByPage", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeLiveStreamInfoByPageResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def kill_stream(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("KillStream", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), KillStreamResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def describe_closed_stream_info_by_page(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeClosedStreamInfoByPage", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeClosedStreamInfoByPageResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeClosedStreamInfoByPageResponse(), True)
+
+    def describe_live_stream_state(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeLiveStreamState", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeLiveStreamStateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeLiveStreamStateResponse(), True)
+
+    def describe_forbidden_stream_info_by_page(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeForbiddenStreamInfoByPage", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeForbiddenStreamInfoByPageResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeForbiddenStreamInfoByPageResponse(), True)
+
+    def update_relay_source_v2(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("UpdateRelaySourceV2", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), UpdateRelaySourceResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def delete_relay_source_v2(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("DeleteRelaySourceV2", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DeleteRelaySourceResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def describe_relay_source_v2(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("DescribeRelaySourceV2", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeRelaySourceResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def create_v_q_score_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("CreateVQScoreTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), CreateVQScoreTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def describe_v_q_score_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("DescribeVQScoreTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeVQScoreTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def list_v_q_score_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("ListVQScoreTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), ListVQScoreTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    #
+    # GeneratePlayURL.
+    #
+    # @param request GeneratePlayURLRequest
+    # @return GeneratePlayURLResponse
+    # @raise Exception
+    def generate_play_u_r_l(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("GeneratePlayURL", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), GeneratePlayURLResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def generate_push_u_r_l(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("GeneratePushURL", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), GeneratePushURLResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def create_pull_to_push_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("CreatePullToPushTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), CreatePullToPushTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    #
+    # ListPullToPushTask.
+    #
+    # @param request ListPullToPushTaskRequest
+    # @return ListPullToPushTaskResponse
+    # @raise Exception
+    def list_pull_to_push_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("ListPullToPushTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), ListPullToPushTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+
+    #
+    # UpdatePullToPushTask.
+    #
+    # @param request UpdatePullToPushTaskRequest
+    # @return UpdatePullToPushTaskResponse
+    # @raise Exception
+    def update_pull_to_push_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("UpdatePullToPushTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), UpdatePullToPushTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    # StopPullToPushTask.
+    #
+    # @param request StopPullToPushTaskRequest
+    # @return StopPullToPushTaskResponse
+    # @raise Exception
+    def stop_pull_to_push_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("StopPullToPushTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), StopPullToPushTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    # RestartPullToPushTask.
+    #
+    # @param request RestartPullToPushTaskRequest
+    # @return RestartPullToPushTaskResponse
+    # @raise Exception
+    def restart_pull_to_push_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("RestartPullToPushTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), RestartPullToPushTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def delete_pull_to_push_task(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("DeletePullToPushTask", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DeletePullToPushTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    def update_deny_config(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("UpdateDenyConfig", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), UpdateDenyConfigResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    # DescribeDenyConfig.
+    #
+    # @param request DescribeDenyConfigRequest
+    # @return DescribeDenyConfigResponse
+    # @raise Exception
+    def describe_deny_config(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("DescribeDenyConfig", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeDenyConfigResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
