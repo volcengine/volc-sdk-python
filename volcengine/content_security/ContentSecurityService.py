@@ -48,7 +48,8 @@ class ContentSecurityService(Service):
                     "AsyncLiveVideoRisk": ApiInfo("POST", "/", {"Action": "AsyncLiveVideoRisk", "Version": "2022-04-25"}, {}, {}),
                     "GetVideoLiveResult": ApiInfo("GET", "/", {"Action": "GetVideoLiveResult", "Version": "2022-04-25"}, {}, {}),
                     "AsyncLiveAudioRisk": ApiInfo("POST", "/", {"Action": "AsyncLiveAudioRisk", "Version": "2022-04-25"}, {}, {}),
-                    "GetAudioLiveResult": ApiInfo("GET", "/", {"Action": "GetAudioLiveResult", "Version": "2022-04-25"}, {}, {})
+                    "GetAudioLiveResult": ApiInfo("GET", "/", {"Action": "GetAudioLiveResult", "Version": "2022-04-25"}, {}, {}),
+                    "TextSliceRisk": ApiInfo("POST", "/", {"Action": "TextSliceRisk", "Version": "2022-11-07"}, {}, {}),
                     }
 
         return api_info
@@ -177,6 +178,13 @@ class ContentSecurityService(Service):
 
     def live_video_result(self, params, body):
         res = self.get("GetAudioLiveResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def text_slice_risk(self, params, body):
+        res = self.json("TextSliceRisk", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
