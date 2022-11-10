@@ -5,8 +5,8 @@ if __name__ == '__main__':
     riskDetector = ContentSecurityService()
 
     # call below method if you dont set ak and sk in $HOME/.volc/config
-    riskDetector.set_ak('AK')
-    riskDetector.set_sk('SK')
+    riskDetector.set_ak('')
+    riskDetector.set_sk('')
 
     params = dict()
     req = {
@@ -160,3 +160,12 @@ if __name__ == '__main__':
     req = dict()
     resp = riskDetector.live_audio_result(params, req)
     print resp
+
+    params = dict()
+    req = {
+        'AppId': 415493,
+        'Service': "text_risk",
+        'Parameters': "{}"
+    }
+
+    resp = riskDetector.text_slice_risk(params, req)
