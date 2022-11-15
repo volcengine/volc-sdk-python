@@ -8,6 +8,8 @@ class SignResult(object):
         self.xSignedHeaders = ''
         self.xSignedQueries = ''
         self.xSignature = ''
+        self.xContextSha256 = ''
+        self.xSecurityToken = ''
 
         self.authorization = ''
 

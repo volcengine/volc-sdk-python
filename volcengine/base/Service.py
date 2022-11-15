@@ -70,6 +70,9 @@ class Service(object):
     def set_sk(self, sk):
         self.service_info.credentials.set_sk(sk)
 
+    def set_session_token(self, session_token):
+        self.service_info.credentials.set_session_token(session_token)
+
     def set_host(self, host):
         self.service_info.host = host
 
