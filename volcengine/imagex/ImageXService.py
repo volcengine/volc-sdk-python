@@ -1,7 +1,7 @@
 # coding:utf-8
 import json
 import os
-import queue
+from six.moves import queue
 import threading
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
@@ -140,7 +140,7 @@ class Uploader:
     def upload_by_host(self, idx):
         store_info = self.store_infos[idx]
         img_data = self.datas[idx]
-        url = 'http://{}/{}'.format(self.host, store_info['StoreUri'])
+        url = 'https://{}/{}'.format(self.host, store_info['StoreUri'])
         check_sum = crc32(img_data) & 0xFFFFFFFF
         check_sum = "%08x" % check_sum
         headers = {'Content-CRC32': check_sum, 'Authorization': store_info['Auth']}
