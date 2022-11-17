@@ -24,6 +24,8 @@ class SignerV4(object):
 
         format_date = SignerV4.get_current_format_date()
         request.headers['X-Date'] = format_date
+        if credentials.session_token != '':
+            request.headers['X-Security-Token'] = credentials.session_token
 
         md = MetaData()
         md.set_algorithm('HMAC-SHA256')
@@ -61,6 +63,8 @@ class SignerV4(object):
         query['X-SignedHeaders'] = md.signed_headers
         query['X-SignedQueries'] = ''
         query['X-SignedQueries'] = ';'.join(sorted(query.keys()))
+        if credentials.session_token != '':
+            query['X-Security-Token'] = credentials.session_token
 
         hashed_canon_req = SignerV4.hashed_simple_canonical_request_v4(request, md)
         signing_str = '\n'.join([md.algorithm, format_date, md.credential_scope, hashed_canon_req])
@@ -101,8 +105,12 @@ class SignerV4(object):
             query['X-SignedHeaders'] = md.signed_headers
             query['X-SignedQueries'] = ''
             query['X-SignedQueries'] = ';'.join(sorted(query.keys()))
+            if credentials.session_token != '':
+                query['X-Security-Token'] = credentials.session_token
             hashed_canon_req = SignerV4.hashed_simple_canonical_request_v4(request, md)
         else:
+            if credentials.session_token != '':
+                request.headers['X-Security-Token'] = credentials.session_token
             hashed_canon_req = SignerV4.hashed_canonical_request_v4(request, md)
 
         signing_str = '\n'.join([md.algorithm, format_date, md.credential_scope, hashed_canon_req])
@@ -117,7 +125,9 @@ class SignerV4(object):
         result.xSignedHeaders = md.signed_headers
         result.xCredential = credentials.ak + '/' + md.credential_scope
         result.xSignature = sign
+        result.xContextSha256 = request.headers['X-Content-Sha256']
         result.authorization = result.xAlgorithm + " Credential=" + result.xCredential + ", SignedHeaders=" + md.signed_headers + ", Signature=" + result.xSignature
+        result.xSecurityToken = credentials.session_token
 
         return result
 
