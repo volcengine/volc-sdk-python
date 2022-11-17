@@ -102,6 +102,8 @@ class VisualService(Service):
             "VideoCoverSelection": ApiInfo("POST", "/", {"Action": "VideoCoverSelection", "Version": "2020-08-26"}, {}, {}),
             "VideoHighlightExtractionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionSubmitTask", "Version": "2020-08-26"}, {}, {}),
             "VideoHighlightExtractionQueryTask": ApiInfo("GET", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
+            "CertToken": ApiInfo("POST", "/", {"Action": "CertToken", "Version": "2022-08-31"}, {}, {}),
+            "CertVerifyQuery": ApiInfo("POST", "/", {"Action": "CertVerifyQuery", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -123,6 +125,21 @@ class VisualService(Service):
         try:
             res = self.get(api, params)
             res_json = json.loads(res)
+            return res_json
+        except Exception as e:
+            res = str(e)
+            try:
+                res_json = json.loads(res)
+                return res_json
+            except:
+                raise Exception(str(e))
+
+    def common_json_handler(self, api, form):
+        params = dict()
+        try:
+            res = self.json(api, params, json.dumps(form))
+            res_json = json.loads(res)
+
             return res_json
         except Exception as e:
             res = str(e)
@@ -412,7 +429,7 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
-    
+
     def image_search_image_search(self, form):
         try:
             res_json = self.common_handler("ImageSearchImageSearch", form)
@@ -433,14 +450,14 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
-    
+
     def product_search_search_image(self, params):
         try:
             res_json = self.json("ProductSearchSearchImage", [], json.dumps(params))
             return res_json
         except Exception as e:
             raise Exception(str(e))
-    
+
     def clue_license(self, form):
         try:
             res_json = self.common_handler("ClueLicense", form)
@@ -461,7 +478,7 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
-    
+
     def taxi_invoice(self, form):
         try:
             res_json = self.common_handler("TaxiInvoice", form)
@@ -628,6 +645,20 @@ class VisualService(Service):
         try:
             res_json = self.common_get_handler(
                 "VideoHighlightExtractionQueryTask", params)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_token(self, form):
+        try:
+            res_json = self.common_json_handler("CertToken", json.dumps(form))
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_verify_query(self, form):
+        try:
+            res_json = self.json("CertVerifyQuery", json.dumps(form))
             return res_json
         except Exception as e:
             raise Exception(str(e))
