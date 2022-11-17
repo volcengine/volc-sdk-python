@@ -164,7 +164,7 @@ class ConsumeLogsResponse(TLSResponse):
         super(ConsumeLogsResponse, self).__init__(response)
 
         self.x_tls_cursor = self.headers[X_TLS_CURSOR]
-        self.x_tls_count = self.headers[X_TLS_COUNT]
+        self.x_tls_count = int(self.headers[X_TLS_COUNT])
         self.pb_message = None
 
         if DATA in self.response:
@@ -181,6 +181,58 @@ class SearchLogsResponse(TLSResponse):
         super(SearchLogsResponse, self).__init__(response)
 
         self.search_result = SearchResult.set_attributes(data=self.response)
+
+
+class DescribeLogContextResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeLogContextResponse, self).__init__(response)
+
+        self.log_context_infos = self.response[LOG_CONTEXT_INFOS]
+        self.prev_over = self.response[PREV_OVER]
+        self.next_over = self.response[NEXT_OVER]
+
+
+class WebTracksResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(WebTracksResponse, self).__init__(response)
+
+
+class DescribeHistogramResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeHistogramResponse, self).__init__(response)
+
+        self.result_status = self.response[RESULT_STATUS]
+        self.interval = self.response[INTERVAL]
+        self.total_count = self.response[TOTAL_COUNT]
+        self.histogram = self.response[HISTOGRAM]
+
+        for i in range(len(self.histogram)):
+            self.histogram[i] = HistogramInfo.set_attributes(data=self.histogram[i])
+
+
+class CreateDownloadTaskResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateDownloadTaskResponse, self).__init__(response)
+
+        self.task_id = self.response[TASK_ID]
+
+
+class DescribeDownloadTasksResponse(TLSResponse):
+    def __init__(self, response):
+        super(DescribeDownloadTasksResponse, self).__init__(response)
+
+        self.total = self.response[TOTAL]
+        self.tasks = self.response[TASKS]
+
+        for i in range(len(self.tasks)):
+            self.tasks[i] = TaskInfo.set_attributes(data=self.tasks[i])
+
+
+class DescribeDownloadUrlResponse(TLSResponse):
+    def __init__(self, response):
+        super(DescribeDownloadUrlResponse, self).__init__(response)
+
+        self.download_url = self.response[DOWNLOAD_URL]
 
 
 class DescribeShardsResponse(TLSResponse):
@@ -230,6 +282,11 @@ class DescribeHostGroupsResponse(TLSResponse):
         for i in range(len(self.host_group_hosts_rules_infos)):
             self.host_group_hosts_rules_infos[i] = \
                 DescribeHostGroupsResponse._get_host_group_hosts_rules_info(self.host_group_hosts_rules_infos[i])
+
+
+class ModifyHostGroupsAutoUpdateResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ModifyHostGroupsAutoUpdateResponse, self).__init__(response)
 
 
 class DescribeHostsResponse(TLSResponse):
@@ -365,3 +422,21 @@ class DescribeAlarmsResponse(TLSResponse):
 
         for i in range(len(self.alarms)):
             self.alarms[i] = AlarmInfo.set_attributes(data=self.alarms[i])
+
+
+class OpenKafkaConsumerResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(OpenKafkaConsumerResponse, self).__init__(response)
+
+
+class CloseKafkaConsumerResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CloseKafkaConsumerResponse, self).__init__(response)
+
+
+class DescribeKafkaConsumerResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeKafkaConsumerResponse, self).__init__(response)
+
+        self.allow_consume = self.response[ALLOW_CONSUME]
+        self.consume_topic = self.response[CONSUME_TOPIC]

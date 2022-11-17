@@ -3,6 +3,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import json
+
 import lz4
 
 from volcengine.tls.log_pb2 import LogGroupList
@@ -209,6 +211,82 @@ class SearchLogsRequest(TLSRequest):
         self.sort = sort
 
 
+class DescribeLogContextRequest(TLSRequest):
+    def __init__(self, topic_id: str, context_flow: str, package_offset: int, source: str,
+                 prev_logs: int = 10, next_logs: int = 10):
+        self.topic_id = topic_id
+        self.context_flow = context_flow
+        self.package_offset = package_offset
+        self.source = source
+        self.prev_logs = prev_logs
+        self.next_logs = next_logs
+
+
+class WebTracksRequest(TLSRequest):
+    def __init__(self, project_id: str, topic_id: str, logs: List[Dict], source: str = None, compression: str = None):
+        self.project_id = project_id
+        self.topic_id = topic_id
+        self.logs = logs
+        self.source = source
+        self.compression = compression
+
+    def get_api_input(self):
+        if len(self.logs) > 10000:
+            raise TLSException(error_code="LogGroupSizeTooLarge",
+                               error_message="The size of LogGroup exceeds 10000.")
+
+        params = {PROJECT_ID: self.project_id, TOPIC_ID: self.topic_id}
+        body = {LOGS: self.logs}
+
+        if self.source is not None:
+            body[SOURCE] = self.source
+
+        request_headers = {CONTENT_TYPE: APPLICATION_JSON, X_TLS_BODYRAWSIZE: str(len(json.dumps(body)))}
+        body[DATA] = json.dumps(body)
+
+        if self.compression is not None:
+            request_headers[X_TLS_COMPRESSTYPE] = self.compression
+            if self.compression == LZ4:
+                body[DATA] = lz4.compress(body[DATA])[4:]
+
+        return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
+
+
+class DescribeHistogramRequest(TLSRequest):
+    def __init__(self, topic_id: str, query: str, start_time: int, end_time: int, interval: int = None):
+        self.topic_id = topic_id
+        self.query = query
+        self.start_time = start_time
+        self.end_time = end_time
+        self.interval = interval
+
+
+class CreateDownloadTaskRequest(TLSRequest):
+    def __init__(self, task_name: str, topic_id: str, query: str, start_time: int, end_time: int,
+                 data_format: str, sort: str, limit: int, compression: str):
+        self.task_name = task_name
+        self.topic_id = topic_id
+        self.query = query
+        self.start_time = start_time
+        self.end_time = end_time
+        self.data_format = data_format
+        self.sort = sort
+        self.limit = limit
+        self.compression = compression
+
+
+class DescribeDownloadTasksRequest(TLSRequest):
+    def __init__(self, topic_id: str, page_number: int = 1, page_size: int = 20):
+        self.topic_id = topic_id
+        self.page_number = page_number
+        self.page_size = page_size
+
+
+class DescribeDownloadUrlRequest(TLSRequest):
+    def __init__(self, task_id: str):
+        self.task_id = task_id
+
+
 class DescribeShardsRequest(TLSRequest):
     def __init__(self, topic_id: str, page_number: int = 1, page_size: int = 20):
         self.topic_id = topic_id
@@ -218,11 +296,15 @@ class DescribeShardsRequest(TLSRequest):
 
 class CreateHostGroupRequest(TLSRequest):
     def __init__(self, host_group_name: str, host_group_type: str,
-                 host_ip_list: List[str] = None, host_identifier: str = None):
+                 host_ip_list: List[str] = None, host_identifier: str = None, auto_update: bool = False,
+                 update_start_time: str = None, update_end_time: str = None):
         self.host_group_name = host_group_name
         self.host_group_type = host_group_type
         self.host_ip_list = host_ip_list
         self.host_identifier = host_identifier
+        self.auto_update = auto_update
+        self.update_start_time = update_start_time
+        self.update_end_time = update_end_time
 
 
 class DeleteHostGroupRequest(TLSRequest):
@@ -232,12 +314,16 @@ class DeleteHostGroupRequest(TLSRequest):
 
 class ModifyHostGroupRequest(TLSRequest):
     def __init__(self, host_group_id: str, host_group_name: str = None, host_group_type: str = None,
-                 host_ip_list: List[str] = None, host_identifier: str = None):
+                 host_ip_list: List[str] = None, host_identifier: str = None, auto_update: bool = False,
+                 update_start_time: str = None, update_end_time: str = None):
         self.host_group_id = host_group_id
         self.host_group_name = host_group_name
         self.host_group_type = host_group_type
         self.host_ip_list = host_ip_list
         self.host_identifier = host_identifier
+        self.auto_update = auto_update
+        self.update_start_time = update_start_time
+        self.update_end_time = update_end_time
 
 
 class DescribeHostGroupRequest(TLSRequest):
@@ -275,6 +361,15 @@ class DescribeHostGroupRulesRequest(TLSRequest):
         self.host_group_id = host_group_id
         self.page_number = page_number
         self.page_size = page_size
+
+
+class ModifyHostGroupsAutoUpdateRequest(TLSRequest):
+    def __init__(self, host_group_ids: List[str], auto_update: bool = False,
+                 update_start_time: str = None, update_end_time: str = None):
+        self.host_group_ids = host_group_ids
+        self.auto_update = auto_update
+        self.update_start_time = update_start_time
+        self.update_end_time = update_end_time
 
 
 class SetRuleRequest(TLSRequest):
@@ -503,3 +598,18 @@ class DescribeAlarmsRequest(TLSRequest):
         self.status = status
         self.page_number = page_number
         self.page_size = page_size
+
+
+class OpenKafkaConsumerRequest(TLSRequest):
+    def __init__(self, topic_id: str):
+        self.topic_id = topic_id
+
+
+class CloseKafkaConsumerRequest(TLSRequest):
+    def __init__(self, topic_id: str):
+        self.topic_id = topic_id
+
+
+class DescribeKafkaConsumerRequest(TLSRequest):
+    def __init__(self, topic_id: str):
+        self.topic_id = topic_id
