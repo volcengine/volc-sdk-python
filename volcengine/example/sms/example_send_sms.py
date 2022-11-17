@@ -30,8 +30,8 @@ if __name__ == '__main__':
     print(resp)
 
     body = {
-        "SmsAccount" : "smsAccount",
-        "Sign" : "sign",
+        "SmsAccount": "smsAccount",
+        "Sign": "sign",
         "TemplateID": "ST_xxx",
         "PhoneNumber": "188xxxxxxxx",
         "CodeType": 6,
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         "SmsAccount": "smsAccount",
         "PhoneNumber": "188xxxxxxxx",
         "Scene": "Test",
-        "Code" : "123456"
+        "Code": "123456"
     }
     body = json.dumps(body)
     resp = sms_service.check_sms_verify_code(body)
