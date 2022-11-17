@@ -16,7 +16,7 @@ class TLSException(Exception):
         if response is not None:
             self.http_code = response.status_code
             self.response_header = response.headers
-            self.request_id = response.headers[X_TLS_REQUEST_ID]
+            self.request_id = response.headers.get(X_TLS_REQUEST_ID)
 
             try:
                 response_body = json.loads(response.text)

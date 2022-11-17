@@ -165,6 +165,30 @@ class QueryResp(TLSData):
         self.modify_time = modify_time
 
 
+class HistogramInfo(TLSData):
+    def __init__(self, time: int = None, count: int = None):
+        self.time = time
+        self.count = count
+
+
+class TaskInfo(TLSData):
+    def __init__(self, task_id: str = None, task_name: str = None, topic_id: str = None, query: str = None,
+                 start_time: str = None, end_time: str = None, data_format: str = None, task_status: str = None,
+                 compression: str = None, create_time: str = None, log_size: int = None, log_count: int = None):
+        self.task_id = task_id
+        self.task_name = task_name
+        self.topic_id = topic_id
+        self.query = query
+        self.start_time = start_time
+        self.end_time = end_time
+        self.data_format = data_format
+        self.task_status = task_status
+        self.compression = compression
+        self.create_time = create_time
+        self.log_size = log_size
+        self.log_count = log_count
+
+
 class HostInfo(TLSData):
     def __init__(self, ip: str = None, log_collector_version: str = None, heartbeat_status: int = None):
         self.ip = ip
@@ -176,7 +200,8 @@ class HostGroupInfo(TLSData):
     def __init__(self, host_group_id: str = None, host_group_name: str = None, host_group_type: str = None,
                  host_identifier: str = None, host_count: int = None, normal_heartbeat_status_count: int = None,
                  abnormal_heartbeat_status_count: int = None, rule_count: int = None,
-                 create_time: str = None, modify_time: str = None):
+                 create_time: str = None, modify_time: str = None, auto_update: bool = False,
+                 update_start_time: str = None, update_end_time: str = None, agent_latest_version: str = None):
         self.host_group_id = host_group_id
         self.host_group_name = host_group_name
         self.host_group_type = host_group_type
@@ -187,6 +212,10 @@ class HostGroupInfo(TLSData):
         self.rule_count = rule_count
         self.create_time = create_time
         self.modify_time = modify_time
+        self.auto_update = auto_update
+        self.update_start_time = update_start_time
+        self.update_end_time = update_end_time
+        self.agent_latest_version = agent_latest_version
 
 
 class FilterKeyRegex(TLSData):
@@ -202,10 +231,19 @@ class FilterKeyRegex(TLSData):
         return cls(key, regex)
 
 
+class LogTemplate(TLSData):
+    def __init__(self, log_type: str, log_format: str):
+        self.log_type = log_type
+        self.log_format = log_format
+
+    def json(self):
+        return {TYPE: self.log_type, FORMAT: self.log_format}
+
+
 class ExtractRule(TLSData):
     def __init__(self, delimiter: str = None, begin_regex: str = None, log_regex: str = None, keys: List[str] = None,
                  time_key: str = None, time_format: str = None, filter_key_regex: List[FilterKeyRegex] = None,
-                 un_match_up_load_switch: bool = None, un_match_log_key: str = None):
+                 un_match_up_load_switch: bool = None, un_match_log_key: str = None, log_template: LogTemplate = None):
         assert (time_key is None and time_format is None) or (time_key is not None and time_format is not None)
         assert (un_match_up_load_switch is None and un_match_log_key is None) or \
                (un_match_up_load_switch is not None and un_match_log_key is not None)
@@ -219,6 +257,7 @@ class ExtractRule(TLSData):
         self.filter_key_regex = filter_key_regex
         self.un_match_up_load_switch = un_match_up_load_switch
         self.un_match_log_key = un_match_log_key
+        self.log_template = log_template
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -228,6 +267,9 @@ class ExtractRule(TLSData):
             extract_rule.filter_key_regex = []
             for one_filter_key_regex in data[FILTER_KEY_REGEX]:
                 extract_rule.filter_key_regex.append(FilterKeyRegex.set_attributes(data=one_filter_key_regex))
+        if LOG_TEMPLATE in data:
+            extract_rule.log_template = LogTemplate(log_type=data[LOG_TEMPLATE].get(TYPE),
+                                                    log_format=data[LOG_TEMPLATE].get(FORMAT))
 
         return extract_rule
 
@@ -238,6 +280,8 @@ class ExtractRule(TLSData):
             json_data[FILTER_KEY_REGEX] = []
             for regex in self.filter_key_regex:
                 json_data[FILTER_KEY_REGEX].append(regex.json())
+        if self.log_template is not None:
+            json_data[LOG_TEMPLATE] = self.log_template.json()
 
         return json_data
 
@@ -275,21 +319,39 @@ class ParsePathRule(TLSData):
         return cls(path_sample, regex, keys)
 
 
+class ShardHashKey(TLSData):
+    def __init__(self, hash_key: str):
+        self.hash_key = hash_key
+
+
 class UserDefineRule(TLSData):
-    def __init__(self, parse_path_rule: ParsePathRule):
+    def __init__(self, parse_path_rule: ParsePathRule = None, shard_hash_key: ShardHashKey = None,
+                 enable_raw_log: bool = False, fields: dict = None):
         self.parse_path_rule = parse_path_rule
+        self.shard_hash_key = shard_hash_key
+        self.enable_raw_log = enable_raw_log
+        self.fields = fields
 
     @classmethod
     def set_attributes(cls, data: dict):
-        if PARSE_PATH_RULE in data:
-            parse_path_rule = ParsePathRule.set_attributes(data[PARSE_PATH_RULE])
-        else:
-            parse_path_rule = None
+        user_define_rule = super(UserDefineRule, cls).set_attributes(data)
 
-        return cls(parse_path_rule)
+        if SHARD_HASH_KEY in data:
+            user_define_rule.shard_hash_key = ShardHashKey(hash_key=data[SHARD_HASH_KEY].get(HASH_KEY))
+        if PARSE_PATH_RULE in data:
+            user_define_rule.parse_path_rule = ParsePathRule.set_attributes(data[PARSE_PATH_RULE])
+
+        return user_define_rule
 
     def json(self):
-        return {PARSE_PATH_RULE: self.parse_path_rule.json()}
+        json_data = super(UserDefineRule, self).json()
+
+        if self.shard_hash_key is not None:
+            json_data[SHARD_HASH_KEY] = self.shard_hash_key.json()
+        if self.parse_path_rule is not None:
+            json_data[PARSE_PATH_RULE] = self.parse_path_rule.json()
+
+        return json_data
 
 
 class KubernetesRule(TLSData):
@@ -387,12 +449,13 @@ class HostGroupHostsRulesInfo(TLSData):
 
 class Receiver(TLSData):
     def __init__(self, receiver_type: str, receiver_names: List[str], receiver_channels: List[str],
-                 start_time: str, end_time: str):
+                 start_time: str, end_time: str, webhook: str = None):
         self.receiver_type = receiver_type
         self.receiver_names = receiver_names
         self.receiver_channels = receiver_channels
         self.start_time = start_time
         self.end_time = end_time
+        self.webhook = webhook
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -401,8 +464,9 @@ class Receiver(TLSData):
         receiver_channels = data.get(RECEIVER_CHANNELS)
         start_time = data.get(START_TIME)
         end_time = data.get(END_TIME)
+        webhook = data.get(WEBHOOK)
 
-        return cls(receiver_type, receiver_names, receiver_channels, start_time, end_time)
+        return cls(receiver_type, receiver_names, receiver_channels, start_time, end_time, webhook)
 
 
 class QueryRequest(TLSData):
@@ -470,7 +534,7 @@ class AlarmInfo(TLSData):
     def __init__(self, alarm_name: str = None, alarm_id: str = None, project_id: str = None, status: bool = None,
                  query_request: List[QueryRequest] = None, request_cycle: RequestCycle = None, condition: str = None,
                  trigger_period: int = None, alarm_period: int = None,
-                 alarm_notify_groups: List[AlarmNotifyGroupInfo] = None, user_define_msg: str = None,
+                 alarm_notify_group: List[AlarmNotifyGroupInfo] = None, user_define_msg: str = None,
                  create_time: str = None, modify_time: str = None):
         self.alarm_name = alarm_name
         self.alarm_id = alarm_id
@@ -481,7 +545,7 @@ class AlarmInfo(TLSData):
         self.condition = condition
         self.trigger_period = trigger_period
         self.alarm_period = alarm_period
-        self.alarm_notify_groups = alarm_notify_groups
+        self.alarm_notify_group = alarm_notify_group
         self.user_define_msg = user_define_msg
         self.create_time = create_time
         self.modify_time = modify_time
@@ -497,8 +561,8 @@ class AlarmInfo(TLSData):
             for one_query_request in data[QUERY_REQUEST]:
                 alarm_info.query_request.append(QueryRequest.set_attributes(data=one_query_request))
         if ALARM_NOTIFY_GROUP in data:
-            alarm_info.alarm_notify_groups = []
+            alarm_info.alarm_notify_group = []
             for alarm_notify_group in data[ALARM_NOTIFY_GROUP]:
-                alarm_info.alarm_notify_groups.append(AlarmNotifyGroupInfo.set_attributes(data=alarm_notify_group))
+                alarm_info.alarm_notify_group.append(AlarmNotifyGroupInfo.set_attributes(data=alarm_notify_group))
 
         return alarm_info

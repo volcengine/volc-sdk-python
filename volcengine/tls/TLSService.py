@@ -44,6 +44,12 @@ API_INFO = {
     DESCRIBE_CURSOR: ApiInfo(HTTP_GET, DESCRIBE_CURSOR, {}, {}, {}),
     CONSUME_LOGS: ApiInfo(HTTP_GET, CONSUME_LOGS, {}, {}, {}),
     SEARCH_LOGS: ApiInfo(HTTP_POST, SEARCH_LOGS, {}, {}, {}),
+    DESCRIBE_LOG_CONTEXT: ApiInfo(HTTP_POST, DESCRIBE_LOG_CONTEXT, {}, {}, {}),
+    WEB_TRACKS: ApiInfo(HTTP_POST, WEB_TRACKS, {}, {}, {}),
+    DESCRIBE_HISTOGRAM: ApiInfo(HTTP_POST, DESCRIBE_HISTOGRAM, {}, {}, {}),
+    CREATE_DOWNLOAD_TASK: ApiInfo(HTTP_POST, CREATE_DOWNLOAD_TASK, {}, {}, {}),
+    DESCRIBE_DOWNLOAD_TASKS: ApiInfo(HTTP_GET, DESCRIBE_DOWNLOAD_TASKS, {}, {}, {}),
+    DESCRIBE_DOWNLOAD_URL: ApiInfo(HTTP_GET, DESCRIBE_DOWNLOAD_URL, {}, {}, {}),
     # APIs of shards.
     DESCRIBE_SHARDS: ApiInfo(HTTP_GET, DESCRIBE_SHARDS, {}, {}, {}),
     # APIs of host groups.
@@ -55,6 +61,7 @@ API_INFO = {
     DESCRIBE_HOSTS: ApiInfo(HTTP_GET, DESCRIBE_HOSTS, {}, {}, {}),
     DELETE_HOST: ApiInfo(HTTP_DELETE, DELETE_HOST, {}, {}, {}),
     DESCRIBE_HOST_GROUP_RULES: ApiInfo(HTTP_GET, DESCRIBE_HOST_GROUP_RULES, {}, {}, {}),
+    MODIFY_HOST_GROUPS_AUTO_UPDATE: ApiInfo(HTTP_PUT, MODIFY_HOST_GROUPS_AUTO_UPDATE, {}, {}, {}),
     # APIs of rules.
     CREATE_RULE: ApiInfo(HTTP_POST, CREATE_RULE, {}, {}, {}),
     DELETE_RULE: ApiInfo(HTTP_DELETE, DELETE_RULE, {}, {}, {}),
@@ -71,7 +78,11 @@ API_INFO = {
     CREATE_ALARM: ApiInfo(HTTP_POST, CREATE_ALARM, {}, {}, {}),
     DELETE_ALARM: ApiInfo(HTTP_DELETE, DELETE_ALARM, {}, {}, {}),
     MODIFY_ALARM: ApiInfo(HTTP_PUT, MODIFY_ALARM, {}, {}, {}),
-    DESCRIBE_ALARMS: ApiInfo(HTTP_GET, DESCRIBE_ALARMS, {}, {}, {})}
+    DESCRIBE_ALARMS: ApiInfo(HTTP_GET, DESCRIBE_ALARMS, {}, {}, {}),
+    # APIs of Kafka consumer.
+    OPEN_KAFKA_CONSUMER: ApiInfo(HTTP_PUT, OPEN_KAFKA_CONSUMER, {}, {}, {}),
+    CLOSE_KAFKA_CONSUMER: ApiInfo(HTTP_PUT, CLOSE_KAFKA_CONSUMER, {}, {}, {}),
+    DESCRIBE_KAFKA_CONSUMER: ApiInfo(HTTP_GET, DESCRIBE_KAFKA_CONSUMER, {}, {}, {})}
 
 
 class TLSService(Service):
@@ -135,7 +146,7 @@ class TLSService(Service):
             request_headers = {CONTENT_TYPE: APPLICATION_JSON}
         request.headers.update(request_headers)
 
-        if "json" in request.headers[CONTENT_TYPE]:
+        if "json" in request.headers[CONTENT_TYPE] and api != WEB_TRACKS:
             request.body = json.dumps(body)
         else:
             request.body = body[DATA]
@@ -275,6 +286,42 @@ class TLSService(Service):
 
         return SearchLogsResponse(response)
 
+    def describe_log_context(self, describe_log_context_request: DescribeLogContextRequest) \
+            -> DescribeLogContextResponse:
+        response = self.__request(api=DESCRIBE_LOG_CONTEXT, body=describe_log_context_request.get_api_input())
+
+        return DescribeLogContextResponse(response)
+
+    def web_tracks(self, web_tracks_request: WebTracksRequest) -> WebTracksResponse:
+        api_input = web_tracks_request.get_api_input()
+        response = self.__request(api=WEB_TRACKS, params=api_input[PARAMS], body=api_input[BODY],
+                                  request_headers=api_input[REQUEST_HEADERS])
+
+        return WebTracksResponse(response)
+
+    def describe_histogram(self, describe_histogram_request: DescribeHistogramRequest) -> DescribeHistogramResponse:
+        response = self.__request(api=DESCRIBE_HISTOGRAM, body=describe_histogram_request.get_api_input())
+
+        return DescribeHistogramResponse(response)
+
+    def create_download_task(self, create_download_task_request: CreateDownloadTaskRequest) \
+            -> CreateDownloadTaskResponse:
+        response = self.__request(api=CREATE_DOWNLOAD_TASK, body=create_download_task_request.get_api_input())
+
+        return CreateDownloadTaskResponse(response)
+
+    def describe_download_tasks(self, describe_download_tasks_request: DescribeDownloadTasksRequest) \
+            -> DescribeDownloadTasksResponse:
+        response = self.__request(api=DESCRIBE_DOWNLOAD_TASKS, params=describe_download_tasks_request.get_api_input())
+
+        return DescribeDownloadTasksResponse(response)
+
+    def describe_download_url(self, describe_download_url_request: DescribeDownloadUrlRequest)\
+            -> DescribeDownloadUrlResponse:
+        response = self.__request(api=DESCRIBE_DOWNLOAD_URL, params=describe_download_url_request.get_api_input())
+
+        return DescribeDownloadUrlResponse(response)
+
     def describe_shards(self, describe_shards_request: DescribeShardsRequest) -> DescribeShardsResponse:
         response = self.__request(api=DESCRIBE_SHARDS, params=describe_shards_request.get_api_input())
 
@@ -321,6 +368,13 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_HOST_GROUP_RULES, params=describe_host_group_rules.get_api_input())
 
         return DescribeHostGroupRulesResponse(response)
+
+    def modify_host_groups_auto_update(self, modify_host_groups_auto_update_request: ModifyHostGroupsAutoUpdateRequest)\
+            -> ModifyHostGroupsAutoUpdateResponse:
+        response = self.__request(api=MODIFY_HOST_GROUPS_AUTO_UPDATE,
+                                  body=modify_host_groups_auto_update_request.get_api_input())
+
+        return ModifyHostGroupsAutoUpdateResponse(response)
 
     def create_rule(self, create_rule_request: CreateRuleRequest) -> CreateRuleResponse:
         response = self.__request(api=CREATE_RULE, body=create_rule_request.get_api_input())
@@ -403,3 +457,20 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_ALARMS, params=describe_alarms_request.get_api_input())
 
         return DescribeAlarmsResponse(response)
+
+    def open_kafka_consumer(self, open_kafka_consumer_request: OpenKafkaConsumerRequest) -> OpenKafkaConsumerResponse:
+        response = self.__request(api=OPEN_KAFKA_CONSUMER, body=open_kafka_consumer_request.get_api_input())
+
+        return OpenKafkaConsumerResponse(response)
+
+    def close_kafka_consumer(self, close_kafka_consumer_request: CloseKafkaConsumerRequest) \
+            -> CloseKafkaConsumerResponse:
+        response = self.__request(api=CLOSE_KAFKA_CONSUMER, body=close_kafka_consumer_request.get_api_input())
+
+        return CloseKafkaConsumerResponse(response)
+
+    def describe_kafka_consumer(self, describe_kafka_consumer_request: DescribeKafkaConsumerRequest)\
+            -> DescribeKafkaConsumerResponse:
+        response = self.__request(api=DESCRIBE_KAFKA_CONSUMER, params=describe_kafka_consumer_request.get_api_input())
+
+        return DescribeKafkaConsumerResponse(response)
