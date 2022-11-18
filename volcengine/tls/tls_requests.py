@@ -3,9 +3,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+try:
+    import lz4
+except ImportError:
+    lz4 = None
 import json
 
-import lz4
 
 from volcengine.tls.log_pb2 import LogGroupList
 from volcengine.tls.data import *
@@ -157,6 +160,9 @@ class PutLogsRequest(TLSRequest):
         if self.compression is not None:
             request_headers[X_TLS_COMPRESSTYPE] = self.compression
             if self.compression == LZ4:
+                if lz4 is None:
+                    raise TLSException(error_code="UnsupportedLZ4",
+                                       error_message="Your platform does not support the LZ4 compression package.")
                 body[DATA] = lz4.compress(body[DATA])[4:]
 
         return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
@@ -194,6 +200,9 @@ class ConsumeLogsRequest(TLSRequest):
         if self.log_group_count is not None:
             body[LOG_GROUP_COUNT] = self.log_group_count
         if self.compression is not None:
+            if self.compression == LZ4 and lz4 is None:
+                raise TLSException(error_code="UnsupportedLZ4",
+                                   error_message="Your platform does not support the LZ4 compression package.")
             body[COMPRESSION] = self.compression
 
         return {PARAMS: params, BODY: body}
