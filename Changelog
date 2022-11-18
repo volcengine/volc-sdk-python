@@ -1,5 +1,10 @@
 ### Change log
 
+2022-11-18 Bumped to version v1.0.63
+- Added sts credential support
+- Updated apis for visual
+- Fixed dependency for windows
+
 2022-11-10 Bumped to version v1.0.62
 - Added live service
 - Updated apis for security
