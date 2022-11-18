@@ -6,11 +6,15 @@ from __future__ import print_function
 import json
 import struct
 
-import lz4
+try:
+    import lz4
+except ImportError:
+    lz4 = None
 from requests import Response
 
 from volcengine.tls.log_pb2 import LogGroupList
 from volcengine.tls.data import *
+from volcengine.tls.tls_exception import TLSException
 
 
 class TLSResponse:
@@ -169,7 +173,7 @@ class ConsumeLogsResponse(TLSResponse):
 
         if DATA in self.response:
             pb_message = self.response[DATA]
-            if compression == "lz4":
+            if compression == LZ4:
                 pb_message = lz4.uncompress(struct.pack('<I', int(self.headers[X_TLS_BODYRAWSIZE])) + pb_message)
 
             self.pb_message = LogGroupList()
