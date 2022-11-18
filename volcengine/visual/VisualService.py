@@ -651,14 +651,14 @@ class VisualService(Service):
 
     def cert_token(self, form):
         try:
-            res_json = self.common_json_handler("CertToken", json.dumps(form))
+            res_json = self.common_json_handler("CertToken", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
     def cert_verify_query(self, form):
         try:
-            res_json = self.json("CertVerifyQuery", json.dumps(form))
+            res_json = self.common_json_handler("CertVerifyQuery", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
