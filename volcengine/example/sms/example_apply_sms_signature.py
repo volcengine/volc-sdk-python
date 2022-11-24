@@ -23,7 +23,8 @@ if __name__ == '__main__':
         "SubAccount": "subAccount",
         "Content": "content",
         "Desc": "description",
-        "Source": "公司名称/公司缩写"
+        "Source": "公司名称/公司缩写",
+        "Domain": "网站域名"
     }
 
     resp = sms_service.apply_sms_signature(body)
