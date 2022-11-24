@@ -15,7 +15,6 @@ service_info_map = {
 }
 
 api_info = {
-
     # 添加加速域名: https://www.volcengine.com/docs/6454/97340
     "AddCdnDomain": ApiInfo("POST", "/", {
         "Action": "AddCdnDomain", "Version": SERVICE_VERSION}, {}, {}),
@@ -91,10 +90,6 @@ api_info = {
     # 获取区域和 ISP 列表: https://www.volcengine.com/docs/6454/70445
     "DescribeCdnRegionAndIsp": ApiInfo("POST", "/", {
         "Action": "DescribeCdnRegionAndIsp", "Version": SERVICE_VERSION}, {}, {}),
-
-    # （Deprecated）查询域名排行数据: https://www.volcengine.com/docs/6454/70447?type=preview
-    "DescribeCdnDomainTopData": ApiInfo("POST", "/", {
-        "Action": "DescribeCdnDomainTopData", "Version": SERVICE_VERSION}, {}, {}),
 
     # 查询账号计费方式: https://www.volcengine.com/docs/6454/78999
     "DescribeCdnService": ApiInfo("POST", "/", {
@@ -183,6 +178,7 @@ api_info = {
     # 批量关联证书: https://www.volcengine.com/docs/6454/125712
     "BatchDeployCert": ApiInfo("POST", "/", {
         "Action": "BatchDeployCert", "Version": SERVICE_VERSION}, {}, {}),
+
 
 }
 
@@ -397,16 +393,6 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "DescribeCdnRegionAndIsp"
-        res = self.json(action, [], json.dumps(params))
-        if res == '':
-            raise Exception("%s: empty response" % action)
-        res_json = json.loads(res)
-        return res_json
-
-    def describe_cdn_domain_top_data(self, params=None):
-        if params is None:
-            params = {}
-        action = "DescribeCdnDomainTopData"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
