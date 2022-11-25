@@ -1,5 +1,8 @@
 ### Change log
 
+2022-11-24 Bumped to version v1.0.64
+- Updated apis for sms/cdn
+
 2022-11-18 Bumped to version v1.0.63
 - Added sts credential support
 - Updated apis for visual
