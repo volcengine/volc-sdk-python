@@ -33,7 +33,7 @@ class ImpServiceConfig(Service):
     @staticmethod
     def get_service_info(region):
         service_info_map = {
-            'cn-north-1': ServiceInfo("open.volcengineapi.com", {'Accept': 'application/json'},
+            'cn-north-1': ServiceInfo("imp.volcengineapi.com", {'Accept': 'application/json'},
                                       Credentials('', '', 'imp', 'cn-north-1'), 10, 10),
         }
         service_info = service_info_map.get(region, None)
