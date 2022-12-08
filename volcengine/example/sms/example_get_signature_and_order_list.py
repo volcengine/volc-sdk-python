@@ -21,6 +21,7 @@ if __name__ == '__main__':
 
     param = {
         "subAccount": "subAccount",
+        "signature": "sign",
         "pageIndex": 1,
         "pageSize": 10
     }
