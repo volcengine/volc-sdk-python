@@ -63,6 +63,10 @@ api_info = {
     "DescribeCdnDataDetail": ApiInfo("POST", "/", {
         "Action": "DescribeCdnDataDetail", "Version": SERVICE_VERSION}, {}, {}),
 
+    # 获取多个域名的省份和运营商的细分数据: https://www.volcengine.com/docs/6454/145577
+    "DescribeDistrictIspData": ApiInfo("POST", "/", {
+        "Action": "DescribeDistrictIspData", "Version": SERVICE_VERSION}, {}, {}),
+
     # 获取独立访客的细分数据: https://www.volcengine.com/docs/6454/79321
     "DescribeEdgeStatisticalData": ApiInfo("POST", "/", {
         "Action": "DescribeEdgeStatisticalData", "Version": SERVICE_VERSION}, {}, {}),
@@ -91,7 +95,7 @@ api_info = {
     "DescribeCdnRegionAndIsp": ApiInfo("POST", "/", {
         "Action": "DescribeCdnRegionAndIsp", "Version": SERVICE_VERSION}, {}, {}),
 
-    # 查询账号计费方式: https://www.volcengine.com/docs/6454/78999
+    # 获取服务相关信息: https://www.volcengine.com/docs/6454/78999
     "DescribeCdnService": ApiInfo("POST", "/", {
         "Action": "DescribeCdnService", "Version": SERVICE_VERSION}, {}, {}),
 
@@ -323,6 +327,16 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "DescribeCdnDataDetail"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_district_isp_data(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDistrictIspData"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
