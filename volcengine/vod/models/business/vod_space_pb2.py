@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cvod/business/vod_space.proto\x12\x1eVolcengine.Vod.Models.Business\"\xd0\x01\n\x0cVodSpaceInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\x12\x13\n\x0bProjectName\x18\x04 \x01(\t\x12\x12\n\nBucketName\x18\x05 \x01(\t\x12\x14\n\x0c\x42ucketStatus\x18\x06 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x07 \x01(\t\x12\x10\n\x08UserName\x18\x08 \x01(\t\x12\x11\n\tCreatedAt\x18\t \x01(\t\x12\x0c\n\x04Type\x18\n \x01(\t\x12\x16\n\x0eMediaSyncLevel\x18\x0b \x01(\t\"/\n\x0eVodStorageData\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12\x0f\n\x07Storage\x18\x02 \x01(\x03\"\xe4\x01\n$VodDescribeVodSpaceStorageDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x0c\n\x04Type\x18\x05 \x01(\t\x12\x19\n\x11LatestStorageData\x18\x06 \x01(\x03\x12G\n\x0fStorageDataList\x18\x07 \x03(\x0b\x32..Volcengine.Vod.Models.Business.VodStorageData*\xa3\x01\n\x17VodSpaceUploadConfigKey\x12$\n UndefinedVodSpaceUploadConfigKey\x10\x00\x12/\n+CustomUploadFilePathVodSpaceUploadConfigKey\x10\x01\x12\x31\n-AutoPublishAfterUploadVodSpaceUploadConfigKey\x10\x02\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodSpaceP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cvod/business/vod_space.proto\x12\x1eVolcengine.Vod.Models.Business\"\xe7\x01\n\x0cVodSpaceInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\x12\x13\n\x0bProjectName\x18\x04 \x01(\t\x12\x12\n\nBucketName\x18\x05 \x01(\t\x12\x14\n\x0c\x42ucketStatus\x18\x06 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x07 \x01(\t\x12\x10\n\x08UserName\x18\x08 \x01(\t\x12\x11\n\tCreatedAt\x18\t \x01(\t\x12\x0c\n\x04Type\x18\n \x01(\t\x12\x16\n\x0eMediaSyncLevel\x18\x0b \x01(\t\x12\x15\n\rCanUseArchive\x18\x0c \x01(\x08\"/\n\x0eVodStorageData\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12\x0f\n\x07Storage\x18\x02 \x01(\x03\"\xe4\x01\n$VodDescribeVodSpaceStorageDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x0c\n\x04Type\x18\x05 \x01(\t\x12\x19\n\x11LatestStorageData\x18\x06 \x01(\x03\x12G\n\x0fStorageDataList\x18\x07 \x03(\x0b\x32..Volcengine.Vod.Models.Business.VodStorageData*\xa3\x01\n\x17VodSpaceUploadConfigKey\x12$\n UndefinedVodSpaceUploadConfigKey\x10\x00\x12/\n+CustomUploadFilePathVodSpaceUploadConfigKey\x10\x01\x12\x31\n-AutoPublishAfterUploadVodSpaceUploadConfigKey\x10\x02\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodSpaceP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 _VODSPACEUPLOADCONFIGKEY = DESCRIPTOR.enum_types_by_name['VodSpaceUploadConfigKey']
 VodSpaceUploadConfigKey = enum_type_wrapper.EnumTypeWrapper(_VODSPACEUPLOADCONFIGKEY)
@@ -52,12 +52,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n)com.volcengine.service.vod.model.businessB\010VodSpaceP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata'
-  _VODSPACEUPLOADCONFIGKEY._serialized_start=556
-  _VODSPACEUPLOADCONFIGKEY._serialized_end=719
+  _VODSPACEUPLOADCONFIGKEY._serialized_start=579
+  _VODSPACEUPLOADCONFIGKEY._serialized_end=742
   _VODSPACEINFO._serialized_start=65
-  _VODSPACEINFO._serialized_end=273
-  _VODSTORAGEDATA._serialized_start=275
-  _VODSTORAGEDATA._serialized_end=322
-  _VODDESCRIBEVODSPACESTORAGEDATARESULT._serialized_start=325
-  _VODDESCRIBEVODSPACESTORAGEDATARESULT._serialized_end=553
+  _VODSPACEINFO._serialized_end=296
+  _VODSTORAGEDATA._serialized_start=298
+  _VODSTORAGEDATA._serialized_end=345
+  _VODDESCRIBEVODSPACESTORAGEDATARESULT._serialized_start=348
+  _VODDESCRIBEVODSPACESTORAGEDATARESULT._serialized_end=576
 # @@protoc_insertion_point(module_scope)
