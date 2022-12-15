@@ -1,5 +1,8 @@
 ### Change log
 
+2022-12-15 Bumped to version v1.0.67
+- Updated apis for iam/vod/cdn
+
 2022-12-08 Bumped to version v1.0.66
 - Updated apis for sms
 - Updated config for rds/imp
