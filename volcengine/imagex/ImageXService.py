@@ -322,13 +322,7 @@ class ImageXService(Service):
             raise Exception(res_json['ResponseMetadata'])
         return res_json['Result']
 
-    # action=0: refresh
-    # action=1: disable
-    # action=2: enable
     def update_image_urls(self, service_id, urls, action=0):
-        if action < 0 or action > 2:
-            raise Exception("update action should be [0,2], %d" % action)
-
         query = {
             'ServiceId': service_id
         }
