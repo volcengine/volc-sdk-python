@@ -662,3 +662,13 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
+    
+    def ocr_api(self, action, form):
+        try:
+            res_json = self.common_handler(action, form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def set_api_info(self, action, version):
+        self.api_info[action] = ApiInfo("POST", "/", {"Action": action, "Version": version}, {}, {})
