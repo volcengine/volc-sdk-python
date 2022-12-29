@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 from volcengine.live.models.business import deny_config_pb2 as live_dot_business_dot_deny__config__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1flive/request/request_live.proto\x12\x1eVolcengine.Live.Models.Request\x1a\x1flive/business/deny_config.proto\"C\n\x13\x43reateDomainRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\x12\x0c\n\x04Type\x18\x02 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\"\xb3\x01\n\x17ListDomainDetailRequest\x12\x0f\n\x07PageNum\x18\x01 \x01(\x03\x12\x10\n\x08PageSize\x18\x02 \x01(\x03\x12\x11\n\tVhostList\x18\x03 \x03(\t\x12\x18\n\x10\x44omainStatusList\x18\x04 \x03(\t\x12\x16\n\x0e\x44omainTypeList\x18\x05 \x03(\t\x12\x18\n\x10\x44omainRegionList\x18\x06 \x03(\t\x12\x16\n\x0e\x44omainNameList\x18\x07 \x03(\t\"&\n\x14\x44isableDomainRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\"%\n\x13\x45nableDomainRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\"%\n\x13\x44\x65leteDomainRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\"+\n\x15\x44\x65scribeDomainRequest\x12\x12\n\nDomainList\x18\x01 \x03(\t\"J\n ManagerPullPushDomainBindRequest\x12\x12\n\nPullDomain\x18\x01 \x01(\t\x12\x12\n\nPushDomain\x18\x02 \x01(\t\"\xa5\x01\n$DescribeRecordTaskFileHistoryRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x0e\n\x06Stream\x18\x03 \x01(\t\x12\x10\n\x08\x44\x61teFrom\x18\x04 \x01(\t\x12\x0e\n\x06\x44\x61teTo\x18\x05 \x01(\t\x12\x0f\n\x07PageNum\x18\x06 \x01(\x05\x12\x10\n\x08PageSize\x18\x07 \x01(\x05\x12\x0c\n\x04Type\x18\x08 \x01(\t\"\xa2\x01\n!DescribeCDNSnapshotHistoryRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x0e\n\x06Stream\x18\x03 \x01(\t\x12\x10\n\x08\x44\x61teFrom\x18\x04 \x01(\t\x12\x0e\n\x06\x44\x61teTo\x18\x05 \x01(\t\x12\x0f\n\x07PageNum\x18\x06 \x01(\x05\x12\x10\n\x08PageSize\x18\x07 \x01(\x05\x12\x0c\n\x04Type\x18\x08 \x01(\t\"\xaa\x01\n#DescribeLiveStreamInfoByPageRequest\x12\x0f\n\x07PageNum\x18\x01 \x01(\x05\x12\x10\n\x08PageSize\x18\x02 \x01(\x05\x12\r\n\x05Vhost\x18\x03 \x01(\t\x12\x0e\n\x06\x44omain\x18\x04 \x01(\t\x12\x0b\n\x03\x41pp\x18\x05 \x01(\t\x12\x0e\n\x06Stream\x18\x06 \x01(\t\x12\x12\n\nStreamType\x18\x07 \x01(\t\x12\x10\n\x08InfoType\x18\x08 \x01(\t\"\xd0\x01\n%DescribeClosedStreamInfoByPageRequest\x12\x0f\n\x07PageNum\x18\x01 \x01(\x05\x12\x10\n\x08PageSize\x18\x02 \x01(\x05\x12\r\n\x05Vhost\x18\x03 \x01(\t\x12\x0e\n\x06\x44omain\x18\x04 \x01(\t\x12\x0b\n\x03\x41pp\x18\x05 \x01(\t\x12\x0e\n\x06Stream\x18\x06 \x01(\t\x12\x0c\n\x04Sort\x18\x07 \x01(\t\x12\x13\n\x0b\x45ndTimeFrom\x18\x08 \x01(\t\x12\x11\n\tEndTimeTo\x18\t \x01(\t\x12\x12\n\nSourceType\x18\n \x01(\t\"\x87\x01\n(DescribeForbiddenStreamInfoByPageRequest\x12\x0f\n\x07PageNum\x18\x01 \x01(\x05\x12\x10\n\x08PageSize\x18\x02 \x01(\x05\x12\r\n\x05Vhost\x18\x03 \x01(\t\x12\x0b\n\x03\x41pp\x18\x04 \x01(\t\x12\x0e\n\x06Stream\x18\x05 \x01(\t\x12\x0c\n\x04Sort\x18\x06 \x01(\t\"\\\n\x1e\x44\x65scribeLiveStreamStateRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\"Q\n\x13ResumeStreamRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\"?\n\x11KillStreamRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x0e\n\x06Stream\x18\x03 \x01(\t\"b\n\x13\x46orbidStreamRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x05 \x01(\t\"\x98\x02\n\x18UpdateRelaySourceRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x1d\n\x15RelaySourceDomainList\x18\x03 \x03(\t\x12j\n\x11RelaySourceParams\x18\x04 \x03(\x0b\x32O.Volcengine.Live.Models.Request.UpdateRelaySourceRequest.RelaySourceParamsEntry\x12\x1b\n\x13RelaySourceProtocol\x18\x05 \x01(\t\x1a\x38\n\x16RelaySourceParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"6\n\x18\x44\x65leteRelaySourceRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\"+\n\x1a\x44\x65scribeRelaySourceRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\"~\n\x18\x43reateVQScoreTaskRequest\x12\x10\n\x08MainAddr\x18\x01 \x01(\t\x12\x14\n\x0c\x43ontrastAddr\x18\x02 \x01(\t\x12\x15\n\rFrameInterval\x18\x03 \x01(\x05\x12\x10\n\x08\x44uration\x18\x04 \x01(\x05\x12\x11\n\tAlgorithm\x18\x05 \x01(\t\"(\n\x1a\x44\x65scribeVQScoreTaskRequest\x12\n\n\x02ID\x18\x01 \x01(\t\"o\n\x16ListVQScoreTaskRequest\x12\x11\n\tStartTime\x18\x01 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x02 \x01(\t\x12\x0f\n\x07PageNum\x18\x03 \x01(\x05\x12\x10\n\x08PageSize\x18\x04 \x01(\x05\x12\x0e\n\x06Status\x18\x05 \x01(\x05\"\x9e\x01\n\x16GeneratePlayURLRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\x12\x0e\n\x06Suffix\x18\x05 \x01(\t\x12\x0c\n\x04Type\x18\x06 \x01(\t\x12\x15\n\rValidDuration\x18\x07 \x01(\x03\x12\x13\n\x0b\x45xpiredTime\x18\x08 \x01(\t\"\x80\x01\n\x16GeneratePushURLRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\x12\x15\n\rValidDuration\x18\x05 \x01(\x03\x12\x13\n\x0b\x45xpiredTime\x18\x06 \x01(\t\"\xba\x01\n\x1b\x43reatePullToPushTaskRequest\x12\r\n\x05Title\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\x03\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\x03\x12\x13\n\x0b\x43\x61llbackURL\x18\x04 \x01(\t\x12\x0c\n\x04Type\x18\x05 \x01(\x05\x12\x11\n\tCycleMode\x18\x06 \x01(\x05\x12\x0f\n\x07\x44stAddr\x18\x07 \x01(\t\x12\x0f\n\x07SrcAddr\x18\x08 \x01(\t\x12\x10\n\x08SrcAddrS\x18\t \x03(\t\"F\n\x19ListPullToPushTaskRequest\x12\x0c\n\x04Page\x18\x01 \x01(\x05\x12\x0c\n\x04Size\x18\x02 \x01(\x05\x12\r\n\x05Title\x18\x03 \x01(\t\"\xca\x01\n\x1bUpdatePullToPushTaskRequest\x12\r\n\x05Title\x18\x01 \x01(\t\x12\x0e\n\x06TaskId\x18\x02 \x01(\t\x12\x11\n\tStartTime\x18\x03 \x01(\x03\x12\x0f\n\x07\x45ndTime\x18\x04 \x01(\x03\x12\x13\n\x0b\x43\x61llbackURL\x18\x05 \x01(\t\x12\x0c\n\x04Type\x18\x06 \x01(\x05\x12\x11\n\tCycleMode\x18\x07 \x01(\x05\x12\x0f\n\x07\x44stAddr\x18\x08 \x01(\t\x12\x0f\n\x07SrcAddr\x18\t \x01(\t\x12\x10\n\x08SrcAddrS\x18\n \x03(\t\".\n\x1cRestartPullToPushTaskRequest\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\"+\n\x19StopPullToPushTaskRequest\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\"-\n\x1b\x44\x65letePullToPushTaskRequest\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\"\x90\x01\n\x17UpdateDenyConfigRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12I\n\x0e\x44\x65nyConfigList\x18\x04 \x03(\x0b\x32\x31.Volcengine.Live.Models.Business.DenyConfigDetail\"G\n\x19\x44\x65scribeDenyConfigRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\"E\n\x17\x44\x65leteDenyConfigRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\tB\xcd\x01\n)com.volcengine.service.live.model.requestB\x0bLiveRequestP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/live/models/request\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Live\\Models\\Request\xe2\x02$Volc\\Service\\Live\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1flive/request/request_live.proto\x12\x1eVolcengine.Live.Models.Request\x1a\x1flive/business/deny_config.proto\"C\n\x13\x43reateDomainRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\x12\x0c\n\x04Type\x18\x02 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\"\xb3\x01\n\x17ListDomainDetailRequest\x12\x0f\n\x07PageNum\x18\x01 \x01(\x03\x12\x10\n\x08PageSize\x18\x02 \x01(\x03\x12\x11\n\tVhostList\x18\x03 \x03(\t\x12\x18\n\x10\x44omainStatusList\x18\x04 \x03(\t\x12\x16\n\x0e\x44omainTypeList\x18\x05 \x03(\t\x12\x18\n\x10\x44omainRegionList\x18\x06 \x03(\t\x12\x16\n\x0e\x44omainNameList\x18\x07 \x03(\t\"&\n\x14\x44isableDomainRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\"%\n\x13\x45nableDomainRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\"%\n\x13\x44\x65leteDomainRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\"+\n\x15\x44\x65scribeDomainRequest\x12\x12\n\nDomainList\x18\x01 \x03(\t\"J\n ManagerPullPushDomainBindRequest\x12\x12\n\nPullDomain\x18\x01 \x01(\t\x12\x12\n\nPushDomain\x18\x02 \x01(\t\"\xa5\x01\n$DescribeRecordTaskFileHistoryRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x0e\n\x06Stream\x18\x03 \x01(\t\x12\x10\n\x08\x44\x61teFrom\x18\x04 \x01(\t\x12\x0e\n\x06\x44\x61teTo\x18\x05 \x01(\t\x12\x0f\n\x07PageNum\x18\x06 \x01(\x03\x12\x10\n\x08PageSize\x18\x07 \x01(\x03\x12\x0c\n\x04Type\x18\x08 \x01(\t\"\xa2\x01\n!DescribeCDNSnapshotHistoryRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x0e\n\x06Stream\x18\x03 \x01(\t\x12\x10\n\x08\x44\x61teFrom\x18\x04 \x01(\t\x12\x0e\n\x06\x44\x61teTo\x18\x05 \x01(\t\x12\x0f\n\x07PageNum\x18\x06 \x01(\x03\x12\x10\n\x08PageSize\x18\x07 \x01(\x03\x12\x0c\n\x04Type\x18\x08 \x01(\t\"\xaa\x01\n#DescribeLiveStreamInfoByPageRequest\x12\x0f\n\x07PageNum\x18\x01 \x01(\x03\x12\x10\n\x08PageSize\x18\x02 \x01(\x03\x12\r\n\x05Vhost\x18\x03 \x01(\t\x12\x0e\n\x06\x44omain\x18\x04 \x01(\t\x12\x0b\n\x03\x41pp\x18\x05 \x01(\t\x12\x0e\n\x06Stream\x18\x06 \x01(\t\x12\x12\n\nStreamType\x18\x07 \x01(\t\x12\x10\n\x08InfoType\x18\x08 \x01(\t\"\xbc\x01\n%DescribeClosedStreamInfoByPageRequest\x12\x0f\n\x07PageNum\x18\x01 \x01(\x03\x12\x10\n\x08PageSize\x18\x02 \x01(\x03\x12\r\n\x05Vhost\x18\x03 \x01(\t\x12\x0e\n\x06\x44omain\x18\x04 \x01(\t\x12\x0b\n\x03\x41pp\x18\x05 \x01(\t\x12\x0e\n\x06Stream\x18\x06 \x01(\t\x12\x0c\n\x04Sort\x18\x07 \x01(\t\x12\x13\n\x0b\x45ndTimeFrom\x18\x08 \x01(\t\x12\x11\n\tEndTimeTo\x18\t \x01(\t\"\x87\x01\n(DescribeForbiddenStreamInfoByPageRequest\x12\x0f\n\x07PageNum\x18\x01 \x01(\x03\x12\x10\n\x08PageSize\x18\x02 \x01(\x03\x12\r\n\x05Vhost\x18\x03 \x01(\t\x12\x0b\n\x03\x41pp\x18\x04 \x01(\t\x12\x0e\n\x06Stream\x18\x05 \x01(\t\x12\x0c\n\x04Sort\x18\x06 \x01(\t\"\\\n\x1e\x44\x65scribeLiveStreamStateRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\"Q\n\x13ResumeStreamRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\"?\n\x11KillStreamRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x0e\n\x06Stream\x18\x03 \x01(\t\"b\n\x13\x46orbidStreamRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x05 \x01(\t\"6\n\x18\x44\x65leteRelaySourceRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\"+\n\x1a\x44\x65scribeRelaySourceRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\"~\n\x18\x43reateVQScoreTaskRequest\x12\x10\n\x08MainAddr\x18\x01 \x01(\t\x12\x14\n\x0c\x43ontrastAddr\x18\x02 \x01(\t\x12\x15\n\rFrameInterval\x18\x03 \x01(\x03\x12\x10\n\x08\x44uration\x18\x04 \x01(\x03\x12\x11\n\tAlgorithm\x18\x05 \x01(\t\"(\n\x1a\x44\x65scribeVQScoreTaskRequest\x12\n\n\x02ID\x18\x01 \x01(\t\"o\n\x16ListVQScoreTaskRequest\x12\x11\n\tStartTime\x18\x01 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x02 \x01(\t\x12\x0f\n\x07PageNum\x18\x03 \x01(\x03\x12\x10\n\x08PageSize\x18\x04 \x01(\x03\x12\x0e\n\x06Status\x18\x05 \x01(\x03\"\x9e\x01\n\x16GeneratePlayURLRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\x12\x0e\n\x06Suffix\x18\x05 \x01(\t\x12\x0c\n\x04Type\x18\x06 \x01(\t\x12\x15\n\rValidDuration\x18\x07 \x01(\x03\x12\x13\n\x0b\x45xpiredTime\x18\x08 \x01(\t\"\x80\x01\n\x16GeneratePushURLRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x0e\n\x06Stream\x18\x04 \x01(\t\x12\x15\n\rValidDuration\x18\x05 \x01(\x03\x12\x13\n\x0b\x45xpiredTime\x18\x06 \x01(\t\"\xba\x01\n\x1b\x43reatePullToPushTaskRequest\x12\r\n\x05Title\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\x03\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\x03\x12\x13\n\x0b\x43\x61llbackURL\x18\x04 \x01(\t\x12\x0c\n\x04Type\x18\x05 \x01(\x05\x12\x11\n\tCycleMode\x18\x06 \x01(\x05\x12\x0f\n\x07\x44stAddr\x18\x07 \x01(\t\x12\x0f\n\x07SrcAddr\x18\x08 \x01(\t\x12\x10\n\x08SrcAddrS\x18\t \x03(\t\"F\n\x19ListPullToPushTaskRequest\x12\x0c\n\x04Page\x18\x01 \x01(\x05\x12\x0c\n\x04Size\x18\x02 \x01(\x05\x12\r\n\x05Title\x18\x03 \x01(\t\"\xca\x01\n\x1bUpdatePullToPushTaskRequest\x12\r\n\x05Title\x18\x01 \x01(\t\x12\x0e\n\x06TaskId\x18\x02 \x01(\t\x12\x11\n\tStartTime\x18\x03 \x01(\x03\x12\x0f\n\x07\x45ndTime\x18\x04 \x01(\x03\x12\x13\n\x0b\x43\x61llbackURL\x18\x05 \x01(\t\x12\x0c\n\x04Type\x18\x06 \x01(\x05\x12\x11\n\tCycleMode\x18\x07 \x01(\x05\x12\x0f\n\x07\x44stAddr\x18\x08 \x01(\t\x12\x0f\n\x07SrcAddr\x18\t \x01(\t\x12\x10\n\x08SrcAddrS\x18\n \x03(\t\".\n\x1cRestartPullToPushTaskRequest\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\"+\n\x19StopPullToPushTaskRequest\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\"-\n\x1b\x44\x65letePullToPushTaskRequest\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\"\x90\x01\n\x17UpdateDenyConfigRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12I\n\x0e\x44\x65nyConfigList\x18\x04 \x03(\x0b\x32\x31.Volcengine.Live.Models.Business.DenyConfigDetail\"G\n\x19\x44\x65scribeDenyConfigRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\"E\n\x17\x44\x65leteDenyConfigRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\"\x98\x02\n\x18UpdateRelaySourceRequest\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x1d\n\x15RelaySourceDomainList\x18\x03 \x03(\t\x12j\n\x11RelaySourceParams\x18\x04 \x03(\x0b\x32O.Volcengine.Live.Models.Request.UpdateRelaySourceRequest.RelaySourceParamsEntry\x12\x1b\n\x13RelaySourceProtocol\x18\x05 \x01(\t\x1a\x38\n\x16RelaySourceParamsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xa6\x01\n\'CreateLiveStreamRecordIndexFilesRequest\x12\x0e\n\x06\x44omain\x18\x01 \x01(\t\x12\x0b\n\x03\x41pp\x18\x02 \x01(\t\x12\x0e\n\x06Stream\x18\x03 \x01(\t\x12\x11\n\tStartTime\x18\x04 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x05 \x01(\t\x12\x14\n\x0cOutputBucket\x18\x06 \x01(\t\x12\x14\n\x0cOutputObject\x18\x07 \x01(\tB\xcd\x01\n)com.volcengine.service.live.model.requestB\x0bLiveRequestP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/live/models/request\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Live\\Models\\Request\xe2\x02$Volc\\Service\\Live\\Models\\GPBMetadatab\x06proto3')
 
 
 
@@ -35,8 +35,6 @@ _DESCRIBELIVESTREAMSTATEREQUEST = DESCRIPTOR.message_types_by_name['DescribeLive
 _RESUMESTREAMREQUEST = DESCRIPTOR.message_types_by_name['ResumeStreamRequest']
 _KILLSTREAMREQUEST = DESCRIPTOR.message_types_by_name['KillStreamRequest']
 _FORBIDSTREAMREQUEST = DESCRIPTOR.message_types_by_name['ForbidStreamRequest']
-_UPDATERELAYSOURCEREQUEST = DESCRIPTOR.message_types_by_name['UpdateRelaySourceRequest']
-_UPDATERELAYSOURCEREQUEST_RELAYSOURCEPARAMSENTRY = _UPDATERELAYSOURCEREQUEST.nested_types_by_name['RelaySourceParamsEntry']
 _DELETERELAYSOURCEREQUEST = DESCRIPTOR.message_types_by_name['DeleteRelaySourceRequest']
 _DESCRIBERELAYSOURCEREQUEST = DESCRIPTOR.message_types_by_name['DescribeRelaySourceRequest']
 _CREATEVQSCORETASKREQUEST = DESCRIPTOR.message_types_by_name['CreateVQScoreTaskRequest']
@@ -53,6 +51,9 @@ _DELETEPULLTOPUSHTASKREQUEST = DESCRIPTOR.message_types_by_name['DeletePullToPus
 _UPDATEDENYCONFIGREQUEST = DESCRIPTOR.message_types_by_name['UpdateDenyConfigRequest']
 _DESCRIBEDENYCONFIGREQUEST = DESCRIPTOR.message_types_by_name['DescribeDenyConfigRequest']
 _DELETEDENYCONFIGREQUEST = DESCRIPTOR.message_types_by_name['DeleteDenyConfigRequest']
+_UPDATERELAYSOURCEREQUEST = DESCRIPTOR.message_types_by_name['UpdateRelaySourceRequest']
+_UPDATERELAYSOURCEREQUEST_RELAYSOURCEPARAMSENTRY = _UPDATERELAYSOURCEREQUEST.nested_types_by_name['RelaySourceParamsEntry']
+_CREATELIVESTREAMRECORDINDEXFILESREQUEST = DESCRIPTOR.message_types_by_name['CreateLiveStreamRecordIndexFilesRequest']
 CreateDomainRequest = _reflection.GeneratedProtocolMessageType('CreateDomainRequest', (_message.Message,), {
   'DESCRIPTOR' : _CREATEDOMAINREQUEST,
   '__module__' : 'live.request.request_live_pb2'
@@ -164,21 +165,6 @@ ForbidStreamRequest = _reflection.GeneratedProtocolMessageType('ForbidStreamRequ
   # @@protoc_insertion_point(class_scope:Volcengine.Live.Models.Request.ForbidStreamRequest)
   })
 _sym_db.RegisterMessage(ForbidStreamRequest)
-
-UpdateRelaySourceRequest = _reflection.GeneratedProtocolMessageType('UpdateRelaySourceRequest', (_message.Message,), {
-
-  'RelaySourceParamsEntry' : _reflection.GeneratedProtocolMessageType('RelaySourceParamsEntry', (_message.Message,), {
-    'DESCRIPTOR' : _UPDATERELAYSOURCEREQUEST_RELAYSOURCEPARAMSENTRY,
-    '__module__' : 'live.request.request_live_pb2'
-    # @@protoc_insertion_point(class_scope:Volcengine.Live.Models.Request.UpdateRelaySourceRequest.RelaySourceParamsEntry)
-    })
-  ,
-  'DESCRIPTOR' : _UPDATERELAYSOURCEREQUEST,
-  '__module__' : 'live.request.request_live_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Live.Models.Request.UpdateRelaySourceRequest)
-  })
-_sym_db.RegisterMessage(UpdateRelaySourceRequest)
-_sym_db.RegisterMessage(UpdateRelaySourceRequest.RelaySourceParamsEntry)
 
 DeleteRelaySourceRequest = _reflection.GeneratedProtocolMessageType('DeleteRelaySourceRequest', (_message.Message,), {
   'DESCRIPTOR' : _DELETERELAYSOURCEREQUEST,
@@ -292,6 +278,28 @@ DeleteDenyConfigRequest = _reflection.GeneratedProtocolMessageType('DeleteDenyCo
   })
 _sym_db.RegisterMessage(DeleteDenyConfigRequest)
 
+UpdateRelaySourceRequest = _reflection.GeneratedProtocolMessageType('UpdateRelaySourceRequest', (_message.Message,), {
+
+  'RelaySourceParamsEntry' : _reflection.GeneratedProtocolMessageType('RelaySourceParamsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _UPDATERELAYSOURCEREQUEST_RELAYSOURCEPARAMSENTRY,
+    '__module__' : 'live.request.request_live_pb2'
+    # @@protoc_insertion_point(class_scope:Volcengine.Live.Models.Request.UpdateRelaySourceRequest.RelaySourceParamsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _UPDATERELAYSOURCEREQUEST,
+  '__module__' : 'live.request.request_live_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Live.Models.Request.UpdateRelaySourceRequest)
+  })
+_sym_db.RegisterMessage(UpdateRelaySourceRequest)
+_sym_db.RegisterMessage(UpdateRelaySourceRequest.RelaySourceParamsEntry)
+
+CreateLiveStreamRecordIndexFilesRequest = _reflection.GeneratedProtocolMessageType('CreateLiveStreamRecordIndexFilesRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CREATELIVESTREAMRECORDINDEXFILESREQUEST,
+  '__module__' : 'live.request.request_live_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Live.Models.Request.CreateLiveStreamRecordIndexFilesRequest)
+  })
+_sym_db.RegisterMessage(CreateLiveStreamRecordIndexFilesRequest)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
@@ -319,51 +327,53 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _DESCRIBELIVESTREAMINFOBYPAGEREQUEST._serialized_start=924
   _DESCRIBELIVESTREAMINFOBYPAGEREQUEST._serialized_end=1094
   _DESCRIBECLOSEDSTREAMINFOBYPAGEREQUEST._serialized_start=1097
-  _DESCRIBECLOSEDSTREAMINFOBYPAGEREQUEST._serialized_end=1305
-  _DESCRIBEFORBIDDENSTREAMINFOBYPAGEREQUEST._serialized_start=1308
-  _DESCRIBEFORBIDDENSTREAMINFOBYPAGEREQUEST._serialized_end=1443
-  _DESCRIBELIVESTREAMSTATEREQUEST._serialized_start=1445
-  _DESCRIBELIVESTREAMSTATEREQUEST._serialized_end=1537
-  _RESUMESTREAMREQUEST._serialized_start=1539
-  _RESUMESTREAMREQUEST._serialized_end=1620
-  _KILLSTREAMREQUEST._serialized_start=1622
-  _KILLSTREAMREQUEST._serialized_end=1685
-  _FORBIDSTREAMREQUEST._serialized_start=1687
-  _FORBIDSTREAMREQUEST._serialized_end=1785
-  _UPDATERELAYSOURCEREQUEST._serialized_start=1788
-  _UPDATERELAYSOURCEREQUEST._serialized_end=2068
-  _UPDATERELAYSOURCEREQUEST_RELAYSOURCEPARAMSENTRY._serialized_start=2012
-  _UPDATERELAYSOURCEREQUEST_RELAYSOURCEPARAMSENTRY._serialized_end=2068
-  _DELETERELAYSOURCEREQUEST._serialized_start=2070
-  _DELETERELAYSOURCEREQUEST._serialized_end=2124
-  _DESCRIBERELAYSOURCEREQUEST._serialized_start=2126
-  _DESCRIBERELAYSOURCEREQUEST._serialized_end=2169
-  _CREATEVQSCORETASKREQUEST._serialized_start=2171
-  _CREATEVQSCORETASKREQUEST._serialized_end=2297
-  _DESCRIBEVQSCORETASKREQUEST._serialized_start=2299
-  _DESCRIBEVQSCORETASKREQUEST._serialized_end=2339
-  _LISTVQSCORETASKREQUEST._serialized_start=2341
-  _LISTVQSCORETASKREQUEST._serialized_end=2452
-  _GENERATEPLAYURLREQUEST._serialized_start=2455
-  _GENERATEPLAYURLREQUEST._serialized_end=2613
-  _GENERATEPUSHURLREQUEST._serialized_start=2616
-  _GENERATEPUSHURLREQUEST._serialized_end=2744
-  _CREATEPULLTOPUSHTASKREQUEST._serialized_start=2747
-  _CREATEPULLTOPUSHTASKREQUEST._serialized_end=2933
-  _LISTPULLTOPUSHTASKREQUEST._serialized_start=2935
-  _LISTPULLTOPUSHTASKREQUEST._serialized_end=3005
-  _UPDATEPULLTOPUSHTASKREQUEST._serialized_start=3008
-  _UPDATEPULLTOPUSHTASKREQUEST._serialized_end=3210
-  _RESTARTPULLTOPUSHTASKREQUEST._serialized_start=3212
-  _RESTARTPULLTOPUSHTASKREQUEST._serialized_end=3258
-  _STOPPULLTOPUSHTASKREQUEST._serialized_start=3260
-  _STOPPULLTOPUSHTASKREQUEST._serialized_end=3303
-  _DELETEPULLTOPUSHTASKREQUEST._serialized_start=3305
-  _DELETEPULLTOPUSHTASKREQUEST._serialized_end=3350
-  _UPDATEDENYCONFIGREQUEST._serialized_start=3353
-  _UPDATEDENYCONFIGREQUEST._serialized_end=3497
-  _DESCRIBEDENYCONFIGREQUEST._serialized_start=3499
-  _DESCRIBEDENYCONFIGREQUEST._serialized_end=3570
-  _DELETEDENYCONFIGREQUEST._serialized_start=3572
-  _DELETEDENYCONFIGREQUEST._serialized_end=3641
+  _DESCRIBECLOSEDSTREAMINFOBYPAGEREQUEST._serialized_end=1285
+  _DESCRIBEFORBIDDENSTREAMINFOBYPAGEREQUEST._serialized_start=1288
+  _DESCRIBEFORBIDDENSTREAMINFOBYPAGEREQUEST._serialized_end=1423
+  _DESCRIBELIVESTREAMSTATEREQUEST._serialized_start=1425
+  _DESCRIBELIVESTREAMSTATEREQUEST._serialized_end=1517
+  _RESUMESTREAMREQUEST._serialized_start=1519
+  _RESUMESTREAMREQUEST._serialized_end=1600
+  _KILLSTREAMREQUEST._serialized_start=1602
+  _KILLSTREAMREQUEST._serialized_end=1665
+  _FORBIDSTREAMREQUEST._serialized_start=1667
+  _FORBIDSTREAMREQUEST._serialized_end=1765
+  _DELETERELAYSOURCEREQUEST._serialized_start=1767
+  _DELETERELAYSOURCEREQUEST._serialized_end=1821
+  _DESCRIBERELAYSOURCEREQUEST._serialized_start=1823
+  _DESCRIBERELAYSOURCEREQUEST._serialized_end=1866
+  _CREATEVQSCORETASKREQUEST._serialized_start=1868
+  _CREATEVQSCORETASKREQUEST._serialized_end=1994
+  _DESCRIBEVQSCORETASKREQUEST._serialized_start=1996
+  _DESCRIBEVQSCORETASKREQUEST._serialized_end=2036
+  _LISTVQSCORETASKREQUEST._serialized_start=2038
+  _LISTVQSCORETASKREQUEST._serialized_end=2149
+  _GENERATEPLAYURLREQUEST._serialized_start=2152
+  _GENERATEPLAYURLREQUEST._serialized_end=2310
+  _GENERATEPUSHURLREQUEST._serialized_start=2313
+  _GENERATEPUSHURLREQUEST._serialized_end=2441
+  _CREATEPULLTOPUSHTASKREQUEST._serialized_start=2444
+  _CREATEPULLTOPUSHTASKREQUEST._serialized_end=2630
+  _LISTPULLTOPUSHTASKREQUEST._serialized_start=2632
+  _LISTPULLTOPUSHTASKREQUEST._serialized_end=2702
+  _UPDATEPULLTOPUSHTASKREQUEST._serialized_start=2705
+  _UPDATEPULLTOPUSHTASKREQUEST._serialized_end=2907
+  _RESTARTPULLTOPUSHTASKREQUEST._serialized_start=2909
+  _RESTARTPULLTOPUSHTASKREQUEST._serialized_end=2955
+  _STOPPULLTOPUSHTASKREQUEST._serialized_start=2957
+  _STOPPULLTOPUSHTASKREQUEST._serialized_end=3000
+  _DELETEPULLTOPUSHTASKREQUEST._serialized_start=3002
+  _DELETEPULLTOPUSHTASKREQUEST._serialized_end=3047
+  _UPDATEDENYCONFIGREQUEST._serialized_start=3050
+  _UPDATEDENYCONFIGREQUEST._serialized_end=3194
+  _DESCRIBEDENYCONFIGREQUEST._serialized_start=3196
+  _DESCRIBEDENYCONFIGREQUEST._serialized_end=3267
+  _DELETEDENYCONFIGREQUEST._serialized_start=3269
+  _DELETEDENYCONFIGREQUEST._serialized_end=3338
+  _UPDATERELAYSOURCEREQUEST._serialized_start=3341
+  _UPDATERELAYSOURCEREQUEST._serialized_end=3621
+  _UPDATERELAYSOURCEREQUEST_RELAYSOURCEPARAMSENTRY._serialized_start=3565
+  _UPDATERELAYSOURCEREQUEST_RELAYSOURCEPARAMSENTRY._serialized_end=3621
+  _CREATELIVESTREAMRECORDINDEXFILESREQUEST._serialized_start=3624
+  _CREATELIVESTREAMRECORDINDEXFILESREQUEST._serialized_end=3790
 # @@protoc_insertion_point(module_scope)

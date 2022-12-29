@@ -17,7 +17,8 @@ from volcengine.live.models.response.response_live_pb2 import DescribeCDNSnapsho
     DeleteRelaySourceResponse, DescribeRelaySourceResponse, CreateVQScoreTaskResponse, DescribeVQScoreTaskResponse, \
     ListVQScoreTaskResponse, GeneratePlayURLResponse, GeneratePushURLResponse, CreatePullToPushTaskResponse, \
     ListPullToPushTaskResponse, UpdatePullToPushTaskResponse, StopPullToPushTaskResponse, RestartPullToPushTaskResponse, \
-    DeletePullToPushTaskResponse, UpdateDenyConfigResponse, DescribeDenyConfigResponse
+    DeletePullToPushTaskResponse, UpdateDenyConfigResponse, DescribeDenyConfigResponse, \
+    CreateLiveStreamRecordIndexFilesResponse
 
 LIVE_SERVICE_VERSION = "2020-08-01"
 service_info_map = {
@@ -179,9 +180,9 @@ api_info = {
                                           "Version": LIVE_SERVICE_VERSION}, {},
                                          {}),
     "DescribeLiveAuditData": ApiInfo("POST", "/",
-                                             {"Action": "DescribeLiveAuditData",
-                                              "Version": LIVE_SERVICE_VERSION}, {},
-                                             {}),
+                                     {"Action": "DescribeLiveAuditData",
+                                      "Version": LIVE_SERVICE_VERSION}, {},
+                                     {}),
     "DescribeCDNSnapshotHistory": ApiInfo("POST", "/",
                                           {"Action": "DescribeCDNSnapshotHistory",
                                            "Version": LIVE_SERVICE_VERSION}, {},
@@ -274,6 +275,10 @@ api_info = {
                                   {"Action": "DescribeDenyConfig",
                                    "Version": LIVE_SERVICE_VERSION}, {},
                                   {}),
+    "CreateLiveStreamRecordIndexFiles": ApiInfo("POST", "/",
+                                                {"Action": "CreateLiveStreamRecordIndexFiles",
+                                                 "Version": LIVE_SERVICE_VERSION}, {},
+                                                {}),
 }
 
 
@@ -1041,7 +1046,6 @@ class LiveService(Service):
         else:
             return res
 
-
     #
     # UpdatePullToPushTask.
     #
@@ -1140,6 +1144,26 @@ class LiveService(Service):
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), DescribeDenyConfigResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    #
+    # CreateLiveStreamRecordIndexFiles.
+    #
+    # @param request CreateLiveStreamRecordIndexFilesRequest
+    # @return CreateLiveStreamRecordIndexFilesResponse
+    # @raise Exception
+    def create_live_stream_record_index_files(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            res = self.json("CreateLiveStreamRecordIndexFiles", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), CreateLiveStreamRecordIndexFilesResponse(), True)
             except Exception:
                 raise Argument
             else:

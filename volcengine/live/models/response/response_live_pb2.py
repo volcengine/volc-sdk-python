@@ -22,9 +22,10 @@ from volcengine.live.models.business import relay_source_pb2 as live_dot_busines
 from volcengine.live.models.business import stream_manage_pb2 as live_dot_business_dot_stream__manage__pb2
 from volcengine.live.models.business import snapshot_manage_pb2 as live_dot_business_dot_snapshot__manage__pb2
 from volcengine.live.models.business import record_manage_pb2 as live_dot_business_dot_record__manage__pb2
+from volcengine.live.models.business import index_m3u8_pb2 as live_dot_business_dot_index__m3u8__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n!live/response/response_live.proto\x12\x1fVolcengine.Live.Models.Response\x1a\x0f\x62\x61se/base.proto\x1a\x1alive/business/domain.proto\x1a\x1blive/business/VQScore.proto\x1a\x18live/business/addr.proto\x1a live/business/pull_to_push.proto\x1a\x1flive/business/deny_config.proto\x1a live/business/relay_source.proto\x1a!live/business/stream_manage.proto\x1a#live/business/snapshot_manage.proto\x1a!live/business/record_manage.proto\"_\n\x14\x43reateDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xa4\x01\n\x18ListDomainDetailResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Live.Models.Business.DomainListInfo\"`\n\x15\x44isableDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"_\n\x14\x45nableDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"_\n\x14\x44\x65leteDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xa2\x01\n\x16\x44\x65scribeDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Live.Models.Business.DomainListInfo\"l\n!ManagerPullPushDomainBindResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xb0\x01\n$DescribeLiveStreamInfoByPageResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Live.Models.Business.LiveStreamInfo\"\xb4\x01\n&DescribeClosedStreamInfoByPageResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x41\n\x06Result\x18\x02 \x01(\x0b\x32\x31.Volcengine.Live.Models.Business.ClosedStreamInfo\"\xac\x01\n\x1f\x44\x65scribeLiveStreamStateResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12@\n\x06Result\x18\x02 \x01(\x0b\x32\x30.Volcengine.Live.Models.Business.StreamStateInfo\"]\n\x12KillStreamResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"_\n\x14\x46orbidStreamResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xba\x01\n)DescribeForbiddenStreamInfoByPageResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Live.Models.Business.ForbiddenStreamInfo\"_\n\x14ResumeStreamResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xb6\x01\n\"DescribeCDNSnapshotHistoryResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12G\n\x06Result\x18\x02 \x01(\x0b\x32\x37.Volcengine.Live.Models.Business.CDNSnapshotHistoryInfo\"\xb4\x01\n%DescribeRecordTaskFileHistoryResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Live.Models.Business.RecordHistoryInfo\"d\n\x19UpdateRelaySourceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"d\n\x19\x44\x65leteRelaySourceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xae\x01\n\x1b\x44\x65scribeRelaySourceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Live.Models.Business.RelaySourceConfigList\"\xa0\x01\n\x19\x43reateVQScoreTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12:\n\x06Result\x18\x02 \x01(\x0b\x32*.Volcengine.Live.Models.Business.VQScoreID\"\xa4\x01\n\x1b\x44\x65scribeVQScoreTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x01(\x0b\x32,.Volcengine.Live.Models.Business.VQScoreInfo\"\xa8\x01\n\x17ListVQScoreTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Live.Models.Business.VQScoreTaskListInfo\"\xaa\x01\n\x17GeneratePlayURLResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Live.Models.Business.GeneratePlayURLResult\"\xaa\x01\n\x17GeneratePushURLResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Live.Models.Business.GeneratePushURLResult\"\xb4\x01\n\x1c\x43reatePullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12K\n\x06Result\x18\x02 \x01(\x0b\x32;.Volcengine.Live.Models.Business.CreatePullToPushTaskResult\"\xb0\x01\n\x1aListPullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Live.Models.Business.ListPullToPushTaskResult\"g\n\x1cUpdatePullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"h\n\x1dRestartPullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"e\n\x1aStopPullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"g\n\x1c\x44\x65letePullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"c\n\x18UpdateDenyConfigResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xb0\x01\n\x1a\x44\x65scribeDenyConfigResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Live.Models.Business.DescribeDenyConfigResult\"c\n\x18\x44\x65leteDenyConfigResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadataB\xd1\x01\n*com.volcengine.service.live.model.responseB\x0cLiveResponseP\x01ZBgithub.com/volcengine/volc-sdk-golang/service/live/models/response\xa0\x01\x01\xd8\x01\x01\xca\x02!Volc\\Service\\Live\\Models\\Response\xe2\x02$Volc\\Service\\Live\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n!live/response/response_live.proto\x12\x1fVolcengine.Live.Models.Response\x1a\x0f\x62\x61se/base.proto\x1a\x1alive/business/domain.proto\x1a\x1blive/business/VQScore.proto\x1a\x18live/business/addr.proto\x1a live/business/pull_to_push.proto\x1a\x1flive/business/deny_config.proto\x1a live/business/relay_source.proto\x1a!live/business/stream_manage.proto\x1a#live/business/snapshot_manage.proto\x1a!live/business/record_manage.proto\x1a\x1elive/business/index_m3u8.proto\"_\n\x14\x43reateDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xa4\x01\n\x18ListDomainDetailResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Live.Models.Business.DomainListInfo\"`\n\x15\x44isableDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"_\n\x14\x45nableDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"_\n\x14\x44\x65leteDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xa2\x01\n\x16\x44\x65scribeDomainResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Live.Models.Business.DomainListInfo\"l\n!ManagerPullPushDomainBindResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xb0\x01\n$DescribeLiveStreamInfoByPageResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12?\n\x06Result\x18\x02 \x01(\x0b\x32/.Volcengine.Live.Models.Business.LiveStreamInfo\"\xb4\x01\n&DescribeClosedStreamInfoByPageResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x41\n\x06Result\x18\x02 \x01(\x0b\x32\x31.Volcengine.Live.Models.Business.ClosedStreamInfo\"\xac\x01\n\x1f\x44\x65scribeLiveStreamStateResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12@\n\x06Result\x18\x02 \x01(\x0b\x32\x30.Volcengine.Live.Models.Business.StreamStateInfo\"]\n\x12KillStreamResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"_\n\x14\x46orbidStreamResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xba\x01\n)DescribeForbiddenStreamInfoByPageResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Live.Models.Business.ForbiddenStreamInfo\"_\n\x14ResumeStreamResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xb6\x01\n\"DescribeCDNSnapshotHistoryResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12G\n\x06Result\x18\x02 \x01(\x0b\x32\x37.Volcengine.Live.Models.Business.CDNSnapshotHistoryInfo\"\xb4\x01\n%DescribeRecordTaskFileHistoryResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x42\n\x06Result\x18\x02 \x01(\x0b\x32\x32.Volcengine.Live.Models.Business.RecordHistoryInfo\"d\n\x19UpdateRelaySourceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"d\n\x19\x44\x65leteRelaySourceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xae\x01\n\x1b\x44\x65scribeRelaySourceResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Live.Models.Business.RelaySourceConfigList\"\xa0\x01\n\x19\x43reateVQScoreTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12:\n\x06Result\x18\x02 \x01(\x0b\x32*.Volcengine.Live.Models.Business.VQScoreID\"\xa4\x01\n\x1b\x44\x65scribeVQScoreTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12<\n\x06Result\x18\x02 \x01(\x0b\x32,.Volcengine.Live.Models.Business.VQScoreInfo\"\xa8\x01\n\x17ListVQScoreTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x44\n\x06Result\x18\x02 \x01(\x0b\x32\x34.Volcengine.Live.Models.Business.VQScoreTaskListInfo\"\xaa\x01\n\x17GeneratePlayURLResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Live.Models.Business.GeneratePlayURLResult\"\xaa\x01\n\x17GeneratePushURLResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12\x46\n\x06Result\x18\x02 \x01(\x0b\x32\x36.Volcengine.Live.Models.Business.GeneratePushURLResult\"\xb4\x01\n\x1c\x43reatePullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12K\n\x06Result\x18\x02 \x01(\x0b\x32;.Volcengine.Live.Models.Business.CreatePullToPushTaskResult\"\xb0\x01\n\x1aListPullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Live.Models.Business.ListPullToPushTaskResult\"g\n\x1cUpdatePullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"h\n\x1dRestartPullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"e\n\x1aStopPullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"g\n\x1c\x44\x65letePullToPushTaskResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"c\n\x18UpdateDenyConfigResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xb0\x01\n\x1a\x44\x65scribeDenyConfigResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12I\n\x06Result\x18\x02 \x01(\x0b\x32\x39.Volcengine.Live.Models.Business.DescribeDenyConfigResult\"c\n\x18\x44\x65leteDenyConfigResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\"\xcc\x01\n(CreateLiveStreamRecordIndexFilesResponse\x12G\n\x10ResponseMetadata\x18\x01 \x01(\x0b\x32-.Volcengine.Base.Models.Base.ResponseMetadata\x12W\n\x06Result\x18\x02 \x01(\x0b\x32G.Volcengine.Live.Models.Business.CreateLiveStreamRecordIndexFilesResultB\xd1\x01\n*com.volcengine.service.live.model.responseB\x0cLiveResponseP\x01ZBgithub.com/volcengine/volc-sdk-golang/service/live/models/response\xa0\x01\x01\xd8\x01\x01\xca\x02!Volc\\Service\\Live\\Models\\Response\xe2\x02$Volc\\Service\\Live\\Models\\GPBMetadatab\x06proto3')
 
 
 
@@ -61,6 +62,7 @@ _DELETEPULLTOPUSHTASKRESPONSE = DESCRIPTOR.message_types_by_name['DeletePullToPu
 _UPDATEDENYCONFIGRESPONSE = DESCRIPTOR.message_types_by_name['UpdateDenyConfigResponse']
 _DESCRIBEDENYCONFIGRESPONSE = DESCRIPTOR.message_types_by_name['DescribeDenyConfigResponse']
 _DELETEDENYCONFIGRESPONSE = DESCRIPTOR.message_types_by_name['DeleteDenyConfigResponse']
+_CREATELIVESTREAMRECORDINDEXFILESRESPONSE = DESCRIPTOR.message_types_by_name['CreateLiveStreamRecordIndexFilesResponse']
 CreateDomainResponse = _reflection.GeneratedProtocolMessageType('CreateDomainResponse', (_message.Message,), {
   'DESCRIPTOR' : _CREATEDOMAINRESPONSE,
   '__module__' : 'live.response.response_live_pb2'
@@ -292,74 +294,83 @@ DeleteDenyConfigResponse = _reflection.GeneratedProtocolMessageType('DeleteDenyC
   })
 _sym_db.RegisterMessage(DeleteDenyConfigResponse)
 
+CreateLiveStreamRecordIndexFilesResponse = _reflection.GeneratedProtocolMessageType('CreateLiveStreamRecordIndexFilesResponse', (_message.Message,), {
+  'DESCRIPTOR' : _CREATELIVESTREAMRECORDINDEXFILESRESPONSE,
+  '__module__' : 'live.response.response_live_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Live.Models.Response.CreateLiveStreamRecordIndexFilesResponse)
+  })
+_sym_db.RegisterMessage(CreateLiveStreamRecordIndexFilesResponse)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n*com.volcengine.service.live.model.responseB\014LiveResponseP\001ZBgithub.com/volcengine/volc-sdk-golang/service/live/models/response\240\001\001\330\001\001\312\002!Volc\\Service\\Live\\Models\\Response\342\002$Volc\\Service\\Live\\Models\\GPBMetadata'
-  _CREATEDOMAINRESPONSE._serialized_start=378
-  _CREATEDOMAINRESPONSE._serialized_end=473
-  _LISTDOMAINDETAILRESPONSE._serialized_start=476
-  _LISTDOMAINDETAILRESPONSE._serialized_end=640
-  _DISABLEDOMAINRESPONSE._serialized_start=642
-  _DISABLEDOMAINRESPONSE._serialized_end=738
-  _ENABLEDOMAINRESPONSE._serialized_start=740
-  _ENABLEDOMAINRESPONSE._serialized_end=835
-  _DELETEDOMAINRESPONSE._serialized_start=837
-  _DELETEDOMAINRESPONSE._serialized_end=932
-  _DESCRIBEDOMAINRESPONSE._serialized_start=935
-  _DESCRIBEDOMAINRESPONSE._serialized_end=1097
-  _MANAGERPULLPUSHDOMAINBINDRESPONSE._serialized_start=1099
-  _MANAGERPULLPUSHDOMAINBINDRESPONSE._serialized_end=1207
-  _DESCRIBELIVESTREAMINFOBYPAGERESPONSE._serialized_start=1210
-  _DESCRIBELIVESTREAMINFOBYPAGERESPONSE._serialized_end=1386
-  _DESCRIBECLOSEDSTREAMINFOBYPAGERESPONSE._serialized_start=1389
-  _DESCRIBECLOSEDSTREAMINFOBYPAGERESPONSE._serialized_end=1569
-  _DESCRIBELIVESTREAMSTATERESPONSE._serialized_start=1572
-  _DESCRIBELIVESTREAMSTATERESPONSE._serialized_end=1744
-  _KILLSTREAMRESPONSE._serialized_start=1746
-  _KILLSTREAMRESPONSE._serialized_end=1839
-  _FORBIDSTREAMRESPONSE._serialized_start=1841
-  _FORBIDSTREAMRESPONSE._serialized_end=1936
-  _DESCRIBEFORBIDDENSTREAMINFOBYPAGERESPONSE._serialized_start=1939
-  _DESCRIBEFORBIDDENSTREAMINFOBYPAGERESPONSE._serialized_end=2125
-  _RESUMESTREAMRESPONSE._serialized_start=2127
-  _RESUMESTREAMRESPONSE._serialized_end=2222
-  _DESCRIBECDNSNAPSHOTHISTORYRESPONSE._serialized_start=2225
-  _DESCRIBECDNSNAPSHOTHISTORYRESPONSE._serialized_end=2407
-  _DESCRIBERECORDTASKFILEHISTORYRESPONSE._serialized_start=2410
-  _DESCRIBERECORDTASKFILEHISTORYRESPONSE._serialized_end=2590
-  _UPDATERELAYSOURCERESPONSE._serialized_start=2592
-  _UPDATERELAYSOURCERESPONSE._serialized_end=2692
-  _DELETERELAYSOURCERESPONSE._serialized_start=2694
-  _DELETERELAYSOURCERESPONSE._serialized_end=2794
-  _DESCRIBERELAYSOURCERESPONSE._serialized_start=2797
-  _DESCRIBERELAYSOURCERESPONSE._serialized_end=2971
-  _CREATEVQSCORETASKRESPONSE._serialized_start=2974
-  _CREATEVQSCORETASKRESPONSE._serialized_end=3134
-  _DESCRIBEVQSCORETASKRESPONSE._serialized_start=3137
-  _DESCRIBEVQSCORETASKRESPONSE._serialized_end=3301
-  _LISTVQSCORETASKRESPONSE._serialized_start=3304
-  _LISTVQSCORETASKRESPONSE._serialized_end=3472
-  _GENERATEPLAYURLRESPONSE._serialized_start=3475
-  _GENERATEPLAYURLRESPONSE._serialized_end=3645
-  _GENERATEPUSHURLRESPONSE._serialized_start=3648
-  _GENERATEPUSHURLRESPONSE._serialized_end=3818
-  _CREATEPULLTOPUSHTASKRESPONSE._serialized_start=3821
-  _CREATEPULLTOPUSHTASKRESPONSE._serialized_end=4001
-  _LISTPULLTOPUSHTASKRESPONSE._serialized_start=4004
-  _LISTPULLTOPUSHTASKRESPONSE._serialized_end=4180
-  _UPDATEPULLTOPUSHTASKRESPONSE._serialized_start=4182
-  _UPDATEPULLTOPUSHTASKRESPONSE._serialized_end=4285
-  _RESTARTPULLTOPUSHTASKRESPONSE._serialized_start=4287
-  _RESTARTPULLTOPUSHTASKRESPONSE._serialized_end=4391
-  _STOPPULLTOPUSHTASKRESPONSE._serialized_start=4393
-  _STOPPULLTOPUSHTASKRESPONSE._serialized_end=4494
-  _DELETEPULLTOPUSHTASKRESPONSE._serialized_start=4496
-  _DELETEPULLTOPUSHTASKRESPONSE._serialized_end=4599
-  _UPDATEDENYCONFIGRESPONSE._serialized_start=4601
-  _UPDATEDENYCONFIGRESPONSE._serialized_end=4700
-  _DESCRIBEDENYCONFIGRESPONSE._serialized_start=4703
-  _DESCRIBEDENYCONFIGRESPONSE._serialized_end=4879
-  _DELETEDENYCONFIGRESPONSE._serialized_start=4881
-  _DELETEDENYCONFIGRESPONSE._serialized_end=4980
+  _CREATEDOMAINRESPONSE._serialized_start=410
+  _CREATEDOMAINRESPONSE._serialized_end=505
+  _LISTDOMAINDETAILRESPONSE._serialized_start=508
+  _LISTDOMAINDETAILRESPONSE._serialized_end=672
+  _DISABLEDOMAINRESPONSE._serialized_start=674
+  _DISABLEDOMAINRESPONSE._serialized_end=770
+  _ENABLEDOMAINRESPONSE._serialized_start=772
+  _ENABLEDOMAINRESPONSE._serialized_end=867
+  _DELETEDOMAINRESPONSE._serialized_start=869
+  _DELETEDOMAINRESPONSE._serialized_end=964
+  _DESCRIBEDOMAINRESPONSE._serialized_start=967
+  _DESCRIBEDOMAINRESPONSE._serialized_end=1129
+  _MANAGERPULLPUSHDOMAINBINDRESPONSE._serialized_start=1131
+  _MANAGERPULLPUSHDOMAINBINDRESPONSE._serialized_end=1239
+  _DESCRIBELIVESTREAMINFOBYPAGERESPONSE._serialized_start=1242
+  _DESCRIBELIVESTREAMINFOBYPAGERESPONSE._serialized_end=1418
+  _DESCRIBECLOSEDSTREAMINFOBYPAGERESPONSE._serialized_start=1421
+  _DESCRIBECLOSEDSTREAMINFOBYPAGERESPONSE._serialized_end=1601
+  _DESCRIBELIVESTREAMSTATERESPONSE._serialized_start=1604
+  _DESCRIBELIVESTREAMSTATERESPONSE._serialized_end=1776
+  _KILLSTREAMRESPONSE._serialized_start=1778
+  _KILLSTREAMRESPONSE._serialized_end=1871
+  _FORBIDSTREAMRESPONSE._serialized_start=1873
+  _FORBIDSTREAMRESPONSE._serialized_end=1968
+  _DESCRIBEFORBIDDENSTREAMINFOBYPAGERESPONSE._serialized_start=1971
+  _DESCRIBEFORBIDDENSTREAMINFOBYPAGERESPONSE._serialized_end=2157
+  _RESUMESTREAMRESPONSE._serialized_start=2159
+  _RESUMESTREAMRESPONSE._serialized_end=2254
+  _DESCRIBECDNSNAPSHOTHISTORYRESPONSE._serialized_start=2257
+  _DESCRIBECDNSNAPSHOTHISTORYRESPONSE._serialized_end=2439
+  _DESCRIBERECORDTASKFILEHISTORYRESPONSE._serialized_start=2442
+  _DESCRIBERECORDTASKFILEHISTORYRESPONSE._serialized_end=2622
+  _UPDATERELAYSOURCERESPONSE._serialized_start=2624
+  _UPDATERELAYSOURCERESPONSE._serialized_end=2724
+  _DELETERELAYSOURCERESPONSE._serialized_start=2726
+  _DELETERELAYSOURCERESPONSE._serialized_end=2826
+  _DESCRIBERELAYSOURCERESPONSE._serialized_start=2829
+  _DESCRIBERELAYSOURCERESPONSE._serialized_end=3003
+  _CREATEVQSCORETASKRESPONSE._serialized_start=3006
+  _CREATEVQSCORETASKRESPONSE._serialized_end=3166
+  _DESCRIBEVQSCORETASKRESPONSE._serialized_start=3169
+  _DESCRIBEVQSCORETASKRESPONSE._serialized_end=3333
+  _LISTVQSCORETASKRESPONSE._serialized_start=3336
+  _LISTVQSCORETASKRESPONSE._serialized_end=3504
+  _GENERATEPLAYURLRESPONSE._serialized_start=3507
+  _GENERATEPLAYURLRESPONSE._serialized_end=3677
+  _GENERATEPUSHURLRESPONSE._serialized_start=3680
+  _GENERATEPUSHURLRESPONSE._serialized_end=3850
+  _CREATEPULLTOPUSHTASKRESPONSE._serialized_start=3853
+  _CREATEPULLTOPUSHTASKRESPONSE._serialized_end=4033
+  _LISTPULLTOPUSHTASKRESPONSE._serialized_start=4036
+  _LISTPULLTOPUSHTASKRESPONSE._serialized_end=4212
+  _UPDATEPULLTOPUSHTASKRESPONSE._serialized_start=4214
+  _UPDATEPULLTOPUSHTASKRESPONSE._serialized_end=4317
+  _RESTARTPULLTOPUSHTASKRESPONSE._serialized_start=4319
+  _RESTARTPULLTOPUSHTASKRESPONSE._serialized_end=4423
+  _STOPPULLTOPUSHTASKRESPONSE._serialized_start=4425
+  _STOPPULLTOPUSHTASKRESPONSE._serialized_end=4526
+  _DELETEPULLTOPUSHTASKRESPONSE._serialized_start=4528
+  _DELETEPULLTOPUSHTASKRESPONSE._serialized_end=4631
+  _UPDATEDENYCONFIGRESPONSE._serialized_start=4633
+  _UPDATEDENYCONFIGRESPONSE._serialized_end=4732
+  _DESCRIBEDENYCONFIGRESPONSE._serialized_start=4735
+  _DESCRIBEDENYCONFIGRESPONSE._serialized_end=4911
+  _DELETEDENYCONFIGRESPONSE._serialized_start=4913
+  _DELETEDENYCONFIGRESPONSE._serialized_end=5012
+  _CREATELIVESTREAMRECORDINDEXFILESRESPONSE._serialized_start=5015
+  _CREATELIVESTREAMRECORDINDEXFILESRESPONSE._serialized_end=5219
 # @@protoc_insertion_point(module_scope)
