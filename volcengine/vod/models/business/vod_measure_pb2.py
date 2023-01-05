@@ -14,12 +14,172 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1evod/business/vod_measure.proto\x12\x1eVolcengine.Vod.Models.BusinessB\xcb\x01\n)com.volcengine.service.vod.model.businessB\nVodMeasureP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1evod/business/vod_measure.proto\x12\x1eVolcengine.Vod.Models.Business\"<\n\x1d\x44\x65scribeVodSpaceTranscodeItem\x12\x0c\n\x04Name\x18\x01 \x01(\t\x12\r\n\x05Value\x18\x02 \x01(\x03\"\x8f\x01\n%DescribeVodSpaceTranscodeDetailTVUnit\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12X\n\x11TranscodeItemList\x18\x02 \x03(\x0b\x32=.Volcengine.Vod.Models.Business.DescribeVodSpaceTranscodeItem\"\xb5\x01\n\x1f\x44\x65scribeVodSpaceTranscodeDetail\x12\r\n\x05Space\x18\x01 \x01(\t\x12\x11\n\tTaskStage\x18\x02 \x01(\t\x12\r\n\x05Total\x18\x03 \x01(\x03\x12\x61\n\x12TranscodeUsageList\x18\x04 \x03(\x0b\x32\x45.Volcengine.Vod.Models.Business.DescribeVodSpaceTranscodeDetailTVUnit\"\xac\x03\n#DescribeVodSpaceTranscodeDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x15\n\rTranscodeType\x18\x04 \x01(\t\x12\x15\n\rSpecification\x18\x05 \x01(\t\x12\x15\n\rTaskStageList\x18\x06 \x03(\t\x12\x13\n\x0b\x41ggregation\x18\x07 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x08 \x03(\t\x12\x1a\n\x12TotalTranscodeData\x18\t \x01(\x03\x12]\n\x16TotalTranscodeDataList\x18\n \x03(\x0b\x32=.Volcengine.Vod.Models.Business.DescribeVodSpaceTranscodeItem\x12`\n\x17TranscodeDataDetailList\x18\x0b \x03(\x0b\x32?.Volcengine.Vod.Models.Business.DescribeVodSpaceTranscodeDetail\"B\n DescribeVodSpaceAIStatisDataItem\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x03\"\xa1\x01\n\"DescribeVodSpaceAIStatisDataDetail\x12\r\n\x05Space\x18\x01 \x01(\t\x12\x11\n\tTaskStage\x18\x02 \x01(\t\x12Y\n\x0f\x41iUsageDataList\x18\x03 \x03(\x0b\x32@.Volcengine.Vod.Models.Business.DescribeVodSpaceAIStatisDataItem\"\x8d\x03\n\"DescribeVodSpaceAIStatisDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0bMediaAiType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x03(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x03(\t\x12\x18\n\x10TotalAiUsageData\x18\x08 \x01(\x03\x12Y\n\x0f\x41iUsageDataList\x18\t \x03(\x0b\x32@.Volcengine.Vod.Models.Business.DescribeVodSpaceAIStatisDataItem\x12\x61\n\x15\x41iUsageDataDetailList\x18\n \x03(\x0b\x32\x42.Volcengine.Vod.Models.Business.DescribeVodSpaceAIStatisDataDetail\"E\n&DescribeVodSpaceSubtitleStatisDataItem\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12\r\n\x05Usage\x18\x02 \x01(\x03\"\xb3\x01\n(DescribeVodSpaceSubtitleStatisDataDetail\x12\r\n\x05Space\x18\x01 \x01(\t\x12\x11\n\tTaskStage\x18\x02 \x01(\t\x12\x65\n\x15SubtitleUsageDataList\x18\x03 \x03(\x0b\x32\x46.Volcengine.Vod.Models.Business.DescribeVodSpaceSubtitleStatisDataItem\"\xb2\x03\n(DescribeVodSpaceSubtitleStatisDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x14\n\x0cSubtitleType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x03(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x03(\t\x12\x1e\n\x16TotalSubtitleUsageData\x18\x08 \x01(\x03\x12\x65\n\x15SubtitleUsageDataList\x18\t \x03(\x0b\x32\x46.Volcengine.Vod.Models.Business.DescribeVodSpaceSubtitleStatisDataItem\x12m\n\x1bSubtitleUsageDataDetailList\x18\n \x03(\x0b\x32H.Volcengine.Vod.Models.Business.DescribeVodSpaceSubtitleStatisDataDetail\"C\n$DescribeVodSpaceDetectStatisDataItem\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12\r\n\x05Usage\x18\x02 \x01(\x03\"\xad\x01\n&DescribeVodSpaceDetectStatisDataDetail\x12\r\n\x05Space\x18\x01 \x01(\t\x12\x11\n\tTaskStage\x18\x02 \x01(\t\x12\x61\n\x13\x44\x65tectUsageDataList\x18\x03 \x03(\x0b\x32\x44.Volcengine.Vod.Models.Business.DescribeVodSpaceDetectStatisDataItem\"\xa4\x03\n&DescribeVodSpaceDetectStatisDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x12\n\nDetectType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x03(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x03(\t\x12\x1c\n\x14TotalDetectUsageData\x18\x08 \x01(\x03\x12\x61\n\x13\x44\x65tectUsageDataList\x18\t \x03(\x0b\x32\x44.Volcengine.Vod.Models.Business.DescribeVodSpaceDetectStatisDataItem\x12i\n\x19\x44\x65tectUsageDataDetailList\x18\n \x03(\x0b\x32\x46.Volcengine.Vod.Models.Business.DescribeVodSpaceDetectStatisDataDetail\":\n\x1b\x44\x65scribeVodSnapshotDataItem\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12\r\n\x05\x43ount\x18\x02 \x01(\x03\"\xa7\x01\n\x1d\x44\x65scribeVodSnapshotDataDetail\x12\r\n\x05Space\x18\x01 \x01(\t\x12\x11\n\tTaskStage\x18\x02 \x01(\t\x12\r\n\x05Total\x18\x03 \x01(\t\x12U\n\x10SnapshotDataList\x18\x04 \x03(\x0b\x32;.Volcengine.Vod.Models.Business.DescribeVodSnapshotDataItem\"\x82\x03\n\x1d\x44\x65scribeVodSnapshotDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x14\n\x0cSnapshotType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x03(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x03(\t\x12\x19\n\x11TotalSnapshotData\x18\x08 \x01(\x03\x12U\n\x10SnapshotDataList\x18\t \x03(\x0b\x32;.Volcengine.Vod.Models.Business.DescribeVodSnapshotDataItem\x12]\n\x16SnapshotDetailDataList\x18\n \x03(\x0b\x32=.Volcengine.Vod.Models.Business.DescribeVodSnapshotDataDetailB\xcb\x01\n)com.volcengine.service.vod.model.businessB\nVodMeasureP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 
+
+_DESCRIBEVODSPACETRANSCODEITEM = DESCRIPTOR.message_types_by_name['DescribeVodSpaceTranscodeItem']
+_DESCRIBEVODSPACETRANSCODEDETAILTVUNIT = DESCRIPTOR.message_types_by_name['DescribeVodSpaceTranscodeDetailTVUnit']
+_DESCRIBEVODSPACETRANSCODEDETAIL = DESCRIPTOR.message_types_by_name['DescribeVodSpaceTranscodeDetail']
+_DESCRIBEVODSPACETRANSCODEDATARESULT = DESCRIPTOR.message_types_by_name['DescribeVodSpaceTranscodeDataResult']
+_DESCRIBEVODSPACEAISTATISDATAITEM = DESCRIPTOR.message_types_by_name['DescribeVodSpaceAIStatisDataItem']
+_DESCRIBEVODSPACEAISTATISDATADETAIL = DESCRIPTOR.message_types_by_name['DescribeVodSpaceAIStatisDataDetail']
+_DESCRIBEVODSPACEAISTATISDATARESULT = DESCRIPTOR.message_types_by_name['DescribeVodSpaceAIStatisDataResult']
+_DESCRIBEVODSPACESUBTITLESTATISDATAITEM = DESCRIPTOR.message_types_by_name['DescribeVodSpaceSubtitleStatisDataItem']
+_DESCRIBEVODSPACESUBTITLESTATISDATADETAIL = DESCRIPTOR.message_types_by_name['DescribeVodSpaceSubtitleStatisDataDetail']
+_DESCRIBEVODSPACESUBTITLESTATISDATARESULT = DESCRIPTOR.message_types_by_name['DescribeVodSpaceSubtitleStatisDataResult']
+_DESCRIBEVODSPACEDETECTSTATISDATAITEM = DESCRIPTOR.message_types_by_name['DescribeVodSpaceDetectStatisDataItem']
+_DESCRIBEVODSPACEDETECTSTATISDATADETAIL = DESCRIPTOR.message_types_by_name['DescribeVodSpaceDetectStatisDataDetail']
+_DESCRIBEVODSPACEDETECTSTATISDATARESULT = DESCRIPTOR.message_types_by_name['DescribeVodSpaceDetectStatisDataResult']
+_DESCRIBEVODSNAPSHOTDATAITEM = DESCRIPTOR.message_types_by_name['DescribeVodSnapshotDataItem']
+_DESCRIBEVODSNAPSHOTDATADETAIL = DESCRIPTOR.message_types_by_name['DescribeVodSnapshotDataDetail']
+_DESCRIBEVODSNAPSHOTDATARESULT = DESCRIPTOR.message_types_by_name['DescribeVodSnapshotDataResult']
+DescribeVodSpaceTranscodeItem = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceTranscodeItem', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACETRANSCODEITEM,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceTranscodeItem)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceTranscodeItem)
+
+DescribeVodSpaceTranscodeDetailTVUnit = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceTranscodeDetailTVUnit', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACETRANSCODEDETAILTVUNIT,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceTranscodeDetailTVUnit)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceTranscodeDetailTVUnit)
+
+DescribeVodSpaceTranscodeDetail = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceTranscodeDetail', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACETRANSCODEDETAIL,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceTranscodeDetail)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceTranscodeDetail)
+
+DescribeVodSpaceTranscodeDataResult = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceTranscodeDataResult', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACETRANSCODEDATARESULT,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceTranscodeDataResult)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceTranscodeDataResult)
+
+DescribeVodSpaceAIStatisDataItem = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceAIStatisDataItem', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACEAISTATISDATAITEM,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceAIStatisDataItem)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceAIStatisDataItem)
+
+DescribeVodSpaceAIStatisDataDetail = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceAIStatisDataDetail', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACEAISTATISDATADETAIL,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceAIStatisDataDetail)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceAIStatisDataDetail)
+
+DescribeVodSpaceAIStatisDataResult = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceAIStatisDataResult', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACEAISTATISDATARESULT,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceAIStatisDataResult)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceAIStatisDataResult)
+
+DescribeVodSpaceSubtitleStatisDataItem = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceSubtitleStatisDataItem', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACESUBTITLESTATISDATAITEM,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceSubtitleStatisDataItem)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceSubtitleStatisDataItem)
+
+DescribeVodSpaceSubtitleStatisDataDetail = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceSubtitleStatisDataDetail', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACESUBTITLESTATISDATADETAIL,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceSubtitleStatisDataDetail)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceSubtitleStatisDataDetail)
+
+DescribeVodSpaceSubtitleStatisDataResult = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceSubtitleStatisDataResult', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACESUBTITLESTATISDATARESULT,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceSubtitleStatisDataResult)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceSubtitleStatisDataResult)
+
+DescribeVodSpaceDetectStatisDataItem = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceDetectStatisDataItem', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACEDETECTSTATISDATAITEM,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceDetectStatisDataItem)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceDetectStatisDataItem)
+
+DescribeVodSpaceDetectStatisDataDetail = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceDetectStatisDataDetail', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACEDETECTSTATISDATADETAIL,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceDetectStatisDataDetail)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceDetectStatisDataDetail)
+
+DescribeVodSpaceDetectStatisDataResult = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceDetectStatisDataResult', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACEDETECTSTATISDATARESULT,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSpaceDetectStatisDataResult)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceDetectStatisDataResult)
+
+DescribeVodSnapshotDataItem = _reflection.GeneratedProtocolMessageType('DescribeVodSnapshotDataItem', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSNAPSHOTDATAITEM,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSnapshotDataItem)
+  })
+_sym_db.RegisterMessage(DescribeVodSnapshotDataItem)
+
+DescribeVodSnapshotDataDetail = _reflection.GeneratedProtocolMessageType('DescribeVodSnapshotDataDetail', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSNAPSHOTDATADETAIL,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSnapshotDataDetail)
+  })
+_sym_db.RegisterMessage(DescribeVodSnapshotDataDetail)
+
+DescribeVodSnapshotDataResult = _reflection.GeneratedProtocolMessageType('DescribeVodSnapshotDataResult', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSNAPSHOTDATARESULT,
+  '__module__' : 'vod.business.vod_measure_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DescribeVodSnapshotDataResult)
+  })
+_sym_db.RegisterMessage(DescribeVodSnapshotDataResult)
 
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n)com.volcengine.service.vod.model.businessB\nVodMeasureP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata'
+  _DESCRIBEVODSPACETRANSCODEITEM._serialized_start=66
+  _DESCRIBEVODSPACETRANSCODEITEM._serialized_end=126
+  _DESCRIBEVODSPACETRANSCODEDETAILTVUNIT._serialized_start=129
+  _DESCRIBEVODSPACETRANSCODEDETAILTVUNIT._serialized_end=272
+  _DESCRIBEVODSPACETRANSCODEDETAIL._serialized_start=275
+  _DESCRIBEVODSPACETRANSCODEDETAIL._serialized_end=456
+  _DESCRIBEVODSPACETRANSCODEDATARESULT._serialized_start=459
+  _DESCRIBEVODSPACETRANSCODEDATARESULT._serialized_end=887
+  _DESCRIBEVODSPACEAISTATISDATAITEM._serialized_start=889
+  _DESCRIBEVODSPACEAISTATISDATAITEM._serialized_end=955
+  _DESCRIBEVODSPACEAISTATISDATADETAIL._serialized_start=958
+  _DESCRIBEVODSPACEAISTATISDATADETAIL._serialized_end=1119
+  _DESCRIBEVODSPACEAISTATISDATARESULT._serialized_start=1122
+  _DESCRIBEVODSPACEAISTATISDATARESULT._serialized_end=1519
+  _DESCRIBEVODSPACESUBTITLESTATISDATAITEM._serialized_start=1521
+  _DESCRIBEVODSPACESUBTITLESTATISDATAITEM._serialized_end=1590
+  _DESCRIBEVODSPACESUBTITLESTATISDATADETAIL._serialized_start=1593
+  _DESCRIBEVODSPACESUBTITLESTATISDATADETAIL._serialized_end=1772
+  _DESCRIBEVODSPACESUBTITLESTATISDATARESULT._serialized_start=1775
+  _DESCRIBEVODSPACESUBTITLESTATISDATARESULT._serialized_end=2209
+  _DESCRIBEVODSPACEDETECTSTATISDATAITEM._serialized_start=2211
+  _DESCRIBEVODSPACEDETECTSTATISDATAITEM._serialized_end=2278
+  _DESCRIBEVODSPACEDETECTSTATISDATADETAIL._serialized_start=2281
+  _DESCRIBEVODSPACEDETECTSTATISDATADETAIL._serialized_end=2454
+  _DESCRIBEVODSPACEDETECTSTATISDATARESULT._serialized_start=2457
+  _DESCRIBEVODSPACEDETECTSTATISDATARESULT._serialized_end=2877
+  _DESCRIBEVODSNAPSHOTDATAITEM._serialized_start=2879
+  _DESCRIBEVODSNAPSHOTDATAITEM._serialized_end=2937
+  _DESCRIBEVODSNAPSHOTDATADETAIL._serialized_start=2940
+  _DESCRIBEVODSNAPSHOTDATADETAIL._serialized_end=3107
+  _DESCRIBEVODSNAPSHOTDATARESULT._serialized_start=3110
+  _DESCRIBEVODSNAPSHOTDATARESULT._serialized_end=3496
 # @@protoc_insertion_point(module_scope)

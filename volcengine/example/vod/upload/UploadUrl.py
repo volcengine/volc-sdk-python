@@ -19,6 +19,7 @@ if __name__ == '__main__':
         req.SpaceName = space_name
         url_set = req.URLSets.add()
         url_set.SourceUrl = url
+        url_set.FileExtension = '.mp4'
         resp = vod_service.upload_media_by_url(req)
     except Exception:
         raise
