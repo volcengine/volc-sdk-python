@@ -50,6 +50,8 @@ class ContentSecurityService(Service):
                     "AsyncLiveAudioRisk": ApiInfo("POST", "/", {"Action": "AsyncLiveAudioRisk", "Version": "2022-04-25"}, {}, {}),
                     "GetAudioLiveResult": ApiInfo("GET", "/", {"Action": "GetAudioLiveResult", "Version": "2022-04-25"}, {}, {}),
                     "TextSliceRisk": ApiInfo("POST", "/", {"Action": "TextSliceRisk", "Version": "2022-11-07"}, {}, {}),
+                    "AsyncImageRiskV2": ApiInfo("POST", "/", {"Action": "AsyncImageRisk", "Version": "2022-08-26"}, {}, {}),
+                    "ImageResultV2": ApiInfo("GET", "/", {"Action": "ImageResult", "Version": "2022-08-26"}, {}, {}),
                     }
 
         return api_info
@@ -96,6 +98,25 @@ class ContentSecurityService(Service):
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def async_image_risk_v2(self, params, body):
+        res = self.json("AsyncImageRiskV2", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def image_result_v2(self, params, body):
+        res = self.get("ImageResultV2", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
 
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
