@@ -54,11 +54,12 @@ class VodServiceConfig(Service):
             # 上传
             "UploadMediaByUrl": ApiInfo("GET", "/", {"Action": "UploadMediaByUrl", "Version": "2020-08-01"}, {}, {}),
             "QueryUploadTaskInfo": ApiInfo("GET", "/", {"Action": "QueryUploadTaskInfo", "Version": "2020-08-01"}, {}, {}),
-            "ApplyUploadInfo": ApiInfo("GET", "/", {"Action": "ApplyUploadInfo", "Version": "2020-08-01"}, {}, {}),
-            "CommitUploadInfo": ApiInfo("GET", "/", {"Action": "CommitUploadInfo", "Version": "2020-08-01"}, {}, {}),
+            "ApplyUploadInfo": ApiInfo("GET", "/", {"Action": "ApplyUploadInfo", "Version": "2022-01-01"}, {}, {}),
+            "CommitUploadInfo": ApiInfo("GET", "/", {"Action": "CommitUploadInfo", "Version": "2022-01-01"}, {}, {}),
             # 媒资
             "UpdateMediaInfo": ApiInfo("GET", "/", {"Action": "UpdateMediaInfo", "Version": "2020-08-01"}, {}, {}),
             "UpdateMediaPublishStatus": ApiInfo("GET", "/", {"Action": "UpdateMediaPublishStatus", "Version": "2020-08-01"}, {}, {}),
+            "UpdateMediaStorageClass": ApiInfo("GET", "/", {"Action": "UpdateMediaStorageClass", "Version": "2022-10-01"}, {}, {}),
             "GetMediaInfos": ApiInfo("GET", "/", {"Action": "GetMediaInfos", "Version": "2020-08-01"}, {}, {}),
             "GetRecommendedPoster": ApiInfo("GET", "/", {"Action": "GetRecommendedPoster", "Version": "2020-08-01"}, {}, {}),
             "DeleteMedia": ApiInfo("GET", "/", {"Action": "DeleteMedia", "Version": "2020-08-01"}, {}, {}),
@@ -108,7 +109,13 @@ class VodServiceConfig(Service):
             # 视频编辑
             "SubmitDirectEditTaskAsync": ApiInfo("POST", "/",{"Action": "SubmitDirectEditTaskAsync", "Version": "2018-01-01"}, {},{}),
             "GetDirectEditResult": ApiInfo("POST", "/", {"Action": "GetDirectEditResult", "Version": "2018-01-01"}, {}, {}),
-            "GetDirectEditProgress": ApiInfo("GET", "/", {"Action": "GetDirectEditProgress", "Version": "2018-01-01"}, {}, {})
+            "GetDirectEditProgress": ApiInfo("GET", "/", {"Action": "GetDirectEditProgress", "Version": "2018-01-01"}, {}, {}),
+            # 计量计费
+            "DescribeVodSpaceTranscodeData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceTranscodeData", "Version": "2020-08-01"}, {}, {}),
+            "DescribeVodSpaceAIStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceAIStatisData", "Version": "2020-08-01"}, {}, {}),
+            "DescribeVodSpaceSubtitleStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceSubtitleStatisData", "Version": "2020-08-01"}, {}, {}),
+            "DescribeVodSpaceDetectStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceDetectStatisData", "Version": "2020-08-01"}, {}, {}),
+            "DescribeVodSnapshotData": ApiInfo("GET", "/", {"Action": "DescribeVodSnapshotData", "Version": "2020-08-01"}, {}, {})
         }
         return api_info
 

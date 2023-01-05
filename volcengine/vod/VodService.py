@@ -136,7 +136,8 @@ class VodService(VodServiceConfig):
                 return base64.b64encode(data.decode('utf-8'))
 
     def upload_media(self, request):
-        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "", request.FileName)
+        oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "", request.FileName,
+                                                              request.FileExtension)
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
         req.SessionKey = session_key
@@ -148,13 +149,14 @@ class VodService(VodServiceConfig):
             raise Exception(resp.ResponseMetadata.Error)
         return resp
 
-    def upload_tob(self, space_name, file_path, file_type, file_name):
+    def upload_tob(self, space_name, file_path, file_type, file_name, file_extension):
         if not os.path.isfile(file_path):
             raise Exception("no such file on file path")
         apply_req = VodApplyUploadInfoRequest()
         apply_req.SpaceName = space_name
         apply_req.FileType = file_type
         apply_req.FileName = file_name
+        apply_req.FileExtension = file_extension
         resp = self.apply_upload_info(apply_req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
@@ -168,10 +170,8 @@ class VodService(VodServiceConfig):
         file_size = os.path.getsize(file_path)
         if file_size < MinChunkSize:
             self.direct_upload(host, oid, auth, file_path)
-        elif file_size > LargeFileSize:
-            self.chunk_upload(file_path, host, oid, auth, file_size, True)
         else:
-            self.chunk_upload(file_path, host, oid, auth, file_size, False)
+            self.chunk_upload(file_path, host, oid, auth, file_size, True)
         cost = (time.time() - start) * 1000
         file_size = os.path.getsize(file_path)
         avg_speed = float(file_size) / float(cost)
@@ -279,7 +279,7 @@ class VodService(VodServiceConfig):
 
     def upload_material(self, request):
         oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType,
-                                                              request.FileName)
+                                                              request.FileName, request.FileExtension)
 
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
@@ -736,6 +736,40 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodUpdateMediaPublishStatusResponse(), True)
+
+    #
+    # UpdateMediaStorageClass.
+    #
+    # @param request VodUpdateMediaStorageClassRequest
+    # @return VodUpdateMediaStorageClassResponse
+    # @raise Exception
+    def update_media_storage_class(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("UpdateMediaStorageClass", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateMediaStorageClassResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateMediaStorageClassResponse(), True)
 
     #
     # GetMediaInfos.
@@ -1382,6 +1416,40 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodListSnapshotsResponse(), True)
+
+    #
+    # ExtractMediaMetaTask.
+    #
+    # @param request VodExtractMediaMetaTaskRequest
+    # @return VodExtractMediaMetaTaskResponse
+    # @raise Exception
+    def extract_media_meta_task(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ExtractMediaMetaTask", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodExtractMediaMetaTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodExtractMediaMetaTaskResponse(), True)
 
     #
     # StartWorkflow.
@@ -2098,6 +2166,74 @@ class VodService(VodServiceConfig):
             return Parse(res, VodCdnStatisticsCommonResponse(), True)
 
     #
+    # SubmitBlockTasks.
+    #
+    # @param request VodSubmitBlockTasksRequest
+    # @return VodSubmitBlockTasksResponse
+    # @raise Exception
+    def submit_block_tasks(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("SubmitBlockTasks", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodSubmitBlockTasksResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodSubmitBlockTasksResponse(), True)
+
+    #
+    # GetContentBlockTasks.
+    #
+    # @param request VodGetContentBlockTasksRequest
+    # @return VodGetContentBlockTasksResponse
+    # @raise Exception
+    def get_content_block_tasks(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetContentBlockTasks", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetContentBlockTasksResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetContentBlockTasksResponse(), True)
+
+    #
     # AddCallbackSubscription.
     #
     # @param request VodAddCallbackSubscriptionRequest
@@ -2233,3 +2369,172 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodGetAppInfoResponse(), True)
 
+    #
+    # DescribeVodSpaceTranscodeData.
+    #
+    # @param request DescribeVodSpaceTranscodeDataRequest
+    # @return DescribeVodSpaceTranscodeDataResponse
+    # @raise Exception
+    def describe_vod_space_transcode_data(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeVodSpaceTranscodeData", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeVodSpaceTranscodeDataResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeVodSpaceTranscodeDataResponse(), True)
+
+    #
+    # DescribeVodSpaceAIStatisData.
+    #
+    # @param request DescribeVodSpaceAIStatisDataRequest
+    # @return DescribeVodSpaceAIStatisDataResponse
+    # @raise Exception
+    def describe_vod_space_a_i_statis_data(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeVodSpaceAIStatisData", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeVodSpaceAIStatisDataResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeVodSpaceAIStatisDataResponse(), True)
+
+    #
+    # DescribeVodSpaceSubtitleStatisData.
+    #
+    # @param request DescribeVodSpaceSubtitleStatisDataRequest
+    # @return DescribeVodSpaceSubtitleStatisDataResponse
+    # @raise Exception
+    def describe_vod_space_subtitle_statis_data(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeVodSpaceSubtitleStatisData", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeVodSpaceSubtitleStatisDataResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeVodSpaceSubtitleStatisDataResponse(), True)
+
+    #
+    # DescribeVodSpaceDetectStatisData.
+    #
+    # @param request DescribeVodSpaceDetectStatisDataRequest
+    # @return DescribeVodSpaceDetectStatisDataResponse
+    # @raise Exception
+    def describe_vod_space_detect_statis_data(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeVodSpaceDetectStatisData", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeVodSpaceDetectStatisDataResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeVodSpaceDetectStatisDataResponse(), True)
+
+    #
+    # DescribeVodSnapshotData.
+    #
+    # @param request DescribeVodSnapshotDataRequest
+    # @return DescribeVodSnapshotDataResponse
+    # @raise Exception
+    def describe_vod_snapshot_data(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeVodSnapshotData", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeVodSnapshotDataResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeVodSnapshotDataResponse(), True)

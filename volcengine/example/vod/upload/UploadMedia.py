@@ -27,6 +27,7 @@ if __name__ == '__main__':
         req.Functions = json.dumps([get_meta_function, snapshot_function])
         req.CallbackArgs = ''
         req.FileName = ''
+        req.FileExtension = '.mp4'
 
         resp = vod_service.upload_media(req)
     except Exception:
@@ -37,6 +38,7 @@ if __name__ == '__main__':
             print(resp.Result.Data)
             print(resp.Result.Data.Vid)
             print(resp.Result.Data.PosterUri)
+            print(resp.Result.Data.SourceInfo.FileName)
             print(resp.Result.Data.SourceInfo.Height)
             print(resp.Result.Data.SourceInfo.Width)
         else:
