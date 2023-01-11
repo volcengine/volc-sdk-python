@@ -58,6 +58,7 @@ class SecretNumberService(Service):
             "UpdateAXN": ApiInfo("POST", "/", {"Action": "UpdateAXN", "Version": "2020-09-01"}, {}, {}),
             "UnbindAXN": ApiInfo("POST", "/", {"Action": "UnbindAXN", "Version": "2020-09-01"}, {}, {}),
             "Click2Call": ApiInfo("POST", "/", {"Action": "Click2Call", "Version": "2021-09-01"}, {}, {}),
+            "CancelClick2Call": ApiInfo("POST", "/", {"Action": "CancelClick2Call", "Version": "2021-09-01"}, {}, {}),
             "Click2CallLite": ApiInfo("POST", "/", {"Action": "Click2CallLite", "Version": "2021-09-01"}, {}, {}),
         }
         return api_info
@@ -150,6 +151,13 @@ class SecretNumberService(Service):
     def click2_call(self, form):
         try:
             return self.common_handler("Click2Call", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def cancel_click2_call(self, form):
+        try:
+            return self.common_handler("CancelClick2Call", form)
         except Exception as e:
             raise Exception(str(e))
 
