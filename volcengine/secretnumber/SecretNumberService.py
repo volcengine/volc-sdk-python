@@ -57,9 +57,18 @@ class SecretNumberService(Service):
             "BindAXN": ApiInfo("POST", "/", {"Action": "BindAXN", "Version": "2020-09-01"}, {}, {}),
             "UpdateAXN": ApiInfo("POST", "/", {"Action": "UpdateAXN", "Version": "2020-09-01"}, {}, {}),
             "UnbindAXN": ApiInfo("POST", "/", {"Action": "UnbindAXN", "Version": "2020-09-01"}, {}, {}),
+            "SelectNumberAndBindAXN": ApiInfo("POST", "/", {"Action": "SelectNumberAndBindAXN", "Version": "2020-09-01"}, {}, {}),
             "Click2Call": ApiInfo("POST", "/", {"Action": "Click2Call", "Version": "2021-09-01"}, {}, {}),
             "CancelClick2Call": ApiInfo("POST", "/", {"Action": "CancelClick2Call", "Version": "2021-09-01"}, {}, {}),
             "Click2CallLite": ApiInfo("POST", "/", {"Action": "Click2CallLite", "Version": "2021-09-01"}, {}, {}),
+            "BindAXNE": ApiInfo("POST", "/", {"Action": "BindAXNE", "Version": "2020-09-01"}, {}, {}),
+            "UnbindAXNE": ApiInfo("POST", "/", {"Action": "UnbindAXNE", "Version": "2020-09-01"}, {}, {}),
+            "UpdateAXNE": ApiInfo("POST", "/", {"Action": "UpdateAXNE", "Version": "2020-09-01"}, {}, {}),
+            "BindAXBForAXNE": ApiInfo("POST", "/", {"Action": "BindAXBForAXNE", "Version": "2020-09-01"}, {}, {}),
+            "BindAXYB": ApiInfo("POST", "/", {"Action": "BindAXYB", "Version": "2020-09-01"}, {}, {}),
+            "BindYBForAXYB": ApiInfo("POST", "/", {"Action": "BindYBForAXYB", "Version": "2020-09-01"}, {}, {}),
+            "UpdateAXYB": ApiInfo("POST", "/", {"Action": "UpdateAXYB", "Version": "2020-09-01"}, {}, {}),
+            "UnbindAXYB": ApiInfo("POST", "/", {"Action": "UnbindAXYB", "Version": "2020-09-01"}, {}, {}),
         }
         return api_info
 
@@ -148,6 +157,13 @@ class SecretNumberService(Service):
             raise Exception(str(e))
 
     @retry(tries=2, delay=0)
+    def select_number_and_bind_axn(self, form):
+        try:
+            return self.common_handler("SelectNumberAndBindAXN", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
     def click2_call(self, form):
         try:
             return self.common_handler("Click2Call", form)
@@ -165,5 +181,61 @@ class SecretNumberService(Service):
     def click2_call_lite(self, form):
         try:
             return self.common_handler("Click2CallLite", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def bind_axne(self, form):
+        try:
+            return self.common_handler("BindAXNE", form)
+        except Exception as e:
+            raise Exception(str(e))
+    
+    @retry(tries=2, delay=0)
+    def unbind_axne(self, form):
+        try:
+            return self.common_handler("UnbindAXNE", form)
+        except Exception as e:
+            raise Exception(str(e))
+    
+    @retry(tries=2, delay=0)
+    def update_axne(self, form):
+        try:
+            return self.common_handler("UpdateAXNE", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def bind_axb_for_axne(self, form):
+        try:
+            return self.common_handler("BindAXBForAXNE", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def bind_axyb(self, form):
+        try:
+            return self.common_handler("BindAXYB", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def bind_yb_for_axyb(self, form):
+        try:
+            return self.common_handler("BindYBForAXYB", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def update_axyb(self, form):
+        try:
+            return self.common_handler("UpdateAXYB", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def unbind_axyb(self, form):
+        try:
+            return self.common_handler("UnbindAXYB", form)
         except Exception as e:
             raise Exception(str(e))

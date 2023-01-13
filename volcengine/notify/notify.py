@@ -53,6 +53,12 @@ notify_api_info = {
         ApiInfo("POST", "/", {"Action": "GetResourceUploadUrl", "Version": NOTIFY_API_VERSION}, {}, {}),
     "CommitResourceUpload":
         ApiInfo("POST", "/", {"Action": "CommitResourceUpload", "Version": NOTIFY_API_VERSION}, {}, {}),
+    "OpenUpdateResource":
+        ApiInfo("POST", "/", {"Action": "OpenUpdateResource", "Version": NOTIFY_API_VERSION}, {}, {}),
+    "QueryUsableResource":
+        ApiInfo("POST", "/", {"Action": "QueryUsableResource", "Version": NOTIFY_API_VERSION}, {}, {}),
+    "QueryOpenGetResource":
+    ApiInfo("POST", "/", {"Action": "QueryOpenGetResource", "Version": NOTIFY_API_VERSION}, {}, {}),
 }
 
 
@@ -98,6 +104,18 @@ class NotifyService(Service):
     def do_query_handler(self, api, params):
         try:
             res = self.get(api, params)
+            return json.loads(res)
+        except Exception as e:
+            res = str(e)
+            try:
+                res_json = json.loads(res)
+                return res_json
+            except:
+                raise Exception(str(e))
+
+    def do_post_handler(self, api, form, params=dict()):
+        try:
+            res = self.post(api, params, form)
             return json.loads(res)
         except Exception as e:
             res = str(e)
@@ -229,6 +247,33 @@ class NotifyService(Service):
     def commit_resource_upload(self, body):
         try:
             res_json = self.do_json_handler("CommitResourceUpload", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def open_update_resource(self, params):
+        try:
+            res_json = self.do_post_handler("OpenUpdateResource", {}, params)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def query_usable_resource(self, params):
+        try:
+            res_json = self.do_post_handler("QueryUsableResource", {}, params)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def query_open_get_resource(self, body):
+        try:
+            res_json = self.do_json_handler("QueryOpenGetResource", body)
             return res_json
         except Exception as e:
             raise Exception(str(e))
