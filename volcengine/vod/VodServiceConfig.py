@@ -79,6 +79,7 @@ class VodServiceConfig(Service):
             "DeleteVideoClassification": ApiInfo("GET", "/", {"Action": "DeleteVideoClassification", "Version": "2021-01-01"}, {}, {}),
             "ListVideoClassifications": ApiInfo("GET", "/", {"Action": "ListVideoClassifications", "Version": "2021-01-01"}, {}, {}),
             "ListSnapshots": ApiInfo("GET", "/", {"Action": "ListSnapshots", "Version": "2021-01-01"}, {}, {}),
+            "ExtractMediaMetaTask": ApiInfo("GET", "/", {"Action": "ExtractMediaMetaTask", "Version": "2022-01-01"}, {}, {}),
             # 转码
             "StartWorkflow": ApiInfo("GET", "/", {"Action": "StartWorkflow", "Version": "2020-08-01"}, {}, {}),
             "RetrieveTranscodeResult": ApiInfo("GET", "/", {"Action": "RetrieveTranscodeResult", "Version": "2020-08-01"}, {}, {}),
