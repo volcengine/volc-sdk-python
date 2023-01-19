@@ -2,21 +2,19 @@
 import json
 
 from volcengine.live.LiveService import LiveService
-from volcengine.live.models.request.request_live_pb2 import CreateVQScoreTaskRequest
+from volcengine.live.models.request.live_requests import CreateVQScoreTaskRequest
 
 if __name__ == '__main__':
     live_service = LiveService()
     live_service.set_ak('')
-    live_service.set_sk('==')
+    live_service.set_sk('')
     req = CreateVQScoreTaskRequest()
-    req.MainAddr = 'MainAddr'
-    req.ContrastAddr = 'ContrastAddr'
+    req.MainAddr = ''
+    req.ContrastAddr = ''
     req.FrameInterval = 0
-    req.Duration = 0
-    req.Algorithm = 'Algorithm'
+    req.Duration = 700
+    req.Algorithm = ''
 
-    print(req)
+    print(req.__dict__)
     resp = live_service.create_v_q_score_task(req)
     print(resp)
-    # 7161756940979294477
-

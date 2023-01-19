@@ -2,7 +2,7 @@
 import json
 
 from volcengine.live.LiveService import LiveService
-from volcengine.live.models.request.request_live_pb2 import CreatePullToPushTaskRequest, ListPullToPushTaskRequest
+from volcengine.live.models.request.request_live_pb2 import ListPullToPushTaskRequest
 
 if __name__ == '__main__':
     live_service = LiveService()

@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1flive/business/deny_config.proto\x12\x1fVolcengine.Live.Models.Business\"\xa8\x01\n\x10\x44\x65nyConfigDetail\x12\x0f\n\x07ProType\x18\x01 \x03(\t\x12\x0f\n\x07\x46mtType\x18\x02 \x03(\t\x12\x11\n\tContinent\x18\x03 \x01(\t\x12\x0f\n\x07\x43ountry\x18\x04 \x01(\t\x12\x0e\n\x06Region\x18\x05 \x01(\t\x12\x0c\n\x04\x43ity\x18\x06 \x01(\t\x12\x0b\n\x03ISP\x18\x07 \x01(\t\x12\x10\n\x08\x44\x65nyList\x18\x08 \x03(\t\x12\x11\n\tAllowList\x18\t \x03(\t\"b\n\x18\x44\x65scribeDenyConfigResult\x12\x46\n\x08\x44\x65nyList\x18\x01 \x03(\x0b\x32\x34.Volcengine.Live.Models.Business.VhostWithDenyConfig\"\x88\x01\n\x13VhostWithDenyConfig\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12\x45\n\nDenyConfig\x18\x04 \x03(\x0b\x32\x31.Volcengine.Live.Models.Business.DenyConfigDetailB\xd2\x01\n*com.volcengine.service.live.model.businessB\nDenyConfigP\x01ZBgithub.com/volcengine/volc-sdk-golang/service/live/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02!Volc\\Service\\Live\\Models\\Business\xe2\x02$Volc\\Service\\Live\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1flive/business/deny_config.proto\x12\x1fVolcengine.Live.Models.Business\"\xa8\x01\n\x10\x44\x65nyConfigDetail\x12\x0f\n\x07ProType\x18\x01 \x03(\t\x12\x0f\n\x07\x46mtType\x18\x02 \x03(\t\x12\x11\n\tContinent\x18\x03 \x01(\t\x12\x0f\n\x07\x43ountry\x18\x04 \x01(\t\x12\x0e\n\x06Region\x18\x05 \x01(\t\x12\x0c\n\x04\x43ity\x18\x06 \x01(\t\x12\x0b\n\x03ISP\x18\x07 \x01(\t\x12\x10\n\x08\x44\x65nyList\x18\x08 \x03(\t\x12\x11\n\tAllowList\x18\t \x03(\t\"b\n\x18\x44\x65scribeDenyConfigResult\x12\x46\n\x08\x44\x65nyList\x18\x01 \x03(\x0b\x32\x34.Volcengine.Live.Models.Business.VhostWithDenyConfig\"\x8e\x01\n\x13VhostWithDenyConfig\x12\r\n\x05Vhost\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0b\n\x03\x41pp\x18\x03 \x01(\t\x12K\n\x10\x44\x65nyConfigDetail\x18\x04 \x03(\x0b\x32\x31.Volcengine.Live.Models.Business.DenyConfigDetailB\xd2\x01\n*com.volcengine.service.live.model.businessB\nDenyConfigP\x01ZBgithub.com/volcengine/volc-sdk-golang/service/live/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02!Volc\\Service\\Live\\Models\\Business\xe2\x02$Volc\\Service\\Live\\Models\\GPBMetadatab\x06proto3')
 
 
 
@@ -51,5 +51,5 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _DESCRIBEDENYCONFIGRESULT._serialized_start=239
   _DESCRIBEDENYCONFIGRESULT._serialized_end=337
   _VHOSTWITHDENYCONFIG._serialized_start=340
-  _VHOSTWITHDENYCONFIG._serialized_end=476
+  _VHOSTWITHDENYCONFIG._serialized_end=482
 # @@protoc_insertion_point(module_scope)
