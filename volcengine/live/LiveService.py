@@ -17,8 +17,7 @@ from volcengine.live.models.response.response_live_pb2 import DescribeCDNSnapsho
     DeleteRelaySourceResponse, DescribeRelaySourceResponse, CreateVQScoreTaskResponse, DescribeVQScoreTaskResponse, \
     ListVQScoreTaskResponse, GeneratePlayURLResponse, GeneratePushURLResponse, CreatePullToPushTaskResponse, \
     ListPullToPushTaskResponse, UpdatePullToPushTaskResponse, StopPullToPushTaskResponse, RestartPullToPushTaskResponse, \
-    DeletePullToPushTaskResponse, UpdateDenyConfigResponse, DescribeDenyConfigResponse, \
-    CreateLiveStreamRecordIndexFilesResponse
+    DeletePullToPushTaskResponse, UpdateDenyConfigResponse, DescribeDenyConfigResponse
 
 LIVE_SERVICE_VERSION = "2020-08-01"
 service_info_map = {
@@ -191,6 +190,14 @@ api_info = {
                                              {"Action": "DescribeRecordTaskFileHistory",
                                               "Version": LIVE_SERVICE_VERSION}, {},
                                              {}),
+    "DescribeCDNSnapshotHistory": ApiInfo("POST", "/",
+                                          {"Action": "DescribeCDNSnapshotHistory",
+                                           "Version": LIVE_SERVICE_VERSION}, {},
+                                          {}),
+    "DescribeRecordTaskFileHistory": ApiInfo("POST", "/",
+                                             {"Action": "DescribeRecordTaskFileHistory",
+                                              "Version": LIVE_SERVICE_VERSION}, {},
+                                             {}),
     "DescribeLiveStreamInfoByPage": ApiInfo("GET", "/",
                                             {"Action": "DescribeLiveStreamInfoByPage",
                                              "Version": LIVE_SERVICE_VERSION}, {},
@@ -275,10 +282,6 @@ api_info = {
                                   {"Action": "DescribeDenyConfig",
                                    "Version": LIVE_SERVICE_VERSION}, {},
                                   {}),
-    "CreateLiveStreamRecordIndexFiles": ApiInfo("POST", "/",
-                                                {"Action": "CreateLiveStreamRecordIndexFiles",
-                                                 "Version": LIVE_SERVICE_VERSION}, {},
-                                                {}),
 }
 
 
@@ -761,7 +764,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, DescribeCDNSnapshotHistoryResponse(), True)
 
     def describe_record_task_file_history(self, request):
         try:
@@ -775,7 +778,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, DescribeRecordTaskFileHistoryResponse(), True)
 
     def describe_live_stream_info_by_page(self, request):
         try:
@@ -794,7 +797,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, DescribeLiveStreamInfoByPageResponse(), True)
 
     def kill_stream(self, request):
         try:
@@ -808,7 +811,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, KillStreamResponse(), True)
 
     def describe_closed_stream_info_by_page(self, request):
         try:
@@ -906,7 +909,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, UpdateRelaySourceResponse(), True)
 
     def delete_relay_source_v2(self, request):
         try:
@@ -920,7 +923,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, DeleteRelaySourceResponse(), True)
 
     def describe_relay_source_v2(self, request):
         try:
@@ -934,12 +937,11 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, DescribeRelaySourceResponse(), True)
 
     def create_v_q_score_task(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            res = self.json("CreateVQScoreTask", {}, json.dumps(params))
+            res = self.json("CreateVQScoreTask", {}, json.dumps(request.__dict__))
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), CreateVQScoreTaskResponse(), True)
@@ -948,7 +950,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, CreateVQScoreTaskResponse(), True)
 
     def describe_v_q_score_task(self, request):
         try:
@@ -962,12 +964,11 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, DescribeVQScoreTaskResponse(), True)
 
     def list_v_q_score_task(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            res = self.json("ListVQScoreTask", {}, json.dumps(params))
+            res = self.json("ListVQScoreTask", {}, json.dumps(request.__dict__))
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), ListVQScoreTaskResponse(), True)
@@ -976,7 +977,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, ListVQScoreTaskResponse(), True)
 
     #
     # GeneratePlayURL.
@@ -986,8 +987,7 @@ class LiveService(Service):
     # @raise Exception
     def generate_play_u_r_l(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            res = self.json("GeneratePlayURL", {}, json.dumps(params))
+            res = self.json("GeneratePlayURL", {}, json.dumps(request.__dict__))
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), GeneratePlayURLResponse(), True)
@@ -996,12 +996,11 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, GeneratePlayURLResponse(), True)
 
     def generate_push_u_r_l(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            res = self.json("GeneratePushURL", {}, json.dumps(params))
+            res = self.json("GeneratePushURL", {}, json.dumps(request.__dict__))
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), GeneratePushURLResponse(), True)
@@ -1010,12 +1009,11 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, GeneratePushURLResponse(), True)
 
     def create_pull_to_push_task(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            res = self.json("CreatePullToPushTask", {}, json.dumps(params))
+            res = self.json("CreatePullToPushTask", {}, json.dumps(request.__dict__))
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), CreatePullToPushTaskResponse(), True)
@@ -1024,7 +1022,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, CreatePullToPushTaskResponse(), True)
 
     #
     # ListPullToPushTask.
@@ -1044,7 +1042,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, ListPullToPushTaskResponse(), True)
 
     #
     # UpdatePullToPushTask.
@@ -1054,8 +1052,7 @@ class LiveService(Service):
     # @raise Exception
     def update_pull_to_push_task(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            res = self.json("UpdatePullToPushTask", {}, json.dumps(params))
+            res = self.json("UpdatePullToPushTask", {}, json.dumps(request.__dict__))
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), UpdatePullToPushTaskResponse(), True)
@@ -1064,7 +1061,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, UpdatePullToPushTaskResponse(), True)
 
     # StopPullToPushTask.
     #
@@ -1083,7 +1080,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, StopPullToPushTaskResponse(), True)
 
     # RestartPullToPushTask.
     #
@@ -1102,7 +1099,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, RestartPullToPushTaskResponse(), True)
 
     def delete_pull_to_push_task(self, request):
         try:
@@ -1116,7 +1113,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, DeletePullToPushTaskResponse(), True)
 
     def update_deny_config(self, request):
         try:
@@ -1130,7 +1127,7 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
+            return Parse(res, UpdateDenyConfigResponse(), True)
 
     # DescribeDenyConfig.
     #
@@ -1149,24 +1146,4 @@ class LiveService(Service):
             else:
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
-            return res
-
-    #
-    # CreateLiveStreamRecordIndexFiles.
-    #
-    # @param request CreateLiveStreamRecordIndexFilesRequest
-    # @return CreateLiveStreamRecordIndexFilesResponse
-    # @raise Exception
-    def create_live_stream_record_index_files(self, request):
-        try:
-            params = MessageToDict(request, False, True)
-            res = self.json("CreateLiveStreamRecordIndexFiles", {}, json.dumps(params))
-        except Exception as Argument:
-            try:
-                resp = Parse(Argument.__str__(), CreateLiveStreamRecordIndexFilesResponse(), True)
-            except Exception:
-                raise Argument
-            else:
-                raise Exception(resp.ResponseMetadata.Error.Code)
-        else:
-            return res
+            return Parse(res, DescribeDenyConfigResponse(), True)
