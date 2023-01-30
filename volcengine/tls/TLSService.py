@@ -162,7 +162,7 @@ class TLSService(Service):
         return request
 
     def __request(self, api: str, params: dict = None, body: dict = None, request_headers: dict = None):
-        logging.info("Requesting {}...\tParams = {}\tBody = {}".format(api, params, body))
+        # logging.info("Requesting {}...\tParams = {}\tBody = {}".format(api, params, body))
 
         request = self.__prepare_request(api, params, body, request_headers)
 
@@ -178,7 +178,7 @@ class TLSService(Service):
             if response.status_code != OK_STATUS:
                 raise TLSException(response)
 
-            logging.info("Successfully got a response from TLS!\n")
+            # logging.info("Successfully got a response from TLS!\n")
 
             return response
 
