@@ -191,14 +191,14 @@ class ContentSecurityService(Service):
         return res_json
 
     def live_audio_result(self, params, body):
-        res = self.get("GetVideoLiveResult", params, json.dumps(body))
+        res = self.get("GetAudioLiveResult", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
 
     def live_video_result(self, params, body):
-        res = self.get("GetAudioLiveResult", params, json.dumps(body))
+        res = self.get("GetVideoLiveResult", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
