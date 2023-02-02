@@ -58,6 +58,11 @@ class SmsService(Service):
             "ApplySmsSignature": ApiInfo("POST", "/", {"Action": "ApplySmsSignature", "Version": "2021-01-11"}, {}, {}),
             "DeleteSignature": ApiInfo("POST", "/", {"Action": "DeleteSignature", "Version": "2021-01-11"}, {},
                                        {}),
+            "ApplyVmsTemplate": ApiInfo("POST", "/", {"Action": "ApplyVmsTemplate", "Version": "2021-01-11"}, {},
+                                        {}),
+            "GetVmsTemplateStatus": ApiInfo("POST", "/", {"Action": "GetVmsTemplateStatus", "Version": "2021-01-11"},
+                                            {},
+                                            {}),
         }
         return api_info
 
@@ -172,6 +177,36 @@ class SmsService(Service):
     @retry(tries=2, delay=0)
     def delete_signature(self, body):
         res = self.json('DeleteSignature', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+
+        return res_json
+
+    @retry(tries=2, delay=0)
+    def apply_vms_template(self, body):
+        body["caller"] = "sdk"
+        if body["channelType"] is None or body["channelType"] == "":
+            body["channelType"] = "CN_VMS"
+        res = self.json('ApplyVmsTemplate', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+
+        return res_json
+
+    @retry(tries=2, delay=0)
+    def get_vms_template_status(self, body):
+        res = self.json('GetVmsTemplateStatus', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+
+        return res_json
+
+    @retry(tries=2, delay=0)
+    def send_vms(self, body):
+        res = self.json('SendSms', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

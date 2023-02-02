@@ -64,3 +64,16 @@ ENABLE_STATUS_ENABLE = "1"
 AREA_CN = "cn"
 AREA_OVERSEAS = "overseas"
 AREA_ALL = "all"
+
+SOURCE_TYPE_TEXT = "text/string"
+SOURCE_TYPE_VIDEO = "video/mp4"
+SOURCE_TYPE_IMAGE_JPG = "image/jpg"
+Source_TYPE_IMAGE_PNG = "image/png "
+Source_TYPE_IMAGE_GIF = "image/gif"
+Source_TYPE_MP3 = "audio/mp3"
+
+SourceTypeImageJPG = "image/jpg"
+SourceTypeImagePNG = "image/png "
+SourceTypeImageGIF = "image/gif"
+SourceTypeAudio = "audio/mp3"
+
