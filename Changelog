@@ -1,5 +1,8 @@
 ### Change log
 
+2023-02-02 Bumped to version v1.0.73
+- Updated apis for sms/vms/security
+
 2023-01-19 Bumped to version v1.0.72
 - Updated apis for live
 - Added bio service
