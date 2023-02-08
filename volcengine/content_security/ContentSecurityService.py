@@ -52,6 +52,8 @@ class ContentSecurityService(Service):
                     "TextSliceRisk": ApiInfo("POST", "/", {"Action": "TextSliceRisk", "Version": "2022-11-07"}, {}, {}),
                     "AsyncImageRiskV2": ApiInfo("POST", "/", {"Action": "AsyncImageRisk", "Version": "2022-08-26"}, {}, {}),
                     "ImageResultV2": ApiInfo("GET", "/", {"Action": "ImageResult", "Version": "2022-08-26"}, {}, {}),
+                    "CloseAudioLiveRisk": ApiInfo("POST", "/", {"Action": "CloseAudioLive", "Version": "2022-04-25"}, {}, {}),
+                    "CloseVideoLiveRisk": ApiInfo("POST", "/", {"Action": "CloseVideoLive", "Version": "2022-04-25"}, {}, {}),
                     }
 
         return api_info
@@ -206,6 +208,20 @@ class ContentSecurityService(Service):
 
     def text_slice_risk(self, params, body):
         res = self.json("TextSliceRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def close_video_live_risk(self, params, body):
+        res = self.json("CloseVideoLiveRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def close_audio_live_risk(self, params, body):
+        res = self.json("CloseAudioLiveRisk", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
