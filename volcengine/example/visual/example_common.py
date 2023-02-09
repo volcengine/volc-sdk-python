@@ -159,4 +159,14 @@ if __name__ == '__main__':
 
     # 表格识别
     # resp = visual_service.ocr_table(form)
+
+    # 智能绘图（文本转图片通用版）
+    # resp = visual_service.t2i_ldm(form)
+
+    # 智能绘图（名画版）
+    # resp = visual_service.img2img_style(form)
+
+    # 智能绘图（漫画版）
+    # resp = visual_service.img2img_anime(form)
+
     print(resp)
