@@ -104,6 +104,9 @@ class VisualService(Service):
             "VideoHighlightExtractionQueryTask": ApiInfo("GET", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
             "CertToken": ApiInfo("POST", "/", {"Action": "CertToken", "Version": "2022-08-31"}, {}, {}),
             "CertVerifyQuery": ApiInfo("POST", "/", {"Action": "CertVerifyQuery", "Version": "2022-08-31"}, {}, {}),
+            "T2ILDM": ApiInfo("POST", "/", {"Action": "T2ILDM", "Version": "2022-08-31"}, {}, {}),
+            "Img2ImgStyle": ApiInfo("POST", "/", {"Action": "Img2ImgStyle", "Version": "2022-08-31"}, {}, {}),
+            "Img2ImgAnime": ApiInfo("POST", "/", {"Action": "Img2ImgAnime", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -659,6 +662,27 @@ class VisualService(Service):
     def cert_verify_query(self, form):
         try:
             res_json = self.common_json_handler("CertVerifyQuery", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def t2i_ldm(self, form):
+        try:
+            res_json = self.common_json_handler("T2ILDM", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2img_style(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgStyle", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2img_anime(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgAnime", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
