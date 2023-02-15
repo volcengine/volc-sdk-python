@@ -12,9 +12,15 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'WorkspaceID': 'workspace_id',
-        'Filter': {'IDs': ['submission_id1', 'submission_id2']},
+        'PageNumber': 1,
+        'PageSize': 10,
+        'Filter': {
+            'IDs': ['test-workflow'],
+            'Status': ['Running'],
+            'Type': ['shared'],
+            'Public': True,
+        },
     }
 
-    resp = bioos_service.list_submissions(params)
+    resp = bioos_service.list_clusters(params)
     print(resp)

@@ -7,26 +7,27 @@ import json
 
 
 if __name__ == '__main__':
-    bioos_service = BioOsService(endpoint="endpoint")
+    # set endpoint/region here if the default value is unsatisfied
+    bioos_service = BioOsService(endpoint='endpoint', region='region')
 
     # call below method if you don't set ak and sk in $HOME/.volc/config
     bioos_service.set_ak('ak')
     bioos_service.set_sk('sk')
 
     params = {
-        "ClusterID": "cluster_id",
-        'WorkspaceID': "workspace_id",
-        'WorkflowID': "workflow_id",
-        'Name': "submission_name",
-        'Description': "submission_description",
-        'DataModelID': "data_model_id",
+        'ClusterID': 'cluster_id',
+        'WorkspaceID': 'workspace_id',
+        'WorkflowID': 'workflow_id',
+        'Name': 'submission_name',
+        'Description': 'submission_description',
+        'DataModelID': 'data_model_id',
         'DataModelRowIDs': ['your-sample-3-id'],
         'Inputs': json.dumps({
-            "testname.hello.name": "this.name1"
+            'testname.hello.name': 'this.name1'
         }),
-        'ExposedOptions': {"ReadFromCache": True},
+        'ExposedOptions': {'ReadFromCache': True},
         'Outputs': json.dumps({
-            "testname.hello.response": "this.response1"
+            'testname.hello.response': 'this.response1'
         }),
     }
 
