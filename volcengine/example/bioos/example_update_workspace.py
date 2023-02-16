@@ -12,9 +12,11 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'WorkspaceID': 'workspace_id',
-        'Filter': {'IDs': ['submission_id1', 'submission_id2']},
+        'ID': 'workspace_id',
+        'Name': 'workspace_name',
+        'Description': 'workspace_description',
+        'CoverPath': 'template-cover/pic1.png'
     }
 
-    resp = bioos_service.list_submissions(params)
+    resp = bioos_service.update_workspace(params)
     print(resp)

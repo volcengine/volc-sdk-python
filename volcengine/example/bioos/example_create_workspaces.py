@@ -12,9 +12,9 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'WorkspaceID': 'workspace_id',
-        'Filter': {'IDs': ['submission_id1', 'submission_id2']},
+        'Name': 'workspace_name',
+        'Description': 'workspace_description'
     }
 
-    resp = bioos_service.list_submissions(params)
+    resp = bioos_service.create_workspaces(params)
     print(resp)

@@ -12,9 +12,13 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'WorkspaceID': 'workspace_id',
-        'Filter': {'IDs': ['submission_id1', 'submission_id2']},
+        'Name': 'cluster_name',
+        'Description': 'cluster_description',
+        'VKEConfig': {
+            'ClusterID': 'cluster_id',
+            'StorageClass': 'ebs-ssd'
+        }
     }
 
-    resp = bioos_service.list_submissions(params)
+    resp = bioos_service.create_cluster(params)
     print(resp)

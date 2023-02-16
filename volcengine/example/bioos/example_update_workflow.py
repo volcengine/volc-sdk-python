@@ -12,9 +12,15 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'WorkspaceID': 'workspace_id',
-        'Filter': {'IDs': ['submission_id1', 'submission_id2']},
+        'WorkspaceID': 'workflow_id',
+        'ID': 'workflow_id',
+        'Name': 'workflow_name',
+        'Description': 'workflow_description',
+        'Source': 'https://foo/wdl.git',
+        'Tag': 'git_tag',
+        'Token': 'git_token',
+        'MainWorkflowPath': 'hello.wdl'
     }
 
-    resp = bioos_service.list_submissions(params)
+    resp = bioos_service.update_workflow(params)
     print(resp)
