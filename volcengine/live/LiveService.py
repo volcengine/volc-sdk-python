@@ -282,6 +282,11 @@ api_info = {
                                   {"Action": "DescribeDenyConfig",
                                    "Version": LIVE_SERVICE_VERSION}, {},
                                   {}),
+    "CreateLiveStreamRecordIndexFiles": ApiInfo("POST", "/",
+                                                {"Action": "CreateLiveStreamRecordIndexFiles",
+                                                 "Version": LIVE_SERVICE_VERSION}, {},
+                                                {}),
+
 }
 
 
@@ -1147,3 +1152,11 @@ class LiveService(Service):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, DescribeDenyConfigResponse(), True)
+
+    def create_live_stream_record_index_files(self, params):
+        action = "CreateLiveStreamRecordIndexFiles"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
