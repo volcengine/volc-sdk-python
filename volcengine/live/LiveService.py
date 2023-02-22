@@ -286,7 +286,14 @@ api_info = {
                                                 {"Action": "CreateLiveStreamRecordIndexFiles",
                                                  "Version": LIVE_SERVICE_VERSION}, {},
                                                 {}),
-
+    "DescribeLiveBatchPushStreamMetrics": ApiInfo("POST", "/",
+                                                {"Action": "DescribeLiveBatchPushStreamMetrics",
+                                                 "Version": LIVE_SERVICE_VERSION}, {},
+                                                {}),
+    "DescribeLiveBatchSourceStreamMetrics": ApiInfo("POST", "/",
+                                                {"Action": "DescribeLiveBatchSourceStreamMetrics",
+                                                 "Version": LIVE_SERVICE_VERSION}, {},
+                                                {}),
 }
 
 
@@ -1155,6 +1162,22 @@ class LiveService(Service):
 
     def create_live_stream_record_index_files(self, params):
         action = "CreateLiveStreamRecordIndexFiles"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_batch_push_stream_metrics(self, params):
+        action = "DescribeLiveBatchPushStreamMetrics"
+        res = self.json(action, dict(), json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_live_batch_source_stream_metrics(self, params):
+        action = "DescribeLiveBatchSourceStreamMetrics"
         res = self.json(action, dict(), json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
