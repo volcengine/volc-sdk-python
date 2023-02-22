@@ -11,6 +11,7 @@ from zlib import crc32
 import os
 import time
 import datetime
+import volcengine.vod
 from volcengine.util.Util import Util
 from volcengine.vod.models.request.request_vod_pb2 import *
 from volcengine.vod.models.response.response_vod_pb2 import *
@@ -137,7 +138,7 @@ class VodService(VodServiceConfig):
 
     def upload_media(self, request):
         oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "", request.FileName,
-                                                              request.FileExtension)
+                                                      request.FileExtension, request.StorageClass)
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
         req.SessionKey = session_key
@@ -149,7 +150,7 @@ class VodService(VodServiceConfig):
             raise Exception(resp.ResponseMetadata.Error)
         return resp
 
-    def upload_tob(self, space_name, file_path, file_type, file_name, file_extension):
+    def upload_tob(self, space_name, file_path, file_type, file_name, file_extension, storage_class):
         if not os.path.isfile(file_path):
             raise Exception("no such file on file path")
         apply_req = VodApplyUploadInfoRequest()
@@ -157,6 +158,7 @@ class VodService(VodServiceConfig):
         apply_req.FileType = file_type
         apply_req.FileName = file_name
         apply_req.FileExtension = file_extension
+        apply_req.StorageClass = storage_class
         resp = self.apply_upload_info(apply_req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
@@ -169,22 +171,26 @@ class VodService(VodServiceConfig):
         start = time.time()
         file_size = os.path.getsize(file_path)
         if file_size < MinChunkSize:
-            self.direct_upload(host, oid, auth, file_path)
+            self.direct_upload(host, oid, auth, file_path, storage_class)
         else:
-            self.chunk_upload(file_path, host, oid, auth, file_size, True)
+            self.chunk_upload(file_path, host, oid, auth, file_size, True, storage_class)
         cost = (time.time() - start) * 1000
         file_size = os.path.getsize(file_path)
         avg_speed = float(file_size) / float(cost)
         return oid, session_key, avg_speed
 
     @retry(tries=3, delay=1, backoff=2)
-    def direct_upload(self, host, oid, auth, file_path):
+    def direct_upload(self, host, oid, auth, file_path, storage_class):
         with open(file_path, 'rb') as f:
             data = f.read()
             check_sum = crc32(data) & 0xFFFFFFFF
         check_sum = "%08x" % check_sum
         url = 'http://{}/{}'.format(host, oid)
         headers = {'Content-CRC32': check_sum, 'Authorization': auth}
+
+        if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
+            headers['X-Upload-Storage-Class'] = 'archive'
+
         upload_status, resp = self.put(url, file_path, headers)
         if not upload_status:
             raise Exception("direct upload error")
@@ -192,8 +198,8 @@ class VodService(VodServiceConfig):
         if resp.get('success') is None or resp['success'] != 0:
             raise Exception("direct upload error")
 
-    def chunk_upload(self, file_path, host, oid, auth, size, is_large_file):
-        upload_id = self.init_upload_part(host, oid, auth, is_large_file)
+    def chunk_upload(self, file_path, host, oid, auth, size, is_large_file, storage_class):
+        upload_id = self.init_upload_part(host, oid, auth, is_large_file, storage_class)
         n = size // MinChunkSize
         last_num = n - 1
         parts = []
@@ -203,21 +209,26 @@ class VodService(VodServiceConfig):
                 part_number = i
                 if is_large_file:
                     part_number = i + 1
-                part = self.upload_part(host, oid, auth, upload_id, part_number, data, is_large_file)
+                part = self.upload_part(host, oid, auth, upload_id, part_number, data, is_large_file, storage_class)
                 parts.append(part)
             data = f.read()
             if is_large_file:
                 last_num = last_num + 1
-            part = self.upload_part(host, oid, auth, upload_id, last_num, data, is_large_file)
+            part = self.upload_part(host, oid, auth, upload_id, last_num, data, is_large_file, storage_class)
             parts.append(part)
-        return self.upload_merge_part(host, oid, auth, upload_id, parts, is_large_file)
+        return self.upload_merge_part(host, oid, auth, upload_id, parts, is_large_file, storage_class)
 
     @retry(tries=3, delay=1, backoff=2)
-    def init_upload_part(self, host, oid, auth, is_large_file):
+    def init_upload_part(self, host, oid, auth, is_large_file, storage_class):
         url = 'http://{}/{}?uploads'.format(host, oid)
         headers = {'Authorization': auth}
         if is_large_file:
             headers['X-Storage-Mode'] = 'gateway'
+
+        if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
+            headers['X-Upload-Storage-Class'] = 'archive'
+
+
         upload_status, resp = self.put_data(url, None, headers)
         resp = json.loads(resp)
         if not upload_status:
@@ -227,7 +238,7 @@ class VodService(VodServiceConfig):
         return resp['payload']['uploadID']
 
     @retry(tries=3, delay=1, backoff=2)
-    def upload_part(self, host, oid, auth, upload_id, part_number, data, is_large_file):
+    def upload_part(self, host, oid, auth, upload_id, part_number, data, is_large_file, storage_class):
         url = 'http://{}/{}?partNumber={}&uploadID={}'.format(host, oid,
                                                               part_number, upload_id)
         check_sum = crc32(data) & 0xFFFFFFFF
@@ -235,6 +246,10 @@ class VodService(VodServiceConfig):
         headers = {'Content-CRC32': check_sum, 'Authorization': auth}
         if is_large_file:
             headers['X-Storage-Mode'] = 'gateway'
+
+        if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
+            headers['X-Upload-Storage-Class'] = 'archive'
+
         upload_status, resp = self.put_data(url, data, headers)
         if not upload_status:
             raise Exception(url + json.dumps(resp))
@@ -254,12 +269,16 @@ class VodService(VodServiceConfig):
         return comma.join(s)
 
     @retry(tries=3, delay=1, backoff=2)
-    def upload_merge_part(self, host, oid, auth, upload_id, check_sum_list, is_large_file):
+    def upload_merge_part(self, host, oid, auth, upload_id, check_sum_list, is_large_file, storage_class):
         url = 'http://{}/{}?uploadID={}'.format(host, oid, upload_id)
         data = self.generate_merge_body(check_sum_list)
         headers = {'Authorization': auth}
         if is_large_file:
             headers['X-Storage-Mode'] = 'gateway'
+
+        if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
+            headers['X-Upload-Storage-Class'] = 'archive'
+
         upload_status, resp = self.put_data(url, data, headers)
         resp = json.loads(resp)
         if not upload_status:
@@ -279,7 +298,7 @@ class VodService(VodServiceConfig):
 
     def upload_material(self, request):
         oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType,
-                                                              request.FileName, request.FileExtension)
+                                                      request.FileName, request.FileExtension, 0)
 
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
@@ -1554,6 +1573,40 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetWorkflowExecutionStatusResponse(), True)
 
     #
+    # GetWorkflowExecutionResult.
+    #
+    # @param request VodGetWorkflowResultRequest
+    # @return VodGetWorkflowResultResponse
+    # @raise Exception
+    def get_workflow_execution_result(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetWorkflowExecutionResult", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetWorkflowResultResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetWorkflowResultResponse(), True)
+
+    #
     # CreateSpace.
     #
     # @param request VodCreateSpaceRequest
@@ -2538,3 +2591,4 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, DescribeVodSnapshotDataResponse(), True)
+
