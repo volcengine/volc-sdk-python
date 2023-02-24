@@ -28,7 +28,7 @@ if __name__ == '__main__':
         req.CallbackArgs = ''
         req.FileName = ''
         req.FileExtension = '.mp4'
-
+        req.StorageClass = 0
         resp = vod_service.upload_media(req)
     except Exception:
         raise

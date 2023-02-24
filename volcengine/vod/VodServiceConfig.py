@@ -84,6 +84,7 @@ class VodServiceConfig(Service):
             "StartWorkflow": ApiInfo("GET", "/", {"Action": "StartWorkflow", "Version": "2020-08-01"}, {}, {}),
             "RetrieveTranscodeResult": ApiInfo("GET", "/", {"Action": "RetrieveTranscodeResult", "Version": "2020-08-01"}, {}, {}),
             "GetWorkflowExecution": ApiInfo("GET", "/", {"Action": "GetWorkflowExecution", "Version": "2020-08-01"}, {}, {}),
+            "GetWorkflowExecutionResult": ApiInfo("GET", "/", {"Action": "GetWorkflowExecutionResult", "Version": "2022-12-01"}, {}, {}),
             # 空间管理
             "CreateSpace": ApiInfo("GET", "/", {"Action": "CreateSpace", "Version": "2021-01-01"}, {}, {}),
             "ListSpace": ApiInfo("GET", "/", {"Action": "ListSpace", "Version": "2021-01-01"}, {}, {}),
