@@ -787,12 +787,21 @@ class LiveService(Service):
 
     def describe_live_stream_info_by_page(self, request):
         try:
-            params = MessageToDict(request, False, True)
-            for k, v in params.items():
-                if isinstance(v, (int, float, bool, str, unicode)) is True:
-                    continue
-                else:
-                    params[k] = json.dumps(v)
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
             res = self.get("DescribeLiveStreamInfoByPage", params)
         except Exception as Argument:
             try:
