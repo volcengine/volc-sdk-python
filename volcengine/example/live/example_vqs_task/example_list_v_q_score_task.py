@@ -2,17 +2,17 @@
 import json
 
 from volcengine.live.LiveService import LiveService
-from volcengine.live.models.request.request_live_pb2 import  ListVQScoreTaskRequest
+from volcengine.live.models.request.live_requests import ListVQScoreTaskRequest
 
 if __name__ == '__main__':
     live_service = LiveService()
     live_service.set_ak('')
     live_service.set_sk('')
     req = ListVQScoreTaskRequest()
-    req.StartTime = '2022-10-21T00:00:00+08:00'
-    req.EndTime = '2022-10-24T00:00:00+08:00'
-    req.PageNum = 0
-    req.PageSize = 0
+    req.StartTime = ''
+    req.EndTime = ''
+    # req.PageNum = 0
+    # req.PageSize = 0
     req.Status = 0
 
     print(req)
