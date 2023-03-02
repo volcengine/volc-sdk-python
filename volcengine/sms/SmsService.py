@@ -192,7 +192,9 @@ class SmsService(Service):
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
-
+        if 'Result' in res_json.keys() and 'templateId' in res_json['Result'].keys():
+            res_json['Result'] = {
+                "templateId": res_json['Result']["templateId"]}
         return res_json
 
     @retry(tries=2, delay=0)
