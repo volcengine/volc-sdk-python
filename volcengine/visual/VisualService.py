@@ -50,14 +50,14 @@ class VisualService(Service):
             "ImageCut": ApiInfo("POST", "/", {"Action": "ImageCut", "Version": "2020-08-26"}, {}, {}),
             "EntityDetect": ApiInfo("POST", "/", {"Action": "EntityDetect", "Version": "2020-08-26"}, {}, {}),
             "GoodsDetect": ApiInfo("POST", "/", {"Action": "GoodsDetect", "Version": "2020-08-26"}, {}, {}),
-            "VideoSummarizationSubmitTask": ApiInfo("POST", "/", {"Action": "VideoSummarizationSubmitTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoSummarizationQueryTask": ApiInfo("GET", "/", {"Action": "VideoSummarizationQueryTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoOverResolutionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoOverResolutionSubmitTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoOverResolutionQueryTask": ApiInfo("GET", "/", {"Action": "VideoOverResolutionQueryTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoRetargetingSubmitTask": ApiInfo("POST", "/", {"Action": "VideoRetargetingSubmitTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoRetargetingQueryTask": ApiInfo("GET", "/", {"Action": "VideoRetargetingQueryTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoInpaintSubmitTask": ApiInfo("POST", "/", {"Action": "VideoInpaintSubmitTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoInpaintQueryTask": ApiInfo("GET", "/", {"Action": "VideoInpaintQueryTask", "Version": "2020-08-26"}, {}, {}),
+            "VideoSummarizationSubmitTask": ApiInfo("POST", "/",{"Action": "VideoSummarizationSubmitTask", "Version": "2020-08-26"},{}, {}),
+            "VideoSummarizationQueryTask": ApiInfo("GET", "/",{"Action": "VideoSummarizationQueryTask", "Version": "2020-08-26"},{}, {}),
+            "VideoOverResolutionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoOverResolutionSubmitTask","Version": "2020-08-26"}, {}, {}),
+            "VideoOverResolutionQueryTask": ApiInfo("GET", "/",{"Action": "VideoOverResolutionQueryTask", "Version": "2020-08-26"},{}, {}),
+            "VideoRetargetingSubmitTask": ApiInfo("POST", "/",{"Action": "VideoRetargetingSubmitTask", "Version": "2020-08-26"}, {},{}),
+            "VideoRetargetingQueryTask": ApiInfo("GET", "/",{"Action": "VideoRetargetingQueryTask", "Version": "2020-08-26"}, {},{}),
+            "VideoInpaintSubmitTask": ApiInfo("POST", "/",{"Action": "VideoInpaintSubmitTask", "Version": "2020-08-26"}, {}, {}),
+            "VideoInpaintQueryTask": ApiInfo("GET", "/", {"Action": "VideoInpaintQueryTask", "Version": "2020-08-26"},{}, {}),
             "CarPlateDetection": ApiInfo("POST", "/", {"Action": "CarPlateDetection", "Version": "2020-08-26"}, {}, {}),
             "DistortionFree": ApiInfo("POST", "/", {"Action": "DistortionFree", "Version": "2020-08-26"}, {}, {}),
             "StretchRecovery": ApiInfo("POST", "/", {"Action": "StretchRecovery", "Version": "2020-08-26"}, {}, {}),
@@ -69,12 +69,12 @@ class VisualService(Service):
             "CarSegment": ApiInfo("POST", "/", {"Action": "CarSegment", "Version": "2020-08-26"}, {}, {}),
             "CarDetection": ApiInfo("POST", "/", {"Action": "CarDetection", "Version": "2020-08-26"}, {}, {}),
             "SkySegment": ApiInfo("POST", "/", {"Action": "SkySegment", "Version": "2020-08-26"}, {}, {}),
-            "ImageSearchImageAdd": ApiInfo("POST", "/", {"Action": "ImageSearchImageAdd", "Version": "2020-08-26"}, {}, {}),
-            "ImageSearchImageDelete": ApiInfo("POST", "/", {"Action": "ImageSearchImageDelete", "Version": "2020-08-26"}, {}, {}),
-            "ImageSearchImageSearch": ApiInfo("POST", "/", {"Action": "ImageSearchImageSearch", "Version": "2020-08-26"}, {}, {}),
-            "ProductSearchAddImage": ApiInfo("POST", "/", {"Action": "ProductSearchAddImage", "Version": "2022-06-16"}, {}, {}),
-            "ProductSearchDeleteImage": ApiInfo("POST", "/", {"Action": "ProductSearchDeleteImage", "Version": "2022-06-16"}, {}, {}),
-            "ProductSearchSearchImage": ApiInfo("POST", "/", {"Action": "ProductSearchSearchImage", "Version": "2022-06-16"}, {}, {}),
+            "ImageSearchImageAdd": ApiInfo("POST", "/", {"Action": "ImageSearchImageAdd", "Version": "2020-08-26"}, {},{}),
+            "ImageSearchImageDelete": ApiInfo("POST", "/",{"Action": "ImageSearchImageDelete", "Version": "2020-08-26"}, {}, {}),
+            "ImageSearchImageSearch": ApiInfo("POST", "/",{"Action": "ImageSearchImageSearch", "Version": "2020-08-26"}, {}, {}),
+            "ProductSearchAddImage": ApiInfo("POST", "/", {"Action": "ProductSearchAddImage", "Version": "2022-06-16"},{}, {}),
+            "ProductSearchDeleteImage": ApiInfo("POST", "/",{"Action": "ProductSearchDeleteImage", "Version": "2022-06-16"}, {},{}),
+            "ProductSearchSearchImage": ApiInfo("POST", "/",{"Action": "ProductSearchSearchImage", "Version": "2022-06-16"}, {},{}),
             "ClueLicense": ApiInfo("POST", "/", {"Action": "OcrClueLicense", "Version": "2020-08-26"}, {}, {}),
             "DrivingLicense": ApiInfo("POST", "/", {"Action": "DrivingLicense", "Version": "2020-08-26"}, {}, {}),
             "VehicleLicense": ApiInfo("POST", "/", {"Action": "VehicleLicense", "Version": "2020-08-26"}, {}, {}),
@@ -89,24 +89,38 @@ class VisualService(Service):
             "CoverVideo": ApiInfo("POST", "/", {"Action": "CoverVideo", "Version": "2020-08-26"}, {}, {}),
             "DollyZoom": ApiInfo("POST", "/", {"Action": "DollyZoom", "Version": "2020-08-26"}, {}, {}),
             "PotraitEffect": ApiInfo("POST", "/", {"Action": "PotraitEffect", "Version": "2020-08-26"}, {}, {}),
-            "ImageStyleConversion": ApiInfo("POST", "/", {"Action": "ImageStyleConversion", "Version": "2020-08-26"}, {}, {}),
+            "ImageStyleConversion": ApiInfo("POST", "/", {"Action": "ImageStyleConversion", "Version": "2020-08-26"},{}, {}),
             "3DGameCartoon": ApiInfo("POST", "/", {"Action": "3DGameCartoon", "Version": "2020-08-26"}, {}, {}),
             "HairSegment": ApiInfo("POST", "/", {"Action": "HairSegment", "Version": "2020-08-26"}, {}, {}),
             "OcrSeal": ApiInfo("POST", "/", {"Action": "OcrSeal", "Version": "2021-08-23"}, {}, {}),
             "OcrPassInvoice": ApiInfo("POST", "/", {"Action": "OcrPassInvoice", "Version": "2021-08-23"}, {}, {}),
             "OCRTrade": ApiInfo("POST", "/", {"Action": "OCRTrade", "Version": "2020-12-21"}, {}, {}),
             "OCRRuanzhu": ApiInfo("POST", "/", {"Action": "OCRRuanzhu", "Version": "2020-12-21"}, {}, {}),
-            "OCRCosmeticProduct": ApiInfo("POST", "/", {"Action": "OCRCosmeticProduct", "Version": "2020-12-21"}, {}, {}),
+            "OCRCosmeticProduct": ApiInfo("POST", "/", {"Action": "OCRCosmeticProduct", "Version": "2020-12-21"}, {},{}),
             "OCRPdf": ApiInfo("POST", "/", {"Action": "OCRPdf", "Version": "2021-08-23"}, {}, {}),
             "OCRTable": ApiInfo("POST", "/", {"Action": "OCRTable", "Version": "2021-08-23"}, {}, {}),
-            "VideoCoverSelection": ApiInfo("POST", "/", {"Action": "VideoCoverSelection", "Version": "2020-08-26"}, {}, {}),
-            "VideoHighlightExtractionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionSubmitTask", "Version": "2020-08-26"}, {}, {}),
-            "VideoHighlightExtractionQueryTask": ApiInfo("GET", "/", {"Action": "VideoHighlightExtractionQueryTask", "Version": "2020-08-26"}, {}, {}),
+            "VideoCoverSelection": ApiInfo("POST", "/", {"Action": "VideoCoverSelection", "Version": "2020-08-26"}, {},{}),
+            "VideoHighlightExtractionSubmitTask": ApiInfo("POST", "/", {"Action": "VideoHighlightExtractionSubmitTask","Version": "2020-08-26"}, {}, {}),
+            "VideoHighlightExtractionQueryTask": ApiInfo("GET", "/", {"Action": "VideoHighlightExtractionQueryTask","Version": "2020-08-26"}, {}, {}),
             "CertToken": ApiInfo("POST", "/", {"Action": "CertToken", "Version": "2022-08-31"}, {}, {}),
             "CertVerifyQuery": ApiInfo("POST", "/", {"Action": "CertVerifyQuery", "Version": "2022-08-31"}, {}, {}),
             "T2ILDM": ApiInfo("POST", "/", {"Action": "T2ILDM", "Version": "2022-08-31"}, {}, {}),
             "Img2ImgStyle": ApiInfo("POST", "/", {"Action": "Img2ImgStyle", "Version": "2022-08-31"}, {}, {}),
             "Img2ImgAnime": ApiInfo("POST", "/", {"Action": "Img2ImgAnime", "Version": "2022-08-31"}, {}, {}),
+            "ImageScoreV2": ApiInfo("POST", "/", {"Action": "ImageScoreV2", "Version": "2022-08-31"}, {}, {}),
+            "EnhancePhotoV2": ApiInfo("POST", "/", {"Action": "EnhancePhotoV2", "Version": "2022-08-31"}, {}, {}),
+            "OverResolutionV2": ApiInfo("POST", "/", {"Action": "OverResolutionV2", "Version": "2022-08-31"}, {}, {}),
+            "VideoOverResolutionSubmitTaskV2": ApiInfo("POST", "/", {"Action": "VideoOverResolutionSubmitTaskV2","Version": "2022-08-31"}, {}, {}),
+            "VideoOverResolutionQueryTaskV2": ApiInfo("POST", "/", {"Action": "VideoOverResolutionQueryTaskV2","Version": "2022-08-31"}, {}, {}),
+            "ImageCorrection": ApiInfo("POST", "/", {"Action": "ImageCorrection", "Version": "2022-08-31"}, {}, {}),
+            "AllAgeGeneration": ApiInfo("POST", "/", {"Action": "AllAgeGeneration", "Version": "2022-08-31"}, {}, {}),
+            "BodyDetection": ApiInfo("POST", "/", {"Action": "BodyDetection", "Version": "2022-08-31"}, {}, {}),
+            "FaceFusionMovieSubmitTask": ApiInfo("POST", "/",{"Action": "FaceFusionMovieSubmitTask", "Version": "2022-08-31"}, {},{}),
+            "FaceFusionMovieGetResult": ApiInfo("POST", "/",{"Action": "FaceFusionMovieGetResult", "Version": "2022-08-31"}, {},{}),
+            "T2iLDM": ApiInfo("POST", "/", {"Action": "T2iLDM", "Version": "2022-08-31"}, {}, {}),
+            "LensVidaVideoSubmitTaskV2": ApiInfo("POST", "/",{"Action": "LensVidaVideoSubmitTaskV2", "Version": "2022-08-31"}, {},{}),
+            "LensVidaVideoGetResultV2": ApiInfo("POST", "/",{"Action": "LensVidaVideoGetResultV2", "Version": "2022-08-31"}, {},{}),
+            "CertSrcFaceComp": ApiInfo("POST", "/", {"Action": "CertSrcFaceComp", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -502,14 +516,14 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
-    
+
     def vat_invoice(self, form):
         try:
             res_json = self.common_handler("VatInvoice", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
-    
+
     def quota_invoice(self, form):
         try:
             res_json = self.common_handler("QuotaInvoice", form)
@@ -600,7 +614,7 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
-    
+
     def ocr_ruanzhu(self, form):
         try:
             res_json = self.common_handler("OCRRuanzhu", form)
@@ -686,10 +700,101 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
-    
+
     def ocr_api(self, action, form):
         try:
             res_json = self.common_handler(action, form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_score_v2(self, body):
+        try:
+            res_json = self.common_json_handler("ImageScoreV2", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def enhance_photo_v2(self, body):
+        try:
+            res_json = self.common_json_handler("EnhancePhotoV2", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def over_resolution_v2(self, body):
+        try:
+            res_json = self.common_json_handler("OverResolutionV2", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_over_resolution_submit_task_v2(self, body):
+        try:
+            res_json = self.common_json_handler("VideoOverResolutionSubmitTaskV2", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def video_over_resolution_get_result_v2(self, body):
+        try:
+            res_json = self.common_json_handler("VideoOverResolutionQueryTaskV2", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def image_correction(self, body):
+        try:
+            res_json = self.common_json_handler("ImageCorrection", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def all_age_generation(self, body):
+        try:
+            res_json = self.common_json_handler("AllAgeGeneration", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def body_detection(self, body):
+        try:
+            res_json = self.common_json_handler("BodyDetection", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def face_fusion_movie_submit_task(self, body):
+        try:
+            res_json = self.common_json_handler("FaceFusionMovieSubmitTask", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def face_fusion_movie_get_result(self, body):
+        try:
+            res_json = self.common_json_handler("FaceFusionMovieGetResult", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def lens_vida_video_submit_task_v2(self, body):
+        try:
+            res_json = self.common_json_handler("LensVidaVideoSubmitTaskV2", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def lens_vida_video_get_result_v2(self, body):
+        try:
+            res_json = self.common_json_handler("LensVidaVideoGetResultV2", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_src_face_comp(self, body):
+        try:
+            res_json = self.common_json_handler("CertSrcFaceComp", body)
             return res_json
         except Exception as e:
             raise Exception(str(e))
