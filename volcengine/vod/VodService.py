@@ -203,20 +203,24 @@ class VodService(VodServiceConfig):
         n = size // MinChunkSize
         last_num = n - 1
         parts = []
+        meta = ''
         with open(file_path, 'rb') as f:
             for i in range(0, last_num):
                 data = f.read(MinChunkSize)
                 part_number = i
                 if is_large_file:
                     part_number = i + 1
-                part = self.upload_part(host, oid, auth, upload_id, part_number, data, is_large_file, storage_class)
+                part, payload = self.upload_part(host, oid, auth, upload_id, part_number, data, is_large_file,
+                                                 storage_class)
+                if part_number == 1:
+                    meta = payload['meta']
                 parts.append(part)
             data = f.read()
             if is_large_file:
                 last_num = last_num + 1
-            part = self.upload_part(host, oid, auth, upload_id, last_num, data, is_large_file, storage_class)
+            part, payload = self.upload_part(host, oid, auth, upload_id, last_num, data, is_large_file, storage_class)
             parts.append(part)
-        return self.upload_merge_part(host, oid, auth, upload_id, parts, is_large_file, storage_class)
+        return self.upload_merge_part(host, oid, auth, upload_id, parts, is_large_file, storage_class, meta)
 
     @retry(tries=3, delay=1, backoff=2)
     def init_upload_part(self, host, oid, auth, is_large_file, storage_class):
@@ -227,7 +231,6 @@ class VodService(VodServiceConfig):
 
         if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
             headers['X-Upload-Storage-Class'] = 'archive'
-
 
         upload_status, resp = self.put_data(url, None, headers)
         resp = json.loads(resp)
@@ -256,7 +259,7 @@ class VodService(VodServiceConfig):
         resp = json.loads(resp)
         if resp.get('success') is None or resp['success'] != 0:
             raise Exception("upload part error")
-        return check_sum
+        return check_sum, resp['payload']
 
     @staticmethod
     def generate_merge_body(check_sum_list):
@@ -269,8 +272,11 @@ class VodService(VodServiceConfig):
         return comma.join(s)
 
     @retry(tries=3, delay=1, backoff=2)
-    def upload_merge_part(self, host, oid, auth, upload_id, check_sum_list, is_large_file, storage_class):
-        url = 'http://{}/{}?uploadID={}'.format(host, oid, upload_id)
+    def upload_merge_part(self, host, oid, auth, upload_id, check_sum_list, is_large_file, storage_class, meta):
+        object_content_type = ''
+        if (meta is not None) and (meta.get("ObjectContentType") is not None):
+            object_content_type = meta['ObjectContentType']
+        url = 'http://{}/{}?uploadID={}&ObjectContentType={}'.format(host, oid, upload_id, object_content_type)
         data = self.generate_merge_body(check_sum_list)
         headers = {'Authorization': auth}
         if is_large_file:
@@ -380,7 +386,6 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return res
-
 
     #
     # GetAllPlayInfo.
@@ -2241,7 +2246,7 @@ class VodService(VodServiceConfig):
                         continue
                     else:
                         params[k] = json.dumps(v)
-            res = self.get("SubmitBlockTasks", params)
+            res = self.post("SubmitBlockTasks", {}, params)
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), VodSubmitBlockTasksResponse(), True)
@@ -2275,7 +2280,7 @@ class VodService(VodServiceConfig):
                         continue
                     else:
                         params[k] = json.dumps(v)
-            res = self.get("GetContentBlockTasks", params)
+            res = self.post("GetContentBlockTasks", {}, params)
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), VodGetContentBlockTasksResponse(), True)
@@ -2285,6 +2290,108 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodGetContentBlockTasksResponse(), True)
+
+    #
+    # CreateDomain.
+    #
+    # @param request VodCreateDomainV2Request
+    # @return VodCreateDomainV2Response
+    # @raise Exception
+    def create_domain(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("CreateDomain", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodCreateDomainV2Response(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodCreateDomainV2Response(), True)
+
+    #
+    # UpdateDomainExpire.
+    #
+    # @param request VodUpdateDomainExpireV2Request
+    # @return VodUpdateDomainExpireV2Response
+    # @raise Exception
+    def update_domain_expire(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("UpdateDomainExpire", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateDomainExpireV2Response(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateDomainExpireV2Response(), True)
+
+    #
+    # UpdateDomainAuthConfig.
+    #
+    # @param request VodUpdateDomainAuthConfigV2Request
+    # @return VodUpdateDomainAuthConfigV2Response
+    # @raise Exception
+    def update_domain_auth_config(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("UpdateDomainAuthConfig", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateDomainAuthConfigV2Response(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateDomainAuthConfigV2Response(), True)
 
     #
     # AddCallbackSubscription.
@@ -2591,4 +2698,3 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, DescribeVodSnapshotDataResponse(), True)
-
