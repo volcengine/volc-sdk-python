@@ -322,21 +322,35 @@ class ImageXService(Service):
             raise Exception(res_json['ResponseMetadata'])
         return res_json['Result']
 
-    def update_image_urls(self, service_id, urls, action=0):
+    def create_image_content_task(self, args):
         query = {
-            'ServiceId': service_id
+            'ServiceId': args['ServiceId']
         }
-        body = {
-            'Action': action,
-            'ImageUrls': urls
-        }
-        res = self.json("UpdateImageUploadFiles", query, json.dumps(body))
+        res = self.imagex_post('CreateImageContentTask', query, json.dumps(args))
         if res == '':
-            raise Exception("UpdateImageUploadFiles: empty response")
+            raise Exception("%s: empty response" % 'CreateImageContentTask')
         res_json = json.loads(res)
-        if 'Error' in res_json['ResponseMetadata']:
-            raise Exception(res_json['ResponseMetadata'])
-        return res_json['Result']
+        return res_json
+
+    def get_image_content_task_detail(self, args):
+        query = {
+            'ServiceId': args['ServiceId']
+        }
+        res = self.imagex_post('GetImageContentTaskDetail', query, json.dumps(args))
+        if res == '':
+            raise Exception("%s: empty response" % 'CreateImageContentTask')
+        res_json = json.loads(res)
+        return res_json
+
+    def get_image_content_block_list(self, args):
+        query = {
+            'ServiceId': args['ServiceId']
+        }
+        res = self.imagex_post('GetImageContentBlockList', query, json.dumps(args))
+        if res == '':
+            raise Exception("%s: empty response" % 'CreateImageContentTask')
+        res_json = json.loads(res)
+        return res_json
 
     def get_image_info(self, service_id, store_uri):
         query = {

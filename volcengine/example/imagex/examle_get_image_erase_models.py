@@ -2,7 +2,6 @@
 from __future__ import print_function
 from volcengine.imagex.ImageXService import ImageXService
 
-
 if __name__ == '__main__':
     imagex_service = ImageXService()
 

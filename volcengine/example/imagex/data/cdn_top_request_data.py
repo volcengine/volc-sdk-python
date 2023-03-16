@@ -18,4 +18,3 @@ if __name__ == '__main__':
 
     resp = describe_imagex_cdntop_request_data(imagex_service, query)
     print(resp)
-
