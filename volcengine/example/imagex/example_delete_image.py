@@ -1,7 +1,6 @@
 # coding:utf-8
 from __future__ import print_function
 
-from volcengine.imagex.ImageXConfig import api_info
 from volcengine.imagex.ImageXService import ImageXService
 
 if __name__ == '__main__':

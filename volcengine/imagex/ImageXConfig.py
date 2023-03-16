@@ -100,8 +100,12 @@ api_info = {
         ApiInfo("POST", "/", {"Action": "DeleteImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
     "PreviewImageUploadFile":
         ApiInfo("GET", "/", {"Action": "PreviewImageUploadFile", "Version": IMAGEX_API_VERSION}, {}, {}),
-    "UpdateImageUploadFiles":
-        ApiInfo("POST", "/", {"Action": "UpdateImageUploadFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "CreateImageContentTask":
+        ApiInfo("POST", "/", {"Action": "CreateImageContentTask", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageContentTaskDetail":
+        ApiInfo("POST", "/", {"Action": "GetImageContentTaskDetail", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageContentBlockList":
+        ApiInfo("POST", "/", {"Action": "GetImageContentBlockList", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageUpdateFiles":
         ApiInfo("GET", "/", {"Action": "GetImageUpdateFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
     "FetchImageUrl":

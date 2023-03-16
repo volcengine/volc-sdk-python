@@ -17,4 +17,3 @@ if __name__ == '__main__':
 
     resp = describe_imagex_domain_bandwidth_data(imagex_service, query)
     print(resp)
-
