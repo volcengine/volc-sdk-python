@@ -294,7 +294,7 @@ api_info = {
     "DescribeLiveBatchSourceStreamMetrics": ApiInfo("POST", "/",
                                                     {"Action": "DescribeLiveBatchSourceStreamMetrics",
                                                      "Version": LIVE_SERVICE_VERSION2020}, {},
-
+                                                    {}),
 }
 
 
