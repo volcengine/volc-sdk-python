@@ -55,7 +55,7 @@ if __name__ == '__main__':
         },
         "Uploader": "your uploader"
     }
-    req.EditParam = json.dumps(editParam)
+    req.EditParam = json.dumps(editParam).encode('utf-8')
     resp = vod_service.submit_direct_edit_task_async(req)
     l = json.loads(resp)
     print(json.dumps(l, ensure_ascii=False, indent=4))

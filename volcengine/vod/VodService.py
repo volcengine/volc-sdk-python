@@ -328,7 +328,7 @@ class VodService(VodServiceConfig):
 
         try:
             params = MessageToDict(request, False, True)
-            params['EditParam'] = json.loads(params['EditParam'])
+            params['EditParam'] = json.loads(request.EditParam)
             res = self.json("SubmitDirectEditTaskAsync", {}, json.dumps(params))
         except Exception as Argument:
             try:
