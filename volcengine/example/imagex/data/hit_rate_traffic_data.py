@@ -1,6 +1,5 @@
 # coding:utf-8
 from __future__ import print_function
-from volcengine.imagex.data.ImageXData import *
 from volcengine.imagex.ImageXService import ImageXService
 
 if __name__ == '__main__':
@@ -15,5 +14,5 @@ if __name__ == '__main__':
     query['EndTime'] = "2023-01-28T00:00:00+08:00"
     query['Interval'] = "300"
 
-    resp = describe_imagex_hit_rate_traffic_data(imagex_service, query)
+    resp = imagex_service.describe_imagex_hit_rate_traffic_data(query)
     print(resp)

@@ -1,6 +1,5 @@
 # coding:utf-8
 from __future__ import print_function
-from volcengine.imagex.data.ImageXData import *
 from volcengine.imagex.ImageXService import ImageXService
 
 if __name__ == '__main__':
@@ -14,5 +13,5 @@ if __name__ == '__main__':
     query['StartTime'] = "2023-01-21T00:00:00+08:00"
     query['EndTime'] = "2023-01-28T00:00:00+08:00"
 
-    resp = describe_imagex_edge_request_regions(imagex_service, query)
+    resp = imagex_service.describe_imagex_edge_request_regions(query)
     print(resp)
