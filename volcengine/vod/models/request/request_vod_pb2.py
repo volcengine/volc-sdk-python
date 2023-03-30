@@ -17,7 +17,7 @@ from volcengine.vod.models.business import vod_workflow_pb2 as vod_dot_business_
 from volcengine.vod.models.business import vod_upload_pb2 as vod_dot_business_dot_vod__upload__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dvod/request/request_vod.proto\x12\x1dVolcengine.Vod.Models.Request\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fvod/business/vod_workflow.proto\x1a\x1dvod/business/vod_upload.proto\"\x84\x03\n\x18VodGetAllPlayInfoRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x02 \x01(\t\x12\x0e\n\x06\x43odecs\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65\x66initions\x18\x04 \x01(\t\x12\x11\n\tFileTypes\x18\x05 \x01(\t\x12\x11\n\tLogoTypes\x18\x06 \x01(\t\x12\x19\n\x11NeedEncryptStream\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\x12\x12\n\nNeedThumbs\x18\t \x01(\t\x12\x17\n\x0fNeedBarrageMask\x18\n \x01(\t\x12\x0f\n\x07\x43\x64nType\x18\x0b \x01(\t\x12\x11\n\tUnionInfo\x18\x0c \x01(\t\x12\x11\n\tPlayScene\x18\r \x01(\t\x12\x1a\n\x12\x44rmExpireTimestamp\x18\x0e \x01(\t\x12\x0f\n\x07HDRType\x18\x0f \x01(\t\x12 \n\x18KeyFrameAlignmentVersion\x18\x10 \x01(\t\x12\x12\n\nUserAction\x18\x11 \x01(\t\x12\x0f\n\x07Quality\x18\x12 \x01(\t\"\xd4\x02\n\x15VodGetPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\x12\x12\n\nNeedThumbs\x18\t \x01(\t\x12\x17\n\x0fNeedBarrageMask\x18\n \x01(\t\x12\x0f\n\x07\x43\x64nType\x18\x0b \x01(\t\x12\x11\n\tUnionInfo\x18\x0c \x01(\t\x12\x15\n\rHDRDefinition\x18\r \x01(\t\x12\x11\n\tPlayScene\x18\x0e \x01(\t\x12\x1a\n\x12\x44rmExpireTimestamp\x18\x0f \x01(\t\x12\x0f\n\x07Quality\x18\x10 \x01(\t\x12\x12\n\nPlayConfig\x18\x11 \x01(\t\"g\n\x1fVodGetPrivateDrmPlayAuthRequest\x12\x0f\n\x07\x44rmType\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x13\n\x0bPlayAuthIds\x18\x03 \x01(\t\x12\x11\n\tUnionInfo\x18\x04 \x01(\t\"Q\n\x1dVodGetHlsDecryptionKeyRequest\x12\x14\n\x0c\x44rmAuthToken\x18\x01 \x01(\t\x12\n\n\x02\x41k\x18\x02 \x01(\t\x12\x0e\n\x06Source\x18\x03 \x01(\t\"\x98\x01\n+VodGetPlayInfoWithLiveTimeShiftSceneRequest\x12\x11\n\tStoreUris\x18\x01 \x01(\t\x12\x11\n\tSpaceName\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\x12\x17\n\x0f\x45xpireTimestamp\x18\x04 \x01(\t\x12\x1d\n\x15NeedComposeBucketName\x18\x05 \x01(\t\"m\n\x13VodUrlUploadRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\x07URLSets\x18\x02 \x03(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodUrlUploadURLSet\"/\n\x1dVodQueryUploadTaskInfoRequest\x12\x0e\n\x06JobIds\x18\x01 \x01(\t\"\xa5\x01\n\x19VodApplyUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x10\n\x08\x46ileSize\x18\x03 \x01(\x01\x12\x10\n\x08\x46ileType\x18\x04 \x01(\t\x12\x10\n\x08\x46ileName\x18\x05 \x01(\t\x12\x14\n\x0cStorageClass\x18\x06 \x01(\x05\x12\x15\n\rFileExtension\x18\x07 \x01(\t\"\xa4\x01\n\x15VodUploadMediaRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x10\n\x08\x46ileName\x18\x05 \x01(\t\x12\x14\n\x0cStorageClass\x18\x06 \x01(\x05\x12\x15\n\rFileExtension\x18\x07 \x01(\t\"\xa3\x01\n\x18VodUploadMaterialRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08\x46ileName\x18\x06 \x01(\t\x12\x15\n\rFileExtension\x18\x07 \x01(\t\"l\n\x1aVodCommitUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"=\n\x17VodUrlUploadJsonRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0f\n\x07URLSets\x18\x02 \x01(\t\".\n\x1eVodGetRecommendedPosterRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"A\n\"VodUpdateMediaPublishStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"]\n!VodUpdateMediaStorageClassRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\x12\x14\n\x0cStorageClass\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\"\x9c\x02\n\x19VodUpdateMediaInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12/\n\tPosterUri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05Title\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x44\x65scription\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04Tags\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x10\x43lassificationId\x18\x06 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\"\'\n\x17VodGetMediaInfosRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\";\n\x15VodDeleteMediaRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x02 \x01(\t\"P\n\x1aVodDeleteTranscodesRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\"\xe1\x01\n\x16VodGetMediaListRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x0e\n\x06Status\x18\x03 \x01(\t\x12\r\n\x05Order\x18\x04 \x01(\t\x12\x0c\n\x04Tags\x18\x05 \x01(\t\x12\x11\n\tStartTime\x18\x06 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x07 \x01(\t\x12\x0e\n\x06Offset\x18\x08 \x01(\t\x12\x10\n\x08PageSize\x18\t \x01(\t\x12\x19\n\x11\x43lassificationIds\x18\n \x01(\t\x12\x19\n\x11TosStorageClasses\x18\x0b \x01(\t\"\xe6\x01\n\x1dVodGetSubtitleInfoListRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x11\n\tLanguages\x18\x03 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x04 \x01(\t\x12\x13\n\x0bLanguageIds\x18\x05 \x01(\t\x12\x13\n\x0bSubtitleIds\x18\x06 \x01(\t\x12\x0e\n\x06Status\x18\x07 \x01(\t\x12\r\n\x05Title\x18\x08 \x01(\t\x12\x0b\n\x03Tag\x18\t \x01(\t\x12\x0e\n\x06Offset\x18\n \x01(\t\x12\x10\n\x08PageSize\x18\x0b \x01(\t\x12\x0b\n\x03Ssl\x18\x0c \x01(\t\"r\n\x1eVodUpdateSubtitleStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x11\n\tLanguages\x18\x03 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\"\xb5\x01\n\x1cVodUpdateSubtitleInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x02 \x01(\t\x12\x10\n\x08Language\x18\x03 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x04 \x01(\t\x12+\n\x05Title\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12)\n\x03Tag\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"w\n VodGetAuditFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x19\n\x11MinNumberOfFrames\x18\x03 \x01(\t\x12\x19\n\x11MaxNumberOfFrames\x18\x04 \x01(\t\"\xa1\x02\n\x1dVodGetMLFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x10\n\x08\x46rameOpt\x18\x03 \x01(\t\x12\x10\n\x08\x46rameFps\x18\x04 \x01(\t\x12\x16\n\x0eNumberOfFrames\x18\x05 \x01(\t\x12\x14\n\x0c\x43utTimeMills\x18\x06 \x01(\t\x12\x16\n\x0eNeedFirstFrame\x18\x07 \x01(\t\x12\x15\n\rNeedLastFrame\x18\x08 \x01(\t\x12\x15\n\rStartTimeMill\x18\t \x01(\t\x12\x13\n\x0b\x45ndTimeMill\x18\n \x01(\t\x12\x19\n\x11MinNumberOfFrames\x18\x0b \x01(\t\x12\x19\n\x11MaxNumberOfFrames\x18\x0c \x01(\t\"U\n!VodGetBetterFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x11\n\tCoverRate\x18\x03 \x01(\t\"?\n\x1eVodGetAudioInfoForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"P\n/VodGetAutomaticSpeechRecognitionForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"I\n(VodGetAudioEventDetectionForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"q\n#VodCreateVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\r\n\x05Level\x18\x02 \x01(\x05\x12\x10\n\x08ParentId\x18\x03 \x01(\x03\x12\x16\n\x0e\x43lassification\x18\x04 \x01(\t\"j\n#VodUpdateVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\x12\x16\n\x0e\x43lassification\x18\x03 \x01(\t\"R\n#VodDeleteVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\"Q\n\"VodListVideoClassificationsRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\"&\n\x17VodListSnapshotsRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\"Z\n\x15VodGetFileListRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Prefix\x18\x02 \x01(\t\x12\r\n\x05Limit\x18\x03 \x01(\t\x12\x0f\n\x07Starter\x18\x04 \x01(\t\"-\n\x1eVodExtractMediaMetaTaskRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\"\xfa\x01\n\x17VodStartWorkflowRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12=\n\x05Input\x18\x03 \x01(\x0b\x32..Volcengine.Vod.Models.Business.WorkflowParams\x12\x10\n\x08Priority\x18\x04 \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x06 \x01(\x08\x12<\n\tDirectUrl\x18\x07 \x01(\x0b\x32).Volcengine.Vod.Models.Business.DirectUrl\"D\n!VodRetrieveTranscodeResultRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nResultType\x18\x02 \x01(\t\"\x9f\x02\n\x1fVodListWorkflowExecutionRequest\x12\r\n\x05RunId\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x11\n\tSpaceName\x18\x03 \x01(\t\x12\x12\n\nTemplateId\x18\x04 \x01(\t\x12\x12\n\nTaskListId\x18\x05 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x06 \x01(\t\x12\x11\n\tJobSource\x18\x07 \x01(\t\x12\x0e\n\x06Status\x18\x08 \x01(\t\x12\x11\n\tStartTime\x18\t \x01(\t\x12\x0f\n\x07\x45ndTime\x18\n \x01(\t\x12\x10\n\x08PageSize\x18\x0b \x01(\t\x12\x0e\n\x06Offset\x18\x0c \x01(\t\x12\x12\n\nOrderByKey\x18\r \x01(\t\x12\r\n\x05Order\x18\x0e \x01(\t\"5\n$VodGetWorkflowExecutionDetailRequest\x12\r\n\x05RunId\x18\x01 \x01(\t\",\n\x1bVodGetWorkflowResultRequest\x12\r\n\x05RunId\x18\x01 \x01(\t\"N\n$VodGetWorkflowExecutionStatusRequest\x12\r\n\x05RunId\x18\x01 \x01(\t\x12\x17\n\x0fNeedTasksDetail\x18\x02 \x01(\t\"\x9c\x01\n#VodSubmitDirectEditTaskAsyncRequest\x12\x10\n\x08Uploader\x18\x01 \x01(\t\x12\x13\n\x0b\x41pplication\x18\x02 \x01(\t\x12\x11\n\tEditParam\x18\x04 \x01(\x0c\x12\x10\n\x08Priority\x18\x05 \x01(\x05\x12\x13\n\x0b\x43\x61llbackUri\x18\x06 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x07 \x01(\t\"/\n\x1dVodGetDirectEditResultRequest\x12\x0e\n\x06ReqIds\x18\x01 \x03(\t\"0\n\x1fVodGetDirectEditProgressRequest\x12\r\n\x05ReqId\x18\x01 \x01(\t\"v\n\x15VodCreateSpaceRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x13\n\x0bProjectName\x18\x02 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x03 \x01(\t\x12\x0e\n\x06Region\x18\x04 \x01(\t\x12\x10\n\x08UserName\x18\x05 \x01(\t\"-\n\x18VodGetSpaceDetailRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\"4\n\x13VodListSpaceRequest\x12\x0e\n\x06Offset\x18\x01 \x01(\x01\x12\r\n\x05Limit\x18\x02 \x01(\x01\"u\n\x15VodUpdateSpaceRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x19\n\x11SourceProjectName\x18\x02 \x01(\t\x12\x19\n\x11TargetProjectName\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\"^\n!VodUpdateSpaceUploadConfigRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x11\n\tConfigKey\x18\x02 \x01(\t\x12\x13\n\x0b\x43onfigValue\x18\x03 \x01(\t\"\x81\x01\n%VodDescribeVodSpaceStorageDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x0c\n\x04Type\x18\x05 \x01(\t\")\n\x14VodListDomainRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\"O\n\x1eVodCreateCdnRefreshTaskRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Urls\x18\x02 \x01(\t\x12\x0c\n\x04Type\x18\x03 \x01(\t\"A\n\x1eVodCreateCdnPreloadTaskRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Urls\x18\x02 \x01(\t\"\xc2\x01\n\x16VodListCdnTasksRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06TaskId\x18\x02 \x01(\t\x12\x12\n\nDomainName\x18\x03 \x01(\t\x12\x10\n\x08TaskType\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x06 \x01(\x05\x12\x14\n\x0c\x45ndTimestamp\x18\x07 \x01(\x05\x12\x0f\n\x07PageNum\x18\x08 \x01(\x05\x12\x10\n\x08PageSize\x18\t \x01(\x05\"n\n\x1aVodListCdnAccessLogRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x02 \x01(\x05\x12\x14\n\x0c\x45ndTimestamp\x18\x03 \x01(\x05\x12\x11\n\tSpaceName\x18\x04 \x01(\t\"p\n\x1dVodListCdnTopAccessUrlRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x02 \x01(\x05\x12\x14\n\x0c\x45ndTimestamp\x18\x03 \x01(\x05\x12\x10\n\x08SortType\x18\x04 \x01(\t\"\x9c\x01\n(VodDescribeVodDomainBandwidthDataRequest\x12\x12\n\nDomainList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x15\n\rBandwidthType\x18\x05 \x01(\t\x12\x0c\n\x04\x41rea\x18\x06 \x01(\t\"\x8f\x01\n\x1aVodListCdnUsageDataRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x10\n\x08Interval\x18\x02 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x03 \x01(\x03\x12\x14\n\x0c\x45ndTimestamp\x18\x04 \x01(\x03\x12\x10\n\x08\x44\x61taType\x18\x05 \x01(\t\x12\x0e\n\x06Metric\x18\x06 \x01(\t\"\x90\x01\n\x1bVodListCdnStatusDataRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x10\n\x08Interval\x18\x02 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x03 \x01(\x03\x12\x14\n\x0c\x45ndTimestamp\x18\x04 \x01(\x03\x12\x10\n\x08\x44\x61taType\x18\x05 \x01(\t\x12\x0e\n\x06Metric\x18\x06 \x01(\t\"\'\n\x18VodDescribeIPInfoRequest\x12\x0b\n\x03Ips\x18\x01 \x01(\t\"|\n\x17VodListCdnPvDataRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x10\n\x08Interval\x18\x02 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x03 \x01(\x03\x12\x14\n\x0c\x45ndTimestamp\x18\x04 \x01(\x03\x12\x10\n\x08\x44\x61taType\x18\x05 \x01(\t\"\x8a\x01\n&VodDescribeVodDomainTrafficDataRequest\x12\x12\n\nDomainList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x13\n\x0bTrafficType\x18\x05 \x01(\t\"A\n\x1aVodSubmitBlockTasksRequest\x12\x10\n\x08\x46ileUrls\x18\x01 \x01(\t\x12\x11\n\tOperation\x18\x02 \x01(\t\"\xb6\x01\n\x1eVodGetContentBlockTasksRequest\x12\x0b\n\x03Url\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0e\n\x06TaskID\x18\x03 \x01(\t\x12\x10\n\x08TaskType\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\x12\x11\n\tStartTime\x18\x06 \x01(\x03\x12\x0f\n\x07\x45ndTime\x18\x07 \x01(\x03\x12\x0f\n\x07PageNum\x18\x08 \x01(\x03\x12\x10\n\x08PageSize\x18\t \x01(\x03\"\xc1\x01\n\x18VodCreateDomainV2Request\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nDomainType\x18\x02 \x01(\t\x12\x0e\n\x06\x44omain\x18\x03 \x01(\t\x12\x19\n\x11SourceStationType\x18\x05 \x01(\x05\x12 \n\x18SourceStationAddressType\x18\x06 \x01(\x05\x12\x0f\n\x07Origins\x18\x07 \x01(\t\x12\x0c\n\x04\x41rea\x18\x08 \x01(\t\x12\x12\n\nBucketName\x18\t \x01(\t\"g\n\x1eVodUpdateDomainExpireV2Request\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nDomainType\x18\x02 \x01(\t\x12\x0e\n\x06\x44omain\x18\x03 \x01(\t\x12\x0e\n\x06\x45xpire\x18\x04 \x01(\x05\"\x8f\x01\n\"VodUpdateDomainAuthConfigV2Request\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nDomainType\x18\x02 \x01(\t\x12\x0e\n\x06\x44omain\x18\x03 \x01(\t\x12\x0f\n\x07MainKey\x18\x04 \x01(\t\x12\x11\n\tBackupKey\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\"X\n!VodAddCallbackSubscriptionRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Url\x18\x02 \x01(\t\x12\x13\n\x0b\x43ontentType\x18\x03 \x01(\t\"h\n\x1aVodSetCallbackEventRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06\x45vents\x18\x02 \x01(\t\x12\x13\n\x0b\x41uthEnabled\x18\x03 \x01(\t\x12\x12\n\nPrivateKey\x18\x04 \x01(\t\"\xf4\x01\n&VodGetSmartStrategyLitePlayInfoRequest\x12\x0f\n\x07PlayUrl\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0b\n\x03Ssl\x18\x07 \x01(\t\x12\x12\n\nNeedThumbs\x18\x08 \x01(\t\x12\x17\n\x0fNeedBarrageMask\x18\t \x01(\t\x12\x11\n\tUnionInfo\x18\n \x01(\t\x12\x15\n\rHDRDefinition\x18\x0b \x01(\t\"%\n\x14VodGetAppInfoRequest\x12\r\n\x05\x41ppId\x18\x01 \x01(\x04\"\xd0\x01\n$DescribeVodSpaceTranscodeDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x15\n\rTranscodeType\x18\x04 \x01(\t\x12\x15\n\rSpecification\x18\x05 \x01(\t\x12\x15\n\rTaskStageList\x18\x06 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x07 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x08 \x01(\t\"\xb6\x01\n#DescribeVodSpaceAIStatisDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0bMediaAiType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x01(\t\"\xbd\x01\n)DescribeVodSpaceSubtitleStatisDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x14\n\x0cSubtitleType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x01(\t\"\xb9\x01\n\'DescribeVodSpaceDetectStatisDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x12\n\nDetectType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x01(\t\"\xb2\x01\n\x1e\x44\x65scribeVodSnapshotDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x14\n\x0cSnapshotType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x01(\tB\xc8\x01\n(com.volcengine.service.vod.model.requestB\nVodRequestP\x01Z@github.com/volcengine/volc-sdk-golang/service/vod/models/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x1fVolc\\Service\\Vod\\Models\\Request\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dvod/request/request_vod.proto\x12\x1dVolcengine.Vod.Models.Request\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1fvod/business/vod_workflow.proto\x1a\x1dvod/business/vod_upload.proto\"\x84\x03\n\x18VodGetAllPlayInfoRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x02 \x01(\t\x12\x0e\n\x06\x43odecs\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65\x66initions\x18\x04 \x01(\t\x12\x11\n\tFileTypes\x18\x05 \x01(\t\x12\x11\n\tLogoTypes\x18\x06 \x01(\t\x12\x19\n\x11NeedEncryptStream\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\x12\x12\n\nNeedThumbs\x18\t \x01(\t\x12\x17\n\x0fNeedBarrageMask\x18\n \x01(\t\x12\x0f\n\x07\x43\x64nType\x18\x0b \x01(\t\x12\x11\n\tUnionInfo\x18\x0c \x01(\t\x12\x11\n\tPlayScene\x18\r \x01(\t\x12\x1a\n\x12\x44rmExpireTimestamp\x18\x0e \x01(\t\x12\x0f\n\x07HDRType\x18\x0f \x01(\t\x12 \n\x18KeyFrameAlignmentVersion\x18\x10 \x01(\t\x12\x12\n\nUserAction\x18\x11 \x01(\t\x12\x0f\n\x07Quality\x18\x12 \x01(\t\"\xd4\x02\n\x15VodGetPlayInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0e\n\x06\x42\x61se64\x18\x07 \x01(\t\x12\x0b\n\x03Ssl\x18\x08 \x01(\t\x12\x12\n\nNeedThumbs\x18\t \x01(\t\x12\x17\n\x0fNeedBarrageMask\x18\n \x01(\t\x12\x0f\n\x07\x43\x64nType\x18\x0b \x01(\t\x12\x11\n\tUnionInfo\x18\x0c \x01(\t\x12\x15\n\rHDRDefinition\x18\r \x01(\t\x12\x11\n\tPlayScene\x18\x0e \x01(\t\x12\x1a\n\x12\x44rmExpireTimestamp\x18\x0f \x01(\t\x12\x0f\n\x07Quality\x18\x10 \x01(\t\x12\x12\n\nPlayConfig\x18\x11 \x01(\t\"g\n\x1fVodGetPrivateDrmPlayAuthRequest\x12\x0f\n\x07\x44rmType\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x13\n\x0bPlayAuthIds\x18\x03 \x01(\t\x12\x11\n\tUnionInfo\x18\x04 \x01(\t\"Q\n\x1dVodGetHlsDecryptionKeyRequest\x12\x14\n\x0c\x44rmAuthToken\x18\x01 \x01(\t\x12\n\n\x02\x41k\x18\x02 \x01(\t\x12\x0e\n\x06Source\x18\x03 \x01(\t\"\x98\x01\n+VodGetPlayInfoWithLiveTimeShiftSceneRequest\x12\x11\n\tStoreUris\x18\x01 \x01(\t\x12\x11\n\tSpaceName\x18\x02 \x01(\t\x12\x0b\n\x03Ssl\x18\x03 \x01(\t\x12\x17\n\x0f\x45xpireTimestamp\x18\x04 \x01(\t\x12\x1d\n\x15NeedComposeBucketName\x18\x05 \x01(\t\"m\n\x13VodUrlUploadRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\x07URLSets\x18\x02 \x03(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodUrlUploadURLSet\"/\n\x1dVodQueryUploadTaskInfoRequest\x12\x0e\n\x06JobIds\x18\x01 \x01(\t\"\xa5\x01\n\x19VodApplyUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x10\n\x08\x46ileSize\x18\x03 \x01(\x01\x12\x10\n\x08\x46ileType\x18\x04 \x01(\t\x12\x10\n\x08\x46ileName\x18\x05 \x01(\t\x12\x14\n\x0cStorageClass\x18\x06 \x01(\x05\x12\x15\n\rFileExtension\x18\x07 \x01(\t\"\xa4\x01\n\x15VodUploadMediaRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x10\n\x08\x46ileName\x18\x05 \x01(\t\x12\x14\n\x0cStorageClass\x18\x06 \x01(\x05\x12\x15\n\rFileExtension\x18\x07 \x01(\t\"\xa3\x01\n\x18VodUploadMaterialRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ilePath\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08\x46ileName\x18\x06 \x01(\t\x12\x15\n\rFileExtension\x18\x07 \x01(\t\"l\n\x1aVodCommitUploadInfoRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\"=\n\x17VodUrlUploadJsonRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0f\n\x07URLSets\x18\x02 \x01(\t\".\n\x1eVodGetRecommendedPosterRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\"A\n\"VodUpdateMediaPublishStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"n\n!VodUpdateMediaStorageClassRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\x12\x14\n\x0cStorageClass\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x04 \x01(\t\"\x9c\x02\n\x19VodUpdateMediaInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12/\n\tPosterUri\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12+\n\x05Title\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x31\n\x0b\x44\x65scription\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12*\n\x04Tags\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x35\n\x10\x43lassificationId\x18\x06 \x01(\x0b\x32\x1b.google.protobuf.Int64Value\"\'\n\x17VodGetMediaInfosRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\";\n\x15VodDeleteMediaRequest\x12\x0c\n\x04Vids\x18\x01 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x02 \x01(\t\"P\n\x1aVodDeleteTranscodesRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\"\xe1\x01\n\x16VodGetMediaListRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x0e\n\x06Status\x18\x03 \x01(\t\x12\r\n\x05Order\x18\x04 \x01(\t\x12\x0c\n\x04Tags\x18\x05 \x01(\t\x12\x11\n\tStartTime\x18\x06 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x07 \x01(\t\x12\x0e\n\x06Offset\x18\x08 \x01(\t\x12\x10\n\x08PageSize\x18\t \x01(\t\x12\x19\n\x11\x43lassificationIds\x18\n \x01(\t\x12\x19\n\x11TosStorageClasses\x18\x0b \x01(\t\"\xe6\x01\n\x1dVodGetSubtitleInfoListRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x11\n\tLanguages\x18\x03 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x04 \x01(\t\x12\x13\n\x0bLanguageIds\x18\x05 \x01(\t\x12\x13\n\x0bSubtitleIds\x18\x06 \x01(\t\x12\x0e\n\x06Status\x18\x07 \x01(\t\x12\r\n\x05Title\x18\x08 \x01(\t\x12\x0b\n\x03Tag\x18\t \x01(\t\x12\x0e\n\x06Offset\x18\n \x01(\t\x12\x10\n\x08PageSize\x18\x0b \x01(\t\x12\x0b\n\x03Ssl\x18\x0c \x01(\t\"r\n\x1eVodUpdateSubtitleStatusRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0f\n\x07\x46ileIds\x18\x02 \x01(\t\x12\x11\n\tLanguages\x18\x03 \x01(\t\x12\x0f\n\x07\x46ormats\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\"\xb5\x01\n\x1cVodUpdateSubtitleInfoRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x02 \x01(\t\x12\x10\n\x08Language\x18\x03 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x04 \x01(\t\x12+\n\x05Title\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12)\n\x03Tag\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"w\n VodGetAuditFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x19\n\x11MinNumberOfFrames\x18\x03 \x01(\t\x12\x19\n\x11MaxNumberOfFrames\x18\x04 \x01(\t\"\xa1\x02\n\x1dVodGetMLFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x10\n\x08\x46rameOpt\x18\x03 \x01(\t\x12\x10\n\x08\x46rameFps\x18\x04 \x01(\t\x12\x16\n\x0eNumberOfFrames\x18\x05 \x01(\t\x12\x14\n\x0c\x43utTimeMills\x18\x06 \x01(\t\x12\x16\n\x0eNeedFirstFrame\x18\x07 \x01(\t\x12\x15\n\rNeedLastFrame\x18\x08 \x01(\t\x12\x15\n\rStartTimeMill\x18\t \x01(\t\x12\x13\n\x0b\x45ndTimeMill\x18\n \x01(\t\x12\x19\n\x11MinNumberOfFrames\x18\x0b \x01(\t\x12\x19\n\x11MaxNumberOfFrames\x18\x0c \x01(\t\"U\n!VodGetBetterFramesForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\x12\x11\n\tCoverRate\x18\x03 \x01(\t\"?\n\x1eVodGetAudioInfoForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"P\n/VodGetAutomaticSpeechRecognitionForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"I\n(VodGetAudioEventDetectionForAuditRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x10\n\x08Strategy\x18\x02 \x01(\t\"q\n#VodCreateVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\r\n\x05Level\x18\x02 \x01(\x05\x12\x10\n\x08ParentId\x18\x03 \x01(\x03\x12\x16\n\x0e\x43lassification\x18\x04 \x01(\t\"j\n#VodUpdateVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\x12\x16\n\x0e\x43lassification\x18\x03 \x01(\t\"R\n#VodDeleteVideoClassificationRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\"Q\n\"VodListVideoClassificationsRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\"&\n\x17VodListSnapshotsRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\"Z\n\x15VodGetFileListRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Prefix\x18\x02 \x01(\t\x12\r\n\x05Limit\x18\x03 \x01(\t\x12\x0f\n\x07Starter\x18\x04 \x01(\t\"-\n\x1eVodExtractMediaMetaTaskRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\"\x8e\x02\n\x17VodStartWorkflowRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nTemplateId\x18\x02 \x01(\t\x12=\n\x05Input\x18\x03 \x01(\x0b\x32..Volcengine.Vod.Models.Business.WorkflowParams\x12\x10\n\x08Priority\x18\x04 \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x06 \x01(\x08\x12<\n\tDirectUrl\x18\x07 \x01(\x0b\x32).Volcengine.Vod.Models.Business.DirectUrl\x12\x12\n\nTaskListId\x18\x08 \x01(\t\"D\n!VodRetrieveTranscodeResultRequest\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x12\n\nResultType\x18\x02 \x01(\t\"\x9f\x02\n\x1fVodListWorkflowExecutionRequest\x12\r\n\x05RunId\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x11\n\tSpaceName\x18\x03 \x01(\t\x12\x12\n\nTemplateId\x18\x04 \x01(\t\x12\x12\n\nTaskListId\x18\x05 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x06 \x01(\t\x12\x11\n\tJobSource\x18\x07 \x01(\t\x12\x0e\n\x06Status\x18\x08 \x01(\t\x12\x11\n\tStartTime\x18\t \x01(\t\x12\x0f\n\x07\x45ndTime\x18\n \x01(\t\x12\x10\n\x08PageSize\x18\x0b \x01(\t\x12\x0e\n\x06Offset\x18\x0c \x01(\t\x12\x12\n\nOrderByKey\x18\r \x01(\t\x12\r\n\x05Order\x18\x0e \x01(\t\"5\n$VodGetWorkflowExecutionDetailRequest\x12\r\n\x05RunId\x18\x01 \x01(\t\",\n\x1bVodGetWorkflowResultRequest\x12\r\n\x05RunId\x18\x01 \x01(\t\"N\n$VodGetWorkflowExecutionStatusRequest\x12\r\n\x05RunId\x18\x01 \x01(\t\x12\x17\n\x0fNeedTasksDetail\x18\x02 \x01(\t\"\x9c\x01\n#VodSubmitDirectEditTaskAsyncRequest\x12\x10\n\x08Uploader\x18\x01 \x01(\t\x12\x13\n\x0b\x41pplication\x18\x02 \x01(\t\x12\x11\n\tEditParam\x18\x04 \x01(\x0c\x12\x10\n\x08Priority\x18\x05 \x01(\x05\x12\x13\n\x0b\x43\x61llbackUri\x18\x06 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x07 \x01(\t\"/\n\x1dVodGetDirectEditResultRequest\x12\x0e\n\x06ReqIds\x18\x01 \x03(\t\"0\n\x1fVodGetDirectEditProgressRequest\x12\r\n\x05ReqId\x18\x01 \x01(\t\"v\n\x15VodCreateSpaceRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x13\n\x0bProjectName\x18\x02 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x03 \x01(\t\x12\x0e\n\x06Region\x18\x04 \x01(\t\x12\x10\n\x08UserName\x18\x05 \x01(\t\"-\n\x18VodGetSpaceDetailRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\"4\n\x13VodListSpaceRequest\x12\x0e\n\x06Offset\x18\x01 \x01(\x01\x12\r\n\x05Limit\x18\x02 \x01(\x01\"u\n\x15VodUpdateSpaceRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x19\n\x11SourceProjectName\x18\x02 \x01(\t\x12\x19\n\x11TargetProjectName\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\"^\n!VodUpdateSpaceUploadConfigRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x11\n\tConfigKey\x18\x02 \x01(\t\x12\x13\n\x0b\x43onfigValue\x18\x03 \x01(\t\"\x81\x01\n%VodDescribeVodSpaceStorageDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x0c\n\x04Type\x18\x05 \x01(\t\")\n\x14VodListDomainRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\"O\n\x1eVodCreateCdnRefreshTaskRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Urls\x18\x02 \x01(\t\x12\x0c\n\x04Type\x18\x03 \x01(\t\"A\n\x1eVodCreateCdnPreloadTaskRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Urls\x18\x02 \x01(\t\"\xc2\x01\n\x16VodListCdnTasksRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06TaskId\x18\x02 \x01(\t\x12\x12\n\nDomainName\x18\x03 \x01(\t\x12\x10\n\x08TaskType\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x06 \x01(\x05\x12\x14\n\x0c\x45ndTimestamp\x18\x07 \x01(\x05\x12\x0f\n\x07PageNum\x18\x08 \x01(\x05\x12\x10\n\x08PageSize\x18\t \x01(\x05\"n\n\x1aVodListCdnAccessLogRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x02 \x01(\x05\x12\x14\n\x0c\x45ndTimestamp\x18\x03 \x01(\x05\x12\x11\n\tSpaceName\x18\x04 \x01(\t\"p\n\x1dVodListCdnTopAccessUrlRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x02 \x01(\x05\x12\x14\n\x0c\x45ndTimestamp\x18\x03 \x01(\x05\x12\x10\n\x08SortType\x18\x04 \x01(\t\"\x9c\x01\n(VodDescribeVodDomainBandwidthDataRequest\x12\x12\n\nDomainList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x15\n\rBandwidthType\x18\x05 \x01(\t\x12\x0c\n\x04\x41rea\x18\x06 \x01(\t\"\x8f\x01\n\x1aVodListCdnUsageDataRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x10\n\x08Interval\x18\x02 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x03 \x01(\x03\x12\x14\n\x0c\x45ndTimestamp\x18\x04 \x01(\x03\x12\x10\n\x08\x44\x61taType\x18\x05 \x01(\t\x12\x0e\n\x06Metric\x18\x06 \x01(\t\"\x90\x01\n\x1bVodListCdnStatusDataRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x10\n\x08Interval\x18\x02 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x03 \x01(\x03\x12\x14\n\x0c\x45ndTimestamp\x18\x04 \x01(\x03\x12\x10\n\x08\x44\x61taType\x18\x05 \x01(\t\x12\x0e\n\x06Metric\x18\x06 \x01(\t\"\'\n\x18VodDescribeIPInfoRequest\x12\x0b\n\x03Ips\x18\x01 \x01(\t\"|\n\x17VodListCdnPvDataRequest\x12\x0f\n\x07\x44omains\x18\x01 \x01(\t\x12\x10\n\x08Interval\x18\x02 \x01(\t\x12\x16\n\x0eStartTimestamp\x18\x03 \x01(\x03\x12\x14\n\x0c\x45ndTimestamp\x18\x04 \x01(\x03\x12\x10\n\x08\x44\x61taType\x18\x05 \x01(\t\"\x8a\x01\n&VodDescribeVodDomainTrafficDataRequest\x12\x12\n\nDomainList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x13\n\x0bTrafficType\x18\x05 \x01(\t\"A\n\x1aVodSubmitBlockTasksRequest\x12\x10\n\x08\x46ileUrls\x18\x01 \x01(\t\x12\x11\n\tOperation\x18\x02 \x01(\t\"\xb6\x01\n\x1eVodGetContentBlockTasksRequest\x12\x0b\n\x03Url\x18\x01 \x01(\t\x12\x0e\n\x06\x44omain\x18\x02 \x01(\t\x12\x0e\n\x06TaskID\x18\x03 \x01(\t\x12\x10\n\x08TaskType\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x05 \x01(\t\x12\x11\n\tStartTime\x18\x06 \x01(\x03\x12\x0f\n\x07\x45ndTime\x18\x07 \x01(\x03\x12\x0f\n\x07PageNum\x18\x08 \x01(\x03\x12\x10\n\x08PageSize\x18\t \x01(\x03\"\xc1\x01\n\x18VodCreateDomainV2Request\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nDomainType\x18\x02 \x01(\t\x12\x0e\n\x06\x44omain\x18\x03 \x01(\t\x12\x19\n\x11SourceStationType\x18\x05 \x01(\x05\x12 \n\x18SourceStationAddressType\x18\x06 \x01(\x05\x12\x0f\n\x07Origins\x18\x07 \x01(\t\x12\x0c\n\x04\x41rea\x18\x08 \x01(\t\x12\x12\n\nBucketName\x18\t \x01(\t\"g\n\x1eVodUpdateDomainExpireV2Request\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nDomainType\x18\x02 \x01(\t\x12\x0e\n\x06\x44omain\x18\x03 \x01(\t\x12\x0e\n\x06\x45xpire\x18\x04 \x01(\x05\"\x8f\x01\n\"VodUpdateDomainAuthConfigV2Request\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nDomainType\x18\x02 \x01(\t\x12\x0e\n\x06\x44omain\x18\x03 \x01(\t\x12\x0f\n\x07MainKey\x18\x04 \x01(\t\x12\x11\n\tBackupKey\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\"X\n!VodAddCallbackSubscriptionRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Url\x18\x02 \x01(\t\x12\x13\n\x0b\x43ontentType\x18\x03 \x01(\t\"h\n\x1aVodSetCallbackEventRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06\x45vents\x18\x02 \x01(\t\x12\x13\n\x0b\x41uthEnabled\x18\x03 \x01(\t\x12\x12\n\nPrivateKey\x18\x04 \x01(\t\"\xf4\x01\n&VodGetSmartStrategyLitePlayInfoRequest\x12\x0f\n\x07PlayUrl\x18\x01 \x01(\t\x12\x0e\n\x06\x46ormat\x18\x02 \x01(\t\x12\r\n\x05\x43odec\x18\x03 \x01(\t\x12\x12\n\nDefinition\x18\x04 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08LogoType\x18\x06 \x01(\t\x12\x0b\n\x03Ssl\x18\x07 \x01(\t\x12\x12\n\nNeedThumbs\x18\x08 \x01(\t\x12\x17\n\x0fNeedBarrageMask\x18\t \x01(\t\x12\x11\n\tUnionInfo\x18\n \x01(\t\x12\x15\n\rHDRDefinition\x18\x0b \x01(\t\"%\n\x14VodGetAppInfoRequest\x12\r\n\x05\x41ppId\x18\x01 \x01(\x04\"\xd0\x01\n$DescribeVodSpaceTranscodeDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x15\n\rTranscodeType\x18\x04 \x01(\t\x12\x15\n\rSpecification\x18\x05 \x01(\t\x12\x15\n\rTaskStageList\x18\x06 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x07 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x08 \x01(\t\"\xb6\x01\n#DescribeVodSpaceAIStatisDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0bMediaAiType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x01(\t\"\xbd\x01\n)DescribeVodSpaceSubtitleStatisDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x14\n\x0cSubtitleType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x01(\t\"\xb9\x01\n\'DescribeVodSpaceDetectStatisDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x12\n\nDetectType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x01(\t\"\xb2\x01\n\x1e\x44\x65scribeVodSnapshotDataRequest\x12\x11\n\tSpaceList\x18\x01 \x01(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x14\n\x0cSnapshotType\x18\x04 \x01(\t\x12\x15\n\rTaskStageList\x18\x05 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x06 \x01(\x03\x12\x17\n\x0f\x44\x65tailFieldList\x18\x07 \x01(\t\"\x91\x01\n)DescribeVodSpaceWorkflowDetailDataRequest\x12\x0e\n\x06Region\x18\x01 \x01(\t\x12\r\n\x05Space\x18\x02 \x01(\t\x12\x11\n\tStartTime\x18\x03 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x04 \x01(\t\x12\x10\n\x08PageSize\x18\x05 \x01(\x03\x12\x0f\n\x07PageNum\x18\x06 \x01(\x03\"A\n\x1eVodSubmitBlockMediaTaskRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Vids\x18\x02 \x01(\t\"C\n VodSubmitUnblockMediaTaskRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Vids\x18\x02 \x01(\t\"B\n\x1fVodQueryMediaBlockStatusRequest\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0c\n\x04Vids\x18\x02 \x01(\tB\xc8\x01\n(com.volcengine.service.vod.model.requestB\nVodRequestP\x01Z@github.com/volcengine/volc-sdk-golang/service/vod/models/request\xa0\x01\x01\xd8\x01\x01\xca\x02\x1fVolc\\Service\\Vod\\Models\\Request\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 
 
@@ -98,6 +98,10 @@ _DESCRIBEVODSPACEAISTATISDATAREQUEST = DESCRIPTOR.message_types_by_name['Describ
 _DESCRIBEVODSPACESUBTITLESTATISDATAREQUEST = DESCRIPTOR.message_types_by_name['DescribeVodSpaceSubtitleStatisDataRequest']
 _DESCRIBEVODSPACEDETECTSTATISDATAREQUEST = DESCRIPTOR.message_types_by_name['DescribeVodSpaceDetectStatisDataRequest']
 _DESCRIBEVODSNAPSHOTDATAREQUEST = DESCRIPTOR.message_types_by_name['DescribeVodSnapshotDataRequest']
+_DESCRIBEVODSPACEWORKFLOWDETAILDATAREQUEST = DESCRIPTOR.message_types_by_name['DescribeVodSpaceWorkflowDetailDataRequest']
+_VODSUBMITBLOCKMEDIATASKREQUEST = DESCRIPTOR.message_types_by_name['VodSubmitBlockMediaTaskRequest']
+_VODSUBMITUNBLOCKMEDIATASKREQUEST = DESCRIPTOR.message_types_by_name['VodSubmitUnblockMediaTaskRequest']
+_VODQUERYMEDIABLOCKSTATUSREQUEST = DESCRIPTOR.message_types_by_name['VodQueryMediaBlockStatusRequest']
 VodGetAllPlayInfoRequest = _reflection.GeneratedProtocolMessageType('VodGetAllPlayInfoRequest', (_message.Message,), {
   'DESCRIPTOR' : _VODGETALLPLAYINFOREQUEST,
   '__module__' : 'vod.request.request_vod_pb2'
@@ -637,6 +641,34 @@ DescribeVodSnapshotDataRequest = _reflection.GeneratedProtocolMessageType('Descr
   })
 _sym_db.RegisterMessage(DescribeVodSnapshotDataRequest)
 
+DescribeVodSpaceWorkflowDetailDataRequest = _reflection.GeneratedProtocolMessageType('DescribeVodSpaceWorkflowDetailDataRequest', (_message.Message,), {
+  'DESCRIPTOR' : _DESCRIBEVODSPACEWORKFLOWDETAILDATAREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.DescribeVodSpaceWorkflowDetailDataRequest)
+  })
+_sym_db.RegisterMessage(DescribeVodSpaceWorkflowDetailDataRequest)
+
+VodSubmitBlockMediaTaskRequest = _reflection.GeneratedProtocolMessageType('VodSubmitBlockMediaTaskRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODSUBMITBLOCKMEDIATASKREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodSubmitBlockMediaTaskRequest)
+  })
+_sym_db.RegisterMessage(VodSubmitBlockMediaTaskRequest)
+
+VodSubmitUnblockMediaTaskRequest = _reflection.GeneratedProtocolMessageType('VodSubmitUnblockMediaTaskRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODSUBMITUNBLOCKMEDIATASKREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodSubmitUnblockMediaTaskRequest)
+  })
+_sym_db.RegisterMessage(VodSubmitUnblockMediaTaskRequest)
+
+VodQueryMediaBlockStatusRequest = _reflection.GeneratedProtocolMessageType('VodQueryMediaBlockStatusRequest', (_message.Message,), {
+  'DESCRIPTOR' : _VODQUERYMEDIABLOCKSTATUSREQUEST,
+  '__module__' : 'vod.request.request_vod_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Request.VodQueryMediaBlockStatusRequest)
+  })
+_sym_db.RegisterMessage(VodQueryMediaBlockStatusRequest)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
@@ -670,129 +702,137 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _VODUPDATEMEDIAPUBLISHSTATUSREQUEST._serialized_start=2119
   _VODUPDATEMEDIAPUBLISHSTATUSREQUEST._serialized_end=2184
   _VODUPDATEMEDIASTORAGECLASSREQUEST._serialized_start=2186
-  _VODUPDATEMEDIASTORAGECLASSREQUEST._serialized_end=2279
-  _VODUPDATEMEDIAINFOREQUEST._serialized_start=2282
-  _VODUPDATEMEDIAINFOREQUEST._serialized_end=2566
-  _VODGETMEDIAINFOSREQUEST._serialized_start=2568
-  _VODGETMEDIAINFOSREQUEST._serialized_end=2607
-  _VODDELETEMEDIAREQUEST._serialized_start=2609
-  _VODDELETEMEDIAREQUEST._serialized_end=2668
-  _VODDELETETRANSCODESREQUEST._serialized_start=2670
-  _VODDELETETRANSCODESREQUEST._serialized_end=2750
-  _VODGETMEDIALISTREQUEST._serialized_start=2753
-  _VODGETMEDIALISTREQUEST._serialized_end=2978
-  _VODGETSUBTITLEINFOLISTREQUEST._serialized_start=2981
-  _VODGETSUBTITLEINFOLISTREQUEST._serialized_end=3211
-  _VODUPDATESUBTITLESTATUSREQUEST._serialized_start=3213
-  _VODUPDATESUBTITLESTATUSREQUEST._serialized_end=3327
-  _VODUPDATESUBTITLEINFOREQUEST._serialized_start=3330
-  _VODUPDATESUBTITLEINFOREQUEST._serialized_end=3511
-  _VODGETAUDITFRAMESFORAUDITREQUEST._serialized_start=3513
-  _VODGETAUDITFRAMESFORAUDITREQUEST._serialized_end=3632
-  _VODGETMLFRAMESFORAUDITREQUEST._serialized_start=3635
-  _VODGETMLFRAMESFORAUDITREQUEST._serialized_end=3924
-  _VODGETBETTERFRAMESFORAUDITREQUEST._serialized_start=3926
-  _VODGETBETTERFRAMESFORAUDITREQUEST._serialized_end=4011
-  _VODGETAUDIOINFOFORAUDITREQUEST._serialized_start=4013
-  _VODGETAUDIOINFOFORAUDITREQUEST._serialized_end=4076
-  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITREQUEST._serialized_start=4078
-  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITREQUEST._serialized_end=4158
-  _VODGETAUDIOEVENTDETECTIONFORAUDITREQUEST._serialized_start=4160
-  _VODGETAUDIOEVENTDETECTIONFORAUDITREQUEST._serialized_end=4233
-  _VODCREATEVIDEOCLASSIFICATIONREQUEST._serialized_start=4235
-  _VODCREATEVIDEOCLASSIFICATIONREQUEST._serialized_end=4348
-  _VODUPDATEVIDEOCLASSIFICATIONREQUEST._serialized_start=4350
-  _VODUPDATEVIDEOCLASSIFICATIONREQUEST._serialized_end=4456
-  _VODDELETEVIDEOCLASSIFICATIONREQUEST._serialized_start=4458
-  _VODDELETEVIDEOCLASSIFICATIONREQUEST._serialized_end=4540
-  _VODLISTVIDEOCLASSIFICATIONSREQUEST._serialized_start=4542
-  _VODLISTVIDEOCLASSIFICATIONSREQUEST._serialized_end=4623
-  _VODLISTSNAPSHOTSREQUEST._serialized_start=4625
-  _VODLISTSNAPSHOTSREQUEST._serialized_end=4663
-  _VODGETFILELISTREQUEST._serialized_start=4665
-  _VODGETFILELISTREQUEST._serialized_end=4755
-  _VODEXTRACTMEDIAMETATASKREQUEST._serialized_start=4757
-  _VODEXTRACTMEDIAMETATASKREQUEST._serialized_end=4802
-  _VODSTARTWORKFLOWREQUEST._serialized_start=4805
-  _VODSTARTWORKFLOWREQUEST._serialized_end=5055
-  _VODRETRIEVETRANSCODERESULTREQUEST._serialized_start=5057
-  _VODRETRIEVETRANSCODERESULTREQUEST._serialized_end=5125
-  _VODLISTWORKFLOWEXECUTIONREQUEST._serialized_start=5128
-  _VODLISTWORKFLOWEXECUTIONREQUEST._serialized_end=5415
-  _VODGETWORKFLOWEXECUTIONDETAILREQUEST._serialized_start=5417
-  _VODGETWORKFLOWEXECUTIONDETAILREQUEST._serialized_end=5470
-  _VODGETWORKFLOWRESULTREQUEST._serialized_start=5472
-  _VODGETWORKFLOWRESULTREQUEST._serialized_end=5516
-  _VODGETWORKFLOWEXECUTIONSTATUSREQUEST._serialized_start=5518
-  _VODGETWORKFLOWEXECUTIONSTATUSREQUEST._serialized_end=5596
-  _VODSUBMITDIRECTEDITTASKASYNCREQUEST._serialized_start=5599
-  _VODSUBMITDIRECTEDITTASKASYNCREQUEST._serialized_end=5755
-  _VODGETDIRECTEDITRESULTREQUEST._serialized_start=5757
-  _VODGETDIRECTEDITRESULTREQUEST._serialized_end=5804
-  _VODGETDIRECTEDITPROGRESSREQUEST._serialized_start=5806
-  _VODGETDIRECTEDITPROGRESSREQUEST._serialized_end=5854
-  _VODCREATESPACEREQUEST._serialized_start=5856
-  _VODCREATESPACEREQUEST._serialized_end=5974
-  _VODGETSPACEDETAILREQUEST._serialized_start=5976
-  _VODGETSPACEDETAILREQUEST._serialized_end=6021
-  _VODLISTSPACEREQUEST._serialized_start=6023
-  _VODLISTSPACEREQUEST._serialized_end=6075
-  _VODUPDATESPACEREQUEST._serialized_start=6077
-  _VODUPDATESPACEREQUEST._serialized_end=6194
-  _VODUPDATESPACEUPLOADCONFIGREQUEST._serialized_start=6196
-  _VODUPDATESPACEUPLOADCONFIGREQUEST._serialized_end=6290
-  _VODDESCRIBEVODSPACESTORAGEDATAREQUEST._serialized_start=6293
-  _VODDESCRIBEVODSPACESTORAGEDATAREQUEST._serialized_end=6422
-  _VODLISTDOMAINREQUEST._serialized_start=6424
-  _VODLISTDOMAINREQUEST._serialized_end=6465
-  _VODCREATECDNREFRESHTASKREQUEST._serialized_start=6467
-  _VODCREATECDNREFRESHTASKREQUEST._serialized_end=6546
-  _VODCREATECDNPRELOADTASKREQUEST._serialized_start=6548
-  _VODCREATECDNPRELOADTASKREQUEST._serialized_end=6613
-  _VODLISTCDNTASKSREQUEST._serialized_start=6616
-  _VODLISTCDNTASKSREQUEST._serialized_end=6810
-  _VODLISTCDNACCESSLOGREQUEST._serialized_start=6812
-  _VODLISTCDNACCESSLOGREQUEST._serialized_end=6922
-  _VODLISTCDNTOPACCESSURLREQUEST._serialized_start=6924
-  _VODLISTCDNTOPACCESSURLREQUEST._serialized_end=7036
-  _VODDESCRIBEVODDOMAINBANDWIDTHDATAREQUEST._serialized_start=7039
-  _VODDESCRIBEVODDOMAINBANDWIDTHDATAREQUEST._serialized_end=7195
-  _VODLISTCDNUSAGEDATAREQUEST._serialized_start=7198
-  _VODLISTCDNUSAGEDATAREQUEST._serialized_end=7341
-  _VODLISTCDNSTATUSDATAREQUEST._serialized_start=7344
-  _VODLISTCDNSTATUSDATAREQUEST._serialized_end=7488
-  _VODDESCRIBEIPINFOREQUEST._serialized_start=7490
-  _VODDESCRIBEIPINFOREQUEST._serialized_end=7529
-  _VODLISTCDNPVDATAREQUEST._serialized_start=7531
-  _VODLISTCDNPVDATAREQUEST._serialized_end=7655
-  _VODDESCRIBEVODDOMAINTRAFFICDATAREQUEST._serialized_start=7658
-  _VODDESCRIBEVODDOMAINTRAFFICDATAREQUEST._serialized_end=7796
-  _VODSUBMITBLOCKTASKSREQUEST._serialized_start=7798
-  _VODSUBMITBLOCKTASKSREQUEST._serialized_end=7863
-  _VODGETCONTENTBLOCKTASKSREQUEST._serialized_start=7866
-  _VODGETCONTENTBLOCKTASKSREQUEST._serialized_end=8048
-  _VODCREATEDOMAINV2REQUEST._serialized_start=8051
-  _VODCREATEDOMAINV2REQUEST._serialized_end=8244
-  _VODUPDATEDOMAINEXPIREV2REQUEST._serialized_start=8246
-  _VODUPDATEDOMAINEXPIREV2REQUEST._serialized_end=8349
-  _VODUPDATEDOMAINAUTHCONFIGV2REQUEST._serialized_start=8352
-  _VODUPDATEDOMAINAUTHCONFIGV2REQUEST._serialized_end=8495
-  _VODADDCALLBACKSUBSCRIPTIONREQUEST._serialized_start=8497
-  _VODADDCALLBACKSUBSCRIPTIONREQUEST._serialized_end=8585
-  _VODSETCALLBACKEVENTREQUEST._serialized_start=8587
-  _VODSETCALLBACKEVENTREQUEST._serialized_end=8691
-  _VODGETSMARTSTRATEGYLITEPLAYINFOREQUEST._serialized_start=8694
-  _VODGETSMARTSTRATEGYLITEPLAYINFOREQUEST._serialized_end=8938
-  _VODGETAPPINFOREQUEST._serialized_start=8940
-  _VODGETAPPINFOREQUEST._serialized_end=8977
-  _DESCRIBEVODSPACETRANSCODEDATAREQUEST._serialized_start=8980
-  _DESCRIBEVODSPACETRANSCODEDATAREQUEST._serialized_end=9188
-  _DESCRIBEVODSPACEAISTATISDATAREQUEST._serialized_start=9191
-  _DESCRIBEVODSPACEAISTATISDATAREQUEST._serialized_end=9373
-  _DESCRIBEVODSPACESUBTITLESTATISDATAREQUEST._serialized_start=9376
-  _DESCRIBEVODSPACESUBTITLESTATISDATAREQUEST._serialized_end=9565
-  _DESCRIBEVODSPACEDETECTSTATISDATAREQUEST._serialized_start=9568
-  _DESCRIBEVODSPACEDETECTSTATISDATAREQUEST._serialized_end=9753
-  _DESCRIBEVODSNAPSHOTDATAREQUEST._serialized_start=9756
-  _DESCRIBEVODSNAPSHOTDATAREQUEST._serialized_end=9934
+  _VODUPDATEMEDIASTORAGECLASSREQUEST._serialized_end=2296
+  _VODUPDATEMEDIAINFOREQUEST._serialized_start=2299
+  _VODUPDATEMEDIAINFOREQUEST._serialized_end=2583
+  _VODGETMEDIAINFOSREQUEST._serialized_start=2585
+  _VODGETMEDIAINFOSREQUEST._serialized_end=2624
+  _VODDELETEMEDIAREQUEST._serialized_start=2626
+  _VODDELETEMEDIAREQUEST._serialized_end=2685
+  _VODDELETETRANSCODESREQUEST._serialized_start=2687
+  _VODDELETETRANSCODESREQUEST._serialized_end=2767
+  _VODGETMEDIALISTREQUEST._serialized_start=2770
+  _VODGETMEDIALISTREQUEST._serialized_end=2995
+  _VODGETSUBTITLEINFOLISTREQUEST._serialized_start=2998
+  _VODGETSUBTITLEINFOLISTREQUEST._serialized_end=3228
+  _VODUPDATESUBTITLESTATUSREQUEST._serialized_start=3230
+  _VODUPDATESUBTITLESTATUSREQUEST._serialized_end=3344
+  _VODUPDATESUBTITLEINFOREQUEST._serialized_start=3347
+  _VODUPDATESUBTITLEINFOREQUEST._serialized_end=3528
+  _VODGETAUDITFRAMESFORAUDITREQUEST._serialized_start=3530
+  _VODGETAUDITFRAMESFORAUDITREQUEST._serialized_end=3649
+  _VODGETMLFRAMESFORAUDITREQUEST._serialized_start=3652
+  _VODGETMLFRAMESFORAUDITREQUEST._serialized_end=3941
+  _VODGETBETTERFRAMESFORAUDITREQUEST._serialized_start=3943
+  _VODGETBETTERFRAMESFORAUDITREQUEST._serialized_end=4028
+  _VODGETAUDIOINFOFORAUDITREQUEST._serialized_start=4030
+  _VODGETAUDIOINFOFORAUDITREQUEST._serialized_end=4093
+  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITREQUEST._serialized_start=4095
+  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITREQUEST._serialized_end=4175
+  _VODGETAUDIOEVENTDETECTIONFORAUDITREQUEST._serialized_start=4177
+  _VODGETAUDIOEVENTDETECTIONFORAUDITREQUEST._serialized_end=4250
+  _VODCREATEVIDEOCLASSIFICATIONREQUEST._serialized_start=4252
+  _VODCREATEVIDEOCLASSIFICATIONREQUEST._serialized_end=4365
+  _VODUPDATEVIDEOCLASSIFICATIONREQUEST._serialized_start=4367
+  _VODUPDATEVIDEOCLASSIFICATIONREQUEST._serialized_end=4473
+  _VODDELETEVIDEOCLASSIFICATIONREQUEST._serialized_start=4475
+  _VODDELETEVIDEOCLASSIFICATIONREQUEST._serialized_end=4557
+  _VODLISTVIDEOCLASSIFICATIONSREQUEST._serialized_start=4559
+  _VODLISTVIDEOCLASSIFICATIONSREQUEST._serialized_end=4640
+  _VODLISTSNAPSHOTSREQUEST._serialized_start=4642
+  _VODLISTSNAPSHOTSREQUEST._serialized_end=4680
+  _VODGETFILELISTREQUEST._serialized_start=4682
+  _VODGETFILELISTREQUEST._serialized_end=4772
+  _VODEXTRACTMEDIAMETATASKREQUEST._serialized_start=4774
+  _VODEXTRACTMEDIAMETATASKREQUEST._serialized_end=4819
+  _VODSTARTWORKFLOWREQUEST._serialized_start=4822
+  _VODSTARTWORKFLOWREQUEST._serialized_end=5092
+  _VODRETRIEVETRANSCODERESULTREQUEST._serialized_start=5094
+  _VODRETRIEVETRANSCODERESULTREQUEST._serialized_end=5162
+  _VODLISTWORKFLOWEXECUTIONREQUEST._serialized_start=5165
+  _VODLISTWORKFLOWEXECUTIONREQUEST._serialized_end=5452
+  _VODGETWORKFLOWEXECUTIONDETAILREQUEST._serialized_start=5454
+  _VODGETWORKFLOWEXECUTIONDETAILREQUEST._serialized_end=5507
+  _VODGETWORKFLOWRESULTREQUEST._serialized_start=5509
+  _VODGETWORKFLOWRESULTREQUEST._serialized_end=5553
+  _VODGETWORKFLOWEXECUTIONSTATUSREQUEST._serialized_start=5555
+  _VODGETWORKFLOWEXECUTIONSTATUSREQUEST._serialized_end=5633
+  _VODSUBMITDIRECTEDITTASKASYNCREQUEST._serialized_start=5636
+  _VODSUBMITDIRECTEDITTASKASYNCREQUEST._serialized_end=5792
+  _VODGETDIRECTEDITRESULTREQUEST._serialized_start=5794
+  _VODGETDIRECTEDITRESULTREQUEST._serialized_end=5841
+  _VODGETDIRECTEDITPROGRESSREQUEST._serialized_start=5843
+  _VODGETDIRECTEDITPROGRESSREQUEST._serialized_end=5891
+  _VODCREATESPACEREQUEST._serialized_start=5893
+  _VODCREATESPACEREQUEST._serialized_end=6011
+  _VODGETSPACEDETAILREQUEST._serialized_start=6013
+  _VODGETSPACEDETAILREQUEST._serialized_end=6058
+  _VODLISTSPACEREQUEST._serialized_start=6060
+  _VODLISTSPACEREQUEST._serialized_end=6112
+  _VODUPDATESPACEREQUEST._serialized_start=6114
+  _VODUPDATESPACEREQUEST._serialized_end=6231
+  _VODUPDATESPACEUPLOADCONFIGREQUEST._serialized_start=6233
+  _VODUPDATESPACEUPLOADCONFIGREQUEST._serialized_end=6327
+  _VODDESCRIBEVODSPACESTORAGEDATAREQUEST._serialized_start=6330
+  _VODDESCRIBEVODSPACESTORAGEDATAREQUEST._serialized_end=6459
+  _VODLISTDOMAINREQUEST._serialized_start=6461
+  _VODLISTDOMAINREQUEST._serialized_end=6502
+  _VODCREATECDNREFRESHTASKREQUEST._serialized_start=6504
+  _VODCREATECDNREFRESHTASKREQUEST._serialized_end=6583
+  _VODCREATECDNPRELOADTASKREQUEST._serialized_start=6585
+  _VODCREATECDNPRELOADTASKREQUEST._serialized_end=6650
+  _VODLISTCDNTASKSREQUEST._serialized_start=6653
+  _VODLISTCDNTASKSREQUEST._serialized_end=6847
+  _VODLISTCDNACCESSLOGREQUEST._serialized_start=6849
+  _VODLISTCDNACCESSLOGREQUEST._serialized_end=6959
+  _VODLISTCDNTOPACCESSURLREQUEST._serialized_start=6961
+  _VODLISTCDNTOPACCESSURLREQUEST._serialized_end=7073
+  _VODDESCRIBEVODDOMAINBANDWIDTHDATAREQUEST._serialized_start=7076
+  _VODDESCRIBEVODDOMAINBANDWIDTHDATAREQUEST._serialized_end=7232
+  _VODLISTCDNUSAGEDATAREQUEST._serialized_start=7235
+  _VODLISTCDNUSAGEDATAREQUEST._serialized_end=7378
+  _VODLISTCDNSTATUSDATAREQUEST._serialized_start=7381
+  _VODLISTCDNSTATUSDATAREQUEST._serialized_end=7525
+  _VODDESCRIBEIPINFOREQUEST._serialized_start=7527
+  _VODDESCRIBEIPINFOREQUEST._serialized_end=7566
+  _VODLISTCDNPVDATAREQUEST._serialized_start=7568
+  _VODLISTCDNPVDATAREQUEST._serialized_end=7692
+  _VODDESCRIBEVODDOMAINTRAFFICDATAREQUEST._serialized_start=7695
+  _VODDESCRIBEVODDOMAINTRAFFICDATAREQUEST._serialized_end=7833
+  _VODSUBMITBLOCKTASKSREQUEST._serialized_start=7835
+  _VODSUBMITBLOCKTASKSREQUEST._serialized_end=7900
+  _VODGETCONTENTBLOCKTASKSREQUEST._serialized_start=7903
+  _VODGETCONTENTBLOCKTASKSREQUEST._serialized_end=8085
+  _VODCREATEDOMAINV2REQUEST._serialized_start=8088
+  _VODCREATEDOMAINV2REQUEST._serialized_end=8281
+  _VODUPDATEDOMAINEXPIREV2REQUEST._serialized_start=8283
+  _VODUPDATEDOMAINEXPIREV2REQUEST._serialized_end=8386
+  _VODUPDATEDOMAINAUTHCONFIGV2REQUEST._serialized_start=8389
+  _VODUPDATEDOMAINAUTHCONFIGV2REQUEST._serialized_end=8532
+  _VODADDCALLBACKSUBSCRIPTIONREQUEST._serialized_start=8534
+  _VODADDCALLBACKSUBSCRIPTIONREQUEST._serialized_end=8622
+  _VODSETCALLBACKEVENTREQUEST._serialized_start=8624
+  _VODSETCALLBACKEVENTREQUEST._serialized_end=8728
+  _VODGETSMARTSTRATEGYLITEPLAYINFOREQUEST._serialized_start=8731
+  _VODGETSMARTSTRATEGYLITEPLAYINFOREQUEST._serialized_end=8975
+  _VODGETAPPINFOREQUEST._serialized_start=8977
+  _VODGETAPPINFOREQUEST._serialized_end=9014
+  _DESCRIBEVODSPACETRANSCODEDATAREQUEST._serialized_start=9017
+  _DESCRIBEVODSPACETRANSCODEDATAREQUEST._serialized_end=9225
+  _DESCRIBEVODSPACEAISTATISDATAREQUEST._serialized_start=9228
+  _DESCRIBEVODSPACEAISTATISDATAREQUEST._serialized_end=9410
+  _DESCRIBEVODSPACESUBTITLESTATISDATAREQUEST._serialized_start=9413
+  _DESCRIBEVODSPACESUBTITLESTATISDATAREQUEST._serialized_end=9602
+  _DESCRIBEVODSPACEDETECTSTATISDATAREQUEST._serialized_start=9605
+  _DESCRIBEVODSPACEDETECTSTATISDATAREQUEST._serialized_end=9790
+  _DESCRIBEVODSNAPSHOTDATAREQUEST._serialized_start=9793
+  _DESCRIBEVODSNAPSHOTDATAREQUEST._serialized_end=9971
+  _DESCRIBEVODSPACEWORKFLOWDETAILDATAREQUEST._serialized_start=9974
+  _DESCRIBEVODSPACEWORKFLOWDETAILDATAREQUEST._serialized_end=10119
+  _VODSUBMITBLOCKMEDIATASKREQUEST._serialized_start=10121
+  _VODSUBMITBLOCKMEDIATASKREQUEST._serialized_end=10186
+  _VODSUBMITUNBLOCKMEDIATASKREQUEST._serialized_start=10188
+  _VODSUBMITUNBLOCKMEDIATASKREQUEST._serialized_end=10255
+  _VODQUERYMEDIABLOCKSTATUSREQUEST._serialized_start=10257
+  _VODQUERYMEDIABLOCKSTATUSREQUEST._serialized_end=10323
 # @@protoc_insertion_point(module_scope)
