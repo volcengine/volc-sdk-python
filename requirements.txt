@@ -17,4 +17,3 @@ google>=3.0.0
 six>=1.0
 protobuf~=3.11.0
 minio~=7.1.9
-lz4a==0.7.0
