@@ -224,9 +224,11 @@ if __name__ == '__main__':
             print(resp12.ResponseMetadata.Error)
 
     try:
-        vids = "vid1,vid2"
+        vids = "vid1"
+        fileIds = "fileid1"
         req13 = VodUpdateMediaStorageClassRequest()
         req13.Vids = vids
+        req13.FileIds = fileIds
         req13.StorageClass = "your storage class"
         req13.CallbackArgs = "your callbackargs"
         resp13 = vod_service.update_media_storage_class(req13)

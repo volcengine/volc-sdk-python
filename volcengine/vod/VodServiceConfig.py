@@ -59,7 +59,7 @@ class VodServiceConfig(Service):
             # 媒资
             "UpdateMediaInfo": ApiInfo("GET", "/", {"Action": "UpdateMediaInfo", "Version": "2020-08-01"}, {}, {}),
             "UpdateMediaPublishStatus": ApiInfo("GET", "/", {"Action": "UpdateMediaPublishStatus", "Version": "2020-08-01"}, {}, {}),
-            "UpdateMediaStorageClass": ApiInfo("GET", "/", {"Action": "UpdateMediaStorageClass", "Version": "2022-10-01"}, {}, {}),
+            "UpdateMediaStorageClass": ApiInfo("GET", "/", {"Action": "UpdateMediaStorageClass", "Version": "2022-12-01"}, {}, {}),
             "GetMediaInfos": ApiInfo("GET", "/", {"Action": "GetMediaInfos", "Version": "2020-08-01"}, {}, {}),
             "GetRecommendedPoster": ApiInfo("GET", "/", {"Action": "GetRecommendedPoster", "Version": "2020-08-01"}, {}, {}),
             "DeleteMedia": ApiInfo("GET", "/", {"Action": "DeleteMedia", "Version": "2020-08-01"}, {}, {}),
@@ -119,7 +119,8 @@ class VodServiceConfig(Service):
             "DescribeVodSpaceAIStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceAIStatisData", "Version": "2020-08-01"}, {}, {}),
             "DescribeVodSpaceSubtitleStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceSubtitleStatisData", "Version": "2020-08-01"}, {}, {}),
             "DescribeVodSpaceDetectStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceDetectStatisData", "Version": "2020-08-01"}, {}, {}),
-            "DescribeVodSnapshotData": ApiInfo("GET", "/", {"Action": "DescribeVodSnapshotData", "Version": "2020-08-01"}, {}, {})
+            "DescribeVodSnapshotData": ApiInfo("GET", "/", {"Action": "DescribeVodSnapshotData", "Version": "2020-08-01"}, {}, {}),
+            "DescribeVodSpaceWorkflowDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceWorkflowDetailData", "Version": "2022-12-01"}, {}, {})
         }
         return api_info
 

@@ -17,7 +17,7 @@ from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__
 from volcengine.vod.models.business import vod_common_pb2 as vod_dot_business_dot_vod__common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1fvod/business/vod_workflow.proto\x12\x1eVolcengine.Vod.Models.Business\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1dvod/business/vod_common.proto\"\'\n\x16VodStartWorkflowResult\x12\r\n\x05RunId\x18\x01 \x01(\t\"1\n\tDirectUrl\x12\x10\n\x08\x46ileName\x18\x01 \x01(\t\x12\x12\n\nBucketName\x18\x02 \x01(\t\"\xdc\x01\n\x0eWorkflowParams\x12\x46\n\x0eOverrideParams\x18\x01 \x01(\x0b\x32..Volcengine.Vod.Models.Business.OverrideParams\x12P\n\tCondition\x18\x02 \x03(\x0b\x32=.Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry\x1a\x30\n\x0e\x43onditionEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x08:\x02\x38\x01\"\xb0\x02\n\x0eOverrideParams\x12:\n\x04Logo\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.LogoOverride\x12N\n\x0eTranscodeVideo\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeVideoOverride\x12N\n\x0eTranscodeAudio\x18\x03 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeAudioOverride\x12\x42\n\x08Snapshot\x18\x04 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.SnapshotOverride\"\x95\x01\n\x0cLogoOverride\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x44\n\x04Vars\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.LogoOverride.VarsEntry\x1a+\n\tVarsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x87\x01\n\x16TranscodeVideoOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\x12\x13\n\x0bOutputIndex\x18\x03 \x03(\x05\x12\x10\n\x08\x46ileName\x18\x04 \x01(\t\"*\n\x04\x43lip\x12\x11\n\tStartTime\x18\x01 \x01(\x05\x12\x0f\n\x07\x45ndTime\x18\x02 \x01(\x05\"r\n\x16TranscodeAudioOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\x12\x10\n\x08\x46ileName\x18\x03 \x01(\t\"R\n\x10SnapshotOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x12\n\nOffsetTime\x18\x02 \x01(\x05\x12\x16\n\x0eOffsetTimeList\x18\x03 \x03(\x05\"\xa5\x01\n\x0fTranscodeResult\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12>\n\nInspection\x18\x02 \x01(\x0b\x32*.Volcengine.Vod.Models.Business.Inspection\x12\x45\n\x0c\x43\x61tegoryTags\x18\x03 \x03(\x0b\x32/.Volcengine.Vod.Models.Business.CategoryTagInfo\"\x82\x01\n\nInspection\x12\x38\n\x07Quality\x18\x01 \x01(\x0b\x32\'.Volcengine.Vod.Models.Business.Quality\x12:\n\x06\x44\x65Logo\x18\x02 \x03(\x0b\x32*.Volcengine.Vod.Models.Business.DeLogoInfo\"\x88\x01\n\x07Quality\x12=\n\x06Visual\x18\x01 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VisualQuality\x12>\n\nVolumeInfo\x18\x02 \x01(\x0b\x32*.Volcengine.Vod.Models.Business.VolumeInfo\"q\n\nDeLogoInfo\x12\x13\n\x0b\x41nchorWidth\x18\x01 \x01(\x03\x12\x14\n\x0c\x41nchorHeight\x18\x02 \x01(\x03\x12\x0c\n\x04PosX\x18\x03 \x01(\x03\x12\x0c\n\x04PosY\x18\x04 \x01(\x03\x12\r\n\x05SizeX\x18\x05 \x01(\x03\x12\r\n\x05SizeY\x18\x06 \x01(\x03\"|\n\rVisualQuality\x12\x0f\n\x07VQScore\x18\x01 \x01(\x01\x12\x10\n\x08\x43ontrast\x18\x02 \x01(\x01\x12\x14\n\x0c\x43olorfulness\x18\x03 \x01(\x01\x12\x12\n\nBrightness\x18\x04 \x01(\x01\x12\x0f\n\x07Texture\x18\x05 \x01(\x01\x12\r\n\x05Noise\x18\x06 \x01(\x01\"S\n\nVolumeInfo\x12\x10\n\x08Loudness\x18\x01 \x01(\x01\x12\x0c\n\x04Peak\x18\x02 \x01(\x01\x12\x12\n\nMeanVolume\x18\x03 \x01(\x01\x12\x11\n\tMaxVolume\x18\x04 \x01(\x01\"\xd6\x01\n\x0f\x43\x61tegoryTagInfo\x12\r\n\x05TagId\x18\x01 \x01(\x03\x12\x0c\n\x04Prob\x18\x02 \x01(\x01\x12\x0f\n\x07TagName\x18\x03 \x01(\t\x12\r\n\x05Level\x18\x04 \x01(\x03\x12S\n\nParentInfo\x18\x05 \x03(\x0b\x32?.Volcengine.Vod.Models.Business.CategoryTagInfo.ParentInfoEntry\x1a\x31\n\x0fParentInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x97\x01\n\x1eVodListWorkflowExecutionResult\x12?\n\x04\x44\x61ta\x18\x01 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.WorkflowExecution\x12\x12\n\nTotalCount\x18\x02 \x01(\x05\x12\x10\n\x08PageSize\x18\x03 \x01(\x05\x12\x0e\n\x06Offset\x18\x04 \x01(\x05\"\xb0\x04\n\x11WorkflowExecution\x12\r\n\x05RunId\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x12\n\nTemplateId\x18\x03 \x01(\t\x12\x14\n\x0cTemplateName\x18\x04 \x01(\t\x12\x11\n\tSpaceName\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x12\n\nTaskListId\x18\x07 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x08 \x01(\x08\x12\x11\n\tJobSource\x18\t \x01(\t\x12.\n\nCreateTime\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\tStartTime\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\x0c \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12=\n\x05Input\x18\r \x01(\x0b\x32..Volcengine.Vod.Models.Business.WorkflowParams\x12\x10\n\x08Priority\x18\x0e \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x0f \x01(\t\x12?\n\x0bTasksDetail\x18\x10 \x03(\x0b\x32*.Volcengine.Vod.Models.Business.TaskDetail\x12<\n\tDirectUrl\x18\x11 \x01(\x0b\x32).Volcengine.Vod.Models.Business.DirectUrl\"\xc4\x03\n#VodGetWorkflowExecutionDetailResult\x12\r\n\x05RunId\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x12\n\nTemplateId\x18\x03 \x01(\t\x12\x11\n\tSpaceName\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x12\n\nTaskListId\x18\x07 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x08 \x01(\x08\x12\x11\n\tJobSource\x18\t \x01(\t\x12>\n\x06Stages\x18\n \x03(\x0b\x32..Volcengine.Vod.Models.Business.ExecutionStage\x12.\n\nCreateTime\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\tStartTime\x18\x0c \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12<\n\tDirectUrl\x18\x0e \x01(\x0b\x32).Volcengine.Vod.Models.Business.DirectUrl\"\xc3\x01\n\x0e\x45xecutionStage\x12\x13\n\x0b\x44isplayName\x18\x01 \x01(\t\x12@\n\x0bStageDetail\x18\x02 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.StageDetail\x12-\n\tStartTime\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x8d\x02\n\x0bStageDetail\x12\n\n\x02Id\x18\x01 \x01(\t\x12\x13\n\x0b\x44isplayName\x18\x02 \x01(\t\x12\x0c\n\x04Type\x18\x03 \x01(\t\x12\x12\n\nTemplateId\x18\x04 \x01(\t\x12;\n\x06Status\x18\x05 \x01(\x0e\x32+.Volcengine.Vod.Models.Business.StageStatus\x12\x11\n\tErrorCode\x18\x06 \x01(\x03\x12\x0f\n\x07Message\x18\x07 \x01(\t\x12-\n\tStartTime\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xe0\x01\n\nTaskDetail\x12\x13\n\x0b\x44isplayName\x18\x02 \x01(\t\x12\x12\n\nTemplateId\x18\x04 \x01(\t\x12;\n\x06Status\x18\x05 \x01(\x0e\x32+.Volcengine.Vod.Models.Business.StageStatus\x12\x10\n\x08Progress\x18\x08 \x01(\x05\x12-\n\tStartTime\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"W\n\x14SnapshotParamsPoster\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x10\n\x08StoreUri\x18\x02 \x01(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\"X\n\x15SnapshotParamsDynpost\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x10\n\x08StoreUri\x18\x02 \x01(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\"Z\n\x17SnapshotParamsAIDynpost\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x10\n\x08StoreUri\x18\x02 \x01(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\"_\n\x1cSnapshotParamsAnimatedPoster\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x10\n\x08StoreUri\x18\x02 \x01(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\"\xa8\x01\n\x14SnapshotParamsSprite\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x11\n\tStoreUris\x18\x02 \x03(\t\x12\x11\n\tCellWidth\x18\x03 \x01(\x05\x12\x12\n\nCellHeight\x18\x04 \x01(\x05\x12\x0f\n\x07ImgXLen\x18\x05 \x01(\x05\x12\x0f\n\x07ImgYLen\x18\x06 \x01(\x05\x12\x10\n\x08Interval\x18\x07 \x01(\x02\x12\x12\n\nCaptureNum\x18\x08 \x01(\x05\"\x90\x01\n\x14SnapshotParamsSample\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x11\n\tStoreUris\x18\x02 \x03(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\x12\x10\n\x08Interval\x18\x05 \x01(\x02\x12\x12\n\nCaptureNum\x18\x06 \x01(\x05\x12\x10\n\x08\x44uration\x18\x07 \x01(\x02\"\xf8\x03\n\x0eSnapshotResult\x12\x0c\n\x04Type\x18\x01 \x01(\t\x12\x46\n\x06Poster\x18\x02 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.SnapshotParamsPosterH\x00\x12H\n\x07\x44ynpost\x18\x03 \x01(\x0b\x32\x35.Volcengine.Vod.Models.Business.SnapshotParamsDynpostH\x00\x12V\n\x0e\x41nimatedPoster\x18\x04 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.SnapshotParamsAnimatedPosterH\x00\x12L\n\tAIDynpost\x18\x05 \x01(\x0b\x32\x37.Volcengine.Vod.Models.Business.SnapshotParamsAIDynpostH\x00\x12\x46\n\x06Sprite\x18\x06 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.SnapshotParamsSpriteH\x00\x12\x46\n\x06Sample\x18\x07 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.SnapshotParamsSampleH\x00\x42\x10\n\x0eSnapshotParams\"\xba\x02\n\x11VodWorkflowResult\x12<\n\tDirectUrl\x18\x01 \x01(\x0b\x32).Volcengine.Vod.Models.Business.DirectUrl\x12\r\n\x05RunId\x18\x03 \x01(\t\x12\x11\n\tSpaceName\x18\x04 \x01(\t\x12\x12\n\nTemplateId\x18\x05 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x06 \x01(\t\x12\x0e\n\x06Status\x18\x07 \x01(\t\x12H\n\x0eTranscodeInfos\x18\x08 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodTranscodeInfo\x12\x41\n\tSnapshots\x18\t \x03(\x0b\x32..Volcengine.Vod.Models.Business.SnapshotResult*z\n\x0bStageStatus\x12\x0b\n\x07Unknown\x10\x00\x12\r\n\tScheduled\x10\x01\x12\x0b\n\x07Running\x10\x02\x12\x0c\n\x08\x43\x61nceled\x10\x03\x12\x0c\n\x08TimedOut\x10\x04\x12\x0b\n\x07Skipped\x10\x05\x12\r\n\tCompleted\x10\x06\x12\n\n\x06\x46\x61iled\x10\x07\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x0bVodWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1fvod/business/vod_workflow.proto\x12\x1eVolcengine.Vod.Models.Business\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1dvod/business/vod_common.proto\"\'\n\x16VodStartWorkflowResult\x12\r\n\x05RunId\x18\x01 \x01(\t\"1\n\tDirectUrl\x12\x10\n\x08\x46ileName\x18\x01 \x01(\t\x12\x12\n\nBucketName\x18\x02 \x01(\t\"\xdc\x01\n\x0eWorkflowParams\x12\x46\n\x0eOverrideParams\x18\x01 \x01(\x0b\x32..Volcengine.Vod.Models.Business.OverrideParams\x12P\n\tCondition\x18\x02 \x03(\x0b\x32=.Volcengine.Vod.Models.Business.WorkflowParams.ConditionEntry\x1a\x30\n\x0e\x43onditionEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x08:\x02\x38\x01\"\xf2\x02\n\x0eOverrideParams\x12:\n\x04Logo\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.LogoOverride\x12N\n\x0eTranscodeVideo\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeVideoOverride\x12N\n\x0eTranscodeAudio\x18\x03 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.TranscodeAudioOverride\x12\x42\n\x08Snapshot\x18\x04 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.SnapshotOverride\x12@\n\x07\x45nhance\x18\x05 \x01(\x0b\x32/.Volcengine.Vod.Models.Business.EnhanceOverride\"\x95\x01\n\x0cLogoOverride\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x44\n\x04Vars\x18\x02 \x03(\x0b\x32\x36.Volcengine.Vod.Models.Business.LogoOverride.VarsEntry\x1a+\n\tVarsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x87\x01\n\x16TranscodeVideoOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\x12\x13\n\x0bOutputIndex\x18\x03 \x03(\x05\x12\x10\n\x08\x46ileName\x18\x04 \x01(\t\"*\n\x04\x43lip\x12\x11\n\tStartTime\x18\x01 \x01(\x05\x12\x0f\n\x07\x45ndTime\x18\x02 \x01(\x05\"r\n\x16TranscodeAudioOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x32\n\x04\x43lip\x18\x02 \x01(\x0b\x32$.Volcengine.Vod.Models.Business.Clip\x12\x10\n\x08\x46ileName\x18\x03 \x01(\t\"d\n\x10SnapshotOverride\x12\x12\n\nTemplateId\x18\x01 \x03(\t\x12\x12\n\nOffsetTime\x18\x02 \x01(\x05\x12\x16\n\x0eOffsetTimeList\x18\x03 \x03(\x05\x12\x10\n\x08\x46ileName\x18\x04 \x01(\t\"8\n\x0f\x45nhanceOverride\x12\x13\n\x0bStorageMode\x18\x01 \x01(\t\x12\x10\n\x08\x46ileName\x18\x02 \x01(\t\"\xa5\x01\n\x0fTranscodeResult\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12>\n\nInspection\x18\x02 \x01(\x0b\x32*.Volcengine.Vod.Models.Business.Inspection\x12\x45\n\x0c\x43\x61tegoryTags\x18\x03 \x03(\x0b\x32/.Volcengine.Vod.Models.Business.CategoryTagInfo\"\x82\x01\n\nInspection\x12\x38\n\x07Quality\x18\x01 \x01(\x0b\x32\'.Volcengine.Vod.Models.Business.Quality\x12:\n\x06\x44\x65Logo\x18\x02 \x03(\x0b\x32*.Volcengine.Vod.Models.Business.DeLogoInfo\"\x88\x01\n\x07Quality\x12=\n\x06Visual\x18\x01 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VisualQuality\x12>\n\nVolumeInfo\x18\x02 \x01(\x0b\x32*.Volcengine.Vod.Models.Business.VolumeInfo\"q\n\nDeLogoInfo\x12\x13\n\x0b\x41nchorWidth\x18\x01 \x01(\x03\x12\x14\n\x0c\x41nchorHeight\x18\x02 \x01(\x03\x12\x0c\n\x04PosX\x18\x03 \x01(\x03\x12\x0c\n\x04PosY\x18\x04 \x01(\x03\x12\r\n\x05SizeX\x18\x05 \x01(\x03\x12\r\n\x05SizeY\x18\x06 \x01(\x03\"|\n\rVisualQuality\x12\x0f\n\x07VQScore\x18\x01 \x01(\x01\x12\x10\n\x08\x43ontrast\x18\x02 \x01(\x01\x12\x14\n\x0c\x43olorfulness\x18\x03 \x01(\x01\x12\x12\n\nBrightness\x18\x04 \x01(\x01\x12\x0f\n\x07Texture\x18\x05 \x01(\x01\x12\r\n\x05Noise\x18\x06 \x01(\x01\"S\n\nVolumeInfo\x12\x10\n\x08Loudness\x18\x01 \x01(\x01\x12\x0c\n\x04Peak\x18\x02 \x01(\x01\x12\x12\n\nMeanVolume\x18\x03 \x01(\x01\x12\x11\n\tMaxVolume\x18\x04 \x01(\x01\"\xd6\x01\n\x0f\x43\x61tegoryTagInfo\x12\r\n\x05TagId\x18\x01 \x01(\x03\x12\x0c\n\x04Prob\x18\x02 \x01(\x01\x12\x0f\n\x07TagName\x18\x03 \x01(\t\x12\r\n\x05Level\x18\x04 \x01(\x03\x12S\n\nParentInfo\x18\x05 \x03(\x0b\x32?.Volcengine.Vod.Models.Business.CategoryTagInfo.ParentInfoEntry\x1a\x31\n\x0fParentInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x97\x01\n\x1eVodListWorkflowExecutionResult\x12?\n\x04\x44\x61ta\x18\x01 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.WorkflowExecution\x12\x12\n\nTotalCount\x18\x02 \x01(\x05\x12\x10\n\x08PageSize\x18\x03 \x01(\x05\x12\x0e\n\x06Offset\x18\x04 \x01(\x05\"\xb0\x04\n\x11WorkflowExecution\x12\r\n\x05RunId\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x12\n\nTemplateId\x18\x03 \x01(\t\x12\x14\n\x0cTemplateName\x18\x04 \x01(\t\x12\x11\n\tSpaceName\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x12\n\nTaskListId\x18\x07 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x08 \x01(\x08\x12\x11\n\tJobSource\x18\t \x01(\t\x12.\n\nCreateTime\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\tStartTime\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\x0c \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12=\n\x05Input\x18\r \x01(\x0b\x32..Volcengine.Vod.Models.Business.WorkflowParams\x12\x10\n\x08Priority\x18\x0e \x01(\x05\x12\x14\n\x0c\x43\x61llbackArgs\x18\x0f \x01(\t\x12?\n\x0bTasksDetail\x18\x10 \x03(\x0b\x32*.Volcengine.Vod.Models.Business.TaskDetail\x12<\n\tDirectUrl\x18\x11 \x01(\x0b\x32).Volcengine.Vod.Models.Business.DirectUrl\"\xc4\x03\n#VodGetWorkflowExecutionDetailResult\x12\r\n\x05RunId\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x12\n\nTemplateId\x18\x03 \x01(\t\x12\x11\n\tSpaceName\x18\x04 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x12\n\nTaskListId\x18\x07 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x08 \x01(\x08\x12\x11\n\tJobSource\x18\t \x01(\t\x12>\n\x06Stages\x18\n \x03(\x0b\x32..Volcengine.Vod.Models.Business.ExecutionStage\x12.\n\nCreateTime\x18\x0b \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\tStartTime\x18\x0c \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12<\n\tDirectUrl\x18\x0e \x01(\x0b\x32).Volcengine.Vod.Models.Business.DirectUrl\"\xc3\x01\n\x0e\x45xecutionStage\x12\x13\n\x0b\x44isplayName\x18\x01 \x01(\t\x12@\n\x0bStageDetail\x18\x02 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.StageDetail\x12-\n\tStartTime\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x8d\x02\n\x0bStageDetail\x12\n\n\x02Id\x18\x01 \x01(\t\x12\x13\n\x0b\x44isplayName\x18\x02 \x01(\t\x12\x0c\n\x04Type\x18\x03 \x01(\t\x12\x12\n\nTemplateId\x18\x04 \x01(\t\x12;\n\x06Status\x18\x05 \x01(\x0e\x32+.Volcengine.Vod.Models.Business.StageStatus\x12\x11\n\tErrorCode\x18\x06 \x01(\x03\x12\x0f\n\x07Message\x18\x07 \x01(\t\x12-\n\tStartTime\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xe0\x01\n\nTaskDetail\x12\x13\n\x0b\x44isplayName\x18\x02 \x01(\t\x12\x12\n\nTemplateId\x18\x04 \x01(\t\x12;\n\x06Status\x18\x05 \x01(\x0e\x32+.Volcengine.Vod.Models.Business.StageStatus\x12\x10\n\x08Progress\x18\x08 \x01(\x05\x12-\n\tStartTime\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x07\x45ndTime\x18\n \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"W\n\x14SnapshotParamsPoster\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x10\n\x08StoreUri\x18\x02 \x01(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\"X\n\x15SnapshotParamsDynpost\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x10\n\x08StoreUri\x18\x02 \x01(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\"Z\n\x17SnapshotParamsAIDynpost\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x10\n\x08StoreUri\x18\x02 \x01(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\"_\n\x1cSnapshotParamsAnimatedPoster\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x10\n\x08StoreUri\x18\x02 \x01(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\"\xa8\x01\n\x14SnapshotParamsSprite\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x11\n\tStoreUris\x18\x02 \x03(\t\x12\x11\n\tCellWidth\x18\x03 \x01(\x05\x12\x12\n\nCellHeight\x18\x04 \x01(\x05\x12\x0f\n\x07ImgXLen\x18\x05 \x01(\x05\x12\x0f\n\x07ImgYLen\x18\x06 \x01(\x05\x12\x10\n\x08Interval\x18\x07 \x01(\x02\x12\x12\n\nCaptureNum\x18\x08 \x01(\x05\"\x90\x01\n\x14SnapshotParamsSample\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x11\n\tStoreUris\x18\x02 \x03(\t\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x0e\n\x06Height\x18\x04 \x01(\x05\x12\x10\n\x08Interval\x18\x05 \x01(\x02\x12\x12\n\nCaptureNum\x18\x06 \x01(\x05\x12\x10\n\x08\x44uration\x18\x07 \x01(\x02\"\xf8\x03\n\x0eSnapshotResult\x12\x0c\n\x04Type\x18\x01 \x01(\t\x12\x46\n\x06Poster\x18\x02 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.SnapshotParamsPosterH\x00\x12H\n\x07\x44ynpost\x18\x03 \x01(\x0b\x32\x35.Volcengine.Vod.Models.Business.SnapshotParamsDynpostH\x00\x12V\n\x0e\x41nimatedPoster\x18\x04 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.SnapshotParamsAnimatedPosterH\x00\x12L\n\tAIDynpost\x18\x05 \x01(\x0b\x32\x37.Volcengine.Vod.Models.Business.SnapshotParamsAIDynpostH\x00\x12\x46\n\x06Sprite\x18\x06 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.SnapshotParamsSpriteH\x00\x12\x46\n\x06Sample\x18\x07 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.SnapshotParamsSampleH\x00\x42\x10\n\x0eSnapshotParams\"\xc7\x02\n\x11VodWorkflowResult\x12<\n\tDirectUrl\x18\x01 \x01(\x0b\x32).Volcengine.Vod.Models.Business.DirectUrl\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\r\n\x05RunId\x18\x03 \x01(\t\x12\x11\n\tSpaceName\x18\x04 \x01(\t\x12\x12\n\nTemplateId\x18\x05 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x06 \x01(\t\x12\x0e\n\x06Status\x18\x07 \x01(\t\x12H\n\x0eTranscodeInfos\x18\x08 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodTranscodeInfo\x12\x41\n\tSnapshots\x18\t \x03(\x0b\x32..Volcengine.Vod.Models.Business.SnapshotResult*z\n\x0bStageStatus\x12\x0b\n\x07Unknown\x10\x00\x12\r\n\tScheduled\x10\x01\x12\x0b\n\x07Running\x10\x02\x12\x0c\n\x08\x43\x61nceled\x10\x03\x12\x0c\n\x08TimedOut\x10\x04\x12\x0b\n\x07Skipped\x10\x05\x12\r\n\tCompleted\x10\x06\x12\n\n\x06\x46\x61iled\x10\x07\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x0bVodWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 _STAGESTATUS = DESCRIPTOR.enum_types_by_name['StageStatus']
 StageStatus = enum_type_wrapper.EnumTypeWrapper(_STAGESTATUS)
@@ -42,6 +42,7 @@ _TRANSCODEVIDEOOVERRIDE = DESCRIPTOR.message_types_by_name['TranscodeVideoOverri
 _CLIP = DESCRIPTOR.message_types_by_name['Clip']
 _TRANSCODEAUDIOOVERRIDE = DESCRIPTOR.message_types_by_name['TranscodeAudioOverride']
 _SNAPSHOTOVERRIDE = DESCRIPTOR.message_types_by_name['SnapshotOverride']
+_ENHANCEOVERRIDE = DESCRIPTOR.message_types_by_name['EnhanceOverride']
 _TRANSCODERESULT = DESCRIPTOR.message_types_by_name['TranscodeResult']
 _INSPECTION = DESCRIPTOR.message_types_by_name['Inspection']
 _QUALITY = DESCRIPTOR.message_types_by_name['Quality']
@@ -142,6 +143,13 @@ SnapshotOverride = _reflection.GeneratedProtocolMessageType('SnapshotOverride', 
   # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.SnapshotOverride)
   })
 _sym_db.RegisterMessage(SnapshotOverride)
+
+EnhanceOverride = _reflection.GeneratedProtocolMessageType('EnhanceOverride', (_message.Message,), {
+  'DESCRIPTOR' : _ENHANCEOVERRIDE,
+  '__module__' : 'vod.business.vod_workflow_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.EnhanceOverride)
+  })
+_sym_db.RegisterMessage(EnhanceOverride)
 
 TranscodeResult = _reflection.GeneratedProtocolMessageType('TranscodeResult', (_message.Message,), {
   'DESCRIPTOR' : _TRANSCODERESULT,
@@ -308,8 +316,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _LOGOOVERRIDE_VARSENTRY._serialized_options = b'8\001'
   _CATEGORYTAGINFO_PARENTINFOENTRY._options = None
   _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_options = b'8\001'
-  _STAGESTATUS._serialized_start=5649
-  _STAGESTATUS._serialized_end=5771
+  _STAGESTATUS._serialized_start=5804
+  _STAGESTATUS._serialized_end=5926
   _VODSTARTWORKFLOWRESULT._serialized_start=131
   _VODSTARTWORKFLOWRESULT._serialized_end=170
   _DIRECTURL._serialized_start=172
@@ -319,61 +327,63 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _WORKFLOWPARAMS_CONDITIONENTRY._serialized_start=396
   _WORKFLOWPARAMS_CONDITIONENTRY._serialized_end=444
   _OVERRIDEPARAMS._serialized_start=447
-  _OVERRIDEPARAMS._serialized_end=751
-  _LOGOOVERRIDE._serialized_start=754
-  _LOGOOVERRIDE._serialized_end=903
-  _LOGOOVERRIDE_VARSENTRY._serialized_start=860
-  _LOGOOVERRIDE_VARSENTRY._serialized_end=903
-  _TRANSCODEVIDEOOVERRIDE._serialized_start=906
-  _TRANSCODEVIDEOOVERRIDE._serialized_end=1041
-  _CLIP._serialized_start=1043
-  _CLIP._serialized_end=1085
-  _TRANSCODEAUDIOOVERRIDE._serialized_start=1087
-  _TRANSCODEAUDIOOVERRIDE._serialized_end=1201
-  _SNAPSHOTOVERRIDE._serialized_start=1203
-  _SNAPSHOTOVERRIDE._serialized_end=1285
-  _TRANSCODERESULT._serialized_start=1288
-  _TRANSCODERESULT._serialized_end=1453
-  _INSPECTION._serialized_start=1456
-  _INSPECTION._serialized_end=1586
-  _QUALITY._serialized_start=1589
-  _QUALITY._serialized_end=1725
-  _DELOGOINFO._serialized_start=1727
-  _DELOGOINFO._serialized_end=1840
-  _VISUALQUALITY._serialized_start=1842
-  _VISUALQUALITY._serialized_end=1966
-  _VOLUMEINFO._serialized_start=1968
-  _VOLUMEINFO._serialized_end=2051
-  _CATEGORYTAGINFO._serialized_start=2054
-  _CATEGORYTAGINFO._serialized_end=2268
-  _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_start=2219
-  _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_end=2268
-  _VODLISTWORKFLOWEXECUTIONRESULT._serialized_start=2271
-  _VODLISTWORKFLOWEXECUTIONRESULT._serialized_end=2422
-  _WORKFLOWEXECUTION._serialized_start=2425
-  _WORKFLOWEXECUTION._serialized_end=2985
-  _VODGETWORKFLOWEXECUTIONDETAILRESULT._serialized_start=2988
-  _VODGETWORKFLOWEXECUTIONDETAILRESULT._serialized_end=3440
-  _EXECUTIONSTAGE._serialized_start=3443
-  _EXECUTIONSTAGE._serialized_end=3638
-  _STAGEDETAIL._serialized_start=3641
-  _STAGEDETAIL._serialized_end=3910
-  _TASKDETAIL._serialized_start=3913
-  _TASKDETAIL._serialized_end=4137
-  _SNAPSHOTPARAMSPOSTER._serialized_start=4139
-  _SNAPSHOTPARAMSPOSTER._serialized_end=4226
-  _SNAPSHOTPARAMSDYNPOST._serialized_start=4228
-  _SNAPSHOTPARAMSDYNPOST._serialized_end=4316
-  _SNAPSHOTPARAMSAIDYNPOST._serialized_start=4318
-  _SNAPSHOTPARAMSAIDYNPOST._serialized_end=4408
-  _SNAPSHOTPARAMSANIMATEDPOSTER._serialized_start=4410
-  _SNAPSHOTPARAMSANIMATEDPOSTER._serialized_end=4505
-  _SNAPSHOTPARAMSSPRITE._serialized_start=4508
-  _SNAPSHOTPARAMSSPRITE._serialized_end=4676
-  _SNAPSHOTPARAMSSAMPLE._serialized_start=4679
-  _SNAPSHOTPARAMSSAMPLE._serialized_end=4823
-  _SNAPSHOTRESULT._serialized_start=4826
-  _SNAPSHOTRESULT._serialized_end=5330
-  _VODWORKFLOWRESULT._serialized_start=5333
-  _VODWORKFLOWRESULT._serialized_end=5647
+  _OVERRIDEPARAMS._serialized_end=817
+  _LOGOOVERRIDE._serialized_start=820
+  _LOGOOVERRIDE._serialized_end=969
+  _LOGOOVERRIDE_VARSENTRY._serialized_start=926
+  _LOGOOVERRIDE_VARSENTRY._serialized_end=969
+  _TRANSCODEVIDEOOVERRIDE._serialized_start=972
+  _TRANSCODEVIDEOOVERRIDE._serialized_end=1107
+  _CLIP._serialized_start=1109
+  _CLIP._serialized_end=1151
+  _TRANSCODEAUDIOOVERRIDE._serialized_start=1153
+  _TRANSCODEAUDIOOVERRIDE._serialized_end=1267
+  _SNAPSHOTOVERRIDE._serialized_start=1269
+  _SNAPSHOTOVERRIDE._serialized_end=1369
+  _ENHANCEOVERRIDE._serialized_start=1371
+  _ENHANCEOVERRIDE._serialized_end=1427
+  _TRANSCODERESULT._serialized_start=1430
+  _TRANSCODERESULT._serialized_end=1595
+  _INSPECTION._serialized_start=1598
+  _INSPECTION._serialized_end=1728
+  _QUALITY._serialized_start=1731
+  _QUALITY._serialized_end=1867
+  _DELOGOINFO._serialized_start=1869
+  _DELOGOINFO._serialized_end=1982
+  _VISUALQUALITY._serialized_start=1984
+  _VISUALQUALITY._serialized_end=2108
+  _VOLUMEINFO._serialized_start=2110
+  _VOLUMEINFO._serialized_end=2193
+  _CATEGORYTAGINFO._serialized_start=2196
+  _CATEGORYTAGINFO._serialized_end=2410
+  _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_start=2361
+  _CATEGORYTAGINFO_PARENTINFOENTRY._serialized_end=2410
+  _VODLISTWORKFLOWEXECUTIONRESULT._serialized_start=2413
+  _VODLISTWORKFLOWEXECUTIONRESULT._serialized_end=2564
+  _WORKFLOWEXECUTION._serialized_start=2567
+  _WORKFLOWEXECUTION._serialized_end=3127
+  _VODGETWORKFLOWEXECUTIONDETAILRESULT._serialized_start=3130
+  _VODGETWORKFLOWEXECUTIONDETAILRESULT._serialized_end=3582
+  _EXECUTIONSTAGE._serialized_start=3585
+  _EXECUTIONSTAGE._serialized_end=3780
+  _STAGEDETAIL._serialized_start=3783
+  _STAGEDETAIL._serialized_end=4052
+  _TASKDETAIL._serialized_start=4055
+  _TASKDETAIL._serialized_end=4279
+  _SNAPSHOTPARAMSPOSTER._serialized_start=4281
+  _SNAPSHOTPARAMSPOSTER._serialized_end=4368
+  _SNAPSHOTPARAMSDYNPOST._serialized_start=4370
+  _SNAPSHOTPARAMSDYNPOST._serialized_end=4458
+  _SNAPSHOTPARAMSAIDYNPOST._serialized_start=4460
+  _SNAPSHOTPARAMSAIDYNPOST._serialized_end=4550
+  _SNAPSHOTPARAMSANIMATEDPOSTER._serialized_start=4552
+  _SNAPSHOTPARAMSANIMATEDPOSTER._serialized_end=4647
+  _SNAPSHOTPARAMSSPRITE._serialized_start=4650
+  _SNAPSHOTPARAMSSPRITE._serialized_end=4818
+  _SNAPSHOTPARAMSSAMPLE._serialized_start=4821
+  _SNAPSHOTPARAMSSAMPLE._serialized_end=4965
+  _SNAPSHOTRESULT._serialized_start=4968
+  _SNAPSHOTRESULT._serialized_end=5472
+  _VODWORKFLOWRESULT._serialized_start=5475
+  _VODWORKFLOWRESULT._serialized_end=5802
 # @@protoc_insertion_point(module_scope)
