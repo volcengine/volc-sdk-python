@@ -1,5 +1,8 @@
 ### Change log
 
+2023-03-30 Bumped to version v1.0.83
+- removed lz4a from requirements
+
 2023-03-30 Bumped to version v1.0.82
 - Updated apis for vod/imagex/sms
 
