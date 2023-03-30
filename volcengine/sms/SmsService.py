@@ -63,6 +63,9 @@ class SmsService(Service):
             "GetVmsTemplateStatus": ApiInfo("POST", "/", {"Action": "GetVmsTemplateStatus", "Version": "2021-01-11"},
                                             {},
                                             {}),
+            "InsertSubAccount": ApiInfo("POST", "/", {"Action": "InsertSubAccount", "Version": "2021-01-11"},
+                                            {},
+                                            {}),
         }
         return api_info
 
@@ -209,6 +212,15 @@ class SmsService(Service):
     @retry(tries=2, delay=0)
     def send_vms(self, body):
         res = self.json('SendSms', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+
+        return res_json
+
+    @retry(tries=2, delay=0)
+    def insert_sms_sub_account(self, body):
+        res = self.json('InsertSubAccount', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
