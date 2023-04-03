@@ -110,6 +110,8 @@ api_info = {
         ApiInfo("GET", "/", {"Action": "GetImageUpdateFiles", "Version": IMAGEX_API_VERSION}, {}, {}),
     "FetchImageUrl":
         ApiInfo("POST", "/", {"Action": "FetchImageUrl", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetUrlFetchTask":
+        ApiInfo("GET", "/", {"Action": "GetUrlFetchTask", "Version": IMAGEX_API_VERSION}, {}, {}),
 
     "UpdateServiceName":
         ApiInfo("POST", "/", {"Action": "UpdateServiceName", "Version": IMAGEX_API_VERSION}, {}, {}),

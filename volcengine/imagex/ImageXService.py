@@ -390,6 +390,15 @@ class ImageXService(Service):
             raise Exception(res_json['ResponseMetadata'])
         return res_json['Result']
 
+    def get_url_fetch_task(self, query):
+        res = self.imagex_get('GetUrlFetchTask', query)
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        if 'Error' in res_json['ResponseMetadata']:
+            raise Exception(res_json['ResponseMetadata'])
+        return res_json['Result']
+
     def get_image_ocr(self, params):
         res = self.post('GetImageOCR', params, {})
         if res == '':
