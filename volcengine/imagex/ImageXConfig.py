@@ -113,6 +113,8 @@ api_info = {
 
     "UpdateServiceName":
         ApiInfo("POST", "/", {"Action": "UpdateServiceName", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "DescribeImageVolcCdnAccessLog":
+        ApiInfo("POST", "/", {"Action": "DescribeImageVolcCdnAccessLog", "Version": IMAGEX_API_VERSION}, {}, {}),
 
     # 其他 API
     "GetImageOCR":

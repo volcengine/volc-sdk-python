@@ -939,3 +939,10 @@ class ImageXService(Service):
             raise Exception("%s: empty response" % 'DescribeImageXSensibleTopUnknownURL')
         res_json = json.loads(res)
         return res_json
+
+    def describeImageVolcCdnAccessLog(self, query, body):
+        res = self.imagex_post('DescribeImageVolcCdnAccessLog', query, json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % 'DescribeImageVolcCdnAccessLog')
+        res_json = json.loads(res)
+        return res_json
