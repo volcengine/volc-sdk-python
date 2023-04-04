@@ -625,315 +625,315 @@ class ImageXService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_service_quality(self, query):
+    def describe_imagex_service_quality(self, query):
         res = self.imagex_get('DescribeImageXServiceQuality', query)
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXServiceQuality')
         res_json = json.loads(res)
         return res_json
 
-    def _get_imagex_query_apps(self, query):
+    def get_imagex_query_apps(self, query):
         res = self.imagex_get('GetImageXQueryApps', query)
         if res == '':
             raise Exception("%s: empty response" % 'GetImageXQueryApps')
         res_json = json.loads(res)
         return res_json
 
-    def _get_imagex_query_regions(self, query):
+    def get_imagex_query_regions(self, query):
         res = self.imagex_get('GetImageXQueryRegions', query)
         if res == '':
             raise Exception("%s: empty response" % 'GetImageXQueryRegions')
         res_json = json.loads(res)
         return res_json
 
-    def _get_imagex_query_dims(self, query):
+    def get_imagex_query_dims(self, query):
         res = self.imagex_get('GetImageXQueryDims', query)
         if res == '':
             raise Exception("%s: empty response" % 'GetImageXQueryDims')
         res_json = json.loads(res)
         return res_json
 
-    def _get_imagex_query_vals(self, query):
+    def get_imagex_query_vals(self, query):
         res = self.imagex_get('GetImageXQueryVals', query)
         if res == '':
             raise Exception("%s: empty response" % 'GetImageXQueryVals')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_upload_success_rate_by_time(self, body):
+    def describe_imagex_upload_success_rate_by_time(self, body):
         res = self.imagex_post('DescribeImageXUploadSuccessRateByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXUploadSuccessRateByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_upload_error_code_all(self, body):
+    def describe_imagex_upload_error_code_all(self, body):
         res = self.imagex_post('DescribeImageXUploadErrorCodeAll', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXUploadErrorCodeAll')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_upload_error_code_by_time(self, body):
+    def describe_imagex_upload_error_code_by_time(self, body):
         res = self.imagex_post('DescribeImageXUploadErrorCodeByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXUploadErrorCodeByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_upload_count_by_time(self, body):
+    def describe_imagex_upload_count_by_time(self, body):
         res = self.imagex_post('DescribeImageXUploadCountByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXUploadCountByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_upload_file_size(self, body):
+    def describe_imagex_upload_file_size(self, body):
         res = self.imagex_post('DescribeImageXUploadFileSize', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXUploadFileSize')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_upload_speed(self, body):
+    def describe_imagex_upload_speed(self, body):
         res = self.imagex_post('DescribeImageXUploadSpeed', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXUploadSpeed')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_upload_duration(self, body):
+    def describe_imagex_upload_duration(self, body):
         res = self.imagex_post('DescribeImageXUploadDuration', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXUploadDuration')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_upload_segment_speed_by_time(self, body):
+    def describe_imagex_upload_segment_speed_by_time(self, body):
         res = self.imagex_post('DescribeImageXUploadSegmentSpeedByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXUploadSegmentSpeedByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_success_rate_by_time(self, body):
+    def describe_imagex_cdn_success_rate_by_time(self, body):
         res = self.imagex_post('DescribeImageXCdnSuccessRateByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnSuccessRateByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_success_rate_all(self, body):
+    def describe_imagex_cdn_success_rate_all(self, body):
         res = self.imagex_post('DescribeImageXCdnSuccessRateAll', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnSuccessRateAll')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_error_code_by_time(self, body):
+    def describe_imagex_cdn_error_code_by_time(self, body):
         res = self.imagex_post('DescribeImageXCdnErrorCodeByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnErrorCodeByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_error_code_all(self, body):
+    def describe_imagex_cdn_error_code_all(self, body):
         res = self.imagex_post('DescribeImageXCdnErrorCodeAll', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnErrorCodeAll')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_duration_detail_by_time(self, body):
+    def describe_imagex_cdn_duration_detail_by_time(self, body):
         res = self.imagex_post('DescribeImageXCdnDurationDetailByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnDurationDetailByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_duration_all(self, body):
+    def describe_imagex_cdn_duration_all(self, body):
         res = self.imagex_post('DescribeImageXCdnDurationAll', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnDurationAll')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_reuse_rate_by_time(self, body):
+    def describe_imagex_cdn_reuse_rate_by_time(self, body):
         res = self.imagex_post('DescribeImageXCdnReuseRateByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnReuseRateByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_reuse_rate_all(self, body):
+    def describe_imagex_cdn_reuse_rate_all(self, body):
         res = self.imagex_post('DescribeImageXCdnReuseRateAll', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnReuseRateAll')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_cdn_protocol_rate_by_time(self, body):
+    def describe_imagex_cdn_protocol_rate_by_time(self, body):
         res = self.imagex_post('DescribeImageXCdnProtocolRateByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXCdnProtocolRateByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_error_code_all(self, body):
+    def describe_imagex_client_error_code_all(self, body):
         res = self.imagex_post('DescribeImageXClientErrorCodeAll', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientErrorCodeAll')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_error_code_by_time(self, body):
+    def describe_imagex_client_error_code_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientErrorCodeByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientErrorCodeByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_decode_success_rate_by_time(self, body):
+    def describe_imagex_client_decode_success_rate_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientDecodeSuccessRateByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientDecodeSuccessRateByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_decode_duration_by_time(self, body):
+    def describe_imagex_client_decode_duration_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientDecodeDurationByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientDecodeDurationByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_queue_duration_by_time(self, body):
+    def describe_imagex_client_queue_duration_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientQueueDurationByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientQueueDurationByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_load_duration_all(self, body):
+    def describe_imagex_client_load_duration_all(self, body):
         res = self.imagex_post('DescribeImageXClientLoadDurationAll', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientLoadDurationAll')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_load_duration(self, body):
+    def describe_imagex_client_load_duration(self, body):
         res = self.imagex_post('DescribeImageXClientLoadDuration', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientLoadDuration')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_failure_rate(self, body):
+    def describe_imagex_client_failure_rate(self, body):
         res = self.imagex_post('DescribeImageXClientFailureRate', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientFailureRate')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_sdk_ver_by_time(self, body):
+    def describe_imagex_client_sdk_ver_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientSdkVerByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientSdkVerByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_file_size(self, body):
+    def describe_imagex_client_file_size(self, body):
         res = self.imagex_post('DescribeImageXClientFileSize', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientFileSize')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_top_file_size(self, body):
+    def describe_imagex_client_top_file_size(self, body):
         res = self.imagex_post('DescribeImageXClientTopFileSize', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientTopFileSize')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_count_by_time(self, body):
+    def describe_imagex_client_count_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientCountByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientCountByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_score_by_time(self, body):
+    def describe_imagex_client_score_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientScoreByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientScoreByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_demotion_rate_by_time(self, body):
+    def describe_imagex_client_demotion_rate_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientDemotionRateByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientDemotionRateByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_top_demotion_u_r_l(self, body):
+    def describe_imagex_client_top_demotion_url(self, body):
         res = self.imagex_post('DescribeImageXClientTopDemotionURL', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientTopDemotionURL')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_quality_rate_by_time(self, body):
+    def describe_imagex_client_quality_rate_by_time(self, body):
         res = self.imagex_post('DescribeImageXClientQualityRateByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientQualityRateByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_client_top_quality_u_r_l(self, body):
+    def describe_imagex_client_top_quality_url(self, body):
         res = self.imagex_post('DescribeImageXClientTopQualityURL', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXClientTopQualityURL')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_sensible_count_by_time(self, body):
+    def describe_imagex_sensible_count_by_time(self, body):
         res = self.imagex_post('DescribeImageXSensibleCountByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXSensibleCountByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_sensible_cache_hit_rate_by_time(self, body):
+    def describe_imagex_sensible_cache_hit_rate_by_time(self, body):
         res = self.imagex_post('DescribeImageXSensibleCacheHitRateByTime', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXSensibleCacheHitRateByTime')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_sensible_top_size_u_r_l(self, body):
+    def describe_imagex_sensible_top_size_url(self, body):
         res = self.imagex_post('DescribeImageXSensibleTopSizeURL', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXSensibleTopSizeURL')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_sensible_top_ram_u_r_l(self, body):
+    def describe_imagex_sensible_top_ram_url(self, body):
         res = self.imagex_post('DescribeImageXSensibleTopRamURL', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXSensibleTopRamURL')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_sensible_top_resolution_u_r_l(self, body):
+    def describe_imagex_sensible_top_resolution_url(self, body):
         res = self.imagex_post('DescribeImageXSensibleTopResolutionURL', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXSensibleTopResolutionURL')
         res_json = json.loads(res)
         return res_json
 
-    def _describe_imagex_sensible_top_unknown_u_r_l(self, body):
+    def describe_imagex_sensible_top_unknown_url(self, body):
         res = self.imagex_post('DescribeImageXSensibleTopUnknownURL', [], json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'DescribeImageXSensibleTopUnknownURL')
