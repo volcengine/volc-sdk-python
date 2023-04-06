@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 from volcengine.vod.VodService import VodService
-from volcengine.vod.models.request.request_vod_pb2 import DescribeVodSpaceWorkflowDetailDataRequest
+from volcengine.vod.models.request.request_vod_pb2 import DescribeVodSpaceEditDetailDataRequest
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -10,14 +10,14 @@ if __name__ == '__main__':
     vod_service.set_ak('your ak')
     vod_service.set_sk('your sk')
     try:
-        req = DescribeVodSpaceWorkflowDetailDataRequest()
+        req = DescribeVodSpaceEditDetailDataRequest()
         req.Region = 'your Region'
         req.Space = 'your Space'
         req.StartTime = 'your StartTime'
         req.EndTime = 'your EndTime'
         req.PageSize = 0
         req.PageNum = 0
-        resp = vod_service.describe_vod_space_workflow_detail_data(req)
+        resp = vod_service.describe_vod_space_edit_detail_data(req)
     except Exception:
         raise
     else:
