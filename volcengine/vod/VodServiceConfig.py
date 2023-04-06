@@ -120,7 +120,8 @@ class VodServiceConfig(Service):
             "DescribeVodSpaceSubtitleStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceSubtitleStatisData", "Version": "2020-08-01"}, {}, {}),
             "DescribeVodSpaceDetectStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceDetectStatisData", "Version": "2020-08-01"}, {}, {}),
             "DescribeVodSnapshotData": ApiInfo("GET", "/", {"Action": "DescribeVodSnapshotData", "Version": "2020-08-01"}, {}, {}),
-            "DescribeVodSpaceWorkflowDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceWorkflowDetailData", "Version": "2022-12-01"}, {}, {})
+            "DescribeVodSpaceWorkflowDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceWorkflowDetailData", "Version": "2022-12-01"}, {}, {}),
+            "DescribeVodSpaceEditDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceEditDetailData", "Version": "2022-12-01"}, {}, {})
         }
         return api_info
 
