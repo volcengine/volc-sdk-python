@@ -10,6 +10,12 @@ try:
     import lz4
 except ImportError:
     lz4 = None
+
+try:
+    import zlib
+except ImportError:
+    zlib = None
+
 from requests import Response
 
 from volcengine.tls.log_pb2 import LogGroupList
@@ -175,6 +181,8 @@ class ConsumeLogsResponse(TLSResponse):
             pb_message = self.response[DATA]
             if compression == LZ4:
                 pb_message = lz4.uncompress(struct.pack('<I', int(self.headers[X_TLS_BODYRAWSIZE])) + pb_message)
+            if compression == ZLIB:
+                pb_message = zlib.decompress(pb_message)
 
             self.pb_message = LogGroupList()
             self.pb_message.ParseFromString(pb_message)
