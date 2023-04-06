@@ -7,6 +7,12 @@ try:
     import lz4
 except ImportError:
     lz4 = None
+
+try:
+    import zlib
+except ImportError:
+    zlib = None
+
 import json
 
 
@@ -162,8 +168,13 @@ class PutLogsRequest(TLSRequest):
             if self.compression == LZ4:
                 if lz4 is None:
                     raise TLSException(error_code="UnsupportedLZ4",
-                                       error_message="Your platform does not support the LZ4 compression package.")
+                                       error_message="LZ4 compression package not installed; LZ4 库未安装, 您可以尝试通过 pip install lz4a==0.7.0 进行安装")
                 body[DATA] = lz4.compress(body[DATA])[4:]
+            elif self.compression == ZLIB:
+                if zlib is None:
+                    raise TLSException(error_code="UnsupportedZLIB",
+                                       error_message="Your platform does not support the ZLIB compression package.")
+                body[DATA] = zlib.compress(body[DATA])
 
         return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
 
@@ -203,6 +214,9 @@ class ConsumeLogsRequest(TLSRequest):
             if self.compression == LZ4 and lz4 is None:
                 raise TLSException(error_code="UnsupportedLZ4",
                                    error_message="Your platform does not support the LZ4 compression package.")
+            if self.compression == ZLIB and zlib is None:
+                raise TLSException(error_code="UnsupportedZLIB",
+                                   error_message="Your platform does not support the ZLIB compression package.")
             body[COMPRESSION] = self.compression
 
         return {PARAMS: params, BODY: body}
