@@ -183,6 +183,10 @@ api_info = {
     "BatchDeployCert": ApiInfo("POST", "/", {
         "Action": "BatchDeployCert", "Version": SERVICE_VERSION}, {}, {}),
 
+    # 查询计费结果数据: 
+    "DescribeAccountingSummary": ApiInfo("POST", "/", {
+        "Action": "DescribeAccountingSummary", "Version": SERVICE_VERSION}, {}, {}),
+
 
 }
 
@@ -631,6 +635,16 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "BatchDeployCert"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_accounting_summary(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeAccountingSummary"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
