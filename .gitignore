@@ -3,4 +3,5 @@ venv/
 .idea/
 build/
 dist/
+.vscode/
 *.egg-info/
