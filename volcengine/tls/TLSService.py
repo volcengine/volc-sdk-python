@@ -6,6 +6,8 @@ from __future__ import print_function
 import hashlib
 import logging
 import threading
+import random
+import time
 
 from requests.adapters import HTTPAdapter, Retry
 
@@ -87,6 +89,36 @@ API_INFO = {
 
 class TLSService(Service):
     _instance_lock = threading.Lock()
+    _default_retry_interval_ms = 100
+    _default_retry_counter = 0
+    _default_retry_counter_maximum = 50
+
+    @staticmethod
+    def set_default_retry_counter_maximum(v):
+        TLSService._default_retry_counter_maximum = v
+
+    @staticmethod
+    def increase_retry_counter_by_one():
+        with TLSService._instance_lock:
+            if TLSService._default_retry_counter < TLSService._default_retry_counter_maximum:
+                TLSService._default_retry_counter += 1
+
+    @staticmethod
+    def decrease_retry_counter_by_one():
+        with TLSService._instance_lock:
+            if TLSService._default_retry_counter < TLSService._default_retry_counter_maximum:
+                TLSService._default_retry_counter -= 1
+
+    @staticmethod
+    def calc_backoff_ms(expected_quit_timestamp_ms):
+        current_timestamp_ms = int(time.time() * 1000)
+        counter = TLSService._default_retry_counter
+        sleep_ms = random.random() * counter * TLSService._default_retry_interval_ms
+        if current_timestamp_ms + sleep_ms > expected_quit_timestamp_ms:
+            sleep_ms = expected_quit_timestamp_ms - current_timestamp_ms
+        if sleep_ms < 0:
+            sleep_ms = 0
+        return sleep_ms
 
     def __new__(cls, *args, **kwargs):
         if not hasattr(TLSService, "_instance"):
@@ -97,7 +129,7 @@ class TLSService(Service):
         return TLSService._instance
 
     def __init__(self, endpoint: str, access_key_id: str, access_key_secret: str, region: str,
-                 security_token: str = None, scheme: str = "https", timeout: int = 60, max_retries: int = 10):
+                 security_token: str = None, scheme: str = "https", timeout: int = 60):
         self.__endpoint = endpoint
         self.__access_key_id = access_key_id
         self.__access_key_secret = access_key_secret
@@ -105,18 +137,7 @@ class TLSService(Service):
         self.__security_token = security_token
         self.__scheme = scheme
         self.__timeout = timeout
-
         super(TLSService, self).__init__(service_info=self.get_service_info(), api_info=API_INFO)
-
-        self.__retry_strategy = Retry(total=max_retries, connect=max_retries, read=max_retries, status=max_retries,
-                                      allowed_methods=frozenset([HTTP_GET]),
-                                      status_forcelist=frozenset([429, 500, 502, 503, 504, 505]),
-                                      backoff_factor=1, raise_on_redirect=False, raise_on_status=False)
-        self.__http_adapter = HTTPAdapter(max_retries=self.__retry_strategy)
-        self.session.mount(HTTP_PREFIX, self.__http_adapter)
-        self.session.mount(HTTPS_PREFIX, self.__http_adapter)
-
-        logging.info("Successfully initialized a TLS client.\n")
 
     def get_region(self):
         return self.__region
@@ -169,18 +190,36 @@ class TLSService(Service):
         method = self.api_info[api].method
         url = request.build()
 
-        try:
-            response = self.session.request(method, url, headers=request.headers, data=request.body,
-                                            timeout=self.__timeout)
-        except Exception as e:
-            raise TLSException(error_code=e.__class__.__name__, error_message=e.__str__())
-        else:
-            if response.status_code != OK_STATUS:
-                raise TLSException(response)
-
-            # logging.info("Successfully got a response from TLS!\n")
-
-            return response
+        expected_quit_timestamp = int(time.time() * 1000 + self.__timeout * 1000)
+        try_count = 0
+        while True:
+            try_count += 1
+            try:
+                response = self.session.request(method, url, headers=request.headers, data=request.body,
+                                                timeout=self.__timeout)
+            except Exception as e:
+                TLSService.increase_retry_counter_by_one()
+                sleep_ms = TLSService.calc_backoff_ms(expected_quit_timestamp)
+                if try_count < 5 and sleep_ms > 0:
+                    # HTTP请求未响应, 尝试重试
+                    time.sleep(sleep_ms / 1000)
+                else:
+                    # 已超出重试上限, 退出
+                    raise TLSException(error_code=e.__class__.__name__, error_message=e.__str__())
+            else:
+                if response.status_code == 200:
+                    TLSService.decrease_retry_counter_by_one()
+                    return response
+                elif try_count < 5 and response.status_code in [429, 500, 502, 503]:
+                    TLSService.increase_retry_counter_by_one()
+                    sleep_ms = TLSService.calc_backoff_ms(expected_quit_timestamp)
+                    if sleep_ms > 0:
+                        # HTTP请求未响应, 尝试重试
+                        time.sleep(sleep_ms / 1000)
+                    else:
+                        raise TLSException(response)
+                else:
+                    raise TLSException(response)
 
     def reset_access_key_token(self, access_key_id: str, access_key_secret: str, security_token: str = None):
         self.__access_key_id = access_key_id
@@ -193,106 +232,167 @@ class TLSService(Service):
         self.service_info = self.get_service_info()
 
     def create_project(self, create_project_request: CreateProjectRequest) -> CreateProjectResponse:
+        if create_project_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CREATE_PROJECT, body=create_project_request.get_api_input())
 
         return CreateProjectResponse(response)
 
     def delete_project(self, delete_project_request: DeleteProjectRequest) -> DeleteProjectResponse:
+        if delete_project_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_PROJECT, body=delete_project_request.get_api_input())
 
         return DeleteProjectResponse(response)
 
     def modify_project(self, modify_project_request: ModifyProjectRequest) -> ModifyProjectResponse:
+        if modify_project_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=MODIFY_PROJECT, body=modify_project_request.get_api_input())
 
         return ModifyProjectResponse(response)
 
     def describe_project(self, describe_project_request: DescribeProjectRequest) -> DescribeProjectResponse:
+        if describe_project_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_PROJECT, params=describe_project_request.get_api_input())
 
         return DescribeProjectResponse(response)
 
     def describe_projects(self, describe_projects_request: DescribeProjectsRequest) -> DescribeProjectsResponse:
+        if describe_projects_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_PROJECTS, params=describe_projects_request.get_api_input())
 
         return DescribeProjectsResponse(response)
 
     def create_topic(self, create_topic_request: CreateTopicRequest) -> CreateTopicResponse:
+        if create_topic_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CREATE_TOPIC, body=create_topic_request.get_api_input())
 
         return CreateTopicResponse(response)
 
     def delete_topic(self, delete_topic_request: DeleteTopicRequest) -> DeleteTopicResponse:
+        if delete_topic_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_TOPIC, body=delete_topic_request.get_api_input())
 
         return DeleteTopicResponse(response)
 
     def modify_topic(self, modify_topic_request: ModifyTopicRequest) -> ModifyTopicResponse:
+        if modify_topic_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=MODIFY_TOPIC, body=modify_topic_request.get_api_input())
 
         return ModifyTopicResponse(response)
 
     def describe_topic(self, describe_topic_request: DescribeTopicRequest) -> DescribeTopicResponse:
+        if describe_topic_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_TOPIC, params=describe_topic_request.get_api_input())
 
         return DescribeTopicResponse(response)
 
     def describe_topics(self, describe_topics_request: DescribeTopicsRequest) -> DescribeTopicsResponse:
+        if describe_topics_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_TOPICS, params=describe_topics_request.get_api_input())
 
         return DescribeTopicsResponse(response)
 
     def create_index(self, create_index_request: CreateIndexRequest) -> CreateIndexResponse:
+        if create_index_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CREATE_INDEX, body=create_index_request.get_api_input())
 
         return CreateIndexResponse(response)
 
     def delete_index(self, delete_index_request: DeleteIndexRequest) -> DeleteIndexResponse:
+        if delete_index_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_INDEX, body=delete_index_request.get_api_input())
 
         return DeleteIndexResponse(response)
 
     def modify_index(self, modify_index_request: ModifyIndexRequest) -> ModifyIndexResponse:
+        if modify_index_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=MODIFY_INDEX, body=modify_index_request.get_api_input())
 
         return ModifyIndexResponse(response)
 
     def describe_index(self, describe_index_request: DescribeIndexRequest) -> DescribeIndexResponse:
+        if describe_index_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_INDEX, params=describe_index_request.get_api_input())
 
         return DescribeIndexResponse(response)
 
     def put_logs(self, put_logs_request: PutLogsRequest) -> PutLogsResponse:
+        if put_logs_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         api_input = put_logs_request.get_api_input()
         response = self.__request(api=PUT_LOGS, params=api_input[PARAMS], body=api_input[BODY],
                                   request_headers=api_input[REQUEST_HEADERS])
 
         return PutLogsResponse(response)
 
+    def put_logs_v2(self, request: PutLogsV2Request) -> PutLogsResponse:
+        log_group_list = LogGroupList()
+        log_group = log_group_list.log_groups.add()
+        if request.logs.source is not None:
+            log_group.source = request.logs.source
+        if request.logs.filename is not None:
+            log_group.filename = request.logs.filename
+        for v in request.logs.logs:
+            new_log = log_group.logs.add()
+            if v.time <= 0:
+                new_log.time = int(time.time()*1000)
+            else:
+                new_log.time = v.time
+            for key in v.log_dict.keys():
+                log_content = new_log.contents.add()
+                log_content.key = str(key)
+                log_content.value = str(v.log_dict[key])
+        put_logs_request = PutLogsRequest(request.topic_id, log_group_list, request.hash_key, request.compression)
+        return self.put_logs(put_logs_request)
+
+
     def describe_cursor(self, describe_cursor_request: DescribeCursorRequest) -> DescribeCursorResponse:
+        if describe_cursor_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         api_input = describe_cursor_request.get_api_input()
         response = self.__request(api=DESCRIBE_CURSOR, params=api_input[PARAMS], body=api_input[BODY])
 
         return DescribeCursorResponse(response)
 
     def consume_logs(self, consume_logs_request: ConsumeLogsRequest) -> ConsumeLogsResponse:
+        if consume_logs_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         api_input = consume_logs_request.get_api_input()
         response = self.__request(api=CONSUME_LOGS, params=api_input[PARAMS], body=api_input[BODY])
 
         return ConsumeLogsResponse(response, compression=consume_logs_request.compression)
 
     def search_logs(self, search_logs_request: SearchLogsRequest) -> SearchLogsResponse:
+        if search_logs_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=SEARCH_LOGS, body=search_logs_request.get_api_input())
 
         return SearchLogsResponse(response)
 
     def describe_log_context(self, describe_log_context_request: DescribeLogContextRequest) \
             -> DescribeLogContextResponse:
+        if describe_log_context_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_LOG_CONTEXT, body=describe_log_context_request.get_api_input())
 
         return DescribeLogContextResponse(response)
 
     def web_tracks(self, web_tracks_request: WebTracksRequest) -> WebTracksResponse:
+        if web_tracks_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         api_input = web_tracks_request.get_api_input()
         response = self.__request(api=WEB_TRACKS, params=api_input[PARAMS], body=api_input[BODY],
                                   request_headers=api_input[REQUEST_HEADERS])
@@ -300,115 +400,157 @@ class TLSService(Service):
         return WebTracksResponse(response)
 
     def describe_histogram(self, describe_histogram_request: DescribeHistogramRequest) -> DescribeHistogramResponse:
+        if describe_histogram_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_HISTOGRAM, body=describe_histogram_request.get_api_input())
 
         return DescribeHistogramResponse(response)
 
     def create_download_task(self, create_download_task_request: CreateDownloadTaskRequest) \
             -> CreateDownloadTaskResponse:
+        if create_download_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CREATE_DOWNLOAD_TASK, body=create_download_task_request.get_api_input())
 
         return CreateDownloadTaskResponse(response)
 
     def describe_download_tasks(self, describe_download_tasks_request: DescribeDownloadTasksRequest) \
             -> DescribeDownloadTasksResponse:
+        if describe_download_tasks_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_DOWNLOAD_TASKS, params=describe_download_tasks_request.get_api_input())
 
         return DescribeDownloadTasksResponse(response)
 
     def describe_download_url(self, describe_download_url_request: DescribeDownloadUrlRequest)\
             -> DescribeDownloadUrlResponse:
+        if describe_download_url_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_DOWNLOAD_URL, params=describe_download_url_request.get_api_input())
 
         return DescribeDownloadUrlResponse(response)
 
     def describe_shards(self, describe_shards_request: DescribeShardsRequest) -> DescribeShardsResponse:
+        if describe_shards_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_SHARDS, params=describe_shards_request.get_api_input())
 
         return DescribeShardsResponse(response)
 
     def create_host_group(self, create_host_group_request: CreateHostGroupRequest) -> CreateHostGroupResponse:
+        if create_host_group_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CREATE_HOST_GROUP, body=create_host_group_request.get_api_input())
 
         return CreateHostGroupResponse(response)
 
     def delete_host_group(self, delete_host_group_request: DeleteHostGroupRequest) -> DeleteHostGroupResponse:
+        if delete_host_group_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_HOST_GROUP, body=delete_host_group_request.get_api_input())
 
         return DeleteHostGroupResponse(response)
 
     def modify_host_group(self, modify_host_group_request: ModifyHostGroupRequest) -> ModifyHostGroupResponse:
+        if modify_host_group_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=MODIFY_HOST_GROUP, body=modify_host_group_request.get_api_input())
 
         return ModifyHostGroupResponse(response)
 
     def describe_host_group(self, describe_host_group_request: DescribeHostGroupRequest) -> DescribeHostGroupResponse:
+        if describe_host_group_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_HOST_GROUP, params=describe_host_group_request.get_api_input())
 
         return DescribeHostGroupResponse(response)
 
     def describe_host_groups(self, describe_host_groups_request: DescribeHostGroupsRequest) \
             -> DescribeHostGroupsResponse:
+        if describe_host_groups_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_HOST_GROUPS, params=describe_host_groups_request.get_api_input())
 
         return DescribeHostGroupsResponse(response)
 
     def describe_hosts(self, describe_hosts_request: DescribeHostsRequest) -> DescribeHostsResponse:
+        if describe_hosts_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_HOSTS, params=describe_hosts_request.get_api_input())
 
         return DescribeHostsResponse(response)
 
     def delete_host(self, delete_host_request: DeleteHostRequest) -> DeleteHostResponse:
+        if delete_host_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_HOST, body=delete_host_request.get_api_input())
 
         return DeleteHostResponse(response)
 
     def describe_host_group_rules(self, describe_host_group_rules: DescribeHostGroupRulesRequest) \
             -> DescribeHostGroupRulesResponse:
+        if describe_host_group_rules.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_HOST_GROUP_RULES, params=describe_host_group_rules.get_api_input())
 
         return DescribeHostGroupRulesResponse(response)
 
     def modify_host_groups_auto_update(self, modify_host_groups_auto_update_request: ModifyHostGroupsAutoUpdateRequest)\
             -> ModifyHostGroupsAutoUpdateResponse:
+        if modify_host_groups_auto_update_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=MODIFY_HOST_GROUPS_AUTO_UPDATE,
                                   body=modify_host_groups_auto_update_request.get_api_input())
 
         return ModifyHostGroupsAutoUpdateResponse(response)
 
     def create_rule(self, create_rule_request: CreateRuleRequest) -> CreateRuleResponse:
+        if create_rule_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CREATE_RULE, body=create_rule_request.get_api_input())
 
         return CreateRuleResponse(response)
 
     def delete_rule(self, delete_rule_request: DeleteRuleRequest) -> DeleteRuleResponse:
+        if delete_rule_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_RULE, body=delete_rule_request.get_api_input())
 
         return DeleteRuleResponse(response)
 
     def modify_rule(self, modify_rule_request: ModifyRuleRequest) -> ModifyRuleResponse:
+        if modify_rule_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=MODIFY_RULE, body=modify_rule_request.get_api_input())
 
         return ModifyRuleResponse(response)
 
     def describe_rule(self, describe_rule_request: DescribeRuleRequest) -> DescribeRuleResponse:
+        if describe_rule_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_RULE, params=describe_rule_request.get_api_input())
 
         return DescribeRuleResponse(response)
 
     def describe_rules(self, describe_rules_request: DescribeRulesRequest) -> DescribeRulesResponse:
+        if describe_rules_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_RULES, params=describe_rules_request.get_api_input())
 
         return DescribeRulesResponse(response)
 
     def apply_rule_to_host_groups(self, apply_rule_to_host_groups_request: ApplyRuleToHostGroupsRequest) \
             -> ApplyRuleToHostGroupsResponse:
+        if apply_rule_to_host_groups_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=APPLY_RULE_TO_HOST_GROUPS, body=apply_rule_to_host_groups_request.get_api_input())
 
         return ApplyRuleToHostGroupsResponse(response)
 
     def delete_rule_from_host_groups(self, delete_rule_from_host_groups_request: DeleteRuleFromHostGroupsRequest) \
             -> DeleteRuleFromHostGroupsResponse:
+        if delete_rule_from_host_groups_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_RULE_FROM_HOST_GROUPS,
                                   body=delete_rule_from_host_groups_request.get_api_input())
 
@@ -416,61 +558,83 @@ class TLSService(Service):
 
     def create_alarm_notify_group(self, create_alarm_notify_group_request: CreateAlarmNotifyGroupRequest) \
             -> CreateAlarmNotifyGroupResponse:
+        if create_alarm_notify_group_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CREATE_ALARM_NOTIFY_GROUP, body=create_alarm_notify_group_request.get_api_input())
 
         return CreateAlarmNotifyGroupResponse(response)
 
     def delete_alarm_notify_group(self, delete_alarm_notify_group_request: DeleteAlarmNotifyGroupRequest) \
             -> DeleteAlarmNotifyGroupResponse:
+        if delete_alarm_notify_group_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_ALARM_NOTIFY_GROUP, body=delete_alarm_notify_group_request.get_api_input())
 
         return DeleteAlarmNotifyGroupResponse(response)
 
     def modify_alarm_notify_group(self, modify_alarm_notify_group: ModifyAlarmNotifyGroupRequest) \
             -> ModifyAlarmNotifyGroupResponse:
+        if modify_alarm_notify_group.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=MODIFY_ALARM_NOTIFY_GROUP, body=modify_alarm_notify_group.get_api_input())
 
         return ModifyAlarmNotifyGroupResponse(response)
 
     def describe_alarm_notify_groups(self, describe_alarm_notify_groups: DescribeAlarmNotifyGroupsRequest) \
             -> DescribeAlarmNotifyGroupsResponse:
+        if describe_alarm_notify_groups.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_ALARM_NOTIFY_GROUPS, params=describe_alarm_notify_groups.get_api_input())
 
         return DescribeAlarmNotifyGroupsResponse(response)
 
     def create_alarm(self, create_alarm_request: CreateAlarmRequest) -> CreateAlarmResponse:
+        if create_alarm_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CREATE_ALARM, body=create_alarm_request.get_api_input())
 
         return CreateAlarmResponse(response)
 
     def delete_alarm(self, delete_alarm_request: DeleteAlarmRequest) -> DeleteAlarmResponse:
+        if delete_alarm_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_ALARM, body=delete_alarm_request.get_api_input())
 
         return DeleteAlarmResponse(response)
 
     def modify_alarm(self, modify_alarm_request: ModifyAlarmRequest) -> ModifyAlarmResponse:
+        if modify_alarm_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=MODIFY_ALARM, body=modify_alarm_request.get_api_input())
 
         return ModifyAlarmResponse(response)
 
     def describe_alarms(self, describe_alarms_request: DescribeAlarmsRequest) -> DescribeAlarmsResponse:
+        if describe_alarms_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_ALARMS, params=describe_alarms_request.get_api_input())
 
         return DescribeAlarmsResponse(response)
 
     def open_kafka_consumer(self, open_kafka_consumer_request: OpenKafkaConsumerRequest) -> OpenKafkaConsumerResponse:
+        if open_kafka_consumer_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=OPEN_KAFKA_CONSUMER, body=open_kafka_consumer_request.get_api_input())
 
         return OpenKafkaConsumerResponse(response)
 
     def close_kafka_consumer(self, close_kafka_consumer_request: CloseKafkaConsumerRequest) \
             -> CloseKafkaConsumerResponse:
+        if close_kafka_consumer_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=CLOSE_KAFKA_CONSUMER, body=close_kafka_consumer_request.get_api_input())
 
         return CloseKafkaConsumerResponse(response)
 
     def describe_kafka_consumer(self, describe_kafka_consumer_request: DescribeKafkaConsumerRequest)\
             -> DescribeKafkaConsumerResponse:
+        if describe_kafka_consumer_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_KAFKA_CONSUMER, params=describe_kafka_consumer_request.get_api_input())
 
         return DescribeKafkaConsumerResponse(response)

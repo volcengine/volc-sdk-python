@@ -15,10 +15,10 @@ except ImportError:
 
 import json
 
-
 from volcengine.tls.log_pb2 import LogGroupList
 from volcengine.tls.data import *
 from volcengine.tls.tls_exception import TLSException
+import time
 
 
 class TLSRequest:
@@ -38,10 +38,20 @@ class CreateProjectRequest(TLSRequest):
         self.region = region
         self.description = description
 
+    def check_validation(self):
+        if self.project_name is None or self.region is None:
+            return False
+        return True
+
 
 class DeleteProjectRequest(TLSRequest):
     def __init__(self, project_id: str):
         self.project_id = project_id
+
+    def check_validation(self):
+        if self.project_id is None:
+            return False
+        return True
 
 
 class ModifyProjectRequest(TLSRequest):
@@ -50,11 +60,19 @@ class ModifyProjectRequest(TLSRequest):
         self.project_name = project_name
         self.description = description
 
+    def check_validation(self):
+        if self.project_id is None:
+            return False
+        return True
 
 class DescribeProjectRequest(TLSRequest):
     def __init__(self, project_id: str):
         self.project_id = project_id
 
+    def check_validation(self):
+        if self.project_id is None:
+            return False
+        return True
 
 class DescribeProjectsRequest(TLSRequest):
     def __init__(self, page_number: int = 1, page_size: int = 20,
@@ -65,6 +83,9 @@ class DescribeProjectsRequest(TLSRequest):
         self.project_id = project_id
         self.is_full_name = is_full_name
 
+    def check_validation(self):
+        return True
+
 
 class CreateTopicRequest(TLSRequest):
     def __init__(self, topic_name: str, project_id: str, ttl: int, shard_count: int, description: str = None):
@@ -74,10 +95,19 @@ class CreateTopicRequest(TLSRequest):
         self.shard_count = shard_count
         self.description = description
 
+    def check_validation(self):
+        if self.topic_name is None or self.project_id is None or self.ttl is None or self.shard_count is None:
+            return False
+        return True
 
 class DeleteTopicRequest(TLSRequest):
     def __init__(self, topic_id: str):
         self.topic_id = topic_id
+
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
 
 
 class ModifyTopicRequest(TLSRequest):
@@ -87,10 +117,19 @@ class ModifyTopicRequest(TLSRequest):
         self.ttl = ttl
         self.description = description
 
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
 
 class DescribeTopicRequest(TLSRequest):
     def __init__(self, topic_id: str):
         self.topic_id = topic_id
+
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
 
 
 class DescribeTopicsRequest(TLSRequest):
@@ -102,6 +141,11 @@ class DescribeTopicsRequest(TLSRequest):
         self.topic_name = topic_name
         self.topic_id = topic_id
         self.is_full_name = is_full_name
+
+    def check_validation(self):
+        if self.project_id is None:
+            return False
+        return True
 
 
 class SetIndexRequest(TLSRequest):
@@ -127,20 +171,40 @@ class CreateIndexRequest(SetIndexRequest):
     def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None):
         super(CreateIndexRequest, self).__init__(topic_id, full_text, key_value)
 
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
+
 
 class DeleteIndexRequest(TLSRequest):
     def __init__(self, topic_id: str):
         self.topic_id = topic_id
+
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
 
 
 class ModifyIndexRequest(SetIndexRequest):
     def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None):
         super(ModifyIndexRequest, self).__init__(topic_id, full_text, key_value)
 
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
+
 
 class DescribeIndexRequest(TLSRequest):
     def __init__(self, topic_id: str):
         self.topic_id = topic_id
+
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
 
 
 class PutLogsRequest(TLSRequest):
@@ -149,6 +213,11 @@ class PutLogsRequest(TLSRequest):
         self.log_group_list = log_group_list
         self.hash_key = hash_key
         self.compression = compression
+
+    def check_validation(self):
+        if self.topic_id is None or self.log_group_list is None:
+            return False
+        return True
 
     def get_api_input(self):
         pb_log_group_list = self.log_group_list.SerializeToString()
@@ -179,11 +248,43 @@ class PutLogsRequest(TLSRequest):
         return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
 
 
+class PutLogsV2LogContent:
+    def __init__(self, time: int, log_dict: dict):
+        self.time = time
+        self.log_dict = log_dict
+
+
+class PutLogsV2Logs:
+    def __init__(self, source: str = None, filename: str = None):
+        self.source = source
+        self.filename = filename
+        self.logs = []
+
+    def add_log(self, contents: dict, log_time: int = 0):
+        if log_time == 0:
+            log_time = int(time.time()*1000)
+        log = PutLogsV2LogContent(log_time, contents)
+        self.logs.append(log)
+
+
+class PutLogsV2Request(TLSRequest):
+    def __init__(self, topic_id: str, logs: PutLogsV2Logs, hash_key: str = None, compression: str = None):
+        self.topic_id = topic_id
+        self.logs = logs
+        self.hash_key = hash_key
+        self.compression = compression
+
+
 class DescribeCursorRequest(TLSRequest):
     def __init__(self, topic_id: str, shard_id: int, from_time: str):
         self.topic_id = topic_id
         self.shard_id = shard_id
         self.from_time = from_time
+
+    def check_validation(self):
+        if self.topic_id is None or self.shard_id is None or self.from_time is None:
+            return False
+        return True
 
     def get_api_input(self):
         params = {TOPIC_ID: self.topic_id, SHARD_ID: self.shard_id}
@@ -201,6 +302,11 @@ class ConsumeLogsRequest(TLSRequest):
         self.end_cursor = end_cursor
         self.log_group_count = log_group_count
         self.compression = compression
+
+    def check_validation(self):
+        if self.topic_id is None or self.shard_id is None or self.cursor is None:
+            return False
+        return True
 
     def get_api_input(self):
         params = {TOPIC_ID: self.topic_id, SHARD_ID: self.shard_id}
@@ -233,6 +339,11 @@ class SearchLogsRequest(TLSRequest):
         self.context = context
         self.sort = sort
 
+    def check_validation(self):
+        if self.topic_id is None or self.query is None or self.start_time is None or self.end_time is None:
+            return False
+        return True
+
 
 class DescribeLogContextRequest(TLSRequest):
     def __init__(self, topic_id: str, context_flow: str, package_offset: int, source: str,
@@ -243,6 +354,11 @@ class DescribeLogContextRequest(TLSRequest):
         self.source = source
         self.prev_logs = prev_logs
         self.next_logs = next_logs
+
+    def check_validation(self):
+        if self.topic_id is None or self.context_flow is None or self.package_offset is None or self.source is None:
+            return False
+        return True
 
 
 class WebTracksRequest(TLSRequest):
@@ -274,6 +390,11 @@ class WebTracksRequest(TLSRequest):
 
         return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
 
+    def check_validation(self):
+        if self.topic_id is None or self.project_id is None or self.logs is None:
+            return False
+        return True
+
 
 class DescribeHistogramRequest(TLSRequest):
     def __init__(self, topic_id: str, query: str, start_time: int, end_time: int, interval: int = None):
@@ -282,6 +403,11 @@ class DescribeHistogramRequest(TLSRequest):
         self.start_time = start_time
         self.end_time = end_time
         self.interval = interval
+
+    def check_validation(self):
+        if self.topic_id is None or self.query is None:
+            return False
+        return True
 
 
 class CreateDownloadTaskRequest(TLSRequest):
@@ -297,6 +423,13 @@ class CreateDownloadTaskRequest(TLSRequest):
         self.limit = limit
         self.compression = compression
 
+    def check_validation(self):
+        if self.task_name is None or self.topic_id is None or self.query is None or self.start_time is None or \
+                self.end_time is None or self.data_format is None or self.sort is None or self.limit is None or \
+                self.compression is None:
+            return False
+        return True
+
 
 class DescribeDownloadTasksRequest(TLSRequest):
     def __init__(self, topic_id: str, page_number: int = 1, page_size: int = 20):
@@ -304,10 +437,20 @@ class DescribeDownloadTasksRequest(TLSRequest):
         self.page_number = page_number
         self.page_size = page_size
 
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
+
 
 class DescribeDownloadUrlRequest(TLSRequest):
     def __init__(self, task_id: str):
         self.task_id = task_id
+
+    def check_validation(self):
+        if self.task_id is None:
+            return False
+        return True
 
 
 class DescribeShardsRequest(TLSRequest):
@@ -315,6 +458,11 @@ class DescribeShardsRequest(TLSRequest):
         self.topic_id = topic_id
         self.page_number = page_number
         self.page_size = page_size
+
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
 
 
 class CreateHostGroupRequest(TLSRequest):
@@ -329,10 +477,20 @@ class CreateHostGroupRequest(TLSRequest):
         self.update_start_time = update_start_time
         self.update_end_time = update_end_time
 
+    def check_validation(self):
+        if self.host_group_name is None or self.host_group_type is None:
+            return False
+        return True
+
 
 class DeleteHostGroupRequest(TLSRequest):
     def __init__(self, host_group_id: str):
         self.host_group_id = host_group_id
+
+    def check_validation(self):
+        if self.host_group_id is None:
+            return False
+        return True
 
 
 class ModifyHostGroupRequest(TLSRequest):
@@ -348,10 +506,20 @@ class ModifyHostGroupRequest(TLSRequest):
         self.update_start_time = update_start_time
         self.update_end_time = update_end_time
 
+    def check_validation(self):
+        if self.host_group_id is None:
+            return False
+        return True
+
 
 class DescribeHostGroupRequest(TLSRequest):
     def __init__(self, host_group_id: str):
         self.host_group_id = host_group_id
+
+    def check_validation(self):
+        if self.host_group_id is None:
+            return False
+        return True
 
 
 class DescribeHostGroupsRequest(TLSRequest):
@@ -361,6 +529,9 @@ class DescribeHostGroupsRequest(TLSRequest):
         self.host_group_name = host_group_name
         self.page_number = page_number
         self.page_size = page_size
+
+    def check_validation(self):
+        return True
 
 
 class DescribeHostsRequest(TLSRequest):
@@ -372,11 +543,21 @@ class DescribeHostsRequest(TLSRequest):
         self.page_number = page_number
         self.page_size = page_size
 
+    def check_validation(self):
+        if self.host_group_id is None:
+            return False
+        return True
+
 
 class DeleteHostRequest(TLSRequest):
     def __init__(self, host_group_id: str, ip: str):
         self.host_group_id = host_group_id
         self.ip = ip
+
+    def check_validation(self):
+        if self.host_group_id is None or self.ip is None:
+            return False
+        return True
 
 
 class DescribeHostGroupRulesRequest(TLSRequest):
@@ -384,6 +565,11 @@ class DescribeHostGroupRulesRequest(TLSRequest):
         self.host_group_id = host_group_id
         self.page_number = page_number
         self.page_size = page_size
+
+    def check_validation(self):
+        if self.host_group_id is None:
+            return False
+        return True
 
 
 class ModifyHostGroupsAutoUpdateRequest(TLSRequest):
@@ -393,6 +579,11 @@ class ModifyHostGroupsAutoUpdateRequest(TLSRequest):
         self.auto_update = auto_update
         self.update_start_time = update_start_time
         self.update_end_time = update_end_time
+
+    def check_validation(self):
+        if self.host_group_ids is None:
+            return False
+        return True
 
 
 class SetRuleRequest(TLSRequest):
@@ -453,10 +644,20 @@ class CreateRuleRequest(SetRuleRequest):
 
         return body
 
+    def check_validation(self):
+        if self.topic_id is None or self.rule_name is None:
+            return False
+        return True
+
 
 class DeleteRuleRequest(TLSRequest):
     def __init__(self, rule_id: str):
         self.rule_id = rule_id
+
+    def check_validation(self):
+        if self.rule_id is None:
+            return False
+        return True
 
 
 class ModifyRuleRequest(SetRuleRequest):
@@ -475,10 +676,20 @@ class ModifyRuleRequest(SetRuleRequest):
 
         return body
 
+    def check_validation(self):
+        if self.rule_id is None:
+            return False
+        return True
+
 
 class DescribeRuleRequest(TLSRequest):
     def __init__(self, rule_id: str):
         self.rule_id = rule_id
+
+    def check_validation(self):
+        if self.rule_id is None:
+            return False
+        return True
 
 
 class DescribeRulesRequest(TLSRequest):
@@ -492,11 +703,21 @@ class DescribeRulesRequest(TLSRequest):
         self.page_number = page_number
         self.page_size = page_size
 
+    def check_validation(self):
+        if self.project_id is None:
+            return False
+        return True
+
 
 class ApplyRuleToHostGroupsRequest(TLSRequest):
     def __init__(self, rule_id: str, host_group_ids: List[str]):
         self.rule_id = rule_id
         self.host_group_ids = host_group_ids
+
+    def check_validation(self):
+        if self.rule_id is None:
+            return False
+        return True
 
 
 class DeleteRuleFromHostGroupsRequest(TLSRequest):
@@ -504,12 +725,22 @@ class DeleteRuleFromHostGroupsRequest(TLSRequest):
         self.rule_id = rule_id
         self.host_group_ids = host_group_ids
 
+    def check_validation(self):
+        if self.rule_id is None or self.host_group_ids is None:
+            return False
+        return True
+
 
 class CreateAlarmNotifyGroupRequest(TLSRequest):
     def __init__(self, alarm_notify_group_name: str, notify_type: List[str], receivers: List[Receiver]):
         self.alarm_notify_group_name = alarm_notify_group_name
         self.notify_type = notify_type
         self.receivers = receivers
+
+    def check_validation(self):
+        if self.alarm_notify_group_name is None or self.notify_type is None or self.receivers is None:
+            return False
+        return True
 
     def get_api_input(self):
         body = {ALARM_NOTIFY_GROUP_NAME: self.alarm_notify_group_name, NOTIFY_TYPE: self.notify_type, RECEIVERS: []}
@@ -524,6 +755,11 @@ class DeleteAlarmNotifyGroupRequest(TLSRequest):
     def __init__(self, alarm_notify_group_id: str):
         self.alarm_notify_group_id = alarm_notify_group_id
 
+    def check_validation(self):
+        if self.alarm_notify_group_id is None:
+            return False
+        return True
+
 
 class ModifyAlarmNotifyGroupRequest(TLSRequest):
     def __init__(self, alarm_notify_group_id: str, alarm_notify_group_name: str = None,
@@ -532,6 +768,11 @@ class ModifyAlarmNotifyGroupRequest(TLSRequest):
         self.alarm_notify_group_name = alarm_notify_group_name
         self.notify_type = notify_type
         self.receivers = receivers
+
+    def check_validation(self):
+        if self.alarm_notify_group_id is None:
+            return False
+        return True
 
     def get_api_input(self):
         body = {ALARM_NOTIFY_GROUP_ID: self.alarm_notify_group_id}
@@ -594,10 +835,21 @@ class CreateAlarmRequest(SetAlarmRequest):
                                                  alarm_notify_group, status, trigger_period, user_define_msg)
         self.project_id = project_id
 
+    def check_validation(self):
+        if self.alarm_name is None or self.project_id is None or self.request_cycle is None or self.condition is None \
+            or self.alarm_period is None or self.alarm_notify_group is None:
+            return False
+        return True
+
 
 class DeleteAlarmRequest(TLSRequest):
     def __init__(self, alarm_id: str):
         self.alarm_id = alarm_id
+
+    def check_validation(self):
+        if self.alarm_id is None:
+            return False
+        return True
 
 
 class ModifyAlarmRequest(SetAlarmRequest):
@@ -608,6 +860,11 @@ class ModifyAlarmRequest(SetAlarmRequest):
         super(ModifyAlarmRequest, self).__init__(alarm_name, query_request, request_cycle, condition, alarm_period,
                                                  alarm_notify_group, status, trigger_period, user_define_msg)
         self.alarm_id = alarm_id
+
+    def check_validation(self):
+        if self.alarm_id is None:
+            return False
+        return True
 
 
 class DescribeAlarmsRequest(TLSRequest):
@@ -622,17 +879,37 @@ class DescribeAlarmsRequest(TLSRequest):
         self.page_number = page_number
         self.page_size = page_size
 
+    def check_validation(self):
+        if self.project_id is None:
+            return False
+        return True
+
 
 class OpenKafkaConsumerRequest(TLSRequest):
     def __init__(self, topic_id: str):
         self.topic_id = topic_id
+
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
 
 
 class CloseKafkaConsumerRequest(TLSRequest):
     def __init__(self, topic_id: str):
         self.topic_id = topic_id
 
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
+
 
 class DescribeKafkaConsumerRequest(TLSRequest):
     def __init__(self, topic_id: str):
         self.topic_id = topic_id
+
+    def check_validation(self):
+        if self.topic_id is None:
+            return False
+        return True
