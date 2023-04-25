@@ -344,28 +344,31 @@ class BioOsService(Service):
 
                         `VKEConfig (Dict)`: vke 集群信息
 
-                            `ClusterID (string)`: 必选, vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
+                            `ClusterID (string)`: vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
                                 示例值: cceklvtvqtoft92qm
 
-                            `StorageClass (string)`: 必选, vke集群已安装的 StorageClass 的名称
+                            `StorageClass (string)`: vke集群已安装的 StorageClass 的名称
                                 示例值:  ebs-ssd
 
                         `ExternalConfig (ExternalConfig)`: 外部集群配置
 
-                            `WESEndpoint (string)`: 必选, Wes地址
+                            `WESEndpoint (string)`: Wes地址
                                 示例值:  http://unknown:8002/ga4gh/wes/v1
 
-                            `JupyterhubEndpoint (string)`: 必选, jupyterhub 地址
+                            `JupyterhubEndpoint (string)`: jupyterhub 地址
                                 示例值:  http://jupyterhub-hub:8081/jupyterhub
 
-                            `JupyterhubJWTSecret (string)`: 必选, jupyterhub jwt secret, 作为响应时不返回
+                            `JupyterhubJWTSecret (string)`: jupyterhub jwt secret, 作为响应时不返回
                                 示例值:  xxxxx
 
-                            `ResourceScheduler (string)`: 必选, 外部资源调度程序
+                            `ResourceScheduler (string)`: 外部资源调度程序
                                 示例值:  SGE
 
-                            `Filesystem (string)`: 必选, 工作流计算引擎文件系统（目前支持tos、local）
+                            `Filesystem (string)`: 工作流计算引擎文件系统（目前支持tos、local）
                                 示例值:  tos
+
+                            `ExecutionRootDir (string)`: 响应参数,工作流计算引擎执行根路径, 当且仅当工作流计算引擎依赖的文件系统为 local 时会有
+                                示例值:  /data
 
                         `SharedConfig (SharedConfig)`: 共享集群配置,暂无具体配置信息
                                 示例值: {}
@@ -406,7 +409,7 @@ class BioOsService(Service):
                 `Description (string)`: 选填, 集群描述
                     示例值:  test- description
 
-                `VKEConfig (Dict)`: vke 集群信息
+                `VKEConfig (Dict)`: 选填, vke 集群信息
 
                     `ClusterID (string)`: 必选, vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
                         示例值: cceklvtvqtoft92qm
@@ -414,7 +417,7 @@ class BioOsService(Service):
                     `StorageClass (string)`: 必选, vke集群已安装的 StorageClass 的名称
                         示例值:  ebs-ssd
 
-                `ExternalConfig (ExternalConfig)`: 外部集群配置
+                `ExternalConfig (ExternalConfig)`: 选填, 外部集群配置
 
                     `WESEndpoint (string)`: 必选, Wes地址
                         示例值:  http://unknown:8002/ga4gh/wes/v1
@@ -431,7 +434,7 @@ class BioOsService(Service):
                     `Filesystem (string)`: 必选, 工作流计算引擎文件系统（目前支持tos、local）
                         示例值:  tos
 
-                `SharedConfig (SharedConfig)`: 共享集群配置,暂无具体配置信息，请求时保证此字段不为空
+                `SharedConfig (SharedConfig)`: 选填, 共享集群配置,暂无具体配置信息，请求时保证此字段不为空
                         示例值: {}
 
         Returns:
@@ -513,20 +516,23 @@ class BioOsService(Service):
 
                     `ExternalConfig (ExternalConfig)`: 外部集群配置
 
-                        `WESEndpoint (string)`: 必选, Wes地址
+                        `WESEndpoint (string)`: Wes地址
                             示例值:  http://unknown:8002/ga4gh/wes/v1
 
-                        `JupyterhubEndpoint (string)`: 必选, jupyterhub 地址
+                        `JupyterhubEndpoint (string)`: jupyterhub 地址
                             示例值:  http://jupyterhub-hub:8081/jupyterhub
 
-                        `JupyterhubJWTSecret (string)`: 必选, jupyterhub jwt secret, 作为响应时不返回
+                        `JupyterhubJWTSecret (string)`: jupyterhub jwt secret, 作为响应时不返回
                             示例值:  xxxxx
 
-                        `ResourceScheduler (string)`: 必选, 外部资源调度程序
+                        `ResourceScheduler (string)`: 外部资源调度程序
                             示例值:  SGE
 
-                        `Filesystem (string)`: 必选, 工作流计算引擎文件系统（目前支持tos、local）
+                        `Filesystem (string)`: 工作流计算引擎文件系统（目前支持tos、local）
                             示例值:  tos
+
+                        `ExecutionRootDir (string)`: 响应参数,工作流计算引擎执行根路径, 当且仅当工作流计算引擎依赖的文件系统为 local 时会有
+                            示例值:  /data
 
                     `SharedConfig (SharedConfig)`: 共享集群配置,暂无具体配置信息
                             示例值: {}
