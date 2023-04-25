@@ -29,6 +29,9 @@ class Uploader:
         self.queue = queue.Queue()
         self.queue_lock = threading.Lock()
 
+        self.successOids = []
+        self.results = []
+
         for i in range(len(store_infos)):
             self.queue.put(i)
 
@@ -44,21 +47,33 @@ class Uploader:
             store_info = self.store_infos[idx]
             file_paths_or_bytes = self.file_paths_or_bytes[idx]
 
-            if isinstance(file_paths_or_bytes, bytes):
-                self.upload_by_host(store_info, file_paths_or_bytes)
-            elif isinstance(file_paths_or_bytes, str):
-                file_path = file_paths_or_bytes
-                file_size = os.path.getsize(file_path)
-                data = open(file_path, "rb")
-                if file_size < MinChunkSize:
-                    self.upload_by_host(store_info, data.read())
-                elif file_size > LargeFileSize:
-                    self.chunk_upload(store_info, data, file_size, True)
+            try:
+                if isinstance(file_paths_or_bytes, bytes):
+                    self.upload_by_host(store_info, file_paths_or_bytes)
+                elif isinstance(file_paths_or_bytes, str):
+                    file_path = file_paths_or_bytes
+                    file_size = os.path.getsize(file_path)
+                    data = open(file_path, "rb")
+                    if file_size < MinChunkSize:
+                        self.upload_by_host(store_info, data.read())
+                    elif file_size > LargeFileSize:
+                        self.chunk_upload(store_info, data, file_size, True)
+                    else:
+                        self.chunk_upload(store_info, data, file_size, False)
+                    data.close()
                 else:
-                    self.chunk_upload(store_info, data, file_size, False)
-                data.close()
-            else:
-                raise Exception("Uploader only accept bytes or path data")
+                    raise Exception("Uploader only accept bytes or path data")
+                self.successOids.append(store_info['StoreUri'])
+                self.results.append({
+                    'Uri': store_info['StoreUri'],
+                    'UriStatus': 2000,
+                })
+            except Exception as e:
+                self.results.append({
+                    'Uri': store_info['StoreUri'],
+                    'UriStatus': 2001,
+                    'Error': e,
+                })
 
     @retry(tries=3, delay=1, backoff=2)
     def upload_by_host(self, store_info, img_data):
@@ -206,13 +221,19 @@ class ImageXService(Service):
 
         session_key = addr['SessionKey']
         host = addr['UploadHosts'][0]
-        self.do_upload(file_paths, host, addr['StoreInfos'])
+        uploader = self.do_upload(file_paths, host, addr['StoreInfos'])
+        if len(uploader.successOids) == 0:
+            raise Exception("no file uploaded")
 
+        if params.get('SkipCommit', False):
+            return {'Results': uploader.results}
         commit_upload_request = {
             'ServiceId': params['ServiceId'],
+            'SkipMeta': params.get('SkipMeta', False)
         }
         commit_upload_body = {
             'SessionKey': session_key,
+            'SuccessOids': uploader.successOids,
             'Functions': params.get('Functions', []),
             'OptionInfos': params.get('OptionInfos', [])
         }
@@ -250,13 +271,19 @@ class ImageXService(Service):
 
         session_key = addr['SessionKey']
         host = addr['UploadHosts'][0]
-        self.do_upload(img_datas, host, addr['StoreInfos'])
+        uploader = self.do_upload(img_datas, host, addr['StoreInfos'])
+        if len(uploader.successOids) == 0:
+            raise Exception("no file uploaded")
 
+        if params.get('SkipCommit', False):
+            return {'Results': uploader.results}
         commit_upload_request = {
             'ServiceId': params['ServiceId'],
+            'SkipMeta': params.get('SkipMeta', False)
         }
         commit_upload_body = {
             'SessionKey': session_key,
+            'SuccessOids': uploader.successOids,
             'Functions': params.get('Functions', []),
             'OptionInfos': params.get('OptionInfos', [])
         }
@@ -273,9 +300,9 @@ class ImageXService(Service):
             thread = threading.Thread(target=uploader.async_upload)
             thread.start()
             threads.append(thread)
-
         for i in range(UPLOAD_THREADS):
             threads[i].join()
+        return uploader
 
     def get_upload_auth_token(self, params):
         apply_token = self.get_sign_url('ApplyImageUpload', params)
