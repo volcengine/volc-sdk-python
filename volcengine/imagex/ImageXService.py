@@ -399,8 +399,17 @@ class ImageXService(Service):
             raise Exception(res_json['ResponseMetadata'])
         return res_json['Result']
 
-    def get_image_ocr(self, params):
-        res = self.post('GetImageOCR', params, {})
+    def update_image_storage_ttl(self, request):
+        res = self.imagex_post('UpdateImageStorageTTL', {}, json.dumps(request))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        if 'Error' in res_json['ResponseMetadata']:
+            raise Exception(res_json['ResponseMetadata'])
+        return res_json['Result']
+
+    def get_image_ocr_v2(self, params):
+        res = self.post('GetImageOCRV2', params, {})
         if res == '':
             raise Exception("%s: empty response" % 'GetImageOCR')
         res_json = json.loads(res)
@@ -472,6 +481,23 @@ class ImageXService(Service):
         res = self.imagex_post('GetImageBgFillResult', params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'GetImageBgFillResult')
+        res_json = json.loads(res)
+        return res_json
+
+    def get_image_duplicate_detection(self, body):
+        query = {
+            'ServiceId': body['ServiceId'],
+        }
+        res = self.imagex_post('GetImageDuplicateDetection', query, json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % 'GetImageDuplicateDetection')
+        res_json = json.loads(res)
+        return res_json
+
+    def get_image_duplicate_task_status(self, query):
+        res = self.imagex_get('GetDedupTaskStatus', query)
+        if res == '':
+            raise Exception("%s: empty response" % 'GetDedupTaskStatus')
         res_json = json.loads(res)
         return res_json
 
