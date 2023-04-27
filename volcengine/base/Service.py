@@ -4,6 +4,9 @@ import logging
 import os
 import time
 from collections import OrderedDict
+
+from requests.auth import AuthBase
+
 try:
     from urllib.parse import urlencode
 except ImportError:
@@ -21,6 +24,23 @@ from volcengine.auth.SignerV4 import SignerV4
 from volcengine.base.Request import Request
 from volcengine.util.Util import *
 from volcengine import VERSION
+
+
+class VolcAuth(AuthBase):
+    def __init__(self, client, request):
+        # setup any auth-related data here
+        self.client = client
+        self.request = request
+
+    def __call__(self, r):
+        self.request.body = r.body
+        self.request.headers["Content-Type"] = r.headers["Content-Type"]
+        self.request.headers["Content-Length"] = r.headers["Content-Length"]
+        SignerV4.sign(self.request, self.client.service_info.credentials)
+        for k in self.request.headers:
+            v = self.request.headers[k]
+            r.headers[k] = v
+        return r.headers
 
 
 class Service(object):
@@ -62,7 +82,6 @@ class Service(object):
                         self.service_info.credentials.set_ak(j['ak'])
                     if 'sk' in j:
                         self.service_info.credentials.set_sk(j['sk'])
-
 
     def set_ak(self, ak):
         self.service_info.credentials.set_ak(ak)
@@ -124,6 +143,25 @@ class Service(object):
 
         resp = self.session.post(url, headers=r.headers, data=r.form,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
+        if resp.status_code == 200:
+            return resp.text
+        else:
+            raise Exception(resp.text)
+
+    def request(self, api, params, data, files=None, reqConfig=None):
+
+        if not (api in self.api_info):
+            raise Exception("no such api")
+        api_info = self.api_info[api]
+
+        r = self.prepare_request(api_info, params)
+        if reqConfig is not None:
+            reqConfig(r)
+        url = r.build()
+
+        resp = self.session.request(api_info.method, url, data=data, files=files,
+                                    timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout),
+                                    auth=VolcAuth(self, r))
         if resp.status_code == 200:
             return resp.text
         else:
