@@ -798,6 +798,8 @@ class DescribeAlarmNotifyGroupsRequest(TLSRequest):
         self.page_number = page_number
         self.page_size = page_size
 
+    def check_validation(self):
+        return True
 
 class SetAlarmRequest(TLSRequest):
     def __init__(self, alarm_name: str = None, query_request: List[QueryRequest] = None,
