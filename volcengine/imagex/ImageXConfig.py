@@ -115,12 +115,14 @@ api_info = {
 
     "UpdateServiceName":
         ApiInfo("POST", "/", {"Action": "UpdateServiceName", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "UpdateImageStorageTTL":
+        ApiInfo("POST", "/", {"Action": "UpdateImageStorageTTL", "Version": IMAGEX_API_VERSION}, {}, {}),
     "DescribeImageVolcCdnAccessLog":
         ApiInfo("POST", "/", {"Action": "DescribeImageVolcCdnAccessLog", "Version": IMAGEX_API_VERSION}, {}, {}),
 
     # 其他 API
-    "GetImageOCR":
-        ApiInfo("POST", "/", {"Action": "GetImageOCR", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageOCRV2":
+        ApiInfo("POST", "/", {"Action": "GetImageOCRV2", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageQuality":
         ApiInfo("POST", "/", {"Action": "GetImageQuality", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageEraseModels":
@@ -131,6 +133,8 @@ api_info = {
         ApiInfo("POST", "/", {"Action": "GetImageBgFillResult", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageDuplicateDetection":
         ApiInfo("POST", "/", {"Action": "GetImageDuplicateDetection", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetDedupTaskStatus":
+        ApiInfo("GET", "/", {"Action": "GetImageDuplicateDetection", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetDenoisingImage":
         ApiInfo("POST", "/", {"Action": "GetDenoisingImage", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetSegmentImage":
