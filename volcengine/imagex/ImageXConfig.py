@@ -129,6 +129,8 @@ api_info = {
         ApiInfo("GET", "/", {"Action": "GetImageEraseModels", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageEnhanceResult":
         ApiInfo("POST", "/", {"Action": "GetImageEnhanceResult", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageEnhanceResultWithData":
+        ApiInfo("POST", "/", {"Action": "GetImageEnhanceResultWithData", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageBgFillResult":
         ApiInfo("POST", "/", {"Action": "GetImageBgFillResult", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageDuplicateDetection":

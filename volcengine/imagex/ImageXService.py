@@ -375,7 +375,14 @@ class ImageXService(Service):
         return res_json
 
     def imagex_post(self, action, params, body):
-        res = self.json(action, params, body)
+        res = self.request(action, params, body)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(json.dumps(res))
+        return res_json
+
+    def imagex_request(self, action, params, body, files):
+        res = self.request(action, params, body, files)
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(json.dumps(res))
@@ -463,6 +470,20 @@ class ImageXService(Service):
             'Resolution': params.get('Resolution', None)
         }
         res = self.imagex_post('GetImageEnhanceResult', params, json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % 'GetImageEnhanceResult')
+        res_json = json.loads(res)
+        return res_json
+
+    def get_image_enhance_result_with_data(self, input, data):
+        params = {
+            "ServiceId": input["ServiceId"]
+        }
+        res = self.imagex_request('GetImageEnhanceResultWithData', params, body={
+            'Input': json.dumps(input),
+        }, files={
+            'Data': ('img', data),
+        })
         if res == '':
             raise Exception("%s: empty response" % 'GetImageEnhanceResult')
         res_json = json.loads(res)
