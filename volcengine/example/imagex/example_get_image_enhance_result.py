@@ -15,7 +15,6 @@ if __name__ == '__main__':
     params['Model'] = 0
     params['DisableAr'] = False
     params['DisableSharp'] = False
-    params['Resolution'] = ''
 
     resp = imagex_service.get_image_enhance_result(params)
     print(resp)
