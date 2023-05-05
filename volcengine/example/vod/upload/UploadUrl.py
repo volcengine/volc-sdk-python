@@ -12,7 +12,7 @@ if __name__ == '__main__':
     vod_service.set_sk('your sk')
 
     space_name = 'your space'
-    url = 'url'
+    url = ''
 
     try:
         req = VodUrlUploadRequest()
@@ -20,7 +20,7 @@ if __name__ == '__main__':
         url_set = req.URLSets.add()
         url_set.SourceUrl = url
         url_set.FileExtension = '.mp4'
-        url_set.StorageClass = 0
+        url_set.CallbackArgs = 'my python callback args'
         resp = vod_service.upload_media_by_url(req)
     except Exception:
         raise
