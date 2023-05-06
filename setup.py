@@ -4,7 +4,7 @@ import sys
 from setuptools import setup, find_packages
 from volcengine import VERSION
 
-install_requires = ["requests", "retry", "pytz", "pycryptodome", "protobuf", "google", "six", "lz4a"]
+install_requires = ["requests", "retry", "pytz", "pycryptodome", "protobuf", "google", "six"]
 
 # 在Windows平台上不安装不兼容的第三方库
 if sys.platform in ("win32", "cygwin"):
