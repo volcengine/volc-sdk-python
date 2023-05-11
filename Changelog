@@ -1,5 +1,9 @@
 ### Change log
 
+2023-05-11 Bumped to version v1.0.89
+- Updated apis for imagex
+- Removed lz4a from setup.py
+
 2023-05-05 Bumped to version v1.0.88
 - Updated apis for vod/imagex
 
