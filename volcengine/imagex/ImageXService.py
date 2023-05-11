@@ -375,7 +375,7 @@ class ImageXService(Service):
         return res_json
 
     def imagex_post(self, action, params, body):
-        res = self.request(action, params, body)
+        res = self.json(action, params, body)
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(json.dumps(res))
@@ -552,6 +552,16 @@ class ImageXService(Service):
         res = self.imagex_post('GetLicensePlateDetection', params, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'GetLicensePlateDetection')
+        res_json = json.loads(res)
+        return res_json
+
+    def get_image_style_result(self, args):
+        query = {
+            'ServiceId': args['ServiceId'],
+        }
+        res = self.imagex_post('GetImageStyleResult', query, json.dumps(args))
+        if res == '':
+            raise Exception("%s: empty response" % 'GetImageStyleResult')
         res_json = json.loads(res)
         return res_json
 

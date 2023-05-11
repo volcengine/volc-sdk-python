@@ -34,8 +34,10 @@ class VolcAuth(AuthBase):
 
     def __call__(self, r):
         self.request.body = r.body
-        self.request.headers["Content-Type"] = r.headers["Content-Type"]
-        self.request.headers["Content-Length"] = r.headers["Content-Length"]
+        if "Content-Type" in r.headers:
+            self.request.headers["Content-Type"] = r.headers["Content-Type"]
+        if "Content-Length" in r.headers:
+            self.request.headers["Content-Length"] = r.headers["Content-Length"]
         SignerV4.sign(self.request, self.client.service_info.credentials)
         for k in self.request.headers:
             v = self.request.headers[k]

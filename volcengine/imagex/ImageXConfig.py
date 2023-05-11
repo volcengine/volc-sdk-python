@@ -159,4 +159,6 @@ api_info = {
         ApiInfo("POST", "/", {"Action": "CreateImageHmExtract", "Version": IMAGEX_API_VERSION}, {}, {}),
     "GetImageEraseResult":
         ApiInfo("POST", "/", {"Action": "GetImageEraseResult", "Version": IMAGEX_API_VERSION}, {}, {}),
+    "GetImageStyleResult":
+        ApiInfo("POST", "/", {"Action": "GetImageStyleResult", "Version": IMAGEX_API_VERSION}, {}, {}),
 }
