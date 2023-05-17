@@ -6,10 +6,6 @@ from volcengine import VERSION
 
 install_requires = ["requests", "retry", "pytz", "pycryptodome", "protobuf", "google", "six"]
 
-# 在Windows平台上不安装不兼容的第三方库
-if sys.platform in ("win32", "cygwin"):
-    install_requires.remove("lz4a")
-
 setup(
     name="volcengine",
     version=VERSION,
