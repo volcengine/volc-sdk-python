@@ -5,7 +5,7 @@ import threading
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
 from volcengine.base.Service import Service
-from volcengine.ServiceInfo import ServiceInfo
+from volcengine.ServiceInfoHttps import ServiceInfoSms
 from volcengine.const.Const import *
 from retry import retry
 
@@ -20,19 +20,15 @@ class SmsService(Service):
                     SmsService._instance = object.__new__(cls)
         return SmsService._instance
 
-    def __init__(self, region=REGION_CN_NORTH1):
-        self.service_info = SmsService.get_service_info(self, region)
+    def __init__(self):
+        self.service_info = SmsService.get_service_info(self, REGION_CN_NORTH1)
         self.api_info = SmsService.get_api_info()
         super(SmsService, self).__init__(self.service_info, self.api_info)
 
     @staticmethod
     def get_service_info(self, region):
-        if region == REGION_AP_SINGAPORE1:
-            service_info = ServiceInfo("sms.byteplusapi.com", {'Accept': 'application/json'},
-                                       Credentials('', '', 'volcSMS', region), 5, 5)
-        else:
-            service_info = ServiceInfo("sms.volcengineapi.com", {'Accept': 'application/json'},
-                                       Credentials('', '', 'volcSMS', region), 5, 5)
+        service_info = ServiceInfoSms("sms.volcengineapi.com", {'Accept': 'application/json'},
+                                      Credentials('', '', 'volcSMS', region), 5, 5)
         return service_info
 
     @staticmethod
@@ -64,8 +60,8 @@ class SmsService(Service):
                                             {},
                                             {}),
             "InsertSubAccount": ApiInfo("POST", "/", {"Action": "InsertSubAccount", "Version": "2021-01-11"},
-                                            {},
-                                            {}),
+                                        {},
+                                        {}),
         }
         return api_info
 

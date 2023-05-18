@@ -15,9 +15,7 @@ if __name__ == '__main__':
     # call below method if you dont set ak and sk in $HOME/.volc/config
     sms_service.set_ak('ak')
     sms_service.set_sk('sk')
-    # sms_service.set_scheme("http")
-    # sms_service.set_scheme("https")
-    # sms_service.set_host('host')¬
+    # sms_service.set_host('host')
 
     body = {
         "subAccount": "subAccount",
