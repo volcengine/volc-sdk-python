@@ -35,6 +35,7 @@ class ContentSecurityService(Service):
         api_info = {"AsyncVideoRisk": ApiInfo("POST", "/", {"Action": "AsyncVideoRisk", "Version": "2021-11-29"}, {}, {}),
                     "VideoResult": ApiInfo("GET", "/", {"Action": "VideoResult", "Version": "2021-11-29"}, {}, {}),
                     "ImageContentRisk": ApiInfo("POST", "/", {"Action": "ImageContentRisk", "Version": "2021-11-29"}, {}, {}),
+                    "ImageContentRiskV2": ApiInfo("POST", "/", {"Action": "ImageContentRiskV2", "Version": "2021-11-29"}, {}, {}),
                     "AsyncImageRisk": ApiInfo("POST", "/", {"Action": "AsyncImageRisk", "Version": "2021-11-29"}, {}, {}),
                     "ImageResult": ApiInfo("GET", "/", {"Action": "GetImageResult", "Version": "2021-11-29"}, {}, {}),
                     "TextRisk": ApiInfo("POST", "/", {"Action": "TextRisk", "Version": "2022-01-26"}, {}, {}),
@@ -78,6 +79,13 @@ class ContentSecurityService(Service):
 
     def image_content_risk(self, params, body):
         res = self.json("ImageContentRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def image_content_risk_v2(self, params, body):
+        res = self.json("ImageContentRiskV2", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
