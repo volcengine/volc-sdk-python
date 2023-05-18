@@ -68,12 +68,24 @@ AREA_ALL = "all"
 SOURCE_TYPE_TEXT = "text/string"
 SOURCE_TYPE_VIDEO = "video/mp4"
 SOURCE_TYPE_IMAGE_JPG = "image/jpg"
-Source_TYPE_IMAGE_PNG = "image/png "
-Source_TYPE_IMAGE_GIF = "image/gif"
-Source_TYPE_MP3 = "audio/mp3"
+SOURCE_TYPE_IMAGE_PNG = "image/png "
+SOURCE_TYPE_IMAGE_GIF = "image/gif"
+SOURCE_TYPE_MP3 = "audio/mp3"
 
-SourceTypeImageJPG = "image/jpg"
-SourceTypeImagePNG = "image/png "
-SourceTypeImageGIF = "image/gif"
-SourceTypeAudio = "audio/mp3"
+DOC_TYPE_THREE_IN_ONE = 0  # 三证合一
+DOC_TYPE_BUSINESS_LICENSE = 1  # 企业营业执照
+DOC_TYPE_ORGANIZATION_CODE_CERTIFICATE = 2  # 组织机构代码证
+DOC_TYPE_TAX_REGISTRATION_CERTIFICATE = 3  # 税务登记证
+DOC_TYPE_SOCIAL_CREDIT_CODE_CERTIFICATE = 4  # 社会信用代码证书
+DOC_TYPE_POWER_OF_ATTORNEY = 5  # 授权委托书
+DOC_TYPE_OTHERS = 6  # 其他 / 更多
 
+SIGN_SOURCE_TYPE_COMPANY = "公司全称/简称"
+SIGN_SOURCE_TYPE_SITE = "工信部备案网站全称/简称"
+SIGN_SOURCE_TYPE_APP = "APP全称/简称"
+SIGN_SOURCE_TYPE_OFFICIAL_ACCOUNTS = "公众号、小程序全称/简称"
+SIGN_SOURCE_TYPE_BRAND = "商标全称/简称"
+SIGN_SOURCE_TYPE_STORE = "电商平台店铺名的全称/简称"
+
+SIGN_PURPOSE_FOR_OWN = 1
+SIGN_PURPOSE_FOR_OTHER = 2
