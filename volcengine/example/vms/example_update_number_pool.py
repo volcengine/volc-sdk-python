@@ -1,16 +1,16 @@
 # coding:utf-8
-from volcengine.vms.NumberPoolService import NumberPoolService
+from volcengine.vms.VmsService import VmsService
 
 if __name__ == '__main__':
-    numberPoolService = NumberPoolService()
+    vms_service = VmsService()
 
-    numberPoolService.set_ak("your ak")
-    numberPoolService.set_sk("your sk")
+    vms_service.set_ak("your ak")
+    vms_service.set_sk("your sk")
 
     form = {
         "Name": "testsipv2",
         "ServiceType": 100,
         "SubServiceType": 101,
-        "NumberPoolNo":"todo"
+        "NumberPoolNo": "todo"
     }
-    print(numberPoolService.update_number_pool(form))
+    print(vms_service.update_number_pool(form))

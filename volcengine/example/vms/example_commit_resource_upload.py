@@ -1,4 +1,5 @@
 # coding:utf-8
+
 from volcengine.vms.VmsService import VmsService
 
 if __name__ == '__main__':
@@ -7,7 +8,8 @@ if __name__ == '__main__':
     vms_service.set_ak("your ak")
     vms_service.set_sk("your sk")
 
-    form = {
-        "NumberPoolNo": "xxx"
+    body = {
+       "FileName": "ecb1be9b71974916a529b936702783cb.mp3",
     }
-    print(vms_service.select_number(form))
+
+    print(vms_service.commit_resource_upload(body))

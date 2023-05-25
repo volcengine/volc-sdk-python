@@ -7,7 +7,8 @@ if __name__ == '__main__':
     vms_service.set_ak("your ak")
     vms_service.set_sk("your sk")
 
-    form = {
-        "NumberPoolNo": "xxx"
+    unbind_axn_form = {
+        "NumberPoolNo": "NP162981168404095092",
+        "SubId": "S16329006138991e7e1003",
     }
-    print(vms_service.select_number(form))
+    print(vms_service.unbind_axn(unbind_axn_form))
