@@ -1,5 +1,8 @@
 ### Change log
 
+2023-05-25 Bumped to version v1.0.92
+Updated apis for vms
+
 2023-05-18 Bumped to version v1.0.91
 - Updated apis for sms/vod/security
 - Urgent notice and update: Due to privacy data security requirements, the Volc SMS SDK will no longer support SG overseas access points. If you used volc-sdk to implement SG overseas endpoints before, please modify your code to avoid future build failures. If you require overseas access to SMS, please use BytePlus services.
