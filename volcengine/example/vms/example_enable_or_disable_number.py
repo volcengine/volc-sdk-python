@@ -1,14 +1,14 @@
 # coding:utf-8
-from volcengine.vms.NumberPoolService import NumberPoolService
+from volcengine.vms.VmsService import VmsService
 
 if __name__ == '__main__':
-    numberPoolService = NumberPoolService()
+    vms_service = VmsService()
 
-    numberPoolService.set_ak("your ak")
-    numberPoolService.set_sk("your sk")
+    vms_service.set_ak("your ak")
+    vms_service.set_sk("your sk")
 
     form = {
         "NumberList": "xxx",
         "EnableCode": 2
     }
-    print(numberPoolService.enable_or_disable_number(form))
+    print(vms_service.enable_or_disable_number(form))
