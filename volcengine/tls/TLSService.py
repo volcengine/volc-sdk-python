@@ -86,6 +86,10 @@ API_INFO = {
     CLOSE_KAFKA_CONSUMER: ApiInfo(HTTP_PUT, CLOSE_KAFKA_CONSUMER, {}, {}, {}),
     DESCRIBE_KAFKA_CONSUMER: ApiInfo(HTTP_GET, DESCRIBE_KAFKA_CONSUMER, {}, {}, {})}
 
+HEADER_API_VERSION = "x-tls-apiversion"
+API_VERSION_V_0_3_0 = "0.3.0"
+API_VERSION_V_0_2_0 = "0.2.0"
+
 
 class TLSService(Service):
     _instance_lock = threading.Lock()
@@ -129,7 +133,8 @@ class TLSService(Service):
         return TLSService._instance
 
     def __init__(self, endpoint: str, access_key_id: str, access_key_secret: str, region: str,
-                 security_token: str = None, scheme: str = "https", timeout: int = 60):
+                 security_token: str = None, scheme: str = "https", timeout: int = 60,
+                 api_version=API_VERSION_V_0_2_0):
         self.__endpoint = endpoint
         self.__access_key_id = access_key_id
         self.__access_key_secret = access_key_secret
@@ -137,6 +142,7 @@ class TLSService(Service):
         self.__security_token = security_token
         self.__scheme = scheme
         self.__timeout = timeout
+        self.__api_version = api_version
         super(TLSService, self).__init__(service_info=self.get_service_info(), api_info=API_INFO)
 
     def get_region(self):
@@ -147,7 +153,6 @@ class TLSService(Service):
 
         if self.__security_token is not None:
             header[X_SECURITY_TOKEN] = self.__security_token
-
         credentials = Credentials(ak=self.__access_key_id, sk=self.__access_key_secret,
                                   service="TLS", region=self.__region)
         service_info = ServiceInfo(host=self.__endpoint, header=header, credentials=credentials, scheme=self.__scheme,
@@ -184,7 +189,12 @@ class TLSService(Service):
 
     def __request(self, api: str, params: dict = None, body: dict = None, request_headers: dict = None):
         # logging.info("Requesting {}...\tParams = {}\tBody = {}".format(api, params, body))
-
+        if request_headers is None:
+            request_headers = {HEADER_API_VERSION: self.__api_version}
+        elif HEADER_API_VERSION not in request_headers:
+            request_headers[HEADER_API_VERSION] = self.__api_version
+        if CONTENT_TYPE not in request_headers:
+            request_headers[CONTENT_TYPE] = APPLICATION_JSON
         request = self.__prepare_request(api, params, body, request_headers)
 
         method = self.api_info[api].method
@@ -348,7 +358,7 @@ class TLSService(Service):
         for v in request.logs.logs:
             new_log = log_group.logs.add()
             if v.time <= 0:
-                new_log.time = int(time.time()*1000)
+                new_log.time = int(time.time() * 1000)
             else:
                 new_log.time = v.time
             for key in v.log_dict.keys():
@@ -357,7 +367,6 @@ class TLSService(Service):
                 log_content.value = str(v.log_dict[key])
         put_logs_request = PutLogsRequest(request.topic_id, log_group_list, request.hash_key, request.compression)
         return self.put_logs(put_logs_request)
-
 
     def describe_cursor(self, describe_cursor_request: DescribeCursorRequest) -> DescribeCursorResponse:
         if describe_cursor_request.check_validation() is False:
@@ -379,6 +388,20 @@ class TLSService(Service):
         if search_logs_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=SEARCH_LOGS, body=search_logs_request.get_api_input())
+
+        return SearchLogsResponse(response)
+
+    def search_logs_v2(self, search_logs_request: SearchLogsRequest) -> SearchLogsResponse:
+        """
+        :param search_logs_request:搜索日志，按照api-version 0.3.0进行
+        :type search_logs_request:
+        :return: SearchLogsResponse:搜索日志
+        :rtype: SearchLogsResponse
+        """
+        if search_logs_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        headers = {HEADER_API_VERSION: API_VERSION_V_0_3_0}
+        response = self.__request(api=SEARCH_LOGS, body=search_logs_request.get_api_input(), request_headers=headers)
 
         return SearchLogsResponse(response)
 
@@ -422,7 +445,7 @@ class TLSService(Service):
 
         return DescribeDownloadTasksResponse(response)
 
-    def describe_download_url(self, describe_download_url_request: DescribeDownloadUrlRequest)\
+    def describe_download_url(self, describe_download_url_request: DescribeDownloadUrlRequest) \
             -> DescribeDownloadUrlResponse:
         if describe_download_url_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
@@ -495,7 +518,7 @@ class TLSService(Service):
 
         return DescribeHostGroupRulesResponse(response)
 
-    def modify_host_groups_auto_update(self, modify_host_groups_auto_update_request: ModifyHostGroupsAutoUpdateRequest)\
+    def modify_host_groups_auto_update(self, modify_host_groups_auto_update_request: ModifyHostGroupsAutoUpdateRequest) \
             -> ModifyHostGroupsAutoUpdateResponse:
         if modify_host_groups_auto_update_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
@@ -631,7 +654,7 @@ class TLSService(Service):
 
         return CloseKafkaConsumerResponse(response)
 
-    def describe_kafka_consumer(self, describe_kafka_consumer_request: DescribeKafkaConsumerRequest)\
+    def describe_kafka_consumer(self, describe_kafka_consumer_request: DescribeKafkaConsumerRequest) \
             -> DescribeKafkaConsumerResponse:
         if describe_kafka_consumer_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")

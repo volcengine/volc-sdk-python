@@ -3,48 +3,58 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import os
+import time
+
 from volcengine.tls.TLSService import TLSService
 from volcengine.tls.tls_requests import *
 
-
 if __name__ == "__main__":
     # 请查询控制台，填写以下参数值
-    endpoint = ""
-    access_key_id = ""
-    access_key_secret = ""
-    region = ""
+    endpoint = os.environ["endpoint"]
+    access_key_id = os.environ["access_key_id"]
+    access_key_secret = os.environ["access_key_secret"]
+    region = os.environ["region"]
 
     # 实例化TLS客户端
     tls_service = TLSService(endpoint, access_key_id, access_key_secret, region)
+    now = str(int(time.time()))
 
     # 创建日志项目
-    create_project_request = CreateProjectRequest(project_name="project-name", region=region,
+    create_project_request = CreateProjectRequest(project_name="project-name-" + now, region=region,
                                                   description="project-description")
     create_project_response = tls_service.create_project(create_project_request)
-    project_id = create_project_response.project_id
+    project_id = create_project_response.get_project_id()
 
     # 创建日志主题
-    create_topic_request = CreateTopicRequest(topic_name="topic-name", project_id=project_id,
+    create_topic_request = CreateTopicRequest(topic_name="topic-name-" + now, project_id=project_id,
                                               ttl=3650, description="topic-description", shard_count=2)
     create_topic_response = tls_service.create_topic(create_topic_request)
-    topic_id = create_topic_response.topic_id
+    topic_id = create_topic_response.get_topic_id()
 
     # 创建告警组
-    receiver = Receiver(receiver_type="User", receiver_names=["receiver-name"], receiver_channels=["Email", "Sms"],
+    receiver = Receiver(receiver_type="User", receiver_names=["zhangshiqi.17"], receiver_channels=["Email", "Sms"],
                         start_time="00:00:00", end_time="23:59:59")
-    create_alarm_notify_group_request = CreateAlarmNotifyGroupRequest(alarm_notify_group_name="alarm-notify-group-name",
-                                                                      notify_type=["Trigger", "Recovery"],
-                                                                      receivers=[receiver])
+    create_alarm_notify_group_request = CreateAlarmNotifyGroupRequest(
+        alarm_notify_group_name="alarm-notify-group-name-" + now,
+        notify_type=["Trigger", "Recovery"],
+        receivers=[receiver])
     create_alarm_notify_group_response = tls_service.create_alarm_notify_group(create_alarm_notify_group_request)
-    alarm_notify_group_id = create_alarm_notify_group_response.alarm_notify_group_id
+    alarm_notify_group_id = create_alarm_notify_group_response.get_alarm_notify_group_id()
 
     # 获取告警组
     describe_alarm_notify_groups_request = DescribeAlarmNotifyGroupsRequest()
-    describe_alarm_notify_groups_response = tls_service.describe_alarm_notify_groups(describe_alarm_notify_groups_request)
+    describe_alarm_notify_groups_response = tls_service.describe_alarm_notify_groups(
+        describe_alarm_notify_groups_request)
+    print("topics total:{} first alarm group name:{}".format(describe_alarm_notify_groups_response.get_total(),
+                                                             describe_alarm_notify_groups_response.
+                                                             get_alarm_notify_groups()[
+                                                                 0].get_alarm_notify_group_name()))
 
     # 修改告警组
     modify_alarm_notify_group_request = \
-        ModifyAlarmNotifyGroupRequest(alarm_notify_group_id, alarm_notify_group_name="change-alarm-notify-group-name")
+        ModifyAlarmNotifyGroupRequest(alarm_notify_group_id,
+                                      alarm_notify_group_name="change-alarm-notify-group-name-" + now)
     modify_alarm_notify_group_response = tls_service.modify_alarm_notify_group(modify_alarm_notify_group_request)
 
     # 创建告警策略
@@ -61,6 +71,8 @@ if __name__ == "__main__":
     # 查询告警策略
     describe_alarms_request = DescribeAlarmsRequest(project_id)
     describe_alarms_response = tls_service.describe_alarms(describe_alarms_request)
+    print("topics total:{} first alarm name:{}".format(describe_alarms_response.get_total(),
+                                                       describe_alarms_response.get_alarms()[0].get_alarm_name()))
 
     # 修改告警策略
     modify_alarm_request = ModifyAlarmRequest(alarm_id, trigger_period=2)
@@ -73,3 +85,9 @@ if __name__ == "__main__":
     # 删除告警组
     delete_alarm_notify_group_request = DeleteAlarmNotifyGroupRequest(alarm_notify_group_id)
     delete_alarm_notify_group_response = tls_service.delete_alarm_notify_group(delete_alarm_notify_group_request)
+
+    # 删除topic
+    tls_service.delete_topic(DeleteTopicRequest(topic_id))
+
+    # 删除日志项目
+    tls_service.delete_project(DeleteProjectRequest(project_id))
