@@ -6,6 +6,8 @@ from __future__ import print_function
 import json
 import struct
 
+from volcengine.tls.util import TLSUtil
+
 try:
     import lz4
 except ImportError:
@@ -36,19 +38,33 @@ class TLSResponse:
         else:
             self.response = {DATA: response.content}
 
+    def get_headers(self):
+        """
+        :return: 请求headers
+        :rtype: dict
+        """
+        return self.headers
+
+    def get_request_id(self):
+        """
+        :return: tls请求id
+        :rtype: str
+        """
+        return self.request_id
+
     @staticmethod
     def _get_host_group_hosts_rules_info(host_group_hosts_rules_info) -> HostGroupHostsRulesInfo:
         host_group_hosts_rules_info[HOST_GROUP_INFO] = \
             HostGroupInfo.set_attributes(data=host_group_hosts_rules_info[HOST_GROUP_INFO])
         host_group_info = host_group_hosts_rules_info[HOST_GROUP_INFO]
 
-        host_infos = host_group_hosts_rules_info[HOST_INFOS]
-        for i in range(len(host_infos)):
-            host_infos[i] = HostInfo.set_attributes(data=host_infos[i])
+        host_infos = []
+        for i in range(len(host_group_hosts_rules_info[HOST_INFOS])):
+            host_infos.append((HostInfo.set_attributes(data=host_group_hosts_rules_info[HOST_INFOS][i])))
 
-        rule_infos = host_group_hosts_rules_info[RULE_INFOS]
-        for i in range(len(rule_infos)):
-            rule_infos[i] = RuleInfo.set_attributes(data=rule_infos[i])
+        rule_infos = []
+        for i in range(len(host_group_hosts_rules_info[RULE_INFOS])):
+            rule_infos.append(RuleInfo.set_attributes(data=host_group_hosts_rules_info[RULE_INFOS][i]))
 
         return HostGroupHostsRulesInfo(host_group_info, host_infos, rule_infos)
 
@@ -58,6 +74,13 @@ class CreateProjectResponse(TLSResponse):
         super(CreateProjectResponse, self).__init__(response)
 
         self.project_id = self.response[PROJECT_ID]
+
+    def get_project_id(self):
+        """
+        :return:日志项目id
+        :rtype: str
+        """
+        return self.project_id
 
 
 class DeleteProjectResponse(TLSResponse):
@@ -76,16 +99,38 @@ class DescribeProjectResponse(TLSResponse):
 
         self.project = ProjectInfo.set_attributes(data=self.response)
 
+    def get_project(self):
+        """
+        :return: 日志项目
+        :rtype: ProjectInfo
+        """
+        return self.project
+
 
 class DescribeProjectsResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeProjectsResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.projects = self.response[PROJECTS]
+        self.projects = []
+        projects = self.response[PROJECTS]
 
-        for i in range(len(self.projects)):
-            self.projects[i] = ProjectInfo.set_attributes(data=self.projects[i])
+        for i in range(len(projects)):
+            self.projects.append(ProjectInfo.set_attributes(data=projects[i]))
+
+    def get_total(self):
+        """
+        :return: project总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_projects(self):
+        """
+        :return: 日志项目列表
+        :rtype: List[ProjectInfo]
+        """
+        return self.projects
 
 
 class CreateTopicResponse(TLSResponse):
@@ -93,6 +138,13 @@ class CreateTopicResponse(TLSResponse):
         super(CreateTopicResponse, self).__init__(response)
 
         self.topic_id = self.response[TOPIC_ID]
+
+    def get_topic_id(self):
+        """
+        :return: 日志主题 ID
+        :rtype: str
+        """
+        return self.topic_id
 
 
 class DeleteTopicResponse(TLSResponse):
@@ -111,16 +163,38 @@ class DescribeTopicResponse(TLSResponse):
 
         self.topic = TopicInfo.set_attributes(data=self.response)
 
+    def get_topic(self):
+        """
+        :return: 日志主题
+        :rtype: TopicInfo
+        """
+        return self.topic
+
 
 class DescribeTopicsResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeTopicsResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.topics = self.response[TOPICS]
+        topics = self.response[TOPICS]
+        self.topics = []
 
-        for i in range(len(self.topics)):
-            self.topics[i] = TopicInfo.set_attributes(data=self.topics[i])
+        for i in range(len(topics)):
+            self.topics.append(TopicInfo.set_attributes(data=topics[i]))
+
+    def get_total(self):
+        """
+        :return: topic总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_topics(self):
+        """
+        :return: topic列表
+        :rtype: List[TopicInfo]
+        """
+        return self.topics
 
 
 class CreateIndexResponse(TLSResponse):
@@ -143,18 +217,47 @@ class ModifyIndexResponse(TLSResponse):
 class DescribeIndexResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeIndexResponse, self).__init__(response)
-
+        self.full_text = FullTextInfo()
         if self.response[FULL_TEXT] is not None:
             self.full_text = FullTextInfo.set_attributes(data=self.response[FULL_TEXT])
-        else:
-            self.full_text = None
-        self.key_value = self.response[KEY_VALUE]
+            self.full_text.delimiter = TLSUtil.replace_white_space_character(self.full_text.delimiter)
+        self.key_value = []
+        key_value = self.response[KEY_VALUE]
         self.create_time = self.response[CREATE_TIME]
         self.modify_time = self.response[MODIFY_TIME]
 
-        for i in range(len(self.key_value)):
-            self.key_value[i] = KeyValueInfo(key=self.key_value[i][KEY],
-                                             value=ValueInfo.set_attributes(data=self.key_value[i][VALUE]))
+        for i in range(len(key_value)):
+            self.key_value.append(KeyValueInfo(key=key_value[i][KEY],
+                                               value=ValueInfo.set_attributes(data=key_value[i][VALUE])))
+            self.key_value[i].value.delimiter = TLSUtil.replace_white_space_character(self.key_value[i].value.delimiter)
+
+    def get_create_time(self):
+        """
+        :return: 创建时间
+        :rtype: str
+        """
+        return self.create_time
+
+    def get_full_text(self):
+        """
+        :return: 全文索引配置
+        :rtype: FullTextInfo
+        """
+        return self.full_text
+
+    def get_modify_time(self):
+        """
+         :return: 修改时间
+         :rtype: str
+         """
+        return self.modify_time
+
+    def get_key_value(self):
+        """
+        :return: 键值索引配置
+        :rtype: List[KeyValueInfo]
+        """
+        return self.key_value
 
 
 class PutLogsResponse(TLSResponse):
@@ -167,6 +270,13 @@ class DescribeCursorResponse(TLSResponse):
         super(DescribeCursorResponse, self).__init__(response)
 
         self.cursor = self.response[CURSOR]
+
+    def get_cursor(self):
+        """
+        :return: 游标
+        :rtype: str
+        """
+        return self.cursor
 
 
 class ConsumeLogsResponse(TLSResponse):
@@ -187,12 +297,42 @@ class ConsumeLogsResponse(TLSResponse):
             self.pb_message = LogGroupList()
             self.pb_message.ParseFromString(pb_message)
 
+    def get_x_tls_count(self):
+        """
+
+        :return: 本次读取的 logGroup 数量
+        :rtype: int
+        """
+        return self.x_tls_count
+
+    def get_pb_message(self):
+        """
+
+        :return:日志数据
+        :rtype:LogGroupList
+        """
+        return self.pb_message
+
+    def get_x_tls_cursor(self):
+        """
+        :return: 当前读取数据下一条 Cursor
+        :rtype: str
+        """
+        return self.x_tls_cursor
+
 
 class SearchLogsResponse(TLSResponse):
     def __init__(self, response: Response):
         super(SearchLogsResponse, self).__init__(response)
 
         self.search_result = SearchResult.set_attributes(data=self.response)
+
+    def get_search_result(self):
+        """
+        :return: 搜索结果
+        :rtype: SearchResult
+        """
+        return self.search_result
 
 
 class DescribeLogContextResponse(TLSResponse):
@@ -202,6 +342,27 @@ class DescribeLogContextResponse(TLSResponse):
         self.log_context_infos = self.response[LOG_CONTEXT_INFOS]
         self.prev_over = self.response[PREV_OVER]
         self.next_over = self.response[NEXT_OVER]
+
+    def get_prev_over(self):
+        """
+        :return:除 LogContextInfos 中的日志以外，是否还存在其他上文
+        :rtype:bool
+        """
+        return self.prev_over
+
+    def get_log_context_infos(self):
+        """
+        :return:日志的上下文日志信息
+        :rtype:List[dict]
+        """
+        return self.log_context_infos
+
+    def get_next_over(self):
+        """
+        :return:除 LogContextInfos 中的日志以外，是否还存在其他下文
+        :rtype:bool
+        """
+        return self.next_over
 
 
 class WebTracksResponse(TLSResponse):
@@ -216,10 +377,39 @@ class DescribeHistogramResponse(TLSResponse):
         self.result_status = self.response[RESULT_STATUS]
         self.interval = self.response[INTERVAL]
         self.total_count = self.response[TOTAL_COUNT]
-        self.histogram = self.response[HISTOGRAM]
+        self.histogram = []
+        histogram = self.response[HISTOGRAM]
 
-        for i in range(len(self.histogram)):
-            self.histogram[i] = HistogramInfo.set_attributes(data=self.histogram[i])
+        for i in range(len(histogram)):
+            self.histogram.append(HistogramInfo.set_attributes(data=histogram[i]))
+
+    def get_histogram(self):
+        """
+        :return:所有子区间的结果集
+        :rtype:List[HistogramInfo]
+        """
+        return self.histogram
+
+    def get_result_status(self):
+        """
+        :return:查询的状态
+        :rtype:str
+        """
+        return self.result_status
+
+    def get_total_count(self):
+        """
+        :return:请求所有直方图数据总和
+        :rtype:int
+        """
+        return self.total_count
+
+    def get_interval(self):
+        """
+        :return:直方图的子区间长度
+        :rtype:int
+        """
+        return self.interval
 
 
 class CreateDownloadTaskResponse(TLSResponse):
@@ -228,16 +418,38 @@ class CreateDownloadTaskResponse(TLSResponse):
 
         self.task_id = self.response[TASK_ID]
 
+    def get_task_id(self):
+        """
+        :return: 下载任务id
+        :rtype: str
+        """
+        return self.task_id
+
 
 class DescribeDownloadTasksResponse(TLSResponse):
     def __init__(self, response):
         super(DescribeDownloadTasksResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.tasks = self.response[TASKS]
+        self.tasks = []
+        tasks = self.response[TASKS]
 
-        for i in range(len(self.tasks)):
-            self.tasks[i] = TaskInfo.set_attributes(data=self.tasks[i])
+        for i in range(len(tasks)):
+            self.tasks.append(TaskInfo.set_attributes(data=tasks[i]))
+
+    def get_total(self):
+        """
+        :return: 下载任务总数
+        :rtype:int
+        """
+        return self.total
+
+    def get_tasks(self):
+        """
+        :return:下载任务列表
+        :rtype: List[TaskInfo]
+        """
+        return self.tasks
 
 
 class DescribeDownloadUrlResponse(TLSResponse):
@@ -246,16 +458,38 @@ class DescribeDownloadUrlResponse(TLSResponse):
 
         self.download_url = self.response[DOWNLOAD_URL]
 
+    def get_download_url(self):
+        """
+        :return:下载文件链接
+        :rtype: str
+        """
+        return self.download_url
+
 
 class DescribeShardsResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeShardsResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.shards = self.response[SHARDS]
+        self.shards = []
+        shards = self.response[SHARDS]
 
-        for i in range(len(self.shards)):
-            self.shards[i] = QueryResp.set_attributes(data=self.shards[i])
+        for i in range(len(shards)):
+            self.shards.append(QueryResp.set_attributes(data=shards[i]))
+
+    def get_shards(self):
+        """
+        :return:shard列表
+        :rtype: List[QueryResp]
+        """
+        return self.shards
+
+    def get_total(self):
+        """
+        :return:shard总数
+        :rtype: int
+        """
+        return self.total
 
 
 class CreateHostGroupResponse(TLSResponse):
@@ -263,6 +497,13 @@ class CreateHostGroupResponse(TLSResponse):
         super(CreateHostGroupResponse, self).__init__(response)
 
         self.host_group_id = self.response[HOST_GROUP_ID]
+
+    def get_host_group_id(self):
+        """
+        :return:机器组id
+        :rtype: str
+        """
+        return self.host_group_id
 
 
 class DeleteHostGroupResponse(TLSResponse):
@@ -283,17 +524,39 @@ class DescribeHostGroupResponse(TLSResponse):
             DescribeHostGroupResponse._get_host_group_hosts_rules_info(self.response[HOST_GROUP_HOSTS_RULES_INFO])
         self.response[HOST_GROUP_HOSTS_RULES_INFO] = self.host_group_hosts_rules_info
 
+    def get_host_group_hosts_rules_info(self):
+        """
+        :return:机器组详细信息
+        :rtype:HostGroupHostsRulesInfo
+        """
+        return self.host_group_hosts_rules_info
+
 
 class DescribeHostGroupsResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeHostGroupsResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.host_group_hosts_rules_infos = self.response[HOST_GROUP_HOSTS_RULES_INFOS]
+        self.host_group_hosts_rules_infos = []
+        host_group_hosts_rules_infos = self.response[HOST_GROUP_HOSTS_RULES_INFOS]
 
-        for i in range(len(self.host_group_hosts_rules_infos)):
-            self.host_group_hosts_rules_infos[i] = \
-                DescribeHostGroupsResponse._get_host_group_hosts_rules_info(self.host_group_hosts_rules_infos[i])
+        for i in range(len(host_group_hosts_rules_infos)):
+            self.host_group_hosts_rules_infos.append(
+                DescribeHostGroupsResponse._get_host_group_hosts_rules_info(host_group_hosts_rules_infos[i]))
+
+    def get_total(self):
+        """
+        :return:机器组总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_host_group_hosts_rules_infos(self):
+        """
+        :return:机器组列表
+        :rtype: List[HostGroupHostsRulesInfo]
+        """
+        return self.host_group_hosts_rules_infos
 
 
 class ModifyHostGroupsAutoUpdateResponse(TLSResponse):
@@ -306,10 +569,24 @@ class DescribeHostsResponse(TLSResponse):
         super(DescribeHostsResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.host_infos = self.response[HOST_INFOS]
+        self.host_infos = []
 
-        for i in range(len(self.host_infos)):
-            self.host_infos[i] = HostInfo.set_attributes(data=self.host_infos[i])
+        for i in range(len(self.response[HOST_INFOS])):
+            self.host_infos.append(HostInfo.set_attributes(data=self.response[HOST_INFOS][i]))
+
+    def get_total(self):
+        """
+        :return:host总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_host_infos(self):
+        """
+        :return:host列表
+        :rtype: List[HostInfo]
+        """
+        return self.host_infos
 
 
 class DeleteHostResponse(TLSResponse):
@@ -322,10 +599,24 @@ class DescribeHostGroupRulesResponse(TLSResponse):
         super(DescribeHostGroupRulesResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.rule_infos = self.response[RULE_INFOS]
+        self.rule_infos = []
+        for i in range(len(self.response[RULE_INFOS])):
+            rule_info = RuleInfo.set_attributes(data=self.response[RULE_INFOS][i])
+            self.rule_infos.append(rule_info)
 
-        for i in range(len(self.rule_infos)):
-            self.rule_infos[i] = RuleInfo.set_attributes(data=self.rule_infos[i])
+    def get_total(self):
+        """
+        :return:机器组采集配置总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_rule_infos(self):
+        """
+        :return:采集配置列表
+        :rtype: List[RuleInfo]
+        """
+        return self.rule_infos
 
 
 class CreateRuleResponse(TLSResponse):
@@ -333,6 +624,13 @@ class CreateRuleResponse(TLSResponse):
         super(CreateRuleResponse, self).__init__(response)
 
         self.rule_id = self.response[RULE_ID]
+
+    def get_rule_id(self):
+        """
+        :return:采集配置的 ID
+        :rtype:str
+        """
+        return self.rule_id
 
 
 class DeleteRuleResponse(TLSResponse):
@@ -353,10 +651,39 @@ class DescribeRuleResponse(TLSResponse):
         self.project_name = self.response[PROJECT_NAME]
         self.rule_info = RuleInfo.set_attributes(data=self.response[RULE_INFO])
         self.response[RULE_INFO] = self.rule_info
-        self.host_group_infos = self.response[HOST_GROUP_INFOS]
+        self.host_group_infos = []
 
-        for i in range(len(self.host_group_infos)):
-            self.host_group_infos[i] = HostGroupInfo.set_attributes(data=self.host_group_infos[i])
+        for i in range(len(self.response[HOST_GROUP_INFOS])):
+            self.host_group_infos.append(
+                HostGroupInfo.set_attributes(data=self.response[HOST_GROUP_INFOS][i]))
+
+    def get_project_id(self):
+        """
+        :return: 日志项目 ID
+        :rtype: str
+        """
+        return self.project_id
+
+    def get_rule_info(self):
+        """
+        :return: 采集配置
+        :rtype: RuleInfo
+        """
+        return self.rule_info
+
+    def get_project_name(self):
+        """
+        :return:日志项目的名称
+        :rtype: str
+        """
+        return self.project_name
+
+    def get_host_group_infos(self):
+        """
+        :return: 机器组列表
+        :rtype: List[HostGroupInfo]
+        """
+        return self.host_group_infos
 
 
 class DescribeRulesResponse(TLSResponse):
@@ -364,10 +691,24 @@ class DescribeRulesResponse(TLSResponse):
         super(DescribeRulesResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.rule_infos = self.response[RULE_INFOS]
+        self.rule_infos = []
 
-        for i in range(len(self.rule_infos)):
-            self.rule_infos[i] = RuleInfo.set_attributes(data=self.rule_infos[i])
+        for i in range(len(self.response[RULE_INFOS])):
+            self.rule_infos.append(RuleInfo.set_attributes(data=self.response[RULE_INFOS][i]))
+
+    def get_total(self):
+        """
+        :return:采集配置总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_rule_infos(self):
+        """
+        :return:采集配置列表
+        :rtype: List[RuleInfo]
+        """
+        return self.rule_infos
 
 
 class ApplyRuleToHostGroupsResponse(TLSResponse):
@@ -386,6 +727,13 @@ class CreateAlarmNotifyGroupResponse(TLSResponse):
 
         self.alarm_notify_group_id = self.response[ALARM_NOTIFY_GROUP_ID]
 
+    def get_alarm_notify_group_id(self):
+        """
+        :return:告警通知组id
+        :rtype: str
+        """
+        return self.alarm_notify_group_id
+
 
 class DeleteAlarmNotifyGroupResponse(TLSResponse):
     def __init__(self, response: Response):
@@ -402,10 +750,25 @@ class DescribeAlarmNotifyGroupsResponse(TLSResponse):
         super(DescribeAlarmNotifyGroupsResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.alarm_notify_groups = self.response[ALARM_NOTIFY_GROUPS]
+        self.alarm_notify_groups = []
 
-        for i in range(len(self.alarm_notify_groups)):
-            self.alarm_notify_groups[i] = AlarmNotifyGroupInfo.set_attributes(data=self.alarm_notify_groups[i])
+        for i in range(len(self.response[ALARM_NOTIFY_GROUPS])):
+            self.alarm_notify_groups.append(AlarmNotifyGroupInfo.set_attributes(
+                data=self.response[ALARM_NOTIFY_GROUPS][i]))
+
+    def get_total(self):
+        """
+        :return:告警通知组总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_alarm_notify_groups(self):
+        """
+        :return:告警通知组列表
+        :rtype: List[AlarmNotifyGroupInfo]
+        """
+        return self.alarm_notify_groups
 
 
 class CreateAlarmResponse(TLSResponse):
@@ -413,6 +776,13 @@ class CreateAlarmResponse(TLSResponse):
         super(CreateAlarmResponse, self).__init__(response)
 
         self.alarm_id = self.response[ALARM_ID]
+
+    def get_alarm_id(self):
+        """
+        :return:告警id
+        :rtype: str
+        """
+        return self.alarm_id
 
 
 class DeleteAlarmResponse(TLSResponse):
@@ -430,10 +800,24 @@ class DescribeAlarmsResponse(TLSResponse):
         super(DescribeAlarmsResponse, self).__init__(response)
 
         self.total = self.response[TOTAL]
-        self.alarms = self.response[ALARMS]
+        self.alarms = []
 
-        for i in range(len(self.alarms)):
-            self.alarms[i] = AlarmInfo.set_attributes(data=self.alarms[i])
+        for i in range(len(self.response[ALARMS])):
+            self.alarms.append(AlarmInfo.set_attributes(data=self.response[ALARMS][i]))
+
+    def get_total(self):
+        """
+        :return:告警总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_alarms(self):
+        """
+        :return:告警列表
+        :rtype: List[AlarmInfo]
+        """
+        return self.alarms
 
 
 class OpenKafkaConsumerResponse(TLSResponse):
@@ -452,3 +836,17 @@ class DescribeKafkaConsumerResponse(TLSResponse):
 
         self.allow_consume = self.response[ALLOW_CONSUME]
         self.consume_topic = self.response[CONSUME_TOPIC]
+
+    def get_allow_consume(self):
+        """
+        :return: 日志主题是否已开启了 Kafka 协议消费功能
+        :rtype:bool
+        """
+        return self.allow_consume
+
+    def get_consume_topic(self):
+        """
+        :return:Kafka 协议消费主题 ID，格式为 out+日志主题 ID
+        :rtype: str
+        """
+        return self.consume_topic

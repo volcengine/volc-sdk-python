@@ -57,6 +57,48 @@ class ProjectInfo(TLSData):
         self.inner_net_domain = inner_net_domain
         self.topic_count = topic_count
 
+    def get_inner_net_domain(self):
+        """
+        :return:内网连接域名
+        :rtype:str
+        """
+        return self.inner_net_domain
+
+    def get_create_time(self):
+        """
+        :return: 创建时间
+        :rtype: str
+        """
+        return self.create_time
+
+    def get_project_id(self):
+        """
+        :return: 日志项目 ID
+        :rtype: str
+        """
+        return self.project_id
+
+    def get_description(self):
+        """
+        :return:日志项目描述
+        :rtype: str
+        """
+        return self.description
+
+    def get_project_name(self):
+        """
+        :return:日志项目名称
+        :rtype:str
+        """
+        return self.project_name
+
+    def get_topic_count(self):
+        """
+        :return:日志项目下的日志主题数量
+        :rtype:int
+        """
+        return self.topic_count
+
 
 class TopicInfo(TLSData):
     def __init__(self, topic_name: str = None, topic_id: str = None, project_id: str = None, ttl: int = None,
@@ -70,12 +112,98 @@ class TopicInfo(TLSData):
         self.shard_count = shard_count
         self.description = description
 
+    def get_create_time(self):
+        """
+        :return: 创建时间
+        :rtype: str
+        """
+        return self.create_time
+
+    def get_project_id(self):
+        """
+        :return: 日志项目 ID
+        :rtype: str
+        """
+        return self.project_id
+
+    def get_modify_time(self):
+        """
+        :return:修改时间
+        :rtype: str
+        """
+        return self.modify_time
+
+    def get_shard_count(self):
+        """
+        :return:日志分区的数量
+        :rtype: int
+        """
+        return self.shard_count
+
+    def get_topic_name(self):
+        """
+        :return: 日志主题名称
+        :rtype: str
+        """
+        return self.topic_name
+
+    def get_description(self):
+        """
+        :return:日志主题描述
+        :rtype: str
+        """
+        return self.description
+
+    def get_topic_id(self):
+        """
+
+        :return: 日志主题 ID
+        :rtype: str
+        """
+        return self.topic_id
+
+    def get_ttl(self):
+        """
+        :return: 日志在日志服务中的保存时间, 单位天
+        :rtype: int
+        """
+        return self.ttl
+
 
 class FullTextInfo(TLSData):
-    def __init__(self, case_sensitive: bool, delimiter: str, include_chinese: bool = False):
+    def __init__(self, case_sensitive: bool = None, delimiter: str = None, include_chinese: bool = False):
+        """
+        :param case_sensitive: 是否大小写敏感
+        :type case_sensitive:bool
+        :param delimiter:全文索引的分词符
+        :type delimiter:string
+        :param include_chinese:是否包含中文
+        :type include_chinese:bool
+        """
         self.case_sensitive = case_sensitive
         self.delimiter = delimiter
         self.include_chinese = include_chinese
+
+    def get_delimiter(self):
+        """
+        :return: 全文索引的分词符
+        :rtype: string
+        """
+        return self.delimiter
+
+    def get_case_sensitive(self):
+        """
+        :return: 是否大小写敏感
+        :rtype: bool
+        """
+        return self.case_sensitive
+
+    def get_include_chinese(self):
+        """
+        :return:是否包含中文
+        :rtype: bool
+        """
+        return self.include_chinese
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -108,6 +236,12 @@ class ValueInfo(TLSData):
 
 class KeyValueInfo(TLSData):
     def __init__(self, key: str, value: ValueInfo):
+        """
+        :param key:需要配置键值索引的字段名称
+        :type key:string
+        :param value:需要配置键值索引的字段描述信息
+        :type value:string
+        """
         self.key = key
         self.value = value
 
@@ -120,6 +254,27 @@ class AnalysisResult(TLSData):
         self.analysis_schema = analysis_schema
         self.analysis_type = analysis_type
         self.analysis_data = analysis_data
+
+    def get_analysis_schema(self):
+        """
+        :return:日志分析列的名称
+        :rtype:List[str]
+        """
+        return self.analysis_schema
+
+    def get_analysis_type(self):
+        """
+        :return:日志分析列对应的属性
+        :rtype:dict
+        """
+        return self.analysis_type
+
+    def get_analysis_data(self):
+        """
+        :return:分析结果返回的键值对
+        :rtype:List[dict]
+        """
+        return self.analysis_data
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -144,6 +299,69 @@ class SearchResult(TLSData):
         self.logs = logs
         self.analysis_result = analysis_result
 
+    def get_list_over(self):
+        """
+        :return: 是否已返回全部结果
+        :rtype:bool
+        """
+        return self.list_over
+
+    def get_analysis_result(self):
+        """
+        :return: 分析结果
+        :rtype: AnalysisResult
+        """
+        return self.analysis_result
+
+    def get_result_status(self):
+        """
+        :return: 查询的状态
+        :rtype:str
+        """
+        return self.result_status
+
+    def get_count(self):
+        """
+        :return: 分析请求命中的条目数
+        :rtype: int
+        """
+        return self.count
+
+    def get_limit(self):
+        """
+        :return:请求中指定返回的 Limit 条目数
+        :rtype: int
+        """
+        return self.limit
+
+    def get_context(self):
+        """
+        :return:仅检索日志时，翻页上下文
+        :rtype: str
+        """
+        return self.context
+
+    def get_hit_count(self):
+        """
+        :return:搜索匹配的总条目数
+        :rtype: int
+        """
+        return self.hit_count
+
+    def get_analysis(self):
+        """
+        :return:是否分析请求
+        :rtype:bool
+        """
+        return self.analysis
+
+    def get_logs(self):
+        """
+        :return:检索日志结果
+        :rtype: List[dict]
+        """
+        return self.logs
+
     @classmethod
     def set_attributes(cls, data: dict):
         search_result = super(SearchResult, cls).set_attributes(data)
@@ -164,11 +382,67 @@ class QueryResp(TLSData):
         self.status = status
         self.modify_time = modify_time
 
+    def get_exclusive_end_key(self):
+        """
+        :return:分区结束的 key 值
+        :rtype:str
+        """
+        return self.exclusive_end_key
+
+    def get_inclusive_begin_key(self):
+        """
+        :return:分区起始的 key 值
+        :rtype:str
+        """
+        return self.inclusive_begin_key
+
+    def get_shard_id(self):
+        """
+        :return:日志主题的分区 ID
+        :rtype: int
+        """
+        return self.shard_id
+
+    def get_modify_time(self):
+        """
+        :return:分区修改时间
+        :rtype:str
+        """
+        return self.modify_time
+
+    def get_topic_id(self):
+        """
+        :return:日志主题的 ID
+        :rtype:str
+        """
+        return self.topic_id
+
+    def get_status(self):
+        """
+        :return:分区状态 readwrite：读写，readonly：只读。
+        :rtype:str
+        """
+        return self.status
+
 
 class HistogramInfo(TLSData):
     def __init__(self, time: int = None, count: int = None):
         self.time = time
         self.count = count
+
+    def get_count(self):
+        """
+        :return:子区间中对应搜索结果的数量
+        :rtype:int
+        """
+        return self.count
+
+    def get_time(self):
+        """
+        :return:子区间的起始时间点，单位为毫秒
+        :rtype:long
+        """
+        return self.time
 
 
 class TaskInfo(TLSData):
@@ -188,12 +462,117 @@ class TaskInfo(TLSData):
         self.log_size = log_size
         self.log_count = log_count
 
+    def get_task_name(self):
+        """
+        :return:下载任务的名称
+        :rtype: str
+        """
+        return self.task_name
+
+    def get_start_time(self):
+        """
+        :return:起始时间。格式为 yyyy-MM-dd HH:mm:ss
+        :rtype: str
+        """
+        return self.start_time
+
+    def get_data_format(self):
+        """
+        :return:导出的文件格式，支持 CSV 文件格式或 JSON 格式
+        :rtype: str
+        """
+        return self.data_format
+
+    def get_task_status(self):
+        """
+        :return:下载任务状态
+        :rtype:str
+        """
+        return self.task_status
+
+    def get_log_count(self):
+        """
+        :return:下载的日志条数
+        :rtype: int
+        """
+        return self.log_count
+
+    def get_create_time(self):
+        """
+        :return:下载任务的创建时间
+        :rtype: str
+        """
+        return self.create_time
+
+    def get_query(self):
+        """
+        :return:日志检索分析语句
+        :rtype:str
+        """
+        return self.query
+
+    def get_end_time(self):
+        """
+        :return:结束时间。格式为 yyyy-MM-dd HH:mm:ss
+        :rtype: str
+        """
+        return self.end_time
+
+    def get_task_id(self):
+        """
+        :return:下载任务的 ID
+        :rtype:str
+        """
+        return self.task_id
+
+    def get_log_size(self):
+        """
+        :return:下载的日志量，单位为字节（Byte）
+        :rtype:long
+        """
+        return self.log_size
+
+    def get_topic_id(self):
+        """
+        :return:日志主题名称
+        :rtype:str
+        """
+        return self.topic_id
+
+    def get_compression(self):
+        """
+        :return:导出文件的压缩格式
+        :rtype:str
+        """
+        return self.compression
+
 
 class HostInfo(TLSData):
     def __init__(self, ip: str = None, log_collector_version: str = None, heartbeat_status: int = None):
         self.ip = ip
         self.log_collector_version = log_collector_version
         self.heartbeat_status = heartbeat_status
+
+    def get_ip(self):
+        """
+        :return:机器的 IP 地址
+        :rtype: str
+        """
+        return self.ip
+
+    def get_log_collector_version(self):
+        """
+        :return:机器安装的 LogCollector 的版本
+        :rtype:str
+        """
+        return self.log_collector_version
+
+    def get_heartbeat_status(self):
+        """
+        :return:Agent 的心跳状态。0：心跳正常 1：心跳异常。
+        :rtype:int
+        """
+        return self.heartbeat_status
 
 
 class HostGroupInfo(TLSData):
@@ -217,9 +596,113 @@ class HostGroupInfo(TLSData):
         self.update_end_time = update_end_time
         self.agent_latest_version = agent_latest_version
 
+    def get_update_end_time(self):
+        """
+        :return:自动升级的结束时间
+        :rtype: str
+        """
+        return self.update_end_time
+
+    def get_update_start_time(self):
+        """
+        :return:自动升级的开始时间
+        :rtype: str
+        """
+        return self.update_start_time
+
+    def get_create_time(self):
+        """
+        :return:机器组创建的时间
+        :rtype:str
+        """
+        return self.create_time
+
+    def get_host_count(self):
+        """
+        :return:机器数量
+        :rtype:int
+        """
+        return self.host_count
+
+    def get_modify_time(self):
+        """
+        :return:机器组修改的时间
+        :rtype:str
+        """
+        return self.modify_time
+
+    def get_host_group_type(self):
+        """
+        :return:机器组的类型
+        :rtype:str
+        """
+        return self.host_group_type
+
+    def get_host_group_id(self):
+        """
+        :return:机器组的ID
+        :rtype:str
+        """
+        return self.host_group_id
+
+    def get_host_identifier(self):
+        """
+        :return:机器的标识符
+        :rtype:str
+        """
+        return self.host_identifier
+
+    def get_abnormal_heartbeat_status_count(self):
+        """
+        :return:心跳异常的机器数量
+        :rtype:int
+        """
+        return self.abnormal_heartbeat_status_count
+
+    def get_auto_update(self):
+        """
+        :return:是否开启自动升级功能
+        :rtype: bool
+        """
+        return self.auto_update
+
+    def get_host_group_name(self):
+        """
+        :return:机器组的名称
+        :rtype: str
+        """
+        return self.host_group_name
+
+    def get_agent_latest_version(self):
+        """
+        :return:日志服务发布的 LogCollector 最新版本号
+        :rtype: str
+        """
+        return self.agent_latest_version
+
+    def get_normal_heartbeat_status_count(self):
+        """
+        :return:心跳正常的机器数量
+        :rtype:int
+        """
+        return self.normal_heartbeat_status_count
+
+    def get_rule_count(self):
+        """
+        :return:绑定的采集配置的数量
+        :rtype:int
+        """
+        return self.rule_count
+
 
 class FilterKeyRegex(TLSData):
     def __init__(self, key: str, regex: str):
+        """
+        :param key: 过滤字段的名称
+        :type key:str
+        :param regex:过滤字段的日志内容需要匹配的正则表达式
+        :type regex:str
+        """
         self.key = key
         self.regex = regex
 
@@ -233,6 +716,12 @@ class FilterKeyRegex(TLSData):
 
 class LogTemplate(TLSData):
     def __init__(self, log_type: str, log_format: str):
+        """
+        :param log_type:日志模板的类型：Nginx
+        :type log_type:str
+        :param log_format:日志模板内容
+        :type log_format:str
+        """
         self.log_type = log_type
         self.log_format = log_format
 
@@ -244,6 +733,28 @@ class ExtractRule(TLSData):
     def __init__(self, delimiter: str = None, begin_regex: str = None, log_regex: str = None, keys: List[str] = None,
                  time_key: str = None, time_format: str = None, filter_key_regex: List[FilterKeyRegex] = None,
                  un_match_up_load_switch: bool = None, un_match_log_key: str = None, log_template: LogTemplate = None):
+        """
+        :param delimiter:日志分隔符
+        :type delimiter:str
+        :param begin_regex:第一行日志需要匹配的正则表达式
+        :type begin_regex:str
+        :param log_regex:整条日志需要匹配的正则表达式
+        :type log_regex:str
+        :param keys:日志字段名称
+        :type keys: List[str]
+        :param time_key:日志时间字段的字段名称
+        :type time_key:str
+        :param time_format:时间字段的解析格式
+        :type time_format:str
+        :param filter_key_regex:时间字段的解析格式
+        :type filter_key_regex:List[FilterKeyRegex]
+        :param un_match_up_load_switch:是否上传解析失败的日志
+        :type un_match_up_load_switch:bool
+        :param un_match_log_key:当上传解析失败的日志时，解析失败的日志的 key 名称
+        :type un_match_log_key:str
+        :param log_template:根据指定的日志模板自动提取日志字段
+        :type log_template:LogTemplate
+        """
         assert (time_key is None and time_format is None) or (time_key is not None and time_format is not None)
         assert (un_match_up_load_switch is None and un_match_log_key is None) or \
                (un_match_up_load_switch is not None and un_match_log_key is not None)
@@ -288,10 +799,30 @@ class ExtractRule(TLSData):
 
 class ExcludePath(TLSData):
     def __init__(self, path_type: str, value: str):
+        """
+        :param path_type:采集路径类型，File或Path
+        :type path_type:str
+        :param value:采集绝对路径
+        :type value:str
+        """
         assert path_type == "File" or path_type == "Path"
 
         self.path_type = path_type
         self.value = value
+
+    def get_path_type(self):
+        """
+        :return: 采集路径类型，File或Path
+        :rtype: str
+        """
+        return self.path_type
+
+    def get_value(self):
+        """
+        :return: 采集绝对路径
+        :rtype: str
+        """
+        return self.value
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -306,9 +837,38 @@ class ExcludePath(TLSData):
 
 class ParsePathRule(TLSData):
     def __init__(self, path_sample: str, regex: str, keys: List[str]):
+        """
+        :param path_sample:实际场景的采集路径样例
+        :type path_sample:str
+        :param regex: 用于提取路径字段的正则表达式
+        :type regex:str
+        :param keys:字段名称列表
+        :type keys: List[str]
+        """
         self.path_sample = path_sample
         self.regex = regex
         self.keys = keys
+
+    def get_path_sample(self):
+        """
+        :return: 实际场景的采集路径样例
+        :rtype: str
+        """
+        return self.path_sample
+
+    def get_regex(self):
+        """
+        :return: 用于提取路径字段的正则表达式
+        :rtype: str
+        """
+        return self.regex
+
+    def get_keys(self):
+        """
+        :return: 字段名称列表
+        :rtype:  List[str]
+        """
+        return self.keys
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -321,16 +881,65 @@ class ParsePathRule(TLSData):
 
 class ShardHashKey(TLSData):
     def __init__(self, hash_key: str):
+        """
+        :param hash_key:日志组的 HashKey
+        :type hash_key: str
+        """
         self.hash_key = hash_key
+
+    def get_hash_key(self):
+        """
+        :return:日志组的 HashKey
+        :rtype: str
+        """
+        return self.hash_key
 
 
 class UserDefineRule(TLSData):
     def __init__(self, parse_path_rule: ParsePathRule = None, shard_hash_key: ShardHashKey = None,
                  enable_raw_log: bool = False, fields: dict = None):
+        """
+        :param parse_path_rule:解析采集路径的规则
+        :type parse_path_rule:ParsePathRule
+        :param shard_hash_key:路由日志分区的规则
+        :type shard_hash_key:ShardHashKey
+        :param enable_raw_log: 是否上传原始日志
+        :type enable_raw_log:bool
+        :param fields:为日志添加常量字段
+        :type fields:dict
+        """
         self.parse_path_rule = parse_path_rule
         self.shard_hash_key = shard_hash_key
         self.enable_raw_log = enable_raw_log
         self.fields = fields
+
+    def get_enable_raw_log(self):
+        """
+        :return:是否上传原始日志
+        :rtype:bool
+        """
+        return self.enable_raw_log
+
+    def get_shard_hash_key(self):
+        """
+        :return:路由日志分区的规则
+        :rtype: ShardHashKey
+        """
+        return self.shard_hash_key
+
+    def get_fields(self):
+        """
+        :return: 为日志添加常量字段
+        :rtype: dict
+        """
+        return self.fields
+
+    def get_parse_path_rule(self):
+        """
+        :return: 解析采集路径的规则
+        :rtype: ParsePathRule
+        """
+        return self.parse_path_rule
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -358,6 +967,22 @@ class KubernetesRule(TLSData):
     def __init__(self, namespace_name_regex: str = None, workload_type: str = None, workload_name_regex: str = None,
                  include_pod_label_regex: Dict[str, str] = None, exclude_pod_label_regex: Dict[str, str] = None,
                  pod_name_regex: str = None, label_tag: Dict[str, str] = None):
+        """
+        :param namespace_name_regex:待采集的 Kubernetes Namespace 名称，不指定 Namespace 名称时表示采集全部容器
+        :type namespace_name_regex:str
+        :param workload_type:通过工作负载的类型指定采集的容器，仅支持选择一种类型
+        :type workload_type:str
+        :param workload_name_regex:通过工作负载的名称指定待采集的容器
+        :type workload_name_regex:str
+        :param include_pod_label_regex:Pod Label 白名单用于指定待采集的容器
+        :type include_pod_label_regex:Dict[str, str]
+        :param exclude_pod_label_regex:通过 Pod Label 黑名单指定不采集的容器，不启用表示采集全部容器
+        :type exclude_pod_label_regex:Dict[str, str]
+        :param pod_name_regex:Pod名称用于指定待采集的容器
+        :type pod_name_regex:str
+        :param label_tag:是否将 Kubernetes Label 作为日志标签，添加到原始日志数据中
+        :type label_tag:Dict[str, str]
+        """
         self.namespace_name_regex = namespace_name_regex
         self.workload_type = workload_type
         self.workload_name_regex = workload_name_regex
@@ -365,6 +990,55 @@ class KubernetesRule(TLSData):
         self.exclude_pod_label_regex = exclude_pod_label_regex
         self.pod_name_regex = pod_name_regex
         self.label_tag = label_tag
+
+    def get_include_pod_label_regex(self):
+        """
+        :return: Pod Label 白名单用于指定待采集的容器
+        :rtype:Dict[str, str]
+        """
+        return self.include_pod_label_regex
+
+    def get_workload_name_regex(self):
+        """
+        :return: 通过工作负载的名称指定待采集的容器
+        :rtype:str
+        """
+        return self.workload_name_regex
+
+    def get_pod_name_regex(self):
+        """
+        :return: Pod名称用于指定待采集的容器
+        :rtype: str
+        """
+        return self.pod_name_regex
+
+    def get_exclude_pod_label_regex(self):
+        """
+        :return: 通过 Pod Label 黑名单指定不采集的容器，不启用表示采集全部容器
+        :rtype: ict[str, str]
+        """
+        return self.exclude_pod_label_regex
+
+    def get_label_tag(self):
+        """
+        :return: 是否将 Kubernetes Label 作为日志标签，添加到原始日志数据中
+        :rtype: Dict[str, str]
+        """
+        return self.label_tag
+
+    def get_namespace_name_regex(self):
+        """
+        :return: 待采集的 Kubernetes Namespace 名称，不指定 Namespace 名称时表示采集全部容器
+        :rtype: str
+        """
+        return self.namespace_name_regex
+
+    def get_workload_type(self):
+        """
+        :return:通过工作负载的类型指定采集的容器，仅支持选择一种类型
+        :rtype: str
+        """
+        return self.workload_type
 
 
 class ContainerRule(TLSData):
@@ -374,6 +1048,24 @@ class ContainerRule(TLSData):
                  include_container_env_regex: Dict[str, str] = None,
                  exclude_container_env_regex: Dict[str, str] = None,
                  env_tag: Dict[str, str] = None, kubernetes_rule: KubernetesRule = None):
+        """
+        :param stream:采集模式
+        :type stream:str
+        :param container_name_regex:待采集的容器名称
+        :type container_name_regex:str
+        :param include_container_label_regex:指定待采集的容器，不启用白名单时指定采集全部容器
+        :type include_container_label_regex:Dict[str, str]
+        :param exclude_container_label_regex:黑名单用于指定不采集的容器范围，不启用黑名单时表示采集全部容器
+        :type exclude_container_label_regex:Dict[str, str]
+        :param include_container_env_regex:容器环境变量白名单通过容器环境变量指定待采集的容器，不启用白名单时表示指定采集全部容器
+        :type include_container_env_regex:Dict[str, str]
+        :param exclude_container_env_regex:容器环境变量黑名单用于指定不采集的容器范围，不启用黑名单时表示采集全部容器
+        :type exclude_container_env_regex:Dict[str, str]
+        :param env_tag:是否将环境变量作为日志标签，添加到原始日志数据中
+        :type env_tag:Dict[str, str]
+        :param kubernetes_rule:Kubernetes 容器的采集规则
+        :type kubernetes_rule:KubernetesRule
+        """
         self.stream = stream
         self.container_name_regex = container_name_regex
         self.include_container_label_regex = include_container_label_regex
@@ -382,6 +1074,62 @@ class ContainerRule(TLSData):
         self.exclude_container_env_regex = exclude_container_env_regex
         self.env_tag = env_tag
         self.kubernetes_rule = kubernetes_rule
+
+    def get_stream(self):
+        """
+        :return 采集模式
+        :rtype str
+        """
+        return self.stream
+
+    def get_exclude_container_env_regex(self):
+        """
+        :return: 容器环境变量黑名单用于指定不采集的容器范围，不启用黑名单时表示采集全部容器
+        :rtype:Dict[str, str]
+        """
+        return self.exclude_container_env_regex
+
+    def get_kubernetes_rule(self):
+        """
+        :return: Kubernetes 容器的采集规则
+        :rtype: KubernetesRule
+        """
+        return self.kubernetes_rule
+
+    def get_include_container_label_regex(self):
+        """
+        :return: 指定待采集的容器，不启用白名单时指定采集全部容器
+        :rtype: Dict[str, str]
+        """
+        return self.include_container_label_regex
+
+    def get_include_container_env_regex(self):
+        """
+        :return: 容器环境变量白名单通过容器环境变量指定待采集的容器，不启用白名单时表示指定采集全部容器
+        :rtype: Dict[str, str]
+        """
+        return self.include_container_env_regex
+
+    def get_exclude_container_label_regex(self):
+        """
+        :return: 黑名单用于指定不采集的容器范围，不启用黑名单时表示采集全部容器
+        :rtype: Dict[str, str]
+        """
+        return self.exclude_container_label_regex
+
+    def get_env_tag(self):
+        """
+        :return: 是否将环境变量作为日志标签，添加到原始日志数据中
+        :rtype: Dict[str, str]
+        """
+        return self.env_tag
+
+    def get_container_name_regex(self):
+        """
+        :return:待采集的容器名称
+        :rtype: str
+        """
+        return self.container_name_regex
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -422,6 +1170,64 @@ class RuleInfo(TLSData):
         self.input_type = input_type
         self.container_rule = container_rule
 
+    def get_exclude_paths(self):
+        """
+        :return:采集黑名单列表
+        :rtype:List[ExcludePath]
+        """
+        return self.exclude_paths
+
+    def get_create_time(self):
+        """
+        :return:采集配置创建的时间
+        :rtype:str
+        """
+        return self.create_time
+
+    def get_rule_name(self):
+        """
+        :return:采集配置的名称
+        :rtype:str
+        """
+        return self.rule_name
+
+    def get_container_rule(self):
+        """
+        :return:容器采集规则。详细说明请查看
+        :rtype:ContainerRule
+        """
+        return self.container_rule
+
+    def get_modify_time(self):
+        return self.modify_time
+
+    def get_input_type(self):
+        return self.input_type
+
+    def get_user_define_rule(self):
+        return self.user_define_rule
+
+    def get_rule_id(self):
+        return self.rule_id
+
+    def get_log_type(self):
+        return self.log_type
+
+    def get_extract_rule(self):
+        return self.extract_rule
+
+    def get_paths(self):
+        return self.paths
+
+    def get_topic_name(self):
+        return self.topic_name
+
+    def get_topic_id(self):
+        return self.topic_id
+
+    def get_log_sample(self):
+        return self.log_sample
+
     @classmethod
     def set_attributes(cls, data: dict):
         rule_info = super(RuleInfo, cls).set_attributes(data)
@@ -446,16 +1252,93 @@ class HostGroupHostsRulesInfo(TLSData):
         self.host_infos = host_infos
         self.rule_infos = rule_infos
 
+    def get_rule_infos(self):
+        """
+        :return:所绑定的采集配置信息列表
+        :rtype: List[RuleInfo]
+        """
+        return self.rule_infos
+
+    def get_host_group_info(self):
+        """
+        :return: 机器组信息
+        :rtype:HostGroupInfo
+        """
+        return self.host_group_info
+
+    def get_host_infos(self):
+        """
+        :return:
+        :rtype:List[HostInfo]
+        """
+        return self.host_infos
+
 
 class Receiver(TLSData):
     def __init__(self, receiver_type: str, receiver_names: List[str], receiver_channels: List[str],
                  start_time: str, end_time: str, webhook: str = None):
+        """
+        :param receiver_type:接受者类型
+        :type receiver_type:str
+        :param receiver_names:接收者的名字
+        :type receiver_names:List[str]
+        :param receiver_channels:通知接收渠道，支持Email、Sms、Phone
+        :type receiver_channels:List[str]
+        :param start_time:可接收信息的时段中，开始的时间
+        :type start_time:str
+        :param end_time:可接收信息的时段中
+        :type end_time:str
+        :param webhook:飞书Webhook请求地址
+        :type webhook:str
+        """
         self.receiver_type = receiver_type
         self.receiver_names = receiver_names
         self.receiver_channels = receiver_channels
         self.start_time = start_time
         self.end_time = end_time
         self.webhook = webhook
+
+    def get_start_time(self):
+        """
+        :return:可接收信息的时段中，开始的时间
+        :rtype: str
+        """
+        return self.start_time
+
+    def get_webhook(self):
+        """
+        :return: 飞书Webhook请求地址
+        :rtype: str
+        """
+        return self.webhook
+
+    def get_receiver_channels(self):
+        """
+        :return:通知接收渠道，支持Email、Sms、Phone
+        :rtype: List[str]
+        """
+        return self.receiver_channels
+
+    def get_end_time(self):
+        """
+        :return: 可接收信息的时段中
+        :rtype:str
+        """
+        return self.end_time
+
+    def get_receiver_names(self):
+        """
+        :return: 接收者的名字
+        :rtype: List[str]
+        """
+        return self.receiver_names
+
+    def get_receiver_type(self):
+        """
+        :return:接受者类型
+        :rtype: str
+        """
+        return self.receiver_type
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -472,12 +1355,68 @@ class Receiver(TLSData):
 class QueryRequest(TLSData):
     def __init__(self, topic_id: str, query: str, number: int,
                  start_time_offset: int, end_time_offset: int, topic_name: str = None):
+        """
+        :param topic_id:日志主题 ID
+        :type topic_id:str
+        :param query:查询语句，支持的最大长度为 1024
+        :type query:str
+        :param number:告警对象序号；从 1 开始递增
+        :type number:int
+        :param start_time_offset:查询范围起始时间相对当前的历史时间，单位为分钟，取值为非正，最大值为 0，最小值为 -1440
+        :type start_time_offset:int
+        :param end_time_offset:查询范围终止时间相对当前的历史时间，单位为分钟，取值为非正，须大于StartTimeOffset，最大值为 0，最小值为 -1440
+        :type end_time_offset:int
+        :param topic_name:告警策略执行的日志主题名称
+        :type topic_name:str
+        """
         self.topic_id = topic_id
         self.query = query
         self.number = number
         self.start_time_offset = start_time_offset
         self.end_time_offset = end_time_offset
         self.topic_name = topic_name
+
+    def get_number(self):
+        """
+        :return:告警对象序号；从 1 开始递增
+        :rtype: int
+        """
+        return self.number
+
+    def get_start_time_offset(self):
+        """
+        :return: 查询范围起始时间相对当前的历史时间，单位为分钟，取值为非正，最大值为 0，最小值为 -1440
+        :rtype: int
+        """
+        return self.start_time_offset
+
+    def get_query(self):
+        """
+        :return:查询语句，支持的最大长度为 1024
+        :rtype: str
+        """
+        return self.query
+
+    def get_topic_name(self):
+        """
+        :return: 告警策略执行的日志主题名称
+        :rtype: str
+        """
+        return self.topic_name
+
+    def get_topic_id(self):
+        """
+        :return: 日志主题 ID
+        :rtype: str
+        """
+        return self.topic_id
+
+    def get_end_time_offset(self):
+        """
+        :return: 查询范围终止时间相对当前的历史时间，单位为分钟
+        :rtype: int
+        """
+        return self.end_time_offset
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -493,8 +1432,28 @@ class QueryRequest(TLSData):
 
 class RequestCycle(TLSData):
     def __init__(self, cycle_type: str, time: int):
+        """
+        :param cycle_type: 执行周期类型，Period：周期执行，Fixed：定期执行
+        :type cycle_type:str
+        :param time:告警任务执行的周期，或者定期执行的时间点。单位为分钟，取值范围为 1~1440
+        :type time:int
+        """
         self.cycle_type = cycle_type
         self.time = time
+
+    def get_time(self):
+        """
+        :return:告警任务执行的周期，或者定期执行的时间点。单位为分钟
+        :rtype: int
+        """
+        return self.time
+
+    def get_cycle_type(self):
+        """
+        :return:执行周期类型，Period：周期执行，Fixed：定期执行
+        :rtype: str
+        """
+        return self.cycle_type
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -517,6 +1476,48 @@ class AlarmNotifyGroupInfo(TLSData):
         self.receivers = receivers
         self.create_time = create_time
         self.modify_time = modify_time
+
+    def get_alarm_notify_group_name(self):
+        """
+        :return:告警通知组名称
+        :rtype: str
+        """
+        return self.alarm_notify_group_name
+
+    def get_notify_type(self):
+        """
+        :return:告警通知的类型：Trigger - 告警触发，Recovery - 告警恢复
+        :rtype: List[str]
+        """
+        return self.notify_type
+
+    def get_create_time(self):
+        """
+        :return:告警通知组创建的时间
+        :rtype:str
+        """
+        return self.create_time
+
+    def get_receivers(self):
+        """
+        :return:接收告警的 IAM 用户列表
+        :rtype:List[Receiver]
+        """
+        return self.receivers
+
+    def get_modify_time(self):
+        """
+        :return:告警通知组修改的时间
+        :rtype:str
+        """
+        return self.modify_time
+
+    def get_alarm_notify_group_id(self):
+        """
+        :return:告警通知组 ID
+        :rtype:str
+        """
+        return self.alarm_notify_group_id
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -549,6 +1550,97 @@ class AlarmInfo(TLSData):
         self.user_define_msg = user_define_msg
         self.create_time = create_time
         self.modify_time = modify_time
+
+    def get_alarm_name(self):
+        """
+        :return:告警策略名称
+        :rtype: str
+        """
+        return self.alarm_name
+
+    def get_alarm_notify_group(self):
+        """
+        :return:告警对应的通知列表
+        :rtype:List[AlarmNotifyGroupInfo]
+        """
+        return self.alarm_notify_group
+
+    def get_request_cycle(self):
+        """
+        :return:告警任务的执行周期
+        :rtype:RequestCycle
+        """
+        return self.request_cycle
+
+    def get_alarm_period(self):
+        """
+        :return:告警重复的周期
+        :rtype: int
+        """
+        return self.alarm_period
+
+    def get_create_time(self):
+        """
+        :return:创建告警策略的时间
+        :rtype:str
+        """
+        return self.create_time
+
+    def get_modify_time(self):
+        """
+        :return:告警策略最近修改的时间
+        :rtype:str
+        """
+        return self.modify_time
+
+    def get_user_define_msg(self):
+        """
+        :return:告警通知的内容
+        :rtype:str
+        """
+        return self.user_define_msg
+
+    def get_condition(self):
+        """
+        :return:告警触发条件
+        :rtype:str
+        """
+        return self.condition
+
+    def get_query_request(self):
+        """
+        :return:检索分析语句，可配置 1~3 条
+        :rtype:List[QueryRequest]
+        """
+        return self.query_request
+
+    def get_project_id(self):
+        """
+        :return:日志项目 ID
+        :rtype: str
+        """
+        return self.project_id
+
+    def get_trigger_period(self):
+        """
+        :return:持续周期
+        :rtype:int
+        """
+        return self.trigger_period
+
+    def get_alarm_id(self):
+        """
+        :return:告警策略的 ID
+        :rtype: str
+        """
+        return self.alarm_id
+
+    def get_status(self):
+        """
+        :return:是否开启告警策略
+        :rtype:bool
+        """
+        return self.status
 
     @classmethod
     def set_attributes(cls, data: dict):
