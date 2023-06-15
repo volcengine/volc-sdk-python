@@ -191,6 +191,9 @@ class VodService(VodServiceConfig):
         if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
             headers['X-Upload-Storage-Class'] = 'archive'
 
+        if storage_class == volcengine.vod.models.business.vod_upload_pb2.IA:
+            headers['X-Upload-Storage-Class'] = 'ia'
+
         upload_status, resp = self.put(url, file_path, headers)
         if not upload_status:
             raise Exception("direct upload error")
@@ -231,7 +234,8 @@ class VodService(VodServiceConfig):
 
         if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
             headers['X-Upload-Storage-Class'] = 'archive'
-
+        if storage_class == volcengine.vod.models.business.vod_upload_pb2.IA:
+            headers['X-Upload-Storage-Class'] = 'ia'
 
         upload_status, resp = self.put_data(url, None, headers)
         resp = json.loads(resp)
@@ -253,6 +257,8 @@ class VodService(VodServiceConfig):
 
         if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
             headers['X-Upload-Storage-Class'] = 'archive'
+        if storage_class == volcengine.vod.models.business.vod_upload_pb2.IA:
+            headers['X-Upload-Storage-Class'] = 'ia'
 
         upload_status, resp = self.put_data(url, data, headers)
         if not upload_status:
@@ -285,6 +291,8 @@ class VodService(VodServiceConfig):
 
         if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
             headers['X-Upload-Storage-Class'] = 'archive'
+        if storage_class == volcengine.vod.models.business.vod_upload_pb2.IA:
+            headers['X-Upload-Storage-Class'] = 'ia'
 
         upload_status, resp = self.put_data(url, data, headers)
         resp = json.loads(resp)
