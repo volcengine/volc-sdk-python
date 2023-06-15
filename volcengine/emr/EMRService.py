@@ -29,7 +29,7 @@ api_info = {
         "Action": "DescribeCluster", "Version": "2022-04-15"}, {}, {}),
 
     # https://www.volcengine.com/docs/6491/145564
-    "ListInstances": ApiInfo("GET", "/", {
+    "ListInstances": ApiInfo("POST", "/", {
         "Action": "ListInstances", "Version": "2022-06-30"}, {}, {}),
 
     # https://www.volcengine.com/docs/6491/145565
@@ -94,8 +94,8 @@ class EMRService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def list_instances(self, params):
-        res = self.get("ListInstances", params)
+    def list_instances(self, params, body):
+        res = self.json("ListInstances", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
