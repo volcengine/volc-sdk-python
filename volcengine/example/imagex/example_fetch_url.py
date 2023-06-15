@@ -21,6 +21,7 @@ if __name__ == '__main__':
         exit()
 
     req2 = {
+        'ServiceId': req1['ServiceId'],
         'Id': resp1['TaskId'],
     }
     resp2 = imagex_service.get_url_fetch_task(req2)
