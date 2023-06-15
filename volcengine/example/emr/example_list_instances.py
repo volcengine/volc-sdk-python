@@ -14,9 +14,9 @@ if __name__ == '__main__':
 
     params = {}
     body = {
-        'ClusterId': 'emr-3pmxlm093c3rmr4x65hy',
-        'HostGroupName': 'MasterGroup'
+        'ClusterId': 'emr-2y1nqhdhxz38x9zkcwxb',
+        'PageSize': 20
     }
 
-    resp = emr_service.list_instance_groups(params, body)
+    resp = emr_service.list_instances(params, body)
     print(json.dumps(resp, ensure_ascii=False, sort_keys=True, indent=4, separators=(',', ':')))
