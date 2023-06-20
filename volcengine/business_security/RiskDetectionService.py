@@ -117,7 +117,7 @@ class RiskDetectService(Service):
     
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def simple_risk_stat(self, params, body):
-        res = self.json("SimpleRiskStat", params, json.dumps(body))
+        res = self.get("SimpleRiskStat", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -125,7 +125,7 @@ class RiskDetectService(Service):
 
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def content_risk_stat(self, params, body):
-        res = self.json("ContentRiskStat", params, json.dumps(body))
+        res = self.get("ContentRiskStat", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
