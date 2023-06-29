@@ -1,16 +1,20 @@
 ### Change log
 
+2023-06-29 Bumped to version v1.0.96
+- Updated apis for cdn/vod
+- Added service maas
+
 2023-06-20 Bumped to version v1.0.95
-Updated apis for security
+- Updated apis for security
 
 2023-06-16 Bumped to version v1.0.94
-Updated apis for imagex/vod/security/emr
+- Updated apis for imagex/vod/security/emr
 
 2023-06-01 Bumped to version v1.0.93
-Updated apis for imagex/tls
+- Updated apis for imagex/tls
 
 2023-05-25 Bumped to version v1.0.92
-Updated apis for vms
+- Updated apis for vms
 
 2023-05-18 Bumped to version v1.0.91
 - Updated apis for sms/vod/security
