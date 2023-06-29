@@ -14,3 +14,7 @@ if __name__ == '__main__':
 
     resp = svc.describe_content_quota()
     print(resp)
+
+    # Get 请求
+    resp = svc.describe_content_quota(method=svc.use_get())
+    print(resp)

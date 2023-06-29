@@ -20,3 +20,7 @@ if __name__ == '__main__':
 
     resp = svc.list_cdn_domains(body)
     print(resp)
+    
+    # use method GET 
+    resp = svc.list_cdn_domains(body, svc.use_get())
+    print(resp)

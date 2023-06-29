@@ -28,3 +28,7 @@ if __name__ == '__main__':
 
     resp = svc.describe_cdn_data(body)
     print(resp)
+    
+    # use method GET
+    resp = svc.describe_cdn_data(body, svc.use_get())
+    print(resp)
