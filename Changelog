@@ -1,5 +1,8 @@
 ### Change log
 
+2023-07-06 Bumped to version v1.0.97
+- Updated apis for maas
+
 2023-06-29 Bumped to version v1.0.96
 - Updated apis for cdn/vod
 - Added service maas
