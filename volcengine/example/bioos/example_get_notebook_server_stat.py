@@ -12,9 +12,8 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'Name': 'workspace_name',
-        'Description': 'workspace_description'
-    }
+        "WorkspaceID": "workspace_id"
+    },
 
-    resp = bioos_service.create_workspace(params)
+    resp = bioos_service.get_notebook_server_stat(params)
     print(resp)
