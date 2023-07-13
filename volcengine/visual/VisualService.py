@@ -115,8 +115,10 @@ class VisualService(Service):
             "ImageCorrection": ApiInfo("POST", "/", {"Action": "ImageCorrection", "Version": "2022-08-31"}, {}, {}),
             "AllAgeGeneration": ApiInfo("POST", "/", {"Action": "AllAgeGeneration", "Version": "2022-08-31"}, {}, {}),
             "BodyDetection": ApiInfo("POST", "/", {"Action": "BodyDetection", "Version": "2022-08-31"}, {}, {}),
-            "FaceFusionMovieSubmitTask": ApiInfo("POST", "/",{"Action": "FaceFusionMovieSubmitTask", "Version": "2022-08-31"}, {},{}),
-            "FaceFusionMovieGetResult": ApiInfo("POST", "/",{"Action": "FaceFusionMovieGetResult", "Version": "2022-08-31"}, {},{}),
+            "FaceFusionMovieSubmitTask": ApiInfo("POST", "/", {"Action": "FaceFusionMovieSubmitTask", "Version": "2022-08-31"}, {},{}),
+            "FaceFusionMovieGetResult": ApiInfo("POST", "/", {"Action": "FaceFusionMovieGetResult", "Version": "2022-08-31"}, {},{}),
+            "FaceFusionMovie": ApiInfo("POST", "/", {"Action": "FaceFusionMovie", "Version": "2022-08-31"}, {}, {}),
+            "TupoCartoon": ApiInfo("POST", "/", {"Action": "TupoCartoon", "Version": "2022-08-31"}, {}, {}),
             "T2iLDM": ApiInfo("POST", "/", {"Action": "T2iLDM", "Version": "2022-08-31"}, {}, {}),
             "LensVidaVideoSubmitTaskV2": ApiInfo("POST", "/",{"Action": "LensVidaVideoSubmitTaskV2", "Version": "2022-08-31"}, {},{}),
             "LensVidaVideoGetResultV2": ApiInfo("POST", "/",{"Action": "LensVidaVideoGetResultV2", "Version": "2022-08-31"}, {},{}),
@@ -774,6 +776,20 @@ class VisualService(Service):
     def face_fusion_movie_get_result(self, body):
         try:
             res_json = self.common_json_handler("FaceFusionMovieGetResult", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def face_fusion_movie(self, body):
+        try:
+            res_json = self.common_json_handler("FaceFusionMovie", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def tupo_cartoon(self, body):
+        try:
+            res_json = self.common_json_handler("TupoCartoon", body)
             return res_json
         except Exception as e:
             raise Exception(str(e))
