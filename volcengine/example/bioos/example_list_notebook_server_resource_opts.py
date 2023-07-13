@@ -12,9 +12,7 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'Name': 'workspace_name',
-        'Description': 'workspace_description'
     }
 
-    resp = bioos_service.create_workspace(params)
+    resp = bioos_service.list_notebook_server_resource_opts(params)
     print(resp)

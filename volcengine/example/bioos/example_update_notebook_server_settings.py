@@ -12,9 +12,12 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'Name': 'workspace_name',
-        'Description': 'workspace_description'
+        "WorkspaceID": "workspace_id",
+        "ResourceSize": "small",
+        "ImageID": "1",
+        "MountTOSEnabled": False,
+        "TempImageName": "jupyter/minimal-notebook"
     }
 
-    resp = bioos_service.create_workspace(params)
+    resp = bioos_service.update_notebook_server_settings(params)
     print(resp)

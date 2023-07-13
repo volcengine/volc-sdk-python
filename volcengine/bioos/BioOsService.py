@@ -38,19 +38,25 @@ class BioOsService(Service):
     def get_api_info():
         api_info = {
             'CreateWorkspace':
-                ApiInfo('POST', '/', {'Action': 'CreateWorkspace', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'CreateWorkspace', 'Version': '2021-03-04'}, {},
+                        {}),
             'ListWorkspaces':
                 ApiInfo('POST', '/', {'Action': 'ListWorkspaces', 'Version': '2021-03-04'}, {}, {}),
             'UpdateWorkspace':
-                ApiInfo('POST', '/', {'Action': 'UpdateWorkspace', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'UpdateWorkspace', 'Version': '2021-03-04'}, {},
+                        {}),
             'DeleteWorkspace':
-                ApiInfo('POST', '/', {'Action': 'DeleteWorkspace', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'DeleteWorkspace', 'Version': '2021-03-04'}, {},
+                        {}),
             'BindClusterToWorkspace':
-                ApiInfo('POST', '/', {'Action': 'BindClusterToWorkspace', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'BindClusterToWorkspace', 'Version': '2021-03-04'},
+                        {}, {}),
             'UnbindClusterAndWorkspace':
-                ApiInfo('POST', '/', {'Action': 'UnbindClusterAndWorkspace', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/',
+                        {'Action': 'UnbindClusterAndWorkspace', 'Version': '2021-03-04'}, {}, {}),
             'ListClustersOfWorkspace':
-                ApiInfo('POST', '/', {'Action': 'ListClustersOfWorkspace', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'ListClustersOfWorkspace', 'Version': '2021-03-04'},
+                        {}, {}),
             'CreateCluster':
                 ApiInfo('POST', '/', {'Action': 'CreateCluster', 'Version': '2021-03-04'}, {}, {}),
             'ListClusters':
@@ -58,21 +64,29 @@ class BioOsService(Service):
             'DeleteCluster':
                 ApiInfo('POST', '/', {'Action': 'DeleteCluster', 'Version': '2021-03-04'}, {}, {}),
             'CreateDataModel':
-                ApiInfo('POST', '/', {'Action': 'CreateDataModel', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'CreateDataModel', 'Version': '2021-03-04'}, {},
+                        {}),
             'ListDataModels':
                 ApiInfo('POST', '/', {'Action': 'ListDataModels', 'Version': '2021-03-04'}, {}, {}),
             'ListDataModelRows':
-                ApiInfo('POST', '/', {'Action': 'ListDataModelRows', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'ListDataModelRows', 'Version': '2021-03-04'}, {},
+                        {}),
             'DeleteDataModelRowsAndHeaders':
-                ApiInfo('POST', '/', {'Action': 'DeleteDataModelRowsAndHeaders', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/',
+                        {'Action': 'DeleteDataModelRowsAndHeaders', 'Version': '2021-03-04'}, {},
+                        {}),
             'CreateSubmission':
-                ApiInfo('POST', '/', {'Action': 'CreateSubmission', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'CreateSubmission', 'Version': '2021-03-04'}, {},
+                        {}),
             'ListSubmissions':
-                ApiInfo('POST', '/', {'Action': 'ListSubmissions', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'ListSubmissions', 'Version': '2021-03-04'}, {},
+                        {}),
             'DeleteSubmission':
-                ApiInfo('POST', '/', {'Action': 'DeleteSubmission', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'DeleteSubmission', 'Version': '2021-03-04'}, {},
+                        {}),
             'CancelSubmission':
-                ApiInfo('POST', '/', {'Action': 'CancelSubmission', 'Version': '2021-03-04'}, {}, {}),
+                ApiInfo('POST', '/', {'Action': 'CancelSubmission', 'Version': '2021-03-04'}, {},
+                        {}),
             'ListRuns':
                 ApiInfo('POST', '/', {'Action': 'ListRuns', 'Version': '2021-03-04'}, {}, {}),
             'CancelRun':
@@ -87,6 +101,29 @@ class BioOsService(Service):
                 ApiInfo('POST', '/', {'Action': 'UpdateWorkflow', 'Version': '2021-03-04'}, {}, {}),
             'DeleteWorkflow':
                 ApiInfo('POST', '/', {'Action': 'DeleteWorkflow', 'Version': '2021-03-04'}, {}, {}),
+            'GetNotebookEditInfo':
+                ApiInfo('POST', '/', {'Action': 'GetNotebookEditInfo', 'Version': '2021-03-04'}, {},
+                        {}),
+            'GetNotebookServerSettings':
+                ApiInfo('POST', '/',
+                        {'Action': 'GetNotebookServerSettings', 'Version': '2021-03-04'}, {}, {}),
+            'GetNotebookServerStat':
+                ApiInfo('POST', '/', {'Action': 'GetNotebookServerStat', 'Version': '2021-03-04'},
+                        {}, {}),
+            'ListNotebookServerImages':
+                ApiInfo('POST', '/',
+                        {'Action': 'ListNotebookServerImages', 'Version': '2021-03-04'}, {}, {}),
+            'ListNotebookServerResourceOpts':
+                ApiInfo('POST', '/',
+                        {'Action': 'ListNotebookServerResourceOpts', 'Version': '2021-03-04'}, {},
+                        {}),
+            'StopNotebookServer':
+                ApiInfo('POST', '/', {'Action': 'StopNotebookServer', 'Version': '2021-03-04'}, {},
+                        {}),
+            'UpdateNotebookServerSettings':
+                ApiInfo('POST', '/',
+                        {'Action': 'UpdateNotebookServerSettings', 'Version': '2021-03-04'}, {},
+                        {}),
         }
         return api_info
 
@@ -98,25 +135,25 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `Name (string)`: 必选, worksapce名称
+                `Name (str)`: 必选, worksapce名称
                     示例值:  test
 
-                `Description (string)`: 必选, Worksapce描述
+                `Description (str)`: 必选, Worksapce描述
                     示例值:  test
 
-                `S3Bucket (string)`: 选填, s3的桶地址
+                `S3Bucket (str)`: 选填, s3的桶地址
                     示例值:  bioos-wcf0cp05eig4883tiu130
 
-                `CopyPublicWorkspaceID (string)`: 选填
+                `CopyPublicWorkspaceID (str)`: 选填
                     示例值:  不填即可
 
-                `CoverPath (string)`: 选填, 封面路径（在tos桶中的相对路径）
+                `CoverPath (str)`: 选填, 封面路径（在tos桶中的相对路径）
                     示例值:  template-cover/pic1.png
 
         Returns:
             Dict:
 
-                `ID (string)`: workspaceID
+                `ID (str)`: workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
         Examples:
@@ -141,24 +178,30 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `PageNumber (int)`: 选填, 页码
+                `PageNumber (int)`: 选填, 分页页码
                     示例值:  1
 
-                `PageSize (int)`: 选填, 页长
+                `PageSize (int)`: 选填, 分页页长
                     示例值:  10
 
                 `Filter (Dict)`: 选填, 筛选条件
 
-                    `Keyword (string)`: 选填, 根据名称筛选
+                    `Keyword (str)`: 选填, 根据名称筛选
                         示例值:  test
 
-                    `IDs (List[string])`: 选填, ID列表
+                    `IDs (List[str])`: 选填, ID列表
                         示例值:  ["test"]
 
-                `SortBy (string)`: 选填, 排序字段（Name CreateTime）
+                    `IsPublic (bool)`: 选填, 是否公开
+                        示例值:  False
+
+                    `PublicLabelIDs (List[str])`: 选填, 公共workspace标签
+                        示例值:  ["xxxxxxxx"]
+
+                `SortBy (str)`: 选填, 按字段排序 取值有Name CreateTime VisitTime
                     示例值:  CreateTime
 
-                `SortOrder (string)`: 选填, 排序顺序（Desc Asc）
+                `SortOrder (str)`: 选填, 指定排序顺序 取值有Asc Desc
                     示例值:  Desc
 
         Returns:
@@ -166,13 +209,13 @@ class BioOsService(Service):
 
                 List[Dict]: Items, Workspace列表
 
-                    `ID (string)`: WorkspaceID
+                    `ID (str)`: WorkspaceID
                         示例值:  wcf0cp05eig4883tiu130
 
-                    `Name (string)`: Workspace 名称
+                    `Name (str)`: Workspace 名称
                         示例值:  test
 
-                    `Description (string)`: 描述
+                    `Description (str)`: 描述
                         示例值:  test
 
                     `CreateTime (int)`: 创建时间戳
@@ -181,17 +224,25 @@ class BioOsService(Service):
                     `UpdateTime (int)`: 更新时间戳
                         示例值:  1673525239
 
-                    `OwnerName (string)`: 创建者名字
+                    `OwnerName (str)`: 创建者名字
                         示例值:  test
 
-                    `CoverDownloadURL (string)`: 封面地址
+                    `CoverDownloadURL (str)`: 封面地址
                         示例值:  template-cover/pic1.png
 
-                    `Role (string)`: 用户角色
+                    `Role (str)`: 用户角色
                         示例值:  Admin
 
-                    `S3Bucket (string)`: tos桶名称
+                    `S3Bucket (str)`: tos桶名称
                         示例值:  bioos-wcf0cp05eig4883tiu130
+
+                    `PublicMeta (Dict)`: 公共 Workspace 元数据
+
+                        `LabelIDs (List[str])`: 必填, 公共 Workspace 标签
+                            示例值:  xxxxxxxx
+
+                        `IDs (float)`: 必填, 公共 Workspace 桶存储占用信息(Gb)
+                            示例值:  1.5
 
                 `PageNumber (int)`: 页码
                     示例值:  1
@@ -213,23 +264,23 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `ID (string)`: 必选, workspaceID
+                `ID (str)`: 必选, workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `Name (string)`: 必选, 更新后的workspace名称
+                `Name (str)`: 必选, 更新后的workspace名称
                     示例值:  test-1
 
-                `Description (string)`: 必选, 更新后的worksapce描述
+                `Description (str)`: 必选, 更新后的worksapce描述
                     示例值:  Test description
 
-                `CoverPath (string)`: 选填, 更新后的封面地址
+                `CoverPath (str)`: 选填, 更新后的封面地址
                     示例值:  template-cover/pic1.png
 
         Returns:
             Dict:
 
                 `Updated (bool)`: 是否完成更新
-                    示例值:  true
+                    示例值:  True
 
         """
         return self.__request('UpdateWorkspace', params)
@@ -242,7 +293,7 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `ID (string)`: 必选, workspaceID
+                `ID (str)`: 必选, workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
         Returns:
@@ -259,13 +310,13 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `ID (string)`: 必选, workspaceID
+                `ID (str)`: 必选, workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `ClusterID (string)`: 必选, 已纳管集群的ID
+                `ClusterID (str)`: 必选, 已纳管集群的ID
                     示例值:  ucf0fgideig4de2rjrr9g
 
-                `Type (string)`: 必选, 关联类型（workflow、notebook）
+                `Type (str)`: 必选, 关联类型（workflow、notebook）
                     示例值:  workspace
 
         Returns:
@@ -282,13 +333,13 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `ID (string)`: 必选, workspaceID
+                `ID (str)`: 必选, workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `ClusterID (string)`: 必选, 已纳管集群的ID
+                `ClusterID (str)`: 必选, 已纳管集群的ID
                     示例值:  ucf0fgideig4de2rjrr9g
 
-                `Type (string)`: 必选, 关联类型（workflow、notebook）
+                `Type (str)`: 必选, 关联类型（workflow、notebook）
                     示例值:  workspace
 
         Returns:
@@ -305,10 +356,10 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                ID (string): 必选, workspaceID
+                ID (str): 必选, workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                Type (string): 必选, 关联类型（workflow、notebook）
+                Type (str): 必选, 关联类型（workflow、notebook）
                     示例值:  workflow
 
         Returns:
@@ -318,16 +369,16 @@ class BioOsService(Service):
 
                     `ClusterInfo (Dict)`: 集群信息
 
-                        `ID (string)`: 纳管集群ID
+                        `ID (str)`: 纳管集群ID
                             示例值:  ucf0fgideig4de2rjrr9g
 
-                        `Name (string)`: 纳管集群名称
+                        `Name (str)`: 纳管集群名称
                             示例值:  test-cluster
 
-                        `Description (string)`: 投递记录描述
+                        `Description (str)`: 投递记录描述
                             示例值:  test-description
 
-                        `Status (string)`: 集群纳管状态（Succeeded、Failed、Running）
+                        `Status (str)`: 集群纳管状态（Succeeded、Failed、Running）
                             示例值:  ClusterStatus
 
                         `StartTime (int)`: 起始时间
@@ -337,43 +388,43 @@ class BioOsService(Service):
                             示例值:
 
                         `Bound (bool)`: 是否存在绑定的 workspace
-                            示例值:  false
+                            示例值:  False
 
                         `Public (bool)`: 是否是公共集群
-                            示例值:  true
+                            示例值:  True
 
                         `VKEConfig (Dict)`: vke 集群信息
 
-                            `ClusterID (string)`: vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
+                            `ClusterID (str)`: vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
                                 示例值: cceklvtvqtoft92qm
 
-                            `StorageClass (string)`: vke集群已安装的 StorageClass 的名称
+                            `StorageClass (str)`: vke集群已安装的 StorageClass 的名称
                                 示例值:  ebs-ssd
 
                         `ExternalConfig (ExternalConfig)`: 外部集群配置
 
-                            `WESEndpoint (string)`: Wes地址
+                            `WESEndpoint (str)`: Wes地址
                                 示例值:  http://unknown:8002/ga4gh/wes/v1
 
-                            `JupyterhubEndpoint (string)`: jupyterhub 地址
+                            `JupyterhubEndpoint (str)`: jupyterhub 地址
                                 示例值:  http://jupyterhub-hub:8081/jupyterhub
 
-                            `JupyterhubJWTSecret (string)`: jupyterhub jwt secret, 作为响应时不返回
+                            `JupyterhubJWTSecret (str)`: jupyterhub jwt secret, 作为响应时不返回
                                 示例值:  xxxxx
 
-                            `ResourceScheduler (string)`: 外部资源调度程序
+                            `ResourceScheduler (str)`: 外部资源调度程序
                                 示例值:  SGE
 
-                            `Filesystem (string)`: 工作流计算引擎文件系统（目前支持tos、local）
+                            `Filesystem (str)`: 工作流计算引擎文件系统（目前支持tos、local）
                                 示例值:  tos
 
-                            `ExecutionRootDir (string)`: 响应参数,工作流计算引擎执行根路径, 当且仅当工作流计算引擎依赖的文件系统为 local 时会有
+                            `ExecutionRootDir (str)`: 响应参数,工作流计算引擎执行根路径, 当且仅当工作流计算引擎依赖的文件系统为 local 时会有
                                 示例值:  /data
 
                         `SharedConfig (SharedConfig)`: 共享集群配置,暂无具体配置信息
                                 示例值: {}
 
-                    `Type (string)`: 关联类型（workflow、notebook）
+                    `Type (str)`: 关联类型（workflow、notebook）
                         示例值:  workflow
 
                     `BindTime (int)`: 绑定是时间
@@ -403,35 +454,35 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `Name (string)`: 必选, 集群名称
+                `Name (str)`: 必选, 集群名称
                     示例值:  test-cluster
 
-                `Description (string)`: 选填, 集群描述
+                `Description (str)`: 选填, 集群描述
                     示例值:  test- description
 
                 `VKEConfig (Dict)`: 选填, vke 集群信息
 
-                    `ClusterID (string)`: 必选, vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
+                    `ClusterID (str)`: 必选, vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
                         示例值: cceklvtvqtoft92qm
 
-                    `StorageClass (string)`: 必选, vke集群已安装的 StorageClass 的名称
+                    `StorageClass (str)`: 必选, vke集群已安装的 StorageClass 的名称
                         示例值:  ebs-ssd
 
                 `ExternalConfig (ExternalConfig)`: 选填, 外部集群配置
 
-                    `WESEndpoint (string)`: 必选, Wes地址
+                    `WESEndpoint (str)`: 必选, Wes地址
                         示例值:  http://unknown:8002/ga4gh/wes/v1
 
-                    `JupyterhubEndpoint (string)`: 必选, jupyterhub 地址
+                    `JupyterhubEndpoint (str)`: 必选, jupyterhub 地址
                         示例值:  http://jupyterhub-hub:8081/jupyterhub
 
-                    `JupyterhubJWTSecret (string)`: 必选, jupyterhub jwt secret, 作为响应时不返回
+                    `JupyterhubJWTSecret (str)`: 必选, jupyterhub jwt secret, 作为响应时不返回
                         示例值:  xxxxx
 
-                    `ResourceScheduler (string)`: 必选, 外部资源调度程序
+                    `ResourceScheduler (str)`: 必选, 外部资源调度程序
                         示例值:  SGE
 
-                    `Filesystem (string)`: 必选, 工作流计算引擎文件系统（目前支持tos、local）
+                    `Filesystem (str)`: 必选, 工作流计算引擎文件系统（目前支持tos、local）
                         示例值:  tos
 
                 `SharedConfig (SharedConfig)`: 选填, 共享集群配置,暂无具体配置信息，请求时保证此字段不为空
@@ -440,7 +491,7 @@ class BioOsService(Service):
         Returns:
             Dict:
 
-                `ID (string)`: 集群ID
+                `ID (str)`: 集群ID
                     示例值:  ucf0fgideig4de2rjrr9g
 
         """
@@ -462,19 +513,19 @@ class BioOsService(Service):
 
                 `Filter (Dict)`: 选填, 筛选条件
 
-                    `IDs (List[string])`: 选填, ID列表
+                    `IDs (List[str])`: 选填, ID列表
                         示例值:  ["test-workflow"]
 
-                    `Status (List[string])`: 选填, 集群状态列表
+                    `Status (List[str])`: 选填, 集群状态列表
                         示例值:  ["Running"]
 
-                    `Type (List[string])`: 选填, 集群类型(volc-vke, external, shared)
+                    `Type (List[str])`: 选填, 集群类型(volc-vke, external, shared)
                         示例值:  ["shared"]
 
-                    `Public (bool)`: 选填, 默认为false，若为true，则集群对所有人可见
-                        示例值:  true
+                    `Public (bool)`: 选填, 默认为False，若为True，则集群对所有人可见
+                        示例值:  True
 
-                    `Keyword (string)`: 选填, 名称模糊匹配
+                    `Keyword (str)`: 选填, 名称模糊匹配
                         示例值:  "test"
 
         Returns:
@@ -482,16 +533,16 @@ class BioOsService(Service):
 
                 `Items (List[Dict])`: cluster列表
 
-                    `ID (string)`: 纳管集群ID
+                    `ID (str)`: 纳管集群ID
                         示例值:  ucf0fgideig4de2rjrr9g
 
-                    `Name (string)`: 纳管集群名称
+                    `Name (str)`: 纳管集群名称
                         示例值:  test-cluster
 
-                    `Description (string)`: 投递记录描述
+                    `Description (str)`: 投递记录描述
                         示例值:  test-description
 
-                    `Status (string)`: 集群纳管状态（Succeeded、Failed、Running）
+                    `Status (str)`: 集群纳管状态（Succeeded、Failed、Running）
                         示例值:  ClusterStatus
 
                     `StartTime (int)`: 起始时间
@@ -501,37 +552,37 @@ class BioOsService(Service):
                         示例值:
 
                     `Bound (bool)`: 是否存在绑定的 workspace
-                        示例值:  false
+                        示例值:  False
 
                     `Public (bool)`: 是否是公共集群
-                        示例值:  true
+                        示例值:  True
 
                     `VKEConfig (Dict)`: vke 集群信息
 
-                        `ClusterID (string)`: 必选, vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
+                        `ClusterID (str)`: 必选, vke集群的clusterID,通过https://www.volcengine.com/docs/6460/115190查询
                             示例值: cceklvtvqtoft92qm
 
-                        `StorageClass (string)`: 必选, vke集群已安装的 StorageClass 的名称
+                        `StorageClass (str)`: 必选, vke集群已安装的 StorageClass 的名称
                             示例值:  ebs-ssd
 
                     `ExternalConfig (ExternalConfig)`: 外部集群配置
 
-                        `WESEndpoint (string)`: Wes地址
+                        `WESEndpoint (str)`: Wes地址
                             示例值:  http://unknown:8002/ga4gh/wes/v1
 
-                        `JupyterhubEndpoint (string)`: jupyterhub 地址
+                        `JupyterhubEndpoint (str)`: jupyterhub 地址
                             示例值:  http://jupyterhub-hub:8081/jupyterhub
 
-                        `JupyterhubJWTSecret (string)`: jupyterhub jwt secret, 作为响应时不返回
+                        `JupyterhubJWTSecret (str)`: jupyterhub jwt secret, 作为响应时不返回
                             示例值:  xxxxx
 
-                        `ResourceScheduler (string)`: 外部资源调度程序
+                        `ResourceScheduler (str)`: 外部资源调度程序
                             示例值:  SGE
 
-                        `Filesystem (string)`: 工作流计算引擎文件系统（目前支持tos、local）
+                        `Filesystem (str)`: 工作流计算引擎文件系统（目前支持tos、local）
                             示例值:  tos
 
-                        `ExecutionRootDir (string)`: 响应参数,工作流计算引擎执行根路径, 当且仅当工作流计算引擎依赖的文件系统为 local 时会有
+                        `ExecutionRootDir (str)`: 响应参数,工作流计算引擎执行根路径, 当且仅当工作流计算引擎依赖的文件系统为 local 时会有
                             示例值:  /data
 
                     `SharedConfig (SharedConfig)`: 共享集群配置,暂无具体配置信息
@@ -557,7 +608,7 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `ID (string)`: 必选, 集群ID
+                `ID (str)`: 必选, 集群ID
                     示例值:  ucf0fgideig4de2rjrr9g
 
         Returns:
@@ -574,22 +625,22 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, 导入datamodel的workspaceID
+                `WorkspaceID (str)`: 必选, 导入datamodel的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `Name (string)`: 必选, 数据模型文件名
+                `Name (str)`: 必选, 数据模型文件名
                     示例值:  test-datamodel
 
-                `Headers (List[string])`: 必选, 表头列表
+                `Headers (List[str])`: 必选, 表头列表
                     示例值:  ["sample_id", "date"]
 
-                `Rows (List[List[string]])`: 必选, 对象列表
+                `Rows (List[List[str]])`: 必选, 对象列表
                     示例值:  [["sample", "01/01/2022"], ["your-sample-2-id", "02/01/2022"]]
 
         Returns:
             Dict:
 
-                `ID (string)`: datamodelID
+                `ID (str)`: datamodelID
                     示例值:  dccc0ne5eig41ascop420
 
         """
@@ -603,7 +654,7 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, 数据模型所在的workspaceID
+                `WorkspaceID (str)`: 必选, 数据模型所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
         Returns:
@@ -614,16 +665,16 @@ class BioOsService(Service):
 
                 `Items (List[Dict])`: 列表项
 
-                    `ID (string)`: 数据模型ID
+                    `ID (str)`: 数据模型ID
                         示例值:  dccc0ne5eig41ascop420
 
-                    `Name (string)`: 数据模型文件名
+                    `Name (str)`: 数据模型文件名
                         示例值:  test-datamodel
 
                     `RowCount (int)`: 数据模型行数
                         示例值:  100
 
-                    `Type (string)`: 数据模型类型（normal、set、workspace）
+                    `Type (str)`: 数据模型类型（normal、set、workspace）
                         示例值:  normal
 
         """
@@ -637,10 +688,10 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, 数据模型所在的workspaceID
+                `WorkspaceID (str)`: 必选, 数据模型所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `ID (string)`: 必选, Datamodel ID
+                `ID (str)`: 必选, Datamodel ID
                     示例值:  dccc0ne5eig41ascop420
 
                 `PageNumber (int)`: 选填, 页码
@@ -651,25 +702,25 @@ class BioOsService(Service):
 
                 `Filter (Dict)`: 选填, 筛选条件
 
-                    `Keyword (string)`: 选填, 筛选数据查询
+                    `Keyword (str)`: 选填, 筛选数据查询
                         示例值:  test
 
-                    `InSetIDs (List[string])`: 选填, 集合表中的实体ID
+                    `InSetIDs (List[str])`: 选填, 集合表中的实体ID
                         示例值:  ["dcehe12leig4dqi3n7080"]
 
-                `SortBy (string)`: 选填, 排序字段（默认为id）
+                `SortBy (str)`: 选填, 排序字段（默认为id）
                     示例值:  CreateTime
 
-                `SortOrder (string)`: 选填, 排序顺序（Desc Asc）
+                `SortOrder (str)`: 选填, 排序顺序（Desc Asc）
                     示例值:  Desc
 
         Returns:
             Dict:
 
-                `Headers (List[string]`: 表头列表
+                `Headers (List[str]`: 表头列表
                     示例值:  ["sample_id"]
 
-                `Rows (List[List[string]])`: 对象列表
+                `Rows (List[List[str]])`: 对象列表
                     示例值:  [["sample"]]
 
                 `PageNumber (int)`: 页码
@@ -692,16 +743,16 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, 数据模型所在的workspaceID
+                `WorkspaceID (str)`: 必选, 数据模型所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `ID (string)`: 必选, Datamodel ID
+                `ID (str)`: 必选, Datamodel ID
                     示例值:  dccc0ne5eig41ascop420
 
                 `RowIDs (List[siring])`: 选填, 需要删除的数据模型行ID
                     示例值:  ["0cafd453-e9fd-4147-bc39-0a16e3d4fedd"]
 
-                `Headers (List[string])`: 选填, 需要删除的数据模型列名
+                `Headers (List[str])`: 选填, 需要删除的数据模型列名
                     示例值:  ["sample_id"]
 
         Returns:
@@ -718,45 +769,45 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, 提交submussion的workspaceID
+                `WorkspaceID (str)`: 必选, 提交submussion的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `WorkflowID (string)`: 必选, 提交submission所使用的workflow的ID
+                `WorkflowID (str)`: 必选, 提交submission所使用的workflow的ID
                     示例值:  fcbkcdkdeig43pmbqr9dg
 
-                `Name (string)`: 必选, 投递名称
+                `Name (str)`: 必选, 投递名称
                     示例值:  test-submission
 
-                `Description (string)`: 选填, 投递描述
+                `Description (str)`: 选填, 投递描述
                     示例值:  test-description
 
-                `DataModelID (string)`: 选填, 数据模型ID
+                `DataModelID (str)`: 选填, 数据模型ID
                     示例值:  dccc0ne5eig41ascop420
 
-                `DataModelRowIDs (List[string])`: 选填, 数据模型行ID
+                `DataModelRowIDs (List[str])`: 选填, 数据模型行ID
                     示例值:  ["0cafd453-e9fd-4147-bc39-0a16e3d4fedd"]
 
-                `Inputs (string)`: 必选, 输入配置，json序列化后的string
+                `Inputs (str)`: 必选, 输入配置，json序列化后的string
                     示例值:  {"test.name1":"this.name1","test.name2":"this.name2","test.request":"this.requestFile"}
 
-                `Outputs (string)`: 必选, 输出配置，json序列化后的string
+                `Outputs (str)`: 必选, 输出配置，json序列化后的string
                     示例值:  {"test.response1":"this.response1","test.response2":"this.response2"}
 
                 `ExposedOptions (Dict)`: 必选, 平台暴露的Workflow Options
 
                     `ReadFromCache (bool)`: 必选, 是否开启call-cache
-                        示例值:  true
+                        示例值:  True
 
-                    `ExecutionRootDir (string)`: 必选, 工作流执行根路径，若为vke集群，则为s3:// + workspace所绑定的桶名，若为外部hpc集群，则为共享文件存储路径，如/share/data
+                    `ExecutionRootDir (str)`: 必选, 工作流执行根路径，若为vke集群，则为s3:// + workspace所绑定的桶名，若为外部hpc集群，则为共享文件存储路径，如/share/data
                         示例值:  s3://bioos-wcbgb1fleig44vch0ug0g
 
-                `ClusterID (string)`: 必选, 运行集群ID
+                `ClusterID (str)`: 必选, 运行集群ID
                     示例值:  ucf0fgideig4de2rjrr9g
 
         Returns:
             Dict:
 
-                `ID (string)`: Submission ID
+                `ID (str)`: Submission ID
                     示例值:  scb6ka15eig43rnbl2bp0
 
         """
@@ -770,24 +821,24 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, submission所在的workspaceID
+                `WorkspaceID (str)`: 必选, submission所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
                 `Filter (Dict)`: 选填, 筛选条件
 
-                    `WorkflowID (string)`: 选填, 根据工作流ID筛选
+                    `WorkflowID (str)`: 选填, 根据工作流ID筛选
                         示例值:  fcbkcdkdeig43pmbqr9dg
 
-                    `Status (List[string])`: 选填, 根据状态筛选（Succeeded、Failed、Running、Cancelled、Cancelling）
+                    `Status (List[str])`: 选填, 根据状态筛选（Succeeded、Failed、Running、Cancelled、Cancelling）
                         示例值:  ["Running","Cancelling"]
 
-                    `ClusterID (string)`: 选填, 根据集群ID筛选
+                    `ClusterID (str)`: 选填, 根据集群ID筛选
                         示例值:  ucf0fgideig4de2rjrr9g
 
-                    `Keyword (string)`: 选填, 根据名称筛选
+                    `Keyword (str)`: 选填, 根据名称筛选
                         示例值:  test
 
-                    `IDs (List[string])`: 选填, 根据submission ID筛选
+                    `IDs (List[str])`: 选填, 根据submission ID筛选
                         示例值:  ["scb6ka15eig43rnbl2bp0"]
 
                 `PageNumber (int)`: 选填, 页码
@@ -801,16 +852,16 @@ class BioOsService(Service):
             Dict:
                 `Items (List[Dict])`: Workflow 列表
 
-                    `ID (string)`: 投递记录ID
+                    `ID (str)`: 投递记录ID
                         示例值:  scb6ka15eig43rnbl2bp0
 
-                    `Name (string)`: 投递记录名称
+                    `Name (str)`: 投递记录名称
                         示例值:  test-submission
 
-                    `Description (string)`: 投递记录描述
+                    `Description (str)`: 投递记录描述
                         示例值:  test-description
 
-                    `Status (string)`: 投递记录状态（Succeeded、Failed、Running）
+                    `Status (str)`: 投递记录状态（Succeeded、Failed、Running）
                         示例值:  Running
 
                     `RunStatus (Dict)`: 工作流运行状态
@@ -856,10 +907,10 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, submission所在的workspaceID
+                `WorkspaceID (str)`: 必选, submission所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `ID (string)`: 必选, Submission ID
+                `ID (str)`: 必选, Submission ID
                     示例值:  dccc0ne5eig41ascop420
 
         Returns:
@@ -876,10 +927,10 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, submission所在的workspaceID
+                `WorkspaceID (str)`: 必选, submission所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `ID (string)`: 必选, Submission ID
+                `ID (str)`: 必选, Submission ID
                     示例值:  scb6ka15eig43rnbl2bp0
 
         Returns:
@@ -896,21 +947,21 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, submission所在的workspaceID
+                `WorkspaceID (str)`: 必选, submission所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `SubmissionID (string)`: 必选, submission的ID
+                `SubmissionID (str)`: 必选, submission的ID
                     示例值:  scb6ka15eig43rnbl2bp0
 
                 `Filter (Dict)`: 选填, 筛选条件
 
-                    `Keyword (string)`: 选填, 运行记录关键字
+                    `Keyword (str)`: 选填, 运行记录关键字
                         示例值:  test-run
 
-                    `IDs (List[string])`: 选填, 运行记录ID列表
+                    `IDs (List[str])`: 选填, 运行记录ID列表
                         示例值:  ["rcb6kdf5eig43rnbl2brg"]
 
-                    `Status (List[string])`: 选填, 根据状态筛选（Pending、Running、Succeeded、Failed、Cancelling、Cancelled）
+                    `Status (List[str])`: 选填, 根据状态筛选（Pending、Running、Succeeded、Failed、Cancelling、Cancelled）
                         示例值:  ["Pending","Running"]
 
                 `PageNumber (int)`: 选填, 页码
@@ -924,13 +975,13 @@ class BioOsService(Service):
 
                 `Items (List[Dict])`: Run列表
 
-                    `ID (string)`: 运行记录ID
+                    `ID (str)`: 运行记录ID
                         示例值:  rcb6kdf5eig43rnbl2brg
 
-                    `DataEntityRowID (string)`: 数据实体 RowID
+                    `DataEntityRowID (str)`: 数据实体 RowID
                         示例值:  dcehe12leig4dqi3n7080
 
-                    `Status (string)`: 投递记录状态（Succeeded、Failed、Running、Pending、Cancelling、Cancelled）
+                    `Status (str)`: 投递记录状态（Succeeded、Failed、Running、Pending、Cancelling、Cancelled）
                         示例值:  Running
 
                     `StartTime (Int)`: 起始时间
@@ -942,16 +993,16 @@ class BioOsService(Service):
                     `Duration (int)`: 分析耗时(单位为s)
                         示例值:
 
-                    `SubmissionID (string)`: 投递记录ID
+                    `SubmissionID (str)`: 投递记录ID
                         示例值:  scb6ka15eig43rnbl2bp0
 
-                    `EngineRunID (string)`: 工作流引擎内运行记录 ID
+                    `EngineRunID (str)`: 工作流引擎内运行记录 ID
                         示例值:  05693535-dcf4-404f-8d18-2d3cac29916b
 
-                    `Inputs (string)`: 运行记录输入参数，json 序列化后的 string
+                    `Inputs (str)`: 运行记录输入参数，json 序列化后的 string
                         示例值:  {"test.name1":"world","test.name2":"hello","test.request":"s3://vci-dev/jxc-test/aaa.txt"}
 
-                    `Outpus (string)`: 运行记录输出参数，json 序列化后的 string
+                    `Outpus (str)`: 运行记录输出参数，json 序列化后的 string
                         示例值:  {"test.resp":"abc",
                         "test.response1":"s3://bioos-dev-wcb1e3v5eig4635iurevg/analysis/scb8gbtleig4f4jqjbtlg/test/d9ea2df5-b8d8-4603-9f62-496229e922c9/call-step21/execution/resp.txt",
                         "test.response2":"s3://bioos-dev-wcb1e3v5eig4635iurevg/analysis/scb8gbtleig4f4jqjbtlg/test/d9ea2df5-b8d8-4603-9f62-496229e922c9/call-step22/execution/resp.txt"}
@@ -979,10 +1030,10 @@ class BioOsService(Service):
                         `Cancelled (int)`: 已终止的工作流运行总数
                             示例值:  10
 
-                    `Log (string)`: 运行记录日志存储路径
+                    `Log (str)`: 运行记录日志存储路径
                         示例值:  s3://bioos-wcb1e3v5eig4635iurevg/analysis/scbd69kteig472iq3lt5g/workflow.941846fb-158d-4d49-82e0-f2f39372e9e3.log
 
-                    `Message (string)`: 运行记录错误详情
+                    `Message (str)`: 运行记录错误详情
                         示例值:
 
                 `PageNumber (int)`: 页码
@@ -1005,9 +1056,9 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, run所在的workspaceID
+                `WorkspaceID (str)`: 必选, run所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
-                `ID (string)`: 必选, Run ID
+                `ID (str)`: 必选, Run ID
                     示例值:  rcb6kdf5eig43rnbl2brg
 
         Returns:
@@ -1024,10 +1075,10 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, submission所在的workspaceID
+                `WorkspaceID (str)`: 必选, submission所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `RunID (string)`: 必选, 运行记录ID
+                `RunID (str)`: 必选, 运行记录ID
                     示例值:  rcb6jdp5eig4f4tigos0g
 
                 `PageNumber (int)`: 选填, 页码
@@ -1041,13 +1092,13 @@ class BioOsService(Service):
 
                 `Items (List[Dict])`: Task列表
 
-                    `Name (string)`: 任务名称
+                    `Name (str)`: 任务名称
                         示例值:  melt.step1.0
 
-                    `RunID (string)`: 运行记录ID
+                    `RunID (str)`: 运行记录ID
                         示例值:  rcb6kdf5eig43rnbl2brg
 
-                    `Status (string)`: 任务状态（Succeeded、Failed、Running、Queued、Initalizing、Cancelled）
+                    `Status (str)`: 任务状态（Succeeded、Failed、Running、Queued、Initalizing、Cancelled）
                         示例值:  Running
 
                     `StartTime (Int)`: 起始时间
@@ -1059,13 +1110,13 @@ class BioOsService(Service):
                     `Duration (int)`: 分析耗时(单位为s)
                         示例值:
 
-                    `Log (string)`: 运行记录日志存储路径
+                    `Log (str)`: 运行记录日志存储路径
                         示例值:  s3://bioos-wcb1e3v5eig4635iurevg/analysis/scbd69kteig472iq3lt5g/workflow.941846fb-158d-4d49-82e0-f2f39372e9e3.log
 
-                    `Stdout (string)`: 任务输出存储路径
+                    `Stdout (str)`: 任务输出存储路径
                         示例值:  s3://bioos-wcb1e3v5eig4635iurevg/analysis/scbqbh2deig40u2tf4ahg/melt/cd28ec5b-75df-4981-a7f5-90f1deba8a94/call-step1/shard-0/execution/stdout
 
-                    `Stderr (string)`: 任务错误存储路径
+                    `Stderr (str)`: 任务错误存储路径
                         示例值:  s3://bioos-wcb1e3v5eig4635iurevg/analysis/scbqbh2deig40u2tf4ahg/melt/cd28ec5b-75df-4981-a7f5-90f1deba8a94/call-step1/shard-0/execution/stderr
 
                 `PageNumber (int)`: 页码
@@ -1089,34 +1140,34 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, 导入workflow的workspaceID
+                `WorkspaceID (str)`: 必选, 导入workflow的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `Name (string)`: 必选, 导入workflow的名字
+                `Name (str)`: 必选, 导入workflow的名字
                     示例值:  test-workflow
 
-                `Description (string)`: 选填, workflow描述信息
+                `Description (str)`: 选填, workflow描述信息
                     示例值:  test-workflow- description
 
-                `Language (string)`: 必选, workflow的语言，目前仅支持WDL
+                `Language (str)`: 必选, workflow的语言，目前仅支持WDL
                     示例值:  WDL
 
-                `Source (string)`: 必选, wdl存放的git仓库信息
+                `Source (str)`: 必选, wdl存放的git仓库信息
                     示例值:  https://gitee.com/xx/wdl.git
 
-                `Tag (string)`: 必选, wdl的git仓库中的tag
+                `Tag (str)`: 必选, wdl的git仓库中的tag
                     示例值:  master
 
-                `Token (string)`: 选填, 若仓库地址为gittee，则需要填写对应token
+                `Token (str)`: 选填, 若仓库地址为gittee，则需要填写对应token
                     示例值:  fefwdfsdfwefdsdf
 
-                `MainWorkflowPath (string)`: 必选, 主wdl在对应仓库中的地址
+                `MainWorkflowPath (str)`: 必选, 主wdl在对应仓库中的地址
                     示例值:  hello.wdl
 
         Returns:
             Dict:
 
-                `ID (string)`: WorkflowID
+                `ID (str)`: WorkflowID
                     示例值:  wcf0cp05eig4883tiu130
 
         """
@@ -1130,7 +1181,7 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, workflow所在的workspaceID
+                `WorkspaceID (str)`: 必选, workflow所在的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
                 `PageNumber (int)`: 选填, 页码
@@ -1141,16 +1192,16 @@ class BioOsService(Service):
 
                 `Filter (Dict)`: 选填, 筛选条件
 
-                    `Keyword (string)`: 选填, 根据名称筛选
+                    `Keyword (str)`: 选填, 根据名称筛选
                         示例值:  test
 
-                    `IDs (List[string])`: 选填, ID列表
+                    `IDs (List[str])`: 选填, ID列表
                         示例值:  ["test-workflow"]
 
-                `SortBy (string)`: 选填, 排序字段（Name CreateTime）
+                `SortBy (str)`: 选填, 排序字段（Name CreateTime）
                     示例值:  CreateTime
 
-                `SortOrder (string)`: 选填, 排序顺序（Desc Asc）
+                `SortOrder (str)`: 选填, 排序顺序（Desc Asc）
                     示例值:  Desc
 
         Returns:
@@ -1158,13 +1209,13 @@ class BioOsService(Service):
 
                 `Items (List[Dict])`: Workflow 列表
 
-                    `ID (string)`: WorkflowID
+                    `ID (str)`: WorkflowID
                         示例值:  wcf0cp05eig4883tiu130
 
-                    `Name (string)`: Workflow 名称
+                    `Name (str)`: Workflow 名称
                         示例值:  test
 
-                    `Description (string)`: 描述
+                    `Description (str)`: 描述
                         示例值:  test
 
                     `CreateTime (int)`: 创建时间戳
@@ -1173,58 +1224,58 @@ class BioOsService(Service):
                     `UpdateTime (int)`: 更新时间戳
                         示例值:  1673525239
 
-                    `Language (string)`: workflow语言
+                    `Language (str)`: workflow语言
                         示例值:  WDL
 
-                    `Source (string)`: wdl仓库地址
+                    `Source (str)`: wdl仓库地址
                         示例值:  https://gitee.com/xx/wdl.git
 
-                    `Tag (string)`: tag地址
+                    `Tag (str)`: tag地址
                         示例值:  master
 
-                    `Token (string)`: 用户的git token
+                    `Token (str)`: 用户的git token
                         示例值:  sfsdfwefew
 
-                    `MainWorkflowPath (string)`: 主wdl在仓库中的位置
+                    `MainWorkflowPath (str)`: 主wdl在仓库中的位置
                         示例值:  hello.wdl
 
                     `Status (Dict)`: workflow导入状态
 
-                        `Phase (string)`: workflow导入状态（Importing、Succeeded、Failed）
+                        `Phase (str)`: workflow导入状态（Importing、Succeeded、Failed）
                             示例值:  Succeeded
 
-                        `Message (string)`: 导入失败原因，Phase为Failed时有效
+                        `Message (str)`: 导入失败原因，Phase为Failed时有效
                             示例值:
 
                     `Inputs (Dict)`: wdl的intput信息
 
-                        `Name (string)`: 参数名称
+                        `Name (str)`: 参数名称
                             示例值:  test
 
-                        `Type (string)`: 参数类型
+                        `Type (str)`: 参数类型
                             示例值:  String
 
                         `Optional (bool)`: 是否是可选参数
-                            示例值:  true
+                            示例值:  True
 
-                        `Default (string)`: 默认值
+                        `Default (str)`: 默认值
                             示例值:  test
 
                     `Outputs (Dict)`: wdl的output信息
 
-                        `Name (string)`: 参数名称
+                        `Name (str)`: 参数名称
                             示例值:  test
 
-                        `Type (string)`: 参数类型
+                        `Type (str)`: 参数类型
                             示例值:  String
 
                         `Optional (bool)`: 是否是可选参数
-                            示例值:  true
+                            示例值:  True
 
-                        `Default (string)`: 默认值
+                        `Default (str)`: 默认值
                             示例值:  test
 
-                    `OwnerName (string)`: 创建者名字
+                    `OwnerName (str)`: 创建者名字
                         示例值:  test
 
                 `PageNumber (int)`: 页码
@@ -1247,28 +1298,28 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, 导入workflow的workspaceID
+                `WorkspaceID (str)`: 必选, 导入workflow的workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `ID (string)`: 必选, workflowID
+                `ID (str)`: 必选, workflowID
                     示例值:  fcbkcdkdeig43pmbqr9dg
 
-                `Name (string)`: 必选, 更新后workflow的名字
+                `Name (str)`: 必选, 更新后workflow的名字
                     示例值:  test-workflow
 
-                `Description (string)`: 选填, 更新后workflow描述信息
+                `Description (str)`: 选填, 更新后workflow描述信息
                     示例值:  test-workflow- description
 
-                `Source (string)`: 必选, 更新后wdl存放的git仓库信息
+                `Source (str)`: 必选, 更新后wdl存放的git仓库信息
                     示例值:  https://gitee.com/xx/wdl.git
 
-                `Tag (string)`: 必选, 更新后wdl的git仓库中的tag
+                `Tag (str)`: 必选, 更新后wdl的git仓库中的tag
                     示例值:  master
 
-                `Token (string)`: 选填, 若仓库地址为gittee，则需要填写对应token
+                `Token (str)`: 选填, 若仓库地址为gittee，则需要填写对应token
                     示例值:  fefwdfsdfwefdsdf
 
-                `MainWorkflowPath (string)`: 必选, 更新后主wdl在对应仓库中的地址
+                `MainWorkflowPath (str)`: 必选, 更新后主wdl在对应仓库中的地址
                     示例值:  hello.wdl
 
         Returns:
@@ -1285,10 +1336,10 @@ class BioOsService(Service):
         Args:
             params (Dict):
 
-                `WorkspaceID (string)`: 必选, workflow所在workspaceID
+                `WorkspaceID (str)`: 必选, workflow所在workspaceID
                     示例值:  wcf0cp05eig4883tiu130
 
-                `ID (string)`: 必选, workflowID
+                `ID (str)`: 必选, workflowID
                     示例值:  fcbkcdkdeig43pmbqr9dg
 
         Returns:
@@ -1296,6 +1347,238 @@ class BioOsService(Service):
 
         """
         return self.__request('DeleteWorkflow', params)
+
+    def get_notebook_edit_info(self, params):
+        """ 启动Notebook Server并获取访问链接
+
+        https://www.volcengine.com/docs/6971/1105070
+
+        Args:
+            params (Dict):
+
+                `WorkspaceID (str)`: 必选, 工作空间 ID
+                    示例值:  wcxxxxxxxxxxxxxxxxxxx
+
+                `Name (str)`: 必选, Notebook文件名 对于Dashboard则为__dashboard__
+                    示例值:  __dashboard__
+
+        Returns:
+            Dict: empty dictionary
+
+        Examples:
+            >>> bioos_service.get_notebook_edit_info(
+            ...    {
+            ...        "WorkspaceID": "wcxxxxxxxxxxxxxxxxxxx",
+            ...        "Name": "__dashboard__"
+            ...    },
+            ... )
+            {
+                    "URL": "https://bioos-xxx.xxx.volcanicengine.com/notebook-01/user/ucxxxxxxxxxxxxxxxxxxx/wcxxxxxxxxxxxxxxxxxxx"
+            }
+        """
+        return self.__request('GetNotebookEditInfo', params)
+
+    def get_notebook_server_settings(self, params):
+        """ 获取当前Notebook Server配置信息
+
+        https://www.volcengine.com/docs/6971/1105071
+
+        Args:
+            params (Dict):
+
+                `WorkspaceID (str)`: 必选, 工作空间 ID
+                    示例值:  wcxxxxxxxxxxxxxxxxxxx
+
+        Returns:
+            Dict:
+
+                `ImageID (str)`: 镜像 ID，如果从未配置过返回""
+                    示例值:  1
+
+                `TempImageName (str)`: 临时镜像名，如果从未配置过返回""
+                    示例值:  jupyter/minimal-notebook
+
+                `MountTOSEnabled (bool)`: 是否挂载TOS桶
+                    示例值:  True
+
+        Examples:
+            >>> bioos_service.get_notebook_server_settings(
+            ...    {
+            ...        "WorkspaceID": "wcxxxxxxxxxxxxxxxxxxx"
+            ...    },
+            ... )
+            {
+                    "ResourceSize": "small",
+                    "ImageID": "1",
+                    "TempImageName": "jupyter/minimal-notebook",
+                    "MountTOSEnabled": True
+            }
+        """
+        return self.__request('GetNotebookServerSettings', params)
+
+    def get_notebook_server_stat(self, params):
+        """ 获取当前Notebook Server状态
+
+        https://www.volcengine.com/docs/6971/1105072
+
+        Args:
+            params (Dict):
+
+                `WorkspaceID (str)`: 必选, 工作空间 ID
+                    示例值:  wcxxxxxxxxxxxxxxxxxxx
+
+        Returns:
+            Dict:
+
+                `TOSAccessible (str)`: TOS挂载生效状态 取值有 OK ClusterNotSupport AccessKeyNotSet AccessKeyInvalid CSINotInstall CSINotReady BucketNotExist
+                    示例值:  OK
+
+        Examples:
+            >>> bioos_service.get_notebook_server_stat(
+            ...    {
+            ...        "WorkspaceID": "wcxxxxxxxxxxxxxxxxxxx"
+            ...    },
+            ... )
+            {
+                    "Status": "spawn",
+                    "TOSAccessible": "OK"
+            }
+        """
+        return self.__request('GetNotebookServerStat', params)
+
+    def list_notebook_server_images(self, params):
+        """ 列举Notebook Server镜像信息
+
+        https://www.volcengine.com/docs/6971/1105073
+
+        Args:
+            params (Dict):
+
+                `ImageIDs (List[str])`: 选填, 镜像ID，不传则返回所有
+                    示例值:  ["1","2"]
+
+                `Source (str)`: 选填, 镜像来源 official,customized
+                    示例值:  official
+
+                `Status (str)`: 选填, 镜像审核状态 pending,approve,reject
+                    示例值:  pending
+
+                `DisplayName (str)`: 选填, 镜像名
+                    示例值:
+
+        Returns:
+            Dict: empty dictionary
+
+        Examples:
+            >>> bioos_service.list_notebook_server_images(
+            ...    {
+            ...        "ImageIDs": ["1","2"],
+            ...        "Source": "official",
+            ...        "Status": "pending",
+            ...        "DisplayName": "xxxxxxxx"
+            ...    },
+            ... )
+            {
+                    "Images": [
+                        {
+                            "ImageID": "1",
+                            "DisplayName": "minimal-notebook",
+                            "ImageName": "jupyter/minimal-notebook",
+                            "Description": "description",
+                            "AccountID": 2xxxxxxxxx,
+                            "UserID": 1xxxxx,
+                            "Status": "pending",
+                            "Source": "official",
+            }
+        """
+        return self.__request('ListNotebookServerImages', params)
+
+    def list_notebook_server_resource_opts(self, params):
+        """ 列举Notebook Server可用资源配置
+
+        https://www.volcengine.com/docs/6971/1105074
+
+        Args:
+            params (Dict):
+
+        Returns:
+            Dict: empty dictionary
+
+        Examples:
+            >>> bioos_service.list_notebook_server_resource_opts()
+            {
+                    "ResourceSize": [
+                        {
+                            "ResourceSize": "small",
+                            "Cpu": 2,
+                            "Memory": 8589934592
+            }
+        """
+        return self.__request('ListNotebookServerResourceOpts', params)
+
+    def stop_notebook_server(self, params):
+        """ 即时暂停当前Notebook Server
+
+        https://www.volcengine.com/docs/6971/1105075
+
+        Args:
+            params (Dict):
+
+                `WorkspaceID (str)`: 必选, 工作空间 ID
+                    示例值:  wcxxxxxxxxxxxxxxxxxxx
+
+        Returns:
+            Dict: empty dictionary
+
+        Examples:
+            >>> bioos_service.stop_notebook_server(
+            ...    {
+            ...        "WorkspaceID": "wcxxxxxxxxxxxxxxxxxxx"
+            ...    },
+            ... )
+            {}
+        """
+        return self.__request('StopNotebookServer', params)
+
+    def update_notebook_server_settings(self, params):
+        """ 更新Notebook Server配置并异步暂停当前Notebook Server
+
+        https://www.volcengine.com/docs/6971/1105076
+
+        Args:
+            params (Dict):
+
+                `WorkspaceID (str)`: 必选, 工作空间 ID
+                    示例值:  wcxxxxxxxxxxxxxxxxxxx
+
+                `ResourceSize (str)`: 选填, 资源规格，没变化则不传 small,middle,larg
+                    示例值:  small
+
+                `ImageID (str)`: 选填, 镜像 ID，没变化则不传，与临时镜像名字端互斥
+                    示例值:  1
+
+                `MountTOSEnabled (bool)`: 选填, 是否挂载TOS桶，没变化则不传
+                    示例值:  False
+
+                `TempImageName (str)`: 选填, 临时镜像名，没变化则不传，与镜像ID字段互斥
+                    示例值:  jupyter/minimal-notebook
+
+        Returns:
+            Dict: empty dictionary
+
+        Examples:
+            >>> bioos_service.update_notebook_server_settings(
+            ...    {
+            ...        "WorkspaceID": "wcxxxxxxxxxxxxxxxxxxx",
+            ...        "ResourceSize": "small",
+            ...        "ImageID": "1",
+            ...        "MountTOSEnabled": False,
+            ...        "TempImageName": "jupyter/minimal-notebook"
+            ...    },
+            ... )
+            {}
+        """
+        return self.__request('UpdateNotebookServerSettings', params)
 
     def __request(self, action, params):
         res = self.json(action, dict(), json.dumps(params))

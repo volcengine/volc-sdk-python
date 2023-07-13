@@ -65,4 +65,18 @@ bioos
 -------------------------------
 .. autofunction:: bioos.BioOsService.BioOsService.list_tasks
 
+Notebook server
+-------------------------------
+.. autofunction:: bioos.BioOsService.BioOsService.get_notebook_edit_info
 
+.. autofunction:: bioos.BioOsService.BioOsService.get_notebook_server_settings
+
+.. autofunction:: bioos.BioOsService.BioOsService.get_notebook_server_stat
+
+.. autofunction:: bioos.BioOsService.BioOsService.list_notebook_server_images
+
+.. autofunction:: bioos.BioOsService.BioOsService.list_notebook_server_resource_opts
+
+.. autofunction:: bioos.BioOsService.BioOsService.stop_notebook_server
+
+.. autofunction:: bioos.BioOsService.BioOsService.update_notebook_server_settings
