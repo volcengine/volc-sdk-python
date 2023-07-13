@@ -1,5 +1,9 @@
 ### Change log
 
+2023-07-13 Bumped to version v1.0.98
+- Updated apis for bioos/maas/visual
+- Added service dts
+
 2023-07-06 Bumped to version v1.0.97
 - Updated apis for maas
 
