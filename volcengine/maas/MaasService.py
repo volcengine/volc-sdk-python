@@ -43,7 +43,7 @@ class MaasService(Service):
             resp = Parse(res, ChatResp(), True)
         except Exception as e:
             try:
-                resp = Parse(str(e.args[0]), ChatResp(), True)
+                resp = Parse(str(e.args[0], encoding='utf-8'), ChatResp(), True)
             except Exception:
                 raise new_client_sdk_request_error(str(e))
             else:
