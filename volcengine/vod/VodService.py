@@ -190,7 +190,6 @@ class VodService(VodServiceConfig):
 
         if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
             headers['X-Upload-Storage-Class'] = 'archive'
-
         if storage_class == volcengine.vod.models.business.vod_upload_pb2.IA:
             headers['X-Upload-Storage-Class'] = 'ia'
 
@@ -206,7 +205,7 @@ class VodService(VodServiceConfig):
         n = size // MinChunkSize
         last_num = n - 1
         parts = []
-        meta = ''
+        meta = {}
         with open(file_path, 'rb') as f:
             for i in range(0, last_num):
                 data = f.read(MinChunkSize)
@@ -222,6 +221,8 @@ class VodService(VodServiceConfig):
             if is_large_file:
                 last_num = last_num + 1
             part, payload = self.upload_part(host, oid, auth, upload_id, last_num, data, is_large_file, storage_class)
+            if last_num == 1:
+                meta = payload["meta"]
             parts.append(part)
         return self.upload_merge_part(host, oid, auth, upload_id, parts, is_large_file, storage_class, meta)
 
@@ -1629,6 +1630,525 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetWorkflowResultResponse(), True)
 
     #
+    # CreateTaskTemplate.
+    #
+    # @param request VodCreateTaskTemplateRequest
+    # @return VodCreateTaskTemplateResponse
+    # @raise Exception
+    def create_task_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("CreateTaskTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodCreateTaskTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodCreateTaskTemplateResponse(), True)
+
+
+    #
+    # UpdateTaskTemplate.
+    #
+    # @param request VodUpdateTaskTemplateRequest
+    # @return VodUpdateTaskTemplateResponse
+    # @raise Exception
+    def update_task_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("UpdateTaskTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateTaskTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateTaskTemplateResponse(), True)
+
+
+    #
+    # GetTaskTemplate.
+    #
+    # @param request VodGetTaskTemplateRequest
+    # @return VodGetTaskTemplateResponse
+    # @raise Exception
+    def get_task_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetTaskTemplate", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetTaskTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetTaskTemplateResponse(), True)
+
+    #
+    # ListTaskTemplate.
+    #
+    # @param request VodListTaskTemplateRequest
+    # @return VodListTaskTemplateResponse
+    # @raise Exception
+    def list_task_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ListTaskTemplate", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodListTaskTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodListTaskTemplateResponse(), True)
+
+    #
+    # DeleteTaskTemplate.
+    #
+    # @param request VodDeleteTaskTemplateRequest
+    # @return VodDeleteTaskTemplateResponse
+    # @raise Exception
+    def delete_task_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("DeleteTaskTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDeleteTaskTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDeleteTaskTemplateResponse(), True)
+
+
+    #
+    # CreateWorkflowTemplate.
+    #
+    # @param request VodCreateWorkflowTemplateRequest
+    # @return VodCreateWorkflowTemplateResponse
+    # @raise Exception
+    def create_workflow_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("CreateWorkflowTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodCreateWorkflowTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodCreateWorkflowTemplateResponse(), True)
+
+
+    #
+    # UpdateWorkflowTemplate.
+    #
+    # @param request VodUpdateWorkflowTemplateRequest
+    # @return VodUpdateWorkflowTemplateResponse
+    # @raise Exception
+    def update_workflow_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("UpdateWorkflowTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateWorkflowTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateWorkflowTemplateResponse(), True)
+
+
+    #
+    # GetWorkflowTemplate.
+    #
+    # @param request VodGetWorkflowTemplateRequest
+    # @return VodGetWorkflowTemplateResponse
+    # @raise Exception
+    def get_workflow_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetWorkflowTemplate", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetWorkflowTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetWorkflowTemplateResponse(), True)
+
+    #
+    # ListWorkflowTemplate.
+    #
+    # @param request VodListWorkflowTemplateRequest
+    # @return VodListWorkflowTemplateResponse
+    # @raise Exception
+    def list_workflow_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ListWorkflowTemplate", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodListWorkflowTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodListWorkflowTemplateResponse(), True)
+
+    #
+    # DeleteWorkflowTemplate.
+    #
+    # @param request VodDeleteWorkflowTemplateRequest
+    # @return VodDeleteWorkflowTemplateResponse
+    # @raise Exception
+    def delete_workflow_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("DeleteWorkflowTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDeleteWorkflowTemplateResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDeleteWorkflowTemplateResponse(), True)
+
+
+    #
+    # CreateWatermarkTemplate.
+    #
+    # @param request VodCreateWatermarkRequest
+    # @return VodCreateWatermarkResponse
+    # @raise Exception
+    def create_watermark_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("CreateWatermarkTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodCreateWatermarkResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodCreateWatermarkResponse(), True)
+
+
+    #
+    # UpdateWatermarkTemplate.
+    #
+    # @param request VodUpdateWatermarkRequest
+    # @return VodUpdateWatermarkResponse
+    # @raise Exception
+    def update_watermark_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("UpdateWatermarkTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateWatermarkResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateWatermarkResponse(), True)
+
+
+    #
+    # GetWatermarkTemplate.
+    #
+    # @param request VodGetWatermarkRequest
+    # @return VodGetWatermarkResponse
+    # @raise Exception
+    def get_watermark_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetWatermarkTemplate", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetWatermarkResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetWatermarkResponse(), True)
+
+    #
+    # ListWatermarkTemplate.
+    #
+    # @param request VodListWatermarkRequest
+    # @return VodListWatermarkResponse
+    # @raise Exception
+    def list_watermark_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("ListWatermarkTemplate", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodListWatermarkResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodListWatermarkResponse(), True)
+
+    #
+    # DeleteWatermarkTemplate.
+    #
+    # @param request VodDeleteWatermarkRequest
+    # @return VodDeleteWatermarkResponse
+    # @raise Exception
+    def delete_watermark_template(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("DeleteWatermarkTemplate",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDeleteWatermarkResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDeleteWatermarkResponse(), True)
+
+
+    #
     # CreateSpace.
     #
     # @param request VodCreateSpaceRequest
@@ -2309,6 +2829,108 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodGetContentBlockTasksResponse(), True)
 
+
+    #
+    # CreateDomain.
+    #
+    # @param request VodCreateDomainV2Request
+    # @return VodCreateDomainV2Response
+    # @raise Exception
+    def create_domain(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("CreateDomain",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodCreateDomainV2Response(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodCreateDomainV2Response(), True)
+
+    #
+    # UpdateDomainExpire.
+    #
+    # @param request VodUpdateDomainExpireV2Request
+    # @return VodUpdateDomainExpireV2Response
+    # @raise Exception
+    def update_domain_expire(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("UpdateDomainExpire",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateDomainExpireV2Response(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateDomainExpireV2Response(), True)
+
+    #
+    # UpdateDomainAuthConfig.
+    #
+    # @param request VodUpdateDomainAuthConfigV2Request
+    # @return VodUpdateDomainAuthConfigV2Response
+    # @raise Exception
+    def update_domain_auth_config(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("UpdateDomainAuthConfig",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateDomainAuthConfigV2Response(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateDomainAuthConfigV2Response(), True)
 
     #
     # AddCallbackSubscription.
