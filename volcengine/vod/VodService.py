@@ -2864,6 +2864,7 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodCreateDomainV2Response(), True)
 
+
     #
     # UpdateDomainExpire.
     #
@@ -2898,6 +2899,7 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodUpdateDomainExpireV2Response(), True)
 
+
     #
     # UpdateDomainAuthConfig.
     #
@@ -2931,6 +2933,7 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodUpdateDomainAuthConfigV2Response(), True)
+
 
     #
     # AddCallbackSubscription.
