@@ -34,7 +34,10 @@ class BillingService(Service):
     def get_api_info():
         api_info = {"ListBill": ApiInfo("POST", "/", {"Action": "ListBill", "Version": SERVICE_VERSION}, {}, {}),
                     "ListBillDetail": ApiInfo("POST", "/", {"Action": "ListBillDetail", "Version": SERVICE_VERSION}, {}, {}),
-                    "ListBillOverviewByProd": ApiInfo("POST", "/", {"Action": "ListBillOverviewByProd", "Version": SERVICE_VERSION}, {}, {})}
+                    "ListBillOverviewByProd": ApiInfo("POST", "/", {"Action": "ListBillOverviewByProd", "Version": SERVICE_VERSION}, {}, {}),
+                    "ListSplitBillDetail": ApiInfo("POST", "/", {"Action": "ListSplitBillDetail", "Version": SERVICE_VERSION}, {}, {}),
+                    "ListAmortizedCostBillDetail": ApiInfo("POST", "/", {"Action": "ListAmortizedCostBillDetail", "Version": SERVICE_VERSION}, {}, {}),
+                    "ListAmortizedCostBillMonthly": ApiInfo("POST", "/", {"Action": "ListAmortizedCostBillMonthly", "Version": SERVICE_VERSION}, {}, {})}
         return api_info
 
     def list_bill(self, params, body):
@@ -53,6 +56,27 @@ class BillingService(Service):
 
     def list_bill_overview_by_prod(self, params, body):
         res = self.json("ListBillOverviewByProd", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def list_split_bill_detail(self, params, body):
+        res = self.json("ListSplitBillDetail", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def list_amortized_cost_bill_detail(self, params, body):
+        res = self.json("ListAmortizedCostBillDetail", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def list_amortized_cost_bill_monthly(self, params, body):
+        res = self.json("ListAmortizedCostBillMonthly", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
