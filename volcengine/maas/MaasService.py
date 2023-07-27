@@ -35,6 +35,7 @@ class MaasService(Service):
         return api_info
 
     def chat(self, req):
+        self._validate()
         try:
             req['stream'] = False
             res = self.json("chat", {}, json.dumps(req))
@@ -50,8 +51,16 @@ class MaasService(Service):
                 raise MaasException(resp.error.code_n, resp.error.code, resp.error.message)
         else:
             return resp
+        
+    def _validate(self):
+        if self.service_info.credentials is None or \
+            self.service_info.credentials.sk is None or \
+            self.service_info.credentials.ak is None:
+            raise new_client_sdk_request_error("no valid credential")
 
     def stream_chat(self, req):
+        self._validate()
+        
         try:
             req['stream'] = True
             
@@ -61,11 +70,6 @@ class MaasService(Service):
             r = self.prepare_request(api_info, {})
             r.headers['Content-Type'] = 'application/json'
             r.body = json.dumps(req)
-            
-            if self.service_info.credentials is None or \
-                self.service_info.credentials.sk is None or \
-                self.service_info.credentials.ak is None:
-                raise new_client_sdk_request_error("no valid credential")
 
             SignerV4.sign(r, self.service_info.credentials)
 
