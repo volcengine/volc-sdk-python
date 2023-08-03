@@ -205,6 +205,7 @@ class ImageXService(Service):
             'SessionKey': params.get('SessionKey', ''),
             'UploadNum': len(file_paths),
             'StoreKeys': params.get('StoreKeys', []),
+            'Overwrite': str(params.get('Overwrite', False))
         }
         resp = self.apply_upload(apply_upload_request)
         if 'Error' in resp['ResponseMetadata']:
@@ -316,7 +317,7 @@ class ImageXService(Service):
         else:
             return base64.b64encode(data.decode('utf-8'))
 
-    def get_upload_auth(self, service_ids, expire=60 * 60, key_ptn=''):
+    def get_upload_auth(self, service_ids, expire=60 * 60, key_ptn='', tag=dict):
         apply_res = []
         commit_res = []
         if len(service_ids) == 0:
@@ -334,6 +335,8 @@ class ImageXService(Service):
             Statement.new_allow_statement(
                 ['ImageX:CommitImageUpload'], commit_res)
         ])
+        for k, v in tag.items():
+            inline_policy.statements.append(Statement.new_allow_statement([k], [str(v)]))
         return self.sign_sts2(inline_policy, expire)
 
     def delete_images(self, service_id, uris):
