@@ -185,7 +185,7 @@ class VodService(VodServiceConfig):
             data = f.read()
             check_sum = crc32(data) & 0xFFFFFFFF
         check_sum = "%08x" % check_sum
-        url = 'http://{}/{}'.format(host, oid)
+        url = 'https://{}/{}'.format(host, oid)
         headers = {'Content-CRC32': check_sum, 'Authorization': auth}
 
         if storage_class == volcengine.vod.models.business.vod_upload_pb2.Archive:
@@ -228,7 +228,7 @@ class VodService(VodServiceConfig):
 
     @retry(tries=3, delay=1, backoff=2)
     def init_upload_part(self, host, oid, auth, is_large_file, storage_class):
-        url = 'http://{}/{}?uploads'.format(host, oid)
+        url = 'https://{}/{}?uploads'.format(host, oid)
         headers = {'Authorization': auth}
         if is_large_file:
             headers['X-Storage-Mode'] = 'gateway'
@@ -248,7 +248,7 @@ class VodService(VodServiceConfig):
 
     @retry(tries=3, delay=1, backoff=2)
     def upload_part(self, host, oid, auth, upload_id, part_number, data, is_large_file, storage_class):
-        url = 'http://{}/{}?partNumber={}&uploadID={}'.format(host, oid,
+        url = 'https://{}/{}?partNumber={}&uploadID={}'.format(host, oid,
                                                               part_number, upload_id)
         check_sum = crc32(data) & 0xFFFFFFFF
         check_sum = "%08x" % check_sum
@@ -284,7 +284,7 @@ class VodService(VodServiceConfig):
         object_content_type = ''
         if (meta is not None) and (meta.get("ObjectContentType") is not None):
             object_content_type = meta['ObjectContentType']
-        url = 'http://{}/{}?uploadID={}&ObjectContentType={}'.format(host, oid, upload_id, object_content_type)
+        url = 'https://{}/{}?uploadID={}&ObjectContentType={}'.format(host, oid, upload_id, object_content_type)
         data = self.generate_merge_body(check_sum_list)
         headers = {'Authorization': auth}
         if is_large_file:
