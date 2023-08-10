@@ -13,7 +13,6 @@ if __name__ == '__main__':
     params['ServiceId'] = 'imagex service id'
     params['SkipMeta'] = False
     params['SkipCommit'] = False
-
     file_paths = ['image file path 1']
     resp = imagex_service.upload_image(params, file_paths)
     print(resp)
