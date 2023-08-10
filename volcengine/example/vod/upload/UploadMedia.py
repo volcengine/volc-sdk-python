@@ -26,7 +26,7 @@ if __name__ == '__main__':
         req.FilePath = file_path
         req.Functions = json.dumps([get_meta_function, snapshot_function])
         req.CallbackArgs = ''
-        req.FileName = ''
+        req.FileName = 'hello/vod.mp4'
         req.FileExtension = '.mp4'
         req.StorageClass = 0
         resp = vod_service.upload_media(req)
