@@ -12,6 +12,7 @@ if __name__ == '__main__':
 
     # service id list allowed to do upload, set to empty if no restriction
     service_ids = ['imagex service id']
-
-    resp = imagex_service.get_upload_auth(service_ids)
+    tag = dict()
+    # tag['UploadOverwrite'] = False
+    resp = imagex_service.get_upload_auth(service_ids, tag=tag)
     print(resp)
