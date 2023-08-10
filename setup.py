@@ -9,7 +9,7 @@ install_requires = [
     "retry==0.9.2",
     "pytz==2020.5",
     "pycryptodome==3.9.9",
-    "protobuf~=3.19.0",
+    "protobuf>=3.18.3",
     "google>=3.0.0",
     "six>=1.0"
 ]
