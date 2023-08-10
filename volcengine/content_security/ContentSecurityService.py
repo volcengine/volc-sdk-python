@@ -46,6 +46,7 @@ class ContentSecurityService(Service):
                     "DeleteCustomContents": ApiInfo("PUT", "/", {"Action": "DeleteCustomContents", "Version": "2022-04-28"}, {}, {}),
                     "AsyncAudioRisk": ApiInfo("POST", "/", {"Action": "AsyncAudioRisk", "Version": "2022-04-01"}, {}, {}),
                     "GetAudioResult": ApiInfo("GET", "/", {"Action": "GetAudioResult", "Version": "2022-04-01"}, {}, {}),
+                    "AudioRisk": ApiInfo("POST", "/", {"Action": "AudioRisk", "Version": "2022-04-01"}, {}, {}),
                     "AsyncLiveVideoRisk": ApiInfo("POST", "/", {"Action": "AsyncLiveVideoRisk", "Version": "2022-04-25"}, {}, {}),
                     "GetVideoLiveResult": ApiInfo("GET", "/", {"Action": "GetVideoLiveResult", "Version": "2022-04-25"}, {}, {}),
                     "AsyncLiveAudioRisk": ApiInfo("POST", "/", {"Action": "AsyncLiveAudioRisk", "Version": "2022-04-25"}, {}, {}),
@@ -188,6 +189,13 @@ class ContentSecurityService(Service):
 
     def audio_result(self, params, body):
         res = self.get("GetAudioResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def audio_risk(self, params, body):
+        res = self.json("AudioRisk", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
