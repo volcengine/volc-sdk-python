@@ -11,7 +11,9 @@ install_requires = [
     "pycryptodome==3.9.9",
     "protobuf>=3.18.3",
     "google>=3.0.0",
-    "six>=1.0"
+    "six>=1.0",
+    "tinyec==0.4.0",
+    "cryptography==38.0.4",
 ]
 
 setup(
