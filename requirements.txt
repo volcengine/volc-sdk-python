@@ -16,3 +16,5 @@ google>=3.0.0
 six>=1.0
 protobuf>=3.18.3
 minio~=7.1.9
+tinyec==0.4.0
+cryptography==38.0.4
