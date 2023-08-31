@@ -1,7 +1,8 @@
 # coding: utf-8
 import json
-import os.path
+import os
 import threading
+import time
 
 import redo
 
@@ -21,6 +22,36 @@ CONN_TIMEOUT = 5
 RECV_TIMEOUT = 5
 DEFAULT_PAGE_NUM = 1
 DEFAULT_PAGE_SIZE = 10
+DEFAULT_STORAGE_ACCESS_EXPIRED_SEC = 15 * 60
+
+
+def _list_dir(dir_name, max_depth=50):
+    if max_depth <= 0:
+        raise Exception("too deep dir %s" % dir_name)
+
+    local_files = []
+    files = os.listdir(dir_name)
+    if len(files) == 0:
+        local_files.append(dir_name)
+
+    for f in files:
+        full_path = os.path.join(dir_name, f)
+        if os.path.isfile(full_path):
+            local_files.append(full_path)
+        else:
+            subs = _list_dir(full_path, max_depth - 1)
+            for e in subs:
+                local_files.append(e)
+
+    return local_files
+
+
+def _to_slash(filename):
+    filename = filename.replace(":\\", "/").replace("\\", "/")
+    if filename[0] == '/':
+        filename = filename[1:]
+
+    return filename
 
 
 class FileInfo(object):
@@ -29,6 +60,9 @@ class FileInfo(object):
         self.size = size
         self.mtime = mtime
         self.md5 = md5
+
+    def __str__(self):
+        return "name: %s, size: %d, mtime: %d, md5: %s" % (self.name, self.size, self.mtime, self.md5)
 
 
 class VerenderService(Service):
@@ -41,9 +75,14 @@ class VerenderService(Service):
                     VerenderService._instance = object.__new__(cls)
         return VerenderService._instance
 
-    def __init__(self):
+    # ftrans_client_addr是快传客户端的地址 不配置默认使用S10 传输速度会低于快传客户端
+    # ftrans_proxy_addr是代理的管理地址 不需要代理则无需配置
+    def __init__(self, ftrans_client_addr=None, ftrans_proxy_addr=None):
         self.api_info = VerenderService.get_api_info()
         self.service_info = VerenderService.get_service_info()
+        self._ftrans_client_addr = ftrans_client_addr
+        self._ftrans_proxy_addr = ftrans_proxy_addr
+        self._storage_access_map = {}
         super(VerenderService, self).__init__(self.service_info, self.api_info)
 
     @staticmethod
@@ -239,17 +278,58 @@ class VerenderService(Service):
         }
         return api_info
 
-    @staticmethod
-    def _get_ftrans_client(storage):
-        addr = storage["ftrans_s10_server"]
-        bucket = storage["bucket_name"]
-        ftrans_security_token = storage["ftrans_security_token"]
-        ftrans_cert_pem = storage["cert_pem"]
-        ftrans_key_pem = storage["private_key_pem"]
-        ftrans_server_name = storage["ftrans_cert_name"]
+    def _get_ftrans_client(self, workspace_id, isp):
+        resp = self.list_cell_spec({"WorkspaceId": workspace_id})
+        cell_specs = resp["cell_specs"]
+        ignore_upload_case = False
+        for cs in cell_specs:
+            if cs["system_info"] == "windows":
+                ignore_upload_case = True
+                break
 
-        cli = FtransService(bucket, ftrans_security_token, ftrans_server_name, addr, ftrans_cert_pem, ftrans_key_pem)
-        return cli
+        if workspace_id not in self._storage_access_map:
+            params = {
+                "WorkspaceId": workspace_id
+            }
+            storage_access = self.get_storage_access(params)
+            self._storage_access_map[workspace_id] = {
+                "storage_access": storage_access,
+                "expired_at": int(time.time()) + DEFAULT_STORAGE_ACCESS_EXPIRED_SEC,
+                "ftrans_client_map": {},
+                "ignore_upload_case": ignore_upload_case
+            }
+        else:
+            storage_access = self._storage_access_map[workspace_id]
+            if storage_access["expired_at"] < int(time.time()):
+                params = {
+                    "WorkspaceId": workspace_id
+                }
+                storage_access = self.get_storage_access(params)
+                self._storage_access_map[workspace_id] = {
+                    "storage_access": storage_access["storage_access"],
+                    "expired_at": int(time.time()) + DEFAULT_STORAGE_ACCESS_EXPIRED_SEC,
+                    "ftrans_client_map": {},
+                    "ignore_upload_case": ignore_upload_case
+                }
+
+        storage_access = self._storage_access_map[workspace_id]
+        if isp in storage_access["ftrans_client_map"]:
+            return storage_access["ftrans_client_map"][isp], storage_access["ignore_upload_case"]
+        else:
+            bucket = storage_access["storage_access"]["bucket_name"]
+            acl_token = storage_access["storage_access"]["ftrans_security_token"]
+            server_name = storage_access["storage_access"]["ftrans_cert_name"]
+            s10_addr = storage_access["storage_access"]["ftrans_s10_server"]
+            cert = storage_access["storage_access"]["cert_pem"]
+            key = storage_access["storage_access"]["private_key_pem"]
+            s2_addr = storage_access["storage_access"]["ftrans_quic_server"]
+            cli = FtransService(bucket, acl_token, server_name,
+                                s10_server=s10_addr, cert_pem=cert, key_pem=key,
+                                client_addr=self._ftrans_client_addr, proxy_addr=self._ftrans_proxy_addr,
+                                s2_server=s2_addr, isp=isp)
+            storage_access["ftrans_client_map"][isp] = cli
+
+            return cli, storage_access["ignore_upload_case"]
 
     @redo.retriable(retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout, exceptions.ReadTimeout),
                     sleeptime=0.1, jitter=0.01, attempts=2)
@@ -305,154 +385,79 @@ class VerenderService(Service):
     def get_current_user(self):
         return self._call_get("GetCurrentUser", params=None)
 
-    @staticmethod
-    def to_slash(src):
-        path = os.path.normpath(src)
-        new = path.replace(":\\", "/").replace("\\", "/")
-        if new[0] == '/':
-            return new[1:]
-        else:
-            return new
+    # isp是传输所选择的运营商出口 可选 ct|cm|un 默认ct
+    def upload_file(self, workspace_id, src, des, isp="ct"):
+        cli, ignore_case = self._get_ftrans_client(workspace_id, isp=isp)
+        if ignore_case:
+            des = des.lower()
 
-    @staticmethod
-    def get_des_file_path(filename, src_path, des_path):
-        filename = VerenderService.to_slash(filename)
-        src_path = VerenderService.to_slash(src_path)
-        des_path = VerenderService.to_slash(des_path)
+        name, size, mtime, md5 = cli.upload_file(src, des)
+        return FileInfo(name, size, mtime, md5)
 
-        if src_path[-1] != '/':
-            src_path = src_path + "/"
+    # isp是传输所选择的运营商出口 可选 ct|cm|un 默认ct
+    def upload_folder(self, workspace_id, src_path, des_path, isp="ct"):
+        cli, ignore_case = self._get_ftrans_client(workspace_id, isp=isp)
 
-        if des_path[-1] != '/':
-            des_path = des_path + "/"
+        file_list = _list_dir(src_path)
 
-        return des_path + filename[len(src_path):]
+        for file in file_list:
+            src = _to_slash(file)
+            src_path = _to_slash(src_path)
+            des_path = _to_slash(des_path)
 
-    @staticmethod
-    def list_dir(dir_name, max_depth=50):
-        if max_depth <= 0:
-            raise Exception("too deep dir %s" % dir_name)
+            if src_path[-1] != '/':
+                src_path = src_path + "/"
 
-        local_files = []
-        files = os.listdir(dir_name)
-        if len(files) == 0:
-            local_files.append(dir_name)
+            if des_path[-1] != '/':
+                des_path = des_path + "/"
 
-        for f in files:
-            full_path = os.path.join(dir_name, f)
-            if os.path.isfile(full_path):
-                local_files.append(full_path)
-            else:
-                subs = VerenderService.list_dir(full_path, max_depth-1)
-                for e in subs:
-                    local_files.append(e)
+            des = des_path + src[len(src_path):]
 
-        return local_files
+            if ignore_case:
+                des = des.lower()
 
-    def upload_file(self, workspace_id, src, des):
-        params = {
-            "WorkspaceId": workspace_id
-        }
-        storage = self.get_storage_access(params=params)
-        cli = VerenderService._get_ftrans_client(storage)
-        des = self.to_slash(des)
+            self.upload_file(workspace_id, file, des)
 
-        try:
-            name, size, mtime, md5 = cli.upload_file(src, des)
-            return FileInfo(name, size, mtime, md5)
-        except Exception as ex:
-            raise ex
-        finally:
-            cli.clean()
+    # isp是传输所选择的运营商出口 可选 ct|cm|un 默认ct
+    def download_file(self, workspace_id, src, dst, isp="ct"):
+        cli, ignore_case = self._get_ftrans_client(workspace_id, isp)
+        if ignore_case:
+            pass
 
-    def upload_folder(self, workspace_id, src_path, des_path):
-        params = {
-            "WorkspaceId": workspace_id
-        }
-        storage = self.get_storage_access(params=params)
-        cli = VerenderService._get_ftrans_client(storage)
+        name, size, mtime, md5 = cli.download_file(dst, src)
+        return FileInfo(name, size, mtime, md5)
 
-        try:
-            local_files = VerenderService.list_dir(src_path)
-
-            file_info_list = []
-
-            for f in local_files:
-                des = self.get_des_file_path(f, src_path, des_path)
-                info = cli.upload_file(f, des)
-                file_info_list.append(info)
-
-            return file_info_list
-        except Exception as ex:
-            raise ex
-        finally:
-            cli.clean()
-
-    def download_file(self, workspace_id, src, dst):
-        params = {
-            "WorkspaceId": workspace_id
-        }
-        storage = self.get_storage_access(params=params)
-        cli = VerenderService._get_ftrans_client(storage)
-
-        try:
-            name, size, mtime, md5 = cli.download_file(dst, src)
-            return FileInfo(name, size, mtime, md5)
-        except Exception as ex:
-            raise ex
-        finally:
-            cli.clean()
-
+    # isp是传输所选择的运营商出口 可选 ct|cm|un 默认ct
     def list_file(self, workspace_id, prefix, filter_in=None, order_type=None, order_field=None,
-                  page_num=None, page_size=None):
+                  page_num=None, page_size=None, isp="ct"):
+        cli, ignore_case = self._get_ftrans_client(workspace_id, isp=isp)
+        if ignore_case:
+            pass
 
-        params = {
-            "WorkspaceId": workspace_id
-        }
-        storage = self.get_storage_access(params=params)
-        cli = VerenderService._get_ftrans_client(storage)
-        try:
-            resp = cli.list_file(prefix,
-                                filter_in=filter_in,
-                                order_type=order_type,
-                                order_field=order_field,
-                                page_num=page_num,
-                                page_size=page_size)
-            return resp
-        except Exception as ex:
-            raise ex
-        finally:
-            cli.clean()
+        resp = cli.list_file(prefix,
+                             filter_in=filter_in,
+                             order_type=order_type,
+                             order_field=order_field,
+                             page_num=page_num,
+                             page_size=page_size)
+        return resp
 
-    def stat_file(self, workspace_id, filename):
-        params = {
-            "WorkspaceId": workspace_id
-        }
-        storage = self.get_storage_access(params=params)
-        cli = self._get_ftrans_client(storage)
+    # isp是传输所选择的运营商出口 可选 ct|cm|un 默认ct
+    def stat_file(self, workspace_id, filename, isp="ct"):
+        cli, ignore_case = self._get_ftrans_client(workspace_id, isp=isp)
+        if ignore_case:
+            pass
 
-        try:
-            size, mtime = cli.get_file_size(filename)
-            resp = FileInfo(filename, size, mtime)
-            return resp
-        except Exception as ex:
-            raise ex
-        finally:
-            cli.clean()
+        size, mtime = cli.get_file_size(filename)
+        return FileInfo(filename, size, mtime, None)
 
-    def remove_file(self, workspace_id, filename):
-        params = {
-            "WorkspaceId": workspace_id
-        }
-        storage = self.get_storage_access(params=params)
-        cli = self._get_ftrans_client(storage)
+    # isp是传输所选择的运营商出口 可选 ct|cm|un 默认ct
+    def remove_file(self, workspace_id, filename, isp="ct"):
+        cli, ignore_case = self._get_ftrans_client(workspace_id, isp=isp)
+        if ignore_case:
+            pass
 
-        try:
-            return cli.remove_file(filename)
-        except Exception as ex:
-            raise ex
-        finally:
-            cli.clean()
+        return cli.remove_file(filename)
 
     def list_cell_spec(self, params=None):
         resp = self._call_get("ListCellSpec", params=params)

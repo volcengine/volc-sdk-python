@@ -1,4 +1,3 @@
-# coding: utf-8
 import base64
 import hashlib
 import json
@@ -8,61 +7,168 @@ import threading
 import time
 import uuid
 
-import urllib3
+import urllib3.poolmanager
 
-LOWEST_SUPPORTED_VERSION = "v1.7.2.2"
 ISP_CT = "ct"
 ISP_UN = "un"
 ISP_CM = "cm"
-SYS_WIN = "nt"
+SWITCH_ON = 1
+SWITCH_OFF = 0
+FTRANS_PROTOCOL_TCP = "tcp"
+FTRANS_PROTOCOL_UDP = "udp"
+FTRANS_HTTP_STATUS_OK = 200
+FTRANS_SIG_EXPIRED_NSEC = 15
+FTRANS_HTTP_METHOD_GET = "GET"
+FTRANS_HTTP_METHOD_POST = "POST"
 FTRANS_MOUNT_PATH = "/var/mnt"
-FTRANS_S10_P2_PATH = "/s10/p2/ftrans"
 FTRANS_ORDER_TYPE_ASC = "asc"
 FTRANS_ORDER_TYPE_DESC = "desc"
 FTRANS_ORDER_FIELD_NAME = "name"
 FTRANS_ORDER_FIELD_MTIME = "mtime"
 FTRANS_DEFAULT_PAGE_NUM = 1
 FTRANS_DEFAULT_PAGE_SIZE = 10
+FTRANS_DEFAULT_FILTER_IN = ""
+FTRANS_PART_SIZE = 4 << 20
 FTRANS_STATUS_WAITING = 0
 FTRANS_STATUS_DOING = 1
 FTRANS_STATUS_FINISHED = 2
 FTRANS_STATUS_FAILED = 3
-FTRANS_DEFAULT_PART_SIZE = 4 << 20
 FTRANS_DEFAULT_PART_CONCURRENCY = 4
-HTTP_METHOD_POST = "POST"
-HTTP_STATUS_OK = 200
+FTRANS_TRANS_STATUS_COMPLETED = "completed"
+FTRANS_TRANS_STATUS_FAILED = "failed"
+FTRANS_TRANS_STATUS_CANCELLED = "cancelled"
+FTRANS_STATUS_UPLOAD_FILE_NONE = 0x401003
+FTRANS_STATUS_DOWNLOAD_FILE_NONE = 0x402003
+FTRANS_STATUS_SUCC = 0x000000
 
 
-class FtransFileTask(object):
-    def __init__(self, local_file_path, remote_file_path, temp_file_path, file_size, mtime, file, part_size,
-                 consistency_check, md5_check, md5=None):
-        self.local_file_path = local_file_path
-        self.remote_file_path = remote_file_path
-        self.temp_file_path = temp_file_path
-        self.file_size = file_size
-        self.mtime = mtime
-        self.file = file
-        self.part_size = part_size
-        self.consistency_check = consistency_check
-        self.md5_check = md5_check
-        self.md5 = md5
-        self.parts = None
-        self.status = FTRANS_STATUS_WAITING
-        self.lock = threading.Lock()
+class FtransException(Exception):
+    pass
 
-    def split_part_task(self):
-        self.parts = queue.Queue()
-        start = 0
-        end = self.file_size
 
-        while start < end:
-            size = self.part_size
-            if start + size > end:
-                size = end - start
+class FtransParameterException(FtransException):
+    pass
 
-            fpt = FtransPartTask(start, size, self)
-            self.parts.put(fpt)
-            start += size
+
+class FtransNetworkException(FtransException):
+    pass
+
+
+class FtransHttpResponseException(FtransException):
+    pass
+
+
+class FtransUploadException(FtransException):
+    pass
+
+
+class FtransDownloadException(FtransException):
+    pass
+
+
+class FtransFileNotFound(FtransException):
+    pass
+
+
+def _split_addr(addr):
+    if addr[0] == '[':
+        segs = addr.split(":")
+        ip = ":".join(segs[1:-1])
+        ip = ip[1:-1]
+        port = int(segs[-1])
+    else:
+        segs = addr.split(":")
+        ip = segs[0]
+        port = int(segs[-1])
+
+    return ip, port
+
+
+def _parse_addr_map(addr):
+    addr_map = {}
+
+    for elem in addr.split(";"):
+        segs = elem.split(":")
+        version = segs[0]
+        isp = ""
+        if segs[1] == ISP_CT or segs[1] == ISP_UN or segs[1] == ISP_CM:
+            isp = segs[1]
+            ip = ":".join(segs[2:-1])
+            if ip[0] == '[' and ip[-1] == ']':
+                ip = ip[1:-1]
+            port = int(segs[-1])
+        else:
+            ip = ":".join(segs[1:-1])
+            if ip[0] == '[' and ip[-1] == ']':
+                ip = ip[1:-1]
+            port = int(segs[-1])
+
+        if version in addr_map:
+            if isp == "":
+                addr_map[version][ISP_CT] = (ip, port)
+                addr_map[version][ISP_UN] = (ip, port)
+                addr_map[version][ISP_CM] = (ip, port)
+            else:
+                addr_map[version][isp] = (ip, port)
+        else:
+            if isp == "":
+                addr_map[version] = {
+                    ISP_CT: (ip, port),
+                    ISP_UN: (ip, port),
+                    ISP_CM: (ip, port)
+                }
+            else:
+                addr_map[version] = {
+                    isp: (ip, port)
+                }
+
+    return addr_map
+
+
+def _save_cert_key(cert_pem, key_pem):
+    random_str = uuid.uuid4().hex
+    cert_file = "%s.cert" % random_str
+    with open(cert_file, "w+") as f:
+        f.write(cert_pem)
+
+    key_file = "%s.key" % random_str
+    with open(key_file, "w+") as f:
+        f.write(key_pem)
+    return cert_file, key_file
+
+
+def _stat_local_file(filename):
+    return os.stat(filename)
+
+
+def _normalize_filter_in(filter_in):
+    special_chars = {
+        "\\": "\\\\",
+        ".": "\\.",
+        "*": "\\*",
+        "+": "\\+",
+        "?": "\\?",
+        "[": "\\[",
+        "]": "\\]",
+        "{": "\\{",
+        "}": "\\}",
+        "(": "\\(",
+        ")": "\\)",
+        ",": "\\,"
+    }
+
+    for old in special_chars:
+        filter_in = filter_in.replace(old, special_chars[old])
+
+    return filter_in
+
+
+def _to_slash(filename):
+    filename = filename.replace(":\\", "/").replace("\\", "/")
+    if filename[0] == '/':
+        filename = filename[1:]
+
+    return filename
 
 
 class FtransPartTask(object):
@@ -74,6 +180,34 @@ class FtransPartTask(object):
         self.status = FTRANS_STATUS_WAITING
 
 
+class FtransFileTask(object):
+    def __init__(self, local_file_path, remote_file_path, temp_file_path, file_size, mtime, file):
+        self.local_file_path = local_file_path
+        self.remote_file_path = remote_file_path
+        self.temp_file_path = temp_file_path
+        self.file_size = file_size
+        self.mtime = mtime
+        self.file = file
+        self.parts = None
+        self.status = FTRANS_STATUS_WAITING
+        self.lock = threading.Lock()
+
+    def split_part_task(self):
+        self.parts = queue.Queue()
+
+        start = 0
+        end = self.file_size
+
+        while start < end:
+            size = FTRANS_PART_SIZE
+            if start + size > end:
+                size = end - start
+
+            fpt = FtransPartTask(start, size, self)
+            self.parts.put(fpt)
+            start += size
+
+
 class FtransWorker(threading.Thread):
     def __init__(self, func, args_list):
         self.func = func
@@ -81,318 +215,498 @@ class FtransWorker(threading.Thread):
         super().__init__()
 
     def run(self):
-        while True:
-            try:
-                args = self.args_list.get(timeout=1)
-                self.func(args)
-            except Exception as ex:
-                return
+        try:
+            args = self.args_list.get(timeout=1)
+            self.func(args)
+        except queue.Empty:
+            return
 
 
 class FtransService(object):
-    def __init__(self, bucket, acl_token, server_name, s10_server, cert_pem, key_pem, isp="ct"):
-        addr, port = FtransService._parse_s10_server(s10_server, isp)
-        if addr == "" or port <= 0:
-            raise Exception("invalid s10 server[%s] or isp[%s]" % (s10_server, isp))
-
-        self._addr = addr
-        self._port = port
-        self._bucket = bucket
+    def __init__(self, bucket, acl_token, server_name, s10_server=None, cert_pem=None, key_pem=None, isp="ct",
+                 client_addr=None, s2_server=None, proxy_addr=None,
+                 client_acl_token=None):
+        self._ftrans_bucket = bucket
         self._ftrans_acl_token = acl_token
         self._ftrans_server_name = server_name
-        self._ftrans_cert_file, self._ftrans_key_file = FtransService._save_cert_into_file(bucket, cert_pem, key_pem)
-        self._conn = urllib3.HTTPSConnectionPool(
-            self._addr,
-            self._port,
-            cert_file=self._ftrans_cert_file,
-            key_file=self._ftrans_key_file,
-            assert_hostname=self._ftrans_server_name
-        )
+        self._ftrans_s10_addr = None
+        self._ftrans_s10_port = None
+        self._ftrans_s10_cert_file = None
+        self._ftrans_s10_key_file = None
+        self._ftrans_client_addr = None
+        self._ftrans_client_port = None
+        self._ftrans_s2_addr = None
+        self._ftrans_s2_port = None
+        self._ftrans_proxy_addr = None
+        self._ftrans_proxy_port = None
+        self._ftrans_client_config = None
+
+        if s10_server is not None:
+            try:
+                addr_map = _parse_addr_map(s10_server)
+            except Exception:
+                raise FtransParameterException("invalid s10 server addr %s" % s10_server)
+
+            found = False
+            for version in addr_map:
+                addr_isp_map = addr_map[version]
+                if isp in addr_isp_map:
+                    s10_addr, s10_port = addr_isp_map[isp]
+                    found = True
+                    break
+            if not found:
+                raise FtransParameterException("addr of isp[%s] not found in s10 server[%s]" % (isp, s10_addr))
+
+            if cert_pem is None or key_pem is None:
+                raise FtransParameterException("cert_pem and key_pem must be specified when s10_server is set")
+
+            cert_file, key_file = _save_cert_key(cert_pem, key_pem)
+
+            self._ftrans_s10_addr = s10_addr
+            self._ftrans_s10_port = s10_port
+            self._ftrans_s10_cert_file = cert_file
+            self._ftrans_s10_key_file = key_file
+            self._ftrans_s10_conn = urllib3.HTTPSConnectionPool(
+                self._ftrans_s10_addr,
+                self._ftrans_s10_port,
+                cert_file=self._ftrans_s10_cert_file,
+                key_file=self._ftrans_s10_key_file,
+                assert_hostname=self._ftrans_server_name
+            )
+
+        if client_addr is not None:
+            if s2_server is None:
+                raise FtransParameterException("s2_server must be specified when client_addr is set")
+
+            try:
+                client_ip, client_port = _split_addr(client_addr)
+            except Exception:
+                raise FtransParameterException("invalid client_addr [%s]" % client_addr)
+
+            client_config = FtransService._get_ftrans_client_config(client_ip, client_port, client_acl_token)
+            version = client_config["Version"]
+            protocol = FTRANS_PROTOCOL_UDP
+            if (client_config["RunTimeTransTudpSwitch"] == SWITCH_OFF) and \
+                    (client_config["RuntimeTransTtcpSwitch"] == SWITCH_ON):
+                protocol = FTRANS_PROTOCOL_TCP
+
+            try:
+                addr_map = _parse_addr_map(s2_server)
+            except Exception:
+                raise FtransParameterException("invalid s2_server [%s]" % s2_server)
+
+            if version not in addr_map:
+                raise FtransParameterException("ftrans client version is too old, please upgrade it")
+
+            if isp not in addr_map[version]:
+                raise FtransParameterException("addr of isp [%s] not found in s2_addr [%s]" % (isp, s2_server))
+
+            s2_addr, s2_port = addr_map[version][isp]
+
+            proxy_ip = None
+            proxy_port = None
+            if proxy_addr is not None:
+                try:
+                    proxy_manager_addr, proxy_manager_port = _split_addr(proxy_addr)
+                except Exception:
+                    raise FtransParameterException("invalid proxy_addr[%s]" % proxy_addr)
+
+                proxy_list = FtransService._get_ftrans_proxy_list(proxy_manager_addr, proxy_manager_port)
+                found = False
+
+                for p in proxy_list:
+                    if p["TargetDomain"] == s2_addr and p["TargetPort"] == s2_port and p["Type"] == protocol and \
+                            p["State"] == "运行中":
+                        found = True
+                        proxy_ip = p["IP"]
+                        proxy_port = p["Port"]
+                        break
+
+                if not found:
+                    proxy_list = FtransService._create_ftrans_proxy(proxy_manager_addr, proxy_manager_port,
+                                                                    s2_addr, s2_port, protocol)
+                    proxy_ip = proxy_list[0]["IP"]
+                    proxy_port = proxy_list[0]["Port"]
+
+            self._ftrans_client_addr = client_ip
+            self._ftrans_client_port = client_port
+            self._ftrans_s2_addr = s2_addr
+            self._ftrans_s2_port = s2_port
+            self._ftrans_client_config = client_config
+            self._ftrans_proxy_addr = proxy_ip
+            self._ftrans_proxy_port = proxy_port
+            self._ftrans_client_acl_token = client_acl_token
+
+    def __del__(self):
+        os.remove(self._ftrans_s10_cert_file)
+        os.remove(self._ftrans_s10_key_file)
 
     @staticmethod
-    def _save_cert_into_file(bucket, cert, key):
-        random_str = uuid.uuid4().hex
-        cert_file = "%s_%s.cert" % (bucket, random_str)
-        with open(cert_file, "w+") as f:
-            f.write(cert)
-
-        key_file = "%s_%s.key" % (bucket, random_str)
-        with open(key_file, "w+") as f:
-            f.write(key)
-        return cert_file, key_file
+    def _gen_ftrans_sig(op, t, token):
+        if token is None:
+            token = "4d0c1b2513cb82263814e10bf2f136ed"
+        s = "%s@ftrans/%s@%d" % (token.lower(), op.lower(), t)
+        return hashlib.md5(s.encode()).hexdigest()
 
     @staticmethod
-    def _parse_s10_server(s10_server, selected_isp):
-        addr_isp_map = {}
-        cur_version = LOWEST_SUPPORTED_VERSION
-        for seg in s10_server.split(";"):
-            elems = seg.split(":")
-            if len(elems) < 3:
-                continue
+    def _get_ftrans_client_config(client_addr, client_port, client_acl_token):
+        op = "config"
+        t = int(time.time()) + FTRANS_SIG_EXPIRED_NSEC
+        sig = FtransService._gen_ftrans_sig(op, t, client_acl_token)
+        url = "http://%s:%d/v2/ftrans?op=%s&t=%d&sig=%s" % (client_addr, client_port, op, t, sig)
 
-            if elems[0] < cur_version:
-                continue
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_POST, url)
 
-            port = int(elems[-1])
-            isp = elems[1]
-            if isp == ISP_CT or isp == ISP_UN or isp == ISP_CM:
-                addr = ":".join(elems[2:-1])
-                if addr[0] == '[' and addr[-1] == ']':
-                    addr = addr[1:-1]
-                addr_isp_map[isp] = (addr, port)
-            else:
-                addr = ":".join(elems[1:-1])
-                if addr[0] == '[' and addr[-1] == ']':
-                    addr = addr[1:-1]
-                addr_isp_map[ISP_CT] = (addr, port)
-                addr_isp_map[ISP_UN] = (addr, port)
-                addr_isp_map[ISP_CM] = (addr, port)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http response status %d when get client config" % resp.status)
 
-            cur_version = elems[0]
+        return json.loads(resp.data)
 
-        return addr_isp_map[selected_isp]
+    @staticmethod
+    def _get_ftrans_proxy_list(proxy_manager_addr, proxy_manager_port):
+        url = "http://%s:%d/api/v1/proxy-list" % (proxy_manager_addr, proxy_manager_port)
 
-    def _get_full_path(self, file):
-        return "%s/%s/%s" % (FTRANS_MOUNT_PATH, self._bucket, file)
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_GET, url)
 
-    def _do_post(self, uri, params, headers=None, body=None):
-        query = []
-        for k, v in params.items():
-            query.append("%s=%s" % (k, v))
-        url = "%s?%s" % (uri, "&".join(query))
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http response %d when get proxy list" % resp.status)
 
+        return json.loads(resp.data)
+
+    @staticmethod
+    def _create_ftrans_proxy(proxy_manager_addr, proxy_manager_port, s2_addr, s2_port, protocol):
+        url = "http://%s:%d/api/v1/proxy" % (proxy_manager_addr, proxy_manager_port)
+        data = [
+            {
+                "TargetDomain": s2_addr,
+                "TargetPort": s2_port,
+                "Type": protocol
+            }
+        ]
+
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_POST, url, body=json.dumps(data))
+
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid response status [%d] when create proxy" % resp.status)
+
+        return json.loads(resp.data)
+
+    @staticmethod
+    def _do_request(method, url, headers=None, body=None, conn=None):
+        if conn is None:
+            conn = urllib3.PoolManager()
         try:
-            return self._conn.request(HTTP_METHOD_POST, url, headers=headers, body=body)
+            resp = conn.request(method, url, headers=headers, body=body)
         except Exception as ex:
-            raise Exception("request %s failed %s" % (url, str(ex)))
+            raise FtransNetworkException("do request %s failed %s" % (url, str(ex)))
 
-    def _upload_file_part(self, fpt):
-        uri = FTRANS_S10_P2_PATH
-        full_path = self._get_full_path(fpt.parent_task.temp_file_path)
-        params = {
-            "op": "upload_file",
-            "des": base64.b64encode(bytes(full_path, encoding="UTF-8")).decode("UTF-8"),
-            "offset": fpt.off,
-            "size": fpt.size,
-            "mtime": fpt.parent_task.mtime,
-            "acltoken": self._ftrans_acl_token
-        }
-        resp = self._do_post(uri, params, body=fpt.data)
-        if resp.status != HTTP_STATUS_OK:
-            raise Exception("invalid response status [%d] when upload %s" %
-                            (resp.status, fpt.parent_task.local_file_path))
         return resp
 
-    def _download_file_part(self, fpt):
-        uri = FTRANS_S10_P2_PATH
-        full_path = self._get_full_path(fpt.parent_task.remote_file_path)
-        params = {
-            "op": "download_file",
-            "src": base64.b64encode(bytes(full_path, encoding="UTF-8")).decode("UTF-8"),
-            "offset": fpt.off,
-            "size": fpt.size,
-            "acltoken": self._ftrans_acl_token
-        }
-        resp = self._do_post(uri, params)
-        if resp.status != HTTP_STATUS_OK:
-            raise Exception("invalid response status [%d] when download %s" % (resp.status, fpt.remote_file_path))
+    def _get_full_path(self, filename):
+        full_path = "%s/%s/%s" % (FTRANS_MOUNT_PATH, self._ftrans_bucket, filename)
+        return full_path
 
-        file_size = int(resp.headers.get("Fsize"))
-        mtime = int(resp.headers.get("Mtime"))
+    def _ftrans_client_enable(self):
+        return (self._ftrans_client_addr is not None) and (self._ftrans_client_port is not None)
 
-        return file_size, mtime, resp.data
-
-    def get_file_size(self, filename):
-        uri = FTRANS_S10_P2_PATH
-        full_path = self._get_full_path(filename)
-        params = {
-            "op": "size_file",
-            "src": base64.b64encode(bytes(full_path, encoding="UTF-8")).decode("UTF-8"),
-            "acltoken": self._ftrans_acl_token
-        }
-
-        resp = self._do_post(uri, params)
-        if resp.status != HTTP_STATUS_OK:
-            raise Exception("invalid response status [%d] when get size of %s" % (resp.status, filename))
-
-        file_size = int(resp.headers.get("Fsize"))
-        mtime = int(resp.headers.get("Mtime"))
-
-        return file_size, mtime
-
-    def _get_file_md5(self, filename):
-        uri = FTRANS_S10_P2_PATH
-        full_path = self._get_full_path(filename)
-        params = {
-            "op": "md5_file",
-            "src": base64.b64encode(bytes(full_path, encoding="UTF-8")).decode("UTF-8"),
-            "acltoken": self._ftrans_acl_token
+    def _upload_file_s2(self, local_file_path, remote_file_path):
+        op = "upload"
+        t = int(time.time()) + FTRANS_SIG_EXPIRED_NSEC
+        sig = FtransService._gen_ftrans_sig(op, t, self._ftrans_client_acl_token)
+        url = "http://%s:%d/v2/ftrans?op=%s&t=%d&sig=%s" % (self._ftrans_client_addr, self._ftrans_client_port,
+                                                            op, t, sig)
+        des = self._get_full_path(remote_file_path)
+        if self._ftrans_proxy_addr is not None and self._ftrans_proxy_port is not None:
+            server_address = "%s:%d" % (self._ftrans_proxy_addr, self._ftrans_proxy_port)
+        else:
+            server_address = "%s:%d" % (self._ftrans_s2_addr, self._ftrans_s2_port)
+        body = {
+            "serverName": self._ftrans_server_name,
+            "serverAddress": server_address,
+            "files": [
+                {
+                    "transId": uuid.uuid4().hex,
+                    "aclToken": self._ftrans_acl_token,
+                    "src": local_file_path,
+                    "des": des
+                }
+            ]
         }
 
-        resp = self._do_post(uri, params)
-        if resp.status != HTTP_STATUS_OK:
-            raise Exception("invalid response status [%d] when get md5 of %s" % (resp.status, filename))
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_POST, url, body=json.dumps(body))
 
-        md5_str = resp.headers.get("Md5")
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http status %d when submit upload file request" % resp.status)
 
-        return md5_str
+        upload_info = json.loads(resp.data)
+        upload_info["serverName"] = self._ftrans_server_name
+        upload_info["serverAddress"] = server_address
 
-    def remove_file(self, filename):
-        return self._remove_file(filename)
+        while True:
+            resp = self._status_upload_s2(upload_info)
 
-    def _remove_file(self, filename):
-        uri = FTRANS_S10_P2_PATH
-        full_path = self._get_full_path(filename)
-        params = {
-            "op": "remove_file",
-            "des": base64.b64encode(bytes(full_path, encoding="UTF-8")).decode("UTF-8"),
-            "acltoken": self._ftrans_acl_token
+            upload_status = resp["files"][0]
+
+            if upload_status["transId"] != upload_info["files"][0]["transId"]:
+                continue
+
+            if upload_status["statusCode"] not in [FTRANS_STATUS_SUCC, FTRANS_STATUS_UPLOAD_FILE_NONE]:
+                raise FtransUploadException("upload file %s failed %s" % (local_file_path, upload_status["statusMsg"]))
+
+            if upload_status["statusCode"] == FTRANS_STATUS_SUCC:
+                trans_status = upload_status["transStatus"]
+                if trans_status == FTRANS_TRANS_STATUS_COMPLETED:
+                    break
+                elif (trans_status == FTRANS_TRANS_STATUS_FAILED) or (trans_status == FTRANS_TRANS_STATUS_CANCELLED):
+                    raise FtransUploadException(
+                        "upload file %s failed %s" % (local_file_path, upload_status["statusMsg"])
+                    )
+
+            time.sleep(1)
+
+        stat_info = _stat_local_file(local_file_path)
+        return remote_file_path, stat_info.st_size, int(stat_info.st_mtime * 1e6), None
+
+    def _download_file_s2(self, local_file_path, remote_file_path):
+        op = "download"
+        t = int(time.time()) + FTRANS_SIG_EXPIRED_NSEC
+        sig = FtransService._gen_ftrans_sig(op, t, self._ftrans_client_acl_token)
+        url = "http://%s:%d/v2/ftrans?op=%s&t=%d&sig=%s" % (self._ftrans_client_addr, self._ftrans_client_port,
+                                                            op, t, sig)
+        src = self._get_full_path(remote_file_path)
+        if self._ftrans_proxy_addr is not None and self._ftrans_proxy_port is not None:
+            server_address = "%s:%d" % (self._ftrans_proxy_addr, self._ftrans_proxy_port)
+        else:
+            server_address = "%s:%d" % (self._ftrans_s2_addr, self._ftrans_s2_port)
+        body = {
+            "serverName": self._ftrans_server_name,
+            "serverAddress": server_address,
+            "files": [
+                {
+                    "transId": uuid.uuid4().hex,
+                    "aclToken": self._ftrans_acl_token,
+                    "src": src,
+                    "des": local_file_path
+                }
+            ]
         }
 
-        resp = self._do_post(uri, params)
-        if resp.status != HTTP_STATUS_OK:
-            raise Exception("invalid response status [%d] when remove %s" % (resp.status, filename))
-        return
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_POST, url, body=json.dumps(body))
 
-    def _rename_file(self, src, dst):
-        uri = FTRANS_S10_P2_PATH
-        src_path = self._get_full_path(src)
-        dst_path = self._get_full_path(dst)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http status %d when submit download file request" % resp.status)
 
-        params = {
-            "op": "rename_file",
-            "src": base64.b64encode(bytes(src_path, encoding="UTF-8")).decode("UTF-8"),
-            "des": base64.b64encode(bytes(dst_path, encoding="UTF-8")).decode("UTF-8"),
-            "acltoken": self._ftrans_acl_token
-        }
+        download_info = json.loads(resp.data)
+        download_info["serverName"] = self._ftrans_server_name
+        download_info["serverAddress"] = server_address
 
-        resp = self._do_post(uri, params)
-        if resp.status != HTTP_STATUS_OK:
-            raise Exception("invalid response status [%d] when rename %s into %s" % (resp.status, src, dst))
+        while True:
+            resp = self._status_download_s2(download_info)
 
-    def list_file(self, prefix, filter_in=None, order_type=None, order_field=None, page_num=None, page_size=None):
-        uri = FTRANS_S10_P2_PATH
-        full_path = self._get_full_path(prefix)
-        if filter_in is None:
-            filter_in = ""
-        if order_type is None or order_field != FTRANS_ORDER_TYPE_DESC:
-            order_type = FTRANS_ORDER_TYPE_ASC
-        if order_field is None or order_field != FTRANS_ORDER_FIELD_MTIME:
-            order_field = FTRANS_ORDER_FIELD_NAME
-        if page_num is None or page_num <= 0:
-            page_num = FTRANS_DEFAULT_PAGE_NUM
-        if page_size is None or page_size <= 0:
-            page_size = FTRANS_DEFAULT_PAGE_SIZE
+            download_status = resp["files"][0]
 
-        params = {
-            "op": "list_dir",
-            "src": base64.b64encode(bytes(full_path, encoding="UTF-8")).decode("UTF-8"),
-            "filterIn": base64.b64encode(bytes(filter_in, encoding="UTF-8")).decode("UTF-8"),
-            "orderBy": order_type,
+            if download_status["transId"] != download_info["files"][0]["transId"]:
+                continue
+
+            if download_status["statusCode"] not in [FTRANS_STATUS_SUCC, FTRANS_STATUS_DOWNLOAD_FILE_NONE]:
+                raise FtransUploadException(
+                    "upload file %s failed %s" % (local_file_path, download_status["statusMsg"]))
+
+            if download_status["statusCode"] == FTRANS_STATUS_SUCC:
+                trans_status = download_status["transStatus"]
+                if trans_status == FTRANS_TRANS_STATUS_COMPLETED:
+                    break
+                elif (trans_status == FTRANS_TRANS_STATUS_FAILED) or (trans_status == FTRANS_TRANS_STATUS_CANCELLED):
+                    raise FtransUploadException(
+                        "upload file %s failed %s" % (local_file_path, download_status["statusMsg"])
+                    )
+
+            time.sleep(1)
+
+        stat_info = _stat_local_file(local_file_path)
+        return remote_file_path, stat_info.st_size, int(stat_info.st_mtime * 1e6), None
+
+    def _status_upload_s2(self, upload_info):
+        op = "status_upload"
+        t = int(time.time()) + FTRANS_SIG_EXPIRED_NSEC
+        sig = FtransService._gen_ftrans_sig(op, t, self._ftrans_client_acl_token)
+        url = "http://%s:%d/v2/ftrans?op=%s&t=%d&sig=%s" % (self._ftrans_client_addr, self._ftrans_client_port,
+                                                            op, t, sig)
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_POST, url,
+                                         body=json.dumps(upload_info))
+
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http status %d when status upload file request" % resp.status)
+
+        return json.loads(resp.data)
+
+    def _status_download_s2(self, download_info):
+        op = "status_download"
+        t = int(time.time()) + FTRANS_SIG_EXPIRED_NSEC
+        sig = FtransService._gen_ftrans_sig(op, t, self._ftrans_client_acl_token)
+        url = "http://%s:%d/v2/ftrans?op=%s&t=%d&sig=%s" % (self._ftrans_client_addr, self._ftrans_client_port,
+                                                            op, t, sig)
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_POST, url,
+                                         body=json.dumps(download_info))
+
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http status %d when status download file request" % resp.status)
+
+        return json.loads(resp.data)
+
+    def _list_file_s2(self, prefix, filter_in, order_type, order_field, page_num, page_size):
+        op = "list_dir"
+        t = int(time.time()) + FTRANS_SIG_EXPIRED_NSEC
+        sig = FtransService._gen_ftrans_sig(op, t, self._ftrans_client_acl_token)
+        url = "http://%s:%d/v2/ftrans?op=%s&t=%d&sig=%s" % (self._ftrans_client_addr, self._ftrans_client_port,
+                                                            op, t, sig)
+        des = self._get_full_path(prefix)
+        if self._ftrans_proxy_addr is not None and self._ftrans_proxy_port is not None:
+            server_address = "%s:%d" % (self._ftrans_proxy_addr, self._ftrans_proxy_port)
+        else:
+            server_address = "%s:%d" % (self._ftrans_s2_addr, self._ftrans_s2_port)
+
+        body = {
+            "serverName": self._ftrans_server_name,
+            "serverAddress": server_address,
+            "aclToken": self._ftrans_acl_token,
+            "des": des,
+            "filterIn": filter_in,
             "sortBy": order_field,
+            "orderBy": order_type,
             "pageNo": page_num,
-            "pageSize": page_size,
-            "acltoken": self._ftrans_acl_token
+            "pageSize": page_size
         }
 
-        resp = self._do_post(uri, params)
-        if resp.status != HTTP_STATUS_OK:
-            raise Exception("invalid response status [%d] when list dir %s" % (resp.status, prefix))
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_POST, url,
+                                         body=json.dumps(body))
 
-        total = int(resp.headers.get("matchedNum"))
-        records = json.loads(resp.data)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http status %d when list dir request" % resp.status)
+
+        files = json.loads(resp.data)
+        total = files["matchedNum"]
+        records = files["fileNodes"]
+        for f in records:
+            f["mtime"] = mtime = int(time.mktime(time.strptime(f["mtime"], "%Y-%m-%d %H:%M:%S")) * 1e6)
 
         return total, records
 
-    def _make_dir(self, dir_name, mtime):
-        uri = FTRANS_S10_P2_PATH
-        full_path = self._get_full_path(dir_name)
-        params = {
-            "op": "make_dir",
-            "des": base64.b64encode(bytes(full_path, encoding="UTF-8")).decode("UTF-8"),
-            "mtime": mtime,
-            "acltoken": self._ftrans_acl_token
+    def _get_file_size_s2(self, filename):
+        prefix = os.path.dirname(filename)
+        name = os.path.basename(filename)
+        filter_in = _normalize_filter_in(name)
+        total_num, file_info_list = self._list_file_s2(prefix, filter_in, FTRANS_ORDER_TYPE_ASC, FTRANS_ORDER_FIELD_MTIME,
+                                                       FTRANS_DEFAULT_PAGE_NUM, FTRANS_DEFAULT_PAGE_SIZE)
+        if total_num == 0:
+            raise FtransFileNotFound("file [%s] not found" % filename)
+        found = False
+        size = 0
+        mtime = 0
+        for f in file_info_list:
+            if f["name"] == name:
+                size = f["size"]
+                mtime = f["mtime"]
+                found = True
+                break
+
+        if not found:
+            raise FtransFileNotFound("file [%s] not found" % filename)
+
+        return size, mtime
+
+    def _remove_file_s2(self, filename):
+        op = "remove_file"
+        t = int(time.time()) + FTRANS_SIG_EXPIRED_NSEC
+        sig = FtransService._gen_ftrans_sig(op, t, self._ftrans_client_acl_token)
+        url = "http://%s:%d/v2/ftrans?op=%s&t=%d&sig=%s" % (self._ftrans_client_addr, self._ftrans_client_port,
+                                                            op, t, sig)
+        des = self._get_full_path(filename)
+        if self._ftrans_proxy_addr is not None and self._ftrans_proxy_port is not None:
+            server_address = "%s:%d" % (self._ftrans_proxy_addr, self._ftrans_proxy_port)
+        else:
+            server_address = "%s:%d" % (self._ftrans_s2_addr, self._ftrans_s2_port)
+        body = {
+            "serverName": self._ftrans_server_name,
+            "serverAddress": server_address,
+            "aclToken": self._ftrans_acl_token,
+            "des": des,
         }
 
-        resp = self._do_post(uri, params)
-        if resp.status != HTTP_STATUS_OK:
-            raise Exception("invalid response status [%d] when make dir %s" % (resp.status, dir_name))
+        resp = FtransService._do_request(FTRANS_HTTP_METHOD_POST, url,
+                                         body=json.dumps(body))
+
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http status %d when remove file %s" % (resp.status, filename))
+
         return
 
-    def _file_exist(self, filename):
-        uri = FTRANS_S10_P2_PATH
-        full_path = self._get_full_path(filename)
-        params = {
-            "op": "exist_file",
-            "src": base64.b64encode(bytes(full_path, encoding="UTF-8")).decode("UTF-8"),
-            "acltoken": self._ftrans_acl_token
-        }
+    def _upload_part_s10(self, fpt):
+        with fpt.parent_task.lock:
+            if fpt.parent_task.status == FTRANS_STATUS_FAILED:
+                raise FtransUploadException("some part upload failed for %s" % fpt.parent_task.local_file_path)
+            fpt.parent_task.file.seek(fpt.off)
+            fpt.data = fpt.parent_task.file.read(fpt.size)
 
-        resp = self._do_post(uri, params)
-        if resp.status != HTTP_STATUS_OK:
-            return False
-        return True
+        try:
+            self._upload_file_part_s10(fpt)
+        except Exception as ex:
+            with fpt.parent_task.lock:
+                fpt.parent_task.status = FTRANS_STATUS_FAILED
+            raise ex
 
-    @staticmethod
-    def _get_local_file_md5(local_file_path):
-        m = hashlib.md5()
-        with open(local_file_path, 'rb') as f:
-            while True:
-                data = f.read(FTRANS_DEFAULT_PART_SIZE)
-                if not data:
-                    break
-                m.update(data)
+    def _download_part_s10(self, fpt):
+        with fpt.parent_task.lock:
+            if fpt.parent_task.status == FTRANS_STATUS_FAILED:
+                raise FtransDownloadException("some part download failed for %s" % fpt.parent_task.remote_file_path)
+        try:
+            file_size, mtime, data = self._download_file_part_s10(fpt)
+            if file_size != fpt.parent_task.file_size or mtime != fpt.parent_task.mtime:
+                raise FtransDownloadException(
+                    "file %s has been modified during downloading" % fpt.parent_task.remote_file_path)
+            with fpt.parent_task.lock:
+                fpt.parent_task.file.seek(fpt.off)
+                fpt.parent_task.file.write(data)
+        except Exception as ex:
+            with fpt.parent_task.lock:
+                fpt.parent_task.status = FTRANS_STATUS_FAILED
+            raise ex
 
-        return m.hexdigest()
-
-    @staticmethod
-    def _to_slash(raw):
-        return raw.replace(":\\", "/").replace("\\", "/")
-
-    def upload_file(self, local_file_path, remote_file_path, part_size=None, consistency_check=True, md5_check=False):
+    def _upload_file_s10(self, local_file_path, remote_file_path):
         if not os.path.exists(local_file_path):
-            raise Exception("file %s not found" % local_file_path)
+            raise FtransFileNotFound("local file %s not found" % local_file_path)
 
         fi = os.stat(local_file_path)
         file_size = fi.st_size
-        mtime = int(fi.st_mtime * 10e5)
-        md5 = ""
-        if md5_check:
-            md5 = self._get_local_file_md5(local_file_path)
+        mtime = int(fi.st_mtime * 1e6)
 
-        remote_file_path = FtransService._to_slash(remote_file_path)
-        if self._file_exist(remote_file_path):
-            remote_file_size, remote_file_mtime = self.get_file_size(remote_file_path)
-            if file_size == remote_file_size and mtime == remote_file_mtime:
-                if not md5_check:
-                    return remote_file_path, file_size, mtime, md5
-                else:
-                    remote_md5 = self._get_file_md5(remote_file_path)
-                    if md5 == remote_md5:
-                        return remote_file_path, file_size, mtime, md5
+        des = _to_slash(remote_file_path)
+        remote_file_size, remote_mtime = self._get_file_size_s10(des)
+        # local_file and remote_file is same, just return success
+        if (file_size == remote_file_size) and (mtime == remote_mtime):
+            return des, file_size, mtime, None
 
+        # if local_file_path is dir, just make it
         if os.path.isdir(local_file_path):
-            self._make_dir(remote_file_path, mtime)
-            return remote_file_path, 0, mtime, ""
+            self._make_dir_s10(des, mtime)
+            return des, 0, mtime, None
+
+        # empty file, just touch it
+        if file_size == 0:
+            self._touch_file_s10(des, mtime)
+            return des, 0, mtime, None
 
         f = open(local_file_path, "rb")
         temp_file_path = "%s_%s" % (remote_file_path, uuid.uuid4().hex)
-        part_size = FTRANS_DEFAULT_PART_SIZE
-        fft = FtransFileTask(local_file_path, remote_file_path, temp_file_path, file_size, mtime, f,
-                             part_size, consistency_check, md5_check, md5)
+        fft = FtransFileTask(local_file_path, des, temp_file_path, file_size, mtime, f)
         fft.split_part_task()
-
-        if fft.file_size <= 0:
-            fpt = FtransPartTask(0, 0, fft)
-            self._upload_file_part(fpt)
-            self._rename_file(fft.temp_file_path, fft.remote_file_path)
-            return remote_file_path, file_size, mtime * 10e5, md5
 
         fft.status = FTRANS_STATUS_DOING
         worker_list = []
+
         i = 0
         while i < FTRANS_DEFAULT_PART_CONCURRENCY:
-            worker = FtransWorker(self._upload_part, fft.parts)
+            worker = FtransWorker(self._upload_part_s10, fft.parts)
             worker.start()
             worker_list.append(worker)
             i += 1
@@ -407,117 +721,250 @@ class FtransService(object):
         fft.file.close()
 
         if fft.status != FTRANS_STATUS_FINISHED:
-            raise Exception("upload file %s failed" % local_file_path)
+            raise FtransUploadException("upload file %s failed" % local_file_path)
 
-        if fft.md5_check:
-            md5 = self._get_file_md5(temp_file_path)
-            if fft.md5 != md5:
-                raise Exception("md5 check failed(local: %s, remote: %s) when upload %s" %
-                                (fft.md5, md5, fft.local_file_path))
+        self._rename_file_s10(fft.temp_file_path, fft.remote_file_path)
+        return fft.remote_file_path, fft.file_size, fft.mtime, None
 
-        self._rename_file(fft.temp_file_path, fft.remote_file_path)
-        return fft.remote_file_path, fft.file_size, fft.mtime, md5
+    def _download_file_s10(self, local_file_path, remote_file_path):
+        file_size, mtime = self._get_file_size_s10(remote_file_path)
 
-    def download_file(self, local_file_path, remote_file_path, part_size=None, consistency_check=True, md5_check=False):
-        md5 = ""
-
-        file_size, mtime = self.get_file_size(remote_file_path)
-        if md5_check:
-            md5 = self._get_file_md5(remote_file_path)
+        if (file_size == 0) and (mtime == 0):
+            raise FtransFileNotFound("file %s not found" % remote_file_path)
 
         if os.path.exists(local_file_path):
             fi = os.stat(local_file_path)
-            if fi.st_size == file_size and fi.st_mtime * 10e5 == mtime:
-                if md5_check:
-                    local_md5 = self._get_local_file_md5(local_file_path)
-                    if local_md5 == md5:
-                        return remote_file_path, file_size, mtime, md5
-                else:
-                    return remote_file_path, file_size, mtime, md5
-            os.remove(local_file_path)
+
+            # local_file_path and remote_file is same
+            if (fi.st_size == file_size) and (int(fi.st_mtime * 1e6) == mtime):
+                return remote_file_path, file_size, mtime, None
+            else:
+                # local_file_path exists and not same as remote_file_path, just delete it and download
+                os.remove(local_file_path)
 
         temp_file_path = "%s_%s" % (local_file_path, uuid.uuid4().hex)
-
         save_dir = os.path.dirname(temp_file_path)
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
 
         f = open(temp_file_path, "wb+")
-        part_size = FTRANS_DEFAULT_PART_SIZE
-        fft = FtransFileTask(local_file_path, remote_file_path, temp_file_path, file_size, mtime, f,
-                             part_size, consistency_check, md5_check, md5)
+        if file_size == 0:
+            f.close()
+            os.rename(temp_file_path, local_file_path)
+
+        fft = FtransFileTask(local_file_path, remote_file_path, temp_file_path, file_size, mtime, f)
         fft.split_part_task()
 
-        if fft.file_size <= 0:
-            fft.file.close()
-            os.rename(fft.temp_file_path, fft.local_file_path)
-            return fft.remote_file_path, fft.file_size, fft.mtime, fft.md5
+        i = 0
+        fft.status = FTRANS_STATUS_DOING
+        worker_list = []
+        i = 0
+        while i < FTRANS_DEFAULT_PART_CONCURRENCY:
+            worker = FtransWorker(self._download_part_s10, fft.parts)
+            worker.start()
+            worker_list.append(worker)
+            i += 1
 
-        try:
-            fft.status = FTRANS_STATUS_DOING
-            worker_list = []
-            i = 0
-            while i < FTRANS_DEFAULT_PART_CONCURRENCY:
-                worker = FtransWorker(self._download_part, fft.parts)
-                worker.start()
-                worker_list.append(worker)
-                i += 1
+        for worker in worker_list:
+            worker.join()
 
-            for worker in worker_list:
-                worker.join()
+        if fft.status == FTRANS_STATUS_DOING:
+            fft.status = FTRANS_STATUS_FINISHED
+        else:
+            fft.status = FTRANS_STATUS_FAILED
+        fft.file.close()
 
-            if fft.status == FTRANS_STATUS_DOING:
-                fft.status = FTRANS_STATUS_FINISHED
-            else:
-                fft.status = FTRANS_STATUS_FAILED
-            fft.file.close()
+        if fft.status != FTRANS_STATUS_FINISHED:
+            raise FtransDownloadException("download file %s failed" % remote_file_path)
 
-            if fft.status != FTRANS_STATUS_FINISHED:
-                raise Exception("download file %s failed" % remote_file_path)
+        os.rename(fft.temp_file_path, fft.local_file_path)
+        os.utime(fft.local_file_path, (time.time(), float(mtime) / 1e6))
 
-            if fft.md5_check:
-                md5 = self._get_local_file_md5(temp_file_path)
-                if fft.md5 != md5:
-                    raise Exception("md5 check failed(local: %s, remote: %s) when upload %s" %
-                                    (fft.md5, md5, fft.local_file_path))
+        return remote_file_path, file_size, mtime, None
 
-            os.rename(fft.temp_file_path, fft.local_file_path)
-            os.utime(fft.local_file_path, (time.time(), float(mtime) / 1e6))
-            return fft.remote_file_path, fft.file_size, fft.mtime, md5
-        except Exception as ex:
-            os.remove(fft.temp_file_path)
-            raise ex
+    def _upload_file_part_s10(self, fpt):
+        op = "upload_file"
+        des = base64.b64encode(bytes(self._get_full_path(fpt.parent_task.temp_file_path), encoding="UTF-8")).decode(
+            encoding="UTF-8")
+        offset = fpt.off
+        size = fpt.size
+        mtime = fpt.parent_task.mtime
+        acl_token = self._ftrans_acl_token
 
-    def _upload_part(self, fpt):
-        with fpt.parent_task.lock:
-            if fpt.parent_task.status == FTRANS_STATUS_FAILED:
-                raise Exception("some part upload failed for %s" % fpt.parent_task.local_file_path)
-            fpt.parent_task.file.seek(fpt.off)
-            fpt.data = fpt.parent_task.file.read(fpt.size)
-        try:
-            self._upload_file_part(fpt)
-        except Exception as ex:
-            with fpt.parent_task.lock:
-                fpt.parent_task.status = FTRANS_STATUS_FAILED
-            raise ex
+        url = "/s10/p2/ftrans?op=%s&des=%s&offset=%d&size=%d&mtime=%d&acltoken=%s" % (op, des, offset, size, mtime,
+                                                                                      acl_token)
+        resp = self._do_request(FTRANS_HTTP_METHOD_POST, url, conn=self._ftrans_s10_conn, body=fpt.data)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http response status [%d] when upload_file_s10" % resp.status)
 
-    def _download_part(self, fpt):
-        with fpt.parent_task.lock:
-            if fpt.parent_task.status == FTRANS_STATUS_FAILED:
-                raise Exception("some part download failed for %s" % fpt.parent_task.remote_file_path)
-        try:
-            file_size, mtime, data = self._download_file_part(fpt)
-            if fpt.parent_task.consistency_check:
-                if file_size != fpt.parent_task.file_size or mtime != fpt.parent_task.mtime:
-                    raise Exception("file %s has been modified during downloading" % fpt.parent_task.remote_file_path)
-            with fpt.parent_task.lock:
-                fpt.parent_task.file.seek(fpt.off)
-                fpt.parent_task.file.write(data)
-        except Exception as ex:
-            with fpt.parent_task.lock:
-                fpt.parent_task.status = FTRANS_STATUS_FAILED
-            raise ex
+        return
 
-    def clean(self):
-        os.remove(self._ftrans_cert_file)
-        os.remove(self._ftrans_key_file)
+    def _download_file_part_s10(self, fpt):
+        op = "download_file"
+        src = base64.b64encode(bytes(self._get_full_path(fpt.parent_task.remote_file_path), encoding="UTF-8")).decode(
+            encoding="UTF-8")
+        offset = fpt.off
+        size = fpt.size
+        acl_token = self._ftrans_acl_token
+
+        url = "/s10/p2/ftrans?op=%s&src=%s&offset=%d&size=%d&acltoken=%s" % (op, src, offset, size, acl_token)
+        resp = self._do_request(FTRANS_HTTP_METHOD_POST, url, conn=self._ftrans_s10_conn, body=fpt.data)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid http response status [%d] when download_file_s10" % resp.status)
+
+        file_size = int(resp.headers.get("Fsize"))
+        mtime = int(resp.headers.get("Mtime"))
+
+        return file_size, mtime, resp.data
+
+    def _list_file_s10(self, prefix, filter_in, order_type, order_field, page_num, page_size):
+        op = "list_dir"
+        src = base64.b64encode(bytes(self._get_full_path(prefix), encoding="UTF-8")).decode(encoding="UTF-8")
+        keyword = base64.b64encode(bytes(filter_in, encoding="UTF-8")).decode(encoding="UTF-8")
+        url = "/s10/p2/ftrans?op=%s&src=%s&filterIn=%s&orderBy=%s&sortBy=%s&pageNo=%d&pageSize=%d&" \
+              "acltoken=%s" % (
+                  op, src, keyword, order_type, order_field, page_num, page_size, self._ftrans_acl_token
+              )
+
+        resp = self._do_request(FTRANS_HTTP_METHOD_POST, url, conn=self._ftrans_s10_conn)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid response status [%d] when list_file_s10" % resp.status)
+
+        total = int(resp.headers.get("matchedNum"))
+        records = json.loads(resp.data)
+
+        for f in records:
+            f["mtime"] = int(time.mktime(time.strptime(f["mtime"], "%Y-%m-%d %H:%M:%S")) * 1e6)
+
+        return total, records
+
+    def _remove_file_s10(self, filename):
+        op = "remove_file"
+        des = base64.b64encode(bytes(self._get_full_path(filename), encoding="UTF-8")).decode(encoding="UTF-8")
+        acl_token = self._ftrans_acl_token
+
+        url = "/s10/p2/ftrans?op=%s&des=%s&acltoken=%s" % (op, des, acl_token)
+
+        resp = self._do_request(FTRANS_HTTP_METHOD_POST, url, conn=self._ftrans_s10_conn)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid response status [%d] when remove_file_s10" % resp.status)
+
+        return
+
+    def _get_file_size_s10(self, filename):
+        op = "size_file"
+        src = base64.b64encode(bytes(self._get_full_path(filename), encoding="UTF-8")).decode(encoding="UTF-8")
+        acl_token = self._ftrans_acl_token
+
+        url = "/s10/p2/ftrans?op=%s&src=%s&acltoken=%s" % (op, src, acl_token)
+
+        resp = self._do_request(FTRANS_HTTP_METHOD_POST, url, conn=self._ftrans_s10_conn)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid response status [%d] when get_file_size_s10" % resp.status)
+
+        file_size = int(resp.headers.get("Fsize"))
+        mtime = int(resp.headers.get("Mtime"))
+
+        return file_size, mtime
+
+    def _make_dir_s10(self, dir_name, mtime):
+        op = "make_dir"
+        des = base64.b64encode(bytes(self._get_full_path(dir_name), encoding="UTF-8")).decode(encoding="UTF-8")
+        acl_token = self._ftrans_acl_token
+        url = "/s10/p2/ftrans?op=%s&des=%s&acltoken=%s&mtime=%d" % (op, des, acl_token, mtime)
+
+        resp = self._do_request(FTRANS_HTTP_METHOD_POST, url, conn=self._ftrans_s10_conn)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid response status [%d] when make_dir_s10" % resp.status)
+
+        return
+
+    def _rename_file_s10(self, src, des):
+        op = "rename_file"
+        src = base64.b64encode(bytes(self._get_full_path(src), encoding="UTF-8")).decode(encoding="UTF-8")
+        des = base64.b64encode(bytes(self._get_full_path(des), encoding="UTF-8")).decode(encoding="UTF-8")
+        acl_token = self._ftrans_acl_token
+
+        url = "/s10/p2/ftrans?op=%s&src=%s&des=%s&acltoken=%s" % (op, src, des, acl_token)
+
+        resp = self._do_request(FTRANS_HTTP_METHOD_POST, url, conn=self._ftrans_s10_conn)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid response status [%d] when rename_file_s10" % resp.status)
+
+        return
+
+    def _touch_file_s10(self, des, mtime):
+        op = "touch_file"
+        des = base64.b64encode(bytes(self._get_full_path(des), encoding="UTF-8")).decode(encoding="UTF-8")
+        acl_token = self._ftrans_acl_token
+
+        url = "/s10/p2/ftrans?op=%s&des=%s&acltoken=%s&mtime=%d" % (op, des, acl_token, mtime)
+
+        resp = self._do_request(FTRANS_HTTP_METHOD_POST, url, conn=self._ftrans_s10_conn)
+        if resp.status != FTRANS_HTTP_STATUS_OK:
+            raise FtransHttpResponseException("invalid response status [%s] when touch_file_s10" % resp.status)
+
+        return
+
+    def upload_file(self, local_file_path, remote_file_path):
+        if remote_file_path == "":
+            raise FtransException("invalid des [%s]" % remote_file_path)
+        remote_file_path = _to_slash(remote_file_path)
+        if self._ftrans_client_enable():
+            return self._upload_file_s2(local_file_path, remote_file_path)
+        else:
+            return self._upload_file_s10(local_file_path, remote_file_path)
+
+    def download_file(self, local_file_path, remote_file_path):
+        if remote_file_path == "":
+            raise FtransException("invalid des [%s]" % remote_file_path)
+        remote_file_path = _to_slash(remote_file_path)
+        if self._ftrans_client_enable():
+            return self._download_file_s2(local_file_path, remote_file_path)
+        else:
+            return self._download_file_s10(local_file_path, remote_file_path)
+
+    def get_file_size(self, filename):
+        if filename == "":
+            raise FtransException("invalid des [%s]" % filename)
+        filename = _to_slash(filename)
+        if self._ftrans_client_enable():
+            return self._get_file_size_s2(filename)
+        else:
+            return self._get_file_size_s10(filename)
+
+    def get_file_md5(self, filename):
+        # may be supported in future
+        return None
+
+    def remove_file(self, filename):
+        if filename == "":
+            raise FtransException("invalid des [%s]" % filename)
+        filename = _to_slash(filename)
+        if self._ftrans_client_enable():
+            return self._remove_file_s2(filename)
+        else:
+            return self._remove_file_s10(filename)
+
+    def list_file(self, prefix, filter_in=None, order_type=None, order_field=None, page_num=None, page_size=None):
+        if prefix != "":
+            prefix = _to_slash(prefix)
+        if filter_in is None:
+            filter_in = FTRANS_DEFAULT_FILTER_IN
+
+        if order_type is None:
+            order_type = FTRANS_ORDER_TYPE_ASC
+
+        if order_field is None:
+            order_field = FTRANS_ORDER_FIELD_NAME
+
+        if page_num is None:
+            page_num = FTRANS_DEFAULT_PAGE_NUM
+
+        if page_size is None:
+            page_size = FTRANS_DEFAULT_PAGE_SIZE
+
+        if self._ftrans_client_enable():
+            return self._list_file_s2(prefix, filter_in, order_type, order_field, page_num, page_size)
+        else:
+            return self._list_file_s10(prefix, filter_in, order_type, order_field, page_num, page_size)
