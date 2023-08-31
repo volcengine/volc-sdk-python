@@ -8,9 +8,10 @@ class Function:
         return {'Name': 'Snapshot', 'Input': {'SnapshotTime': snapshot_time}}
 
     @staticmethod
-    def get_add_option_info_func(title, tags, description, classification_id):
-        return {'Name': 'AddOptionInfo', 'Input': {'Title': title, 'Tags': tags, 'Description': description,
-                                                   'ClassificationId': classification_id}}
+    def get_add_option_info_func(title, tags, description, classification_id, is_hls_index_only=False):
+        return {'Name': 'AddOptionInfo',
+                'Input': {'Title': title, 'Tags': tags, 'Description': description,
+                          'ClassificationId': classification_id, "IsHlsIndexOnly": is_hls_index_only}}
 
     @staticmethod
     def get_add_material_option_info_func(title, tags, description, category, record_type, format_input):

@@ -19,6 +19,7 @@ if __name__ == '__main__':
 
     get_meta_function = Function.get_meta_func()
     snapshot_function = Function.get_snapshot_func(2.3)
+    apply_function = Function.get_add_option_info_func("title1", "tag1", "desc1", 0, False)
 
     try:
         req = VodUploadMediaRequest()
