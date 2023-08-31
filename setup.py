@@ -13,7 +13,6 @@ install_requires = [
     "google>=3.0.0",
     "six>=1.0",
     "tinyec==0.4.0",
-    "cryptography==38.0.4",
 ]
 
 setup(
@@ -21,7 +20,7 @@ setup(
     version=VERSION,
     keywords=("pip", "volcengine", "volc-sdk-python"),
     description="The Volcengine SDK for Python",
-    license="MIT Licence",
+    license="MIT License",
 
     url="https://github.com/Volcengine/volc-sdk-python",
     author="Volcengine SDK",
