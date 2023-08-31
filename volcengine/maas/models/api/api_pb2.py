@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='api',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\rapi/api.proto\x12\x03\x61pi\x1a\nbase.proto\"(\n\x07Message\x12\x0c\n\x04role\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\";\n\x05Model\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0b\x65ndpoint_id\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\"6\n\x05\x45rror\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\x12\x0e\n\x06\x63ode_n\x18\x02 \x01(\x05\x12\x0f\n\x07message\x18\x03 \x01(\t\"6\n\tErrorResp\x12\x19\n\x05\x65rror\x18\x01 \x01(\x0b\x32\n.api.Error\x12\x0e\n\x06req_id\x18\x02 \x01(\t\"_\n\x06\x43hoice\x12\r\n\x05index\x18\x01 \x01(\x05\x12\x1d\n\x07message\x18\x02 \x01(\x0b\x32\x0c.api.Message\x12\x15\n\rfinish_reason\x18\x03 \x01(\t\x12\x10\n\x08logprobs\x18\x04 \x01(\x02\"\xe7\x01\n\nParameters\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x12\n\nmax_tokens\x18\x02 \x01(\x03\x12\r\n\x05top_p\x18\x03 \x01(\x02\x12\x18\n\x10presence_penalty\x18\x04 \x01(\x02\x12\x19\n\x11\x66requency_penalty\x18\x05 \x01(\x02\x12\x16\n\x0emax_new_tokens\x18\x06 \x01(\x03\x12\x1a\n\x12repetition_penalty\x18\x07 \x01(\x02\x12\x11\n\tdo_sample\x18\x08 \x01(\x08\x12\r\n\x05top_k\x18\t \x01(\x03\x12\x16\n\x0emin_new_tokens\x18\n \x01(\x03\"O\n\x05Usage\x12\x15\n\rprompt_tokens\x18\x01 \x01(\x03\x12\x19\n\x11\x63ompletion_tokens\x18\x02 \x01(\x03\x12\x14\n\x0ctotal_tokens\x18\x03 \x01(\x03\"\xb9\x01\n\x07\x43hatReq\x12\x19\n\x05model\x18\x01 \x01(\x0b\x32\n.api.Model\x12\x1e\n\x08messages\x18\x02 \x03(\x0b\x32\x0c.api.Message\x12#\n\nparameters\x18\x03 \x01(\x0b\x32\x0f.api.Parameters\x12\x0e\n\x06stream\x18\x04 \x01(\x08\x12\x0e\n\x06req_id\x18\x05 \x01(\t\x12.\n\x0c\x63rypto_token\x18\x06 \x01(\tB\x18\xba\xbb\x18\x14Ml-Maas-Crypto-Token\"m\n\x08\x43hatResp\x12\x0e\n\x06req_id\x18\x01 \x01(\t\x12\x19\n\x05\x65rror\x18\x02 \x01(\x0b\x32\n.api.Error\x12\x1b\n\x06\x63hoice\x18\x03 \x01(\x0b\x32\x0b.api.Choice\x12\x19\n\x05usage\x18\x04 \x01(\x0b\x32\n.api.Usage\"$\n\x07\x43\x65rtReq\x12\x19\n\x05model\x18\x01 \x01(\x0b\x32\n.api.Model\"3\n\x08\x43\x65rtResp\x12\x19\n\x05model\x18\x01 \x01(\x0b\x32\n.api.Model\x12\x0c\n\x04\x63\x65rt\x18\x02 \x01(\t2x\n\nAPIService\x12\x34\n\x04\x43hat\x12\x0c.api.ChatReq\x1a\r.api.ChatResp\"\x0f\xd2\xc1\x18\x0b\x61pi/v1/chat\x12\x34\n\x04\x43\x65rt\x12\x0c.api.CertReq\x1a\r.api.CertResp\"\x0f\xd2\xc1\x18\x0b\x61pi/v1/certb\x06proto3')
+  serialized_pb=_b('\n\rapi/api.proto\x12\x03\x61pi\x1a\nbase.proto\"(\n\x07Message\x12\x0c\n\x04role\x18\x01 \x01(\t\x12\x0f\n\x07\x63ontent\x18\x02 \x01(\t\";\n\x05Model\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0b\x65ndpoint_id\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\"6\n\x05\x45rror\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\x12\x0e\n\x06\x63ode_n\x18\x02 \x01(\x05\x12\x0f\n\x07message\x18\x03 \x01(\t\"6\n\tErrorResp\x12\x19\n\x05\x65rror\x18\x01 \x01(\x0b\x32\n.api.Error\x12\x0e\n\x06req_id\x18\x02 \x01(\t\"_\n\x06\x43hoice\x12\r\n\x05index\x18\x01 \x01(\x05\x12\x1d\n\x07message\x18\x02 \x01(\x0b\x32\x0c.api.Message\x12\x15\n\rfinish_reason\x18\x03 \x01(\t\x12\x10\n\x08logprobs\x18\x04 \x01(\x02\"\x82\x02\n\nParameters\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x12\n\nmax_tokens\x18\x02 \x01(\x03\x12\r\n\x05top_p\x18\x03 \x01(\x02\x12\x18\n\x10presence_penalty\x18\x04 \x01(\x02\x12\x19\n\x11\x66requency_penalty\x18\x05 \x01(\x02\x12\x16\n\x0emax_new_tokens\x18\x06 \x01(\x03\x12\x1a\n\x12repetition_penalty\x18\x07 \x01(\x02\x12\x11\n\tdo_sample\x18\x08 \x01(\x08\x12\r\n\x05top_k\x18\t \x01(\x03\x12\x16\n\x0emin_new_tokens\x18\n \x01(\x03\x12\x19\n\x11max_prompt_tokens\x18\x0b \x01(\x03\"O\n\x05Usage\x12\x15\n\rprompt_tokens\x18\x01 \x01(\x03\x12\x19\n\x11\x63ompletion_tokens\x18\x02 \x01(\x03\x12\x14\n\x0ctotal_tokens\x18\x03 \x01(\x03\"\xb9\x01\n\x07\x43hatReq\x12\x19\n\x05model\x18\x01 \x01(\x0b\x32\n.api.Model\x12\x1e\n\x08messages\x18\x02 \x03(\x0b\x32\x0c.api.Message\x12#\n\nparameters\x18\x03 \x01(\x0b\x32\x0f.api.Parameters\x12\x0e\n\x06stream\x18\x04 \x01(\x08\x12\x0e\n\x06req_id\x18\x05 \x01(\t\x12.\n\x0c\x63rypto_token\x18\x06 \x01(\tB\x18\xba\xbb\x18\x14Ml-Maas-Crypto-Token\"m\n\x08\x43hatResp\x12\x0e\n\x06req_id\x18\x01 \x01(\t\x12\x19\n\x05\x65rror\x18\x02 \x01(\x0b\x32\n.api.Error\x12\x1b\n\x06\x63hoice\x18\x03 \x01(\x0b\x32\x0b.api.Choice\x12\x19\n\x05usage\x18\x04 \x01(\x0b\x32\n.api.Usage\"$\n\x07\x43\x65rtReq\x12\x19\n\x05model\x18\x01 \x01(\x0b\x32\n.api.Model\"3\n\x08\x43\x65rtResp\x12\x19\n\x05model\x18\x01 \x01(\x0b\x32\n.api.Model\x12\x0c\n\x04\x63\x65rt\x18\x02 \x01(\t2x\n\nAPIService\x12\x34\n\x04\x43hat\x12\x0c.api.ChatReq\x1a\r.api.ChatResp\"\x0f\xd2\xc1\x18\x0b\x61pi/v1/chat\x12\x34\n\x04\x43\x65rt\x12\x0c.api.CertReq\x1a\r.api.CertResp\"\x0f\xd2\xc1\x18\x0b\x61pi/v1/certb\x06proto3')
   ,
   dependencies=[base__pb2.DESCRIPTOR,])
 
@@ -322,6 +322,13 @@ _PARAMETERS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='max_prompt_tokens', full_name='api.Parameters.max_prompt_tokens', index=10,
+      number=11, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -335,7 +342,7 @@ _PARAMETERS = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=347,
-  serialized_end=578,
+  serialized_end=605,
 )
 
 
@@ -379,8 +386,8 @@ _USAGE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=580,
-  serialized_end=659,
+  serialized_start=607,
+  serialized_end=686,
 )
 
 
@@ -445,8 +452,8 @@ _CHATREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=662,
-  serialized_end=847,
+  serialized_start=689,
+  serialized_end=874,
 )
 
 
@@ -497,8 +504,8 @@ _CHATRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=849,
-  serialized_end=958,
+  serialized_start=876,
+  serialized_end=985,
 )
 
 
@@ -528,8 +535,8 @@ _CERTREQ = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=960,
-  serialized_end=996,
+  serialized_start=987,
+  serialized_end=1023,
 )
 
 
@@ -566,8 +573,8 @@ _CERTRESP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=998,
-  serialized_end=1049,
+  serialized_start=1025,
+  serialized_end=1076,
 )
 
 _ERRORRESP.fields_by_name['error'].message_type = _ERROR
@@ -679,8 +686,8 @@ _APISERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=1051,
-  serialized_end=1171,
+  serialized_start=1078,
+  serialized_end=1198,
   methods=[
   _descriptor.MethodDescriptor(
     name='Chat',
