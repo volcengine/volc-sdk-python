@@ -94,6 +94,34 @@ api_info = {
     # 扩容实例云盘: https://www.volcengine.com/docs/6499/174017
     "ScaleInstanceCloudDiskCapacity": ApiInfo("POST", "/", {
         "Action": "ScaleInstanceCloudDiskCapacity", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 创建边缘云盘
+    "CreateEbsInstances": ApiInfo("POST", "/", {
+        "Action": "CreateEbsInstances", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取边缘云盘列表
+    "ListEbsInstances": ApiInfo("GET", "/", {
+        "Action": "ListEbsInstances", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取边缘云盘详情
+    "GetEbsInstance": ApiInfo("GET", "/", {
+        "Action": "GetEbsInstance", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 边缘云盘扩容
+    "ScaleEbsInstanceCapacity": ApiInfo("POST", "/", {
+        "Action": "ScaleEbsInstanceCapacity", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 边缘云盘挂载
+    "AttachEbs": ApiInfo("POST", "/", {
+        "Action": "AttachEbs", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 边缘云盘卸载
+    "DetachEbs": ApiInfo("POST", "/", {
+        "Action": "DetachEbs", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 边缘云盘删除
+    "DeleteEbsInstance": ApiInfo("POST", "/", {
+        "Action": "DeleteEbsInstance", "Version": SERVICE_VERSION}, {}, {}),
 }
 
 
@@ -317,6 +345,76 @@ class VeenService(Service):
         if body is None:
             body = {}
         action = "ScaleInstanceCloudDiskCapacity"
+        res = self.json(action,[],json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def create_ebs_instances(self, body=None):
+        if body is None:
+            body = {}
+        action = "CreateEbsInstances"
+        res = self.json(action,[],json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def list_ebs_instances(self, query=None):
+        if query is None:
+            query = {}
+        action = "ListEbsInstances"
+        res = self.get(action,query)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def get_ebs_instance(self, query=None):
+        if query is None:
+            query = {}
+        action = "GetEbsInstance"
+        res = self.get(action,query)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def scale_ebs_instance_capacity(self, body=None):
+        if body is None:
+            body = {}
+        action = "ScaleEbsInstanceCapacity"
+        res = self.json(action,[],json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def attach_ebs(self, body=None):
+        if body is None:
+            body = {}
+        action = "AttachEbs"
+        res = self.json(action,[],json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def detach_ebs(self, body=None):
+        if body is None:
+            body = {}
+        action = "DetachEbs"
+        res = self.json(action,[],json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def delete_ebs_instance(self, body=None):
+        if body is None:
+            body = {}
+        action = "DeleteEbsInstance"
         res = self.json(action,[],json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
