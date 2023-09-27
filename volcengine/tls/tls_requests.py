@@ -147,7 +147,9 @@ class DescribeProjectsRequest(TLSRequest):
 
 
 class CreateTopicRequest(TLSRequest):
-    def __init__(self, topic_name: str, project_id: str, ttl: int, shard_count: int, description: str = None):
+    def __init__(self, topic_name: str, project_id: str, ttl: int, shard_count: int, description: str = None,
+                 auto_split: bool = True, max_split_shard: int = 10, enable_tracking: bool = False,
+                 time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = True):
         """
         :param topic_name: 日志主题名称
         :type topic_name: string
@@ -159,12 +161,33 @@ class CreateTopicRequest(TLSRequest):
         :type shard_count:int
         :param description: 日志主题描述
         :type description:str
+        :param auto_split 是否开启分区的自动分裂功能
+        :type auto_split bool
+        :param max_split_shard 分区的最大分裂数，即分区分裂后，所有分区的最大数量
+        :type max_split_shard int
+        :param enable_tracking 是否开启WebTracking功能
+        :type enable_tracking bool
+        :param time_key 日志时间字段的字段名称
+        :type time_key str
+        :param time_format 时间字段的解析格式
+        :type time_format str
+        :param tags 日志主题标签信息
+        :type tags List[TagInfo]
+        :param log_public_ip 是否开启记录外网IP功能
+        :type log_public_ip bool
         """
         self.topic_name = topic_name
         self.project_id = project_id
         self.ttl = ttl
         self.shard_count = shard_count
         self.description = description
+        self.auto_split = auto_split
+        self.max_split_shard = max_split_shard
+        self.enable_tracking = enable_tracking
+        self.time_key = time_key
+        self.time_format = time_format
+        self.tags = tags
+        self.log_public_ip = log_public_ip
 
     def check_validation(self):
         """
@@ -174,6 +197,19 @@ class CreateTopicRequest(TLSRequest):
         if self.topic_name is None or self.project_id is None or self.ttl is None or self.shard_count is None:
             return False
         return True
+    
+    def get_api_input(self):
+        body = super(CreateTopicRequest, self).get_api_input()
+
+        if self.tags is not None:
+            body[TAGS] = []
+            for tag in self.tags:
+                body[TAGS].append(tag.json())
+
+        del body["LogPublicIp"]
+        body[LOG_PUBLIC_IP] = self.log_public_ip
+
+        return body
 
 
 class DeleteTopicRequest(TLSRequest):
@@ -195,7 +231,9 @@ class DeleteTopicRequest(TLSRequest):
 
 
 class ModifyTopicRequest(TLSRequest):
-    def __init__(self, topic_id: str, topic_name: str = None, ttl: int = None, description: str = None):
+    def __init__(self, topic_id: str, topic_name: str = None, ttl: int = None, description: str = None,
+                 auto_split: bool = True, max_split_shard: int = 10, enable_tracking: bool = False,
+                 time_key: str = None, time_format: str = None, log_public_ip: bool = True):
         """
         :param topic_id:日志主题 ID
         :type topic_id:str
@@ -205,11 +243,29 @@ class ModifyTopicRequest(TLSRequest):
         :type ttl:int
         :param description: 日志主题描述
         :type description:str
+        :param auto_split 是否开启分区的自动分裂功能
+        :type auto_split bool
+        :param max_split_shard 分区的最大分裂数，即分区分裂后，所有分区的最大数量
+        :type max_split_shard int
+        :param enable_tracking 是否开启WebTracking功能
+        :type enable_tracking bool
+        :param time_key 日志时间字段的字段名称
+        :type time_key str
+        :param time_format 时间字段的解析格式
+        :type time_format str
+        :param log_public_ip 是否开启记录外网IP功能
+        :type log_public_ip bool
         """
         self.topic_id = topic_id
         self.topic_name = topic_name
         self.ttl = ttl
         self.description = description
+        self.auto_split = auto_split
+        self.max_split_shard = max_split_shard
+        self.enable_tracking = enable_tracking
+        self.time_key = time_key
+        self.time_format = time_format
+        self.log_public_ip = log_public_ip
 
     def check_validation(self):
         """
@@ -219,6 +275,14 @@ class ModifyTopicRequest(TLSRequest):
         if self.topic_id is None:
             return False
         return True
+
+    def get_api_input(self):
+        body = super(ModifyTopicRequest, self).get_api_input()
+
+        del body["LogPublicIp"]
+        body[LOG_PUBLIC_IP] = self.log_public_ip
+
+        return body
 
 
 class DescribeTopicRequest(TLSRequest):
@@ -241,7 +305,7 @@ class DescribeTopicRequest(TLSRequest):
 
 class DescribeTopicsRequest(TLSRequest):
     def __init__(self, project_id: str, page_number: int = 1, page_size: int = 20,
-                 topic_name: str = None, topic_id: str = None, is_full_name: bool = False):
+                 topic_name: str = None, topic_id: str = None, is_full_name: bool = False, tags: List[TagInfo] = None):
         """
         :param page_number: 分页查询时的页码。默认为 1
         :type page_number: int
@@ -255,6 +319,8 @@ class DescribeTopicsRequest(TLSRequest):
         :type project_id: str
         :param is_full_name: 根据TopicName 筛选时，是否精确匹配
         :type is_full_name: bool
+        :param tags: 根据日志主题标签进行筛选
+        :type tags: List[TagInfo]
         """
         self.project_id = project_id
         self.page_number = page_number
@@ -262,6 +328,7 @@ class DescribeTopicsRequest(TLSRequest):
         self.topic_name = topic_name
         self.topic_id = topic_id
         self.is_full_name = is_full_name
+        self.tags = tags
 
     def check_validation(self):
         """
@@ -271,6 +338,16 @@ class DescribeTopicsRequest(TLSRequest):
         if self.project_id is None:
             return False
         return True
+
+    def get_api_input(self):
+        body = super(DescribeTopicsRequest, self).get_api_input()
+
+        if self.tags is not None:
+            body[TAGS] = []
+            for tag in self.tags:
+                body[TAGS].append(tag.json())
+
+        return body
 
 
 class SetIndexRequest(TLSRequest):
@@ -381,7 +458,7 @@ class DescribeIndexRequest(TLSRequest):
 
 
 class PutLogsRequest(TLSRequest):
-    def __init__(self, topic_id: str, log_group_list: LogGroupList, hash_key: str = None, compression: str = None):
+    def __init__(self, topic_id: str, log_group_list: LogGroupList, hash_key: str = None, compression: str = LZ4):
         """
         :param topic_id:日志主题 ID
         :type topic_id:str
@@ -467,7 +544,7 @@ class PutLogsV2Logs:
 
 
 class PutLogsV2Request(TLSRequest):
-    def __init__(self, topic_id: str, logs: PutLogsV2Logs, hash_key: str = None, compression: str = None):
+    def __init__(self, topic_id: str, logs: PutLogsV2Logs, hash_key: str = None, compression: str = LZ4):
         """
         :param topic_id:日志主题 ID
         :type topic_id:str
@@ -516,7 +593,8 @@ class DescribeCursorRequest(TLSRequest):
 
 class ConsumeLogsRequest(TLSRequest):
     def __init__(self, topic_id: str, shard_id: int, cursor: str, end_cursor: str = None,
-                 log_group_count: int = None, compression: str = None):
+                 log_group_count: int = None, compression: str = None,
+                 consumer_group_name: str = None, consumer_name: str = None):
         """
         :param topic_id: 日志主题id
         :type topic_id:str
@@ -530,6 +608,10 @@ class ConsumeLogsRequest(TLSRequest):
         :type log_group_count:int
         :param compression:返回数据的压缩格式支持lz4、zlib
         :type compression:str
+        :param consumer_group_name: 消费组名称
+        :type consumer_group_name: str
+        :param consumer_name: 消费者名称
+        :type consumer_name: str
         """
         self.topic_id = topic_id
         self.shard_id = shard_id
@@ -537,6 +619,8 @@ class ConsumeLogsRequest(TLSRequest):
         self.end_cursor = end_cursor
         self.log_group_count = log_group_count
         self.compression = compression
+        self.consumer_group_name = consumer_group_name
+        self.consumer_name = consumer_name
 
     def check_validation(self):
         """
@@ -550,6 +634,7 @@ class ConsumeLogsRequest(TLSRequest):
     def get_api_input(self):
         params = {TOPIC_ID: self.topic_id, SHARD_ID: self.shard_id}
         body = {CURSOR: self.cursor}
+        request_headers = {}
 
         if self.end_cursor is not None:
             body[END_CURSOR] = self.end_cursor
@@ -563,8 +648,12 @@ class ConsumeLogsRequest(TLSRequest):
                 raise TLSException(error_code="UnsupportedZLIB",
                                    error_message="Your platform does not support the ZLIB compression package.")
             body[COMPRESSION] = self.compression
+        if self.consumer_group_name is not None:
+            request_headers[CONSUMER_GROUP_NAME] = self.consumer_group_name
+        if self.consumer_name is not None:
+            request_headers[CONSUMER_NAME] = self.consumer_name
 
-        return {PARAMS: params, BODY: body}
+        return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
 
 
 class SearchLogsRequest(TLSRequest):
@@ -639,18 +728,18 @@ class DescribeLogContextRequest(TLSRequest):
 
 
 class WebTracksRequest(TLSRequest):
-    def __init__(self, project_id: str, topic_id: str, logs: List[Dict], source: str = None, compression: str = None):
+    def __init__(self, project_id: str, topic_id: str, logs: List[Dict], source: str = None, compression: str = LZ4):
         """
         :param project_id: 日志项目 ID
         :type project_id: string
-        :param topic_id:日志主题 ID
-        :type topic_id:str
-        :param logs:日志内容
+        :param topic_id: 日志主题 ID
+        :type topic_id: str
+        :param logs: 日志内容
         :type logs: List[Dict]
-        :param source:日志来源
-        :type source:str
-        :param compression:请求体的压缩格式支持lz4。默认不压缩
-        :type compression:str
+        :param source: 日志来源
+        :type source: str
+        :param compression: 请求体的压缩格式支持lz4，默认lz4压缩
+        :type compression: str
         """
         self.project_id = project_id
         self.topic_id = topic_id
@@ -1083,24 +1172,24 @@ class SetRuleRequest(TLSRequest):
                  user_define_rule: UserDefineRule = None, log_sample: str = None, input_type: int = None,
                  container_rule: ContainerRule = None):
         """
-        :param rule_name:采集配置的名称
-        :type rule_name:
-        :param paths:采集路径列表
-        :type paths:List[str]
-        :param log_type:采集模式
-        :type log_type:str
-        :param extract_rule:日志提取规则
-        :type extract_rule:ExtractRule
-        :param exclude_paths:采集黑名单列表
-        :type exclude_paths:List[ExcludePath]
-        :param user_define_rule:用户自定义的采集规则
-        :type user_define_rule:UserDefineRule
-        :param log_sample:日志样例
-        :type log_sample:str
-        :param input_type: 采集类型 0：（默认）宿主机日志文件，1：K8s 容器标准输出，2：K8s 容器内日志文件
-        :type input_type:int
+        :param rule_name: 采集配置的名称
+        :type rule_name: str
+        :param paths: 采集路径列表
+        :type paths: List[str]
+        :param log_type: 采集模式
+        :type log_type: str
+        :param extract_rule: 日志提取规则
+        :type extract_rule: ExtractRule
+        :param exclude_paths: 采集黑名单列表
+        :type exclude_paths: List[ExcludePath]
+        :param user_define_rule: 用户自定义的采集规则
+        :type user_define_rule: UserDefineRule
+        :param log_sample: 日志样例
+        :type log_sample: str
+        :param input_type: 采集类型，0（默认）为宿主机日志文件，1为K8s容器标准输出，2为K8s容器内日志文件
+        :type input_type: int
         :param container_rule: 容器采集规则
-        :type container_rule:ContainerRule
+        :type container_rule: ContainerRule
         """
         self.rule_name = rule_name
         self.paths = paths
@@ -1145,26 +1234,26 @@ class CreateRuleRequest(SetRuleRequest):
                  user_define_rule: UserDefineRule = None, log_sample: str = None, input_type: int = 0,
                  container_rule: ContainerRule = None):
         """
-        :param topic_id:日志主题 ID
-        :type topic_id:str
-        :param rule_name:采集配置的名称
-        :type rule_name:
-        :param paths:采集路径列表
-        :type paths:List[str]
-        :param log_type:采集模式
-        :type log_type:str
-        :param extract_rule:日志提取规则
-        :type extract_rule:ExtractRule
-        :param exclude_paths:采集黑名单列表
-        :type exclude_paths:List[ExcludePath]
-        :param user_define_rule:用户自定义的采集规则
-        :type user_define_rule:UserDefineRule
-        :param log_sample:日志样例
-        :type log_sample:str
-        :param input_type: 采集类型 0：（默认）宿主机日志文件，1：K8s 容器标准输出，2：K8s 容器内日志文件
-        :type input_type:int
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param rule_name: 采集配置的名称
+        :type rule_name: str
+        :param paths: 采集路径列表
+        :type paths: List[str]
+        :param log_type: 采集模式
+        :type log_type: str
+        :param extract_rule: 日志提取规则
+        :type extract_rule: ExtractRule
+        :param exclude_paths: 采集黑名单列表
+        :type exclude_paths: List[ExcludePath]
+        :param user_define_rule: 用户自定义的采集规则
+        :type user_define_rule: UserDefineRule
+        :param log_sample: 日志样例
+        :type log_sample: str
+        :param input_type: 采集类型，0（默认）为宿主机日志文件，1为K8s容器标准输出，2为K8s容器内日志文件
+        :type input_type: int
         :param container_rule: 容器采集规则
-        :type container_rule:ContainerRule
+        :type container_rule: ContainerRule
         """
         super(CreateRuleRequest, self).__init__(rule_name, paths, log_type, extract_rule, exclude_paths,
                                                 user_define_rule, log_sample, input_type, container_rule)
@@ -1211,26 +1300,26 @@ class ModifyRuleRequest(SetRuleRequest):
                  user_define_rule: UserDefineRule = None, log_sample: str = None, input_type: int = None,
                  container_rule: ContainerRule = None):
         """
-        :param rule_id:采集配置的 ID
-        :type rule_id:str
-        :param rule_name:采集配置的名称
-        :type rule_name:
-        :param paths:采集路径列表
-        :type paths:List[str]
-        :param log_type:采集模式
-        :type log_type:str
-        :param extract_rule:日志提取规则
-        :type extract_rule:ExtractRule
-        :param exclude_paths:采集黑名单列表
-        :type exclude_paths:List[ExcludePath]
-        :param user_define_rule:用户自定义的采集规则
-        :type user_define_rule:UserDefineRule
-        :param log_sample:日志样例
-        :type log_sample:str
-        :param input_type: 采集类型 0：（默认）宿主机日志文件，1：K8s 容器标准输出，2：K8s 容器内日志文件
-        :type input_type:int
+        :param rule_id: 采集配置ID
+        :type rule_id: str
+        :param rule_name: 采集配置的名称
+        :type rule_name: str
+        :param paths: 采集路径列表
+        :type paths: List[str]
+        :param log_type: 采集模式
+        :type log_type: str
+        :param extract_rule: 日志提取规则
+        :type extract_rule: ExtractRule
+        :param exclude_paths: 采集黑名单列表
+        :type exclude_paths: List[ExcludePath]
+        :param user_define_rule: 用户自定义的采集规则
+        :type user_define_rule: UserDefineRule
+        :param log_sample: 日志样例
+        :type log_sample: str
+        :param input_type: 采集类型，0（默认）为宿主机日志文件，1为K8s容器标准输出，2为K8s容器内日志文件
+        :type input_type: int
         :param container_rule: 容器采集规则
-        :type container_rule:ContainerRule
+        :type container_rule: ContainerRule
         """
         super(ModifyRuleRequest, self).__init__(rule_name, paths, log_type, extract_rule, exclude_paths,
                                                 user_define_rule, log_sample, input_type, container_rule)
@@ -1351,18 +1440,22 @@ class DeleteRuleFromHostGroupsRequest(TLSRequest):
 
 
 class CreateAlarmNotifyGroupRequest(TLSRequest):
-    def __init__(self, alarm_notify_group_name: str, notify_type: List[str], receivers: List[Receiver]):
+    def __init__(self, alarm_notify_group_name: str, notify_type: List[str], receivers: List[Receiver],
+                 iam_project_name: str = None):
         """
-        :param alarm_notify_group_name:告警通知组名称
-        :type alarm_notify_group_name:str
-        :param notify_type: 告警通知的类型 Trigger告警触发、Recovery告警恢复
+        :param alarm_notify_group_name: 告警通知组名称
+        :type alarm_notify_group_name: str
+        :param notify_type: 告警通知的类型Trigger告警触发、Recovery告警恢复
         :type notify_type: List[str]
-        :param receivers:接收告警的 IAM 用户列表
-        :type receivers:List[Receiver]
+        :param receivers: 接收告警的IAM用户列表
+        :type receivers: List[Receiver]
+        :param iam_project_name 告警组所属的 IAM 项目名称
+        :type iam_project_name str
         """
         self.alarm_notify_group_name = alarm_notify_group_name
         self.notify_type = notify_type
         self.receivers = receivers
+        self.iam_project_name = iam_project_name
 
     def check_validation(self):
         """
@@ -1378,6 +1471,9 @@ class CreateAlarmNotifyGroupRequest(TLSRequest):
 
         for receiver in self.receivers:
             body[RECEIVERS].append(receiver.json())
+
+        if self.iam_project_name is not None:
+            body[IAM_PROJECT_NAME] = self.iam_project_name
 
         return body
 
@@ -1444,52 +1540,62 @@ class ModifyAlarmNotifyGroupRequest(TLSRequest):
 
 class DescribeAlarmNotifyGroupsRequest(TLSRequest):
     def __init__(self, alarm_notify_group_name: str = None, alarm_notify_group_id: str = None,
-                 receiver_name: str = None, page_number: int = 1, page_size: int = 20):
+                 receiver_name: str = None, page_number: int = 1, page_size: int = 20, iam_project_name: str = None):
         """
         :param alarm_notify_group_id: 告警通知组 ID
-        :type alarm_notify_group_id:str
-        :param alarm_notify_group_name:告警通知组名称
-        :type alarm_notify_group_name:str
-        :param receiver_name:接收告警的 IAM 用户
-        :type receiver_name:str
-        :param page_number: 分页查询时的页码。默认为 1
+        :type alarm_notify_group_id: str
+        :param alarm_notify_group_name: 告警通知组名称
+        :type alarm_notify_group_name: str
+        :param receiver_name: 接收告警的IAM用户
+        :type receiver_name: str
+        :param page_number: 分页查询时的页码，默认为1
         :type page_number: int
-        :param page_size: 分页大小。默认为 20，最大为 100
+        :param page_size: 分页大小，默认为20，最大为100
         :type page_size: int
+        :param iam_project_name 根据告警组所属的IAM项目名称进行筛选
+        :type iam_project_name str
         """
         self.alarm_notify_group_name = alarm_notify_group_name
         self.alarm_notify_group_id = alarm_notify_group_id
         self.receiver_name = receiver_name
         self.page_number = page_number
         self.page_size = page_size
+        self.iam_project_name = iam_project_name
 
     def check_validation(self):
         return True
+
 
 class SetAlarmRequest(TLSRequest):
     def __init__(self, alarm_name: str = None, query_request: List[QueryRequest] = None,
                  request_cycle: RequestCycle = None, condition: str = None, alarm_period: int = None,
                  alarm_notify_group: List[str] = None, status: bool = None, trigger_period: int = None,
-                 user_define_msg: str = None):
+                 user_define_msg: str = None, severity: str = None, alarm_period_detail: AlarmPeriodSetting = None):
         """
-        :param alarm_name:告警策略名称
-        :type alarm_name:str
-        :param query_request:检索分析语句，可配置 1~3 条
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param alarm_name: 告警策略名称
+        :type alarm_name: str
+        :param query_request: 检索分析语句，可配置1~3条
         :type query_request: List[QueryRequest]
-        :param request_cycle:告警任务的执行周期
-        :type request_cycle:RequestCycle
+        :param request_cycle: 告警任务的执行周期
+        :type request_cycle: RequestCycle
         :param condition: 告警触发条件
-        :type condition:str
-        :param alarm_period:告警重复的周期
-        :type alarm_period:int
-        :param alarm_notify_group:告警对应的通知列表
-        :type alarm_notify_group:List[str]
-        :param status:是否开启告警策略。默认值为 true
-        :type status:bool
-        :param trigger_period:triggerPeriod 触发告警持续周期。最小值为 1，最大值为10。
-        :type trigger_period:int
-        :param user_define_msg:告警通知的内容
-        :type user_define_msg:str
+        :type condition: str
+        :param alarm_period: 告警重复的周期
+        :type alarm_period: int
+        :param alarm_notify_group: 告警对应的通知列表
+        :type alarm_notify_group: List[str]
+        :param status: 是否开启告警策略，默认值为true
+        :type status: bool
+        :param trigger_period: triggerPeriod触发告警持续周期，最小值为1，最大值为10
+        :type trigger_period: int
+        :param user_define_msg: 告警通知的内容
+        :type user_define_msg: str
+        :param severity: 告警通知的级别，即告警的严重程度，支持设置为notice、warning或critical，严重程度递增，默认为notice
+        :type severity: str
+        :param alarm_period_detail: 告警通知发送的周期
+        :type alarm_period_detail: AlarmPeriodSetting
         """
         self.alarm_name = alarm_name
         self.query_request = query_request
@@ -1500,6 +1606,8 @@ class SetAlarmRequest(TLSRequest):
         self.status = status
         self.trigger_period = trigger_period
         self.user_define_msg = user_define_msg
+        self.severity = severity
+        self.alarm_period_detail = alarm_period_detail
 
     def get_api_input(self):
         body = super(SetAlarmRequest, self).get_api_input()
@@ -1510,6 +1618,8 @@ class SetAlarmRequest(TLSRequest):
             body[QUERY_REQUEST] = []
             for one_query_request in self.query_request:
                 body[QUERY_REQUEST].append(one_query_request.json())
+        if self.alarm_period_detail is not None:
+            body[ALARM_PERIOD_DETAIL] = self.alarm_period_detail.json()
 
         return body
 
@@ -1517,31 +1627,37 @@ class SetAlarmRequest(TLSRequest):
 class CreateAlarmRequest(SetAlarmRequest):
     def __init__(self, project_id: str, alarm_name: str, query_request: List[QueryRequest],
                  request_cycle: RequestCycle, condition: str, alarm_period: int, alarm_notify_group: List[str],
-                 status: bool = True, trigger_period: int = 1, user_define_msg: str = None):
+                 status: bool = True, trigger_period: int = 1, user_define_msg: str = None,
+                 severity: str = "notice", alarm_period_detail: AlarmPeriodSetting = None):
         """
-        :param project_id: 日志项目 ID
-        :type project_id: string
-        :param alarm_name:告警策略名称
-        :type alarm_name:str
-        :param query_request:检索分析语句，可配置 1~3 条
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param alarm_name: 告警策略名称
+        :type alarm_name: str
+        :param query_request: 检索分析语句，可配置1~3条
         :type query_request: List[QueryRequest]
-        :param request_cycle:告警任务的执行周期
-        :type request_cycle:RequestCycle
+        :param request_cycle: 告警任务的执行周期
+        :type request_cycle: RequestCycle
         :param condition: 告警触发条件
-        :type condition:str
-        :param alarm_period:告警重复的周期
-        :type alarm_period:int
-        :param alarm_notify_group:告警对应的通知列表
-        :type alarm_notify_group:List[str]
-        :param status:是否开启告警策略。默认值为 true
-        :type status:bool
-        :param trigger_period:triggerPeriod 触发告警持续周期。最小值为 1，最大值为10。
-        :type trigger_period:int
-        :param user_define_msg:告警通知的内容
-        :type user_define_msg:str
+        :type condition: str
+        :param alarm_period: 告警重复的周期
+        :type alarm_period: int
+        :param alarm_notify_group: 告警对应的通知列表
+        :type alarm_notify_group: List[str]
+        :param status: 是否开启告警策略，默认值为true
+        :type status: bool
+        :param trigger_period: triggerPeriod触发告警持续周期，最小值为1，最大值为10
+        :type trigger_period: int
+        :param user_define_msg: 告警通知的内容
+        :type user_define_msg: str
+        :param severity: 告警通知的级别，即告警的严重程度，支持设置为notice、warning或critical，严重程度递增，默认为notice
+        :type severity: str
+        :param alarm_period_detail: 告警通知发送的周期
+        :type alarm_period_detail: AlarmPeriodSetting
         """
         super(CreateAlarmRequest, self).__init__(alarm_name, query_request, request_cycle, condition, alarm_period,
-                                                 alarm_notify_group, status, trigger_period, user_define_msg)
+                                                 alarm_notify_group, status, trigger_period, user_define_msg,
+                                                 severity, alarm_period_detail)
         self.project_id = project_id
 
     def check_validation(self):
@@ -1577,31 +1693,36 @@ class ModifyAlarmRequest(SetAlarmRequest):
     def __init__(self, alarm_id: str, alarm_name: str = None, query_request: List[QueryRequest] = None,
                  request_cycle: RequestCycle = None, condition: str = None, alarm_period: int = None,
                  alarm_notify_group: List[str] = None, status: bool = None, trigger_period: int = None,
-                 user_define_msg: str = None):
+                 user_define_msg: str = None, severity: str = "notice", alarm_period_detail: AlarmPeriodSetting = None):
         """
-        :param alarm_id:告警策略 ID
-        :type alarm_id:str
-        :param alarm_name:告警策略名称
-        :type alarm_name:str
-        :param query_request:检索分析语句，可配置 1~3 条
+        :param alarm_id: 告警策略ID
+        :type alarm_id: str
+        :param alarm_name: 告警策略名称
+        :type alarm_name: str
+        :param query_request: 检索分析语句，可配置1~3条
         :type query_request: List[QueryRequest]
-        :param request_cycle:告警任务的执行周期
-        :type request_cycle:RequestCycle
+        :param request_cycle: 告警任务的执行周期
+        :type request_cycle: RequestCycle
         :param condition: 告警触发条件
-        :type condition:str
-        :param alarm_period:告警重复的周期
-        :type alarm_period:int
-        :param alarm_notify_group:告警对应的通知列表
-        :type alarm_notify_group:List[str]
-        :param status:是否开启告警策略。默认值为 true
-        :type status:bool
-        :param trigger_period:triggerPeriod 触发告警持续周期。最小值为 1，最大值为10。
-        :type trigger_period:int
-        :param user_define_msg:告警通知的内容
-        :type user_define_msg:str
+        :type condition: str
+        :param alarm_period: 告警重复的周期
+        :type alarm_period: int
+        :param alarm_notify_group: 告警对应的通知列表
+        :type alarm_notify_group: List[str]
+        :param status: 是否开启告警策略，默认值为true
+        :type status: bool
+        :param trigger_period: triggerPeriod触发告警持续周期，最小值为1，最大值为10
+        :type trigger_period: int
+        :param user_define_msg: 告警通知的内容
+        :type user_define_msg: str
+        :param severity: 告警通知的级别，即告警的严重程度，支持设置为notice、warning或critical，严重程度递增，默认为notice
+        :type severity: str
+        :param alarm_period_detail: 告警通知发送的周期
+        :type alarm_period_detail: AlarmPeriodSetting
         """
         super(ModifyAlarmRequest, self).__init__(alarm_name, query_request, request_cycle, condition, alarm_period,
-                                                 alarm_notify_group, status, trigger_period, user_define_msg)
+                                                 alarm_notify_group, status, trigger_period, user_define_msg,
+                                                 severity, alarm_period_detail)
         self.alarm_id = alarm_id
 
     def check_validation(self):
@@ -1707,3 +1828,208 @@ class DescribeKafkaConsumerRequest(TLSRequest):
         if self.topic_id is None:
             return False
         return True
+
+
+class CreateConsumerGroupRequest(TLSRequest):
+    def __init__(self, project_id: str, consumer_group_name: str, topic_id_list: List[str], heartbeat_ttl: int, ordered_consume: bool):
+        """
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param consumer_group_name: 消费组名称
+        :type consumer_group_name: str
+        :param topic_id_list: 消费者要消费的TopicID列表
+        :type topic_id_list: List[str]
+        :param heartbeat_ttl: 心跳TTL
+        :type heartbeat_ttl: int
+        :param ordered_consume: 是否按顺序消费
+        :type ordered_consume: bool
+        """
+        self.project_id = project_id
+        self.consumer_group_name = consumer_group_name
+        self.topic_id_list = topic_id_list
+        self.heartbeat_ttl = heartbeat_ttl
+        self.ordered_consume = ordered_consume
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return (self.project_id is not None and self.consumer_group_name is not None
+                and self.topic_id_list is not None and self.heartbeat_ttl is not None and self.ordered_consume is not None)
+
+    def get_api_input(self):
+        body = {PROJECT_ID_UPPERCASE: self.project_id, CONSUMER_GROUP_NAME: self.consumer_group_name,
+                TOPIC_ID_LIST: self.topic_id_list, HEARTBEAT_TTL: self.heartbeat_ttl, ORDERED_CONSUME: self.ordered_consume}
+
+        return body
+
+
+class DeleteConsumerGroupRequest(TLSRequest):
+    def __init__(self, project_id: str, consumer_group_name: str):
+        """
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param consumer_group_name: 消费组名称
+        :type consumer_group_name: str
+        """
+        self.project_id = project_id
+        self.consumer_group_name = consumer_group_name
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.project_id is not None and self.consumer_group_name is not None
+
+    def get_api_input(self):
+        return {PROJECT_ID_UPPERCASE: self.project_id, CONSUMER_GROUP_NAME: self.consumer_group_name}
+
+
+class ModifyConsumerGroupRequest(TLSRequest):
+    def __init__(self, project_id: str, consumer_group_name: str,
+                 topic_id_list: List[str] = None, heartbeat_ttl: int = None, ordered_consume: bool = None):
+        """
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param consumer_group_name: 消费组名称
+        :type consumer_group_name: str
+        :param topic_id_list: 消费者要消费的TopicID列表
+        :type topic_id_list: List[str]
+        :param heartbeat_ttl: 心跳TTL
+        :type heartbeat_ttl: int
+        :param ordered_consume: 是否按顺序消费
+        :type ordered_consume: bool
+        """
+        self.project_id = project_id
+        self.consumer_group_name = consumer_group_name
+        self.topic_id_list = topic_id_list
+        self.heartbeat_ttl = heartbeat_ttl
+        self.ordered_consume = ordered_consume
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.project_id is not None and self.consumer_group_name is not None
+
+    def get_api_input(self):
+        body = {PROJECT_ID_UPPERCASE: self.project_id, CONSUMER_GROUP_NAME: self.consumer_group_name}
+
+        if self.topic_id_list is not None:
+            body[TOPIC_ID_LIST] = self.topic_id_list
+        if self.heartbeat_ttl is not None:
+            body[HEARTBEAT_TTL] = self.heartbeat_ttl
+        if self.ordered_consume is not None:
+            body[ORDERED_CONSUME] = self.ordered_consume
+
+        return body
+
+
+class DescribeConsumerGroupsRequest(TLSRequest):
+    def __init__(self, project_id: str, page_number: int = 1, page_size: int = 20):
+        """
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param page_number: 分页查询时的页码
+        :type page_number: int
+        :param page_size: 分页大小
+        :type page_size: int
+        """
+        self.project_id = project_id
+        self.page_number = page_number
+        self.page_size = page_size
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.project_id is not None
+
+
+class ConsumerHeartbeatRequest(TLSRequest):
+    def __init__(self, project_id: str, consumer_group_name: str, consumer_name: str):
+        """
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param consumer_group_name: 消费组名称
+        :type consumer_group_name: str
+        :param consumer_name: 消费者名称
+        :type consumer_name: str
+        """
+        self.project_id = project_id
+        self.consumer_group_name = consumer_group_name
+        self.consumer_name = consumer_name
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.project_id is not None and self.consumer_group_name is not None and self.consumer_name is not None
+
+    def get_api_input(self):
+        return {PROJECT_ID_UPPERCASE: self.project_id, CONSUMER_GROUP_NAME: self.consumer_group_name,
+                CONSUMER_NAME: self.consumer_name}
+
+
+class ModifyCheckpointRequest(TLSRequest):
+    def __init__(self, project_id: str, topic_id: str, shard_id: int, consumer_group_name: str, checkpoint: str):
+        """
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param shard_id: ShardID
+        :type shard_id: int
+        :param consumer_group_name: 消费者名称
+        :type consumer_group_name: str
+        :param checkpoint: 检查点
+        :type checkpoint: str
+        """
+        self.project_id = project_id
+        self.topic_id = topic_id
+        self.shard_id = shard_id
+        self.consumer_group_name = consumer_group_name
+        self.checkpoint = checkpoint
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return (self.project_id is not None and self.topic_id is not None and self.shard_id is not None
+                and self.consumer_group_name is not None and self.checkpoint is not None)
+
+    def get_api_input(self):
+        return {PROJECT_ID_UPPERCASE: self.project_id, TOPIC_ID_UPPERCASE: self.topic_id,
+                SHARD_ID_UPPERCASE: self.shard_id, CONSUMER_GROUP_NAME: self.consumer_group_name,
+                CHECKPOINT: self.checkpoint}
+
+
+class DescribeCheckpointRequest(TLSRequest):
+    def __init__(self, project_id: str, topic_id: str, shard_id: int, consumer_group_name: str):
+        """
+        :param project_id: 日志项目ID
+        :param topic_id: 日志主题ID
+        :param shard_id: ShardID
+        :param consumer_group_name: 消费组名称
+        """
+        self.project_id = project_id
+        self.topic_id = topic_id
+        self.shard_id = shard_id
+        self.consumer_group_name = consumer_group_name
+
+    def check_validation(self):
+        return (self.project_id is not None and self.topic_id is not None and self.shard_id is not None
+                and self.consumer_group_name is not None)
+
+    def get_api_input(self):
+        params = {PROJECT_ID: self.project_id, TOPIC_ID: self.topic_id,
+                  SHARD_ID: self.shard_id}
+        body = {CONSUMER_GROUP_NAME: self.consumer_group_name}
+
+        return {PARAMS: params, BODY: body}
