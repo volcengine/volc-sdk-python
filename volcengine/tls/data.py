@@ -100,21 +100,9 @@ class ProjectInfo(TLSData):
         return self.topic_count
 
 
-class TagInfo(TLSData):
-    def __init__(self, key: str, value: str = None):
-        """
-        :param key: 标签Key的值
-        :param value: 标签Value的值
-        """
-        self.key = key
-        self.value = value
-
-
 class TopicInfo(TLSData):
     def __init__(self, topic_name: str = None, topic_id: str = None, project_id: str = None, ttl: int = None,
-                 create_time: str = None, modify_time: str = None, shard_count: int = None, description: str = None,
-                 auto_split: bool = None, max_split_shard: int = None, enable_tracking: bool = None,
-                 time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = None):
+                 create_time: str = None, modify_time: str = None, shard_count: int = None, description: str = None):
         self.topic_name = topic_name
         self.topic_id = topic_id
         self.project_id = project_id
@@ -123,37 +111,6 @@ class TopicInfo(TLSData):
         self.modify_time = modify_time
         self.shard_count = shard_count
         self.description = description
-        self.auto_split = auto_split
-        self.max_split_shard = max_split_shard
-        self.enable_tracking = enable_tracking
-        self.time_key = time_key
-        self.time_format = time_format
-        self.tags = tags
-        self.log_public_ip = log_public_ip
-
-    @classmethod
-    def set_attributes(cls, data: dict):
-        topic_name = data.get(TOPIC_NAME)
-        topic_id = data.get(TOPIC_ID)
-        project_id = data.get(PROJECT_ID)
-        ttl = data.get(TTL)
-        create_time = data.get(CREATE_TIME)
-        modify_time = data.get(MODIFY_TIME)
-        shard_count = data.get(SHARD_COUNT)
-        description = data.get(DESCRIPTION)
-        auto_split = data.get(AUTO_SPLIT)
-        max_split_shard = data.get(MAX_SPLIT_SHARD)
-        enable_tracking = data.get(ENABLE_TRACKING)
-        time_key = data.get(TIME_KEY)
-        time_format = data.get(TIME_FORMAT)
-        tags = data.get(TAGS)
-        log_public_ip = data.get(LOG_PUBLIC_IP)
-
-        for i in range(len(tags)):
-            tags[i] = TagInfo(tags[i][KEY], tags[i][VALUE])
-
-        return cls(topic_name, topic_id, project_id, ttl, create_time, modify_time, shard_count, description,
-                   auto_split, max_split_shard, enable_tracking, time_key, time_format, tags, log_public_ip)
 
     def get_create_time(self):
         """
@@ -211,55 +168,6 @@ class TopicInfo(TLSData):
         :rtype: int
         """
         return self.ttl
-
-    def is_auto_split(self):
-        """
-        :return: 是否开启分区的自动分裂功能
-        :rtype: bool
-        """
-        return self.auto_split
-
-    def get_max_split_shard(self):
-        """
-        :return: 分区的最大分裂数
-        :rtype: int
-        """
-        return self.max_split_shard
-
-    def is_enable_tracking(self):
-        """
-        :return: 是否开启了WebTracking功能
-        :rtype: bool
-        """
-        return self.enable_tracking
-
-    def get_time_key(self):
-        """
-        :return: 日志时间字段的字段名称
-        :rtype: str
-        """
-        return self.time_key
-
-    def get_time_format(self):
-        """
-        :return: 时间字段的解析格式
-        :rtype: str
-        """
-        return self.time_format
-
-    def get_tags(self):
-        """
-        :return: 日志主题标签信息
-        :rtype: List[TagInfo]
-        """
-        return self.tags
-
-    def get_log_public_ip(self):
-        """
-        :return: 是否开启了记录外网IP功能
-        :rtype: bool
-        """
-        return self.log_public_ip
 
 
 class FullTextInfo(TLSData):
@@ -824,31 +732,28 @@ class LogTemplate(TLSData):
 class ExtractRule(TLSData):
     def __init__(self, delimiter: str = None, begin_regex: str = None, log_regex: str = None, keys: List[str] = None,
                  time_key: str = None, time_format: str = None, filter_key_regex: List[FilterKeyRegex] = None,
-                 un_match_up_load_switch: bool = None, un_match_log_key: str = None, log_template: LogTemplate = None,
-                 quote: str = None):
+                 un_match_up_load_switch: bool = None, un_match_log_key: str = None, log_template: LogTemplate = None):
         """
-        :param delimiter: 日志分隔符
-        :type delimiter: str
-        :param begin_regex: 第一行日志需要匹配的正则表达式
-        :type begin_regex: str
-        :param log_regex: 整条日志需要匹配的正则表达式
-        :type log_regex: str
-        :param keys: 日志字段名称
+        :param delimiter:日志分隔符
+        :type delimiter:str
+        :param begin_regex:第一行日志需要匹配的正则表达式
+        :type begin_regex:str
+        :param log_regex:整条日志需要匹配的正则表达式
+        :type log_regex:str
+        :param keys:日志字段名称
         :type keys: List[str]
-        :param time_key: 日志时间字段的字段名称
-        :type time_key: str
-        :param time_format: 时间字段的解析格式
-        :type time_format: str
-        :param filter_key_regex: 时间字段的解析格式
-        :type filter_key_regex: List[FilterKeyRegex]
-        :param un_match_up_load_switch: 是否上传解析失败的日志
-        :type un_match_up_load_switch: bool
-        :param un_match_log_key: 当上传解析失败的日志时，解析失败的日志的key名称
-        :type un_match_log_key: str
-        :param log_template: 根据指定的日志模板自动提取日志字段
-        :type log_template: LogTemplate
-        :param quote: 引用符
-        :type quote: str
+        :param time_key:日志时间字段的字段名称
+        :type time_key:str
+        :param time_format:时间字段的解析格式
+        :type time_format:str
+        :param filter_key_regex:时间字段的解析格式
+        :type filter_key_regex:List[FilterKeyRegex]
+        :param un_match_up_load_switch:是否上传解析失败的日志
+        :type un_match_up_load_switch:bool
+        :param un_match_log_key:当上传解析失败的日志时，解析失败的日志的 key 名称
+        :type un_match_log_key:str
+        :param log_template:根据指定的日志模板自动提取日志字段
+        :type log_template:LogTemplate
         """
         assert (time_key is None and time_format is None) or (time_key is not None and time_format is not None)
         assert (un_match_up_load_switch is None and un_match_log_key is None) or \
@@ -864,7 +769,6 @@ class ExtractRule(TLSData):
         self.un_match_up_load_switch = un_match_up_load_switch
         self.un_match_log_key = un_match_log_key
         self.log_template = log_template
-        self.quote = quote
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -991,109 +895,23 @@ class ShardHashKey(TLSData):
         return self.hash_key
 
 
-class Plugin(TLSData):
-    def __init__(self, processors: Dict):
-        """
-        :param processors: LogCollector插件
-        :type processors: Dict
-        """
-        self.processors = processors
-
-    def get_processors(self):
-        """
-        :return: LogCollector插件
-        :rtype: Dict
-        """
-        return self.processors
-
-class Advanced(TLSData):
-    def __init__(self, close_inactive: int = 60, close_timeout: int = 0,
-                 close_removed: bool = False, close_renamed: bool = False, close_eof: bool = False):
-        """
-        :param close_inactive: 释放日志文件句柄的等待时间
-        :type close_inactive: int
-        :param close_timeout: LogCollector监控日志文件的最大时长
-        :type close_timeout: int
-        :param close_removed: 日志文件被移除之后，是否释放该日志文件的句柄
-        :type close_removed: bool
-        :param close_renamed: 日志文件被重命名之后，是否释放该日志文件的句柄
-        :type close_renamed: bool
-        :param close_eof: 读取至日志文件的末尾之后，是否释放该日志文件的句柄
-        :type close_eof: bool
-        """
-        self.close_inactive = close_inactive
-        self.close_timeout = close_timeout
-        self.close_removed = close_removed
-        self.close_renamed = close_renamed
-        self.close_eof = close_eof
-
-    def get_close_inactive(self):
-        """
-        :return: 释放日志文件句柄的等待时间
-        :rtype: int
-        """
-        return self.close_inactive
-
-    def get_close_timeout(self):
-        """
-        :return: LogCollector监控日志文件的最大时长
-        :rtype: int
-        """
-        return self.close_timeout
-
-    def get_close_removed(self):
-        """
-        :return: 日志文件被移除之后，是否释放该日志文件的句柄
-        :rtype: bool
-        """
-        return self.close_removed
-
-    def get_close_renamed(self):
-        """
-        :return: 日志文件被重命名之后，是否释放该日志文件的句柄
-        :rtype: bool
-        """
-        return self.close_renamed
-
-    def get_close_eof(self):
-        """
-        :return: 读取至日志文件的末尾之后，是否释放该日志文件的句柄
-        :rtype: bool
-        """
-        return self.close_eof
-
-    def json(self):
-        return {CLOSE_INACTIVE: self.close_inactive, CLOSE_TIMEOUT: self.close_timeout,
-                CLOSE_REMOVED: self.close_removed, CLOSE_RENAMED: self.close_renamed, CLOSE_EOF: self.close_eof}
-
-
 class UserDefineRule(TLSData):
     def __init__(self, parse_path_rule: ParsePathRule = None, shard_hash_key: ShardHashKey = None,
-                 enable_raw_log: bool = False, fields: dict = None, plugin: Plugin = None, advanced: Advanced = None,
-                 tail_files: bool = False):
+                 enable_raw_log: bool = False, fields: dict = None):
         """
-        :param parse_path_rule: 解析采集路径的规则
-        :type parse_path_rule: ParsePathRule
-        :param shard_hash_key: 路由日志分区的规则
-        :type shard_hash_key: ShardHashKey
+        :param parse_path_rule:解析采集路径的规则
+        :type parse_path_rule:ParsePathRule
+        :param shard_hash_key:路由日志分区的规则
+        :type shard_hash_key:ShardHashKey
         :param enable_raw_log: 是否上传原始日志
-        :type enable_raw_log: bool
-        :param fields: 为日志添加常量字段
-        :type fields: dict
-        :param plugin: LogCollector插件配置
-        :type plugin: Plugin
-        :param advanced: LogCollector扩展配置
-        :type advanced: Advanced
-        :param tail_files: LogCollector采集策略，即指定LogCollector采集增量日志还是全量日志
-        :type tail_files: bool
+        :type enable_raw_log:bool
+        :param fields:为日志添加常量字段
+        :type fields:dict
         """
         self.parse_path_rule = parse_path_rule
         self.shard_hash_key = shard_hash_key
         self.enable_raw_log = enable_raw_log
         self.fields = fields
-        self.plugin = plugin
-        self.advanced = advanced
-        self.tail_files = tail_files
 
     def get_enable_raw_log(self):
         """
@@ -1123,27 +941,6 @@ class UserDefineRule(TLSData):
         """
         return self.parse_path_rule
 
-    def get_plugin(self):
-        """
-        :return: LogCollector插件配置
-        :rtype: Plugin
-        """
-        return self.plugin
-
-    def get_advanced(self):
-        """
-        :return: LogCollector扩展配置
-        :rtype: Advanced
-        """
-        return self.advanced
-
-    def get_tail_files(self):
-        """
-        :return: LogCollector采集策略，即指定LogCollector采集增量日志还是全量日志
-        :rtype: bool
-        """
-        return self.tail_files
-
     @classmethod
     def set_attributes(cls, data: dict):
         user_define_rule = super(UserDefineRule, cls).set_attributes(data)
@@ -1152,14 +949,6 @@ class UserDefineRule(TLSData):
             user_define_rule.shard_hash_key = ShardHashKey(hash_key=data[SHARD_HASH_KEY].get(HASH_KEY))
         if PARSE_PATH_RULE in data:
             user_define_rule.parse_path_rule = ParsePathRule.set_attributes(data[PARSE_PATH_RULE])
-        if PLUGIN in data:
-            user_define_rule.plugin = Plugin(processors=data[PLUGIN])
-        if ADVANCED in data:
-            user_define_rule.advanced = Advanced(close_inactive=data[ADVANCED].get(CLOSE_INACTIVE),
-                                                 close_timeout=data[ADVANCED].get(CLOSE_TIMEOUT),
-                                                 close_removed=data[ADVANCED].get(CLOSE_REMOVED),
-                                                 close_renamed=data[ADVANCED].get(CLOSE_RENAMED),
-                                                 close_eof=data[ADVANCED].get(CLOSE_EOF))
 
         return user_define_rule
 
@@ -1170,8 +959,6 @@ class UserDefineRule(TLSData):
             json_data[SHARD_HASH_KEY] = self.shard_hash_key.json()
         if self.parse_path_rule is not None:
             json_data[PARSE_PATH_RULE] = self.parse_path_rule.json()
-        if self.advanced is not None:
-            json_data[ADVANCED] = self.advanced.json()
 
         return json_data
 
@@ -1179,24 +966,22 @@ class UserDefineRule(TLSData):
 class KubernetesRule(TLSData):
     def __init__(self, namespace_name_regex: str = None, workload_type: str = None, workload_name_regex: str = None,
                  include_pod_label_regex: Dict[str, str] = None, exclude_pod_label_regex: Dict[str, str] = None,
-                 pod_name_regex: str = None, label_tag: Dict[str, str] = None, annotation_tag: Dict[str, str] = None):
+                 pod_name_regex: str = None, label_tag: Dict[str, str] = None):
         """
-        :param namespace_name_regex: 待采集的Kubernetes Namespace名称，不指定Namespace名称时表示采集全部容器
-        :type namespace_name_regex: str
-        :param workload_type: 通过工作负载的类型指定采集的容器，仅支持选择一种类型
-        :type workload_type: str
-        :param workload_name_regex: 通过工作负载的名称指定待采集的容器
-        :type workload_name_regex: str
-        :param include_pod_label_regex: Pod Label白名单用于指定待采集的容器
-        :type include_pod_label_regex: Dict[str, str]
-        :param exclude_pod_label_regex: 通过Pod Label黑名单指定不采集的容器，不启用表示采集全部容器
-        :type exclude_pod_label_regex: Dict[str, str]
-        :param pod_name_regex: Pod名称用于指定待采集的容器
-        :type pod_name_regex: str
-        :param label_tag: 是否将Kubernetes Label作为日志标签，添加到原始日志数据中
-        :type label_tag: Dict[str, str]
-        :param annotation_tag: 是否将Kubernetes Annotation作为日志标签，添加到原始日志数据中
-        :type annotation_tag: Dict[str, str]
+        :param namespace_name_regex:待采集的 Kubernetes Namespace 名称，不指定 Namespace 名称时表示采集全部容器
+        :type namespace_name_regex:str
+        :param workload_type:通过工作负载的类型指定采集的容器，仅支持选择一种类型
+        :type workload_type:str
+        :param workload_name_regex:通过工作负载的名称指定待采集的容器
+        :type workload_name_regex:str
+        :param include_pod_label_regex:Pod Label 白名单用于指定待采集的容器
+        :type include_pod_label_regex:Dict[str, str]
+        :param exclude_pod_label_regex:通过 Pod Label 黑名单指定不采集的容器，不启用表示采集全部容器
+        :type exclude_pod_label_regex:Dict[str, str]
+        :param pod_name_regex:Pod名称用于指定待采集的容器
+        :type pod_name_regex:str
+        :param label_tag:是否将 Kubernetes Label 作为日志标签，添加到原始日志数据中
+        :type label_tag:Dict[str, str]
         """
         self.namespace_name_regex = namespace_name_regex
         self.workload_type = workload_type
@@ -1205,7 +990,6 @@ class KubernetesRule(TLSData):
         self.exclude_pod_label_regex = exclude_pod_label_regex
         self.pod_name_regex = pod_name_regex
         self.label_tag = label_tag
-        self.annotation_tag = annotation_tag
 
     def get_include_pod_label_regex(self):
         """
@@ -1255,13 +1039,6 @@ class KubernetesRule(TLSData):
         :rtype: str
         """
         return self.workload_type
-
-    def get_annotation_tag(self):
-        """
-        :return: 是否将Kubernetes Annotation作为日志标签，添加到原始日志数据中
-        :rtype: Dict[str, str]
-        """
-        return self.annotation_tag
 
 
 class ContainerRule(TLSData):
@@ -1692,14 +1469,13 @@ class RequestCycle(TLSData):
 class AlarmNotifyGroupInfo(TLSData):
     def __init__(self, alarm_notify_group_name: str = None, alarm_notify_group_id: str = None,
                  notify_type: List[str] = None, receivers: List[Receiver] = None,
-                 create_time: str = None, modify_time: str = None, iam_project_name: str = None):
+                 create_time: str = None, modify_time: str = None):
         self.alarm_notify_group_name = alarm_notify_group_name
         self.alarm_notify_group_id = alarm_notify_group_id
         self.notify_type = notify_type
         self.receivers = receivers
         self.create_time = create_time
         self.modify_time = modify_time
-        self.iam_project_name = iam_project_name
 
     def get_alarm_notify_group_name(self):
         """
@@ -1743,13 +1519,6 @@ class AlarmNotifyGroupInfo(TLSData):
         """
         return self.alarm_notify_group_id
 
-    def get_iam_project_name(self):
-        """
-        :return: 告警组所属的IAM项目
-        :rtype: str
-        """
-        return self.iam_project_name
-
     @classmethod
     def set_attributes(cls, data: dict):
         alarm_notify_group_info = super(AlarmNotifyGroupInfo, cls).set_attributes(data)
@@ -1762,24 +1531,12 @@ class AlarmNotifyGroupInfo(TLSData):
         return alarm_notify_group_info
 
 
-class AlarmPeriodSetting(TLSData):
-    def __init__(self, sms: int, phone: int, email: int, general_webhook: int):
-        self.sms = sms
-        self.phone = phone
-        self.email = email
-        self.general_webhook = general_webhook
-
-    def json(self):
-        return {SMS: self.sms, PHONE: self.phone, EMAIL: self.email, GENERAL_WEBHOOK: self.general_webhook}
-
-
 class AlarmInfo(TLSData):
     def __init__(self, alarm_name: str = None, alarm_id: str = None, project_id: str = None, status: bool = None,
                  query_request: List[QueryRequest] = None, request_cycle: RequestCycle = None, condition: str = None,
                  trigger_period: int = None, alarm_period: int = None,
                  alarm_notify_group: List[AlarmNotifyGroupInfo] = None, user_define_msg: str = None,
-                 create_time: str = None, modify_time: str = None,
-                 severity: str = None, alarm_period_detail: AlarmPeriodSetting = None):
+                 create_time: str = None, modify_time: str = None):
         self.alarm_name = alarm_name
         self.alarm_id = alarm_id
         self.project_id = project_id
@@ -1793,8 +1550,6 @@ class AlarmInfo(TLSData):
         self.user_define_msg = user_define_msg
         self.create_time = create_time
         self.modify_time = modify_time
-        self.severity = severity
-        self.alarm_period_detail = alarm_period_detail
 
     def get_alarm_name(self):
         """
@@ -1887,20 +1642,6 @@ class AlarmInfo(TLSData):
         """
         return self.status
 
-    def get_severity(self):
-        """
-        :return: 告警通知的级别，即告警的严重程度
-        :rtype: str
-        """
-        return self.severity
-
-    def get_alarm_period_detail(self):
-        """
-        :return: 告警通知发送的周期
-        :rtype: AlarmPeriodSetting
-        """
-        return self.alarm_period_detail
-
     @classmethod
     def set_attributes(cls, data: dict):
         alarm_info = super(AlarmInfo, cls).set_attributes(data)
@@ -1915,41 +1656,5 @@ class AlarmInfo(TLSData):
             alarm_info.alarm_notify_group = []
             for alarm_notify_group in data[ALARM_NOTIFY_GROUP]:
                 alarm_info.alarm_notify_group.append(AlarmNotifyGroupInfo.set_attributes(data=alarm_notify_group))
-        if ALARM_PERIOD_DETAIL in data:
-            alarm_info.alarm_period_detail = AlarmPeriodSetting(sms=data[ALARM_PERIOD_DETAIL][SMS],
-                                                                phone=data[ALARM_PERIOD_DETAIL][PHONE],
-                                                                email=data[ALARM_PERIOD_DETAIL][EMAIL],
-                                                                general_webhook=data[ALARM_PERIOD_DETAIL][GENERAL_WEBHOOK])
 
         return alarm_info
-
-
-class ConsumerGroup(TLSData):
-    def __init__(self, project_id: str = None, consumer_group_name: str = None,
-                 heartbeat_ttl: int = None, ordered_consume: bool = None):
-        self.project_id = project_id
-        self.consumer_group_name = consumer_group_name
-        self.heartbeat_ttl = heartbeat_ttl
-        self.ordered_consume = ordered_consume
-
-    @classmethod
-    def set_attributes(cls, data: dict):
-        project_id = data.get(PROJECT_ID_UPPERCASE)
-        consumer_group_name = data.get(CONSUMER_GROUP_NAME)
-        heartbeat_ttl = data.get(HEARTBEAT_TTL)
-        ordered_consume = data.get(ORDERED_CONSUME)
-
-        return cls(project_id, consumer_group_name, heartbeat_ttl, ordered_consume)
-
-
-class ConsumeShard(TLSData):
-    def __init__(self, topic_id: str = None, shard_id: int = None):
-        self.topic_id = topic_id
-        self.shard_id = shard_id
-
-    @classmethod
-    def set_attributes(cls, data: dict):
-        topic_id = data.get(TOPIC_ID_UPPERCASE)
-        shard_id = data.get(SHARD_ID_UPPERCASE)
-
-        return cls(topic_id, shard_id)

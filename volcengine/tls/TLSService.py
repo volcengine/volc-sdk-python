@@ -4,8 +4,12 @@ from __future__ import division
 from __future__ import print_function
 
 import hashlib
+import logging
 import threading
 import random
+import time
+
+from requests.adapters import HTTPAdapter, Retry
 
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
@@ -15,7 +19,9 @@ from volcengine.base.Service import Service
 from volcengine.tls.tls_requests import *
 from volcengine.tls.tls_responses import *
 from volcengine.tls.tls_exception import TLSException
-from volcengine.tls.util import get_logger
+
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s \t %(levelname)s \t %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S")
 
 API_INFO = {
     # APIs of log projects.
@@ -78,16 +84,7 @@ API_INFO = {
     # APIs of Kafka consumer.
     OPEN_KAFKA_CONSUMER: ApiInfo(HTTP_PUT, OPEN_KAFKA_CONSUMER, {}, {}, {}),
     CLOSE_KAFKA_CONSUMER: ApiInfo(HTTP_PUT, CLOSE_KAFKA_CONSUMER, {}, {}, {}),
-    DESCRIBE_KAFKA_CONSUMER: ApiInfo(HTTP_GET, DESCRIBE_KAFKA_CONSUMER, {}, {}, {}),
-    # APIs of consumer group.
-    CREATE_CONSUMER_GROUP: ApiInfo(HTTP_POST, CREATE_CONSUMER_GROUP, {}, {}, {}),
-    DELETE_CONSUMER_GROUP: ApiInfo(HTTP_DELETE, DELETE_CONSUMER_GROUP, {}, {}, {}),
-    MODIFY_CONSUMER_GROUP: ApiInfo(HTTP_PUT, MODIFY_CONSUMER_GROUP, {}, {}, {}),
-    DESCRIBE_CONSUMER_GROUPS: ApiInfo(HTTP_GET, DESCRIBE_CONSUMER_GROUPS, {}, {}, {}),
-    CONSUMER_HEARTBEAT: ApiInfo(HTTP_POST, CONSUMER_HEARTBEAT, {}, {}, {}),
-    MODIFY_CHECKPOINT: ApiInfo(HTTP_PUT, MODIFY_CHECKPOINT, {}, {}, {}),
-    DESCRIBE_CHECKPOINT: ApiInfo(HTTP_GET, DESCRIBE_CHECKPOINT, {}, {}, {})
-}
+    DESCRIBE_KAFKA_CONSUMER: ApiInfo(HTTP_GET, DESCRIBE_KAFKA_CONSUMER, {}, {}, {})}
 
 HEADER_API_VERSION = "x-tls-apiversion"
 API_VERSION_V_0_3_0 = "0.3.0"
@@ -137,7 +134,7 @@ class TLSService(Service):
 
     def __init__(self, endpoint: str, access_key_id: str, access_key_secret: str, region: str,
                  security_token: str = None, scheme: str = "https", timeout: int = 60,
-                 api_version=API_VERSION_V_0_3_0):
+                 api_version=API_VERSION_V_0_2_0):
         self.__endpoint = endpoint
         self.__access_key_id = access_key_id
         self.__access_key_secret = access_key_secret
@@ -146,10 +143,6 @@ class TLSService(Service):
         self.__scheme = scheme
         self.__timeout = timeout
         self.__api_version = api_version
-
-        self.__logger = get_logger("tls-python-sdk-logger")
-        self.__logger.info("Successfully initialize the TLS client.")
-
         super(TLSService, self).__init__(service_info=self.get_service_info(), api_info=API_INFO)
 
     def get_region(self):
@@ -195,6 +188,7 @@ class TLSService(Service):
         return request
 
     def __request(self, api: str, params: dict = None, body: dict = None, request_headers: dict = None):
+        # logging.info("Requesting {}...\tParams = {}\tBody = {}".format(api, params, body))
         if request_headers is None:
             request_headers = {HEADER_API_VERSION: self.__api_version}
         elif HEADER_API_VERSION not in request_headers:
@@ -211,8 +205,6 @@ class TLSService(Service):
         while True:
             try_count += 1
             try:
-                # if try_count == 1:
-                #     self.__logger.info("TLS client is trying to request {}.".format(api))
                 response = self.session.request(method, url, headers=request.headers, data=request.body,
                                                 timeout=self.__timeout)
             except Exception as e:
@@ -226,7 +218,6 @@ class TLSService(Service):
                     raise TLSException(error_code=e.__class__.__name__, error_message=e.__str__())
             else:
                 if response.status_code == 200:
-                    # self.__logger.info("TLS client successfully got the response for requesting {}".format(api))
                     TLSService.decrease_retry_counter_by_one()
                     return response
                 elif try_count < 5 and response.status_code in [429, 500, 502, 503]:
@@ -389,17 +380,14 @@ class TLSService(Service):
         if consume_logs_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         api_input = consume_logs_request.get_api_input()
-        response = self.__request(api=CONSUME_LOGS, params=api_input[PARAMS], body=api_input[BODY],
-                                  request_headers=api_input[REQUEST_HEADERS])
+        response = self.__request(api=CONSUME_LOGS, params=api_input[PARAMS], body=api_input[BODY])
 
         return ConsumeLogsResponse(response, compression=consume_logs_request.compression)
 
     def search_logs(self, search_logs_request: SearchLogsRequest) -> SearchLogsResponse:
         if search_logs_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        headers = {HEADER_API_VERSION: API_VERSION_V_0_2_0}
-
-        response = self.__request(api=SEARCH_LOGS, body=search_logs_request.get_api_input(), request_headers=headers)
+        response = self.__request(api=SEARCH_LOGS, body=search_logs_request.get_api_input())
 
         return SearchLogsResponse(response)
 
@@ -522,11 +510,11 @@ class TLSService(Service):
 
         return DeleteHostResponse(response)
 
-    def describe_host_group_rules(self, describe_host_group_rules_request: DescribeHostGroupRulesRequest) \
+    def describe_host_group_rules(self, describe_host_group_rules: DescribeHostGroupRulesRequest) \
             -> DescribeHostGroupRulesResponse:
-        if describe_host_group_rules_request.check_validation() is False:
+        if describe_host_group_rules.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=DESCRIBE_HOST_GROUP_RULES, params=describe_host_group_rules_request.get_api_input())
+        response = self.__request(api=DESCRIBE_HOST_GROUP_RULES, params=describe_host_group_rules.get_api_input())
 
         return DescribeHostGroupRulesResponse(response)
 
@@ -607,19 +595,19 @@ class TLSService(Service):
 
         return DeleteAlarmNotifyGroupResponse(response)
 
-    def modify_alarm_notify_group(self, modify_alarm_notify_group_request: ModifyAlarmNotifyGroupRequest) \
+    def modify_alarm_notify_group(self, modify_alarm_notify_group: ModifyAlarmNotifyGroupRequest) \
             -> ModifyAlarmNotifyGroupResponse:
-        if modify_alarm_notify_group_request.check_validation() is False:
+        if modify_alarm_notify_group.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=MODIFY_ALARM_NOTIFY_GROUP, body=modify_alarm_notify_group_request.get_api_input())
+        response = self.__request(api=MODIFY_ALARM_NOTIFY_GROUP, body=modify_alarm_notify_group.get_api_input())
 
         return ModifyAlarmNotifyGroupResponse(response)
 
-    def describe_alarm_notify_groups(self, describe_alarm_notify_groups_request: DescribeAlarmNotifyGroupsRequest) \
+    def describe_alarm_notify_groups(self, describe_alarm_notify_groups: DescribeAlarmNotifyGroupsRequest) \
             -> DescribeAlarmNotifyGroupsResponse:
-        if describe_alarm_notify_groups_request.check_validation() is False:
+        if describe_alarm_notify_groups.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=DESCRIBE_ALARM_NOTIFY_GROUPS, params=describe_alarm_notify_groups_request.get_api_input())
+        response = self.__request(api=DESCRIBE_ALARM_NOTIFY_GROUPS, params=describe_alarm_notify_groups.get_api_input())
 
         return DescribeAlarmNotifyGroupsResponse(response)
 
@@ -673,57 +661,3 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_KAFKA_CONSUMER, params=describe_kafka_consumer_request.get_api_input())
 
         return DescribeKafkaConsumerResponse(response)
-
-    def create_consumer_group(self, create_consumer_group_request: CreateConsumerGroupRequest) \
-            -> CreateConsumerGroupResponse:
-        if not create_consumer_group_request.check_validation():
-            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=CREATE_CONSUMER_GROUP, body=create_consumer_group_request.get_api_input())
-
-        return CreateConsumerGroupResponse(response)
-
-    def delete_consumer_group(self, delete_consumer_group_request: DeleteConsumerGroupRequest) \
-            -> DeleteConsumerGroupResponse:
-        if not delete_consumer_group_request.check_validation():
-            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=DELETE_CONSUMER_GROUP, body=delete_consumer_group_request.get_api_input())
-
-        return DeleteConsumerGroupResponse(response)
-
-    def modify_consumer_group(self, modify_consumer_group_request: ModifyConsumerGroupRequest) \
-            -> ModifyConsumerGroupResponse:
-        if not modify_consumer_group_request.check_validation():
-            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=MODIFY_CONSUMER_GROUP, body=modify_consumer_group_request.get_api_input())
-
-        return ModifyConsumerGroupResponse(response)
-
-    def describe_consumer_groups(self, describe_consumer_groups_request: DescribeConsumerGroupsRequest) \
-            -> DescribeConsumerGroupsResponse:
-        if not describe_consumer_groups_request.check_validation():
-            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=DESCRIBE_CONSUMER_GROUPS, params=describe_consumer_groups_request.get_api_input())
-
-        return DescribeConsumerGroupsResponse(response)
-
-    def consumer_heartbeat(self, consumer_heartbeat_request: ConsumerHeartbeatRequest) -> ConsumerHeartbeatResponse:
-        if not consumer_heartbeat_request.check_validation():
-            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=CONSUMER_HEARTBEAT, body=consumer_heartbeat_request.get_api_input())
-
-        return ConsumerHeartbeatResponse(response)
-
-    def modify_checkpoint(self, modify_checkpoint_request: ModifyCheckpointRequest) -> ModifyCheckpointResponse:
-        if not modify_checkpoint_request.check_validation():
-            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        response = self.__request(api=MODIFY_CHECKPOINT, body=modify_checkpoint_request.get_api_input())
-
-        return ModifyCheckpointResponse(response)
-
-    def describe_checkpoint(self, describe_checkpoint_request: DescribeCheckpointRequest) -> DescribeCheckpointResponse:
-        if not describe_checkpoint_request.check_validation():
-            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
-        api_input = describe_checkpoint_request.get_api_input()
-        response = self.__request(api=DESCRIBE_CHECKPOINT, params=api_input[PARAMS], body=api_input[BODY])
-
-        return DescribeCheckpointResponse(response)
