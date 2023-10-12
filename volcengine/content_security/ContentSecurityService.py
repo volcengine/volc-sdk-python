@@ -30,6 +30,12 @@ class ContentSecurityService(Service):
                                    Credentials('', '', 'BusinessSecurity', 'cn-north-1'), 5, 5)
         return service_info
 
+    def set_socket_timeout(self, timeout):
+        self.service_info.socket_timeout = timeout
+
+    def set_connection_timeout(self, timeout):
+        self.service_info.connection_timeout = timeout
+
     @staticmethod
     def get_api_info():
         api_info = {"AsyncVideoRisk": ApiInfo("POST", "/", {"Action": "AsyncVideoRisk", "Version": "2021-11-29"}, {}, {}),
