@@ -12,6 +12,7 @@ if __name__ == '__main__':
     try:
         req = VodDescribeVodDomainBandwidthDataRequest()
         req.DomainList = ""
+        req.DomainInSpaceList = ""
         req.StartTime = ""
         req.EndTime = ""
         req.Aggregation = 0
