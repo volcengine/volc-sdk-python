@@ -78,6 +78,7 @@ class ContentSecurityService(Service):
         res_json = json.loads(res)
         return res_json
 
+    # deprecated, use image_content_risk_v2 instead
     def image_content_risk(self, params, body):
         res = self.json("ImageContentRisk", params, json.dumps(body))
         if res == '':
@@ -131,6 +132,7 @@ class ContentSecurityService(Service):
 
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    # deprecated, use text_slice_risk instead
     def text_risk(self, params, body):
         res = self.json("TextRisk", params, json.dumps(body))
         if res == '':

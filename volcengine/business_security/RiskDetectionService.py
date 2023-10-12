@@ -81,6 +81,7 @@ class RiskDetectService(Service):
 
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    # deprecated, use mobile_status_v2 instead
     def mobile_status(self, params, body):
         res = self.json("MobileStatus", params, json.dumps(body))
         if res == '':
@@ -90,6 +91,7 @@ class RiskDetectService(Service):
 
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    # deprecated, use element_verify_v2 instead
     def element_verify(self, params, body):
         res = self.json("ElementVerify", params, json.dumps(body))
         if res == '':
