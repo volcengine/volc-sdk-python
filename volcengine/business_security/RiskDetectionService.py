@@ -46,6 +46,12 @@ class RiskDetectService(Service):
 
         return api_info
 
+    def set_socket_timeout(self, timeout):
+        self.service_info.socket_timeout = timeout
+
+    def set_connection_timeout(self, timeout):
+        self.service_info.connection_timeout = timeout
+
     @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2, retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def risk_detect(self, params, body):
         res = self.json("RiskDetection", params, json.dumps(body))
