@@ -10,7 +10,7 @@ def test_chat(maas, req):
     except MaasException as e:
         print(e)
 
-    
+
 def test_stream_chat(maas, req):
     try:
         resps = maas.stream_chat(req)
@@ -23,10 +23,10 @@ def test_stream_chat(maas, req):
 
 if __name__ == '__main__':
     maas = MaasService('maas-api.ml-platform-cn-beijing.volces.com', 'cn-beijing')
-    
+
     maas.set_ak(os.getenv("VOLC_ACCESSKEY"))
     maas.set_sk(os.getenv("VOLC_SECRETKEY"))
-    
+
     # document: "https://www.volcengine.com/docs/82379/1099475"
     req = {
         "model": {
@@ -49,8 +49,7 @@ if __name__ == '__main__':
             },
         ]
     }
-    
+
     test_chat(maas, req)
     test_stream_chat(maas, req)
 
-    
