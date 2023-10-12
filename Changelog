@@ -1,5 +1,8 @@
 ### Change log
 
+2023-10-12 Bumped to version v1.0.109
+- Updated apis for business_security/content_security/maas/vod
+
 2023-09-28 Bumped to version v1.0.108
 - Updated apis for tls
 
