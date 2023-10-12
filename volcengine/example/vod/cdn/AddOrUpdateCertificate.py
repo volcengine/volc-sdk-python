@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 from volcengine.vod.VodService import VodService
-from volcengine.vod.models.request.request_vod_pb2 import VodDescribeVodDomainTrafficDataRequest
+from volcengine.vod.models.request.request_vod_pb2 import AddOrUpdateCertificateV2Request
 
 if __name__ == '__main__':
     vod_service = VodService()
@@ -10,15 +10,13 @@ if __name__ == '__main__':
     vod_service.set_ak('your ak')
     vod_service.set_sk('your sk')
     try:
-        req = VodDescribeVodDomainTrafficDataRequest()
-        req.DomainList = ""
-        req.DomainInSpaceList = ""
-        req.StartTime = ""
-        req.EndTime = ""
-        req.Aggregation = 0
-        req.TrafficType = ""
-        req.Area = ""
-        resp = vod_service.describe_vod_domain_traffic_data(req)
+        req = AddOrUpdateCertificateV2Request()
+        req.SpaceName = 'your space name'
+        req.Domain = 'your domain'
+        req.DomainType = 'your DomainType'
+        req.CertificateId = 'your CertificateId'
+        req.HttpsStatus = 'your HttpsStatus'
+        resp = vod_service.add_or_update_certificate20230701(req)
     except Exception:
         raise
     else:

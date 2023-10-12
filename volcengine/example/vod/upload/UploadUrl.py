@@ -21,6 +21,8 @@ if __name__ == '__main__':
         url_set.SourceUrl = url
         url_set.FileExtension = '.mp4'
         url_set.CallbackArgs = 'my python callback args'
+        customUrlHeaders = {'your header key': 'your header value'}
+        url_set.CustomURLHeaders.update(**customUrlHeaders)
         resp = vod_service.upload_media_by_url(req)
     except Exception:
         raise

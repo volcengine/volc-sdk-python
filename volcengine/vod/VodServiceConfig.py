@@ -106,17 +106,17 @@ class VodServiceConfig(Service):
             "GetSpaceDetail": ApiInfo("GET", "/", {"Action": "GetSpaceDetail", "Version": "2022-01-01"}, {}, {}),
             "UpdateSpace": ApiInfo("GET", "/", {"Action": "UpdateSpace", "Version": "2021-01-01"}, {}, {}),
             "UpdateSpaceUploadConfig": ApiInfo("GET", "/", {"Action": "UpdateSpaceUploadConfig", "Version": "2022-01-01"}, {}, {}),
-            "DescribeVodSpaceStorageData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceStorageData", "Version": "2020-08-01"}, {}, {}),
+            "DescribeVodSpaceStorageData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceStorageData", "Version": "2023-07-01"}, {}, {}),
             # 分发加速
-            "ListDomain": ApiInfo("GET", "/", {"Action": "ListDomain", "Version": "2021-01-01"}, {}, {}),
+            "ListDomain": ApiInfo("GET", "/", {"Action": "ListDomain", "Version": "2023-01-01"}, {}, {}),
             "CreateCdnRefreshTask": ApiInfo("GET", "/", {"Action": "CreateCdnRefreshTask", "Version": "2021-01-01"}, {}, {}),
             "CreateCdnPreloadTask": ApiInfo("GET", "/", {"Action": "CreateCdnPreloadTask", "Version": "2021-01-01"}, {}, {}),
             "ListCdnTasks": ApiInfo("GET", "/", {"Action": "ListCdnTasks", "Version": "2022-01-01"}, {}, {}),
             "ListCdnAccessLog": ApiInfo("GET", "/", {"Action": "ListCdnAccessLog", "Version": "2022-01-01"}, {}, {}),
             "ListCdnTopAccessUrl": ApiInfo("GET", "/", {"Action": "ListCdnTopAccessUrl", "Version": "2022-01-01"}, {}, {}),
             "ListCdnTopAccess": ApiInfo("GET", "/", {"Action": "ListCdnTopAccess", "Version": "2023-07-01"}, {}, {}),
-            "DescribeVodDomainBandwidthData": ApiInfo("GET", "/", {"Action": "DescribeVodDomainBandwidthData", "Version": "2020-08-01"}, {}, {}),
-            "DescribeVodDomainTrafficData": ApiInfo("GET", "/", {"Action": "DescribeVodDomainTrafficData", "Version": "2020-08-01"}, {}, {}),
+            "DescribeVodDomainBandwidthData": ApiInfo("GET", "/", {"Action": "DescribeVodDomainBandwidthData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodDomainTrafficData": ApiInfo("GET", "/", {"Action": "DescribeVodDomainTrafficData", "Version": "2023-07-01"}, {}, {}),
             "ListCdnUsageData": ApiInfo("GET", "/", {"Action": "ListCdnUsageData", "Version": "2022-12-01"}, {}, {}),
             "ListCdnStatusData": ApiInfo("GET", "/", {"Action": "ListCdnStatusData", "Version": "2022-01-01"}, {}, {}),
             "DescribeIpInfo": ApiInfo("GET", "/", {"Action": "DescribeIpInfo", "Version": "2022-01-01"}, {}, {}),
@@ -126,6 +126,7 @@ class VodServiceConfig(Service):
             "CreateDomain": ApiInfo("POST", "/", {"Action": "CreateDomain", "Version": "2023-02-01"}, {}, {}),
             "UpdateDomainExpire": ApiInfo("POST", "/", {"Action": "UpdateDomainExpire", "Version": "2023-02-01"}, {}, {}),
             "UpdateDomainAuthConfig": ApiInfo("POST", "/", {"Action": "UpdateDomainAuthConfig", "Version": "2023-02-01"}, {}, {}),
+            "AddOrUpdateCertificate20230701": ApiInfo("POST", "/",{"Action": "AddOrUpdateCertificate", "Version": "2023-07-01"}, {}, {}),
             # 回调管理
             "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
             "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2022-01-01"}, {}, {}),
@@ -134,13 +135,13 @@ class VodServiceConfig(Service):
             "GetDirectEditResult": ApiInfo("POST", "/", {"Action": "GetDirectEditResult", "Version": "2018-01-01"}, {}, {}),
             "GetDirectEditProgress": ApiInfo("GET", "/", {"Action": "GetDirectEditProgress", "Version": "2018-01-01"}, {}, {}),
             # 计量计费
-            "DescribeVodSpaceTranscodeData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceTranscodeData", "Version": "2020-08-01"}, {}, {}),
-            "DescribeVodSpaceAIStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceAIStatisData", "Version": "2020-08-01"}, {}, {}),
-            "DescribeVodSpaceSubtitleStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceSubtitleStatisData", "Version": "2020-08-01"}, {}, {}),
-            "DescribeVodSpaceDetectStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceDetectStatisData", "Version": "2020-08-01"}, {}, {}),
-            "DescribeVodSnapshotData": ApiInfo("GET", "/", {"Action": "DescribeVodSnapshotData", "Version": "2020-08-01"}, {}, {}),
-            "DescribeVodSpaceWorkflowDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceWorkflowDetailData", "Version": "2022-12-01"}, {}, {}),
-            "DescribeVodSpaceEditDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceEditDetailData", "Version": "2022-12-01"}, {}, {})
+            "DescribeVodSpaceTranscodeData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceTranscodeData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodSpaceAIStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceAIStatisData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodSpaceSubtitleStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceSubtitleStatisData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodSpaceDetectStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceDetectStatisData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodSnapshotData": ApiInfo("GET", "/", {"Action": "DescribeVodSnapshotData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodSpaceWorkflowDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceWorkflowDetailData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodSpaceEditDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceEditDetailData", "Version": "2023-07-01"}, {}, {})
         }
         return api_info
 
