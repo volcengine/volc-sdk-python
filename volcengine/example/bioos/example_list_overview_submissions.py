@@ -12,13 +12,11 @@ if __name__ == '__main__':
     bioos_service.set_sk('sk')
 
     params = {
-        'Name': 'cluster_name',
-        'Description': 'cluster_description',
-        'VKEConfig': {
-            'ClusterID': 'cluster_id',
-            'StorageClass': 'ebs-ssd'
-        }
+        "PageNumber": 1,
+        "PageSize": 10,
+        "SortBy": "OwnerName",
+        "SortOrder": "Desc"
     }
 
-    resp = bioos_service.create_cluster(params)
+    resp = bioos_service.list_overview_submissions(params)
     print(resp)
