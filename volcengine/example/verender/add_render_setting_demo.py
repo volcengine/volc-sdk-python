@@ -6,12 +6,12 @@ def add_render_setting_demo():
 
     user = v.get_current_user()
     params = {
-        "WorkspaceId": 1993
+        "WorkspaceId": 1935
     }
     body = {
         "AccountId": user["AccountId"],
         "UserId": user["UserId"],
-        "WorkspaceId": 1993,
+        "WorkspaceId": 1935,
         "Name": "test-render-setting-2111",
         "Dcc": "maya",
         "DccVersion": "2022.3",
@@ -25,7 +25,7 @@ def add_render_setting_demo():
         ],
         "RenderLayerMode": "LegacyRenderLayer",
         "ProjectPath": "",
-        "FrameOneCell": 1,
+        "FramesCountOneCell": 1,
         "CellSpecId": 15
     }
 

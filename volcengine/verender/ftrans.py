@@ -215,11 +215,12 @@ class FtransWorker(threading.Thread):
         super().__init__()
 
     def run(self):
-        try:
-            args = self.args_list.get(timeout=1)
-            self.func(args)
-        except queue.Empty:
-            return
+        while True:
+            try:
+                args = self.args_list.get(timeout=1)
+                self.func(args)
+            except queue.Empty:
+                return
 
 
 class FtransService(object):
