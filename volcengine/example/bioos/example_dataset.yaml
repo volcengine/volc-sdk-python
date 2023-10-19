@@ -1,0 +1,35 @@
+Name: GRCh37 Genome Reference Consortium Human Reference 37(hg19)
+Description: 'It contains the genome sequence files from the original release in 2009 by NCBI(GCA_000001405.1) and some related files. This original version and all subsequent changes are called "hg19" at UCSC. GRCh37 was produced and is updated by the Genome Reference Consortium:  https://www.ncbi.nlm.nih.gov/grc'
+Documentation: http://sss.com
+Contact: genome@soe.ucsc.edu
+ManagedBy: "bio2s[Bio-OS]"
+Owners:
+  - user1
+  - user2
+Licence: http://sss.com
+Relevance: 组学基础研究
+CreateDate: 2009-03-01
+UpdateDate: 2020-03-01
+Catalogue: OMICSDATA
+ProjectType:
+  ProjectDataTypes:
+  - Whole Genome sequencing
+  SampleScope: Monoisolate
+Other:
+  ExternalLink: https://hgdownload.soe.ucsc.edu/downloads.html
+  ExternalLinkDescription: This page contains links to sequence and annotation downloads for the genome assemblies featured in the UCSC Genome Browser.Downloads are also available via our JSON API, MySQL server, or FTP server. Data filtering is available in the Table Browser or via the command-line utilities.For access to the most recent assembly of each genome, see the current genomes directory. Previous versions of certain data are available from our track archive. Data hosted in Public Hubs exists on external sites. GenArk (Genome Archive) species data can be found here. All data in the Genome Browser are freely usable for any purpose except as indicated in the README.txt files in the download directories. These data were contributed by many researchers, as listed on the Genome Browser credits page. Please acknowledge the contributor(s) of the data you use.
+  Tutorial: http://sss.com
+  Tools&applications: http://sss.com
+Publications:
+  - Title: title
+    URL: http://aaa.bbb.com
+    Authors:
+      - author1
+      - author2
+    Citation: http://111.222.com
+Labels:
+    - human
+    - genome reference
+DataFilesURL: null
+DataFileSamplesURL: null
+DataFileMethodURL: null
