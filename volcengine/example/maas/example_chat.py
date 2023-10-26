@@ -28,6 +28,7 @@ if __name__ == '__main__':
     maas.set_sk(os.getenv("VOLC_SECRETKEY"))
 
     # document: "https://www.volcengine.com/docs/82379/1099475"
+    # chat
     req = {
         "model": {
             "name": "${YOUR_MODEL_NAME}"
