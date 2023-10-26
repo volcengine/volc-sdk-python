@@ -206,8 +206,9 @@ class CreateTopicRequest(TLSRequest):
             for tag in self.tags:
                 body[TAGS].append(tag.json())
 
-        del body["LogPublicIp"]
-        body[LOG_PUBLIC_IP] = self.log_public_ip
+        if self.log_public_ip is not None:
+            del body["LogPublicIp"]
+            body[LOG_PUBLIC_IP] = self.log_public_ip
 
         return body
 
@@ -279,8 +280,9 @@ class ModifyTopicRequest(TLSRequest):
     def get_api_input(self):
         body = super(ModifyTopicRequest, self).get_api_input()
 
-        del body["LogPublicIp"]
-        body[LOG_PUBLIC_IP] = self.log_public_ip
+        if self.log_public_ip is not None:
+            del body["LogPublicIp"]
+            body[LOG_PUBLIC_IP] = self.log_public_ip
 
         return body
 
