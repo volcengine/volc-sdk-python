@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.describe_cert_detail_secret_v_2(body)
+    resp = service.describe_cert_detail_secret_v2(body)
     print(resp)

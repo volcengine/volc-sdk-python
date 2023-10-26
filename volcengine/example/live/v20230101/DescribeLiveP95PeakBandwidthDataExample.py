@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.describe_live_p_95_peak_bandwidth_data(body)
+    resp = service.describe_live_p95_peak_bandwidth_data(body)
     print(resp)

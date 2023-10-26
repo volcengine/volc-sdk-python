@@ -124,7 +124,7 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def update_record_preset_v_2(self, body):
+    def update_record_preset_v2(self, body):
         res = self.api_post('UpdateRecordPresetV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -138,14 +138,14 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def list_vhost_record_preset_v_2(self, body):
+    def list_vhost_record_preset_v2(self, body):
         res = self.api_post('ListVhostRecordPresetV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def create_record_preset_v_2(self, body):
+    def create_record_preset_v2(self, body):
         res = self.api_post('CreateRecordPresetV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -187,28 +187,28 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def delete_time_shift_preset_v_3(self, body):
+    def delete_time_shift_preset_v3(self, body):
         res = self.api_post('DeleteTimeShiftPresetV3', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def update_time_shift_preset_v_3(self, body):
+    def update_time_shift_preset_v3(self, body):
         res = self.api_post('UpdateTimeShiftPresetV3', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def list_time_shift_preset_v_2(self, body):
+    def list_time_shift_preset_v2(self, body):
         res = self.api_post('ListTimeShiftPresetV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def create_time_shift_preset_v_3(self, body):
+    def create_time_shift_preset_v3(self, body):
         res = self.api_post('CreateTimeShiftPresetV3', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -257,14 +257,14 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def list_cert_v_2(self, body):
+    def list_cert_v2(self, body):
         res = self.api_post('ListCertV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def describe_cert_detail_secret_v_2(self, body):
+    def describe_cert_detail_secret_v2(self, body):
         res = self.api_post('DescribeCertDetailSecretV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -327,7 +327,7 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def create_domain_v_2(self, body):
+    def create_domain_v2(self, body):
         res = self.api_post('CreateDomainV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -439,49 +439,49 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def delete_relay_source_v_3(self, body):
+    def delete_relay_source_v3(self, body):
         res = self.api_post('DeleteRelaySourceV3', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def delete_relay_source_v_4(self, body):
+    def delete_relay_source_v4(self, body):
         res = self.api_post('DeleteRelaySourceV4', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def update_relay_source_v_4(self, body):
+    def update_relay_source_v4(self, body):
         res = self.api_post('UpdateRelaySourceV4', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def list_relay_source_v_4(self, body):
+    def list_relay_source_v4(self, body):
         res = self.api_post('ListRelaySourceV4', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def describe_relay_source_v_3(self, body):
+    def describe_relay_source_v3(self, body):
         res = self.api_post('DescribeRelaySourceV3', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def create_relay_source_v_4(self, body):
+    def create_relay_source_v4(self, body):
         res = self.api_post('CreateRelaySourceV4', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def update_relay_source_v_3(self, body):
+    def update_relay_source_v3(self, body):
         res = self.api_post('UpdateRelaySourceV3', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
@@ -761,7 +761,7 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def describe_live_p_95_peak_bandwidth_data(self, body):
+    def describe_live_p95_peak_bandwidth_data(self, body):
         res = self.api_post('DescribeLiveP95PeakBandwidthData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")

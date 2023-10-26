@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.create_time_shift_preset_v_3(body)
+    resp = service.create_time_shift_preset_v3(body)
     print(resp)
