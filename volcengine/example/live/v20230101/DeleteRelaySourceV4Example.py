@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.delete_relay_source_v_4(body)
+    resp = service.delete_relay_source_v4(body)
     print(resp)

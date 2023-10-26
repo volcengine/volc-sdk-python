@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.create_domain_v_2(body)
+    resp = service.create_domain_v2(body)
     print(resp)

@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.list_cert_v_2(body)
+    resp = service.list_cert_v2(body)
     print(resp)
