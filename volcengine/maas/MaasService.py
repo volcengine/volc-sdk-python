@@ -33,6 +33,7 @@ class MaasService(Service):
             "cert": ApiInfo("POST", "/api/v1/cert", {}, {}, {}),
             "tokenization": ApiInfo("POST", "/api/v1/tokenization", {}, {}, {}),
             "classification": ApiInfo("POST", "/api/v1/classification", {}, {}, {}),
+            "embeddings": ApiInfo("POST", "/api/v1/embeddings", {}, {}, {}),
         }
         return api_info
 
@@ -141,6 +142,22 @@ class MaasService(Service):
     def classification(self, req):
         try:
             res = self.json("classification", {}, json.dumps(req))
+            if res == '':
+                raise new_client_sdk_request_error("empty response", req.get('req_id', None))
+            resp = json_to_object(res)
+        except Exception as e:
+            try:
+                resp = json_to_object(str(e.args[0], encoding='utf-8'))
+            except Exception:
+                raise new_client_sdk_request_error(str(e), req.get('req_id', None))
+            else:
+                raise MaasException(resp.error.code_n, resp.error.code, resp.error.message, resp.req_id)
+        else:
+            return resp
+
+    def embeddings(self, req):
+        try:
+            res = self.json("embeddings", {}, json.dumps(req))
             if res == '':
                 raise new_client_sdk_request_error("empty response", req.get('req_id', None))
             resp = json_to_object(res)
