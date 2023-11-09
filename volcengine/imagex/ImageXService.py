@@ -446,7 +446,16 @@ class ImageXService(Service):
         return res_json['Result']
 
     def get_image_ocr_v2(self, params):
-        res = self.post('GetImageOCRV2', params, {})
+        query = {
+            'ServiceId': params['ServiceId']
+        }
+        body = {
+            'Scene': params['Scene'],
+            'StoreUri': params.get('StoreUri', None),
+            'ImageUrl': params.get('ImageUrl', None),
+            'InstrumentName': params.get('InstrumentName', None)
+        }
+        res = self.imagex_post('GetImageOCRV2', query, json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % 'GetImageOCR')
         res_json = json.loads(res)
