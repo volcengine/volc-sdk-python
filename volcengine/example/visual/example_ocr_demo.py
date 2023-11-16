@@ -75,8 +75,6 @@ if __name__ == '__main__':
     # action=OcrSeal, version=2021-08-23
     # 合同校验      
     # action=OcrTextAlignment, version=2021-08-23
-    # pdf识别       
-    # action=OCRPdf, version=2021-08-23
     # 表格识别      
     # action=OCRTable, version=2021-08-23
     print(resp)

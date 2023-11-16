@@ -123,10 +123,11 @@ class VodServiceConfig(Service):
             "ListCdnPvData": ApiInfo("GET", "/", {"Action": "ListCdnPvData", "Version": "2022-01-01"}, {}, {}),
             "SubmitBlockTasks": ApiInfo("POST", "/", {"Action": "SubmitBlockTasks", "Version": "2022-01-01"}, {}, {}),
             "GetContentBlockTasks": ApiInfo("POST", "/", {"Action": "GetContentBlockTasks", "Version": "2022-01-01"}, {}, {}),
+            "ListFileMetaInfosByFileNames": ApiInfo("POST", "/", {"Action": "ListFileMetaInfosByFileNames", "Version": "2023-07-01"}, {}, {}),
             "CreateDomain": ApiInfo("GET", "/", {"Action": "CreateDomain", "Version": "2023-02-01"}, {}, {}),
             "UpdateDomainExpire": ApiInfo("GET", "/", {"Action": "UpdateDomainExpire", "Version": "2023-02-01"}, {}, {}),
             "UpdateDomainAuthConfig": ApiInfo("GET", "/", {"Action": "UpdateDomainAuthConfig", "Version": "2023-02-01"}, {}, {}),
-            "AddOrUpdateCertificate20230701": ApiInfo("POST", "/",{"Action": "AddOrUpdateCertificate", "Version": "2023-07-01"}, {}, {}),
+            "AddOrUpdateCertificate": ApiInfo("POST", "/",{"Action": "AddOrUpdateCertificate", "Version": "2023-07-01"}, {}, {}),
             # 回调管理
             "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
             "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2022-01-01"}, {}, {}),

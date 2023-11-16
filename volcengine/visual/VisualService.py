@@ -42,6 +42,7 @@ class VisualService(Service):
             "GeneralSegment": ApiInfo("POST", "/", {"Action": "GeneralSegment", "Version": "2020-08-26"}, {}, {}),
             "EnhancePhoto": ApiInfo("POST", "/", {"Action": "EnhancePhoto", "Version": "2020-08-26"}, {}, {}),
             "ConvertPhoto": ApiInfo("POST", "/", {"Action": "ConvertPhoto", "Version": "2020-08-26"}, {}, {}),
+            "ConvertPhotoV2": ApiInfo("POST", "/", {"Action": "ConvertPhotoV2", "Version": "2022-08-31"}, {}, {}),
             "VideoSceneDetect": ApiInfo("POST", "/", {"Action": "VideoSceneDetect", "Version": "2020-08-26"}, {}, {}),
             "OverResolution": ApiInfo("POST", "/", {"Action": "OverResolution", "Version": "2020-08-26"}, {}, {}),
             "GoodsSegment": ApiInfo("POST", "/", {"Action": "GoodsSegment", "Version": "2020-08-26"}, {}, {}),
@@ -84,10 +85,12 @@ class VisualService(Service):
             "VatInvoice": ApiInfo("POST", "/", {"Action": "OcrVatInvoice", "Version": "2020-08-26"}, {}, {}),
             "QuotaInvoice": ApiInfo("POST", "/", {"Action": "OcrQuotaInvoice", "Version": "2020-08-26"}, {}, {}),
             "HairStyle": ApiInfo("POST", "/", {"Action": "HairStyle", "Version": "2020-08-26"}, {}, {}),
+            "HairStyleV2": ApiInfo("POST", "/", {"Action": "HairStyle", "Version": "2022-08-31"}, {}, {}),
             "FacePretty": ApiInfo("POST", "/", {"Action": "FacePretty", "Version": "2020-08-26"}, {}, {}),
             "ImageAnimation": ApiInfo("POST", "/", {"Action": "ImageAnimation", "Version": "2020-08-26"}, {}, {}),
             "CoverVideo": ApiInfo("POST", "/", {"Action": "CoverVideo", "Version": "2020-08-26"}, {}, {}),
             "DollyZoom": ApiInfo("POST", "/", {"Action": "DollyZoom", "Version": "2020-08-26"}, {}, {}),
+            "Img2Video3D": ApiInfo("POST", "/", {"Action": "Img2Video3D", "Version": "2022-08-31"}, {}, {}),
             "PotraitEffect": ApiInfo("POST", "/", {"Action": "PotraitEffect", "Version": "2020-08-26"}, {}, {}),
             "ImageStyleConversion": ApiInfo("POST", "/", {"Action": "ImageStyleConversion", "Version": "2020-08-26"},{}, {}),
             "3DGameCartoon": ApiInfo("POST", "/", {"Action": "3DGameCartoon", "Version": "2020-08-26"}, {}, {}),
@@ -123,6 +126,13 @@ class VisualService(Service):
             "LensVidaVideoSubmitTaskV2": ApiInfo("POST", "/",{"Action": "LensVidaVideoSubmitTaskV2", "Version": "2022-08-31"}, {},{}),
             "LensVidaVideoGetResultV2": ApiInfo("POST", "/",{"Action": "LensVidaVideoGetResultV2", "Version": "2022-08-31"}, {},{}),
             "CertSrcFaceComp": ApiInfo("POST", "/", {"Action": "CertSrcFaceComp", "Version": "2022-08-31"}, {}, {}),
+            "AIGufeng": ApiInfo("POST", "/", {"Action": "AIGufeng", "Version": "2022-08-31"}, {}, {}),
+            "CertConfigInit": ApiInfo("POST", "/", {"Action": "CertConfigInit", "Version": "2022-08-31"}, {}, {}),
+            "CertConfigGet": ApiInfo("POST", "/", {"Action": "CertConfigInit", "Version": "2022-08-31"}, {}, {}),
+            "FaceCompare": ApiInfo("POST", "/", {"Action": "FaceCompare", "Version": "2022-08-31"}, {}, {}),
+            "StillLivenessImg": ApiInfo("POST", "/", {"Action": "StillLivenessImg", "Version": "2022-08-31"}, {}, {}),
+            "CertAuth": ApiInfo("POST", "/", {"Action": "CertAuth", "Version": "2022-08-31"}, {}, {}),
+            "CertVerify": ApiInfo("POST", "/", {"Action": "CertVerify", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -238,6 +248,12 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
+    def convert_photo_v2(self, form):
+        try:
+            res_json = self.common_json_handler("ConvertPhotoV2", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
     def video_scene_detect(self, form):
         try:
             res_json = self.common_handler("VideoSceneDetect", form)
@@ -540,6 +556,12 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
+    def hair_style_v2(self, form):
+        try:
+            res_json = self.common_json_handler("HairStyleV2", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
     def face_pretty(self, form):
         try:
             res_json = self.common_handler("FacePretty", form)
@@ -568,6 +590,19 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
+    def img2_video3D(self, form):
+        try:
+            res_json = self.common_json_handler("Img2Video3D", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ai_gufeng(self, form):
+        try:
+            res_json = self.common_json_handler("AIGufeng", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
     def potrait_effect(self, form):
         try:
             res_json = self.common_handler("PotraitEffect", form)
@@ -709,6 +744,13 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
+        
+    def ocr_async_api(self, action, form):
+        try:
+            res_json = self.common_json_handler(action, form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
 
     def image_score_v2(self, body):
         try:
@@ -811,6 +853,48 @@ class VisualService(Service):
     def cert_src_face_comp(self, body):
         try:
             res_json = self.common_json_handler("CertSrcFaceComp", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_config_init(self, form):
+        try:
+            res_json = self.common_json_handler("CertConfigInit", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_config_get(self, body):
+        try:
+            res_json = self.common_json_handler("CertConfigGet", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def face_compare(self, body):
+        try:
+            res_json = self.common_json_handler("FaceCompare", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def still_liveness_img(self, body):
+        try:
+            res_json = self.common_json_handler("StillLivenessImg", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_auth(self, body):
+        try:
+            res_json = self.common_json_handler("CertAuth", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_verify(self, body):
+        try:
+            res_json = self.common_json_handler("CertVerify", body)
             return res_json
         except Exception as e:
             raise Exception(str(e))

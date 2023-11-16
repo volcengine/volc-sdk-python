@@ -279,13 +279,16 @@ class VerenderService(Service):
         return api_info
 
     def _get_ftrans_client(self, workspace_id, isp):
-        resp = self.list_cell_spec({"WorkspaceId": workspace_id})
-        cell_specs = resp["cell_specs"]
-        ignore_upload_case = False
-        for cs in cell_specs:
-            if cs["system_info"] == "windows":
-                ignore_upload_case = True
-                break
+        params = {
+            "WorkspaceId": workspace_id
+        }
+        resp = self.list_workspace(params=params)
+        if resp["Total"] != 1:
+            raise Exception("workspace not found")
+        try:
+            ignore_upload_case = resp["Workspaces"][0]["ConvertToLowerCase"]
+        except:
+            ignore_upload_case = False
 
         if workspace_id not in self._storage_access_map:
             params = {

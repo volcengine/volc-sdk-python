@@ -16,7 +16,7 @@ _sym_db = _symbol_database.Default()
 from volcengine.vod.models.business import vod_common_pb2 as volcengine_dot_vod_dot_business_dot_vod__common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'volcengine/vod/business/vod_media.proto\x12\x1eVolcengine.Vod.Models.Business\x1a(volcengine/vod/business/vod_common.proto\"\xb6\x02\n\x11VodMediaBasicInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\r\n\x05Title\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\x12\x11\n\tPosterUri\x18\x05 \x01(\t\x12\x15\n\rPublishStatus\x18\x06 \x01(\t\x12\x0c\n\x04Tags\x18\x07 \x03(\t\x12\x12\n\nCreateTime\x18\x08 \x01(\t\x12I\n\x0e\x43lassification\x18\t \x01(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodClassification\x12\x17\n\x0fTosStorageClass\x18\n \x01(\t\x12\x17\n\x0fVodUploadSource\x18\x0b \x01(\t\x12\x14\n\x0cHlsMediaSize\x18\x0c \x01(\x01\"\xe1\x01\n\x0cVodMediaInfo\x12\x44\n\tBasicInfo\x18\x01 \x01(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodMediaBasicInfo\x12\x41\n\nSourceInfo\x18\x02 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12H\n\x0eTranscodeInfos\x18\x03 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodTranscodeInfo\"q\n\x14VodGetMediaInfosData\x12\x43\n\rMediaInfoList\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodMediaInfo\x12\x14\n\x0cNotExistVids\x18\x02 \x03(\t\"2\n\x10VodStoreUriGroup\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x11\n\tStoreUris\x18\x02 \x03(\t\"u\n\x13VodGetRecPosterData\x12H\n\x0eStoreUriGroups\x18\x01 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodStoreUriGroup\x12\x14\n\x0cNotExistVids\x18\x02 \x03(\t\"*\n\x12VodDeleteMediaData\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\"2\n\x17VodDeleteTranscodesData\x12\x17\n\x0fNotExistFileIds\x18\x01 \x03(\t\"4\n\x19VodDeleteMediaTosFileData\x12\x17\n\x0f\x46\x61iledFileNames\x18\x01 \x03(\t\"\xa3\x01\n\x13VodGetMediaListData\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\rMediaInfoList\x18\x02 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodMediaInfo\x12\x12\n\nTotalCount\x18\x03 \x01(\x05\x12\x0e\n\x06Offset\x18\x04 \x01(\x05\x12\x10\n\x08PageSize\x18\x05 \x01(\x05\"6\n\x1bVodUpdateSubtitleStatusData\x12\x17\n\x0fNotExistFileIds\x18\x01 \x03(\t\"p\n\x13VodFileSubtitleInfo\x12\x0e\n\x06\x46ileId\x18\x01 \x01(\t\x12I\n\x10SubtitleInfoList\x18\x02 \x03(\x0b\x32/.Volcengine.Vod.Models.Business.VodSubtitleInfo\"\xcb\x01\n\x1aVodGetSubtitleInfoListData\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12Q\n\x14\x46ileSubtitleInfoList\x18\x02 \x03(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodFileSubtitleInfo\x12\x17\n\x0fNotExistFileIds\x18\x03 \x03(\t\x12\x12\n\nTotalCount\x18\x04 \x01(\x05\x12\x0e\n\x06Offset\x18\x05 \x01(\x05\x12\x10\n\x08PageSize\x18\x06 \x01(\x05\"q\n\x14VodFrameDataForAudit\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x13\n\x0b\x46rameNumber\x18\x02 \x01(\x05\x12\x13\n\x0b\x43utTimeMill\x18\x03 \x01(\x01\x12\r\n\x05Width\x18\x04 \x01(\x05\x12\x0e\n\x06Height\x18\x05 \x01(\x05\"b\n\x1aVodGetFramesForAuditResult\x12\x44\n\x06\x46rames\x18\x01 \x03(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodFrameDataForAudit\"\x9f\x01\n\x1aVodBetterFrameDataForAudit\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x13\n\x0b\x46rameNumber\x18\x02 \x01(\x05\x12\x13\n\x0b\x43utTimeMill\x18\x03 \x01(\x01\x12\r\n\x05Width\x18\x04 \x01(\x05\x12\x0e\n\x06Height\x18\x05 \x01(\x05\x12\x11\n\tCoverRate\x18\x06 \x01(\x01\x12\x13\n\x0bLBPHashCode\x18\x07 \x03(\x01\"n\n VodGetBetterFramesForAuditResult\x12J\n\x06\x46rames\x18\x01 \x03(\x0b\x32:.Volcengine.Vod.Models.Business.VodBetterFrameDataForAudit\"J\n\x14VodAudioInfoForAudit\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x01\x12\x0e\n\x06\x46ormat\x18\x03 \x01(\t\"h\n\x1dVodGetAudioInfoForAuditResult\x12G\n\tAudioInfo\x18\x01 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodAudioInfoForAudit\"n\n\x1bVodASRUtteranceWordForAudit\x12\x0c\n\x04Text\x18\x01 \x01(\t\x12\x15\n\rStartTimeMill\x18\x02 \x01(\x01\x12\x13\n\x0b\x45ndTimeMill\x18\x03 \x01(\x01\x12\x15\n\rBlankDuration\x18\x04 \x01(\x01\"\xc5\x01\n\x17VodASRUtteranceForAudit\x12\x0c\n\x04Text\x18\x01 \x01(\t\x12\x15\n\rStartTimeMill\x18\x02 \x01(\x01\x12\x13\n\x0b\x45ndTimeMill\x18\x03 \x01(\x01\x12J\n\x05Words\x18\x04 \x03(\x0b\x32;.Volcengine.Vod.Models.Business.VodASRUtteranceWordForAudit\x12\x10\n\x08Language\x18\x05 \x01(\t\x12\x12\n\nSpeechRate\x18\x06 \x01(\x01\">\n\x1cVodASRLanguageDetailForAudit\x12\x0c\n\x04Prob\x18\x01 \x01(\x01\x12\x10\n\x08Language\x18\x02 \x01(\t\"\xfc\x01\n\x12VodASRInfoForAudit\x12\x0c\n\x04Text\x18\x01 \x01(\t\x12K\n\nUtterances\x18\x03 \x03(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodASRUtteranceForAudit\x12\x10\n\x08Language\x18\x04 \x01(\t\x12U\n\x0fLanguageDetails\x18\x05 \x03(\x0b\x32<.Volcengine.Vod.Models.Business.VodASRLanguageDetailForAudit\x12\x12\n\nSpeechRate\x18\x06 \x01(\x01\x12\x0e\n\x06Volume\x18\x07 \x01(\x01\"r\n.VodGetAutomaticSpeechRecognitionForAuditResult\x12@\n\x04Info\x18\x01 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodASRInfoForAudit\"S\n\x17VodAEDTimeRangeForAudit\x12\x15\n\rStartTimeMill\x18\x01 \x01(\x01\x12\x13\n\x0b\x45ndTimeMill\x18\x02 \x01(\x01\x12\x0c\n\x04Prob\x18\x03 \x01(\x01\"\x86\x01\n\x17VodAEDEventItemForAudit\x12\r\n\x05\x45vent\x18\x01 \x01(\t\x12\x0f\n\x07UttProb\x18\x02 \x01(\x01\x12K\n\nTimeRanges\x18\x03 \x03(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodAEDTimeRangeForAudit\"a\n\x12VodAEDInfoForAudit\x12K\n\nEventItems\x18\x01 \x03(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodAEDEventItemForAudit\"k\n\'VodGetAudioEventDetectionForAuditResult\x12@\n\x04Info\x18\x01 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodAEDInfoForAudit\"<\n VodCreateVideoClassificationData\x12\x18\n\x10\x43lassificationId\x18\x01 \x01(\x03\"\xbb\x02\n\x11VodClassification\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\x12\r\n\x05Level\x18\x03 \x01(\x05\x12\x16\n\x0e\x43lassification\x18\x04 \x01(\t\x12\x1e\n\x16ParentClassificationId\x18\x05 \x01(\x03\x12L\n\x11SubClassification\x18\x06 \x01(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodClassification\x12Q\n\x16SubClassificationTrees\x18\x07 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodClassification\x12\x11\n\tCreatedAt\x18\x08 \x01(\t\"m\n\x1bVodVideoClassificationsData\x12N\n\x13\x43lassificationTrees\x18\x01 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodClassification\"[\n\x0bVodSnapshot\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x0e\n\x06Height\x18\x02 \x01(\x05\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x10\n\x08StoreUri\x18\x04 \x01(\t\x12\x0b\n\x03Url\x18\x05 \x01(\t\"\xb3\x01\n\x11VodSpriteSnapshot\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x0f\n\x07ImgXLen\x18\x02 \x01(\x05\x12\x0f\n\x07ImgYLen\x18\x03 \x01(\x05\x12\x11\n\tCellWidth\x18\x04 \x01(\x05\x12\x12\n\nCellHeight\x18\x05 \x01(\x05\x12\x10\n\x08Interval\x18\x06 \x01(\x02\x12\x12\n\nCaptureNum\x18\x07 \x01(\x05\x12\x11\n\tStoreUris\x18\x08 \x03(\t\x12\x0c\n\x04Urls\x18\t \x03(\t\"\x91\x02\n\x17VodSamplePosterSnapshot\x12\x11\n\tStoreUris\x18\x01 \x03(\t\x12\x0e\n\x06ImgNum\x18\x02 \x01(\x05\x12\x11\n\tCellWidth\x18\x03 \x01(\x05\x12\x12\n\nCellHeight\x18\x04 \x01(\x05\x12\x10\n\x08Interval\x18\x05 \x01(\x02\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\x10\n\x08\x44uration\x18\x07 \x01(\x02\x12\x0c\n\x04Urls\x18\x08 \x03(\t\x12\x18\n\x10LargeSnapshotUri\x18\t \x01(\t\x12 \n\x18LargeSnapshotDownloadUrl\x18\n \x01(\t\x12\x1d\n\x15LargeSnapshotFillType\x18\x0b \x01(\t\x12\x0f\n\x07Offsets\x18\x0c \x03(\x02\"\xfa\x03\n\x0fVodSnapshotData\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x44\n\x0fPosterSnapshots\x18\x03 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodSnapshot\x12\x45\n\x10\x44ynpostSnapshots\x18\x04 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodSnapshot\x12L\n\x17\x41nimatedPosterSnapshots\x18\x05 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodSnapshot\x12G\n\x12\x41iDynpostSnapshots\x18\x06 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodSnapshot\x12J\n\x0fSpriteSnapshots\x18\x07 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodSpriteSnapshot\x12W\n\x16VSamplePosterSnapshots\x18\x08 \x03(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodSamplePosterSnapshot\"\xae\x01\n\x12VodGetFileListData\x12\x13\n\x0bIsTruncated\x18\x01 \x01(\x08\x12\x16\n\x0e\x43ommonPrefixes\x18\x02 \x03(\t\x12\x0f\n\x07\x46ileSum\x18\x03 \x01(\x03\x12\x13\n\x0bNextStarter\x18\x04 \x01(\t\x12\x45\n\x0e\x46ileBasicInfos\x18\x05 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.FileBasicInfo\"Z\n\rFileBasicInfo\x12\x10\n\x08\x46ileName\x18\x01 \x01(\t\x12\x0c\n\x04Size\x18\x02 \x01(\x03\x12\x14\n\x0cStorageClass\x18\x03 \x01(\t\x12\x13\n\x0bUpdatedTime\x18\x04 \x01(\t\"6\n\x1eVodUpdateMediaStorageClassData\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\"b\n\x1dVodSubmitBlockMediaTaskResult\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\x12\x13\n\x0b\x42lockedVids\x18\x02 \x03(\t\x12\x16\n\x0eUnblockingVids\x18\x03 \x03(\t\"d\n\x1fVodSubmitUnblockMediaTaskResult\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\x12\x15\n\rUnblockedVids\x18\x02 \x03(\t\x12\x14\n\x0c\x42lockingVids\x18\x03 \x03(\t\"\x84\x01\n\x1eVodQueryMediaBlockStatusResult\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\x12L\n\x12MediaBlockStatuses\x18\x02 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.MediaBlockStatus\"/\n\x10MediaBlockStatus\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t*\xd0\x02\n VodFrameExtractingOptionForAudit\x12-\n)UndefinedVodFrameExtractingOptionForAudit\x10\x00\x12\'\n#FpsVodFrameExtractingOptionForAudit\x10\x01\x12\x32\n.NumberOfFramesVodFrameExtractingOptionForAudit\x10\x02\x12,\n(CutTimesVodFrameExtractingOptionForAudit\x10\x03\x12:\n6FpsLimitNumberOfFramesVodFrameExtractingOptionForAudit\x10\x04\x12\x36\n2OnlyFirstLastFrameVodFrameExtractingOptionForAudit\x10\x05\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodMediaP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'volcengine/vod/business/vod_media.proto\x12\x1eVolcengine.Vod.Models.Business\x1a(volcengine/vod/business/vod_common.proto\"r\n%VodListFileMetaInfosByFileNamesResult\x12I\n\x10VodFileMetaInfos\x18\x01 \x03(\x0b\x32/.Volcengine.Vod.Models.Business.VodFileMetaInfo\"\x7f\n\x0fVodFileMetaInfo\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x02 \x01(\t\x12\x12\n\nMaterialId\x18\x03 \x01(\t\x12\x10\n\x08\x46ileType\x18\x05 \x01(\t\x12\x10\n\x08\x46ileName\x18\x06 \x01(\t\x12\x17\n\x0f\x46ileNameEncoded\x18\x07 \x01(\t\"\xb6\x02\n\x11VodMediaBasicInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\r\n\x05Title\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\x12\x11\n\tPosterUri\x18\x05 \x01(\t\x12\x15\n\rPublishStatus\x18\x06 \x01(\t\x12\x0c\n\x04Tags\x18\x07 \x03(\t\x12\x12\n\nCreateTime\x18\x08 \x01(\t\x12I\n\x0e\x43lassification\x18\t \x01(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodClassification\x12\x17\n\x0fTosStorageClass\x18\n \x01(\t\x12\x17\n\x0fVodUploadSource\x18\x0b \x01(\t\x12\x14\n\x0cHlsMediaSize\x18\x0c \x01(\x01\"\xe1\x01\n\x0cVodMediaInfo\x12\x44\n\tBasicInfo\x18\x01 \x01(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodMediaBasicInfo\x12\x41\n\nSourceInfo\x18\x02 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12H\n\x0eTranscodeInfos\x18\x03 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodTranscodeInfo\"q\n\x14VodGetMediaInfosData\x12\x43\n\rMediaInfoList\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodMediaInfo\x12\x14\n\x0cNotExistVids\x18\x02 \x03(\t\"2\n\x10VodStoreUriGroup\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x11\n\tStoreUris\x18\x02 \x03(\t\"u\n\x13VodGetRecPosterData\x12H\n\x0eStoreUriGroups\x18\x01 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodStoreUriGroup\x12\x14\n\x0cNotExistVids\x18\x02 \x03(\t\"*\n\x12VodDeleteMediaData\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\"2\n\x17VodDeleteTranscodesData\x12\x17\n\x0fNotExistFileIds\x18\x01 \x03(\t\"4\n\x19VodDeleteMediaTosFileData\x12\x17\n\x0f\x46\x61iledFileNames\x18\x01 \x03(\t\"\xa3\x01\n\x13VodGetMediaListData\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x43\n\rMediaInfoList\x18\x02 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodMediaInfo\x12\x12\n\nTotalCount\x18\x03 \x01(\x05\x12\x0e\n\x06Offset\x18\x04 \x01(\x05\x12\x10\n\x08PageSize\x18\x05 \x01(\x05\"6\n\x1bVodUpdateSubtitleStatusData\x12\x17\n\x0fNotExistFileIds\x18\x01 \x03(\t\"p\n\x13VodFileSubtitleInfo\x12\x0e\n\x06\x46ileId\x18\x01 \x01(\t\x12I\n\x10SubtitleInfoList\x18\x02 \x03(\x0b\x32/.Volcengine.Vod.Models.Business.VodSubtitleInfo\"\xcb\x01\n\x1aVodGetSubtitleInfoListData\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12Q\n\x14\x46ileSubtitleInfoList\x18\x02 \x03(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodFileSubtitleInfo\x12\x17\n\x0fNotExistFileIds\x18\x03 \x03(\t\x12\x12\n\nTotalCount\x18\x04 \x01(\x05\x12\x0e\n\x06Offset\x18\x05 \x01(\x05\x12\x10\n\x08PageSize\x18\x06 \x01(\x05\"q\n\x14VodFrameDataForAudit\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x13\n\x0b\x46rameNumber\x18\x02 \x01(\x05\x12\x13\n\x0b\x43utTimeMill\x18\x03 \x01(\x01\x12\r\n\x05Width\x18\x04 \x01(\x05\x12\x0e\n\x06Height\x18\x05 \x01(\x05\"b\n\x1aVodGetFramesForAuditResult\x12\x44\n\x06\x46rames\x18\x01 \x03(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodFrameDataForAudit\"\x9f\x01\n\x1aVodBetterFrameDataForAudit\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x13\n\x0b\x46rameNumber\x18\x02 \x01(\x05\x12\x13\n\x0b\x43utTimeMill\x18\x03 \x01(\x01\x12\r\n\x05Width\x18\x04 \x01(\x05\x12\x0e\n\x06Height\x18\x05 \x01(\x05\x12\x11\n\tCoverRate\x18\x06 \x01(\x01\x12\x13\n\x0bLBPHashCode\x18\x07 \x03(\x01\"n\n VodGetBetterFramesForAuditResult\x12J\n\x06\x46rames\x18\x01 \x03(\x0b\x32:.Volcengine.Vod.Models.Business.VodBetterFrameDataForAudit\"J\n\x14VodAudioInfoForAudit\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x01\x12\x0e\n\x06\x46ormat\x18\x03 \x01(\t\"h\n\x1dVodGetAudioInfoForAuditResult\x12G\n\tAudioInfo\x18\x01 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodAudioInfoForAudit\"n\n\x1bVodASRUtteranceWordForAudit\x12\x0c\n\x04Text\x18\x01 \x01(\t\x12\x15\n\rStartTimeMill\x18\x02 \x01(\x01\x12\x13\n\x0b\x45ndTimeMill\x18\x03 \x01(\x01\x12\x15\n\rBlankDuration\x18\x04 \x01(\x01\"\xc5\x01\n\x17VodASRUtteranceForAudit\x12\x0c\n\x04Text\x18\x01 \x01(\t\x12\x15\n\rStartTimeMill\x18\x02 \x01(\x01\x12\x13\n\x0b\x45ndTimeMill\x18\x03 \x01(\x01\x12J\n\x05Words\x18\x04 \x03(\x0b\x32;.Volcengine.Vod.Models.Business.VodASRUtteranceWordForAudit\x12\x10\n\x08Language\x18\x05 \x01(\t\x12\x12\n\nSpeechRate\x18\x06 \x01(\x01\">\n\x1cVodASRLanguageDetailForAudit\x12\x0c\n\x04Prob\x18\x01 \x01(\x01\x12\x10\n\x08Language\x18\x02 \x01(\t\"\xfc\x01\n\x12VodASRInfoForAudit\x12\x0c\n\x04Text\x18\x01 \x01(\t\x12K\n\nUtterances\x18\x03 \x03(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodASRUtteranceForAudit\x12\x10\n\x08Language\x18\x04 \x01(\t\x12U\n\x0fLanguageDetails\x18\x05 \x03(\x0b\x32<.Volcengine.Vod.Models.Business.VodASRLanguageDetailForAudit\x12\x12\n\nSpeechRate\x18\x06 \x01(\x01\x12\x0e\n\x06Volume\x18\x07 \x01(\x01\"r\n.VodGetAutomaticSpeechRecognitionForAuditResult\x12@\n\x04Info\x18\x01 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodASRInfoForAudit\"S\n\x17VodAEDTimeRangeForAudit\x12\x15\n\rStartTimeMill\x18\x01 \x01(\x01\x12\x13\n\x0b\x45ndTimeMill\x18\x02 \x01(\x01\x12\x0c\n\x04Prob\x18\x03 \x01(\x01\"\x86\x01\n\x17VodAEDEventItemForAudit\x12\r\n\x05\x45vent\x18\x01 \x01(\t\x12\x0f\n\x07UttProb\x18\x02 \x01(\x01\x12K\n\nTimeRanges\x18\x03 \x03(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodAEDTimeRangeForAudit\"a\n\x12VodAEDInfoForAudit\x12K\n\nEventItems\x18\x01 \x03(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodAEDEventItemForAudit\"k\n\'VodGetAudioEventDetectionForAuditResult\x12@\n\x04Info\x18\x01 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.VodAEDInfoForAudit\"<\n VodCreateVideoClassificationData\x12\x18\n\x10\x43lassificationId\x18\x01 \x01(\x03\"\xbb\x02\n\x11VodClassification\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x02 \x01(\x03\x12\r\n\x05Level\x18\x03 \x01(\x05\x12\x16\n\x0e\x43lassification\x18\x04 \x01(\t\x12\x1e\n\x16ParentClassificationId\x18\x05 \x01(\x03\x12L\n\x11SubClassification\x18\x06 \x01(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodClassification\x12Q\n\x16SubClassificationTrees\x18\x07 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodClassification\x12\x11\n\tCreatedAt\x18\x08 \x01(\t\"m\n\x1bVodVideoClassificationsData\x12N\n\x13\x43lassificationTrees\x18\x01 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodClassification\"[\n\x0bVodSnapshot\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x0e\n\x06Height\x18\x02 \x01(\x05\x12\r\n\x05Width\x18\x03 \x01(\x05\x12\x10\n\x08StoreUri\x18\x04 \x01(\t\x12\x0b\n\x03Url\x18\x05 \x01(\t\"\xb3\x01\n\x11VodSpriteSnapshot\x12\x0e\n\x06\x46ormat\x18\x01 \x01(\t\x12\x0f\n\x07ImgXLen\x18\x02 \x01(\x05\x12\x0f\n\x07ImgYLen\x18\x03 \x01(\x05\x12\x11\n\tCellWidth\x18\x04 \x01(\x05\x12\x12\n\nCellHeight\x18\x05 \x01(\x05\x12\x10\n\x08Interval\x18\x06 \x01(\x02\x12\x12\n\nCaptureNum\x18\x07 \x01(\x05\x12\x11\n\tStoreUris\x18\x08 \x03(\t\x12\x0c\n\x04Urls\x18\t \x03(\t\"\x91\x02\n\x17VodSamplePosterSnapshot\x12\x11\n\tStoreUris\x18\x01 \x03(\t\x12\x0e\n\x06ImgNum\x18\x02 \x01(\x05\x12\x11\n\tCellWidth\x18\x03 \x01(\x05\x12\x12\n\nCellHeight\x18\x04 \x01(\x05\x12\x10\n\x08Interval\x18\x05 \x01(\x02\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\x10\n\x08\x44uration\x18\x07 \x01(\x02\x12\x0c\n\x04Urls\x18\x08 \x03(\t\x12\x18\n\x10LargeSnapshotUri\x18\t \x01(\t\x12 \n\x18LargeSnapshotDownloadUrl\x18\n \x01(\t\x12\x1d\n\x15LargeSnapshotFillType\x18\x0b \x01(\t\x12\x0f\n\x07Offsets\x18\x0c \x03(\x02\"\xfa\x03\n\x0fVodSnapshotData\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x44\n\x0fPosterSnapshots\x18\x03 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodSnapshot\x12\x45\n\x10\x44ynpostSnapshots\x18\x04 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodSnapshot\x12L\n\x17\x41nimatedPosterSnapshots\x18\x05 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodSnapshot\x12G\n\x12\x41iDynpostSnapshots\x18\x06 \x03(\x0b\x32+.Volcengine.Vod.Models.Business.VodSnapshot\x12J\n\x0fSpriteSnapshots\x18\x07 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodSpriteSnapshot\x12W\n\x16VSamplePosterSnapshots\x18\x08 \x03(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodSamplePosterSnapshot\"\xae\x01\n\x12VodGetFileListData\x12\x13\n\x0bIsTruncated\x18\x01 \x01(\x08\x12\x16\n\x0e\x43ommonPrefixes\x18\x02 \x03(\t\x12\x0f\n\x07\x46ileSum\x18\x03 \x01(\x03\x12\x13\n\x0bNextStarter\x18\x04 \x01(\t\x12\x45\n\x0e\x46ileBasicInfos\x18\x05 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.FileBasicInfo\"Z\n\rFileBasicInfo\x12\x10\n\x08\x46ileName\x18\x01 \x01(\t\x12\x0c\n\x04Size\x18\x02 \x01(\x03\x12\x14\n\x0cStorageClass\x18\x03 \x01(\t\x12\x13\n\x0bUpdatedTime\x18\x04 \x01(\t\"6\n\x1eVodUpdateMediaStorageClassData\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\"b\n\x1dVodSubmitBlockMediaTaskResult\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\x12\x13\n\x0b\x42lockedVids\x18\x02 \x03(\t\x12\x16\n\x0eUnblockingVids\x18\x03 \x03(\t\"d\n\x1fVodSubmitUnblockMediaTaskResult\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\x12\x15\n\rUnblockedVids\x18\x02 \x03(\t\x12\x14\n\x0c\x42lockingVids\x18\x03 \x03(\t\"\x84\x01\n\x1eVodQueryMediaBlockStatusResult\x12\x14\n\x0cNotExistVids\x18\x01 \x03(\t\x12L\n\x12MediaBlockStatuses\x18\x02 \x03(\x0b\x32\x30.Volcengine.Vod.Models.Business.MediaBlockStatus\"/\n\x10MediaBlockStatus\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t*\xd0\x02\n VodFrameExtractingOptionForAudit\x12-\n)UndefinedVodFrameExtractingOptionForAudit\x10\x00\x12\'\n#FpsVodFrameExtractingOptionForAudit\x10\x01\x12\x32\n.NumberOfFramesVodFrameExtractingOptionForAudit\x10\x02\x12,\n(CutTimesVodFrameExtractingOptionForAudit\x10\x03\x12:\n6FpsLimitNumberOfFramesVodFrameExtractingOptionForAudit\x10\x04\x12\x36\n2OnlyFirstLastFrameVodFrameExtractingOptionForAudit\x10\x05\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodMediaP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 _VODFRAMEEXTRACTINGOPTIONFORAUDIT = DESCRIPTOR.enum_types_by_name['VodFrameExtractingOptionForAudit']
 VodFrameExtractingOptionForAudit = enum_type_wrapper.EnumTypeWrapper(_VODFRAMEEXTRACTINGOPTIONFORAUDIT)
@@ -28,6 +28,8 @@ FpsLimitNumberOfFramesVodFrameExtractingOptionForAudit = 4
 OnlyFirstLastFrameVodFrameExtractingOptionForAudit = 5
 
 
+_VODLISTFILEMETAINFOSBYFILENAMESRESULT = DESCRIPTOR.message_types_by_name['VodListFileMetaInfosByFileNamesResult']
+_VODFILEMETAINFO = DESCRIPTOR.message_types_by_name['VodFileMetaInfo']
 _VODMEDIABASICINFO = DESCRIPTOR.message_types_by_name['VodMediaBasicInfo']
 _VODMEDIAINFO = DESCRIPTOR.message_types_by_name['VodMediaInfo']
 _VODGETMEDIAINFOSDATA = DESCRIPTOR.message_types_by_name['VodGetMediaInfosData']
@@ -69,6 +71,20 @@ _VODSUBMITBLOCKMEDIATASKRESULT = DESCRIPTOR.message_types_by_name['VodSubmitBloc
 _VODSUBMITUNBLOCKMEDIATASKRESULT = DESCRIPTOR.message_types_by_name['VodSubmitUnblockMediaTaskResult']
 _VODQUERYMEDIABLOCKSTATUSRESULT = DESCRIPTOR.message_types_by_name['VodQueryMediaBlockStatusResult']
 _MEDIABLOCKSTATUS = DESCRIPTOR.message_types_by_name['MediaBlockStatus']
+VodListFileMetaInfosByFileNamesResult = _reflection.GeneratedProtocolMessageType('VodListFileMetaInfosByFileNamesResult', (_message.Message,), {
+  'DESCRIPTOR' : _VODLISTFILEMETAINFOSBYFILENAMESRESULT,
+  '__module__' : 'volcengine.vod.business.vod_media_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodListFileMetaInfosByFileNamesResult)
+  })
+_sym_db.RegisterMessage(VodListFileMetaInfosByFileNamesResult)
+
+VodFileMetaInfo = _reflection.GeneratedProtocolMessageType('VodFileMetaInfo', (_message.Message,), {
+  'DESCRIPTOR' : _VODFILEMETAINFO,
+  '__module__' : 'volcengine.vod.business.vod_media_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodFileMetaInfo)
+  })
+_sym_db.RegisterMessage(VodFileMetaInfo)
+
 VodMediaBasicInfo = _reflection.GeneratedProtocolMessageType('VodMediaBasicInfo', (_message.Message,), {
   'DESCRIPTOR' : _VODMEDIABASICINFO,
   '__module__' : 'volcengine.vod.business.vod_media_pb2'
@@ -360,88 +376,92 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n)com.volcengine.service.vod.model.businessB\010VodMediaP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata'
-  _VODFRAMEEXTRACTINGOPTIONFORAUDIT._serialized_start=5747
-  _VODFRAMEEXTRACTINGOPTIONFORAUDIT._serialized_end=6083
-  _VODMEDIABASICINFO._serialized_start=118
-  _VODMEDIABASICINFO._serialized_end=428
-  _VODMEDIAINFO._serialized_start=431
-  _VODMEDIAINFO._serialized_end=656
-  _VODGETMEDIAINFOSDATA._serialized_start=658
-  _VODGETMEDIAINFOSDATA._serialized_end=771
-  _VODSTOREURIGROUP._serialized_start=773
-  _VODSTOREURIGROUP._serialized_end=823
-  _VODGETRECPOSTERDATA._serialized_start=825
-  _VODGETRECPOSTERDATA._serialized_end=942
-  _VODDELETEMEDIADATA._serialized_start=944
-  _VODDELETEMEDIADATA._serialized_end=986
-  _VODDELETETRANSCODESDATA._serialized_start=988
-  _VODDELETETRANSCODESDATA._serialized_end=1038
-  _VODDELETEMEDIATOSFILEDATA._serialized_start=1040
-  _VODDELETEMEDIATOSFILEDATA._serialized_end=1092
-  _VODGETMEDIALISTDATA._serialized_start=1095
-  _VODGETMEDIALISTDATA._serialized_end=1258
-  _VODUPDATESUBTITLESTATUSDATA._serialized_start=1260
-  _VODUPDATESUBTITLESTATUSDATA._serialized_end=1314
-  _VODFILESUBTITLEINFO._serialized_start=1316
-  _VODFILESUBTITLEINFO._serialized_end=1428
-  _VODGETSUBTITLEINFOLISTDATA._serialized_start=1431
-  _VODGETSUBTITLEINFOLISTDATA._serialized_end=1634
-  _VODFRAMEDATAFORAUDIT._serialized_start=1636
-  _VODFRAMEDATAFORAUDIT._serialized_end=1749
-  _VODGETFRAMESFORAUDITRESULT._serialized_start=1751
-  _VODGETFRAMESFORAUDITRESULT._serialized_end=1849
-  _VODBETTERFRAMEDATAFORAUDIT._serialized_start=1852
-  _VODBETTERFRAMEDATAFORAUDIT._serialized_end=2011
-  _VODGETBETTERFRAMESFORAUDITRESULT._serialized_start=2013
-  _VODGETBETTERFRAMESFORAUDITRESULT._serialized_end=2123
-  _VODAUDIOINFOFORAUDIT._serialized_start=2125
-  _VODAUDIOINFOFORAUDIT._serialized_end=2199
-  _VODGETAUDIOINFOFORAUDITRESULT._serialized_start=2201
-  _VODGETAUDIOINFOFORAUDITRESULT._serialized_end=2305
-  _VODASRUTTERANCEWORDFORAUDIT._serialized_start=2307
-  _VODASRUTTERANCEWORDFORAUDIT._serialized_end=2417
-  _VODASRUTTERANCEFORAUDIT._serialized_start=2420
-  _VODASRUTTERANCEFORAUDIT._serialized_end=2617
-  _VODASRLANGUAGEDETAILFORAUDIT._serialized_start=2619
-  _VODASRLANGUAGEDETAILFORAUDIT._serialized_end=2681
-  _VODASRINFOFORAUDIT._serialized_start=2684
-  _VODASRINFOFORAUDIT._serialized_end=2936
-  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITRESULT._serialized_start=2938
-  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITRESULT._serialized_end=3052
-  _VODAEDTIMERANGEFORAUDIT._serialized_start=3054
-  _VODAEDTIMERANGEFORAUDIT._serialized_end=3137
-  _VODAEDEVENTITEMFORAUDIT._serialized_start=3140
-  _VODAEDEVENTITEMFORAUDIT._serialized_end=3274
-  _VODAEDINFOFORAUDIT._serialized_start=3276
-  _VODAEDINFOFORAUDIT._serialized_end=3373
-  _VODGETAUDIOEVENTDETECTIONFORAUDITRESULT._serialized_start=3375
-  _VODGETAUDIOEVENTDETECTIONFORAUDITRESULT._serialized_end=3482
-  _VODCREATEVIDEOCLASSIFICATIONDATA._serialized_start=3484
-  _VODCREATEVIDEOCLASSIFICATIONDATA._serialized_end=3544
-  _VODCLASSIFICATION._serialized_start=3547
-  _VODCLASSIFICATION._serialized_end=3862
-  _VODVIDEOCLASSIFICATIONSDATA._serialized_start=3864
-  _VODVIDEOCLASSIFICATIONSDATA._serialized_end=3973
-  _VODSNAPSHOT._serialized_start=3975
-  _VODSNAPSHOT._serialized_end=4066
-  _VODSPRITESNAPSHOT._serialized_start=4069
-  _VODSPRITESNAPSHOT._serialized_end=4248
-  _VODSAMPLEPOSTERSNAPSHOT._serialized_start=4251
-  _VODSAMPLEPOSTERSNAPSHOT._serialized_end=4524
-  _VODSNAPSHOTDATA._serialized_start=4527
-  _VODSNAPSHOTDATA._serialized_end=5033
-  _VODGETFILELISTDATA._serialized_start=5036
-  _VODGETFILELISTDATA._serialized_end=5210
-  _FILEBASICINFO._serialized_start=5212
-  _FILEBASICINFO._serialized_end=5302
-  _VODUPDATEMEDIASTORAGECLASSDATA._serialized_start=5304
-  _VODUPDATEMEDIASTORAGECLASSDATA._serialized_end=5358
-  _VODSUBMITBLOCKMEDIATASKRESULT._serialized_start=5360
-  _VODSUBMITBLOCKMEDIATASKRESULT._serialized_end=5458
-  _VODSUBMITUNBLOCKMEDIATASKRESULT._serialized_start=5460
-  _VODSUBMITUNBLOCKMEDIATASKRESULT._serialized_end=5560
-  _VODQUERYMEDIABLOCKSTATUSRESULT._serialized_start=5563
-  _VODQUERYMEDIABLOCKSTATUSRESULT._serialized_end=5695
-  _MEDIABLOCKSTATUS._serialized_start=5697
-  _MEDIABLOCKSTATUS._serialized_end=5744
+  _VODFRAMEEXTRACTINGOPTIONFORAUDIT._serialized_start=5992
+  _VODFRAMEEXTRACTINGOPTIONFORAUDIT._serialized_end=6328
+  _VODLISTFILEMETAINFOSBYFILENAMESRESULT._serialized_start=117
+  _VODLISTFILEMETAINFOSBYFILENAMESRESULT._serialized_end=231
+  _VODFILEMETAINFO._serialized_start=233
+  _VODFILEMETAINFO._serialized_end=360
+  _VODMEDIABASICINFO._serialized_start=363
+  _VODMEDIABASICINFO._serialized_end=673
+  _VODMEDIAINFO._serialized_start=676
+  _VODMEDIAINFO._serialized_end=901
+  _VODGETMEDIAINFOSDATA._serialized_start=903
+  _VODGETMEDIAINFOSDATA._serialized_end=1016
+  _VODSTOREURIGROUP._serialized_start=1018
+  _VODSTOREURIGROUP._serialized_end=1068
+  _VODGETRECPOSTERDATA._serialized_start=1070
+  _VODGETRECPOSTERDATA._serialized_end=1187
+  _VODDELETEMEDIADATA._serialized_start=1189
+  _VODDELETEMEDIADATA._serialized_end=1231
+  _VODDELETETRANSCODESDATA._serialized_start=1233
+  _VODDELETETRANSCODESDATA._serialized_end=1283
+  _VODDELETEMEDIATOSFILEDATA._serialized_start=1285
+  _VODDELETEMEDIATOSFILEDATA._serialized_end=1337
+  _VODGETMEDIALISTDATA._serialized_start=1340
+  _VODGETMEDIALISTDATA._serialized_end=1503
+  _VODUPDATESUBTITLESTATUSDATA._serialized_start=1505
+  _VODUPDATESUBTITLESTATUSDATA._serialized_end=1559
+  _VODFILESUBTITLEINFO._serialized_start=1561
+  _VODFILESUBTITLEINFO._serialized_end=1673
+  _VODGETSUBTITLEINFOLISTDATA._serialized_start=1676
+  _VODGETSUBTITLEINFOLISTDATA._serialized_end=1879
+  _VODFRAMEDATAFORAUDIT._serialized_start=1881
+  _VODFRAMEDATAFORAUDIT._serialized_end=1994
+  _VODGETFRAMESFORAUDITRESULT._serialized_start=1996
+  _VODGETFRAMESFORAUDITRESULT._serialized_end=2094
+  _VODBETTERFRAMEDATAFORAUDIT._serialized_start=2097
+  _VODBETTERFRAMEDATAFORAUDIT._serialized_end=2256
+  _VODGETBETTERFRAMESFORAUDITRESULT._serialized_start=2258
+  _VODGETBETTERFRAMESFORAUDITRESULT._serialized_end=2368
+  _VODAUDIOINFOFORAUDIT._serialized_start=2370
+  _VODAUDIOINFOFORAUDIT._serialized_end=2444
+  _VODGETAUDIOINFOFORAUDITRESULT._serialized_start=2446
+  _VODGETAUDIOINFOFORAUDITRESULT._serialized_end=2550
+  _VODASRUTTERANCEWORDFORAUDIT._serialized_start=2552
+  _VODASRUTTERANCEWORDFORAUDIT._serialized_end=2662
+  _VODASRUTTERANCEFORAUDIT._serialized_start=2665
+  _VODASRUTTERANCEFORAUDIT._serialized_end=2862
+  _VODASRLANGUAGEDETAILFORAUDIT._serialized_start=2864
+  _VODASRLANGUAGEDETAILFORAUDIT._serialized_end=2926
+  _VODASRINFOFORAUDIT._serialized_start=2929
+  _VODASRINFOFORAUDIT._serialized_end=3181
+  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITRESULT._serialized_start=3183
+  _VODGETAUTOMATICSPEECHRECOGNITIONFORAUDITRESULT._serialized_end=3297
+  _VODAEDTIMERANGEFORAUDIT._serialized_start=3299
+  _VODAEDTIMERANGEFORAUDIT._serialized_end=3382
+  _VODAEDEVENTITEMFORAUDIT._serialized_start=3385
+  _VODAEDEVENTITEMFORAUDIT._serialized_end=3519
+  _VODAEDINFOFORAUDIT._serialized_start=3521
+  _VODAEDINFOFORAUDIT._serialized_end=3618
+  _VODGETAUDIOEVENTDETECTIONFORAUDITRESULT._serialized_start=3620
+  _VODGETAUDIOEVENTDETECTIONFORAUDITRESULT._serialized_end=3727
+  _VODCREATEVIDEOCLASSIFICATIONDATA._serialized_start=3729
+  _VODCREATEVIDEOCLASSIFICATIONDATA._serialized_end=3789
+  _VODCLASSIFICATION._serialized_start=3792
+  _VODCLASSIFICATION._serialized_end=4107
+  _VODVIDEOCLASSIFICATIONSDATA._serialized_start=4109
+  _VODVIDEOCLASSIFICATIONSDATA._serialized_end=4218
+  _VODSNAPSHOT._serialized_start=4220
+  _VODSNAPSHOT._serialized_end=4311
+  _VODSPRITESNAPSHOT._serialized_start=4314
+  _VODSPRITESNAPSHOT._serialized_end=4493
+  _VODSAMPLEPOSTERSNAPSHOT._serialized_start=4496
+  _VODSAMPLEPOSTERSNAPSHOT._serialized_end=4769
+  _VODSNAPSHOTDATA._serialized_start=4772
+  _VODSNAPSHOTDATA._serialized_end=5278
+  _VODGETFILELISTDATA._serialized_start=5281
+  _VODGETFILELISTDATA._serialized_end=5455
+  _FILEBASICINFO._serialized_start=5457
+  _FILEBASICINFO._serialized_end=5547
+  _VODUPDATEMEDIASTORAGECLASSDATA._serialized_start=5549
+  _VODUPDATEMEDIASTORAGECLASSDATA._serialized_end=5603
+  _VODSUBMITBLOCKMEDIATASKRESULT._serialized_start=5605
+  _VODSUBMITBLOCKMEDIATASKRESULT._serialized_end=5703
+  _VODSUBMITUNBLOCKMEDIATASKRESULT._serialized_start=5705
+  _VODSUBMITUNBLOCKMEDIATASKRESULT._serialized_end=5805
+  _VODQUERYMEDIABLOCKSTATUSRESULT._serialized_start=5808
+  _VODQUERYMEDIABLOCKSTATUSRESULT._serialized_end=5940
+  _MEDIABLOCKSTATUS._serialized_start=5942
+  _MEDIABLOCKSTATUS._serialized_end=5989
 # @@protoc_insertion_point(module_scope)

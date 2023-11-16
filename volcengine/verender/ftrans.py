@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 import queue
+import random
 import threading
 import time
 import uuid
@@ -12,6 +13,8 @@ import urllib3.poolmanager
 ISP_CT = "ct"
 ISP_UN = "un"
 ISP_CM = "cm"
+ISP_DEFAULT="default"
+VERSION_DEFAULT="default"
 SWITCH_ON = 1
 SWITCH_OFF = 0
 FTRANS_PROTOCOL_TCP = "tcp"
@@ -73,7 +76,7 @@ class FtransFileNotFound(FtransException):
 def _split_addr(addr):
     if addr[0] == '[':
         segs = addr.split(":")
-        ip = ":".join(segs[1:-1])
+        ip = ":".join(segs[0:-1])
         ip = ip[1:-1]
         port = int(segs[-1])
     else:
@@ -84,44 +87,89 @@ def _split_addr(addr):
     return ip, port
 
 
-def _parse_addr_map(addr):
+def _set_addr_map(addr_map, version, isp, ip, port):
+    if version not in addr_map:
+        addr_map[version] = {}
+
+    if isp not in addr_map[version]:
+        addr_map[version][isp] = []
+
+    found = False
+    for exist_ip, exist_port in addr_map[version][isp]:
+        if ip == exist_ip and port == exist_port:
+            found = True
+            break
+    if not found:
+        addr_map[version][isp].append((ip, port))
+
+
+def _get_addr_map(addr_map, version, isp):
+    if version not in addr_map:
+        if VERSION_DEFAULT not in addr_map:
+            raise FtransException("version not found in addr_map")
+
+        version = VERSION_DEFAULT
+
+    if isp not in addr_map[version]:
+        if ISP_DEFAULT not in addr_map[version]:
+            raise FtransException("isp not found in addr_map")
+
+        isp = ISP_DEFAULT
+
+    if len(addr_map[version][isp]) == 0:
+        raise FtransException("empty addr list")
+
+    return addr_map[version][isp][random.randint(1, 100) % len(addr_map[version][isp])]
+
+def _build_addr_map(addr):
     addr_map = {}
 
     for elem in addr.split(";"):
-        segs = elem.split(":")
-        version = segs[0]
-        isp = ""
-        if segs[1] == ISP_CT or segs[1] == ISP_UN or segs[1] == ISP_CM:
-            isp = segs[1]
-            ip = ":".join(segs[2:-1])
-            if ip[0] == '[' and ip[-1] == ']':
-                ip = ip[1:-1]
-            port = int(segs[-1])
-        else:
-            ip = ":".join(segs[1:-1])
-            if ip[0] == '[' and ip[-1] == ']':
-                ip = ip[1:-1]
-            port = int(segs[-1])
-
-        if version in addr_map:
-            if isp == "":
-                addr_map[version][ISP_CT] = (ip, port)
-                addr_map[version][ISP_UN] = (ip, port)
-                addr_map[version][ISP_CM] = (ip, port)
+        idx = elem.find("[")
+        if idx == -1:
+            # ipv4
+            segs = elem.split(":")
+            if len(segs) < 2 or len(segs) > 4:
+                continue
+            if len(segs) == 2:
+                # ip4:port
+                ip, port = _split_addr(elem)
+                _set_addr_map(addr_map, VERSION_DEFAULT, ISP_DEFAULT, ip, port)
+            elif len(segs) == 3:
+                if segs[0] != ISP_CT and segs[0] != ISP_UN and segs[0] != ISP_CM:
+                    # version:ip4:port
+                    ip, port = _split_addr(":".join(segs[1:]))
+                    _set_addr_map(addr_map, segs[0], ISP_DEFAULT, ip, port)
+                else:
+                    # isp:ip4:port
+                    ip, port = _split_addr(":".join(segs[1:]))
+                    _set_addr_map(addr_map, VERSION_DEFAULT, segs[0], ip, port)
             else:
-                addr_map[version][isp] = (ip, port)
+                # version:isp:ip4:port
+                ip, port = _split_addr(":".join(segs[2:]))
+                _set_addr_map(addr_map, segs[0], segs[1], ip, port)
         else:
-            if isp == "":
-                addr_map[version] = {
-                    ISP_CT: (ip, port),
-                    ISP_UN: (ip, port),
-                    ISP_CM: (ip, port)
-                }
+            # ipv6
+            if idx == 0:
+                # [ip6]:port
+                ip, port = _split_addr(elem)
+                _set_addr_map(addr_map, VERSION_DEFAULT, ISP_DEFAULT, ip, port)
             else:
-                addr_map[version] = {
-                    isp: (ip, port)
-                }
+                segs = elem[:idx-1].split(":")
+                if len(segs) > 2:
+                    continue
 
+                ip, port = _split_addr(elem[idx:])
+                if len(segs) == 1:
+                    if segs[0] != ISP_CT and segs[0] != ISP_UN and segs[0] != ISP_CM:
+                        # version:[ip6]:port
+                        _set_addr_map(addr_map, segs[0], ISP_DEFAULT, ip, port)
+                    else:
+                        # isp:[ip6]:port
+                        _set_addr_map(addr_map, VERSION_DEFAULT, segs[0], ip, port)
+                else:
+                    # version:isp:[ip6]:port
+                    _set_addr_map(addr_map, segs[0], segs[1], ip, port)
     return addr_map
 
 
@@ -244,19 +292,14 @@ class FtransService(object):
 
         if s10_server is not None:
             try:
-                addr_map = _parse_addr_map(s10_server)
+                addr_map = _build_addr_map(s10_server)
             except Exception:
                 raise FtransParameterException("invalid s10 server addr %s" % s10_server)
 
-            found = False
-            for version in addr_map:
-                addr_isp_map = addr_map[version]
-                if isp in addr_isp_map:
-                    s10_addr, s10_port = addr_isp_map[isp]
-                    found = True
-                    break
-            if not found:
-                raise FtransParameterException("addr of isp[%s] not found in s10 server[%s]" % (isp, s10_addr))
+            try:
+                s10_addr, s10_port = _get_addr_map(addr_map, VERSION_DEFAULT, isp)
+            except:
+                raise FtransParameterException("no s10 server found of isp[%s]" % isp )
 
             if cert_pem is None or key_pem is None:
                 raise FtransParameterException("cert_pem and key_pem must be specified when s10_server is set")
@@ -287,23 +330,19 @@ class FtransService(object):
             client_config = FtransService._get_ftrans_client_config(client_ip, client_port, client_acl_token)
             version = client_config["Version"]
             protocol = FTRANS_PROTOCOL_UDP
-            if (client_config["RunTimeTransTudpSwitch"] == SWITCH_OFF) and \
-                    (client_config["RuntimeTransTtcpSwitch"] == SWITCH_ON):
+            if (client_config.get("RuntimeTransTudpSwitch", "") == SWITCH_OFF) and \
+                    (client_config.get("RuntimeTransTtcpSwitch", "") == SWITCH_ON):
                 protocol = FTRANS_PROTOCOL_TCP
 
             try:
-                addr_map = _parse_addr_map(s2_server)
+                addr_map = _build_addr_map(s2_server)
             except Exception:
                 raise FtransParameterException("invalid s2_server [%s]" % s2_server)
 
-            if version not in addr_map:
-                raise FtransParameterException("ftrans client version is too old, please upgrade it")
-
-            if isp not in addr_map[version]:
-                raise FtransParameterException("addr of isp [%s] not found in s2_addr [%s]" % (isp, s2_server))
-
-            s2_addr, s2_port = addr_map[version][isp]
-
+            try:
+                s2_addr, s2_port = _get_addr_map(addr_map, version, isp)
+            except:
+                raise FtransParameterException("no s2 addr found of version[%s] isp[%s]" % (version, isp))
             proxy_ip = None
             proxy_port = None
             if proxy_addr is not None:

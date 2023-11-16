@@ -16,7 +16,7 @@ if __name__ == '__main__':
         req.DomainType = 'your DomainType'
         req.CertificateId = 'your CertificateId'
         req.HttpsStatus = 'your HttpsStatus'
-        resp = vod_service.add_or_update_certificate20230701(req)
+        resp = vod_service.add_or_update_certificate(req)
     except Exception:
         raise
     else:

@@ -11,7 +11,7 @@ if __name__ == '__main__':
     vod_service.set_sk('your sk')
     try:
         req = VodUpdateDomainExpireV2Request()
-        req.SpaceName = 'your space name'
+        #req.SpaceName = 'your space name'
         resp = vod_service.update_domain_expire(req)
     except Exception:
         raise
