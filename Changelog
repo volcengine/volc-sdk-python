@@ -1,5 +1,9 @@
 ### Change log
 
+2023-11-16 Bumped to version v1.0.115
+- Updated apis for vod/verender/visual
+- Added service viking_db
+
 2023-11-09 Bumped to version v1.0.114
 - Updated apis for imagex
 
