@@ -117,6 +117,20 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def stop_pull_record_task(self, body):
+        res = self.api_post('StopPullRecordTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def create_pull_record_task(self, body):
+        res = self.api_post('CreatePullRecordTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def delete_record_preset(self, body):
         res = self.api_post('DeleteRecordPreset', [], json.dumps(body))
         if res == '':
@@ -140,6 +154,13 @@ class LiveTrait(Service):
             
     def list_vhost_record_preset_v2(self, body):
         res = self.api_post('ListVhostRecordPresetV2', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def list_pull_record_task(self, body):
+        res = self.api_post('ListPullRecordTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -243,13 +264,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def update_auth_key(self, body):
-        res = self.api_post('UpdateAuthKey', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def delete_cert(self, body):
         res = self.api_post('DeleteCert', [], json.dumps(body))
         if res == '':
@@ -292,22 +306,15 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def delete_referer(self, body):
-        res = self.api_post('DeleteReferer', [], json.dumps(body))
+    def create_verify_content(self, body):
+        res = self.api_post('CreateVerifyContent', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def describe_referer(self, body):
-        res = self.api_post('DescribeReferer', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def update_referer(self, body):
-        res = self.api_post('UpdateReferer', [], json.dumps(body))
+    def verify_domain_owner(self, body):
+        res = self.api_post('VerifyDomainOwner', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -350,20 +357,6 @@ class LiveTrait(Service):
             
     def list_domain_detail(self, body):
         res = self.api_post('ListDomainDetail', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def create_verify_content(self, body):
-        res = self.api_post('CreateVerifyContent', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def verify_domain_owner(self, body):
-        res = self.api_post('VerifyDomainOwner', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -420,20 +413,6 @@ class LiveTrait(Service):
             
     def list_pull_to_push_task(self, query):
         res = self.api_get('ListPullToPushTask', query)
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def describe_deny_config(self, body):
-        res = self.api_post('DescribeDenyConfig', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def update_deny_config(self, body):
-        res = self.api_post('UpdateDenyConfig', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -572,13 +551,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def list_vqos_dimension_values(self, query, body):
-        res = self.api_post('ListVqosDimensionValues', query, json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def list_vqos_metrics_dimensions(self, query):
         res = self.api_get('ListVqosMetricsDimensions', query)
         if res == '':
@@ -586,29 +558,36 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def get_vqos_raw_data(self, query, body):
-        res = self.api_post('GetVqosRawData', query, json.dumps(body))
+    def stop_pull_cdn_snapshot_task(self, body):
+        res = self.api_post('StopPullCDNSnapshotTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def stop_pull_record_task(self, body):
-        res = self.api_post('StopPullRecordTask', [], json.dumps(body))
+    def create_pull_cdn_snapshot_task(self, body):
+        res = self.api_post('CreatePullCDNSnapshotTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def create_pull_record_task(self, body):
-        res = self.api_post('CreatePullRecordTask', [], json.dumps(body))
+    def get_pull_cdn_snapshot_task(self, body):
+        res = self.api_post('GetPullCDNSnapshotTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def list_pull_record_task(self, body):
-        res = self.api_post('ListPullRecordTask', [], json.dumps(body))
+    def list_pull_cdn_snapshot_task(self, body):
+        res = self.api_post('ListPullCDNSnapshotTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def get_pull_record_task(self, body):
+        res = self.api_post('GetPullRecordTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -623,6 +602,13 @@ class LiveTrait(Service):
             
     def update_snapshot_audit_preset(self, body):
         res = self.api_post('UpdateSnapshotAuditPreset', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_snapshot_audit_preset_detail(self, body):
+        res = self.api_post('DescribeSnapshotAuditPresetDetail', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -826,6 +812,69 @@ class LiveTrait(Service):
             
     def describe_live_time_shift_data(self, body):
         res = self.api_post('DescribeLiveTimeShiftData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_customized_log_data(self, body):
+        res = self.api_post('DescribeLiveCustomizedLogData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_log_data(self, body):
+        res = self.api_post('DescribeLiveLogData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_referer(self, body):
+        res = self.api_post('DeleteReferer', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_referer(self, body):
+        res = self.api_post('DescribeReferer', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_deny_config(self, body):
+        res = self.api_post('DescribeDenyConfig', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_referer(self, body):
+        res = self.api_post('UpdateReferer', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_auth_key(self, body):
+        res = self.api_post('UpdateAuthKey', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_deny_config(self, body):
+        res = self.api_post('UpdateDenyConfig', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_stream_usage_data(self, body):
+        res = self.api_post('DescribeLiveStreamUsageData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

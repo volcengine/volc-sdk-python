@@ -1,2 +1,1 @@
-def models():
-    return None
+__version__ = '1.0.0'
