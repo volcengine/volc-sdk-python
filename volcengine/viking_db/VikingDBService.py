@@ -24,8 +24,8 @@ class VikingDBService(Service):
                     VikingDBService._instance = object.__new__(cls)
         return VikingDBService._instance
 
-    def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk=""):
-        self.service_info = VikingDBService.get_service_info(host, region)
+    def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk="", scheme='http'):
+        self.service_info = VikingDBService.get_service_info(host, region, scheme)
         self.api_info = VikingDBService.get_api_info()
         super(VikingDBService, self).__init__(self.service_info, self.api_info)
         if ak:
@@ -34,9 +34,9 @@ class VikingDBService(Service):
             self.set_sk(sk)
 
     @staticmethod
-    def get_service_info(host, region):
+    def get_service_info(host, region, scheme):
         service_info = ServiceInfo(host, {"Host": host},
-                                   Credentials('', '', 'air', region), 5, 5)
+                                   Credentials('', '', 'air', region), 5, 5, scheme=scheme)
         return service_info
 
     @staticmethod
@@ -98,7 +98,22 @@ class VikingDBService(Service):
 
     # get参数放在body里面，异常处理
     def get_body_exception(self, api, params, body):
-        res = self.get_body(api, params, body)
+        # res = self.get_body(api, params, body)
+        # if res == '':
+        #     raise VikingDBException(1000028, "missed",
+        #                             "empty response due to unknown error, please contact customer service")
+        # return res
+        try:
+            res = self.get_body(api, params, body)
+        except Exception as e:
+            try:
+                res_json = json.loads(e.args[0].decode("utf-8"))
+            except:
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e)))
+            code = res_json.get("code", 1000028)
+            request_id = res_json.get("request_id", 1000028)
+            message = res_json.get("message", None)
+            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message)
         if res == '':
             raise VikingDBException(1000028, "missed",
                                     "empty response due to unknown error, please contact customer service")
@@ -106,7 +121,22 @@ class VikingDBService(Service):
 
     # get参数放在url里面，异常处理
     def get_exception(self, api, params):
-        res = self.get(api, params)
+        # res = self.get(api, params)
+        # if res == '':
+        #     raise VikingDBException(1000028, "missed",
+        #                             "empty response due to unknown error, please contact customer service")
+        # return res
+        try:
+            res = self.get(api, params)
+        except Exception as e:
+            try:
+                res_json = json.loads(e.args[0].decode("utf-8"))
+            except:
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e)))
+            code = res_json.get("code", 1000028)
+            request_id = res_json.get("request_id", 1000028)
+            message = res_json.get("message", None)
+            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message)
         if res == '':
             raise VikingDBException(1000028, "missed",
                                     "empty response due to unknown error, please contact customer service")
@@ -114,26 +144,26 @@ class VikingDBService(Service):
 
     # post异常处理
     def json_exception(self, api, params, body):
-        res = self.json(api, params, body)
-        if res == '':
-            raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service")
-        return res
-        # try:
-        #     res = self.json(api, params, body)
-        # except Exception as e:
-        #     try:
-        #         res_json = json.loads(json.dumps(eval(str(e))))
-        #     except:
-        #         raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e)))
-        #     code = res_json.get("code", 1000028)
-        #     request_id = res_json.get("request_id", 1000028)
-        #     message = res_json.get("message", None)
-        #     raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message)
+        # res = self.json(api, params, body)
         # if res == '':
         #     raise VikingDBException(1000028, "missed",
         #                             "empty response due to unknown error, please contact customer service")
         # return res
+        try:
+            res = self.json(api, params, body)
+        except Exception as e:
+            try:
+                res_json = json.loads(e.args[0].decode("utf-8"))
+            except:
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e)))
+            code = res_json.get("code", 1000028)
+            request_id = res_json.get("request_id", 1000028)
+            message = res_json.get("message", None)
+            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message)
+        if res == '':
+            raise VikingDBException(1000028, "missed",
+                                    "empty response due to unknown error, please contact customer service")
+        return res
 
     def create_collection(self, collection_name, fields, description=""):
         """
@@ -190,6 +220,9 @@ class VikingDBService(Service):
         stat = None
         fields = []
         indexes = []
+        create_time = None
+        update_time = None
+        update_person = None
         # print(res)
         if "fields" in res["data"]:
             # fields 应该是list<Field>，这里是json array
@@ -229,10 +262,15 @@ class VikingDBService(Service):
                 indexes.append(index)
         if "stat" in res["data"]:
             stat = res["data"]["stat"]
-
+        if "create_time" in res["data"]:
+            create_time = res["data"]["create_time"]
+        if "update_time" in res["data"]:
+            update_time = res["data"]["update_time"]
+        if "update_person" in res["data"]:
+            update_person = res["data"]["update_person"]
         # print(description, fields, indexes, stat, res["data"]["primary_key"])
         collection = Collection(collection_name, fields, self, res["data"]["primary_key"], indexes=indexes, stat=stat,
-                                description=description)
+                                description=description, create_time=create_time, update_time=update_time, update_person=update_person)
         return collection
 
     def drop_collection(self, collection_name):
@@ -322,6 +360,7 @@ class VikingDBService(Service):
         vector_index = scalar_index = partition_by = status = None
         cpu_quota = 2
         description = ""
+        shard_count = index_cost = create_time = update_time = update_person = None
         # print(res["data"])
         if "vector_index" in res["data"]:
             vector_index = res["data"]["vector_index"]
@@ -342,9 +381,20 @@ class VikingDBService(Service):
             partition_by = res["data"]["partition_by"]
         if "status" in res["data"]:
             status = res["data"]["status"]
+        if "create_time" in res["data"]:
+            create_time = res["data"]["create_time"]
+        if "update_time" in res["data"]:
+            update_time = res["data"]["update_time"]
+        if "update_person" in res["data"]:
+            update_person = res["data"]["update_person"]
+        if "index_cost" in res["data"]:
+            index_cost = res["data"]["index_cost"]
+        if "shard_count" in res["data"]:
+            shard_count = res["data"]["shard_count"]
         # print(collection_name, index_name, vector_index, scalar_index, description, cpu_quota, partition_by, status)
         index = Index(collection_name, index_name, vector_index, scalar_index, status, self, description=description,
-                      cpu_quota=cpu_quota, partition_by=partition_by)
+                      cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time, update_time=update_time,
+                      update_person=update_person, index_cost=index_cost, shard_count=shard_count)
         return index
 
     def drop_index(self, collection_name, index_name):
@@ -382,6 +432,7 @@ class VikingDBService(Service):
             vector_index = scalar_index = partition_by = status = None
             cpu_quota = 2
             description = index_name = ""
+            shard_count = index_cost = create_time = update_time = update_person = None
             if "index_name" in item:
                 index_name = item["index_name"]
             if "vector_index" in item:
@@ -403,10 +454,22 @@ class VikingDBService(Service):
                 partition_by = item["partition_by"]
             if "status" in item:
                 status = item["status"]
+            if "create_time" in item:
+                create_time = item["create_time"]
+            if "update_time" in item:
+                update_time = item["update_time"]
+            if "update_person" in item:
+                update_person = item["update_person"]
+            if "index_cost" in item:
+                index_cost = item["index_cost"]
+            if "shard_count" in item:
+                shard_count = item["shard_count"]
             # print(collection_name, index_name, vector_index, scalar_index, description, cpu_quota, partition_by, status)
             index = Index(collection_name, index_name, vector_index, scalar_index, status, self,
                           description=description,
-                          cpu_quota=cpu_quota, partition_by=partition_by)
+                          cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time,
+                          update_time=update_time, update_person=update_person, index_cost=index_cost,
+                          shard_count=shard_count)
             indexes.append(index)
         # print(indexes)
         return indexes

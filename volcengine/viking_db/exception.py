@@ -1,5 +1,5 @@
 # coding:utf-8
-class OtherException(Exception):
+class VikingDBServerException(Exception):
     def __init__(self, code, request_id, message=None):
         self.code = code
         self.request_id = request_id
@@ -9,127 +9,127 @@ class OtherException(Exception):
         return self.message
 
 
-class UnauthorizedException(OtherException):
+class UnauthorizedException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class NoPermissionException(OtherException):
+class NoPermissionException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class InvalidRequestException(OtherException):
+class InvalidRequestException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class CollectionExistException(OtherException):
+class CollectionExistException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class CollectionNotExistException(OtherException):
+class CollectionNotExistException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class OperationNotAllowedException(OtherException):
+class OperationNotAllowedException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class IndexExistException(OtherException):
+class IndexExistException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class IndexNotExistException(OtherException):
+class IndexNotExistException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class QueryOpFailedException(OtherException):
+class QueryOpFailedException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class DataNotFoundException(OtherException):
+class DataNotFoundException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class DelOpFailedException(OtherException):
+class DelOpFailedException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class UpsertOpFailedException(OtherException):
+class UpsertOpFailedException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class TokenMismatchException(OtherException):
+class TokenMismatchException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class InvalidQueryVecException(OtherException):
+class InvalidQueryVecException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class InvalidPrimaryKeyException(OtherException):
+class InvalidPrimaryKeyException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class InvalidPartitionException(OtherException):
+class InvalidPartitionException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class InvalidScalarCondException(OtherException):
+class InvalidScalarCondException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class InvalidProxyServiceException(OtherException):
+class InvalidProxyServiceException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class IndexRecallException(OtherException):
+class IndexRecallException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class IndexFetchDataException(OtherException):
+class IndexFetchDataException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class IndexNotReadyException(OtherException):
+class IndexNotReadyException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class APINotImplementedException(OtherException):
+class APINotImplementedException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class CalcEmbeddingFailedException(OtherException):
+class CalcEmbeddingFailedException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class ListEmbeddingModelsException(OtherException):
+class ListEmbeddingModelsException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         super().__init__(code, request_id, message)
 
 
-class VikingDBException(OtherException):
+class VikingDBException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         self.code = code
         self.request_id = request_id

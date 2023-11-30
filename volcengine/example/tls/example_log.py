@@ -4,17 +4,18 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-import time
 
 from volcengine.tls.TLSService import TLSService
 from volcengine.tls.tls_requests import *
 
+
 if __name__ == "__main__":
-    # 请查询控制台，填写以下参数值
-    endpoint = os.environ["endpoint"]
-    access_key_id = os.environ["access_key_id"]
-    access_key_secret = os.environ["access_key_secret"]
-    region = os.environ["region"]
+    # 初始化客户端，推荐通过环境变量动态获取火山引擎密钥等身份认证信息，以免AccessKey硬编码引发数据安全风险。详细说明请参考 https://www.volcengine.com/docs/6470/1166455
+    # 使用STS时，ak和sk均使用临时密钥，且设置VOLCENGINE_TOKEN；不使用STS时，VOLCENGINE_TOKEN部分传空
+    endpoint = os.environ["VOLCENGINE_ENDPOINT"]
+    region = os.environ["VOLCENGINE_REGION"]
+    access_key_id = os.environ["VOLCENGINE_ACCESS_KEY_ID"]
+    access_key_secret = os.environ["VOLCENGINE_ACCESS_KEY_SECRET"]
 
     # 实例化TLS客户端
     tls_service = TLSService(endpoint, access_key_id, access_key_secret, region)
@@ -45,47 +46,49 @@ if __name__ == "__main__":
     create_index_response = tls_service.create_index(create_index_request)
 
     # 写入日志数据
-    log_group_list = LogGroupList()
-
-    log_group = log_group_list.log_groups.add()
-    log_group.source = "127.0.0.1"
-    log_group.filename = "sys.log"
-
-    log = log_group.logs.add()
-    log.time = 1346457600000
-
-    log_content = log.contents.add()
-    log_content.key = "key1"
-    log_content.value = "error"
-
-    put_logs_request = PutLogsRequest(topic_id, log_group_list, compression="lz4")
-    tls_service.put_logs(put_logs_request)
+    # 建议您一次性聚合多条日志后调用一次put_logs_v2接口，以提高日志上传吞吐率
+    # 请根据您的需要，填写topic_id、source、filename和logs列表，建议您使用lz4压缩
+    # PutLogs API的请求参数规范和限制请参阅 https://www.volcengine.com/docs/6470/112191
+    logs = PutLogsV2Logs(source="192.168.1.1", filename="sys.log")
+    for i in range(100):
+        logs.add_log(contents={"key1": "value1-" + str(i + 1), "key2": "value2-" + str(i + 1)},
+                     log_time=int(round(time.time())))
+    tls_service.put_logs_v2(PutLogsV2Request(topic_id, logs))
     time.sleep(30)
 
-    # # 查询消费游标
+    # 查询消费游标
+    # 请根据您的需要，填写topic_id、shard_id和from_time
+    # DescribeCursor API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112193
     describe_cursor_request = DescribeCursorRequest(topic_id, shard_id=0, from_time="begin")
     describe_cursor_response = tls_service.describe_cursor(describe_cursor_request)
-    print("log cursor{}".format(describe_cursor_response.cursor))
+
     # 消费日志数据
+    # 请根据您的需要，填写topic_id、shard_id、cursor等参数
+    # ConsumeLogs API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112194
     consume_logs_request = ConsumeLogsRequest(topic_id, shard_id=0, cursor=describe_cursor_response.cursor)
     consume_logs_response = tls_service.consume_logs(consume_logs_request)
-    print("log count{} cursor{}".format(consume_logs_response.get_x_tls_count(),
-                                        consume_logs_response.get_x_tls_cursor()))
+
+    # 查询分析日志数据
+    # 请根据您的需要，填写topic_id、query、start_time、end_time、limit等参数值
+    # SearchLogs API的请求参数规范和限制请参阅 https://www.volcengine.com/docs/6470/112195
+
+    # 当您需要检索和分析日志时，推荐您使用Python SDK提供的search_logs_v2方法，下面的代码提供了具体的调用示例
     # 查询日志数据（全文检索）
     search_logs_request = SearchLogsRequest(topic_id, query="error", limit=10,
-                                            start_time=1346457600000, end_time=1630454400000)
+                                            start_time=1672502400000, end_time=1688140800000)
     search_logs_response = tls_service.search_logs_v2(search_logs_request)
-    print("search logs {}".format(search_logs_response.get_search_result().get_logs()[0].get("key1")))
 
     # 查询日志数据（键值检索）
     search_logs_request = SearchLogsRequest(topic_id, query="key1:error", limit=10,
-                                            start_time=1346457600000, end_time=1630454400000)
+                                            start_time=1672502400000, end_time=1688140800000)
     search_logs_response = tls_service.search_logs_v2(search_logs_request)
-    print("search logs {}".format(search_logs_response.get_search_result().get_logs()[0].get("key1")))
+
     # 查询日志数据（SQL分析）
-    search_logs_request = SearchLogsRequest(topic_id, query="*|select key2,count(*) cnt group by key2", limit=10,
-                                            start_time=1346457600000, end_time=1630454400000)
+    search_logs_request = SearchLogsRequest(topic_id, query="* | select key1, key2", limit=10,
+                                            start_time=1672502400000, end_time=1688140800000)
     search_logs_response = tls_service.search_logs_v2(search_logs_request)
-    print("analysis logs {}".format(search_logs_response.get_search_result().get_analysis_result()[0].get("key1")))
-    tls_service.delete_topic(DeleteTopicRequest(topic_id))
-    tls_service.delete_project(DeleteProjectRequest(project_id))
+
+    # 查询日志数据（SQL分析）
+    search_logs_request = SearchLogsRequest(topic_id, query="* | select key1, key2", limit=10,
+                                            start_time=1672502400000, end_time=1688140800000)
+    search_logs_response = tls_service.search_logs(search_logs_request)

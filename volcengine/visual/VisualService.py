@@ -122,7 +122,6 @@ class VisualService(Service):
             "FaceFusionMovieGetResult": ApiInfo("POST", "/", {"Action": "FaceFusionMovieGetResult", "Version": "2022-08-31"}, {},{}),
             "FaceFusionMovie": ApiInfo("POST", "/", {"Action": "FaceFusionMovie", "Version": "2022-08-31"}, {}, {}),
             "TupoCartoon": ApiInfo("POST", "/", {"Action": "TupoCartoon", "Version": "2022-08-31"}, {}, {}),
-            "T2iLDM": ApiInfo("POST", "/", {"Action": "T2iLDM", "Version": "2022-08-31"}, {}, {}),
             "LensVidaVideoSubmitTaskV2": ApiInfo("POST", "/",{"Action": "LensVidaVideoSubmitTaskV2", "Version": "2022-08-31"}, {},{}),
             "LensVidaVideoGetResultV2": ApiInfo("POST", "/",{"Action": "LensVidaVideoGetResultV2", "Version": "2022-08-31"}, {},{}),
             "CertSrcFaceComp": ApiInfo("POST", "/", {"Action": "CertSrcFaceComp", "Version": "2022-08-31"}, {}, {}),

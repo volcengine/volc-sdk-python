@@ -7,7 +7,8 @@ from volcengine.viking_db.common import Data, VectorOrder, ScalarOrder
 
 class Index(object):
     def __init__(self, collection_name, index_name, vector_index, scalar_index, stat, viking_db_service, description="",
-                 cpu_quota=2, partition_by=None):
+                 cpu_quota=2, partition_by=None, create_time=None, update_time=None, update_person=None,
+                 index_cost=None, shard_count=None):
         self.collection_name = collection_name
         self.index_name = index_name
         self.description = description
@@ -17,7 +18,11 @@ class Index(object):
         self.viking_db_service = viking_db_service
         self.cpu_quota = cpu_quota
         self.partition_by = partition_by
-
+        self.create_time = create_time
+        self.update_time = update_time
+        self.update_person = update_person
+        self.index_cost = index_cost
+        self.shard_count = shard_count
         # 获取primary_key
         col = self.viking_db_service.get_exception("GetCollection", {"collection_name": self.collection_name})
         col = json.loads(col)
@@ -73,7 +78,7 @@ class Index(object):
                     if output_fields != [] or output_fields is None:
                         fields = item["fields"]
                     # print(id, fields)
-                    data = Data(fields, id=id, timestamp=None)
+                    data = Data(fields, id=id, timestamp=None, score=item["score"])
                     datas.append(data)
                 # print("==================")
             return datas
@@ -118,7 +123,7 @@ class Index(object):
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
                 # print(id, fields)
-                data = Data(fields, id=id, timestamp=None)
+                data = Data(fields, id=id, timestamp=None, score=item["score"])
                 datas.append(data)
             # print("==================")
         return datas
@@ -163,7 +168,7 @@ class Index(object):
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
                 # print(id, fields)
-                data = Data(fields, id=id, timestamp=None)
+                data = Data(fields, id=id, timestamp=None, score=item["score"])
                 datas.append(data)
             # print("==================")
         return datas
@@ -206,7 +211,7 @@ class Index(object):
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
                 # print(id, fields)
-                data = Data(fields, id=id, timestamp=None)
+                data = Data(fields, id=id, timestamp=None, score=item["score"])
                 datas.append(data)
             # print("==================")
         return datas

@@ -10,10 +10,11 @@ sys.path.insert(0, "/data00/home/xiejianqiao.1027/project/volc-sdk-python/volcen
 
 
 if __name__ == '__main__':
-    # vikingdb_service = VikingDBService("101.126.33.217", "cn-north-1")  # 正式环境
-    vikingdb_service = VikingDBService("your host", "your region")  # 测试环境
-    vikingdb_service.set_ak("your ak")
-    vikingdb_service.set_sk("your sk")
+    vikingdb_service = VikingDBService("host", "region")
+    vikingdb_service.set_ak("ak")
+    vikingdb_service.set_sk("sk")
+
+
 
     # 写给用户的样例
     # fields = [
@@ -23,7 +24,7 @@ if __name__ == '__main__':
     #         is_primary_key=True
     #     ),
     #     Field(
-    #         field_name="'text_vector'",
+    #         field_name="text_vector",
     #         field_type=FieldType.Vector,
     #         dim=10
     #     ),
@@ -49,12 +50,12 @@ if __name__ == '__main__':
     #     ),
     # ]
     # res = vikingdb_service.create_collection("example", fields, "This is an example")
-    # 返回一个collection实例
+    # # 返回一个collection实例
     # print(res)
     #
     # res = vikingdb_service.get_collection("example")
     # 返回一个collection实例
-    # print(res)
+    # print(res.update_person)
     #
     # vikingdb_service.drop_collection("example")  # 无返回
     #
@@ -64,20 +65,24 @@ if __name__ == '__main__':
     #
     # vector_index = VectorIndexParams(distance=DistanceType.COSINE,index_type=IndexType.HNSW,
     #                                  quant=QuantType.Float)
-    # res = vikingdb_service.create_index("example","example_index", vector_index, cpu_quota=2,
+    # res = vikingdb_service.create_index("example","example_index1", vector_index, cpu_quota=2,
     #                                     description="This is an index", scalar_index=['price', 'like'])
     # 返回一个index实例
     # print(res)
     #
     # res = vikingdb_service.get_index("example", "example_index")
     # 返回一个index实例
-    # print(res.scalar_index)
+    # print(res.shard_count)
     #
     # vikingdb_service.drop_index("example", "example_index")  # 无返回
     #
     # res = vikingdb_service.list_indexes("example")
     # 返回一个列表
-    # print(res)
+    # for item in res:
+    #     print(item.index_cost)
+    #     print(item.update_person)
+    #     print(item.update_time)
+    #     print(item.create_time)
     #
     # def gen_random_vector(dim):
     #     res = [0, ] * dim
@@ -85,18 +90,18 @@ if __name__ == '__main__':
     #         res[i] = random.random() - 0.5
     #     return res
     # collection = vikingdb_service.get_collection("example")
-    # field1 = {"doc_id": "11", "text_vector": gen_random_vector(10), "like": 1, "price": 1.11,
+    # field1 = {"doc_id": "111", "text_vector": gen_random_vector(10), "like": 1, "price": 1.11,
     #           "author": ["gy"], "aim": True}
-    # field2 = {"doc_id": "22", "text_vector": gen_random_vector(10), "like": 2, "price": 2.22,
+    # field2 = {"doc_id": "222", "text_vector": gen_random_vector(10), "like": 2, "price": 2.22,
     #           "author": ["gy", "xjq"], "aim": False}
-    # field3 = {"doc_id": "33", "text_vector": gen_random_vector(10), "like": 1, "price": 3.33,
+    # field3 = {"doc_id": "333", "text_vector": gen_random_vector(10), "like": 1, "price": 3.33,
     #           "author": ["gy", "xjq"], "aim": False}
-    # field4 = {"doc_id": "44", "text_vector": gen_random_vector(10), "like": 1, "price": 4.44,
+    # field4 = {"doc_id": "444", "text_vector": gen_random_vector(10), "like": 1, "price": 4.44,
     #           "author": ["gy", "xjq"], "aim": False}
-    # data1 = Data(field1)
-    # data2 = Data(field2)
-    # data3 = Data(field3)
-    # data4 = Data(field4)
+    # data1 = Data(field1, TTL=2000)
+    # data2 = Data(field2, TTL=3000)
+    # data3 = Data(field3, TTL=4000)
+    # data4 = Data(field4, TTL=2000)
     # datas = []
     # datas.append(data1)
     # datas.append(data2)
@@ -105,7 +110,9 @@ if __name__ == '__main__':
     # collection.upsert_data(datas)  # 无返回
     #
     # collection = vikingdb_service.get_collection("example")
-    # res = collection.fetch_data(["11", "22", "33", "44"])
+    # res = collection.fetch_data("111")
+    # print(res.fields)
+    # res = collection.fetch_data(["111", "222", "333", "444"])
     # 返回一个列表
     # for item in res:
     #     print(item)
@@ -122,12 +129,12 @@ if __name__ == '__main__':
     #     print(item.fields)
     #
     # index = vikingdb_service.get_index("example", "example_index")
-    # res = index.search_by_id("11", limit=2, output_fields=["doc_id", "like", "text_vector"], partition="1")
+    # res = index.search_by_id("111", limit=2, output_fields=["doc_id", "like", "text_vector"])
     # 返回一个列表
     # for item in res:
     #     print(item)
-    #     print(item.fields)
-    #
+    #     print(item.score)
+
     # index = vikingdb_service.get_index("example", "example_index")
     # def gen_random_vector(dim):
     #     res = [0, ] * dim
@@ -135,11 +142,11 @@ if __name__ == '__main__':
     #         res[i] = random.random() - 0.5
     #     return res
     # res = index.search_by_vector(gen_random_vector(10), limit=2, output_fields=["doc_id", "like", "text_vector"],
-    #                              partition="1")
+    #                              )
     # 返回一个列表
     # for item in res:
     #     print(item)
-    #     print(item.fields)
+    #     print(item.score)
     #
     # index = vikingdb_service.get_index("example", "example_index")
     # def gen_random_vector(dim):
@@ -149,19 +156,18 @@ if __name__ == '__main__':
     #     return res
     # res = index.search(order=VectorOrder(gen_random_vector(10)), limit=2,
     #                    output_fields=["doc_id", "like", "text_vector"],
-    #                    partition="1", filter={"op": "range", "field": "price", "lt": 3.5})
+    #                     filter={"op": "range", "field": "price", "lt": 3.5})
     # 返回一个列表
     # for item in res:
     #     print(item)
-    #     print(item.fields)
+    #     print(item.score)
     # res = index.search(order=ScalarOrder("price", Order.Desc), limit=6,
     #                    output_fields=["price"],
-    #                    partition="1",
     #                    filter={"op": "range", "field": "price", "lt": 5})
-    # 返回一个列表
+    # # 返回一个列表
     # for item in res:
     #     print(item)
-    #     print(item.fields)
+    #     print(item.score)
     #
     # 含有text字段的测试
     # fields = [

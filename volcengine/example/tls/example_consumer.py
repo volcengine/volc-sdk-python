@@ -30,20 +30,21 @@ class MyLogProcessor(LogProcessor):
 
 
 if __name__ == '__main__':
-    # 配置TLS Client的基本信息
-    endpoint = os.environ["endpoint"]
-    access_key_id = os.environ["access_key_id"]
-    access_key_secret = os.environ["access_key_secret"]
-    region = os.environ["region"]
+    # 初始化客户端，推荐通过环境变量动态获取火山引擎密钥等身份认证信息，以免AccessKey硬编码引发数据安全风险。详细说明请参考https://www.volcengine.com/docs/6470/1166455
+    # 使用STS时，ak和sk均使用临时密钥，且设置VOLCENGINE_TOKEN；不使用STS时，VOLCENGINE_TOKEN部分传空
+    endpoint = os.environ["VOLCENGINE_ENDPOINT"]
+    region = os.environ["VOLCENGINE_REGION"]
+    access_key_id = os.environ["VOLCENGINE_ACCESS_KEY_ID"]
+    access_key_secret = os.environ["VOLCENGINE_ACCESS_KEY_SECRET"]
 
     # 实例化TLS客户端
     tls_service = TLSService(endpoint, access_key_id, access_key_secret, region)
 
-    # 配置消费组的必填参数，ConsumerConfig构造函数设定了一些默认参数，也可根据需要自定义配置
-    consumer_config = ConsumerConfig(project_id="ProjectID",
+    # 配置消费组的必填参数，ConsumerConfig构造函数设定了一些默认参数，您也可根据需要自定义配置
+    consumer_config = ConsumerConfig(project_id="your-project-id",
                                      consumer_group_name="python-consumer-group",
                                      consumer_name="python-consumer",
-                                     topic_id_list=["TopicID"])
+                                     topic_id_list=["your-topic-id"])
     tls_consumer = TLSConsumer(consumer_config, tls_service, MyLogProcessor())
 
     # 调用start方法开始持续消费

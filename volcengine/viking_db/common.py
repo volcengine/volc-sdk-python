@@ -137,10 +137,20 @@ class Text(object):
 
 
 class Data(object):
-    def __init__(self, fields, id=None, timestamp=None):
+    def __init__(self, fields, id=None, TTL=None, timestamp=None, score=None):
         self._id = id
         self._fields = fields
         self._timestamp = timestamp
+        self._TTL = TTL
+        self._score = score
+
+    @property
+    def TTL(self):
+        return self._TTL
+
+    @property
+    def score(self):
+        return self._score
 
     @property
     def id(self):

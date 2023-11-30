@@ -10,7 +10,7 @@ from volcengine.viking_db.common import Data
 
 class Collection(object):
     def __init__(self, collection_name, fields, viking_db_service, primary_key, indexes=None, stat=None,
-                 description=""):
+                 description="", create_time=None, update_time=None, update_person=None):
         self.collection_name = collection_name
         self.fields = fields
         self.viking_db_service = viking_db_service
@@ -24,7 +24,12 @@ class Collection(object):
         else:
             self.stat = {}
         self.description = description
-
+        if create_time is not None:
+            self.create_time = create_time
+        if update_time is not None:
+            self.update_time = update_time
+        if update_person is not None:
+            self.update_person = update_person
     def upsert_data(self, data: Union[Data, List[Data]]):
         """
         Insert and overwrite data in fields within a collection
@@ -35,17 +40,27 @@ class Collection(object):
         """
         if isinstance(data, Data):
             fields_arr = [data.fields]
-            params = {"collection_name": self.collection_name, "fields": fields_arr}
+            ttl = 0
+            if data.TTL is not None:
+                ttl = data.TTL
+            params = {"collection_name": self.collection_name, "fields": fields_arr, "ttl": ttl}
+            # print(params)
             res = self.viking_db_service.json_exception("UpsertData", {}, json.dumps(params))
         elif isinstance(data, list):
             fields_arr = []
+            ttl = 0
+            record = {}
             for item in data:
-                fields_arr.append(item.fields)
-                # print(item.fields)
-            # print(fields_arr)
-            params = {"collection_name": self.collection_name, "fields": fields_arr}
-            res = self.viking_db_service.json_exception("UpsertData", {}, json.dumps(params))
-            # print(res,params)
+                if item.TTL in record:
+                    fields = record[item.TTL]
+                    fields.append(item.fields)
+                    record[item.TTL] = fields
+                else:
+                    record[item.TTL] = [item.fields]
+            for item in record:
+                params = {"collection_name": self.collection_name, "fields": record[item], "ttl": item}
+                res = self.viking_db_service.json_exception("UpsertData", {}, json.dumps(params))
+
 
     def delete_data(self, id: Union[str, List[str], int, List[int]]):
         """

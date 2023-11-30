@@ -12,9 +12,9 @@ if __name__ == '__main__':
 
     form = {
 
-        "image_url":"https://xxx"
+        "image_url": "https://xxx"
 
     }
 
-    resp = visual_service.car_plate_detection(form)
+    resp = visual_service.car_detection(form)
     print(resp)

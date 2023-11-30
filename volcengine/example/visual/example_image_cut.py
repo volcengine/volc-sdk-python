@@ -15,7 +15,10 @@ if __name__ == '__main__':
     params = dict()
 
     form = {
-        "image_base64": "image_base64_str"
+        "image_url": "https://xxx",
+        "width": 100,
+        "height": 120,
+        "cut_method": "gauss_padding_reserve_score"
     }
 
     resp = visual_service.image_cut(form)

@@ -1580,18 +1580,18 @@ class QueryRequest(TLSData):
     def __init__(self, topic_id: str, query: str, number: int,
                  start_time_offset: int, end_time_offset: int, topic_name: str = None):
         """
-        :param topic_id:日志主题 ID
-        :type topic_id:str
-        :param query:查询语句，支持的最大长度为 1024
-        :type query:str
-        :param number:告警对象序号；从 1 开始递增
-        :type number:int
-        :param start_time_offset:查询范围起始时间相对当前的历史时间，单位为分钟，取值为非正，最大值为 0，最小值为 -1440
-        :type start_time_offset:int
-        :param end_time_offset:查询范围终止时间相对当前的历史时间，单位为分钟，取值为非正，须大于StartTimeOffset，最大值为 0，最小值为 -1440
-        :type end_time_offset:int
-        :param topic_name:告警策略执行的日志主题名称
-        :type topic_name:str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param query: 查询语句，支持的最大长度为1024
+        :type query: str
+        :param number: 告警对象序号（从1开始递增）
+        :type number: int
+        :param start_time_offset: 查询范围起始时间相对当前的历史时间，单位为分钟，取值为非正，最大值为0，最小值为-1440
+        :type start_time_offset: int
+        :param end_time_offset: 查询范围终止时间相对当前的历史时间，单位为分钟，取值为非正，须大于StartTimeOffset，最大值为0，最小值为-1440
+        :type end_time_offset: int
+        :param topic_name: 告警策略执行的日志主题名称
+        :type topic_name: str
         """
         self.topic_id = topic_id
         self.query = query
@@ -1651,7 +1651,7 @@ class QueryRequest(TLSData):
         start_time_offset = data.get(START_TIME_OFFSET)
         end_time_offset = data.get(END_TIME_OFFSET)
 
-        return cls(topic_id, topic_name, query, number, start_time_offset, end_time_offset)
+        return cls(topic_id, query, number, start_time_offset, end_time_offset, topic_name)
 
 
 class RequestCycle(TLSData):

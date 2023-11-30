@@ -15,7 +15,8 @@ if __name__ == '__main__':
     params = dict()
 
     form = {
-        "image_base64": "image_base64_str"
+        "image_url": "https://xxx",
+        "method":"human"
     }
 
     resp = visual_service.goods_segment(form)
