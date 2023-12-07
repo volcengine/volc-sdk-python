@@ -74,6 +74,8 @@ class VikingDBService(Service):
                                  {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "ListEmbeddings": ApiInfo("GET", "/api/data/list_embedding_models", {}, {},
                                       {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "UpdateCollection": ApiInfo("POST", "/api/collection/update", {}, {},
+                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
         return api_info
 
@@ -109,14 +111,14 @@ class VikingDBService(Service):
             try:
                 res_json = json.loads(e.args[0].decode("utf-8"))
             except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e)))
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)
-            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message)
+            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
         if res == '':
             raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service")
+                                    "empty response due to unknown error, please contact customer service") from None
         return res
 
     # get参数放在url里面，异常处理
@@ -132,14 +134,14 @@ class VikingDBService(Service):
             try:
                 res_json = json.loads(e.args[0].decode("utf-8"))
             except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e)))
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)
-            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message)
+            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
         if res == '':
             raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service")
+                                    "empty response due to unknown error, please contact customer service") from None
         return res
 
     # post异常处理
@@ -155,14 +157,14 @@ class VikingDBService(Service):
             try:
                 res_json = json.loads(e.args[0].decode("utf-8"))
             except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e)))
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)
-            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message)
+            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
         if res == '':
             raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service")
+                                    "empty response due to unknown error, please contact customer service") from None
         return res
 
     def create_collection(self, collection_name, fields, description=""):
@@ -270,7 +272,8 @@ class VikingDBService(Service):
             update_person = res["data"]["update_person"]
         # print(description, fields, indexes, stat, res["data"]["primary_key"])
         collection = Collection(collection_name, fields, self, res["data"]["primary_key"], indexes=indexes, stat=stat,
-                                description=description, create_time=create_time, update_time=update_time, update_person=update_person)
+                                description=description, create_time=create_time, update_time=update_time,
+                                update_person=update_person)
         return collection
 
     def drop_collection(self, collection_name):
@@ -294,10 +297,67 @@ class VikingDBService(Service):
         res = self.get_exception("ListCollections", {})
         res = json.loads(res)
         collections = []
-        for item in res["data"]:
-            # print(item)
-            collection = self.get_collection(item["collection_name"])
-            # print(collection)
+        for indexItem in res["data"]:
+            # print(indexItem)
+            description = None
+            collection_name = None
+            stat = None
+            fields = []
+            indexes = []
+            create_time = None
+            update_time = None
+            update_person = None
+            # print(res)
+            if "fields" in indexItem:
+                # print(indexItem)
+                for item in indexItem["fields"]:
+                    field_name = None
+                    field_type = None
+                    default_val = None
+                    dim = None
+                    is_primary_key = False
+                    pipeline_name = None
+                    # print(item)
+                    if "field_name" in item:
+                        field_name = item["field_name"]
+                    if "field_type" in item:
+                        field_type = item["field_type"]
+                    if "default_val" in item:
+                        default_val = item["default_val"]
+                    if "dim" in item:
+                        dim = item["dim"]
+                    if "primary_key" in indexItem:
+                        if indexItem["primary_key"] == field_name:
+                            is_primary_key = True
+                    if "pipeline_name" in item:
+                        pipeline_name = item["pipeline_name"]
+                    # print(field_name, field_type, default_val, dim, is_primary_key, pipeline_name)
+                    field = Field(field_name, field_type, default_val=default_val, dim=dim,
+                                  is_primary_key=is_primary_key, pipeline_name=pipeline_name)
+                    fields.append(field)
+            if "collection_name" in indexItem:
+                collection_name = indexItem["collection_name"]
+            if "description" in indexItem:
+                description = indexItem["description"]
+            if "indexes" in indexItem:
+                # print(res["data"]["indexes"]) 返回的是index_name
+                for item in indexItem["indexes"]:
+                    # print(item)
+                    index = self.get_index(collection_name, item)
+                    indexes.append(index)
+            if "stat" in indexItem:
+                stat = indexItem["stat"]
+            if "create_time" in indexItem:
+                create_time = indexItem["create_time"]
+            if "update_time" in indexItem:
+                update_time = indexItem["update_time"]
+            if "update_person" in indexItem:
+                update_person = indexItem["update_person"]
+            # print(description, fields, indexes, stat, indexItem["primary_key"], create_time, update_time, update_person)
+            collection = Collection(collection_name, fields, self, indexItem["primary_key"], indexes=indexes,
+                                    stat=stat,
+                                    description=description, create_time=create_time, update_time=update_time,
+                                    update_person=update_person)
             collections.append(collection)
         return collections
 
@@ -506,9 +566,34 @@ class VikingDBService(Service):
             # print(res["data"])
             return res["data"]
 
+    def update_collection(self, collection_name, fields, description=None):
+        _fields = []
+        for field in fields:
+            assert isinstance(field, Field)
+            _field = {
+                "field_name": field.field_name,
+                "field_type": field.field_type.value,
+            }
+            if field.default_val is not None:
+                _field["default_val"] = field.default_val
+            if field.dim is not None:
+                _field["dim"] = field.dim
+            if field.pipeline_name is not None:
+                _field["pipeline_name"] = field.pipeline_name
+            _fields.append(_field)
+        params = {
+            "collection_name": collection_name,
+            "fields": _fields
+        }
+        if description != None:
+            params["description"] = description
+        # print(params)
+        res = self.json_exception("UpdateCollection", {}, json.dumps(params))
+
+
+
     def list_embeddings(self, model_name=""):
         params = {"model_name": model_name}
         res = self.get_body_exception("ListEmbeddings", {}, json.dumps(params))
         print(res)
         pass
-

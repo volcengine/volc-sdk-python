@@ -61,7 +61,9 @@ if __name__ == '__main__':
     #
     # res = vikingdb_service.list_collections()
     # 返回一个列表
-    # print(res)
+    # for item in res:
+    #     print(item.indexes)
+
     #
     # vector_index = VectorIndexParams(distance=DistanceType.COSINE,index_type=IndexType.HNSW,
     #                                  quant=QuantType.Float)
@@ -241,3 +243,26 @@ if __name__ == '__main__':
     # print(res)
     # for item in res:
     #     print(item)
+
+    # fields = [
+    #     Field(
+    #         field_name="like1",
+    #         field_type=FieldType.Float32,
+    #         default_val=0
+    #     ),
+    #     Field(
+    #         field_name="price1",
+    #         field_type=FieldType.String,
+    #         default_val=""
+    #     ),
+    # ]
+    # vikingdb_service.update_collection("example",fields,description="change")
+    # res = vikingdb_service.get_collection("example")
+    # print(res.description)
+    # for field in res.fields:
+    #     print(field.field_name)
+    #     print(field.field_type)
+    #     print(field.default_val)
+    #     print(field.dim)
+    #     print(field.pipeline_name)
+    #     print("--------------------")
