@@ -13,9 +13,6 @@ if __name__ == '__main__':
     vikingdb_service = VikingDBService("host", "region")
     vikingdb_service.set_ak("ak")
     vikingdb_service.set_sk("sk")
-
-
-
     # 写给用户的样例
     # fields = [
     #     Field(
@@ -232,12 +229,12 @@ if __name__ == '__main__':
     # datas.append(data4)
     # collection.upsert_data(datas)  # 无返回
     #
-    # index = vikingdb_service.get_index("example_text", "example_index_text")
-    # res = index.search_by_text(Text(text="this is five"), filter={"op": "range", "field": "price", "lt": 4},
-    #                            limit=3, output_fields=["doc_id", "text", "price", "like"], partition=1)
-    # for item in res:
-    #     print(item)
-    #     print(item.fields)
+    index = vikingdb_service.get_index("example_text", "example_index_text")
+    res = index.search_by_text(Text(text="this is five"), filter={"op": "range", "field": "price", "lt": 4},
+                               limit=3, output_fields=["doc_id", "text", "price", "like"], partition=1)
+    for item in res:
+        print(item)
+        print(item.text)
     # list = [RawData("text","hello1"), RawData("text","hello2")]
     # res = vikingdb_service.embedding(EmbModel("bge_large_zh"), list)
     # print(res)

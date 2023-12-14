@@ -28,7 +28,7 @@ class SmsService(Service):
     @staticmethod
     def get_service_info(self, region):
         service_info = ServiceInfoSms("sms.volcengineapi.com", {'Accept': 'application/json'},
-                                      Credentials('', '', 'volcSMS', region), 5, 5)
+                                      Credentials('', '', 'volcSMS', region), 5, 10)
         return service_info
 
     @staticmethod

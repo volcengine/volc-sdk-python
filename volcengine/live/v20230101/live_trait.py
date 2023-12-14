@@ -271,15 +271,15 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def list_cert_v2(self, body):
-        res = self.api_post('ListCertV2', [], json.dumps(body))
+    def describe_cert_detail_secret_v2(self, body):
+        res = self.api_post('DescribeCertDetailSecretV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def describe_cert_detail_secret_v2(self, body):
-        res = self.api_post('DescribeCertDetailSecretV2', [], json.dumps(body))
+    def list_cert_v2(self, body):
+        res = self.api_post('ListCertV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -418,15 +418,15 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def delete_relay_source_v3(self, body):
-        res = self.api_post('DeleteRelaySourceV3', [], json.dumps(body))
+    def delete_relay_source_v4(self, body):
+        res = self.api_post('DeleteRelaySourceV4', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def delete_relay_source_v4(self, body):
-        res = self.api_post('DeleteRelaySourceV4', [], json.dumps(body))
+    def delete_relay_source_v3(self, body):
+        res = self.api_post('DeleteRelaySourceV3', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -838,6 +838,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_deny_config(self, body):
+        res = self.api_post('DescribeDenyConfig', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_referer(self, body):
         res = self.api_post('DescribeReferer', [], json.dumps(body))
         if res == '':
@@ -845,8 +852,8 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def describe_deny_config(self, body):
-        res = self.api_post('DescribeDenyConfig', [], json.dumps(body))
+    def update_deny_config(self, body):
+        res = self.api_post('UpdateDenyConfig', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -866,8 +873,8 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def update_deny_config(self, body):
-        res = self.api_post('UpdateDenyConfig', [], json.dumps(body))
+    def describe_live_activity_bandwidth_data(self, body):
+        res = self.api_post('DescribeLiveActivityBandwidthData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

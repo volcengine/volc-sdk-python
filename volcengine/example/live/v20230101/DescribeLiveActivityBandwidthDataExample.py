@@ -8,8 +8,7 @@ if __name__ == '__main__':
     service.set_ak('ak')
     service.set_sk('sk')
 
-    query = {}
     body = {}
 
-    resp = service.get_vqos_raw_data(query, body)
+    resp = service.describe_live_activity_bandwidth_data(body)
     print(resp)

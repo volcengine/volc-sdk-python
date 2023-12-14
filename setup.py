@@ -12,7 +12,6 @@ install_requires = [
     "protobuf>=3.18.3",
     "google>=3.0.0",
     "six>=1.0",
-    "tinyec==0.4.0",
 ]
 
 setup(
