@@ -46,16 +46,10 @@ class MaasService(Service):
             if res == '':
                 raise new_client_sdk_request_error("empty response", log_id)
             resp = json_to_object(res)
+        except MaasException as e:
+            raise e
         except Exception as e:
-            try:
-                resp = json_to_object(str(e.args[0], encoding='utf-8'))
-            except Exception:
-                raise new_client_sdk_request_error(str(e), log_id)
-            else:
-                if resp.error:
-                    raise MaasException(resp.error.code_n, resp.error.code, resp.error.message, log_id)
-                else:
-                    raise new_client_sdk_request_error(resp, log_id)
+            raise new_client_sdk_request_error(str(e), log_id)
         else:
             return resp
 
@@ -136,16 +130,10 @@ class MaasService(Service):
             if res == '':
                 raise new_client_sdk_request_error("empty response", log_id)
             resp = json_to_object(res)
+        except MaasException as e:
+            raise e
         except Exception as e:
-            try:
-                resp = json_to_object(str(e.args[0], encoding='utf-8'))
-            except Exception:
-                raise new_client_sdk_request_error(str(e), log_id)
-            else:
-                if resp.error:
-                    raise MaasException(resp.error.code_n, resp.error.code, resp.error.message, log_id)
-                else:
-                    raise new_client_sdk_request_error(resp, log_id)
+            raise new_client_sdk_request_error(str(e), log_id)
         else:
             return resp
 
@@ -156,16 +144,10 @@ class MaasService(Service):
             if res == '':
                 raise new_client_sdk_request_error("empty response", log_id)
             resp = json_to_object(res)
+        except MaasException as e:
+            raise e
         except Exception as e:
-            try:
-                resp = json_to_object(str(e.args[0], encoding='utf-8'))
-            except Exception:
-                raise new_client_sdk_request_error(str(e), log_id)
-            else:
-                if resp.error:
-                    raise MaasException(resp.error.code_n, resp.error.code, resp.error.message, log_id)
-                else:
-                    raise new_client_sdk_request_error(resp, log_id)
+            raise new_client_sdk_request_error(str(e), log_id)
         else:
             return resp
 
@@ -176,16 +158,10 @@ class MaasService(Service):
             if res == '':
                 raise new_client_sdk_request_error("empty response", log_id)
             resp = json_to_object(res)
+        except MaasException as e:
+            raise e
         except Exception as e:
-            try:
-                resp = json_to_object(str(e.args[0], encoding='utf-8'))
-            except Exception:
-                raise new_client_sdk_request_error(str(e), log_id)
-            else:
-                if resp.error:
-                    raise MaasException(resp.error.code_n, resp.error.code, resp.error.message, log_id)
-                else:
-                    raise new_client_sdk_request_error(resp, log_id)
+            raise new_client_sdk_request_error(str(e), log_id)
         else:
             return resp
 
@@ -237,10 +213,20 @@ class MaasService(Service):
         SignerV4.sign(r, self.service_info.credentials)
 
         url = r.build()
-        resp = self.session.post(url, headers=r.headers, data=r.body,
+        res = self.session.post(url, headers=r.headers, data=r.body,
                                  timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
-        log_id = resp.headers.get('x-tt-logid', None)
-        if resp.status_code == 200:
-            return json.dumps(resp.json()), log_id
+        log_id = res.headers.get('x-tt-logid', None)
+        if res.status_code == 200:
+            return json.dumps(res.json()), log_id
         else:
-            raise new_client_sdk_request_error(resp.text.encode("utf-8"), log_id)
+            raw = res.text.encode()
+            res.close()
+            try:
+                resp = json_to_object(str(raw, encoding='utf-8'))
+            except Exception:
+                raise new_client_sdk_request_error(raw, log_id)
+            else:
+                if resp.error:
+                    raise MaasException(resp.error.code_n, resp.error.code, resp.error.message, log_id)
+                else:
+                    raise new_client_sdk_request_error(resp, log_id)

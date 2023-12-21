@@ -362,7 +362,7 @@ class VikingDBService(Service):
         return collections
 
     def create_index(self, collection_name, index_name, vector_index=None, cpu_quota=2, description="", partition_by="",
-                     scalar_index=None):
+                     scalar_index=None, shard_count=None):
         """
         create an index.
 
@@ -380,6 +380,8 @@ class VikingDBService(Service):
         :type partition_by: str
         :param scalar_index: determine index type.
         :type scalar_index: list or None
+        :param shard_count: shard count.
+        :type shard_count: int
         :rtype: Index
         """
         # print(vector_index.dic())
@@ -394,6 +396,8 @@ class VikingDBService(Service):
             params["vector_index"] = vector_index.dic()  # vector_index 类型应该是VectorIndexParams，而非json
         if scalar_index is not None:
             params["scalar_index"] = scalar_index
+        if shard_count is not None:
+            params["shard_count"] = shard_count
         # print(params)
         res = self.json_exception("CreateIndex", {}, json.dumps(params))
         # print(res)

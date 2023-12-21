@@ -1,5 +1,8 @@
 ### Change log
 
+2023-12-21 Bumped to version v1.0.120
+- Updated apis for viking_db/maas
+
 2023-12-14 Bumped to version v1.0.119
 - Updated apis for viking_db/maas/live/sms
 
