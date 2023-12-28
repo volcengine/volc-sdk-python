@@ -229,12 +229,12 @@ if __name__ == '__main__':
     # datas.append(data4)
     # collection.upsert_data(datas)  # 无返回
     #
-    index = vikingdb_service.get_index("example_text", "example_index_text")
-    res = index.search_by_text(Text(text="this is five"), filter={"op": "range", "field": "price", "lt": 4},
-                               limit=3, output_fields=["doc_id", "text", "price", "like"], partition=1)
-    for item in res:
-        print(item)
-        print(item.text)
+    # index = vikingdb_service.get_index("example_text", "example_index_text")
+    # res = index.search_by_text(Text(text="this is five"), filter={"op": "range", "field": "price", "lt": 4},
+    #                            limit=3, output_fields=["doc_id", "text", "price", "like"], partition=1)
+    # for item in res:
+    #     print(item)
+    #     print(item.text)
     # list = [RawData("text","hello1"), RawData("text","hello2")]
     # res = vikingdb_service.embedding(EmbModel("bge_large_zh"), list)
     # print(res)
@@ -263,3 +263,16 @@ if __name__ == '__main__':
     #     print(field.dim)
     #     print(field.pipeline_name)
     #     print("--------------------")
+
+    # res = vikingdb_service.get_index("example", "example_index")
+    # print(res.description)
+    # print(res.cpu_quota)
+    # print(res.scalar_index)
+    #
+    # vikingdb_service.update_index("example", "example_index", description="update index", cpu_quota=4,
+    #                               scalar_index=["aim"])
+    #
+    # res = vikingdb_service.get_index("example", "example_index")
+    # print(res.description)
+    # print(res.cpu_quota)
+    # print(res.scalar_index)

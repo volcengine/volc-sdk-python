@@ -33,5 +33,8 @@ def dict_to_object(dict_obj):
     return dict_obj
 
 
-def json_to_object(json_str):
-    return dict_to_object(json.loads(json_str))
+def json_to_object(json_str, log_id=None):
+    obj = dict_to_object(json.loads(json_str))
+    if obj and isinstance(obj, dict) and log_id:
+        obj["req_id"] = log_id
+    return obj

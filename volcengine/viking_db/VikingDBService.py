@@ -76,6 +76,8 @@ class VikingDBService(Service):
                                       {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "UpdateCollection": ApiInfo("POST", "/api/collection/update", {}, {},
                                         {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "UpdateIndex": ApiInfo("POST", "/api/index/update", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
         return api_info
 
@@ -594,7 +596,18 @@ class VikingDBService(Service):
         # print(params)
         res = self.json_exception("UpdateCollection", {}, json.dumps(params))
 
-
+    def update_index(self, collection_name, index_name, description=None, cpu_quota=None, scalar_index=None):
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+        }
+        if description is not None:
+            params["description"] = description
+        if cpu_quota is not None:
+            params["cpu_quota"] = cpu_quota
+        if scalar_index is not None:
+            params["scalar_index"] = scalar_index
+        res = self.json_exception("UpdateIndex", {}, json.dumps(params))
 
     def list_embeddings(self, model_name=""):
         params = {"model_name": model_name}
