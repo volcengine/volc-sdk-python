@@ -17,13 +17,17 @@ bioos
 
 .. autofunction:: bioos.BioOsService.BioOsService.list_clusters_of_workspace
 
+.. autofunction:: bioos.BioOsService.BioOsService.list_workspace_labels
+
 集群
 -------------------------------
-.. autofunction:: bioos.BioOsService.BioOsService.create_cluster
-
 .. autofunction:: bioos.BioOsService.BioOsService.list_clusters
 
 .. autofunction:: bioos.BioOsService.BioOsService.delete_cluster
+
+.. autofunction:: bioos.BioOsService.BioOsService.update_api_accesskey
+
+.. autofunction:: bioos.BioOsService.BioOsService.get_api_accesskey
 
 工作流
 -------------------------------
@@ -95,4 +99,12 @@ Notebook server
 
 .. autofunction:: bioos.BioOsService.BioOsService.update_notebook_server_settings
 
+.. autofunction:: bioos.BioOsService.BioOsService.create_notebook_server_image
+
 .. autofunction:: bioos.BioOsService.BioOsService.list_notebook_servers
+
+.. autofunction:: bioos.BioOsService.BioOsService.delete_notebook_server
+
+.. autofunction:: bioos.BioOsService.BioOsService.delete_notebook_server_settings
+
+.. autofunction:: bioos.BioOsService.BioOsService.get_notebook_server_extra_packages

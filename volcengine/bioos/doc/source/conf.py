@@ -10,8 +10,8 @@ import sys
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'bioos'
-copyright = '2023, guangqiming'
-author = 'guangqiming'
+copyright = '2023, jixinchi'
+author = 'jixinchi'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

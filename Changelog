@@ -1,5 +1,8 @@
 ### Change log
 
+2024-01-04 Bumped to version v1.0.122
+- Updated apis for bioos/tls
+
 2023-12-28 Bumped to version v1.0.121
 - Updated apis for viking_db/maas/sms
 

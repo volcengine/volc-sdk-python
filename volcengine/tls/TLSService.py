@@ -206,7 +206,7 @@ class TLSService(Service):
         method = self.api_info[api].method
         url = request.build()
 
-        expected_quit_timestamp = int(time.time() * 1000 + self.__timeout * 1000)
+        expected_quit_timestamp = int(time.time() * 1000 + self.__timeout * 1500)
         try_count = 0
         while True:
             try_count += 1
