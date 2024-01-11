@@ -32,7 +32,7 @@ class IndexType(Enum):
     """
     FLAT = "flat"
     HNSW = "hnsw"
-
+    IVF = "ivf"
 
 class QuantType(Enum):
     """
@@ -40,6 +40,8 @@ class QuantType(Enum):
     """
     Float = "float"
     Int8 = "int8"
+    Fix16 = "fix16"
+    PQ = "pq"
 
 
 class Order(Enum):

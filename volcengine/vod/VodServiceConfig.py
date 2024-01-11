@@ -50,6 +50,7 @@ class VodServiceConfig(Service):
             "GetAllPlayInfo": ApiInfo("GET", "/", {"Action": "GetAllPlayInfo", "Version": "2022-01-01"}, {}, {}),
             "GetPrivateDrmPlayAuth": ApiInfo("GET", "/", {"Action": "GetPrivateDrmPlayAuth", "Version": "2020-08-01"}, {}, {}),
             "GetHlsDecryptionKey": ApiInfo("GET", "/", {"Action": "GetHlsDecryptionKey", "Version": "2020-08-01"}, {}, {}),
+            "DescribeDrmDataKey": ApiInfo("GET", "/", {"Action": "DescribeDrmDataKey", "Version": "2023-07-01"}, {}, {}),
             "GetPlayInfoWithLiveTimeShiftScene": ApiInfo("GET", "/", {"Action": "GetPlayInfoWithLiveTimeShiftScene", "Version": "2021-11-01"}, {}, {}),
             # 上传
             "UploadMediaByUrl": ApiInfo("GET", "/", {"Action": "UploadMediaByUrl", "Version": "2020-08-01"}, {}, {}),
@@ -61,6 +62,7 @@ class VodServiceConfig(Service):
             "UpdateMediaPublishStatus": ApiInfo("GET", "/", {"Action": "UpdateMediaPublishStatus", "Version": "2020-08-01"}, {}, {}),
             "UpdateMediaStorageClass": ApiInfo("GET", "/", {"Action": "UpdateMediaStorageClass", "Version": "2022-12-01"}, {}, {}),
             "GetMediaInfos": ApiInfo("GET", "/", {"Action": "GetMediaInfos", "Version": "2022-12-01"}, {}, {}),
+            "GetMediaInfos20230701": ApiInfo("GET", "/", {"Action": "GetMediaInfos", "Version": "2023-07-01"}, {}, {}),
             "GetRecommendedPoster": ApiInfo("GET", "/", {"Action": "GetRecommendedPoster", "Version": "2020-08-01"}, {}, {}),
             "DeleteMedia": ApiInfo("GET", "/", {"Action": "DeleteMedia", "Version": "2020-08-01"}, {}, {}),
             "DeleteTranscodes": ApiInfo("GET", "/", {"Action": "DeleteTranscodes", "Version": "2020-08-01"}, {}, {}),
@@ -101,6 +103,7 @@ class VodServiceConfig(Service):
             "ListWatermarkTemplate": ApiInfo("GET", "/", {"Action": "ListWatermarkTemplate", "Version": "2023-07-01"}, {}, {}),
             "DeleteWatermarkTemplate": ApiInfo("POST", "/", {"Action": "DeleteWatermarkTemplate", "Version": "2023-07-01"}, {}, {}),
             # 空间管理
+            "DeleteSpace": ApiInfo("GET", "/", {"Action": "DeleteSpace", "Version": "2023-07-01"}, {}, {}),
             "CreateSpace": ApiInfo("GET", "/", {"Action": "CreateSpace", "Version": "2021-01-01"}, {}, {}),
             "ListSpace": ApiInfo("GET", "/", {"Action": "ListSpace", "Version": "2021-01-01"}, {}, {}),
             "GetSpaceDetail": ApiInfo("GET", "/", {"Action": "GetSpaceDetail", "Version": "2022-01-01"}, {}, {}),
@@ -108,6 +111,12 @@ class VodServiceConfig(Service):
             "UpdateSpaceUploadConfig": ApiInfo("GET", "/", {"Action": "UpdateSpaceUploadConfig", "Version": "2022-01-01"}, {}, {}),
             "DescribeVodSpaceStorageData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceStorageData", "Version": "2023-07-01"}, {}, {}),
             # 分发加速
+            "AddDomainToScheduler": ApiInfo("GET", "/", {"Action": "AddDomainToScheduler", "Version": "2023-07-01"}, {}, {}),
+            "RemoveDomainFromScheduler": ApiInfo("GET", "/", {"Action": "RemoveDomainFromScheduler", "Version": "2023-07-01"}, {}, {}),
+            "UpdateDomainPlayRule": ApiInfo("GET", "/", {"Action": "UpdateDomainPlayRule", "Version": "2023-07-01"}, {}, {}),
+            "StartDomain": ApiInfo("GET", "/", {"Action": "StartDomain", "Version": "2023-07-01"}, {}, {}),
+            "StopDomain": ApiInfo("GET", "/", {"Action": "StopDomain", "Version": "2023-07-01"}, {}, {}),
+            "DeleteDomain": ApiInfo("GET", "/", {"Action": "DeleteDomain", "Version": "2023-07-01"}, {}, {}),
             "ListDomain": ApiInfo("GET", "/", {"Action": "ListDomain", "Version": "2023-01-01"}, {}, {}),
             "CreateCdnRefreshTask": ApiInfo("GET", "/", {"Action": "CreateCdnRefreshTask", "Version": "2021-01-01"}, {}, {}),
             "CreateCdnPreloadTask": ApiInfo("GET", "/", {"Action": "CreateCdnPreloadTask", "Version": "2021-01-01"}, {}, {}),
@@ -128,6 +137,7 @@ class VodServiceConfig(Service):
             "UpdateDomainExpire": ApiInfo("GET", "/", {"Action": "UpdateDomainExpire", "Version": "2023-02-01"}, {}, {}),
             "UpdateDomainAuthConfig": ApiInfo("GET", "/", {"Action": "UpdateDomainAuthConfig", "Version": "2023-02-01"}, {}, {}),
             "AddOrUpdateCertificate": ApiInfo("POST", "/",{"Action": "AddOrUpdateCertificate", "Version": "2023-07-01"}, {}, {}),
+            "UpdateDomainUrlAuthConfig": ApiInfo("GET", "/", {"Action": "UpdateDomainUrlAuthConfig", "Version": "2023-07-01"}, {}, {}),
             # 回调管理
             "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
             "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2022-01-01"}, {}, {}),

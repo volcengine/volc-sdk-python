@@ -33,6 +33,14 @@ class VikingDBService(Service):
         if sk:
             self.set_sk(sk)
 
+    def setHeader(self, header):
+        api_info = VikingDBService.get_api_info()
+        for key in api_info:
+            for item in header:
+                api_info[key].header[item] = header[item]
+        self.api_info = api_info
+
+
     @staticmethod
     def get_service_info(host, region, scheme):
         service_info = ServiceInfo(host, {"Host": host},

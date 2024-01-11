@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n&volcengine/vod/business/vod_play.proto\x12\x1eVolcengine.Vod.Models.Business\"\xd8\x01\n\x1cVodGetOriginalPlayInfoResult\x12\x10\n\x08\x46ileType\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x02\x12\x0c\n\x04Size\x18\x03 \x01(\x01\x12\x0e\n\x06Height\x18\x04 \x01(\x05\x12\r\n\x05Width\x18\x05 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\r\n\x05\x43odec\x18\x07 \x01(\t\x12\x0f\n\x07\x42itrate\x18\x08 \x01(\x05\x12\x0b\n\x03Md5\x18\t \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\n \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x0b \x01(\t\"H\n\x19VodPrivateDrmPlayAuthInfo\x12\x12\n\nPlayAuthId\x18\x01 \x01(\t\x12\x17\n\x0fPlayAuthContent\x18\x02 \x01(\t\"u\n\x1eVodGetPrivateDrmPlayAuthResult\x12S\n\x10PlayAuthInfoList\x18\x01 \x03(\x0b\x32\x39.Volcengine.Vod.Models.Business.VodPrivateDrmPlayAuthInfo\"1\n\x1cVodGetHlsDecryptionKeyResult\x12\x11\n\tSecretKey\x18\x01 \x01(\t\"t\n!VodPlayInfoWithLiveTimeShiftScene\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\x02 \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x03 \x01(\t\x12\x11\n\tUrlExpire\x18\x04 \x01(\x01\"\x85\x01\n*VodGetPlayInfoWithLiveTimeShiftSceneResult\x12W\n\x0cPlayInfoList\x18\x01 \x03(\x0b\x32\x41.Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftSceneB\xcb\x01\n)com.volcengine.service.vod.model.businessB\x07VodPlayP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n&volcengine/vod/business/vod_play.proto\x12\x1eVolcengine.Vod.Models.Business\"\xd8\x01\n\x1cVodGetOriginalPlayInfoResult\x12\x10\n\x08\x46ileType\x18\x01 \x01(\t\x12\x10\n\x08\x44uration\x18\x02 \x01(\x02\x12\x0c\n\x04Size\x18\x03 \x01(\x01\x12\x0e\n\x06Height\x18\x04 \x01(\x05\x12\r\n\x05Width\x18\x05 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x06 \x01(\t\x12\r\n\x05\x43odec\x18\x07 \x01(\t\x12\x0f\n\x07\x42itrate\x18\x08 \x01(\x05\x12\x0b\n\x03Md5\x18\t \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\n \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x0b \x01(\t\"H\n\x19VodPrivateDrmPlayAuthInfo\x12\x12\n\nPlayAuthId\x18\x01 \x01(\t\x12\x17\n\x0fPlayAuthContent\x18\x02 \x01(\t\"u\n\x1eVodGetPrivateDrmPlayAuthResult\x12S\n\x10PlayAuthInfoList\x18\x01 \x03(\x0b\x32\x39.Volcengine.Vod.Models.Business.VodPrivateDrmPlayAuthInfo\"1\n\x1cVodGetHlsDecryptionKeyResult\x12\x11\n\tSecretKey\x18\x01 \x01(\t\"t\n!VodPlayInfoWithLiveTimeShiftScene\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x13\n\x0bMainPlayUrl\x18\x02 \x01(\t\x12\x15\n\rBackupPlayUrl\x18\x03 \x01(\t\x12\x11\n\tUrlExpire\x18\x04 \x01(\x01\"\x85\x01\n*VodGetPlayInfoWithLiveTimeShiftSceneResult\x12W\n\x0cPlayInfoList\x18\x01 \x03(\x0b\x32\x41.Volcengine.Vod.Models.Business.VodPlayInfoWithLiveTimeShiftScene\"<\n\x1bVodDescribeDrmDataKeyResult\x12\x11\n\tSecretKey\x18\x01 \x01(\t\x12\n\n\x02\x41k\x18\x02 \x01(\tB\xcb\x01\n)com.volcengine.service.vod.model.businessB\x07VodPlayP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 
 
@@ -24,6 +24,7 @@ _VODGETPRIVATEDRMPLAYAUTHRESULT = DESCRIPTOR.message_types_by_name['VodGetPrivat
 _VODGETHLSDECRYPTIONKEYRESULT = DESCRIPTOR.message_types_by_name['VodGetHlsDecryptionKeyResult']
 _VODPLAYINFOWITHLIVETIMESHIFTSCENE = DESCRIPTOR.message_types_by_name['VodPlayInfoWithLiveTimeShiftScene']
 _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESULT = DESCRIPTOR.message_types_by_name['VodGetPlayInfoWithLiveTimeShiftSceneResult']
+_VODDESCRIBEDRMDATAKEYRESULT = DESCRIPTOR.message_types_by_name['VodDescribeDrmDataKeyResult']
 VodGetOriginalPlayInfoResult = _reflection.GeneratedProtocolMessageType('VodGetOriginalPlayInfoResult', (_message.Message,), {
   'DESCRIPTOR' : _VODGETORIGINALPLAYINFORESULT,
   '__module__' : 'volcengine.vod.business.vod_play_pb2'
@@ -66,6 +67,13 @@ VodGetPlayInfoWithLiveTimeShiftSceneResult = _reflection.GeneratedProtocolMessag
   })
 _sym_db.RegisterMessage(VodGetPlayInfoWithLiveTimeShiftSceneResult)
 
+VodDescribeDrmDataKeyResult = _reflection.GeneratedProtocolMessageType('VodDescribeDrmDataKeyResult', (_message.Message,), {
+  'DESCRIPTOR' : _VODDESCRIBEDRMDATAKEYRESULT,
+  '__module__' : 'volcengine.vod.business.vod_play_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodDescribeDrmDataKeyResult)
+  })
+_sym_db.RegisterMessage(VodDescribeDrmDataKeyResult)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
@@ -82,4 +90,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _VODPLAYINFOWITHLIVETIMESHIFTSCENE._serialized_end=653
   _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESULT._serialized_start=656
   _VODGETPLAYINFOWITHLIVETIMESHIFTSCENERESULT._serialized_end=789
+  _VODDESCRIBEDRMDATAKEYRESULT._serialized_start=791
+  _VODDESCRIBEDRMDATAKEYRESULT._serialized_end=851
 # @@protoc_insertion_point(module_scope)
