@@ -13,7 +13,6 @@ if __name__ == '__main__':
     vikingdb_service = VikingDBService("host", "region")
     vikingdb_service.set_ak("ak")
     vikingdb_service.set_sk("sk")
-    vikingdb_service.setHeader({'V-User-Name': 'name'})
     # 写给用户的样例
     # fields = [
     #     Field(
@@ -51,7 +50,7 @@ if __name__ == '__main__':
     # # 返回一个collection实例
     # print(res)
     #
-    res = vikingdb_service.get_collection("example")
+    # res = vikingdb_service.get_collection("example")
     # 返回一个collection实例
     # print(res.update_person)
     #
@@ -277,3 +276,6 @@ if __name__ == '__main__':
     # print(res.description)
     # print(res.cpu_quota)
     # print(res.scalar_index)
+
+    score = vikingdb_service.rerank("退改", "如果您需要人工服务，可以拨打人工客服电话：4006660921", "转人工")
+    print(score)

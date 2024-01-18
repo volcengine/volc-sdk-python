@@ -86,6 +86,8 @@ class VikingDBService(Service):
                                         {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "UpdateIndex": ApiInfo("POST", "/api/index/update", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "Rerank": ApiInfo("POST", "/api/index/rerank", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
         return api_info
 
@@ -622,3 +624,13 @@ class VikingDBService(Service):
         res = self.get_body_exception("ListEmbeddings", {}, json.dumps(params))
         print(res)
         pass
+
+    def rerank(self, query, content, title=""):
+        params = {
+            "query": query,
+            "content": content,
+            "title": title
+        }
+        res = self.json_exception("Rerank", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["data"]

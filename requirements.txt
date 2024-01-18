@@ -17,3 +17,4 @@ six>=1.0
 protobuf>=3.18.3
 minio~=7.1.9
 readerwriterlock>=1.0.9
+kafka~=1.3.5
