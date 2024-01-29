@@ -1,9 +1,9 @@
 # coding:utf-8
 from __future__ import print_function
-from volcengine.imagex.ImageXService import ImageXService
+from volcengine.imagex.imagex_service import ImagexService
 
 if __name__ == '__main__':
-    imagex_service = ImageXService()
+    imagex_service = ImagexService()
 
     imagex_service.set_ak('ak')
     imagex_service.set_sk('sk')

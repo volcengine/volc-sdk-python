@@ -24,8 +24,8 @@ class VikingDBService(Service):
                     VikingDBService._instance = object.__new__(cls)
         return VikingDBService._instance
 
-    def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk="", scheme='http'):
-        self.service_info = VikingDBService.get_service_info(host, region, scheme)
+    def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk="", scheme='http', connection_timeout=30, socket_timeout=30):
+        self.service_info = VikingDBService.get_service_info(host, region, scheme, connection_timeout, socket_timeout)
         self.api_info = VikingDBService.get_api_info()
         super(VikingDBService, self).__init__(self.service_info, self.api_info)
         if ak:
@@ -42,9 +42,9 @@ class VikingDBService(Service):
 
 
     @staticmethod
-    def get_service_info(host, region, scheme):
+    def get_service_info(host, region, scheme, connection_timeout, socket_timeout):
         service_info = ServiceInfo(host, {"Host": host},
-                                   Credentials('', '', 'air', region), 5, 5, scheme=scheme)
+                                   Credentials('', '', 'air', region), connection_timeout, socket_timeout, scheme=scheme)
         return service_info
 
     @staticmethod

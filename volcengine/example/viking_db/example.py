@@ -10,7 +10,7 @@ sys.path.insert(0, "/data00/home/xiejianqiao.1027/project/volc-sdk-python/volcen
 
 
 if __name__ == '__main__':
-    vikingdb_service = VikingDBService("host", "region")
+    vikingdb_service = VikingDBService()
     vikingdb_service.set_ak("ak")
     vikingdb_service.set_sk("sk")
     # 写给用户的样例
@@ -50,9 +50,9 @@ if __name__ == '__main__':
     # # 返回一个collection实例
     # print(res)
     #
-    # res = vikingdb_service.get_collection("example")
+    res = vikingdb_service.get_collection("example")
     # 返回一个collection实例
-    # print(res.update_person)
+    print(res.update_person)
     #
     # vikingdb_service.drop_collection("example")  # 无返回
     #
@@ -277,5 +277,5 @@ if __name__ == '__main__':
     # print(res.cpu_quota)
     # print(res.scalar_index)
 
-    score = vikingdb_service.rerank("退改", "如果您需要人工服务，可以拨打人工客服电话：4006660921", "转人工")
-    print(score)
+    # score = vikingdb_service.rerank("退改", "如果您需要人工服务，可以拨打人工客服电话：4006660921", "转人工")
+    # print(score)
