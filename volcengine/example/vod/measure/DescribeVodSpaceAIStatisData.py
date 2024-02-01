@@ -18,6 +18,7 @@ if __name__ == '__main__':
         req.TaskStageList = 'your TaskStageList'
         req.Aggregation = 0
         req.DetailFieldList = 'your DetailFieldList'
+        req.RegionList = "your RegionList"
         resp = vod_service.describe_vod_space_a_i_statis_data(req)
     except Exception:
         raise

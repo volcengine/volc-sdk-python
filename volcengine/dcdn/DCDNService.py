@@ -120,6 +120,15 @@ api_info = {
     # 查询全站加速预热刷新任务Quota: https://www.volcengine.com/docs/6559/102403
     "RetryPurgePrefetchTask": ApiInfo("POST", "/", {
         "Action": "RetryPurgePrefetchTask", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 更新全站加速域名拨测配置:
+    "UpdateDomainProbeSetting": ApiInfo("POST", "/", {
+        "Action": "UpdateDomainProbeSetting", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 查询全站加速域名拨测配置:
+    "DescribeDomainProbeSetting": ApiInfo("POST", "/", {
+        "Action": "DescribeDomainProbeSetting", "Version": SERVICE_VERSION}, {}, {}),
+
 }
 
 
@@ -410,6 +419,26 @@ class DCDNService(Service):
         if params is None:
             params = {}
         action = "RetryPurgePrefetchTask"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def update_domain_probe_setting(self, params=None):
+        if params is None:
+            params = {}
+        action = "UpdateDomainProbeSetting"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_domain_probe_setting(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDomainProbeSetting"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)

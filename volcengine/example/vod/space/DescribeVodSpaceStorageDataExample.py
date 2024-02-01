@@ -16,6 +16,7 @@ if __name__ == '__main__':
         req.EndTime = "your EndTime"
         req.Aggregation = 0
         req.Type = ""
+        req.RegionList = "your RegionList"
         resp = vod_service.describe_vod_space_storage_data(req)
     except Exception:
         raise

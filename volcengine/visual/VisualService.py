@@ -132,6 +132,10 @@ class VisualService(Service):
             "StillLivenessImg": ApiInfo("POST", "/", {"Action": "StillLivenessImg", "Version": "2022-08-31"}, {}, {}),
             "CertAuth": ApiInfo("POST", "/", {"Action": "CertAuth", "Version": "2022-08-31"}, {}, {}),
             "CertVerify": ApiInfo("POST", "/", {"Action": "CertVerify", "Version": "2022-08-31"}, {}, {}),
+            "FaceSwapV2": ApiInfo("POST", "/", {"Action": "FaceSwap", "Version": "2022-08-31"}, {}, {}),
+            "FaceswapAI": ApiInfo("POST", "/", {"Action": "FaceswapAI", "Version": "2022-08-31"}, {}, {}),
+            "CertH5ConfigInit": ApiInfo("POST", "/", {"Action": "CertH5ConfigInit", "Version": "2022-08-31"}, {}, {}),
+            "CertH5Token": ApiInfo("POST", "/", {"Action": "CertH5Token", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -204,7 +208,18 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
-
+    def face_swap_v2(self, form):
+        try:
+            res_json = self.common_json_handler("FaceSwapV2", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    def faceswap_ai(self, form):
+        try:
+            res_json = self.common_json_handler("FaceswapAI", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
     def ocr_normal(self, form):
         try:
             res_json = self.common_handler("OCRNormal", form)
@@ -250,6 +265,20 @@ class VisualService(Service):
     def convert_photo_v2(self, form):
         try:
             res_json = self.common_json_handler("ConvertPhotoV2", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_h5_config_init(self, form):
+        try:
+            res_json = self.common_json_handler("CertH5ConfigInit", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_h5_token(self, form):
+        try:
+            res_json = self.common_json_handler("CertH5Token", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))

@@ -82,8 +82,8 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def delete_watermark_preset(self, body):
-        res = self.api_post('DeleteWatermarkPreset', [], json.dumps(body))
+    def create_watermark_preset(self, body):
+        res = self.api_post('CreateWatermarkPreset', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -91,6 +91,13 @@ class LiveTrait(Service):
             
     def update_watermark_preset(self, body):
         res = self.api_post('UpdateWatermarkPreset', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_watermark_preset(self, body):
+        res = self.api_post('DeleteWatermarkPreset', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -105,13 +112,6 @@ class LiveTrait(Service):
             
     def list_vhost_watermark_preset(self, body):
         res = self.api_post('ListVhostWatermarkPreset', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def create_watermark_preset(self, body):
-        res = self.api_post('CreateWatermarkPreset', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -187,6 +187,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def update_snapshot_preset_v2(self, body):
+        res = self.api_post('UpdateSnapshotPresetV2', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_cdn_snapshot_history(self, body):
         res = self.api_post('DescribeCDNSnapshotHistory', [], json.dumps(body))
         if res == '':
@@ -201,8 +208,22 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def list_vhost_snapshot_preset_v2(self, body):
+        res = self.api_post('ListVhostSnapshotPresetV2', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def create_snapshot_preset(self, body):
         res = self.api_post('CreateSnapshotPreset', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def create_snapshot_preset_v2(self, body):
+        res = self.api_post('CreateSnapshotPresetV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
