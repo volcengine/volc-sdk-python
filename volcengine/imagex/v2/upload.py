@@ -5,7 +5,7 @@ import threading
 from volcengine.const.Const import *
 from volcengine.util.Util import *
 from volcengine.Policy import *
-from volcengine.imagex.const import *
+from volcengine.imagex.v2.const import *
 
 from retry import retry
 
