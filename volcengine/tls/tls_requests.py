@@ -489,9 +489,9 @@ class PutLogsRequest(TLSRequest):
     def get_api_input(self):
         pb_log_group_list = self.log_group_list.SerializeToString()
 
-        if len(pb_log_group_list) > 5 * 1024 * 1024:
+        if len(pb_log_group_list) > 11 * 1024 * 1024:
             raise TLSException(error_code="LogGroupListSizeTooLarge",
-                               error_message="The size of LogGroupList exceeds 5 MB.")
+                               error_message="The size of LogGroupList exceeds 11 MB.")
 
         params = {TOPIC_ID: self.topic_id}
         body = {DATA: pb_log_group_list}

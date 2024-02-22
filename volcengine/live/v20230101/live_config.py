@@ -105,7 +105,9 @@ api_info = {
     "DescribeLivePushStreamMetrics": ApiInfo("POST", "/", {"Action": "DescribeLivePushStreamMetrics", "Version": "2023-01-01"}, {}, {}),
     "DescribeLivePlayStatusCodeData": ApiInfo("POST", "/", {"Action": "DescribeLivePlayStatusCodeData", "Version": "2023-01-01"}, {}, {}),
     "DescribeLiveBatchSourceStreamMetrics": ApiInfo("POST", "/", {"Action": "DescribeLiveBatchSourceStreamMetrics", "Version": "2023-01-01"}, {}, {}),
+    "DescribeLiveBatchSourceStreamAvgMetrics": ApiInfo("POST", "/", {"Action": "DescribeLiveBatchSourceStreamAvgMetrics", "Version": "2023-01-01"}, {}, {}),
     "DescribeLiveBatchPushStreamMetrics": ApiInfo("POST", "/", {"Action": "DescribeLiveBatchPushStreamMetrics", "Version": "2023-01-01"}, {}, {}),
+    "DescribeLiveBatchPushStreamAvgMetrics": ApiInfo("POST", "/", {"Action": "DescribeLiveBatchPushStreamAvgMetrics", "Version": "2023-01-01"}, {}, {}),
     "DescribeLiveStreamCountData": ApiInfo("POST", "/", {"Action": "DescribeLiveStreamCountData", "Version": "2023-01-01"}, {}, {}),
     "DescribeLivePushStreamCountData": ApiInfo("POST", "/", {"Action": "DescribeLivePushStreamCountData", "Version": "2023-01-01"}, {}, {}),
     "DescribeLiveSourceBandwidthData": ApiInfo("POST", "/", {"Action": "DescribeLiveSourceBandwidthData", "Version": "2023-01-01"}, {}, {}),
@@ -135,5 +137,8 @@ api_info = {
     "UpdateReferer": ApiInfo("POST", "/", {"Action": "UpdateReferer", "Version": "2023-01-01"}, {}, {}),
     "UpdateAuthKey": ApiInfo("POST", "/", {"Action": "UpdateAuthKey", "Version": "2023-01-01"}, {}, {}),
     "DescribeLiveActivityBandwidthData": ApiInfo("POST", "/", {"Action": "DescribeLiveActivityBandwidthData", "Version": "2023-01-01"}, {}, {}),
-    "DescribeLiveStreamUsageData": ApiInfo("POST", "/", {"Action": "DescribeLiveStreamUsageData", "Version": "2023-01-01"}, {}, {})
+    "DescribeLiveStreamUsageData": ApiInfo("POST", "/", {"Action": "DescribeLiveStreamUsageData", "Version": "2023-01-01"}, {}, {}),
+    "DeleteIPAccessRule": ApiInfo("POST", "/", {"Action": "DeleteIPAccessRule", "Version": "2023-01-01"}, {}, {}),
+    "UpdateIPAccessRule": ApiInfo("POST", "/", {"Action": "UpdateIPAccessRule", "Version": "2023-01-01"}, {}, {}),
+    "DescribeIPAccessRule": ApiInfo("POST", "/", {"Action": "DescribeIPAccessRule", "Version": "2023-01-01"}, {}, {})
 }

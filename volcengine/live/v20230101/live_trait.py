@@ -691,8 +691,22 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_live_batch_source_stream_avg_metrics(self, body):
+        res = self.api_post('DescribeLiveBatchSourceStreamAvgMetrics', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_live_batch_push_stream_metrics(self, body):
         res = self.api_post('DescribeLiveBatchPushStreamMetrics', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_batch_push_stream_avg_metrics(self, body):
+        res = self.api_post('DescribeLiveBatchPushStreamAvgMetrics', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -903,6 +917,27 @@ class LiveTrait(Service):
             
     def describe_live_stream_usage_data(self, body):
         res = self.api_post('DescribeLiveStreamUsageData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_ip_access_rule(self, body):
+        res = self.api_post('DeleteIPAccessRule', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_ip_access_rule(self, body):
+        res = self.api_post('UpdateIPAccessRule', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_ip_access_rule(self, body):
+        res = self.api_post('DescribeIPAccessRule', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

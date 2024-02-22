@@ -129,6 +129,10 @@ api_info = {
     "DescribeDomainProbeSetting": ApiInfo("POST", "/", {
         "Action": "DescribeDomainProbeSetting", "Version": SERVICE_VERSION}, {}, {}),
 
+    # 获取边缘层节点的所有 IP:
+    "DescribeDcdnEdgeIp": ApiInfo("POST", "/", {
+        "Action": "DescribeDcdnEdgeIp", "Version": SERVICE_VERSION}, {}, {}),
+
 }
 
 
@@ -439,6 +443,16 @@ class DCDNService(Service):
         if params is None:
             params = {}
         action = "DescribeDomainProbeSetting"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_dcdn_edge_ip(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDcdnEdgeIp"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)

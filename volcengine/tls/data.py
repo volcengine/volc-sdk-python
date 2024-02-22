@@ -993,19 +993,23 @@ class ShardHashKey(TLSData):
 
 
 class Plugin(TLSData):
-    def __init__(self, processors: Dict):
+    def __init__(self, processors: List[Dict]):
         """
         :param processors: LogCollector插件
-        :type processors: Dict
+        :type processors: List[Dict]
         """
         self.processors = processors
 
     def get_processors(self):
         """
         :return: LogCollector插件
-        :rtype: Dict
+        :rtype: List[Dict]
         """
         return self.processors
+
+    def json(self):
+        return {PROCESSORS: self.processors}
+
 
 class Advanced(TLSData):
     def __init__(self, close_inactive: int = 60, close_timeout: int = 0,
@@ -1154,7 +1158,7 @@ class UserDefineRule(TLSData):
         if PARSE_PATH_RULE in data:
             user_define_rule.parse_path_rule = ParsePathRule.set_attributes(data[PARSE_PATH_RULE])
         if PLUGIN in data:
-            user_define_rule.plugin = Plugin(processors=data[PLUGIN])
+            user_define_rule.plugin = Plugin(processors=data[PLUGIN].get(PROCESSORS))
         if ADVANCED in data:
             user_define_rule.advanced = Advanced(close_inactive=data[ADVANCED].get(CLOSE_INACTIVE),
                                                  close_timeout=data[ADVANCED].get(CLOSE_TIMEOUT),
@@ -1171,6 +1175,8 @@ class UserDefineRule(TLSData):
             json_data[SHARD_HASH_KEY] = self.shard_hash_key.json()
         if self.parse_path_rule is not None:
             json_data[PARSE_PATH_RULE] = self.parse_path_rule.json()
+        if self.plugin is not None:
+            json_data[PLUGIN] = self.plugin.json()
         if self.advanced is not None:
             json_data[ADVANCED] = self.advanced.json()
 
