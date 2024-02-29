@@ -29,12 +29,12 @@ class Index(object):
         # print(col["data"]["primary_key"])
         self.primary_key = col["data"]["primary_key"]
 
-    def search(self, order, filter=None, limit=10, output_fields=None, partition="default"):
+    def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default"):
         """
         Search for vectors or scalars similar to a given vector or scalar.
 
-        :param order: the given vector or scalar.
-        :type order: VectorOrder or ScalarOrder
+        :param order: the given vector or scalar or None.
+        :type order: VectorOrder or ScalarOrder or None
         :param filter: filter conditions.
         :type filter: dict
         :param limit: number of retrieved results.
@@ -82,6 +82,30 @@ class Index(object):
                     datas.append(data)
                 # print("==================")
             return datas
+        elif order is None:
+            search = {"limit": limit, "partition": partition}
+            if output_fields is not None:
+                search["output_fields"] = output_fields
+            if filter is not None:
+                search['filter'] = filter
+            params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
+            res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
+            res = json.loads(res)
+
+            datas = []
+            # print(res)
+            for items in res["data"]:
+                for item in items:
+                    id = item[self.primary_key]
+                    fields = {}
+                    if output_fields != [] or output_fields is None:
+                        fields = item["fields"]
+                    data = Data(fields, id=id, timestamp=None, score=item["score"])
+                    datas.append(data)
+                # print("==================")
+            return datas
+
+
 
     def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default"):
         """

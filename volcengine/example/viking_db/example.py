@@ -11,8 +11,8 @@ sys.path.insert(0, "/data00/home/xiejianqiao.1027/project/volc-sdk-python/volcen
 
 if __name__ == '__main__':
     vikingdb_service = VikingDBService()
-    vikingdb_service.set_ak("ak")
-    vikingdb_service.set_sk("sk")
+    vikingdb_service.set_ak("")
+    vikingdb_service.set_sk("")
     # 写给用户的样例
     # fields = [
     #     Field(
@@ -50,9 +50,9 @@ if __name__ == '__main__':
     # # 返回一个collection实例
     # print(res)
     #
-    res = vikingdb_service.get_collection("example")
+    # res = vikingdb_service.get_collection("example")
     # 返回一个collection实例
-    print(res.update_person)
+    # print(res.update_person)
     #
     # vikingdb_service.drop_collection("example")  # 无返回
     #
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     #
     # vector_index = VectorIndexParams(distance=DistanceType.COSINE,index_type=IndexType.HNSW,
     #                                  quant=QuantType.Float)
-    # res = vikingdb_service.create_index("example","example_index1", vector_index, cpu_quota=2,
+    # res = vikingdb_service.create_index("example","example_index", vector_index, cpu_quota=2,
     #                                     description="This is an index", scalar_index=['price', 'like'])
     # 返回一个index实例
     # print(res)
@@ -93,14 +93,14 @@ if __name__ == '__main__':
     #           "author": ["gy"], "aim": True}
     # field2 = {"doc_id": "222", "text_vector": gen_random_vector(10), "like": 2, "price": 2.22,
     #           "author": ["gy", "xjq"], "aim": False}
-    # field3 = {"doc_id": "333", "text_vector": gen_random_vector(10), "like": 1, "price": 3.33,
+    # field3 = {"doc_id": "333", "text_vector": gen_random_vector(10), "like": 3, "price": 3.33,
     #           "author": ["gy", "xjq"], "aim": False}
-    # field4 = {"doc_id": "444", "text_vector": gen_random_vector(10), "like": 1, "price": 4.44,
+    # field4 = {"doc_id": "444", "text_vector": gen_random_vector(10), "like": 4, "price": 4.44,
     #           "author": ["gy", "xjq"], "aim": False}
-    # data1 = Data(field1, TTL=2000)
-    # data2 = Data(field2, TTL=3000)
-    # data3 = Data(field3, TTL=4000)
-    # data4 = Data(field4, TTL=2000)
+    # data1 = Data(field1)
+    # data2 = Data(field2)
+    # data3 = Data(field3)
+    # data4 = Data(field4)
     # datas = []
     # datas.append(data1)
     # datas.append(data2)
@@ -166,6 +166,13 @@ if __name__ == '__main__':
     # # 返回一个列表
     # for item in res:
     #     print(item)
+    #     print(item.score)
+    # index = vikingdb_service.get_index("example", "example_index")
+    # res = index.search(limit=5, output_fields=["doc_id", "like"],
+    #                 filter={"op": "range", "field": "price", "lt": 3.5})
+    # 返回一个列表
+    # for item in res:
+    #     print(item.fields)
     #     print(item.score)
     #
     # 含有text字段的测试
