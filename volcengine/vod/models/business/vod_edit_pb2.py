@@ -12,22 +12,15 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
-from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n&volcengine/vod/business/vod_edit.proto\x12\x1eVolcengine.Vod.Models.Business\x1a\x1cgoogle/protobuf/struct.proto\"0\n\x1fSubmitDirectEditTaskAsyncResult\x12\r\n\x05ReqId\x18\x01 \x01(\t\"\'\n\x15GetDirectEditProgress\x12\x0e\n\x06Result\x18\x01 \x01(\x05\"\xc2\x01\n\x13GetDirectEditResult\x12\r\n\x05ReqId\x18\x01 \x01(\t\x12<\n\tEditParam\x18\x02 \x01(\x0b\x32).Volcengine.Vod.Models.Business.EditParam\x12\x10\n\x08Priority\x18\x03 \x01(\x05\x12\x13\n\x0b\x43\x61llbackUri\x18\x04 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x11\n\tOutputVid\x18\x07 \x01(\t\"\xec\x01\n\tEditParam\x12\x36\n\x06\x43\x61nvas\x18\x01 \x01(\x0b\x32&.Volcengine.Vod.Models.Business.Canvas\x12\x36\n\x06Output\x18\x02 \x01(\x0b\x32&.Volcengine.Vod.Models.Business.Output\x12%\n\x05Track\x18\x03 \x03(\x0b\x32\x16.google.protobuf.Value\x12\x36\n\x06Upload\x18\x04 \x01(\x0b\x32&.Volcengine.Vod.Models.Business.Upload\x12\x10\n\x08Uploader\x18\x05 \x01(\t\"\'\n\x06\x43\x61nvas\x12\x0e\n\x06Height\x18\x01 \x01(\x05\x12\r\n\x05Width\x18\x02 \x01(\x05\"\x86\x01\n\x06Output\x12\r\n\x05\x41lpha\x18\x01 \x01(\x08\x12\x34\n\x05\x43odec\x18\x02 \x01(\x0b\x32%.Volcengine.Vod.Models.Business.Codec\x12\x14\n\x0c\x44isableAudio\x18\x03 \x01(\x08\x12\x14\n\x0c\x44isableVideo\x18\x04 \x01(\x08\x12\x0b\n\x03\x46ps\x18\x05 \x01(\x05\"b\n\x05\x43odec\x12\x14\n\x0c\x41udioBitrate\x18\x01 \x01(\x05\x12\x12\n\nAudioCodec\x18\x02 \x01(\t\x12\x0b\n\x03\x43rf\x18\x03 \x01(\x05\x12\x0e\n\x06Preset\x18\x04 \x01(\t\x12\x12\n\nVideoCodec\x18\x05 \x01(\t\"E\n\x05Track\x12\n\n\x02ID\x18\x01 \x01(\t\x12\x0e\n\x06Source\x18\x02 \x01(\t\x12\x12\n\nTargetTime\x18\x03 \x03(\x05\x12\x0c\n\x04Type\x18\x04 \x01(\t\".\n\x06Upload\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x11\n\tVideoName\x18\x02 \x01(\tB\xc8\x01\n)com.volcengine.service.vod.model.businessB\x07VodEditP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n&volcengine/vod/business/vod_edit.proto\x12\x1eVolcengine.Vod.Models.Business\"0\n\x1fSubmitDirectEditTaskAsyncResult\x12\r\n\x05ReqId\x18\x01 \x01(\t\"\'\n\x15GetDirectEditProgress\x12\x0e\n\x06Result\x18\x01 \x01(\x05\"\x97\x01\n\x13GetDirectEditResult\x12\r\n\x05ReqId\x18\x01 \x01(\t\x12\x11\n\tEditParam\x18\x02 \x01(\x0c\x12\x10\n\x08Priority\x18\x03 \x01(\x05\x12\x13\n\x0b\x43\x61llbackUri\x18\x04 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x11\n\tOutputVid\x18\x07 \x01(\tB\xc8\x01\n)com.volcengine.service.vod.model.businessB\x07VodEditP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 
 
 _SUBMITDIRECTEDITTASKASYNCRESULT = DESCRIPTOR.message_types_by_name['SubmitDirectEditTaskAsyncResult']
 _GETDIRECTEDITPROGRESS = DESCRIPTOR.message_types_by_name['GetDirectEditProgress']
 _GETDIRECTEDITRESULT = DESCRIPTOR.message_types_by_name['GetDirectEditResult']
-_EDITPARAM = DESCRIPTOR.message_types_by_name['EditParam']
-_CANVAS = DESCRIPTOR.message_types_by_name['Canvas']
-_OUTPUT = DESCRIPTOR.message_types_by_name['Output']
-_CODEC = DESCRIPTOR.message_types_by_name['Codec']
-_TRACK = DESCRIPTOR.message_types_by_name['Track']
-_UPLOAD = DESCRIPTOR.message_types_by_name['Upload']
 SubmitDirectEditTaskAsyncResult = _reflection.GeneratedProtocolMessageType('SubmitDirectEditTaskAsyncResult', (_message.Message,), {
   'DESCRIPTOR' : _SUBMITDIRECTEDITTASKASYNCRESULT,
   '__module__' : 'volcengine.vod.business.vod_edit_pb2'
@@ -49,68 +42,14 @@ GetDirectEditResult = _reflection.GeneratedProtocolMessageType('GetDirectEditRes
   })
 _sym_db.RegisterMessage(GetDirectEditResult)
 
-EditParam = _reflection.GeneratedProtocolMessageType('EditParam', (_message.Message,), {
-  'DESCRIPTOR' : _EDITPARAM,
-  '__module__' : 'volcengine.vod.business.vod_edit_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.EditParam)
-  })
-_sym_db.RegisterMessage(EditParam)
-
-Canvas = _reflection.GeneratedProtocolMessageType('Canvas', (_message.Message,), {
-  'DESCRIPTOR' : _CANVAS,
-  '__module__' : 'volcengine.vod.business.vod_edit_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.Canvas)
-  })
-_sym_db.RegisterMessage(Canvas)
-
-Output = _reflection.GeneratedProtocolMessageType('Output', (_message.Message,), {
-  'DESCRIPTOR' : _OUTPUT,
-  '__module__' : 'volcengine.vod.business.vod_edit_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.Output)
-  })
-_sym_db.RegisterMessage(Output)
-
-Codec = _reflection.GeneratedProtocolMessageType('Codec', (_message.Message,), {
-  'DESCRIPTOR' : _CODEC,
-  '__module__' : 'volcengine.vod.business.vod_edit_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.Codec)
-  })
-_sym_db.RegisterMessage(Codec)
-
-Track = _reflection.GeneratedProtocolMessageType('Track', (_message.Message,), {
-  'DESCRIPTOR' : _TRACK,
-  '__module__' : 'volcengine.vod.business.vod_edit_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.Track)
-  })
-_sym_db.RegisterMessage(Track)
-
-Upload = _reflection.GeneratedProtocolMessageType('Upload', (_message.Message,), {
-  'DESCRIPTOR' : _UPLOAD,
-  '__module__' : 'volcengine.vod.business.vod_edit_pb2'
-  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.Upload)
-  })
-_sym_db.RegisterMessage(Upload)
-
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n)com.volcengine.service.vod.model.businessB\007VodEditP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata'
-  _SUBMITDIRECTEDITTASKASYNCRESULT._serialized_start=104
-  _SUBMITDIRECTEDITTASKASYNCRESULT._serialized_end=152
-  _GETDIRECTEDITPROGRESS._serialized_start=154
-  _GETDIRECTEDITPROGRESS._serialized_end=193
-  _GETDIRECTEDITRESULT._serialized_start=196
-  _GETDIRECTEDITRESULT._serialized_end=390
-  _EDITPARAM._serialized_start=393
-  _EDITPARAM._serialized_end=629
-  _CANVAS._serialized_start=631
-  _CANVAS._serialized_end=670
-  _OUTPUT._serialized_start=673
-  _OUTPUT._serialized_end=807
-  _CODEC._serialized_start=809
-  _CODEC._serialized_end=907
-  _TRACK._serialized_start=909
-  _TRACK._serialized_end=978
-  _UPLOAD._serialized_start=980
-  _UPLOAD._serialized_end=1026
+  _SUBMITDIRECTEDITTASKASYNCRESULT._serialized_start=74
+  _SUBMITDIRECTEDITTASKASYNCRESULT._serialized_end=122
+  _GETDIRECTEDITPROGRESS._serialized_start=124
+  _GETDIRECTEDITPROGRESS._serialized_end=163
+  _GETDIRECTEDITRESULT._serialized_start=166
+  _GETDIRECTEDITRESULT._serialized_end=317
 # @@protoc_insertion_point(module_scope)
