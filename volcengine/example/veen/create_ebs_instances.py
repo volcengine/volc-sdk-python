@@ -20,6 +20,9 @@ if __name__ == "__main__":
         "number": 1,
         "name": "ebs_test_yx",
         "desc": "test",
+        "project": "",
+        "delete_with_res": True,
+        "res_id": "veen-xxxxx",
     }
 
     resp = svc.create_ebs_instances(body)

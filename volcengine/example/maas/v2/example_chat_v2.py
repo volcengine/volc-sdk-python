@@ -36,7 +36,7 @@ if __name__ == '__main__':
         "messages": [
             {
                 "role": ChatRole.USER,
-                "content": "天为什么这么蓝？"
+                "content": "天为什么这么蓝"
             }, {
                 "role": ChatRole.ASSISTANT,
                 "content": "因为有你"
@@ -50,4 +50,4 @@ if __name__ == '__main__':
     endpoint_id = "{YOUR_ENDPOINT_ID}"
     test_chat(maas, endpoint_id, req)
     test_stream_chat(maas, endpoint_id, req)
-
+#

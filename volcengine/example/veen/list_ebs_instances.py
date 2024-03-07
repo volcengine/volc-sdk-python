@@ -11,8 +11,8 @@ if __name__ == "__main__":
     svc.set_ak(ak)
     svc.set_sk(sk)
 
-    query = {
-        "with_attachment_info": "true",
+    body = {
+        "with_attachment_info": True,
         "res_ids": ["testing2-veen92023710333272539522"],
         "ebs_ids": ["disk-t9p44586fn6cbs9"],
         "ebs_names": ["本地_虚机测试用-3"],
@@ -22,15 +22,17 @@ if __name__ == "__main__":
         "ebs_type": ["data"],
         "charge_type": ["HourUsed"],
         "fuzzy_veen_external_ip": "172.19.23.230",
+        "delete_with_res": True,
+        "fuzzy_ebs_id_or_name": "disk-t9p44586fn6cbs9",
         "page_option": {
             "page_no": 1,
             "page_size": 10,
         },
         "order_option": {
             "order_by": "ebs_id",
-            "asc": "true",
+            "asc": True,
         },
     }
 
-    resp = svc.list_ebs_instances(query)
+    resp = svc.list_ebs_instances(body)
     print(resp)

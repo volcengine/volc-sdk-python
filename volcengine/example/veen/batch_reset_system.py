@@ -12,9 +12,10 @@ if __name__ == "__main__":
     svc.set_sk(sk)
 
     body = {
-        "ebs_id": "disk-t9p44586fn6cbs9",
-        "ebs_ids": ["disk-t9p44586fn6cbs9"],
+        "instance_identities": ["veen26301302623093022820", "testing-veen23323035425312030023"],
+        "image_identity": "image7ajpdaodf7",
+        "clear_data_disk": False,
     }
 
-    resp = svc.detach_ebs(body)
+    resp = svc.batch_reset_system(body)
     print(resp)

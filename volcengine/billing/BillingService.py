@@ -41,42 +41,42 @@ class BillingService(Service):
         return api_info
 
     def list_bill(self, params, body):
-        res = self.json("ListBill", params, json.dumps(body))
+        res = self.post("ListBill", params, body)
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
 
     def list_bill_detail(self, params, body):
-        res = self.json("ListBillDetail", params, json.dumps(body))
+        res = self.post("ListBillDetail", params, body)
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
 
     def list_bill_overview_by_prod(self, params, body):
-        res = self.json("ListBillOverviewByProd", params, json.dumps(body))
+        res = self.post("ListBillOverviewByProd", params, body)
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
 
     def list_split_bill_detail(self, params, body):
-        res = self.json("ListSplitBillDetail", params, json.dumps(body))
+        res = self.post("ListSplitBillDetail", params, body)
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
 
     def list_amortized_cost_bill_detail(self, params, body):
-        res = self.json("ListAmortizedCostBillDetail", params, json.dumps(body))
+        res = self.post("ListAmortizedCostBillDetail", params, body)
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
 
     def list_amortized_cost_bill_monthly(self, params, body):
-        res = self.json("ListAmortizedCostBillMonthly", params, json.dumps(body))
+        res = self.post("ListAmortizedCostBillMonthly", params, body)
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

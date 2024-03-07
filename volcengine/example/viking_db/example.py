@@ -13,6 +13,22 @@ if __name__ == '__main__':
     vikingdb_service = VikingDBService()
     vikingdb_service.set_ak("")
     vikingdb_service.set_sk("")
+
+    # datas = [{
+    #     "query": "退改",
+    #     "content": "如果您需要人工服务，可以拨打人工客服电话：4006660921",
+    #     "title": "无"
+    # }, {
+    #     "query": "退改",
+    #     "content": "1、1日票 1.5日票 2日票的退款政策： -到访日前2天的00:00前，免费退款 - 到访日前2天的00:00至到访日前夜23:59期间,退款需扣除服务费（人民币80元） - 到访日当天（00:00 之后），不可退款 2、半日票的退款政策： - 未使用的们票可在所选入...",
+    #     "title": "门票退改政策｜北京环球影城的门票退改政策"
+    # }, {
+    #     "query": "退改",
+    #     "content": "如果您需要人工服务，可以拨打人工客服电话：4006660921",
+    # }]
+    # res = vikingdb_service.batch_rerank(datas)
+    # print(res)
+
     # 写给用户的样例
     # fields = [
     #     Field(
@@ -62,16 +78,16 @@ if __name__ == '__main__':
     #     print(item.indexes)
 
     #
-    # vector_index = VectorIndexParams(distance=DistanceType.COSINE,index_type=IndexType.HNSW,
+    # vector_index = VectorIndexParams(distance=DistanceType.COSINE,index_type=IndexType.DiskANN,
     #                                  quant=QuantType.Float)
-    # res = vikingdb_service.create_index("example","example_index", vector_index, cpu_quota=2,
+    # res = vikingdb_service.create_index("example","example_index6", vector_index, cpu_quota=2,
     #                                     description="This is an index", scalar_index=['price', 'like'])
     # 返回一个index实例
     # print(res)
     #
-    # res = vikingdb_service.get_index("example", "example_index")
+    # res = vikingdb_service.get_index("example", "example_index6")
     # 返回一个index实例
-    # print(res.shard_count)
+    # print(res.vector_index)
     #
     # vikingdb_service.drop_index("example", "example_index")  # 无返回
     #

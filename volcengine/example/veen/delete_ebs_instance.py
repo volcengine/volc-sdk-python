@@ -12,6 +12,7 @@ if __name__ == "__main__":
     svc.set_sk(sk)
 
     body = {
+        "ebs_id": "disk-t9p44586fn6cbs9",
         "ebs_ids": ["disk-t9p44586fn6cbs9"],
     }
 

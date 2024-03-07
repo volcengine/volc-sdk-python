@@ -88,6 +88,8 @@ class VikingDBService(Service):
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "Rerank": ApiInfo("POST", "/api/index/rerank", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "BatchRerank": ApiInfo("POST", "/api/index/batch_rerank", {}, {},
+                              {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
         return api_info
 
@@ -632,5 +634,13 @@ class VikingDBService(Service):
             "title": title
         }
         res = self.json_exception("Rerank", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["data"]
+
+    def batch_rerank(self, datas):
+        params = {
+            "datas": datas,
+        }
+        res = self.json_exception("BatchRerank", {}, json.dumps(params))
         res = json.loads(res)
         return res["data"]

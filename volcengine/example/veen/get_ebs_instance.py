@@ -11,10 +11,10 @@ if __name__ == "__main__":
     svc.set_ak(ak)
     svc.set_sk(sk)
 
-    query = {
+    body = {
         "ebs_id": "disk-t9p44586fn6cbs9",
-        "with_attachment_info": "true",
+        "with_attachment_info": True,
     }
 
-    resp = svc.get_ebs_instance(query)
+    resp = svc.get_ebs_instance(body)
     print(resp)

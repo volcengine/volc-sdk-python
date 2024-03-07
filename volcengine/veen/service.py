@@ -100,11 +100,11 @@ api_info = {
         "Action": "CreateEbsInstances", "Version": SERVICE_VERSION}, {}, {}),
 
     # 获取边缘云盘列表
-    "ListEbsInstances": ApiInfo("GET", "/", {
+    "ListEbsInstances": ApiInfo("POST", "/", {
         "Action": "ListEbsInstances", "Version": SERVICE_VERSION}, {}, {}),
 
     # 获取边缘云盘详情
-    "GetEbsInstance": ApiInfo("GET", "/", {
+    "GetEbsInstance": ApiInfo("POST", "/", {
         "Action": "GetEbsInstance", "Version": SERVICE_VERSION}, {}, {}),
 
     # 边缘云盘扩容
@@ -122,6 +122,10 @@ api_info = {
     # 边缘云盘删除
     "DeleteEbsInstance": ApiInfo("POST", "/", {
         "Action": "DeleteEbsInstance", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 批量重置系统或更换镜像 https://www.volcengine.com/docs/6499/196711
+    "BatchResetSystem": ApiInfo("POST", "/", {
+        "Action": "BatchResetSystem", "Version": SERVICE_VERSION}, {}, {}),
 }
 
 
@@ -361,21 +365,21 @@ class VeenService(Service):
         res_json = json.loads(res)
         return res_json
 
-    def list_ebs_instances(self, query=None):
-        if query is None:
-            query = {}
+    def list_ebs_instances(self, body=None):
+        if body is None:
+            body = {}
         action = "ListEbsInstances"
-        res = self.get(action,query)
+        res = self.json(action,[],json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
         return res_json
 
-    def get_ebs_instance(self, query=None):
-        if query is None:
-            query = {}
+    def get_ebs_instance(self, body=None):
+        if body is None:
+            body = {}
         action = "GetEbsInstance"
-        res = self.get(action,query)
+        res = self.json(action,[],json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -415,6 +419,16 @@ class VeenService(Service):
         if body is None:
             body = {}
         action = "DeleteEbsInstance"
+        res = self.json(action,[],json.dumps(body))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def batch_reset_system(self, body=None):
+        if body is None:
+            body = {}
+        action = "BatchResetSystem"
         res = self.json(action,[],json.dumps(body))
         if res == '':
             raise Exception("%s: empty response" % action)

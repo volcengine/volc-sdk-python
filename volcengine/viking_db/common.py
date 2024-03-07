@@ -33,6 +33,7 @@ class IndexType(Enum):
     FLAT = "flat"
     HNSW = "hnsw"
     IVF = "ivf"
+    DiskANN = "DiskANN"
 
 class QuantType(Enum):
     """

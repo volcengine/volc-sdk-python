@@ -14,6 +14,7 @@ if __name__ == "__main__":
     body = {
         "ebs_id": "disk-t9p44586fn6cbs9",
         "capacity": "200",
+        "with_reboot": True,
     }
 
     resp = svc.scale_ebs_instance_capacity(body)

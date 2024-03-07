@@ -1,6 +1,7 @@
 # coding:utf-8
 import json
 import copy
+import time
 
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
@@ -12,6 +13,8 @@ from volcengine.maas.sse_decoder import SSEDecoder
 from volcengine.maas.exception import MaasException, new_client_sdk_request_error
 from volcengine.maas.utils import dict_to_object, json_to_object
 from .utils import gen_req_id
+from volcengine.maas.v2.audio.audio import Audio
+from volcengine.maas.v2.images.images import Images
 
 
 class MaasService(Service):
@@ -20,7 +23,16 @@ class MaasService(Service):
             host, region, connection_timeout, socket_timeout
         )
         api_info = MaasService.get_api_info()
+        self._apikey = None
+        self._apikey_ttl = None
+        api_info = self.get_api_info()
         super(MaasService, self).__init__(service_info, api_info)
+
+        self.audio = Audio(self)
+        self.images = Images(self)
+
+    def set_apikey(self, apikey):
+        self._apikey = apikey
 
     @staticmethod
     def get_service_info(host, region, connection_timeout, socket_timeout):
@@ -47,6 +59,15 @@ class MaasService(Service):
             "embeddings": ApiInfo(
                 "POST", "/api/v2/endpoint/{endpoint_id}/embeddings", {}, {}, {}
             ),
+            "audio.speech": ApiInfo(
+                "POST", "/api/v2/endpoint/{endpoint_id}/audio/speech", {}, {}, {}
+            ),
+            "images.quick_gen": ApiInfo(
+                "POST", "/api/v2/endpoint/{endpoint_id}/images/quick-gen", {}, {}, {}
+            ),
+            "top": ApiInfo(
+                "POST", "/", {}, {}, {}
+            ),
         }
         return api_info
 
@@ -60,7 +81,7 @@ class MaasService(Service):
 
         try:
             req["stream"] = True
-            res = self._call(endpoint_id, "chat", req_id, {}, json.dumps(req))
+            res = self._call(endpoint_id, "chat", req_id, {}, json.dumps(req), self._apikey)
 
             decoder = SSEDecoder(res)
 
@@ -98,35 +119,43 @@ class MaasService(Service):
     def embeddings(self, endpoint_id, req):
         return self._request(endpoint_id, "embeddings", req)
 
-    def _request(self, endpoint_id, api, req):
+    def _request(self, endpoint_id, api, req, params={}, apikey=None):
         req_id = gen_req_id()
 
         self._validate(api, req_id)
-        try:
-            res = self._call(endpoint_id, api, req_id, {}, json.dumps(req))
 
+        apikey = self.get_apikey()
+        apikey_ttl = self._apikey_ttl
+        # 用户set_apikey的
+        if apikey is not None and apikey_ttl is None :
+            pass
+        if endpoint_id is not None and apikey_ttl is None and apikey is None:
+            self.get_key(endpoint_id)
+
+        try:
+            res = self._call(endpoint_id, api, req_id, params, json.dumps(req), self._apikey)
             resp = dict_to_object(res.json())
             if resp and isinstance(resp, dict):
                 resp["req_id"] = req_id
             return resp
 
         except MaasException as e:
-            raise
+            raise e
         except Exception as e:
             raise new_client_sdk_request_error(str(e), req_id)
 
     def _validate(self, api, req_id):
         if (
-            self.service_info.credentials is None
-            or self.service_info.credentials.sk is None
-            or self.service_info.credentials.ak is None
+                self.service_info.credentials is None
+                or self.service_info.credentials.sk is None
+                or self.service_info.credentials.ak is None
         ):
             raise new_client_sdk_request_error("no valid credential", req_id)
 
         if not (api in self.api_info):
             raise new_client_sdk_request_error("no such api", req_id)
 
-    def _call(self, endpoint_id, api, req_id, params, body):
+    def _call(self, endpoint_id, api, req_id, params, body, apikey=None):
         api_info = copy.deepcopy(self.api_info[api])
         api_info.path = api_info.path.format(endpoint_id=endpoint_id)
 
@@ -136,6 +165,9 @@ class MaasService(Service):
         r.body = body
 
         SignerV4.sign(r, self.service_info.credentials)
+
+        if apikey is not None:
+            r.headers["Authorization"] = "Bearer " + apikey
 
         url = r.build()
         res = self.session.post(
@@ -164,3 +196,60 @@ class MaasService(Service):
                     raise new_client_sdk_request_error(resp, req_id)
 
         return res
+
+    def create_or_refresh_api_key(self, req):
+        try:
+            res = self.request("top", {"Version": "2024-01-01", "Action": "CreateOrRefreshAPIKey"}, req)
+            res = json.loads(res)
+            # res = self._request(None, "top", req, {"Version": "2024-01-01", "Action": "CreateOrRefreshAPIKey"})
+            if res == "":
+                raise new_client_sdk_request_error("empty response")
+        except MaasException as e:
+            raise e
+        except Exception as e:
+            raise new_client_sdk_request_error(str(e))
+        else:
+            return res["Result"]["ApiKey"]
+
+    def get_apikey(self):
+        return self._apikey
+
+    def set_apikey(self, apikey):
+        self._apikey = apikey
+
+    def get_apikey_ttl(self):
+        return self._apikey_ttl
+
+    def _set_apikey_ttl(self, ttl):
+        self._apikey_ttl = ttl
+
+    def apply_key(self, endpoint_id, ttl=604800, endpoint_id_list=None):
+        maas = MaasService('open.volcengineapi.com', 'cn-beijing')
+        maas.set_ak(self.service_info.credentials.ak)
+        maas.set_sk(self.service_info.credentials.sk)
+
+        if endpoint_id_list is None:
+            endpoint_id_list = []
+        endpoint_id_list.append(endpoint_id)
+
+        req = {
+            "Ttl": ttl,
+            "EndpointIdList": endpoint_id_list,
+        }
+        try:
+            api_key = maas.create_or_refresh_api_key(req)
+            self.set_apikey(api_key)
+            self._set_apikey_ttl(ttl + int(time.time()))
+            return api_key
+        except MaasException as e:
+            raise e
+
+    def get_key(self, endpoint_id):
+        api_key = self.get_apikey()
+        if api_key is None:
+            self.apply_key(endpoint_id)
+
+        if time.time() + 300 > self.get_apikey_ttl():  # 过期5分钟前,重新生成
+            self.apply_key(endpoint_id)
+
+        return self.get_apikey()
