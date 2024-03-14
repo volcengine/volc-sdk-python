@@ -47,15 +47,40 @@ class TLSData:
         return json_data
 
 
+class TagInfo(TLSData):
+    def __init__(self, key: str, value: str = None):
+        """
+        :param key: 标签Key的值
+        :param value: 标签Value的值
+        """
+        self.key = key
+        self.value = value
+
+
 class ProjectInfo(TLSData):
     def __init__(self, project_name: str = None, project_id: str = None, description: str = None,
-                 create_time: str = None, inner_net_domain: str = None, topic_count: int = None):
+                 create_time: str = None, inner_net_domain: str = None, topic_count: int = None,
+                 iam_project_name: str = None, tags: List[TagInfo] = None):
         self.project_name = project_name
         self.project_id = project_id
         self.description = description
         self.create_time = create_time
         self.inner_net_domain = inner_net_domain
         self.topic_count = topic_count
+        self.iam_project_name = iam_project_name
+        self.tags = tags
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        project_info = super(ProjectInfo, cls).set_attributes(data)
+
+        if TAGS in data:
+            tags = data[TAGS]
+            project_info.tags = []
+            for i in range(len(tags)):
+                project_info.tags.append(TagInfo(tags[i].get(KEY), tags[i].get(VALUE)))
+
+        return project_info
 
     def get_inner_net_domain(self):
         """
@@ -99,15 +124,19 @@ class ProjectInfo(TLSData):
         """
         return self.topic_count
 
+    def get_iam_project_name(self):
+        """
+        :return: 日志项目所属的IAM项目
+        :rtype: str
+        """
+        return self.iam_project_name
 
-class TagInfo(TLSData):
-    def __init__(self, key: str, value: str = None):
+    def get_tags(self):
         """
-        :param key: 标签Key的值
-        :param value: 标签Value的值
+        :return: 日志项目标签信息
+        :rtype: List[TagInfo]
         """
-        self.key = key
-        self.value = value
+        return self.tags
 
 
 class TopicInfo(TLSData):
@@ -146,15 +175,17 @@ class TopicInfo(TLSData):
         enable_tracking = data.get(ENABLE_TRACKING)
         time_key = data.get(TIME_KEY)
         time_format = data.get(TIME_FORMAT)
-        tags = data.get(TAGS)
+        topic_tags = None
         log_public_ip = data.get(LOG_PUBLIC_IP)
 
+        tags = data.get(TAGS)
         if tags is not None:
+            topic_tags = []
             for i in range(len(tags)):
-                tags[i] = TagInfo(tags[i][KEY], tags[i][VALUE])
+                topic_tags.append(TagInfo(tags[i].get(KEY), tags[i].get(VALUE)))
 
         return cls(topic_name, topic_id, project_id, ttl, create_time, modify_time, shard_count, description,
-                   auto_split, max_split_shard, enable_tracking, time_key, time_format, tags, log_public_ip)
+                   auto_split, max_split_shard, enable_tracking, time_key, time_format, topic_tags, log_public_ip)
 
     def get_create_time(self):
         """
@@ -673,7 +704,8 @@ class HostGroupInfo(TLSData):
                  host_identifier: str = None, host_count: int = None, normal_heartbeat_status_count: int = None,
                  abnormal_heartbeat_status_count: int = None, rule_count: int = None,
                  create_time: str = None, modify_time: str = None, auto_update: bool = False,
-                 update_start_time: str = None, update_end_time: str = None, agent_latest_version: str = None):
+                 update_start_time: str = None, update_end_time: str = None, agent_latest_version: str = None,
+                 service_logging: bool = None, iam_project_name: str = None):
         self.host_group_id = host_group_id
         self.host_group_name = host_group_name
         self.host_group_type = host_group_type
@@ -688,104 +720,120 @@ class HostGroupInfo(TLSData):
         self.update_start_time = update_start_time
         self.update_end_time = update_end_time
         self.agent_latest_version = agent_latest_version
+        self.service_logging = service_logging
+        self.iam_project_name = iam_project_name
 
     def get_update_end_time(self):
         """
-        :return:自动升级的结束时间
+        :return: 自动升级的结束时间
         :rtype: str
         """
         return self.update_end_time
 
     def get_update_start_time(self):
         """
-        :return:自动升级的开始时间
+        :return: 自动升级的开始时间
         :rtype: str
         """
         return self.update_start_time
 
     def get_create_time(self):
         """
-        :return:机器组创建的时间
-        :rtype:str
+        :return: 机器组创建时间
+        :rtype: str
         """
         return self.create_time
 
     def get_host_count(self):
         """
-        :return:机器数量
-        :rtype:int
+        :return: 机器数量
+        :rtype: int
         """
         return self.host_count
 
     def get_modify_time(self):
         """
-        :return:机器组修改的时间
-        :rtype:str
+        :return: 机器组修改时间
+        :rtype: str
         """
         return self.modify_time
 
     def get_host_group_type(self):
         """
-        :return:机器组的类型
-        :rtype:str
+        :return: 机器组类型
+        :rtype: str
         """
         return self.host_group_type
 
     def get_host_group_id(self):
         """
-        :return:机器组的ID
-        :rtype:str
+        :return: 机器组ID
+        :rtype: str
         """
         return self.host_group_id
 
     def get_host_identifier(self):
         """
-        :return:机器的标识符
-        :rtype:str
+        :return: 机器标识符
+        :rtype: str
         """
         return self.host_identifier
 
     def get_abnormal_heartbeat_status_count(self):
         """
-        :return:心跳异常的机器数量
-        :rtype:int
+        :return: 心跳异常的机器数量
+        :rtype: int
         """
         return self.abnormal_heartbeat_status_count
 
     def get_auto_update(self):
         """
-        :return:是否开启自动升级功能
+        :return: 是否开启自动升级功能
         :rtype: bool
         """
         return self.auto_update
 
     def get_host_group_name(self):
         """
-        :return:机器组的名称
+        :return: 机器组名称
         :rtype: str
         """
         return self.host_group_name
 
     def get_agent_latest_version(self):
         """
-        :return:日志服务发布的 LogCollector 最新版本号
+        :return: 日志服务发布的LogCollector最新版本号
         :rtype: str
         """
         return self.agent_latest_version
 
     def get_normal_heartbeat_status_count(self):
         """
-        :return:心跳正常的机器数量
-        :rtype:int
+        :return: 心跳正常的机器数量
+        :rtype: int
         """
         return self.normal_heartbeat_status_count
 
     def get_rule_count(self):
         """
-        :return:绑定的采集配置的数量
-        :rtype:int
+        :return: 绑定的采集配置的数量
+        :rtype: int
         """
         return self.rule_count
+
+    def get_service_logging(self):
+        """
+        :return: 是否开启Logcollector服务日志功能
+        :rtype: bool
+        """
+        return self.service_logging
+
+    def get_iam_project_name(self):
+        """
+        :return: 机器组所属的IAM项目
+        :rtype: str
+        """
+        return self.iam_project_name
 
 
 class FilterKeyRegex(TLSData):

@@ -217,19 +217,28 @@ class ModifyIndexResponse(TLSResponse):
 class DescribeIndexResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeIndexResponse, self).__init__(response)
+
         self.full_text = FullTextInfo()
         if self.response[FULL_TEXT] is not None:
             self.full_text = FullTextInfo.set_attributes(data=self.response[FULL_TEXT])
             self.full_text.delimiter = TLSUtil.replace_white_space_character(self.full_text.delimiter)
+
         self.key_value = []
         key_value = self.response[KEY_VALUE]
-        self.create_time = self.response[CREATE_TIME]
-        self.modify_time = self.response[MODIFY_TIME]
-
         for i in range(len(key_value)):
             self.key_value.append(KeyValueInfo(key=key_value[i][KEY],
                                                value=ValueInfo.set_attributes(data=key_value[i][VALUE])))
             self.key_value[i].value.delimiter = TLSUtil.replace_white_space_character(self.key_value[i].value.delimiter)
+
+        self.user_inner_key_value = []
+        user_inner_key_value = self.response[USER_INNER_KEY_VALUE]
+        for i in range(len(user_inner_key_value)):
+            self.user_inner_key_value.append(KeyValueInfo(key=user_inner_key_value[i][KEY],
+                                                          value=ValueInfo.set_attributes(data=user_inner_key_value[i][VALUE])))
+            self.user_inner_key_value[i].value.delimiter = TLSUtil.replace_white_space_character(self.user_inner_key_value[i].value.delimiter)
+
+        self.create_time = self.response[CREATE_TIME]
+        self.modify_time = self.response[MODIFY_TIME]
 
     def get_create_time(self):
         """
@@ -258,6 +267,13 @@ class DescribeIndexResponse(TLSResponse):
         :rtype: List[KeyValueInfo]
         """
         return self.key_value
+
+    def get_user_inner_key_value(self):
+        """
+        :return: 预留字段索引配置
+        :rtype: List[KeyValueInfo]
+        """
+        return self.user_inner_key_value
 
 
 class PutLogsResponse(TLSResponse):
@@ -619,6 +635,11 @@ class DescribeHostGroupRulesResponse(TLSResponse):
         return self.rule_infos
 
 
+class DeleteAbnormalHostsResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteAbnormalHostsResponse, self).__init__(response)
+
+
 class CreateRuleResponse(TLSResponse):
     def __init__(self, response: Response):
         super(CreateRuleResponse, self).__init__(response)
@@ -895,6 +916,11 @@ class ModifyCheckpointResponse(TLSResponse):
         super(ModifyCheckpointResponse, self).__init__(response)
 
 
+class ResetCheckpointResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ResetCheckpointResponse, self).__init__(response)
+
+
 class DescribeCheckpointResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeCheckpointResponse, self).__init__(response)
@@ -903,3 +929,13 @@ class DescribeCheckpointResponse(TLSResponse):
         self.checkpoint = self.response.get(CHECKPOINT)
         self.update_time = self.response.get(UPDATE_TIME)
         self.consumer = self.response.get(CONSUMER)
+
+
+class AddTagsToResourceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(AddTagsToResourceResponse, self).__init__(response)
+
+
+class RemoveTagsFromResourceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(RemoveTagsFromResourceResponse, self).__init__(response)

@@ -85,16 +85,16 @@ if __name__ == '__main__':
     # 返回一个index实例
     # print(res)
     #
-    # res = vikingdb_service.get_index("example", "example_index6")
+    # res = vikingdb_service.get_index("example", "example_index")
     # 返回一个index实例
-    # print(res.vector_index)
+    # print(res.shard_count)
     #
     # vikingdb_service.drop_index("example", "example_index")  # 无返回
     #
     # res = vikingdb_service.list_indexes("example")
     # 返回一个列表
     # for item in res:
-    #     print(item.index_cost)
+    #     print(item.shard_count)
     #     print(item.update_person)
     #     print(item.update_time)
     #     print(item.create_time)
@@ -292,8 +292,7 @@ if __name__ == '__main__':
     # print(res.cpu_quota)
     # print(res.scalar_index)
     #
-    # vikingdb_service.update_index("example", "example_index", description="update index", cpu_quota=4,
-    #                               scalar_index=["aim"])
+    # vikingdb_service.update_index("example", "example_index", shard_count=3)
     #
     # res = vikingdb_service.get_index("example", "example_index")
     # print(res.description)

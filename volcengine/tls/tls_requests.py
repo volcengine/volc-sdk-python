@@ -33,27 +33,42 @@ class TLSRequest:
 
 
 class CreateProjectRequest(TLSRequest):
-    def __init__(self, project_name: str, region: str, description: str = None):
+    def __init__(self, project_name: str, region: str, description: str = None,
+                 iam_project_name: str = None, tags: List[TagInfo] = None):
         """
-        :param project_name:日志项目的名称
-        :type project_name:str
-        :param region:地域
-        :type region:str
-        :param description:日志项目描述信息
-        :type description:str
+        :param project_name: 日志项目的名称
+        :type project_name: str
+        :param region: 地域
+        :type region: str
+        :param description: 日志项目描述信息
+        :type description: str
+        :param iam_project_name: 当前创建的日志项目所属的IAM项目（未指定此参数时，日志服务会将日志项目添加到名为default的IAM项目中）
+        :type iam_project_name: str
+        :param tags: 日志项目标签信息
+        :type tags: List[TagInfo]
         """
         self.project_name = project_name
         self.region = region
         self.description = description
+        self.iam_project_name = iam_project_name
+        self.tags = tags
 
     def check_validation(self):
         """
         :return: 参数是否合法
         :rtype: bool
         """
-        if self.project_name is None or self.region is None:
-            return False
-        return True
+        return self.project_name is not None and self.region is not None
+
+    def get_api_input(self):
+        body = super(CreateProjectRequest, self).get_api_input()
+
+        if self.tags is not None:
+            body[TAGS] = []
+            for tag in self.tags:
+                body[TAGS].append(tag.json())
+
+        return body
 
 
 class DeleteProjectRequest(TLSRequest):
@@ -118,25 +133,32 @@ class DescribeProjectRequest(TLSRequest):
 
 class DescribeProjectsRequest(TLSRequest):
     def __init__(self, page_number: int = 1, page_size: int = 20,
-                 project_name: str = None, project_id: str = None, is_full_name: bool = False):
+                 project_name: str = None, project_id: str = None, is_full_name: bool = False,
+                 iam_project_name: str = None, tags: List[TagInfo] = None):
         """
 
-        :param page_number: 分页查询时的页码。默认为 1
+        :param page_number: 分页查询时的页码（默认为1）
         :type page_number: int
-        :param page_size: 分页大小。默认为 20，最大为 100
+        :param page_size: 分页大小（默认为20，最大为100）
         :type page_size: int
         :param project_name: 日志项目的名称
-        :type project_name:str
-        :param project_id: 日志项目 ID
-        :type project_id: string
-        :param is_full_name: 根据 ProjectName 筛选时，是否精确匹配
+        :type project_name: str
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param is_full_name: 根据ProjectName筛选时，是否精确匹配
         :type is_full_name: bool
+        :param iam_project_name: 当前创建的日志项目所属的IAM项目（未指定此参数时，日志服务会将日志项目添加到名为default的IAM项目中）
+        :type iam_project_name: str
+        :param tags: 日志项目标签信息
+        :type tags: List[TagInfo]
         """
         self.page_number = page_number
         self.page_size = page_size
         self.project_name = project_name
         self.project_id = project_id
         self.is_full_name = is_full_name
+        self.iam_project_name = iam_project_name
+        self.tags = tags
 
     def check_validation(self):
         """
@@ -144,6 +166,17 @@ class DescribeProjectsRequest(TLSRequest):
         :rtype: bool
         """
         return True
+
+    def get_api_input(self):
+        body = super(DescribeProjectsRequest, self).get_api_input()
+
+        if self.tags is not None:
+            body[TAGS] = []
+            for tag in self.tags:
+                body[TAGS].append(tag.json())
+            body[TAGS] = json.dumps(body[TAGS])
+
+        return body
 
 
 class CreateTopicRequest(TLSRequest):
@@ -197,7 +230,7 @@ class CreateTopicRequest(TLSRequest):
         if self.topic_name is None or self.project_id is None or self.ttl is None or self.shard_count is None:
             return False
         return True
-    
+
     def get_api_input(self):
         body = super(CreateTopicRequest, self).get_api_input()
 
@@ -354,18 +387,22 @@ class DescribeTopicsRequest(TLSRequest):
 
 
 class SetIndexRequest(TLSRequest):
-    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None):
+    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None,
+                 user_inner_key_value: List[KeyValueInfo] = None):
         """
-        :param topic_id:日志主题 ID
-        :type topic_id:str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
         :param full_text: 全文索引配置
-        :type full_text:FullTextInfo
-        :param key_value:键值索引配置
-        :type key_value:List[KeyValueInfo]
+        :type full_text: FullTextInfo
+        :param key_value: 键值索引配置
+        :type key_value: List[KeyValueInfo]
+        :param user_inner_key_value: 预留字段索引配置
+        :type user_inner_key_value: List[KeyValueInfo]
         """
         self.topic_id = topic_id
         self.full_text = full_text
         self.key_value = key_value
+        self.user_inner_key_value = user_inner_key_value
 
     def get_api_input(self):
         body = {TOPIC_ID: self.topic_id}
@@ -376,21 +413,28 @@ class SetIndexRequest(TLSRequest):
             body[KEY_VALUE] = []
             for key_value_info in self.key_value:
                 body[KEY_VALUE].append(key_value_info.json())
+        if self.user_inner_key_value is not None:
+            body[USER_INNER_KEY_VALUE] = []
+            for key_value_info in self.user_inner_key_value:
+                body[USER_INNER_KEY_VALUE].append(key_value_info.json())
 
         return body
 
 
 class CreateIndexRequest(SetIndexRequest):
-    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None):
+    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None,
+                 user_inner_key_value: List[KeyValueInfo] = None):
         """
-        :param topic_id:日志主题 ID
-        :type topic_id:str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
         :param full_text: 全文索引配置
-        :type full_text:FullTextInfo
-        :param key_value:键值索引配置
-        :type key_value:List[KeyValueInfo]
+        :type full_text: FullTextInfo
+        :param key_value: 键值索引配置
+        :type key_value: List[KeyValueInfo]
+        :param user_inner_key_value: 预留字段索引配置
+        :type user_inner_key_value: List[KeyValueInfo]
         """
-        super(CreateIndexRequest, self).__init__(topic_id, full_text, key_value)
+        super(CreateIndexRequest, self).__init__(topic_id, full_text, key_value, user_inner_key_value)
 
     def check_validation(self):
         """
@@ -405,8 +449,8 @@ class CreateIndexRequest(SetIndexRequest):
 class DeleteIndexRequest(TLSRequest):
     def __init__(self, topic_id: str):
         """
-        :param topic_id:日志主题 ID
-        :type topic_id:str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
         """
         self.topic_id = topic_id
 
@@ -421,16 +465,19 @@ class DeleteIndexRequest(TLSRequest):
 
 
 class ModifyIndexRequest(SetIndexRequest):
-    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None):
+    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None,
+                 user_inner_key_value: List[KeyValueInfo] = None):
         """
-        :param topic_id:日志主题 ID
-        :type topic_id:str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
         :param full_text: 全文索引配置
-        :type full_text:FullTextInfo
-        :param key_value:键值索引配置
-        :type key_value:List[KeyValueInfo]
+        :type full_text: FullTextInfo
+        :param key_value: 键值索引配置
+        :type key_value: List[KeyValueInfo]
+        :param user_inner_key_value: 预留字段索引配置
+        :type user_inner_key_value: List[KeyValueInfo]
         """
-        super(ModifyIndexRequest, self).__init__(topic_id, full_text, key_value)
+        super(ModifyIndexRequest, self).__init__(topic_id, full_text, key_value, user_inner_key_value)
 
     def check_validation(self):
         """
@@ -445,8 +492,8 @@ class ModifyIndexRequest(SetIndexRequest):
 class DescribeIndexRequest(TLSRequest):
     def __init__(self, topic_id: str):
         """
-        :param topic_id:日志主题 ID
-        :type topic_id:str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
         """
         self.topic_id = topic_id
 
@@ -488,10 +535,6 @@ class PutLogsRequest(TLSRequest):
 
     def get_api_input(self):
         pb_log_group_list = self.log_group_list.SerializeToString()
-
-        if len(pb_log_group_list) > 11 * 1024 * 1024:
-            raise TLSException(error_code="LogGroupListSizeTooLarge",
-                               error_message="The size of LogGroupList exceeds 11 MB.")
 
         params = {TOPIC_ID: self.topic_id}
         body = {DATA: pb_log_group_list}
@@ -857,18 +900,21 @@ class CreateDownloadTaskRequest(TLSRequest):
 
 
 class DescribeDownloadTasksRequest(TLSRequest):
-    def __init__(self, topic_id: str, page_number: int = 1, page_size: int = 20):
+    def __init__(self, topic_id: str, page_number: int = 1, page_size: int = 20, task_name: str = None):
         """
-        :param page_number: 分页查询时的页码。默认为 1
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param page_number: 分页查询时的页码（默认为1）
         :type page_number: int
-        :param page_size: 分页大小。默认为 20，最大为 100
+        :param page_size: 分页大小（默认为20，最大为100）
         :type page_size: int
-        :param topic_id:日志主题 ID
-        :type topic_id:str
+        :param task_name: 根据任务名称进行筛选，支持模糊搜索
+        :type task_name: str
         """
         self.topic_id = topic_id
         self.page_number = page_number
         self.page_size = page_size
+        self.task_name = task_name
 
     def check_validation(self):
         """
@@ -925,22 +971,27 @@ class DescribeShardsRequest(TLSRequest):
 class CreateHostGroupRequest(TLSRequest):
     def __init__(self, host_group_name: str, host_group_type: str,
                  host_ip_list: List[str] = None, host_identifier: str = None, auto_update: bool = False,
-                 update_start_time: str = None, update_end_time: str = None):
+                 update_start_time: str = None, update_end_time: str = None,
+                 service_logging: bool = False, iam_project_name: str = None):
         """
-        :param host_group_name:机器组的名称
-        :type host_group_name:str
-        :param host_group_type:机器组的类型：IP、Label
-        :type host_group_type:str
-        :param host_ip_list:机器组的类型：IP、Label
-        :type host_ip_list:List[str]
-        :param host_identifier:机器 IP 列表
-        :type host_identifier:str
-        :param auto_update:是否开启自动升级功能
-        :type auto_update:bool
-        :param update_start_time:自动升级的开始时间
-        :type update_start_time:str
-        :param update_end_time:自动升级的结束时间
-        :type update_end_time:str
+        :param host_group_name: 机器组的名称
+        :type host_group_name: str
+        :param host_group_type: 机器组的类型（IP或Label）
+        :type host_group_type: str
+        :param host_ip_list: 机器IP列表（HostGroupType为IP时必选）
+        :type host_ip_list: List[str]
+        :param host_identifier: 机器标识（HostGroupType为Label时必选）
+        :type host_identifier: str
+        :param auto_update: 是否开启自动升级功能
+        :type auto_update: bool
+        :param update_start_time: 自动升级的开始时间
+        :type update_start_time: str
+        :param update_end_time: 自动升级的结束时间
+        :type update_end_time: str
+        :param service_logging: 是否开启Logcollector服务日志功能
+        :type service_logging: bool
+        :param iam_project_name: 机器组所属的IAM项目名称
+        :type iam_project_name: str
         """
         self.host_group_name = host_group_name
         self.host_group_type = host_group_type
@@ -949,6 +1000,8 @@ class CreateHostGroupRequest(TLSRequest):
         self.auto_update = auto_update
         self.update_start_time = update_start_time
         self.update_end_time = update_end_time
+        self.service_logging = service_logging
+        self.iam_project_name = iam_project_name
 
     def check_validation(self):
         """
@@ -963,8 +1016,8 @@ class CreateHostGroupRequest(TLSRequest):
 class DeleteHostGroupRequest(TLSRequest):
     def __init__(self, host_group_id: str):
         """
-        :param host_group_id:机器组的 ID
-        :type host_group_id:str
+        :param host_group_id: 机器组ID
+        :type host_group_id: str
         """
         self.host_group_id = host_group_id
 
@@ -980,27 +1033,28 @@ class DeleteHostGroupRequest(TLSRequest):
 
 class ModifyHostGroupRequest(TLSRequest):
     def __init__(self, host_group_id: str, host_group_name: str = None, host_group_type: str = None,
-                 host_ip_list: List[str] = None, host_identifier: str = None, auto_update: bool = False,
-                 update_start_time: str = None, update_end_time: str = None):
+                 host_ip_list: List[str] = None, host_identifier: str = None, auto_update: bool = None,
+                 update_start_time: str = None, update_end_time: str = None, service_logging: bool = None):
         """
-        :param host_group_id:机器组的 ID
-        :type host_group_id:str
-        :param host_group_name:机器组的名称
-        :type host_group_name:str
-        :param host_group_type:机器组的类型：IP、Label
-        :type host_group_type:str
-        :param host_ip_list:机器组的类型：IP、Label
-        :type host_ip_list:List[str]
-        :param host_identifier:机器 IP 列表
-        :type host_identifier:str
-        :param auto_update:是否开启自动升级功能
-        :type auto_update:bool
-        :param update_start_time:自动升级的开始时间
-        :type update_start_time:str
-        :param update_end_time:自动升级的结束时间
-        :type update_end_time:str
+        :param host_group_id: 机器组ID
+        :type host_group_id: str
+        :param host_group_name: 机器组的名称
+        :type host_group_name: str
+        :param host_group_type: 机器组的类型（IP或Label）
+        :type host_group_type: str
+        :param host_ip_list: 机器IP列表（HostGroupType为IP时必选）
+        :type host_ip_list: List[str]
+        :param host_identifier: 机器标识（HostGroupType为Label时必选）
+        :type host_identifier: str
+        :param auto_update: 是否开启自动升级功能
+        :type auto_update: bool
+        :param update_start_time: 自动升级的开始时间
+        :type update_start_time: str
+        :param update_end_time: 自动升级的结束时间
+        :type update_end_time: str
+        :param service_logging: 是否开启Logcollector服务日志功能
+        :type service_logging: bool
         """
-
         self.host_group_id = host_group_id
         self.host_group_name = host_group_name
         self.host_group_type = host_group_type
@@ -1009,6 +1063,7 @@ class ModifyHostGroupRequest(TLSRequest):
         self.auto_update = auto_update
         self.update_start_time = update_start_time
         self.update_end_time = update_end_time
+        self.service_logging = service_logging
 
     def check_validation(self):
         """
@@ -1023,8 +1078,8 @@ class ModifyHostGroupRequest(TLSRequest):
 class DescribeHostGroupRequest(TLSRequest):
     def __init__(self, host_group_id: str):
         """
-        :param host_group_id:机器组的 ID
-        :type host_group_id:str
+        :param host_group_id: 机器组ID
+        :type host_group_id: str
         """
         self.host_group_id = host_group_id
 
@@ -1040,22 +1095,36 @@ class DescribeHostGroupRequest(TLSRequest):
 
 class DescribeHostGroupsRequest(TLSRequest):
     def __init__(self, host_group_id: str = None, host_group_name: str = None,
-                 page_number: int = 1, page_size: int = 20):
+                 page_number: int = 1, page_size: int = 20,
+                 auto_update: bool = None, host_identifier: str = None,
+                 service_logging: bool = None, iam_project_name: str = None):
         """
 
-        :param host_group_id:机器组的 ID
-        :type host_group_id:str
-        :param host_group_name:机器组的名称
-        :type host_group_name:str
-        :param page_number: 分页查询时的页码。默认为 1
+        :param host_group_id: 机器组ID
+        :type host_group_id: str
+        :param host_group_name: 机器组名称
+        :type host_group_name: str
+        :param page_number: 分页查询时的页码（默认为1）
         :type page_number: int
-        :param page_size: 分页大小。默认为 20，最大为 100
+        :param page_size: 分页大小（默认为20，最大为100）
         :type page_size: int
+        :param auto_update: 是否开启了自动升级功能
+        :type auto_update: bool
+        :param host_identifier: 机器组标识，不支持模糊查询
+        :type host_identifier: str
+        :param service_logging: 是否已开启服务日志功能
+        :type service_logging: bool
+        :param iam_project_name: 根据机器组所属的IAM项目名称进行筛选（精确匹配）
+        :type iam_project_name: str
         """
         self.host_group_id = host_group_id
         self.host_group_name = host_group_name
         self.page_number = page_number
         self.page_size = page_size
+        self.auto_update = auto_update
+        self.host_identifier = host_identifier
+        self.service_logging = service_logging
+        self.iam_project_name = iam_project_name
 
     def check_validation(self):
         """
@@ -1069,15 +1138,15 @@ class DescribeHostsRequest(TLSRequest):
     def __init__(self, host_group_id: str, ip: str = None, heartbeat_status: int = None,
                  page_number: int = 1, page_size: int = 20):
         """
-        :param host_group_id:机器组的 ID
-        :type host_group_id:str
-        :param ip: 机器 IP
-        :type ip:str
-        :param heartbeat_status:机器心跳状态
-        :type heartbeat_status:int
-        :param page_number: 分页查询时的页码。默认为 1
+        :param host_group_id: 机器组ID
+        :type host_group_id: str
+        :param ip: 机器IP
+        :type ip: str
+        :param heartbeat_status: 机器心跳状态
+        :type heartbeat_status: int
+        :param page_number: 分页查询时的页码（默认为1）
         :type page_number: int
-        :param page_size: 分页大小。默认为 20，最大为 100
+        :param page_size: 分页大小（默认为20，最大为100）
         :type page_size: int
         """
         self.host_group_id = host_group_id
@@ -1099,10 +1168,10 @@ class DescribeHostsRequest(TLSRequest):
 class DeleteHostRequest(TLSRequest):
     def __init__(self, host_group_id: str, ip: str):
         """
-        :param host_group_id:机器组的 ID
-        :type host_group_id:str
-        :param ip: 机器 IP
-        :type ip:str
+        :param host_group_id: 机器组ID
+        :type host_group_id: str
+        :param ip: 机器IP
+        :type ip: str
         """
         self.host_group_id = host_group_id
         self.ip = ip
@@ -1120,11 +1189,11 @@ class DeleteHostRequest(TLSRequest):
 class DescribeHostGroupRulesRequest(TLSRequest):
     def __init__(self, host_group_id: str, page_number: int = 1, page_size: int = 20):
         """
-        :param host_group_id:机器组的 ID
-        :type host_group_id:str
-        :param page_number: 分页查询时的页码。默认为 1
+        :param host_group_id: 机器组ID
+        :type host_group_id: str
+        :param page_number: 分页查询时的页码（默认为1）
         :type page_number: int
-        :param page_size: 分页大小。默认为 20，最大为 100
+        :param page_size: 分页大小（默认为20，最大为100）
         :type page_size: int
         """
         self.host_group_id = host_group_id
@@ -1142,17 +1211,17 @@ class DescribeHostGroupRulesRequest(TLSRequest):
 
 
 class ModifyHostGroupsAutoUpdateRequest(TLSRequest):
-    def __init__(self, host_group_ids: List[str], auto_update: bool = False,
+    def __init__(self, host_group_ids: List[str], auto_update: bool = None,
                  update_start_time: str = None, update_end_time: str = None):
         """
-        :param host_group_ids:机器组 ID 列表
-        :type host_group_ids:List[str]
-        :param auto_update:机器组服务器中安装的 LogCollector 是否开启自动升级功能
-        :type auto_update:bool
-        :param update_start_time:自动升级的开始时间
-        :type update_start_time:str
-        :param update_end_time:自动升级的结束时间
-        :type update_end_time:str
+        :param host_group_ids: 机器组ID列表
+        :type host_group_ids: List[str]
+        :param auto_update: 机器组服务器中安装的LogCollector是否开启自动升级功能
+        :type auto_update: bool
+        :param update_start_time: 自动升级的开始时间
+        :type update_start_time: str
+        :param update_end_time: 自动升级的结束时间
+        :type update_end_time: str
         """
         self.host_group_ids = host_group_ids
         self.auto_update = auto_update
@@ -1167,6 +1236,22 @@ class ModifyHostGroupsAutoUpdateRequest(TLSRequest):
         if self.host_group_ids is None:
             return False
         return True
+
+
+class DeleteAbnormalHostsRequest(TLSRequest):
+    def __init__(self, host_group_id: str):
+        """
+        :param host_group_id: 机器组ID
+        :type host_group_id: str
+        """
+        self.host_group_id = host_group_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.host_group_id is not None
 
 
 class SetRuleRequest(TLSRequest):
@@ -2013,6 +2098,31 @@ class ModifyCheckpointRequest(TLSRequest):
                 CHECKPOINT: self.checkpoint}
 
 
+class ResetCheckpointRequest(TLSRequest):
+    def __init__(self, project_id: str, consumer_group_name: str, position: str):
+        """
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param consumer_group_name: 消费者名称
+        :type consumer_group_name: str
+        :param position: 消费位点
+        :type position: str
+        """
+        self.project_id = project_id
+        self.consumer_group_name = consumer_group_name
+        self.position = position
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.project_id is not None and self.consumer_group_name is not None and self.position is not None
+
+    def get_api_input(self):
+        return {PROJECT_ID_UPPERCASE: self.project_id, CONSUMER_GROUP_NAME: self.consumer_group_name, POSITION: self.position}
+
+
 class DescribeCheckpointRequest(TLSRequest):
     def __init__(self, project_id: str, topic_id: str, shard_id: int, consumer_group_name: str):
         """
@@ -2027,6 +2137,10 @@ class DescribeCheckpointRequest(TLSRequest):
         self.consumer_group_name = consumer_group_name
 
     def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
         return (self.project_id is not None and self.topic_id is not None and self.shard_id is not None
                 and self.consumer_group_name is not None)
 
@@ -2036,3 +2150,55 @@ class DescribeCheckpointRequest(TLSRequest):
         body = {CONSUMER_GROUP_NAME: self.consumer_group_name}
 
         return {PARAMS: params, BODY: body}
+
+
+class AddTagsToResourceRequest(TLSRequest):
+    def __init__(self, resource_type: str, resources_list: List[str], tags: List[TagInfo]):
+        """
+        :param resource_type: 资源类型，支持设置为project或topic
+        :type resource_type: str
+        :param resources_list: 资源列表，即日志项目或日志主题的ID列表
+        :type resources_list: List[str]
+        :param tags: 需要绑定的标签键和标签值数组对象
+        :type tags: List[TagInfo]
+        """
+        self.resource_type = resource_type
+        self.resources_list = resources_list
+        self.tags = tags
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.resource_type is not None and self.resources_list is not None and self.tags is not None
+
+    def get_api_input(self):
+        body = {RESOURCE_TYPE: self.resource_type, RESOURCES_LIST: self.resources_list, TAGS: []}
+
+        for tag in self.tags:
+            body[TAGS].append(tag.json())
+
+        return body
+
+
+class RemoveTagsFromResourceRequest(TLSRequest):
+    def __init__(self, resource_type: str, resources_list: List[str], tag_key_list: List[str]):
+        """
+        :param resource_type: 资源类型，支持设置为project或topic
+        :type resource_type: str
+        :param resources_list: 资源列表，即日志项目或日志主题的ID列表
+        :type resources_list: List[str]
+        :param tag_key_list: 待解绑的资源标签键列表
+        :type tag_key_list: List[str]
+        """
+        self.resource_type = resource_type
+        self.resources_list = resources_list
+        self.tag_key_list = tag_key_list
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.resource_type is not None and self.resources_list is not None and self.tag_key_list is not None

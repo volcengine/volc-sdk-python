@@ -1,15 +1,13 @@
 
-from functools import cached_property
-
-
 from volcengine.maas.v2._resource import SyncAPIResource
 from volcengine.maas.v2.audio.speech import Speech
 
 
 class Audio(SyncAPIResource):
-    @cached_property
+    __speech: Speech = None
+
+    @property
     def speech(self) -> Speech:
-        return Speech(self._service)
-
-
-
+        if self.__speech is None:
+            self.__speech = Speech(self._service)
+        return self.__speech

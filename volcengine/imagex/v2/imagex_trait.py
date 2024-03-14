@@ -108,6 +108,9 @@ class ImagexTrait(Service):
     def rerun_image_migrate_task(self, query, body):
         return self.imagex_post('RerunImageMigrateTask', query, json.dumps(body))
             
+    def describe_imagex_bucket_retrieval_usage(self, query):
+        return self.imagex_get('DescribeImageXBucketRetrievalUsage', query)
+            
     def describe_imagex_summary(self, query):
         return self.imagex_get('DescribeImageXSummary', query)
             
@@ -315,6 +318,9 @@ class ImagexTrait(Service):
     def describe_imagex_sensible_top_unknown_url(self, body):
         return self.imagex_post('DescribeImageXSensibleTopUnknownURL', [], json.dumps(body))
             
+    def update_image_resource_status(self, query, body):
+        return self.imagex_post('UpdateImageResourceStatus', query, json.dumps(body))
+            
     def get_image_storage_files(self, query):
         return self.imagex_get('GetImageStorageFiles', query)
             
@@ -341,6 +347,9 @@ class ImagexTrait(Service):
             
     def preview_image_upload_file(self, query):
         return self.imagex_get('PreviewImageUploadFile', query)
+            
+    def get_image_service_subscription(self):
+        return self.imagex_get('GetImageServiceSubscription', {})
             
     def get_image_service(self, query):
         return self.imagex_get('GetImageService', query)
@@ -444,6 +453,9 @@ class ImagexTrait(Service):
     def create_hidden_watermark_image(self, query, body):
         return self.imagex_post('CreateHiddenWatermarkImage', query, json.dumps(body))
             
+    def get_image_detect_result(self, query, body):
+        return self.imagex_post('GetImageDetectResult', query, json.dumps(body))
+            
     def create_image_hm_extract(self, query, body):
         return self.imagex_post('CreateImageHmExtract', query, json.dumps(body))
             
@@ -476,9 +488,6 @@ class ImagexTrait(Service):
             
     def update_image_mirror_conf(self, query, body):
         return self.imagex_post('UpdateImageMirrorConf', query, json.dumps(body))
-            
-    def get_image_service_subscription(self):
-        return self.imagex_get('GetImageServiceSubscription', {})
             
     def get_image_auth_key(self, query):
         return self.imagex_get('GetImageAuthKey', query)

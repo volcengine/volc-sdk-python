@@ -58,6 +58,7 @@ API_INFO = {
     DELETE_HOST: ApiInfo(HTTP_DELETE, DELETE_HOST, {}, {}, {}),
     DESCRIBE_HOST_GROUP_RULES: ApiInfo(HTTP_GET, DESCRIBE_HOST_GROUP_RULES, {}, {}, {}),
     MODIFY_HOST_GROUPS_AUTO_UPDATE: ApiInfo(HTTP_PUT, MODIFY_HOST_GROUPS_AUTO_UPDATE, {}, {}, {}),
+    DELETE_ABNORMAL_HOSTS: ApiInfo(HTTP_DELETE, DELETE_ABNORMAL_HOSTS, {}, {}, {}),
     # APIs of rules.
     CREATE_RULE: ApiInfo(HTTP_POST, CREATE_RULE, {}, {}, {}),
     DELETE_RULE: ApiInfo(HTTP_DELETE, DELETE_RULE, {}, {}, {}),
@@ -86,7 +87,11 @@ API_INFO = {
     DESCRIBE_CONSUMER_GROUPS: ApiInfo(HTTP_GET, DESCRIBE_CONSUMER_GROUPS, {}, {}, {}),
     CONSUMER_HEARTBEAT: ApiInfo(HTTP_POST, CONSUMER_HEARTBEAT, {}, {}, {}),
     MODIFY_CHECKPOINT: ApiInfo(HTTP_PUT, MODIFY_CHECKPOINT, {}, {}, {}),
-    DESCRIBE_CHECKPOINT: ApiInfo(HTTP_GET, DESCRIBE_CHECKPOINT, {}, {}, {})
+    RESET_CHECKPOINT: ApiInfo(HTTP_PUT, RESET_CHECKPOINT, {}, {}, {}),
+    DESCRIBE_CHECKPOINT: ApiInfo(HTTP_GET, DESCRIBE_CHECKPOINT, {}, {}, {}),
+    # APIs of resource labels.
+    ADD_TAGS_TO_RESOURCE: ApiInfo(HTTP_POST, ADD_TAGS_TO_RESOURCE, {}, {}, {}),
+    REMOVE_TAGS_FROM_RESOURCE: ApiInfo(HTTP_POST, REMOVE_TAGS_FROM_RESOURCE, {}, {}, {})
 }
 
 HEADER_API_VERSION = "x-tls-apiversion"
@@ -539,6 +544,14 @@ class TLSService(Service):
 
         return ModifyHostGroupsAutoUpdateResponse(response)
 
+    def delete_abnormal_hosts(self, delete_abnormal_hosts_request: DeleteAbnormalHostsRequest) \
+            -> DeleteAbnormalHostsResponse:
+        if not delete_abnormal_hosts_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_ABNORMAL_HOSTS, body=delete_abnormal_hosts_request.get_api_input())
+
+        return DeleteAbnormalHostsResponse(response)
+
     def create_rule(self, create_rule_request: CreateRuleRequest) -> CreateRuleResponse:
         if create_rule_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
@@ -720,6 +733,13 @@ class TLSService(Service):
 
         return ModifyCheckpointResponse(response)
 
+    def reset_checkpoint(self, reset_checkpoint_request: ResetCheckpointRequest) -> ResetCheckpointResponse:
+        if not reset_checkpoint_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=RESET_CHECKPOINT, body=reset_checkpoint_request.get_api_input())
+
+        return ResetCheckpointResponse(response)
+
     def describe_checkpoint(self, describe_checkpoint_request: DescribeCheckpointRequest) -> DescribeCheckpointResponse:
         if not describe_checkpoint_request.check_validation():
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
@@ -727,3 +747,18 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_CHECKPOINT, params=api_input[PARAMS], body=api_input[BODY])
 
         return DescribeCheckpointResponse(response)
+
+    def add_tags_to_resource(self, add_tags_to_resource_request: AddTagsToResourceRequest) -> AddTagsToResourceResponse:
+        if not add_tags_to_resource_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=ADD_TAGS_TO_RESOURCE, body=add_tags_to_resource_request.get_api_input())
+
+        return AddTagsToResourceResponse(response)
+
+    def remove_tags_from_resource(self, remove_tags_from_resource_request: RemoveTagsFromResourceRequest) \
+            -> RemoveTagsFromResourceResponse:
+        if not remove_tags_from_resource_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=REMOVE_TAGS_FROM_RESOURCE, body=remove_tags_from_resource_request.get_api_input())
+
+        return RemoveTagsFromResourceResponse(response)

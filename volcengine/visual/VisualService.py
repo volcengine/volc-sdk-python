@@ -137,6 +137,7 @@ class VisualService(Service):
             "CertH5ConfigInit": ApiInfo("POST", "/", {"Action": "CertH5ConfigInit", "Version": "2022-08-31"}, {}, {}),
             "CertH5Token": ApiInfo("POST", "/", {"Action": "CertH5Token", "Version": "2022-08-31"}, {}, {}),
             "HighAesSmartDrawing": ApiInfo("POST", "/", {"Action": "HighAesSmartDrawing", "Version": "2022-08-31"}, {},{}),
+            "EmotionPortrait": ApiInfo("POST", "/", {"Action": "EmotionPortrait", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -917,6 +918,13 @@ class VisualService(Service):
     def still_liveness_img(self, body):
         try:
             res_json = self.common_json_handler("StillLivenessImg", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def emotion_portrait(self, body):
+        try:
+            res_json = self.common_json_handler("EmotionPortrait", body)
             return res_json
         except Exception as e:
             raise Exception(str(e))

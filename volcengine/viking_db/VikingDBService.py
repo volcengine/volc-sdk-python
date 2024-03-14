@@ -608,7 +608,7 @@ class VikingDBService(Service):
         # print(params)
         res = self.json_exception("UpdateCollection", {}, json.dumps(params))
 
-    def update_index(self, collection_name, index_name, description=None, cpu_quota=None, scalar_index=None):
+    def update_index(self, collection_name, index_name, description=None, cpu_quota=None, scalar_index=None, shard_count=None):
         params = {
             "collection_name": collection_name,
             "index_name": index_name,
@@ -619,6 +619,8 @@ class VikingDBService(Service):
             params["cpu_quota"] = cpu_quota
         if scalar_index is not None:
             params["scalar_index"] = scalar_index
+        if shard_count is not None:
+            params["shard_count"] = shard_count
         res = self.json_exception("UpdateIndex", {}, json.dumps(params))
 
     def list_embeddings(self, model_name=""):

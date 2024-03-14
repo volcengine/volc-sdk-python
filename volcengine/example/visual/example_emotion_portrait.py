@@ -7,16 +7,14 @@ if __name__ == '__main__':
     visual_service = VisualService()
 
     # call below method if you don't set ak and sk in $HOME/.volc/config
-    visual_service.set_ak('')
-    visual_service.set_sk('')
+    visual_service.set_ak('AK')
+    visual_service.set_sk('SK')
 
     form = {
+        "req_key": "emotion_portrait",
+        "image_urls": [""],
+        "target_emotion": "jiuwo"
+    }
 
-        "req_key":"cert_h5_token",
-        "h5_config_id":"",
-        "sts_token":"",
-        "idcard_name":"",
-        "idcard_no":""
-}
-    resp = visual_service.cert_h5_token(form)
+    resp = visual_service.emotion_portrait(form)
     print(resp)
