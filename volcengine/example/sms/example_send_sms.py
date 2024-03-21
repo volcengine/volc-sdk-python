@@ -17,7 +17,7 @@ if __name__ == '__main__':
         "SmsAccount": "smsAccount",
         "Sign": "sign",
         "TemplateID": "ST_xxx",
-        "TemplateParam": {"code": "1234"},
+        "TemplateParam": "{\"code\": \"1234\"}",
         "PhoneNumbers": "188xxxxxxxx",
         "Tag": "tag",
     }

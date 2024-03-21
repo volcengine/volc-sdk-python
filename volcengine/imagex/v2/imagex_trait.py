@@ -183,6 +183,15 @@ class ImagexTrait(Service):
     def describe_imagexcdn_top_request_data(self, query):
         return self.imagex_get('DescribeImageXCDNTopRequestData', query)
             
+    def describe_imagex_exceed_resolution_ratio_all(self, body):
+        return self.imagex_post('DescribeImageXExceedResolutionRatioAll', [], json.dumps(body))
+            
+    def describe_imagex_exceed_file_size(self, body):
+        return self.imagex_post('DescribeImageXExceedFileSize', [], json.dumps(body))
+            
+    def describe_imagex_exceed_count_by_time(self, body):
+        return self.imagex_post('DescribeImageXExceedCountByTime', [], json.dumps(body))
+            
     def describe_imagex_service_quality(self, query):
         return self.imagex_get('DescribeImageXServiceQuality', query)
             
@@ -374,6 +383,9 @@ class ImagexTrait(Service):
             
     def get_resource_url(self, query):
         return self.imagex_get('GetResourceURL', query)
+            
+    def create_image_from_uri(self, query, body):
+        return self.imagex_post('CreateImageFromUri', query, json.dumps(body))
             
     def update_image_file_key(self, query, body):
         return self.imagex_post('UpdateImageFileKey', query, json.dumps(body))

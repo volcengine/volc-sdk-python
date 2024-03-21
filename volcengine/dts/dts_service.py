@@ -7,6 +7,7 @@ from volcengine.ServiceInfo import ServiceInfo
 from volcengine.base.Service import Service
 
 SERVICE_VERSION = "2022-10-01"
+PRE_SERVICE_VERSION = "2018-01-01"
 SERVICE_HOST = "dts.volcengineapi.com"
 SERVICE_NAME = "dts"
 REST_API_METHOD = "POST"
@@ -52,6 +53,12 @@ api_info = {
     "DescribeTransmissionTasks": ApiInfo(REST_API_METHOD, "/",
                                          {"Action": "DescribeTransmissionTasks", "Version": SERVICE_VERSION},
                                          {}, {}),
+    "PreCheckAsync": ApiInfo(REST_API_METHOD, "/",
+                             {"Action": "PreCheckAsync", "Version": PRE_SERVICE_VERSION},
+                             {}, {}),
+    "GetAsyncPreCheckResult": ApiInfo(REST_API_METHOD, "/",
+                                      {"Action": "GetAsyncPreCheckResult", "Version": PRE_SERVICE_VERSION},
+                                      {}, {}),
 }
 
 
@@ -153,6 +160,20 @@ class DtsService(Service):
 
     def describe_transmission_task_progress(self, params, body):
         res = self.json('DescribeTransmissionTaskProgress', params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def pre_check_async(self, params, body):
+        res = self.json('PreCheckAsync', params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def get_async_pre_check_result(self, params, body):
+        res = self.json('GetAsyncPreCheckResult', params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

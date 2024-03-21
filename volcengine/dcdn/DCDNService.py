@@ -8,15 +8,16 @@ from volcengine.base.Service import Service
 from volcengine.ServiceInfo import ServiceInfo
 
 SERVICE_VERSION = "2021-04-01"
+SERVICE_VERSION_V2 = "2023-01-01"
 
 service_info = ServiceInfo("open.volcengineapi.com", {'Accept': 'application/json'},
                            Credentials('', '', 'dcdn', 'cn-north-1'), 60 * 5, 60 * 5, "https")
 
 api_info = {
-    # 查询域名列表: https://www.volcengine.com/docs/6559/95182
-    "DescribeUserDomains": ApiInfo("GET", "/", {
-        "Action": "DescribeUserDomains", "Version": SERVICE_VERSION}, {}, {}),
-
+    # 查询域名列表: https://www.volcengine.com/docs/6559/192391
+    "DescribeUserDomains": ApiInfo("POST", "/", {
+        "Action": "DescribeUserDomains", "Version": SERVICE_VERSION_V2}, {}, {}),
+    
     # 查询全站加速域名的详细配置: https://www.volcengine.com/docs/6559/94321
     "DescribeDomainConfig": ApiInfo("POST", "/", {
         "Action": "DescribeDomainConfig", "Version": SERVICE_VERSION}, {}, {}),
@@ -24,6 +25,10 @@ api_info = {
     # 新增全站加速域名: https://www.volcengine.com/docs/6559/79725
     "CreateDomain": ApiInfo("POST", "/", {
         "Action": "CreateDomain", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 新增全站加速域名V2,支持识别Project: https://www.volcengine.com/docs/6559/191870
+    "CreateDomainV2": ApiInfo("POST", "/", {
+        "Action": "CreateDomain", "Version": SERVICE_VERSION_V2}, {}, {}),
 
     # 启动全站加速域名: https://www.volcengine.com/docs/6559/94320
     "StartDomain": ApiInfo("POST", "/", {
@@ -40,6 +45,10 @@ api_info = {
     # 变更域名配置: https://www.volcengine.com/docs/6559/95183
     "UpdateDomainConfig": ApiInfo("POST", "/", {
         "Action": "UpdateDomainConfig", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 变更域名配置V2,支持识别Project: https://www.volcengine.com/docs/6559/191883
+    "UpdateDomainConfigV2": ApiInfo("POST", "/", {
+        "Action": "UpdateDomainConfig", "Version": SERVICE_VERSION_V2}, {}, {}),
 
     # 查询域名的资源用量数据: https://www.volcengine.com/docs/6559/79733
     "DescribeStatistics": ApiInfo("POST", "/", {
@@ -163,7 +172,7 @@ class DCDNService(Service):
         if params is None:
             params = {}
         action = "DescribeUserDomains"
-        res = self.get(action, params)
+        res = self.json(action,[], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
         res_json = json.loads(res)
@@ -183,6 +192,16 @@ class DCDNService(Service):
         if params is None:
             params = {}
         action = "CreateDomain"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+    
+    def create_domain_v2(self, params=None):
+        if params is None:
+            params = {}
+        action = "CreateDomainV2"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
@@ -223,6 +242,16 @@ class DCDNService(Service):
         if params is None:
             params = {}
         action = "UpdateDomainConfig"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+    
+    def update_domain_config_v2(self, params=None):
+        if params is None:
+            params = {}
+        action = "UpdateDomainConfigV2"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)

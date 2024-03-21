@@ -1,5 +1,8 @@
 ### Change log
 
+2024-03-21 Bumped to version v1.0.134
+- Updated apis for dcdn/dts/imagex/live/sms/visual
+
 2024-03-14 Bumped to version v1.0.133
 - Updated apis for viking_db/imagex/visual/maas/tls
 

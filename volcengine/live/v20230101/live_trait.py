@@ -124,6 +124,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def create_live_stream_record_index_files(self, body):
+        res = self.api_post('CreateLiveStreamRecordIndexFiles', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def create_pull_record_task(self, body):
         res = self.api_post('CreatePullRecordTask', [], json.dumps(body))
         if res == '':
@@ -712,6 +719,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_live_batch_stream_transcode_data(self, body):
+        res = self.api_post('DescribeLiveBatchStreamTranscodeData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_live_stream_count_data(self, body):
         res = self.api_post('DescribeLiveStreamCountData', [], json.dumps(body))
         if res == '':
@@ -756,13 +770,6 @@ class LiveTrait(Service):
             
     def describe_live_batch_stream_traffic_data(self, body):
         res = self.api_post('DescribeLiveBatchStreamTrafficData', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def describe_live_batch_stream_transcode_data(self, body):
-        res = self.api_post('DescribeLiveBatchStreamTranscodeData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

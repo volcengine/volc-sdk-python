@@ -1,0 +1,448 @@
+[
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "name": "Field",
+    "type": "record",
+    "fields": [
+      {
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "name": "dataTypeNumber",
+        "type": "int"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "Integer",
+    "fields": [
+      {
+        "name": "precision",
+        "type": "int"
+      },
+      {
+        "name": "value",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "Character",
+    "fields": [
+      {
+        "name": "charset",
+        "type": "string"
+      },
+      {
+        "name": "value",
+        "type": "bytes"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "Float",
+    "fields": [
+      {
+        "name": "value",
+        "type": "double"
+      },
+      {
+        "name": "precision",
+        "type": "int"
+      },
+      {
+        "name": "scale",
+        "type": "int"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "Decimal",
+    "fields": [
+      {
+        "name": "value",
+        "type": "string"
+      },
+      {
+        "name": "precision",
+        "type": "int"
+      },
+      {
+        "name": "scale",
+        "type": "int"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "Timestamp",
+    "fields": [
+      {
+        "name": "timestamp",
+        "type": "long"
+      },
+      {
+        "name": "millis",
+        "type": "int"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "DateTime",
+    "fields": [
+      {
+        "name": "year",
+        "default": null,
+        "type": [
+          "null",
+          "int"
+        ]
+      },
+      {
+        "name": "month",
+        "default": null,
+        "type": [
+          "null",
+          "int"
+        ]
+      },
+      {
+        "name": "day",
+        "default": null,
+        "type": [
+          "null",
+          "int"
+        ]
+      },
+      {
+        "name": "hour",
+        "default": null,
+        "type": [
+          "null",
+          "int"
+        ]
+      },
+      {
+        "name": "minute",
+        "default": null,
+        "type": [
+          "null",
+          "int"
+        ]
+      },
+      {
+        "name": "second",
+        "default": null,
+        "type": [
+          "null",
+          "int"
+        ]
+      },
+      {
+        "name": "millis",
+        "default": null,
+        "type": [
+          "null",
+          "int"
+        ]
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "TimestampWithTimeZone",
+    "fields": [
+      {
+        "name": "value",
+        "type": "DateTime"
+      },
+      {
+        "name": "timezone",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "BinaryGeometry",
+    "fields": [
+      {
+        "name": "type",
+        "type": "string"
+      },
+      {
+        "name": "value",
+        "type": "bytes"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "TextGeometry",
+    "fields": [
+      {
+        "name": "type",
+        "type": "string"
+      },
+      {
+        "name": "value",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "BinaryObject",
+    "fields": [
+      {
+        "name": "type",
+        "type": "string"
+      },
+      {
+        "name": "value",
+        "type": "bytes"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "TextObject",
+    "fields": [
+      {
+        "name": "type",
+        "type": "string"
+      },
+      {
+        "name": "value",
+        "type": "string"
+      }
+    ]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "enum",
+    "name": "EmptyObject",
+    "symbols" : ["NULL", "NONE"]
+  },
+  {
+    "namespace": "com.bytedance.dts.subscribe.avro",
+    "type": "record",
+    "name": "Record",
+    "fields": [
+      {
+        "name": "version",
+        "type": "int",
+        "doc": "version infomation"
+      },
+      {
+        "name": "id",
+        "type": "long",
+        "doc": "unique id of this record in the whole stream"
+      },
+      {
+        "name": "sourceTimestamp",
+        "type": "long",
+        "doc": "record log timestamp"
+      },
+      {
+        "name": "sourcePosition",
+        "type": "string",
+        "doc": "record source location information"
+      },
+      {
+        "name": "safeSourcePosition",
+        "type": "string",
+        "default": "",
+        "doc": "safe record source location information, use to recovery."
+      },
+      {
+        "name": "sourceTxid",
+        "type": "string",
+        "default": "",
+        "doc": "record transation id"
+      },
+      {
+        "name": "source",
+        "doc": "source dataource",
+        "type": {
+          "namespace": "com.bytedance.dts.subscribe.avro",
+          "name": "Source",
+          "type": "record",
+          "fields": [
+            {
+              "name": "sourceType",
+              "type": {
+                "namespace": "com.bytedance.dts.subscribe.avro",
+                "name": "SourceType",
+                "type": "enum",
+                "symbols": [
+                  "MySQL",
+                  "Oracle",
+                  "SQLServer",
+                  "PostgreSQL",
+                  "MongoDB",
+                  "Redis",
+                  "DB2",
+                  "PPAS",
+                  "DRDS",
+                  "HBASE",
+                  "HDFS",
+                  "FILE",
+                  "OTHER"
+                ]
+              }
+            },
+            {
+              "name": "version",
+              "type": "string",
+              "doc": "source datasource version information"
+            }
+          ]
+        }
+      },
+      {
+        "namespace": "com.bytedance.dts.subscribe.avro",
+        "name": "operation",
+        "type": {
+          "name": "Operation",
+          "type": "enum",
+          "symbols": [
+            "INSERT",
+            "UPDATE",
+            "DELETE",
+            "DDL",
+            "BEGIN",
+            "COMMIT",
+            "ROLLBACK",
+            "ABORT",
+            "HEARTBEAT",
+            "CHECKPOINT",
+            "COMMAND",
+            "FILL",
+            "FINISH",
+            "CONTROL",
+            "RDB",
+            "NOOP",
+            "INIT"
+          ]
+        }
+      },
+      {
+        "name": "objectName",
+        "default": null,
+        "type": [
+          "null",
+          "string"
+        ]
+      },
+      {
+        "name": "processTimestamps",
+        "default": null,
+        "type": [
+          "null",
+          {
+            "type": "array",
+            "items": "long"
+          }
+        ],
+        "doc": "time when this record is processed along the stream dataflow"
+      },
+      {
+        "name": "tags",
+        "default": {},
+        "type": {
+          "type": "map",
+          "values": "string"
+        },
+        "doc": "tags to identify properties of this record"
+      },
+      {
+        "name": "fields",
+        "default": null,
+        "type": [
+          "null",
+          "string",
+          {
+            "type": "array",
+            "items": "com.bytedance.dts.subscribe.avro.Field"
+          }
+        ]
+      },
+      {
+        "name": "beforeImages",
+        "default": null,
+        "type": [
+          "null",
+          "string",
+          {
+            "type": "array",
+            "items": [
+              "null",
+              "com.bytedance.dts.subscribe.avro.Integer",
+              "com.bytedance.dts.subscribe.avro.Character",
+              "com.bytedance.dts.subscribe.avro.Decimal",
+              "com.bytedance.dts.subscribe.avro.Float",
+              "com.bytedance.dts.subscribe.avro.Timestamp",
+              "com.bytedance.dts.subscribe.avro.DateTime",
+              "com.bytedance.dts.subscribe.avro.TimestampWithTimeZone",
+              "com.bytedance.dts.subscribe.avro.BinaryGeometry",
+              "com.bytedance.dts.subscribe.avro.TextGeometry",
+              "com.bytedance.dts.subscribe.avro.BinaryObject",
+              "com.bytedance.dts.subscribe.avro.TextObject",
+              "com.bytedance.dts.subscribe.avro.EmptyObject"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "afterImages",
+        "default": null,
+        "type": [
+          "null",
+          "string",
+          {
+            "type": "array",
+            "items": [
+              "null",
+              "com.bytedance.dts.subscribe.avro.Integer",
+              "com.bytedance.dts.subscribe.avro.Character",
+              "com.bytedance.dts.subscribe.avro.Decimal",
+              "com.bytedance.dts.subscribe.avro.Float",
+              "com.bytedance.dts.subscribe.avro.Timestamp",
+              "com.bytedance.dts.subscribe.avro.DateTime",
+              "com.bytedance.dts.subscribe.avro.TimestampWithTimeZone",
+              "com.bytedance.dts.subscribe.avro.BinaryGeometry",
+              "com.bytedance.dts.subscribe.avro.TextGeometry",
+              "com.bytedance.dts.subscribe.avro.BinaryObject",
+              "com.bytedance.dts.subscribe.avro.TextObject",
+              "com.bytedance.dts.subscribe.avro.EmptyObject"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "bornTimestamp",
+        "default": 0,
+        "type": "long",
+        "doc": "the timestamp in unit of millisecond that record is born in source"
+      }
+    ]
+  }
+]

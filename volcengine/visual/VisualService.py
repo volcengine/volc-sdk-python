@@ -138,6 +138,9 @@ class VisualService(Service):
             "CertH5Token": ApiInfo("POST", "/", {"Action": "CertH5Token", "Version": "2022-08-31"}, {}, {}),
             "HighAesSmartDrawing": ApiInfo("POST", "/", {"Action": "HighAesSmartDrawing", "Version": "2022-08-31"}, {},{}),
             "EmotionPortrait": ApiInfo("POST", "/", {"Action": "EmotionPortrait", "Version": "2022-08-31"}, {}, {}),
+            "Img2ImgInpainting": ApiInfo("POST", "/", {"Action": "Img2ImgInpainting", "Version": "2022-08-31"}, {}, {}),
+            "Img2ImgInpaintingEdit": ApiInfo("POST", "/", {"Action": "Img2ImgInpaintingEdit", "Version": "2022-08-31"},{}, {}),
+            "Img2ImgOutpainting": ApiInfo("POST", "/", {"Action": "Img2ImgOutpainting", "Version": "2022-08-31"}, {},{}),
         }
         return api_info
 
@@ -186,6 +189,27 @@ class VisualService(Service):
     def jpcartoon_cut(self, form):
         try:
             res_json = self.common_handler("JPCartoonCut", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2img_inpainting(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgInpainting", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2img_inpainting_edit(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgInpaintingEdit", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2img_outpainting(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgOutpainting", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))

@@ -156,7 +156,24 @@ class ImagexService(ImagexTrait):
             return base64.b64encode(data.encode("utf-8")).decode("utf-8")
         else:
             return base64.b64encode(data.decode("utf-8"))
-
+        
+    # tag 字段如下，可选择所需字段传入
+    # upload_policy_dict = {
+    #     "FileSizeUpLimit": "xxx",
+    #     "FileSizeBottomLimit": "xxx",
+    #     "ContentTypeBlackList":[
+    #         "xxx"
+    #     ],
+    #     "ContentTypeWhiteList":[
+    #         "xxx"
+    #     ]
+    # }
+    # policy_str = json.dumps(upload_policy_dict)
+    #
+    # tag = {
+    #     "UploadOverwrite": "true",
+    #     "UploadPolicy": policy_str,
+    # }
     def get_upload_auth(self, service_ids, expire=60 * 60, key_ptn="", tag=dict):
         apply_res = []
         commit_res = []

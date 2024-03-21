@@ -14,11 +14,18 @@ if __name__ == '__main__':
     svc.set_ak(ak)
     svc.set_sk(sk)
 
-    params = {
-        "PageNum": 1,
-        "PageSize": 10,
-        "ProjectName": ["TEST"],
+    body = {
+        "Domain": "www.test.com",
+        "Origin": {
+            "Origins": [
+                {
+                    "Name": "3.3.3.3",
+                    "Weight": 1
+                }
+            ],
+            "OriginType": "IP",
+            "OriginProtocolType": "http",
+        },
     }
-
-    resp = svc.describe_user_domains(params)
+    resp = svc.update_domain_config_v2(body)
     print(resp)
