@@ -12,6 +12,7 @@ import os
 import time
 import datetime
 import volcengine.vod
+import sys
 from volcengine.util.Util import Util
 from volcengine.vod.models.request.request_vod_pb2 import *
 from volcengine.vod.models.response.response_vod_pb2 import *
