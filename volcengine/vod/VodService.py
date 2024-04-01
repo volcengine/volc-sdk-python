@@ -1021,6 +1021,41 @@ class VodService(VodServiceConfig):
             return Parse(res, VodDeleteTranscodesResponse(), True)
 
     #
+    # DeleteMediaTosFile.
+    #
+    # @param request VodDeleteMediaTosFileRequest
+    # @return VodDeleteMediaTosFileResponse
+    # @raise Exception
+    def delete_media_tos_file(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("DeleteMediaTosFile",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDeleteMediaTosFileResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDeleteMediaTosFileResponse(), True)
+
+
+    #
     # GetMediaList.
     #
     # @param request VodGetMediaListRequest

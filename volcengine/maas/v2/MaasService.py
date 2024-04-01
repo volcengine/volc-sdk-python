@@ -138,11 +138,13 @@ class MaasService(Service):
             raise new_client_sdk_request_error(str(e), req_id)
 
     def _validate(self, api, req_id):
-        if (
-            self.service_info.credentials is None
-            or self.service_info.credentials.sk is None
-            or self.service_info.credentials.ak is None
-        ):
+        credentials_exist = (
+                self.service_info.credentials is not None and
+                self.service_info.credentials.sk is not None and
+                self.service_info.credentials.ak is not None
+        )
+
+        if not self._setted_apikey and not credentials_exist:
             raise new_client_sdk_request_error("no valid credential", req_id)
 
         if not (api in self.api_info):
