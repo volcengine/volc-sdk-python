@@ -152,6 +152,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def get_pull_record_task(self, body):
+        res = self.api_post('GetPullRecordTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_record_task_file_history(self, body):
         res = self.api_post('DescribeRecordTaskFileHistory', [], json.dumps(body))
         if res == '':
@@ -187,15 +194,15 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def update_snapshot_preset(self, body):
-        res = self.api_post('UpdateSnapshotPreset', [], json.dumps(body))
+    def update_snapshot_preset_v2(self, body):
+        res = self.api_post('UpdateSnapshotPresetV2', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def update_snapshot_preset_v2(self, body):
-        res = self.api_post('UpdateSnapshotPresetV2', [], json.dumps(body))
+    def update_snapshot_preset(self, body):
+        res = self.api_post('UpdateSnapshotPreset', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -208,13 +215,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def list_vhost_snapshot_preset(self, body):
-        res = self.api_post('ListVhostSnapshotPreset', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def list_vhost_snapshot_preset_v2(self, body):
         res = self.api_post('ListVhostSnapshotPresetV2', [], json.dumps(body))
         if res == '':
@@ -222,8 +222,8 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def create_snapshot_preset(self, body):
-        res = self.api_post('CreateSnapshotPreset', [], json.dumps(body))
+    def list_vhost_snapshot_preset(self, body):
+        res = self.api_post('ListVhostSnapshotPreset', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -231,6 +231,13 @@ class LiveTrait(Service):
             
     def create_snapshot_preset_v2(self, body):
         res = self.api_post('CreateSnapshotPresetV2', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def create_snapshot_preset(self, body):
+        res = self.api_post('CreateSnapshotPreset', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -280,13 +287,6 @@ class LiveTrait(Service):
             
     def update_callback(self, body):
         res = self.api_post('UpdateCallback', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def describe_auth(self, body):
-        res = self.api_post('DescribeAuth', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -614,13 +614,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def get_pull_record_task(self, body):
-        res = self.api_post('GetPullRecordTask', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def delete_snapshot_audit_preset(self, body):
         res = self.api_post('DeleteSnapshotAuditPreset', [], json.dumps(body))
         if res == '':
@@ -735,6 +728,13 @@ class LiveTrait(Service):
             
     def describe_live_push_stream_count_data(self, body):
         res = self.api_post('DescribeLivePushStreamCountData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_push_stream_info_data(self, body):
+        res = self.api_post('DescribeLivePushStreamInfoData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -894,6 +894,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_auth(self, body):
+        res = self.api_post('DescribeAuth', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def update_deny_config(self, body):
         res = self.api_post('UpdateDenyConfig', [], json.dumps(body))
         if res == '':
@@ -910,6 +917,34 @@ class LiveTrait(Service):
             
     def update_auth_key(self, body):
         res = self.api_post('UpdateAuthKey', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_http_header_config(self, body):
+        res = self.api_post('DeleteHTTPHeaderConfig', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def enable_http_header_config(self, body):
+        res = self.api_post('EnableHTTPHeaderConfig', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_http_header_config(self, body):
+        res = self.api_post('DescribeHTTPHeaderConfig', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_http_header_config(self, body):
+        res = self.api_post('UpdateHTTPHeaderConfig', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

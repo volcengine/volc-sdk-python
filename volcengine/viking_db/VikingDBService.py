@@ -33,6 +33,11 @@ class VikingDBService(Service):
         if sk:
             self.set_sk(sk)
 
+        try:
+            res = self.get_body("Ping", {}, json.dumps({}))
+        except Exception as e:
+            raise VikingDBException(1000028, "missed", "host or region is incorrect".format(str(e))) from None
+
     def setHeader(self, header):
         api_info = VikingDBService.get_api_info()
         for key in api_info:
@@ -90,6 +95,8 @@ class VikingDBService(Service):
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "BatchRerank": ApiInfo("POST", "/api/index/batch_rerank", {}, {},
                               {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "Ping": ApiInfo("GET", "/api/viking_db/data/ping", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
         return api_info
 

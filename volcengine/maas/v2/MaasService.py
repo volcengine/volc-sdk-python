@@ -79,7 +79,7 @@ class MaasService(Service):
         try:
             req["stream"] = True
             res = self._call(
-                endpoint_id, "chat", req_id, {}, json.dumps(req), apikey, stream=True
+                endpoint_id, "chat", req_id, {}, json.dumps(req).encode("utf-8"), apikey, stream=True
             )
 
             decoder = SSEDecoder(res)
@@ -126,7 +126,7 @@ class MaasService(Service):
         apikey = self._setted_apikey
 
         try:
-            res = self._call(endpoint_id, api, req_id, params, json.dumps(req), apikey)
+            res = self._call(endpoint_id, api, req_id, params, json.dumps(req).encode("utf-8"), apikey)
             resp = dict_to_object(res.json())
             if resp and isinstance(resp, dict):
                 resp["req_id"] = req_id

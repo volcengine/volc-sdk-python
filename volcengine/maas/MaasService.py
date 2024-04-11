@@ -43,7 +43,7 @@ class MaasService(Service):
             req['stream'] = False
             if is_secret:
                 key, nonce, req = self.encrypt_chat_request(req)
-            res = self.json("chat", {}, json.dumps(req))
+            res = self.json("chat", {}, json.dumps(req).encode("utf-8"))
             if res == '':
                 raise new_client_sdk_request_error("empty response", req.get('req_id', None))
             resp = json_to_object(res)
@@ -81,7 +81,7 @@ class MaasService(Service):
             api_info = self.api_info["chat"]
             r = self.prepare_request(api_info, {})
             r.headers['Content-Type'] = 'application/json'
-            r.body = json.dumps(req)
+            r.body = json.dumps(req).encode("utf-8")
 
             SignerV4.sign(r, self.service_info.credentials)
 
@@ -125,7 +125,7 @@ class MaasService(Service):
 
     def tokenize(self, req):
         try:
-            res = self.json("tokenization", {}, json.dumps(req))
+            res = self.json("tokenization", {}, json.dumps(req).encode("utf-8"))
             if res == '':
                 raise new_client_sdk_request_error("empty response", req.get('req_id', None))
             resp = json_to_object(res)
@@ -141,7 +141,7 @@ class MaasService(Service):
 
     def classification(self, req):
         try:
-            res = self.json("classification", {}, json.dumps(req))
+            res = self.json("classification", {}, json.dumps(req).encode("utf-8"))
             if res == '':
                 raise new_client_sdk_request_error("empty response", req.get('req_id', None))
             resp = json_to_object(res)
@@ -157,7 +157,7 @@ class MaasService(Service):
 
     def embeddings(self, req):
         try:
-            res = self.json("embeddings", {}, json.dumps(req))
+            res = self.json("embeddings", {}, json.dumps(req).encode("utf-8"))
             if res == '':
                 raise new_client_sdk_request_error("empty response", req.get('req_id', None))
             resp = json_to_object(res)
@@ -174,7 +174,7 @@ class MaasService(Service):
     def init_cert_by_req(self, req):
         cert_req = {"model": req['model']}
         try:
-            resp = self.json("cert", {}, json.dumps(cert_req))
+            resp = self.json("cert", {}, json.dumps(cert_req).encode("utf-8"))
             resp = json_to_object(resp)
             req['model']['endpoint_id'] = resp.model.endpoint_id
             if resp.cert is None or len(resp.cert) == 0:

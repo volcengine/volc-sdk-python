@@ -92,6 +92,7 @@ class ImagexService(ImagexTrait):
             "SessionKey": params.get("SessionKey", ""),
             "UploadNum": len(img_datas),
             "StoreKeys": params.get("StoreKeys", []),
+            "Overwrite": str(params.get("Overwrite", False)),
         }
         resp = self.apply_upload(apply_upload_request)
         if "Error" in resp["ResponseMetadata"]:

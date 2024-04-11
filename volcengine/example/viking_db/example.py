@@ -10,7 +10,7 @@ sys.path.insert(0, "/data00/home/xiejianqiao.1027/project/volc-sdk-python/volcen
 
 
 if __name__ == '__main__':
-    vikingdb_service = VikingDBService()
+    vikingdb_service = VikingDBService("", "")
     vikingdb_service.set_ak("")
     vikingdb_service.set_sk("")
 
@@ -66,9 +66,9 @@ if __name__ == '__main__':
     # # 返回一个collection实例
     # print(res)
     #
-    # res = vikingdb_service.get_collection("example")
+    res = vikingdb_service.get_collection("example")
     # 返回一个collection实例
-    # print(res.update_person)
+    print(res.update_person)
     #
     # vikingdb_service.drop_collection("example")  # 无返回
     #
