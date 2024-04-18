@@ -9,6 +9,7 @@ from volcengine.vod.VodServiceConfig import VodServiceConfig
 from retry import retry
 from zlib import crc32
 import os
+import sys
 import time
 import datetime
 import volcengine.vod

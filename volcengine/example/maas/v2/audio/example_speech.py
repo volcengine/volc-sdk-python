@@ -3,7 +3,7 @@ from volcengine.maas.v2 import MaasService
 from volcengine.maas import MaasException
 
 
-def test_speech_chat(maas: MaasService, endpoint_id, req, file):
+def test_speech(maas: MaasService, endpoint_id, req, file):
     request_id = ""
     try:
         resp = maas.audio.speech.create(endpoint_id, req)
@@ -31,5 +31,5 @@ if __name__ == '__main__':
 
     endpoint_id = "{YOUR_ENDPOINT_ID}"
     file = "{YOUR_LOCAL_FILE}"
-    test_speech_chat(maas, endpoint_id, req, file)
+    test_speech(maas, endpoint_id, req, file)
 

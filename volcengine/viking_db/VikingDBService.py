@@ -24,7 +24,8 @@ class VikingDBService(Service):
                     VikingDBService._instance = object.__new__(cls)
         return VikingDBService._instance
 
-    def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk="", scheme='http', connection_timeout=30, socket_timeout=30):
+    def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk="", scheme='http',
+                 connection_timeout=30, socket_timeout=30):
         self.service_info = VikingDBService.get_service_info(host, region, scheme, connection_timeout, socket_timeout)
         self.api_info = VikingDBService.get_api_info()
         super(VikingDBService, self).__init__(self.service_info, self.api_info)
@@ -45,11 +46,11 @@ class VikingDBService(Service):
                 api_info[key].header[item] = header[item]
         self.api_info = api_info
 
-
     @staticmethod
     def get_service_info(host, region, scheme, connection_timeout, socket_timeout):
         service_info = ServiceInfo(host, {"Host": host},
-                                   Credentials('', '', 'air', region), connection_timeout, socket_timeout, scheme=scheme)
+                                   Credentials('', '', 'air', region), connection_timeout, socket_timeout,
+                                   scheme=scheme)
         return service_info
 
     @staticmethod
@@ -92,10 +93,12 @@ class VikingDBService(Service):
             "UpdateIndex": ApiInfo("POST", "/api/index/update", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "Rerank": ApiInfo("POST", "/api/index/rerank", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+                              {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "BatchRerank": ApiInfo("POST", "/api/index/batch_rerank", {}, {},
                               {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "Ping": ApiInfo("GET", "/api/viking_db/data/ping", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "EmbeddingV2": ApiInfo("POST", "/api/data/embedding/version/2", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
         return api_info
@@ -615,7 +618,8 @@ class VikingDBService(Service):
         # print(params)
         res = self.json_exception("UpdateCollection", {}, json.dumps(params))
 
-    def update_index(self, collection_name, index_name, description=None, cpu_quota=None, scalar_index=None, shard_count=None):
+    def update_index(self, collection_name, index_name, description=None, cpu_quota=None, scalar_index=None,
+                     shard_count=None):
         params = {
             "collection_name": collection_name,
             "index_name": index_name,
@@ -652,4 +656,30 @@ class VikingDBService(Service):
         }
         res = self.json_exception("BatchRerank", {}, json.dumps(params))
         res = json.loads(res)
+        return res["data"]
+
+    def embedding_v2(self, emb_model, raw_data: Union[RawData, List[RawData]]):
+        """
+        request embedding service to extract features from text, images, etc.
+
+        :param emb_model: The name of the collection.
+        :type emb_model: EmbModel
+        :param raw_data: The name of the collection.
+        :type raw_data: RawData or list[RawData]
+        :rtype: list or list[list]
+        """
+        model = {"model_name": emb_model.model_name, "params": emb_model.params}
+        data = []
+        if isinstance(raw_data, RawData):
+            param = {"data_type": raw_data.data_type, "text": raw_data.text}
+            data.append(param)
+        elif isinstance(raw_data, List):
+            for item in raw_data:
+                param = {"data_type": item.data_type, "text": item.text}
+                data.append(param)
+        params = {"model": model, "data": data}
+        res = self.json_exception("EmbeddingV2", {}, json.dumps(params))
+        res = json.loads(res)
+        # print(res["data"])
+
         return res["data"]

@@ -29,7 +29,7 @@ class Index(object):
         # print(col["data"]["primary_key"])
         self.primary_key = col["data"]["primary_key"]
 
-    def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default"):
+    def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None):
         """
         Search for vectors or scalars similar to a given vector or scalar.
 
@@ -48,11 +48,11 @@ class Index(object):
         if isinstance(order, VectorOrder):
             res = []
             if order.vector is not None:
-                res = self.search_by_vector(order.vector, filter=filter, limit=limit,
-                                            output_fields=output_fields, partition=partition)
+                res = self.search_by_vector(order.vector, sparse_vectors=order.sparse_vectors, filter=filter, limit=limit,
+                                            output_fields=output_fields, partition=partition, dense_weight=dense_weight)
             elif order.id is not None:
                 res = self.search_by_id(order.id, filter=filter, limit=limit,
-                                        output_fields=output_fields, partition=partition)
+                                        output_fields=output_fields, partition=partition, dense_weight=dense_weight)
             return res
         elif isinstance(order, ScalarOrder):
             search = {}
@@ -107,7 +107,7 @@ class Index(object):
 
 
 
-    def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default"):
+    def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None):
         """
         Search for vectors similar to a given vector based on its id.
 
@@ -130,6 +130,8 @@ class Index(object):
             search["output_fields"] = output_fields
         if filter is not None:
             search['filter'] = filter
+        if dense_weight is not None:
+            search['dense_weight'] = dense_weight
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
@@ -152,7 +154,7 @@ class Index(object):
             # print("==================")
         return datas
 
-    def search_by_vector(self, vector, filter=None, limit=10, output_fields=None, partition="default"):
+    def search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None):
         """
         Search for vectors similar to a given vector.
 
@@ -171,11 +173,15 @@ class Index(object):
         # vector是一个向量，不是list，但是数据库要求传入的是个列表
         search = {}
         order_by_vector = {"vectors": [vector]}
+        if sparse_vectors is not None:
+            order_by_vector['sparse_vectors'] = [sparse_vectors]
         search = {"order_by_vector": order_by_vector, "limit": limit, "partition": partition}
         if output_fields is not None:
             search["output_fields"] = output_fields
         if filter is not None:
             search['filter'] = filter
+        if dense_weight is not None:
+            search['dense_weight'] = dense_weight
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
@@ -197,7 +203,7 @@ class Index(object):
             # print("==================")
         return datas
 
-    def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default"):
+    def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None):
         """
         Search for text similar to a given text.
 
@@ -220,6 +226,8 @@ class Index(object):
             search["output_fields"] = output_fields
         if filter is not None:
             search['filter'] = filter
+        if dense_weight is not None:
+            search['dense_weight'] = dense_weight
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)

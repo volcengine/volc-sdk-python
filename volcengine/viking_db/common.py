@@ -15,6 +15,7 @@ class FieldType(Enum):
     Float32 = "float32"
     Bool = "bool"
     Text = "text"
+    Sparse_Vector = "sparse_vector"
 
 
 class DistanceType(Enum):
@@ -34,6 +35,7 @@ class IndexType(Enum):
     HNSW = "hnsw"
     IVF = "ivf"
     DiskANN = "DiskANN"
+    HNSW_HYBRID = "hnsw_hybrid"
 
 class QuantType(Enum):
     """
@@ -212,13 +214,18 @@ class VectorIndexParams(object):
 
 
 class VectorOrder(object):
-    def __init__(self, vector=None, id=None):
+    def __init__(self, vector=None, sparse_vectors=None ,id=None):
         self._vector = vector
         self._id = id
+        self._sparse_vectors = sparse_vectors
 
     @property
     def vector(self):
         return self._vector
+
+    @property
+    def sparse_vectors(self):
+        return self._sparse_vectors
 
     @property
     def id(self):

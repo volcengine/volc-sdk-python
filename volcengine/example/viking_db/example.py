@@ -10,9 +10,90 @@ sys.path.insert(0, "/data00/home/xiejianqiao.1027/project/volc-sdk-python/volcen
 
 
 if __name__ == '__main__':
-    vikingdb_service = VikingDBService("", "")
+    vikingdb_service = VikingDBService()
     vikingdb_service.set_ak("")
     vikingdb_service.set_sk("")
+
+
+    # dense_sparse
+    # fields = [
+    #     Field(
+    #         field_name="id",
+    #         field_type=FieldType.String,
+    #         is_primary_key=True
+    #     ),
+    #     Field(
+    #         field_name="vector",
+    #         field_type=FieldType.Vector,
+    #         dim=10
+    #     ),
+    #     Field(
+    #         field_name="sparse",
+    #         field_type=FieldType.Sparse_Vector,
+    #         default_val=0
+    #     ),
+    # ]
+    # res = vikingdb_service.create_collection("sparse", fields)
+
+    # res = vikingdb_service.get_collection("sparse")
+    # for item in res.fields:
+    #     print(item.field_type, item.field_name)
+
+    def gen_random_vector(dim):
+        res = [0, ] * dim
+        for i in range(dim):
+            res[i] = random.random() - 0.5
+        return res
+
+
+    # collection = vikingdb_service.get_collection("sparse")
+    # field1 = {"id": "111", "vector": gen_random_vector(10), "sparse": {"hello1": 0.01, "world1": 0.02}}
+    # field2 = {"id": "222", "vector": gen_random_vector(10), "sparse": {"hello2": 0.02, "world2": 0.03}}
+    # field3 = {"id": "333", "vector": gen_random_vector(10), "sparse": {"hello3": 0.03, "world3": 0.04}}
+    # field4 = {"id": "444", "vector": gen_random_vector(10), "sparse": {"hello4": 0.04, "world4": 0.05}}
+    # data1 = Data(field1)
+    # data2 = Data(field2)
+    # data3 = Data(field3)
+    # data4 = Data(field4)
+    # datas = [data1, data2, data3, data4]
+    # collection.upsert_data(datas)
+
+    # collection = vikingdb_service.get_collection("sparse")
+    # res = collection.fetch_data("111")
+    # print(res.fields)
+
+    # vector_index = VectorIndexParams(distance=DistanceType.COSINE, index_type=IndexType.HNSW_HYBRID,
+    #                                  quant=QuantType.Float)
+    # res = vikingdb_service.create_index("sparse", "sparse", vector_index)
+
+    # res = vikingdb_service.get_index("sparse", "sparse")
+    # print(res.vector_index)
+
+    # index = vikingdb_service.get_index("sparse", "sparse")
+    # res = index.search_by_vector(vector=gen_random_vector(10), sparse_vectors={"he": 0.05}, dense_weight=0.1)
+    # print(res)
+
+    # index = vikingdb_service.get_index("sparse", "sparse")
+    # res = index.search_by_id("111", dense_weight=0.1)
+    # print(res)
+
+    # index = vikingdb_service.get_index("sparse", "sparse")
+    # res = index.search_by_id("111", dense_weight=0.1)
+    # print(res)
+
+    # index = vikingdb_service.get_index("sparse", "sparse")
+    # res = index.search(VectorOrder(vector=gen_random_vector(10), sparse_vectors={"he": 0.05}), dense_weight=0.1)
+    # print(res)
+
+    # list = [RawData("text", "hello1"), RawData("text", "hello2")]
+    # res = vikingdb_service.embedding_v2(EmbModel("bge-m3"), list)
+    # print(res)
+
+
+
+
+
+
 
     # datas = [{
     #     "query": "退改",
@@ -66,10 +147,10 @@ if __name__ == '__main__':
     # # 返回一个collection实例
     # print(res)
     #
-    res = vikingdb_service.get_collection("example")
-    # 返回一个collection实例
-    print(res.update_person)
-    #
+    # res = vikingdb_service.get_collection("example")
+    # # 返回一个collection实例
+    # print(res.update_person)
+    # #
     # vikingdb_service.drop_collection("example")  # 无返回
     #
     # res = vikingdb_service.list_collections()
