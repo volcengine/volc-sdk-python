@@ -64,6 +64,9 @@ class MaasService(Service):
             "images.quick_gen": ApiInfo(
                 "POST", "/api/v2/endpoint/{endpoint_id}/images/quick-gen", {}, {}, {}
             ),
+            "images.flex_gen": ApiInfo(
+                "POST", "/api/v2/endpoint/{endpoint_id}/images/flex-gen", {}, {}, {}
+            ),
         }
         return api_info
 

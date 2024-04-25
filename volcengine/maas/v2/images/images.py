@@ -9,3 +9,6 @@ class Images(SyncAPIResource):
 
     def quick_gen(self, endpoint_id, req):
         return self._service._request(endpoint_id, "images.quick_gen", req)
+
+    def flex_gen(self, endpoint_id, req):
+        return self._service._request(endpoint_id, "images.flex_gen", req)
