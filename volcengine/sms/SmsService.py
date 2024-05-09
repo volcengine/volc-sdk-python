@@ -62,6 +62,7 @@ class SmsService(Service):
             "InsertSubAccount": ApiInfo("POST", "/", {"Action": "InsertSubAccount", "Version": "2021-01-11"},
                                         {},
                                         {}),
+            "GetSmsSendDetails": ApiInfo("POST","/", {"Action": "GetSmsSendDetails", "Version": "2021-01-11"}, {}, {})
         }
         return api_info
 
@@ -222,3 +223,10 @@ class SmsService(Service):
         res_json = json.loads(res)
 
         return res_json
+
+    @retry(tries=2, delay=0)
+    def get_sms_send_details(self, body):
+        res = self.json('GetSmsSendDetails', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        return json.loads(res)

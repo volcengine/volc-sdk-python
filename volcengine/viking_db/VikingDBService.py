@@ -2,6 +2,8 @@
 import json
 import threading
 
+import aiohttp
+
 from .Index import Index
 from .common import *
 from .Collection import Collection
@@ -95,9 +97,9 @@ class VikingDBService(Service):
             "Rerank": ApiInfo("POST", "/api/index/rerank", {}, {},
                               {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "BatchRerank": ApiInfo("POST", "/api/index/batch_rerank", {}, {},
-                              {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "Ping": ApiInfo("GET", "/api/viking_db/data/ping", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "Ping": ApiInfo("GET", "/api/viking_db/data/ping", {}, {},
+                            {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "EmbeddingV2": ApiInfo("POST", "/api/data/embedding/version/2", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
@@ -121,6 +123,25 @@ class VikingDBService(Service):
             return json.dumps(resp.json())
         else:
             raise Exception(resp.text.encode("utf-8"))
+
+    async def async_json(self, api, params, body):
+        if not (api in self.api_info):
+            raise Exception("no such api")
+        api_info = self.api_info[api]
+        r = self.prepare_request(api_info, params)
+        r.headers['Content-Type'] = 'application/json'
+        r.body = body
+
+        SignerV4.sign(r, self.service_info.credentials)
+        timeout = aiohttp.ClientTimeout(connect=self.service_info.connection_timeout,
+                                        sock_connect=self.service_info.socket_timeout)
+        url = r.build()
+        async with aiohttp.request("POST", url, headers=r.headers, data=r.body, timeout=timeout) as r:
+            resp = await r.text(encoding="utf-8")
+            if r.status == 200:
+                return resp
+            else:
+                raise Exception(resp)
 
     # get参数放在body里面，异常处理
     def get_body_exception(self, api, params, body):
@@ -191,6 +212,60 @@ class VikingDBService(Service):
                                     "empty response due to unknown error, please contact customer service") from None
         return res
 
+    async def async_json_exception(self, api, params, body):
+        try:
+            res = await self.async_json(api, params, body)
+        except Exception as e:
+            try:
+                res_json = json.loads(e.args[0].decode("utf-8"))
+            except:
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+            code = res_json.get("code", 1000028)
+            request_id = res_json.get("request_id", 1000028)
+            message = res_json.get("message", None)
+            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
+        if res == '':
+            raise VikingDBException(1000028, "missed",
+                                    "empty response due to unknown error, please contact customer service") from None
+        return res
+
+    async def async_get_body_exception(self, api, params, body):
+        try:
+            res = await self.async_get_body(api, params, body)
+        except Exception as e:
+            try:
+                res_json = json.loads(e.args[0].decode("utf-8"))
+            except:
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+            code = res_json.get("code", 1000028)
+            request_id = res_json.get("request_id", 1000028)
+            message = res_json.get("message", None)
+            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
+        if res == '':
+            raise VikingDBException(1000028, "missed",
+                                    "empty response due to unknown error, please contact customer service") from None
+        return res
+
+    async def async_get_body(self, api, params, body):
+        if not (api in self.api_info):
+            raise Exception("no such api")
+        api_info = self.api_info[api]
+        r = self.prepare_request(api_info, params)
+        r.headers['Content-Type'] = 'application/json'
+        r.body = body
+
+        SignerV4.sign(r, self.service_info.credentials)
+        timeout = aiohttp.ClientTimeout(connect=self.service_info.connection_timeout,
+                                        sock_connect=self.service_info.socket_timeout)
+        url = r.build()
+
+        async with aiohttp.request("GET", url, headers=r.headers, data=r.body, timeout=timeout) as r:
+            resp = await r.text(encoding="utf-8")
+            if r.status == 200:
+                return resp
+            else:
+                raise Exception(resp)
+
     def create_collection(self, collection_name, fields, description=""):
         """
         create a collection.
@@ -227,6 +302,33 @@ class VikingDBService(Service):
         params["fields"] = _fields
         # print(params)
         self.json_exception("CreateCollection", {}, json.dumps(params))
+        return Collection(collection_name, fields, self, primary_key, description=description)
+
+    async def async_create_collection(self, collection_name, fields, description=""):
+        params = {"collection_name": collection_name, "description": description}
+        assert isinstance(fields, list)
+        primary_key = None
+        _fields = []
+        for field in fields:
+            assert isinstance(field, Field)
+            if field.is_primary_key:
+                primary_key = field.field_name
+            _field = {
+                "field_name": field.field_name,
+                "field_type": field.field_type.value,
+            }
+            if field.default_val is not None:
+                _field["default_val"] = field.default_val
+            if field.dim is not None:
+                _field["dim"] = field.dim
+            if field.pipeline_name is not None:
+                _field["pipeline_name"] = field.pipeline_name
+            _fields.append(_field)
+        assert primary_key is not None
+        params["primary_key"] = primary_key
+        params["fields"] = _fields
+        # print(params)
+        await self.async_json_exception("CreateCollection", {}, json.dumps(params))
         return Collection(collection_name, fields, self, primary_key, description=description)
 
     def get_collection(self, collection_name):
@@ -300,6 +402,69 @@ class VikingDBService(Service):
                                 update_person=update_person)
         return collection
 
+    async def async_get_collection(self, collection_name):
+        params = {"collection_name": collection_name}
+        res = await self.async_get_body_exception("GetCollection", {}, json.dumps(params))
+        res = json.loads(res)
+        if "data" not in res:
+            raise VikingDBException(1000028, "missed", "data format error, please contact us")
+        return self.package_collection(collection_name, res["data"])
+
+    def package_collection(self, collection_name, res):
+        description = ""
+        stat = None
+        fields = []
+        indexes = []
+        create_time = None
+        update_time = None
+        update_person = None
+        if "fields" in res:
+            for item in res["fields"]:
+                field_name = None
+                field_type = None
+                default_val = None
+                dim = None
+                is_primary_key = False
+                pipeline_name = None
+                # print(item)
+                if "field_name" in item:
+                    field_name = item["field_name"]
+                if "field_type" in item:
+                    field_type = item["field_type"]
+                if "default_val" in item:
+                    default_val = item["default_val"]
+                if "dim" in item:
+                    dim = item["dim"]
+                if "primary_key" in res:
+                    if res["primary_key"] == field_name:
+                        is_primary_key = True
+                if "pipeline_name" in item:
+                    pipeline_name = item["pipeline_name"]
+                # print(field_name, field_type, default_val, dim, is_primary_key, pipeline_name)
+                field = Field(field_name, field_type, default_val=default_val, dim=dim,
+                              is_primary_key=is_primary_key, pipeline_name=pipeline_name)
+                fields.append(field)
+        if "description" in res:
+            description = res["description"]
+        if "indexes" in res:
+            for item in res["indexes"]:
+                # print(item)
+                index = self.get_index(collection_name, item)
+                indexes.append(index)
+        if "stat" in res:
+            stat = res["stat"]
+        if "create_time" in res:
+            create_time = res["create_time"]
+        if "update_time" in res:
+            update_time = res["update_time"]
+        if "update_person" in res:
+            update_person = res["update_person"]
+        # print(description, fields, indexes, stat, res["primary_key"])
+        collection = Collection(collection_name, fields, self, res["primary_key"], indexes=indexes, stat=stat,
+                                description=description, create_time=create_time, update_time=update_time,
+                                update_person=update_person)
+        return collection
+
     def drop_collection(self, collection_name):
         """
         drop a collection
@@ -311,6 +476,10 @@ class VikingDBService(Service):
         params = {"collection_name": collection_name}
         self.json_exception("DropCollection", {}, json.dumps(params))
         # res = self.json("DropCollection", {}, json.dumps(params))
+
+    async def async_drop_collection(self, collection_name):
+        params = {"collection_name": collection_name}
+        await self.async_json_exception("DropCollection", {}, json.dumps(params))
 
     def list_collections(self):
         """
@@ -385,6 +554,17 @@ class VikingDBService(Service):
             collections.append(collection)
         return collections
 
+    async def async_list_collections(self):
+        res = await self.async_get_body_exception("ListCollections", {}, json.dumps({}))
+        res = json.loads(res)
+        collections = []
+        if "data" not in res:
+            raise VikingDBException(1000028, "missed", "data format error, please contact us")
+        for indexItem in res["data"]:
+            collection = self.package_collection(indexItem["collection_name"], indexItem)
+            collections.append(collection)
+        return collections
+
     def create_index(self, collection_name, index_name, vector_index=None, cpu_quota=2, description="", partition_by="",
                      scalar_index=None, shard_count=None):
         """
@@ -424,6 +604,28 @@ class VikingDBService(Service):
             params["shard_count"] = shard_count
         # print(params)
         res = self.json_exception("CreateIndex", {}, json.dumps(params))
+        # print(res)
+        index = Index(collection_name, index_name, vector_index, scalar_index, None, self, description=description,
+                      cpu_quota=cpu_quota, partition_by=partition_by)
+        return index
+
+    async def async_create_index(self, collection_name, index_name, vector_index=None, cpu_quota=2, description="",
+                                 partition_by="", scalar_index=None, shard_count=None):
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "cpu_quota": cpu_quota,
+            "description": description,
+            "partition_by": partition_by,
+        }
+        if vector_index is not None:
+            params["vector_index"] = vector_index.dic()  # vector_index 类型应该是VectorIndexParams，而非json
+        if scalar_index is not None:
+            params["scalar_index"] = scalar_index
+        if shard_count is not None:
+            params["shard_count"] = shard_count
+        # print(params)
+        res = await self.async_json_exception("CreateIndex", {}, json.dumps(params))
         # print(res)
         index = Index(collection_name, index_name, vector_index, scalar_index, None, self, description=description,
                       cpu_quota=cpu_quota, partition_by=partition_by)
@@ -485,6 +687,55 @@ class VikingDBService(Service):
                       update_person=update_person, index_cost=index_cost, shard_count=shard_count)
         return index
 
+    async def async_get_index(self, collection_name, index_name):
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+        }
+        res = await self.async_get_body_exception("GetIndex", {}, json.dumps(params))
+        res = json.loads(res)
+        if "data" not in res:
+            raise VikingDBException(1000028, "missed", "data format error, please contact us")
+        return self.package_index(collection_name, index_name, res["data"])
+
+    def package_index(self, collection_name, index_name, res):
+        vector_index = scalar_index = partition_by = status = None
+        cpu_quota = 2
+        description = ""
+        shard_count = index_cost = create_time = update_time = update_person = None
+        if "vector_index" in res:
+            vector_index = res["vector_index"]
+        if "range_index" in res:
+            scalar_index = res["range_index"]
+        if "enum_index" in res:
+            if scalar_index is not None:
+                scalar_index = set(scalar_index + res["enum_index"])
+            else:
+                scalar_index = res["enum_index"]
+        if "description" in res:
+            description = res["description"]
+        if "cpu_quota" in res:
+            cpu_quota = res["cpu_quota"]
+        if "partition_by" in res:
+            partition_by = res["partition_by"]
+        if "status" in res:
+            status = res["status"]
+        if "create_time" in res:
+            create_time = res["create_time"]
+        if "update_time" in res:
+            update_time = res["update_time"]
+        if "update_person" in res:
+            update_person = res["update_person"]
+        if "index_cost" in res:
+            index_cost = res["index_cost"]
+        if "shard_count" in res:
+            shard_count = res["shard_count"]
+        # print(collection_name, index_name, vector_index, scalar_index, description, cpu_quota, partition_by, status)
+        index = Index(collection_name, index_name, vector_index, scalar_index, status, self, description=description,
+                      cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time, update_time=update_time,
+                      update_person=update_person, index_cost=index_cost, shard_count=shard_count)
+        return index
+
     def drop_index(self, collection_name, index_name):
         """
         drop an index
@@ -501,6 +752,13 @@ class VikingDBService(Service):
         }
         # res = self.json("DropIndex", {}, json.dumps(params))
         self.json_exception("DropIndex", {}, json.dumps(params))
+
+    async def async_drop_index(self, collection_name, index_name):
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+        }
+        await self.async_json_exception("DropIndex", {}, json.dumps(params))
 
     def list_indexes(self, collection_name):
         """
@@ -562,6 +820,22 @@ class VikingDBService(Service):
         # print(indexes)
         return indexes
 
+    async def async_list_indexes(self, collection_name):
+        params = {
+            "collection_name": collection_name,
+        }
+        # res = self.get("ListIndexes", params)
+        res = await self.async_get_body_exception("ListIndexes", {}, json.dumps(params))
+        res = json.loads(res)
+        indexes = []
+        if "data" not in res:
+            raise VikingDBException(1000028, "missed", "data format error, please contact us")
+        for item in res["data"]:
+            index = self.package_index(collection_name, item["index_name"], item)
+            indexes.append(index)
+        # print(indexes)
+        return indexes
+
     def embedding(self, emb_model, raw_data: Union[RawData, List[RawData]]):
         """
         request embedding service to extract features from text, images, etc.
@@ -594,6 +868,26 @@ class VikingDBService(Service):
             # print(res["data"])
             return res["data"]
 
+    async def async_embedding(self, emb_model, raw_data: Union[RawData, List[RawData]]):
+        model = {"model_name": emb_model.model_name, "params": emb_model.params}
+        data = []
+        if isinstance(raw_data, RawData):
+            param = {"data_type": raw_data.data_type, "text": raw_data.text}
+            data.append(param)
+        elif isinstance(raw_data, List):
+            for item in raw_data:
+                param = {"data_type": item.data_type, "text": item.text}
+                data.append(param)
+        params = {"model": model, "data": data}
+        res = await self.async_json_exception("Embedding", {}, json.dumps(params))
+        res = json.loads(res)
+        # print(res["data"])
+        if isinstance(raw_data, RawData):
+            # print(res["data"][0])
+            return res["data"][0]
+        else:
+            return res["data"]
+
     def update_collection(self, collection_name, fields, description=None):
         _fields = []
         for field in fields:
@@ -618,6 +912,30 @@ class VikingDBService(Service):
         # print(params)
         res = self.json_exception("UpdateCollection", {}, json.dumps(params))
 
+    async def async_update_collection(self, collection_name, fields, description=None):
+        _fields = []
+        for field in fields:
+            assert isinstance(field, Field)
+            _field = {
+                "field_name": field.field_name,
+                "field_type": field.field_type.value,
+            }
+            if field.default_val is not None:
+                _field["default_val"] = field.default_val
+            if field.dim is not None:
+                _field["dim"] = field.dim
+            if field.pipeline_name is not None:
+                _field["pipeline_name"] = field.pipeline_name
+            _fields.append(_field)
+        params = {
+            "collection_name": collection_name,
+            "fields": _fields
+        }
+        if description != None:
+            params["description"] = description
+        # print(params)
+        res = await self.async_json_exception("UpdateCollection", {}, json.dumps(params))
+
     def update_index(self, collection_name, index_name, description=None, cpu_quota=None, scalar_index=None,
                      shard_count=None):
         params = {
@@ -633,6 +951,22 @@ class VikingDBService(Service):
         if shard_count is not None:
             params["shard_count"] = shard_count
         res = self.json_exception("UpdateIndex", {}, json.dumps(params))
+
+    async def async_update_index(self, collection_name, index_name, description=None, cpu_quota=None, scalar_index=None,
+                                 shard_count=None):
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+        }
+        if description is not None:
+            params["description"] = description
+        if cpu_quota is not None:
+            params["cpu_quota"] = cpu_quota
+        if scalar_index is not None:
+            params["scalar_index"] = scalar_index
+        if shard_count is not None:
+            params["shard_count"] = shard_count
+        res = await self.async_json_exception("UpdateIndex", {}, json.dumps(params))
 
     def list_embeddings(self, model_name=""):
         params = {"model_name": model_name}
@@ -650,11 +984,29 @@ class VikingDBService(Service):
         res = json.loads(res)
         return res["data"]
 
+    async def async_rerank(self, query, content, title=""):
+        params = {
+            "query": query,
+            "content": content,
+            "title": title
+        }
+        res = await self.async_json_exception("Rerank", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["data"]
+
     def batch_rerank(self, datas):
         params = {
             "datas": datas,
         }
         res = self.json_exception("BatchRerank", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["data"]
+
+    async def async_batch_rerank(self, datas):
+        params = {
+            "datas": datas,
+        }
+        res = await self.async_json_exception("BatchRerank", {}, json.dumps(params))
         res = json.loads(res)
         return res["data"]
 
@@ -671,14 +1023,47 @@ class VikingDBService(Service):
         model = {"model_name": emb_model.model_name, "params": emb_model.params}
         data = []
         if isinstance(raw_data, RawData):
-            param = {"data_type": raw_data.data_type, "text": raw_data.text}
+            param = {"data_type": raw_data.data_type}
+            if raw_data.text != "":
+                param["text"] = raw_data.text
+            if raw_data.image != "":
+                param["image"] = raw_data.image
             data.append(param)
         elif isinstance(raw_data, List):
             for item in raw_data:
-                param = {"data_type": item.data_type, "text": item.text}
+                param = {"data_type": item.data_type}
+                if item.text != "":
+                    param["text"] = item.text
+                if item.image != "":
+                    param["image"] = item.image
                 data.append(param)
         params = {"model": model, "data": data}
         res = self.json_exception("EmbeddingV2", {}, json.dumps(params))
+        res = json.loads(res)
+        # print(res["data"])
+
+        return res["data"]
+
+    async def async_embedding_v2(self, emb_model, raw_data: Union[RawData, List[RawData]]):
+        model = {"model_name": emb_model.model_name, "params": emb_model.params}
+        data = []
+        if isinstance(raw_data, RawData):
+            param = {"data_type": raw_data.data_type}
+            if raw_data.text != "":
+                param["text"] = raw_data.text
+            if raw_data.image != "":
+                param["image"] = raw_data.image
+            data.append(param)
+        elif isinstance(raw_data, List):
+            for item in raw_data:
+                param = {"data_type": item.data_type}
+                if item.text != "":
+                    param["text"] = item.text
+                if item.image != "":
+                    param["image"] = item.image
+                data.append(param)
+        params = {"model": model, "data": data}
+        res = await self.async_json_exception("EmbeddingV2", {}, json.dumps(params))
         res = json.loads(res)
         # print(res["data"])
 

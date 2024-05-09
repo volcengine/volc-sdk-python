@@ -155,7 +155,11 @@ class VodServiceConfig(Service):
             "DescribeVodSpaceDetectStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceDetectStatisData", "Version": "2023-07-01"}, {}, {}),
             "DescribeVodSnapshotData": ApiInfo("GET", "/", {"Action": "DescribeVodSnapshotData", "Version": "2023-07-01"}, {}, {}),
             "DescribeVodSpaceWorkflowDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceWorkflowDetailData", "Version": "2023-07-01"}, {}, {}),
-            "DescribeVodSpaceEditDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceEditDetailData", "Version": "2023-07-01"}, {}, {})
+            "DescribeVodSpaceEditDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceEditDetailData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodEnhanceImageData": ApiInfo("GET", "/", {"Action": "DescribeVodEnhanceImageData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodSpaceEditStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceEditStatisData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodPlayedStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodPlayedStatisData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodMostPlayedStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodMostPlayedStatisData", "Version": "2023-07-01"}, {}, {})
         }
         return api_info
 

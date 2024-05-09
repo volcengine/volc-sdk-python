@@ -70,9 +70,10 @@ class EmbModel(object):
 
 
 class RawData(object):
-    def __init__(self, data_type, text):
+    def __init__(self, data_type, text="", image=""):
         self._data_type = data_type
         self._text = text
+        self._image = image
 
     @property
     def data_type(self):
@@ -81,6 +82,10 @@ class RawData(object):
     @property
     def text(self):
         return self._text
+
+    @property
+    def image(self):
+        return self._image
 
 
 class Field(object):

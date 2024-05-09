@@ -61,6 +61,30 @@ class Collection(object):
                 params = {"collection_name": self.collection_name, "fields": record[item], "ttl": item}
                 res = self.viking_db_service.json_exception("UpsertData", {}, json.dumps(params))
 
+    async def async_upsert_data(self, data: Union[Data, List[Data]]):
+        if isinstance(data, Data):
+            fields_arr = [data.fields]
+            ttl = 0
+            if data.TTL is not None:
+                ttl = data.TTL
+            params = {"collection_name": self.collection_name, "fields": fields_arr, "ttl": ttl}
+            # print(params)
+            res = await self.viking_db_service.async_json_exception("UpsertData", {}, json.dumps(params))
+        elif isinstance(data, list):
+            fields_arr = []
+            ttl = 0
+            record = {}
+            for item in data:
+                if item.TTL in record:
+                    fields = record[item.TTL]
+                    fields.append(item.fields)
+                    record[item.TTL] = fields
+                else:
+                    record[item.TTL] = [item.fields]
+            for item in record:
+                params = {"collection_name": self.collection_name, "fields": record[item], "ttl": item}
+                res = await self.viking_db_service.async_json_exception("UpsertData", {}, json.dumps(params))
+
 
     def delete_data(self, id: Union[str, List[str], int, List[int]]):
         """
@@ -77,6 +101,16 @@ class Collection(object):
         elif isinstance(id, List):
             params = {"collection_name": self.collection_name, "primary_keys": id}
             res = self.viking_db_service.json_exception("DeleteData", {}, json.dumps(params))
+            # print(res,params)
+
+    async def async_delete_data(self, id: Union[str, List[str], int, List[int]]):
+        if isinstance(id, str) or isinstance(id, int):
+            params = {"collection_name": self.collection_name, "primary_keys": id}
+            res = await self.viking_db_service.async_json_exception("DeleteData", {}, json.dumps(params))
+            # print(res)
+        elif isinstance(id, List):
+            params = {"collection_name": self.collection_name, "primary_keys": id}
+            res = await self.viking_db_service.async_json_exception("DeleteData", {}, json.dumps(params))
             # print(res,params)
 
     def fetch_data(self, id: Union[str, List[str], int, List[int]]):
@@ -100,6 +134,30 @@ class Collection(object):
         elif isinstance(id, List):
             params = {"collection_name": self.collection_name, "primary_keys": id}
             res = self.viking_db_service.get_body_exception("FetchData", {}, json.dumps(params))
+            res = json.loads(res)
+            # print(res["data"],self.primary_key)
+            datas = []
+            for item in res["data"]:
+                # print(item)
+                data = Data(item, id=item[self.primary_key], timestamp=None)
+                datas.append(data)
+                # print(data.id,data.fields)
+            return datas
+
+    async def async_fetch_data(self, id: Union[str, List[str], int, List[int]]):
+        if isinstance(id, str) or isinstance(id, int):
+            params = {"collection_name": self.collection_name, "primary_keys": id}
+            # print(params)
+            res = await self.viking_db_service.async_get_body_exception("FetchData", {}, json.dumps(params))
+            # print(res)
+            # res是一个列表,只有一个元素
+            res = json.loads(res)
+            # print(res["data"][0])
+            data = Data(res["data"][0], id=id, timestamp=None)
+            return data
+        elif isinstance(id, List):
+            params = {"collection_name": self.collection_name, "primary_keys": id}
+            res = await self.viking_db_service.async_get_body_exception("FetchData", {}, json.dumps(params))
             res = json.loads(res)
             # print(res["data"],self.primary_key)
             datas = []
