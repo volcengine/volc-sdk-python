@@ -1,5 +1,8 @@
 ### Change log
 
+2024-05-16 Bumped to version v1.0.140
+- Updated apis for viking_knowledgebase/tls
+
 2024-05-09 Bumped to version v1.0.139
 - Updated apis for vod/sms/viking_db
 - Add viking_knowledgebase sdk

@@ -207,7 +207,7 @@ class VikingKnowledgeBaseService(Service):
                 assert isinstance(fields, list)
                 params["fields"] = fields
         return Collection(self, collection_name, params)
-    
+
     async def async_create_collection(self, collection_name, index=None, description="", preprocessing=None):
         params = {"name": collection_name, "description": description, "index": index, "preprocessing":preprocessing}
         await self.async_json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
@@ -216,7 +216,7 @@ class VikingKnowledgeBaseService(Service):
             assert isinstance(fields, list)
             params["fields"] = fields
         return Collection(self, collection_name, params)
-    
+
     def get_collection(self, collection_name):
         params = {"name": collection_name}
         res = self.json_exception("GetCollection", {}, json.dumps(params))
@@ -224,6 +224,7 @@ class VikingKnowledgeBaseService(Service):
         now_index_list = data["pipeline_list"][0]["index_list"][0]
         fields = now_index_list["index_config"]["fields"]
         data["fields"] = fields
+
         return Collection(self, collection_name, data)
 
     async def async_get_collection(self, collection_name):
@@ -233,6 +234,7 @@ class VikingKnowledgeBaseService(Service):
         now_index_list = data["pipeline_list"][0]["index_list"][0]
         fields = now_index_list["index_config"]["fields"]
         data["fields"] = fields
+
         return Collection(self, collection_name, data)
 
     def drop_collection(self, collection_name):
@@ -252,6 +254,7 @@ class VikingKnowledgeBaseService(Service):
             fields = now_index_list["index_config"]["fields"]
             collection["fields"] = fields
             collections.append(Collection(self, collection["collection_name"], collection))
+
         return collections
 
     async def async_list_collections(self):
@@ -263,6 +266,7 @@ class VikingKnowledgeBaseService(Service):
             fields = now_index_list["index_config"]["fields"]
             collection["fields"] = fields
             collections.append(Collection(self, collection["collection_name"], collection))
+
         return collections
 
     def update_collection(self, collection_name, description=None, cpu_quota=None):
