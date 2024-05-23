@@ -17,6 +17,7 @@ for point in points:
     print(point.content)
     print(point.chunk_id)
     print(point.point_id)
+    print(point.doc_id)
     print("=======")
 # c = Collection(vikingkb_service, collection_name)
 # tos_path = "viking-db-tos/djk_test/test_0401/"
