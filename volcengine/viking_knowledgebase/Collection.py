@@ -17,9 +17,13 @@ class Collection(object):
             self.pipeline_list          = kwargs.get("pipeline_list")
             self.preprocessing          = kwargs.get("preprocessing")
             self.fields                 = [Field(field) for field in kwargs.get("fields", [])]
+            self.project                = kwargs.get("project")
+            self.resource_id            = kwargs.get("resource_id")
 
-    def add_doc(self, add_type, doc_id=None, doc_name=None, doc_type=None, tos_path=None, url=None, meta=None):
-        params = {"collection_name": self.collection_name, "add_type": add_type}
+    def add_doc(self, add_type, doc_id=None, doc_name=None, doc_type=None, tos_path=None, url=None, meta=None, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "add_type": add_type, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         if add_type == "tos" :
             params["tos_path"]  = tos_path
 
@@ -32,8 +36,10 @@ class Collection(object):
                 params["meta"]  = meta
         self.viking_knowledgebase_service.json_exception("AddDoc", {}, json.dumps(params))
 
-    async def async_add_doc(self, add_type, doc_id=None, doc_name=None, doc_type=None, tos_path=None, url=None, meta=None):
-        params = {"collection_name": self.collection_name, "add_type": add_type}
+    async def async_add_doc(self, add_type, doc_id=None, doc_name=None, doc_type=None, tos_path=None, url=None, meta=None, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "add_type": add_type, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         if add_type == "tos" :
             params["tos_path"]  = tos_path
 
@@ -46,28 +52,36 @@ class Collection(object):
                 params["meta"]  = meta
         await self.viking_knowledgebase_service.async_json_exception("AddDoc", {}, json.dumps(params))
 
-    def delete_doc(self, doc_id):
-        params = {"collection_name": self.collection_name, "doc_id": doc_id}
+    def delete_doc(self, doc_id, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "doc_id": doc_id, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         self.viking_knowledgebase_service.json_exception("DeleteDoc", {}, json.dumps(params))
     
-    async def async_delete_doc(self, doc_id):
-        params = {"collection_name": self.collection_name, "doc_id": doc_id}
+    async def async_delete_doc(self, doc_id, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "doc_id": doc_id, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         await self.viking_knowledgebase_service.async_json_exception("DeleteDoc", {}, json.dumps(params))
 
-    def get_doc(self, doc_id):
-        params = {"collection_name": self.collection_name, "doc_id": doc_id}
+    def get_doc(self, doc_id, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "doc_id": doc_id, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         res = self.viking_knowledgebase_service.json_exception("GetDocInfo", {}, json.dumps(params))
         data = json.loads(res)["data"]
         return Doc(data)
 
-    async def async_get_doc(self, doc_id):
-        params = {"collection_name": self.collection_name, "doc_id": doc_id}
+    async def async_get_doc(self, doc_id, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "doc_id": doc_id, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         res = await self.viking_knowledgebase_service.async_json_exception("GetDocInfo", {}, json.dumps(params))
         data = json.loads(res)["data"]
         return Doc(data)
 
-    def list_docs(self, offset=0, limit=-1, doc_type=None):
-        params = {"collection_name": self.collection_name, "offset": offset, "limit": limit, "doc_type": doc_type}
+    def list_docs(self, offset=0, limit=-1, doc_type=None, project="default"):
+        params = {"collection_name": self.collection_name, "offset": offset, "limit": limit, "doc_type": doc_type, "project":project}
         res = self.viking_knowledgebase_service.json_exception("ListDocs", {}, json.dumps(params))
         data = json.loads(res)["data"]
         docs = []
@@ -75,8 +89,8 @@ class Collection(object):
             docs.append(Doc(item))
         return docs
 
-    async def async_list_docs(self, offset=0, limit=-1, doc_type=None):
-        params = {"collection_name": self.collection_name, "offset": offset, "limit": limit, "doc_type": doc_type}
+    async def async_list_docs(self, offset=0, limit=-1, doc_type=None, project="default"):
+        params = {"collection_name": self.collection_name, "offset": offset, "limit": limit, "doc_type": doc_type, "project":project}
         res = await self.viking_knowledgebase_service.async_json_exception("ListDocs", {}, json.dumps(params))
         data = json.loads(res)["data"]
         docs = []
@@ -84,28 +98,38 @@ class Collection(object):
             docs.append(Doc(item))
         return docs
 
-    def update_meta(self, doc_id, meta):
-        params = {"collection_name": self.collection_name, "doc_id": doc_id, "meta": meta}
+    def update_meta(self, doc_id, meta, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "doc_id": doc_id, "meta": meta, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         self.viking_knowledgebase_service.json_exception("UpdateDocMeta", {}, json.dumps(params))
     
-    async def async_update_meta(self, doc_id, meta):
-        params = {"collection_name": self.collection_name, "doc_id": doc_id, "meta": meta}
+    async def async_update_meta(self, doc_id, meta, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "doc_id": doc_id, "meta": meta, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         await self.viking_knowledgebase_service.async_json_exception("UpdateDocMeta", {}, json.dumps(params))
 
-    def get_point(self, point_id):
-        params = {"collection_name": self.collection_name, "point_id": point_id}
+    def get_point(self, point_id, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "point_id": point_id, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         res = self.viking_knowledgebase_service.json_exception("GetPointInfo", {}, json.dumps(params))
         res = json.loads(res)
         return Point(res["data"])
     
-    async def async_get_point(self, point_id):
-        params = {"collection_name": self.collection_name, "point_id": point_id}
+    async def async_get_point(self, point_id, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "point_id": point_id, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         res = await self.viking_knowledgebase_service.async_json_exception("GetPointInfo", {}, json.dumps(params))
         res = json.loads(res)
         return Point(res["data"])
 
-    def list_points(self, offset=0, limit=-1, doc_ids=None):
-        params = {"collection_name": self.collection_name, "offset": offset, "limit": limit, "doc_ids": doc_ids}
+    def list_points(self, offset=0, limit=-1, doc_ids=None, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "offset": offset, "limit": limit, "doc_ids": doc_ids, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         res = self.viking_knowledgebase_service.json_exception("ListPoints", {}, json.dumps(params))
         point_list = json.loads(res)["data"]["point_list"]
         points = []
@@ -113,8 +137,10 @@ class Collection(object):
             points.append(Point(item))
         return points 
     
-    async def async_list_points(self, offset=0, limit=-1, doc_ids=None):
-        params = {"collection_name": self.collection_name, "offset": offset, "limit": limit, "doc_ids": doc_ids}
+    async def async_list_points(self, offset=0, limit=-1, doc_ids=None, project="default", resource_id=None):
+        params = {"collection_name": self.collection_name, "offset": offset, "limit": limit, "doc_ids": doc_ids, "project":project}
+        if resource_id is not None:
+            params["resource_id"] = resource_id
         res = await self.viking_knowledgebase_service.async_json_exception("ListPoints", {}, json.dumps(params))
         point_list = json.loads(res)["data"]["point_list"]
         points = []

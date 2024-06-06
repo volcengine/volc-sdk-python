@@ -69,7 +69,9 @@ class VikingKnowledgeBaseService(Service):
             "UpdateCollection":     ApiInfo("POST", "/api/knowledge/collection/update", {}, {},
                                         {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "SearchCollection":     ApiInfo("POST", "/api/knowledge/collection/search", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),      
+                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "SearchAndGenerate":    ApiInfo("POST", "/api/knowledge/collection/search_and_generate", {}, {},
+                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),        
 
             # Doc
             "AddDoc":               ApiInfo("POST", "/api/knowledge/doc/add", {}, {},
@@ -200,9 +202,11 @@ class VikingKnowledgeBaseService(Service):
                                     "empty response due to unknown error, please contact customer service") from None
         return res
 
-    def create_collection(self, collection_name, index=None, description="", preprocessing=None):
-        params = {"name": collection_name, "description": description, "index": index, "preprocessing":preprocessing}
-        self.json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
+    def create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default"):
+        params = {"name": collection_name, "description": description, "index": index, "preprocessing": preprocessing, "project": project}
+        res = self.json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
+        data = json.loads(res)["data"]
+        params["resource_id"] = data["resource_id"]
         if index is not None and index.get("index_config") is not None:
             fields = index["index_config"].get("fields")
             if fields is not None:
@@ -210,17 +214,21 @@ class VikingKnowledgeBaseService(Service):
                 params["fields"] = fields
         return Collection(self, collection_name, params)
 
-    async def async_create_collection(self, collection_name, index=None, description="", preprocessing=None):
-        params = {"name": collection_name, "description": description, "index": index, "preprocessing":preprocessing}
-        await self.async_json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
+    async def async_create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default"):
+        params = {"name": collection_name, "description": description, "index": index, "preprocessing":preprocessing, "project": project}
+        res = await self.async_json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
+        data = json.loads(res)["data"]
+        params["resource_id"] = data["resource_id"]
         if index is not None and index.get("index_config") is not None:
             fields = index["index_config"]["fields"]
             assert isinstance(fields, list)
             params["fields"] = fields
         return Collection(self, collection_name, params)
 
-    def get_collection(self, collection_name):
-        params = {"name": collection_name}
+    def get_collection(self, collection_name, project="default", resource_id=None):
+        params = {"name": collection_name, "project": project}
+        if resource_id != None:
+            params["resource_id"] = resource_id
         res = self.json_exception("GetCollection", {}, json.dumps(params))
         data = json.loads(res)["data"]
         now_index_list = data["pipeline_list"][0]["index_list"][0]
@@ -229,8 +237,10 @@ class VikingKnowledgeBaseService(Service):
 
         return Collection(self, collection_name, data)
 
-    async def async_get_collection(self, collection_name):
-        params = {"name": collection_name}
+    async def async_get_collection(self, collection_name, project="default", resource_id=None):
+        params = {"name": collection_name, "project": project}
+        if resource_id != None:
+            params["resource_id"] = resource_id
         res = await self.async_json_exception("GetCollection", {}, json.dumps(params))
         data = json.loads(res)["data"]
         now_index_list = data["pipeline_list"][0]["index_list"][0]
@@ -239,16 +249,23 @@ class VikingKnowledgeBaseService(Service):
 
         return Collection(self, collection_name, data)
 
-    def drop_collection(self, collection_name):
-        params = {"name": collection_name}
+    def drop_collection(self, collection_name, project="default", resource_id=None):
+        params = {"name": collection_name, "project":project}
+        if resource_id != None:
+            params["resource_id"] = resource_id
         self.json_exception("DropCollection", {}, json.dumps(params))
 
-    async def async_drop_collection(self, collection_name):
-        params = {"name": collection_name}
+    async def async_drop_collection(self, collection_name, project="default", resource_id=None):
+        params = {"name": collection_name, "project":project}
+        if resource_id != None:
+            params["resource_id"] = resource_id
         await self.async_json_exception("DropCollection", {}, json.dumps(params))
 
-    def list_collections(self):
-        res = self.json_exception("ListCollections", {}, json.dumps({}))
+    def list_collections(self, project=None, brief=False):
+        params = {"brief": brief}
+        if project is not None:
+            params["project"] = project
+        res = self.json_exception("ListCollections", {}, json.dumps(params))
         collection_list = json.loads(res)["data"]["collection_list"]
         collections = []
         for collection in collection_list:
@@ -259,8 +276,11 @@ class VikingKnowledgeBaseService(Service):
 
         return collections
 
-    async def async_list_collections(self):
-        res = await self.async_json_exception("ListCollections", {}, json.dumps({}))
+    async def async_list_collections(self, project=None, brief=False):
+        params = {"brief": brief}
+        if project is not None:
+            params["project"] = project
+        res = await self.async_json_exception("ListCollections", {}, json.dumps(params))
         collection_list = json.loads(res)["data"]["collection_list"]
         collections = []
         for collection in collection_list:
@@ -271,8 +291,10 @@ class VikingKnowledgeBaseService(Service):
 
         return collections
 
-    def update_collection(self, collection_name, description=None, cpu_quota=None):
-        params = {"name": collection_name}
+    def update_collection(self, collection_name, description=None, cpu_quota=None, project="default", resource_id=None):
+        params = {"name": collection_name, "project":project}
+        if resource_id != None:
+            params["resource_id"] = resource_id
         if description  != None:
             params["description"] = description
         if cpu_quota    != None:
@@ -280,8 +302,10 @@ class VikingKnowledgeBaseService(Service):
 
         self.json_exception("UpdateCollection", {}, json.dumps(params))
 
-    async def async_update_collection(self, collection_name, description=None, cpu_quota=None):
-        params = {"name": collection_name}
+    async def async_update_collection(self, collection_name, description=None, cpu_quota=None, project="default", resource_id=None):
+        params = {"name": collection_name, "project":project}
+        if resource_id != None:
+            params["resource_id"] = resource_id
         if description  != None:
             params["description"] = description
         if cpu_quota    != None:
@@ -289,13 +313,16 @@ class VikingKnowledgeBaseService(Service):
 
         await self.async_json_exception("UpdateCollection", {}, json.dumps(params))
 
-    def search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False):
+    def search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, project="default", resource_id=None):
         params = {"name": collection_name, 
                   "query": query,
                   "limit": limit,
                   "dense_weight": dense_weight,
-                  "rerank_switch": rerank_switch
+                  "rerank_switch": rerank_switch,
+                  "project": project
                   }
+        if resource_id != None:
+            params["resource_id"] = resource_id
         if query_param != None:
             params["query_param"] = query_param
         res = self.json_exception("SearchCollection", {}, json.dumps(params))
@@ -308,13 +335,16 @@ class VikingKnowledgeBaseService(Service):
                 points.append(Point(result))
         return points
     
-    async def async_search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False):
+    async def async_search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, project="default", resource_id=None):
         params = {"name": collection_name, 
                   "query": query,
                   "limit": limit,
                   "dense_weight": dense_weight,
-                  "rerank_switch": rerank_switch
+                  "rerank_switch": rerank_switch,
+                  "project": project
                   }
+        if resource_id != None:
+            params["resource_id"] = resource_id
         if query_param != None:
             params["query_param"] = query_param
         res = await self.async_json_exception("SearchCollection", {}, json.dumps(params))
@@ -326,3 +356,73 @@ class VikingKnowledgeBaseService(Service):
                 result['collection_name'] = collection_name
                 points.append(Point(result))
         return points
+    
+    def search_and_generate(self, collection_name, query, query_param=None, retrieve_param=None, llm_param=None, project="default", resource_id=None):
+        params = {"name": collection_name, 
+                  "query": query,
+                  "project": project
+                  }
+        
+        if resource_id != None:
+            params["resource_id"] = resource_id
+        if query_param != None:
+            params["query_param"] = query_param
+        if retrieve_param != None:
+            params["retrieve_param"] = retrieve_param
+        if llm_param != None:
+            params["llm_param"] = llm_param
+            
+        res = self.json_exception("SearchAndGenerate", {}, json.dumps(params))
+        data = json.loads(res)["data"]
+        results = data.get("result_list")
+        points = []
+        if results is not None:
+            for result in results:
+                result['collection_name'] = collection_name
+                points.append(Point(result))
+        ret = {
+            "collection_name": data.get("collection_name"),
+            "count": data.get("count"),
+            "generated_answer": data.get("generated_answer"),
+            "prompt": data.get("prompt"),
+            "usage": data.get("usage"),
+            "refs": points
+        }
+        
+        return ret
+    
+    async def async_search_and_generate(self, collection_name, query, query_param=None, retrieve_param=None, llm_param=None, project="default", resource_id=None):
+        params = {"name": collection_name, 
+                  "query": query,
+                  "project": project
+                  }
+        
+        if resource_id != None:
+            params["resource_id"] = resource_id
+        if query_param != None:
+            params["query_param"] = query_param
+        if retrieve_param != None:
+            params["retrieve_param"] = retrieve_param
+        if llm_param != None:
+            params["llm_param"] = llm_param
+            
+        res = await self.async_json_exception("SearchAndGenerate", {}, json.dumps(params))
+        data = json.loads(res)["data"]
+        results = data.get("result_list")
+        points = []
+        if results is not None:
+            for result in results:
+                result['collection_name'] = collection_name
+                points.append(Point(result))
+        ret = {
+            "collection_name": data.get("collection_name"),
+            "count": data.get("count"),
+            "generated_answer": data.get("generated_answer"),
+            "prompt": data.get("prompt"),
+            "usage": data.get("usage"),
+            "refs": points
+        }
+        
+        return ret
+    
+    

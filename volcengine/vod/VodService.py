@@ -407,6 +407,26 @@ class VodService(VodServiceConfig):
         else:
             return res
 
+        #
+        # CancelDirectEditTask.
+        #
+        # @param request VodCancelDirectEditTaskRequest
+        # @return VodCancelDirectEditTaskResponse
+        # @raise Exception
+    def cancel_direct_edit_task(self, request):
+        try:
+            jsonData = MessageToJson(request, False, True)
+            res = self.json("CancelDirectEditTask", {}, jsonData)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodCancelDirectEditTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error)
+        else:
+            return res
+
 
     #
     # GetAllPlayInfo.

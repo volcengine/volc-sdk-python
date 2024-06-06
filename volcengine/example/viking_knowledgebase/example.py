@@ -1,6 +1,6 @@
 import sys
 import os
-
+import asyncio
 current_directory = os.path.dirname(os.path.abspath(__file__))
 seek = os.path.dirname(os.path.dirname(os.path.dirname(current_directory)))  
 sys.path.insert(0, seek)
@@ -9,16 +9,33 @@ from volcengine.viking_knowledgebase import VikingKnowledgeBaseService, Collecti
 from volcengine.viking_knowledgebase.common import Field, FieldType, IndexType, EmbddingModelType
 
 
-collection_name = "test_sdks"
+collection_name = "hax_test"
+
+project_name = 'y2y5c4r8evyi'
+# project_name = 'ss_test'
 
 viking_knowledgebase_service = VikingKnowledgeBaseService()
-points = viking_knowledgebase_service.search_collection(collection_name=collection_name,query="银屑病是什么？")
+points = viking_knowledgebase_service.search_collection(collection_name=collection_name,query="贷款需要注意什么？", project=project_name)
 for point in points:
     print(point.content)
     print(point.chunk_id)
     print(point.point_id)
     print(point.doc_id)
     print("=======")
+    
+async def main():
+    viking_knowledgebase_service = VikingKnowledgeBaseService()
+    points = await viking_knowledgebase_service.async_search_collection(collection_name=collection_name, query="贷款需要注意什么？", project=project_name)
+    for point in points:
+        print(point.content)
+        print(point.chunk_id)
+        print(point.point_id)
+        print(point.doc_id)
+        print("=======")
+        
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+loop.close()
 # c = Collection(vikingkb_service, collection_name)
 # tos_path = "viking-db-tos/djk_test/test_0401/"
 # c.add_doc(add_type="tos", tos_path=tos_path)

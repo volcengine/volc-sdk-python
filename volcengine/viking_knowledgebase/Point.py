@@ -14,7 +14,7 @@ class Point(object):
         self.score                  = kwargs.get("score")
         self.doc_info               = Doc(kwargs.get("doc_info"))
         self.chunk_id               = kwargs.get("chunk_id")
-
+        
     @property
     @deprecated(reason="The 'doc_id' property is deprecated. Use 'doc_info.doc_id' instead.")
     def doc_id(self):
