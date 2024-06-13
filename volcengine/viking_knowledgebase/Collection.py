@@ -70,6 +70,9 @@ class Collection(object):
             params["resource_id"] = resource_id
         res = self.viking_knowledgebase_service.json_exception("GetDocInfo", {}, json.dumps(params))
         data = json.loads(res)["data"]
+        data['project'] = project
+        if resource_id is not None :
+            data['resource_id'] = resource_id
         return Doc(data)
 
     async def async_get_doc(self, doc_id, project="default", resource_id=None):
@@ -78,6 +81,9 @@ class Collection(object):
             params["resource_id"] = resource_id
         res = await self.viking_knowledgebase_service.async_json_exception("GetDocInfo", {}, json.dumps(params))
         data = json.loads(res)["data"]
+        data['project'] = project
+        if resource_id is not None :
+            data['resource_id'] = resource_id
         return Doc(data)
 
     def list_docs(self, offset=0, limit=-1, doc_type=None, project="default"):
@@ -86,6 +92,7 @@ class Collection(object):
         data = json.loads(res)["data"]
         docs = []
         for item in data["doc_list"]:
+            item['project'] = project
             docs.append(Doc(item))
         return docs
 
@@ -95,6 +102,7 @@ class Collection(object):
         data = json.loads(res)["data"]
         docs = []
         for item in data["doc_list"]:
+            item['project'] = project
             docs.append(Doc(item))
         return docs
 
@@ -116,6 +124,9 @@ class Collection(object):
             params["resource_id"] = resource_id
         res = self.viking_knowledgebase_service.json_exception("GetPointInfo", {}, json.dumps(params))
         res = json.loads(res)
+        res["data"]["project"] = project
+        if resource_id is not None :
+            res["data"]["resource_id"] = resource_id
         return Point(res["data"])
     
     async def async_get_point(self, point_id, project="default", resource_id=None):
@@ -124,6 +135,9 @@ class Collection(object):
             params["resource_id"] = resource_id
         res = await self.viking_knowledgebase_service.async_json_exception("GetPointInfo", {}, json.dumps(params))
         res = json.loads(res)
+        res["data"]["project"] = project
+        if resource_id is not None :
+            res["data"]["resource_id"] = resource_id
         return Point(res["data"])
 
     def list_points(self, offset=0, limit=-1, doc_ids=None, project="default", resource_id=None):
@@ -134,6 +148,7 @@ class Collection(object):
         point_list = json.loads(res)["data"]["point_list"]
         points = []
         for item in point_list:
+            item["project"] = project
             points.append(Point(item))
         return points 
     
@@ -145,5 +160,6 @@ class Collection(object):
         point_list = json.loads(res)["data"]["point_list"]
         points = []
         for item in point_list:
+            item["project"] = project
             points.append(Point(item))
         return points 

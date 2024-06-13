@@ -332,6 +332,9 @@ class VikingKnowledgeBaseService(Service):
         if results is not None:
             for result in results:
                 result['collection_name'] = collection_name
+                result['project'] = project
+                if resource_id is not None :
+                    result['resource_id'] = resource_id
                 points.append(Point(result))
         return points
     
@@ -354,6 +357,9 @@ class VikingKnowledgeBaseService(Service):
         if results is not None:
             for result in results:
                 result['collection_name'] = collection_name
+                result['project'] = project
+                if resource_id is not None :
+                    result['resource_id'] = resource_id
                 points.append(Point(result))
         return points
     

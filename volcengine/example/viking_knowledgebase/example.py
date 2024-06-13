@@ -21,21 +21,27 @@ for point in points:
     print(point.chunk_id)
     print(point.point_id)
     print(point.doc_id)
+    print(point.project)
     print("=======")
     
-async def main():
-    viking_knowledgebase_service = VikingKnowledgeBaseService()
-    points = await viking_knowledgebase_service.async_search_collection(collection_name=collection_name, query="贷款需要注意什么？", project=project_name)
-    for point in points:
-        print(point.content)
-        print(point.chunk_id)
-        print(point.point_id)
-        print(point.doc_id)
-        print("=======")
+c = viking_knowledgebase_service.get_collection(collection_name=collection_name, project=project_name)
+print(c.get_doc("_sys_auto_gen_doc_id-7155405830436663798", project=project_name).project)
+# 异步
+# async def main():
+#     viking_knowledgebase_service = VikingKnowledgeBaseService()
+#     points = await viking_knowledgebase_service.async_search_collection(collection_name=collection_name, query="贷款需要注意什么？", project=project_name)
+#     for point in points:
+#         print(point.content)
+#         print(point.chunk_id)
+#         print(point.point_id)
+#         print(point.doc_id)
+#         print("=======")
         
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
-loop.close()
+# loop = asyncio.get_event_loop()
+# loop.run_until_complete(main())
+# loop.close()
+
+
 # c = Collection(vikingkb_service, collection_name)
 # tos_path = "viking-db-tos/djk_test/test_0401/"
 # c.add_doc(add_type="tos", tos_path=tos_path)

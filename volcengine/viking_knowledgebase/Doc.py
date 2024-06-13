@@ -22,4 +22,5 @@ class Doc(object):
             meta                = json.loads(meta)
             self.fields         = [Field(field) for field in meta]
         
-
+        self.project            = kwargs.get("project", "default")
+        self.resource_id        = kwargs.get("resource_id")

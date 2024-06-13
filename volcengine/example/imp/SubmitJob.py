@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 from volcengine.imp.ImpService import ImpService
-from volcengine.imp.models.business.imp_common_pb2 import InputPath
+from volcengine.imp.models.business.imp_common_pb2 import *
 from volcengine.imp.models.request.request_imp_pb2 import *
 
 if __name__ == '__main__':
@@ -19,6 +19,23 @@ if __name__ == '__main__':
         req.InputPath.FileId = 'your vid'
         req.TemplateId = 'your template id'
         req.CallbackArgs = 'your callback args'
+
+        smart_erase = SmartEraseOverrideParams()
+        watermark_detect = DetectRect()
+        watermark_detect.X1 = 0
+        watermark_detect.X2 = 1
+        watermark_detect.Y1 = 0
+        watermark_detect.Y2 = 1
+        ocr_detect = DetectRect()
+        ocr_detect.X1 = 0
+        ocr_detect.X2 = 1
+        ocr_detect.Y1 = 0
+        ocr_detect.Y2 = 1
+        smart_erase.ActivityId.append("*")
+        smart_erase.Watermark.DetectRect.append(watermark_detect)
+        smart_erase.OCR.DetectRect.append(ocr_detect)
+        req.Params.OverrideParams.SmartErase.append(smart_erase)
+
         resp = imp_service.submit_job(req)
     except Exception:
         raise

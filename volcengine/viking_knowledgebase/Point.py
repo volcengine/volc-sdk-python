@@ -15,6 +15,9 @@ class Point(object):
         self.doc_info               = Doc(kwargs.get("doc_info"))
         self.chunk_id               = kwargs.get("chunk_id")
         
+        self.project                = kwargs.get("project", "default")
+        self.resource_id            = kwargs.get("resource_id")
+
     @property
     @deprecated(reason="The 'doc_id' property is deprecated. Use 'doc_info.doc_id' instead.")
     def doc_id(self):

@@ -141,7 +141,14 @@ api_info = {
     # 获取边缘层节点的所有 IP:
     "DescribeDcdnEdgeIp": ApiInfo("POST", "/", {
         "Action": "DescribeDcdnEdgeIp", "Version": SERVICE_VERSION}, {}, {}),
-
+    
+    # 更新GA源站的回源策略:
+    "UpdateGAOriginPolicy": ApiInfo("POST", "/", {
+        "Action": "UpdateGAOriginPolicy", "Version": SERVICE_VERSION}, {}, {}),
+    
+    # 查询GA源站的回源策略:
+    "DescribeGAOriginPolicy": ApiInfo("POST", "/", {
+        "Action": "DescribeGAOriginPolicy", "Version": SERVICE_VERSION}, {}, {}),
 }
 
 
@@ -482,6 +489,26 @@ class DCDNService(Service):
         if params is None:
             params = {}
         action = "DescribeDcdnEdgeIp"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def update_ga_origin_policy(self, params=None):
+        if params is None:
+            params = {}
+        action = "UpdateGAOriginPolicy"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+    
+    def describe_ga_origin_policy(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeGAOriginPolicy"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
