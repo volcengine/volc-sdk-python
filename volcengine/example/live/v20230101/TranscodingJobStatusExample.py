@@ -8,7 +8,7 @@ if __name__ == '__main__':
     service.set_ak('ak')
     service.set_sk('sk')
 
-    body = {}
+    query = {}
 
-    resp = service.describe_snapshot_audit_preset_detail(body)
+    resp = service.transcoding_job_status(query)
     print(resp)

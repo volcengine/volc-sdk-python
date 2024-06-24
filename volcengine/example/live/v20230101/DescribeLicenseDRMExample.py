@@ -8,7 +8,7 @@ if __name__ == '__main__':
     service.set_ak('ak')
     service.set_sk('sk')
 
-    body = {}
+    query = {}
 
-    resp = service.describe_live_customized_log_data(body)
+    resp = service.describe_license_drm(query)
     print(resp)

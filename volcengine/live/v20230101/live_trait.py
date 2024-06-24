@@ -68,6 +68,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def transcoding_job_status(self, query):
+        res = self.api_get('TranscodingJobStatus', query)
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def list_vhost_trans_code_preset(self, body):
         res = self.api_post('ListVhostTransCodePreset', [], json.dumps(body))
         if res == '':
@@ -77,6 +84,13 @@ class LiveTrait(Service):
             
     def create_transcode_preset(self, body):
         res = self.api_post('CreateTranscodePreset', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def restart_transcoding_job(self, query):
+        res = self.api_get('RestartTranscodingJob', query)
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -334,20 +348,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def create_verify_content(self, body):
-        res = self.api_post('CreateVerifyContent', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def verify_domain_owner(self, body):
-        res = self.api_post('VerifyDomainOwner', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def delete_domain(self, body):
         res = self.api_post('DeleteDomain', [], json.dumps(body))
         if res == '':
@@ -579,41 +579,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def list_vqos_metrics_dimensions(self, query):
-        res = self.api_get('ListVqosMetricsDimensions', query)
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def stop_pull_cdn_snapshot_task(self, body):
-        res = self.api_post('StopPullCDNSnapshotTask', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def create_pull_cdn_snapshot_task(self, body):
-        res = self.api_post('CreatePullCDNSnapshotTask', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def get_pull_cdn_snapshot_task(self, body):
-        res = self.api_post('GetPullCDNSnapshotTask', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def list_pull_cdn_snapshot_task(self, body):
-        res = self.api_post('ListPullCDNSnapshotTask', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def delete_snapshot_audit_preset(self, body):
         res = self.api_post('DeleteSnapshotAuditPreset', [], json.dumps(body))
         if res == '':
@@ -623,13 +588,6 @@ class LiveTrait(Service):
             
     def update_snapshot_audit_preset(self, body):
         res = self.api_post('UpdateSnapshotAuditPreset', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def describe_snapshot_audit_preset_detail(self, body):
-        res = self.api_post('DescribeSnapshotAuditPresetDetail', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -712,13 +670,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def describe_live_batch_stream_transcode_data(self, body):
-        res = self.api_post('DescribeLiveBatchStreamTranscodeData', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def describe_live_stream_count_data(self, body):
         res = self.api_post('DescribeLiveStreamCountData', [], json.dumps(body))
         if res == '':
@@ -735,6 +686,13 @@ class LiveTrait(Service):
             
     def describe_live_push_stream_info_data(self, body):
         res = self.api_post('DescribeLivePushStreamInfoData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_transcode_info_data(self, body):
+        res = self.api_post('DescribeLiveTranscodeInfoData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -763,13 +721,6 @@ class LiveTrait(Service):
             
     def describe_live_metric_traffic_data(self, body):
         res = self.api_post('DescribeLiveMetricTrafficData', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def describe_live_batch_stream_traffic_data(self, body):
-        res = self.api_post('DescribeLiveBatchStreamTrafficData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -859,13 +810,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def describe_live_customized_log_data(self, body):
-        res = self.api_post('DescribeLiveCustomizedLogData', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def describe_live_log_data(self, body):
         res = self.api_post('DescribeLiveLogData', [], json.dumps(body))
         if res == '':
@@ -950,15 +894,50 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def describe_live_activity_bandwidth_data(self, body):
-        res = self.api_post('DescribeLiveActivityBandwidthData', [], json.dumps(body))
+    def update_encrypt_drm(self, body):
+        res = self.api_post('UpdateEncryptDRM', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
         return res_json
             
-    def describe_live_stream_usage_data(self, body):
-        res = self.api_post('DescribeLiveStreamUsageData', [], json.dumps(body))
+    def describe_license_drm(self, query, body):
+        res = self.api_post('DescribeLicenseDRM', query, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_cert_drm(self, query):
+        res = self.api_get('DescribeCertDRM', query)
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_encrypt_drm(self, body):
+        res = self.api_post('DescribeEncryptDRM', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def bind_encrypt_drm(self, body):
+        res = self.api_post('BindEncryptDRM', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def un_bind_encrypt_drm(self, body):
+        res = self.api_post('UnBindEncryptDRM', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def list_bind_encrypt_drm(self, body):
+        res = self.api_post('ListBindEncryptDRM', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

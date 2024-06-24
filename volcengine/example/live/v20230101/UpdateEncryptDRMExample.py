@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.describe_live_activity_bandwidth_data(body)
+    resp = service.update_encrypt_drm(body)
     print(resp)

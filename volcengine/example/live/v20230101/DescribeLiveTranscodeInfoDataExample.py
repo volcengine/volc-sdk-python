@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.verify_domain_owner(body)
+    resp = service.describe_live_transcode_info_data(body)
     print(resp)

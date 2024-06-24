@@ -8,7 +8,5 @@ if __name__ == '__main__':
     service.set_ak('ak')
     service.set_sk('sk')
 
-    body = {}
-
-    resp = service.describe_live_stream_usage_data(body)
+    resp = service.describe_encrypt_drm()
     print(resp)

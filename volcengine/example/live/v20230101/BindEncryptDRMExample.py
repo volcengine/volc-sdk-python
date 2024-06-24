@@ -8,7 +8,7 @@ if __name__ == '__main__':
     service.set_ak('ak')
     service.set_sk('sk')
 
-    query = {}
+    body = {}
 
-    resp = service.list_vqos_metrics_dimensions(query)
+    resp = service.bind_encrypt_drm(body)
     print(resp)

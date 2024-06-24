@@ -62,7 +62,10 @@ class SmsService(Service):
             "InsertSubAccount": ApiInfo("POST", "/", {"Action": "InsertSubAccount", "Version": "2021-01-11"},
                                         {},
                                         {}),
-            "GetSmsSendDetails": ApiInfo("POST","/", {"Action": "GetSmsSendDetails", "Version": "2021-01-11"}, {}, {})
+            "GetSmsSendDetails": ApiInfo("POST","/", {"Action": "GetSmsSendDetails", "Version": "2021-01-11"}, {}, {}),
+            "ApplySignatureIdent": ApiInfo("POST","/", {"Action": "ApplySignatureIdent", "Version": "2021-01-11"}, {}, {}),
+            "GetSignatureIdentList": ApiInfo("POST","/", {"Action": "GetSignatureIdentList", "Version": "2021-01-11"}, {}, {}),
+            "BatchBindSignatureIdent": ApiInfo("POST","/", {"Action": "BatchBindSignatureIdent", "Version": "2021-01-11"}, {}, {})
         }
         return api_info
 
@@ -227,6 +230,27 @@ class SmsService(Service):
     @retry(tries=2, delay=0)
     def get_sms_send_details(self, body):
         res = self.json('GetSmsSendDetails', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        return json.loads(res)
+    
+    @retry(tries=2, delay=0)
+    def apply_signature_ident(self, body):
+        res = self.json('ApplySignatureIdent', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        return json.loads(res)
+    
+    @retry(tries=2, delay=0)
+    def get_signature_ident_list(self, body):
+        res = self.json('GetSignatureIdentList', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        return json.loads(res)
+    
+    @retry(tries=2, delay=0)
+    def batch_bind_signature_ident(self, body):
+        res = self.json('BatchBindSignatureIdent', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)

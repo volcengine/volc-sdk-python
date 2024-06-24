@@ -8,7 +8,7 @@ if __name__ == '__main__':
     service.set_ak('ak')
     service.set_sk('sk')
 
-    body = {}
+    query = {}
 
-    resp = service.list_pull_cdn_snapshot_task(body)
+    resp = service.restart_transcoding_job(query)
     print(resp)

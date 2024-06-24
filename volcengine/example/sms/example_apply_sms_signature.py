@@ -33,7 +33,8 @@ if __name__ == '__main__':
             "FileContent": to_base64_str("图片.jpg"),
             "FileSuffix": "jpg"
         }],
-        "Purpose": SIGN_PURPOSE_FOR_OWN
+        "Purpose": SIGN_PURPOSE_FOR_OWN,
+        "SignatureIdentificationID": 12
     }
 
     resp = sms_service.apply_sms_signature(body)

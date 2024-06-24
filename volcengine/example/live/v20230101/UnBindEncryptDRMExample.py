@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.get_pull_cdn_snapshot_task(body)
+    resp = service.un_bind_encrypt_drm(body)
     print(resp)
