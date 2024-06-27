@@ -635,6 +635,20 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_live_batch_stream_session_data(self, body):
+        res = self.api_post('DescribeLiveBatchStreamSessionData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_stream_session_data(self, body):
+        res = self.api_post('DescribeLiveStreamSessionData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_live_play_status_code_data(self, body):
         res = self.api_post('DescribeLivePlayStatusCodeData', [], json.dumps(body))
         if res == '':
@@ -726,8 +740,8 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def describe_live_stream_session_data(self, body):
-        res = self.api_post('DescribeLiveStreamSessionData', [], json.dumps(body))
+    def describe_live_batch_stream_traffic_data(self, body):
+        res = self.api_post('DescribeLiveBatchStreamTrafficData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

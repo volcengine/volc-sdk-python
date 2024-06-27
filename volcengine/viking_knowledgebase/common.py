@@ -14,6 +14,7 @@ class EmbddingModelType(Enum):
     EmbeddingModelBgeLargeZhAndM3   = "bge-large-zh-and-m3"
     EmbeddingModelBgeLargeZh        = "bge-large-zh"
     EmbeddingModelBgeM3             = "bge-m3"
+    EmbeddingModelDoubao            = "doubao-embedding"
 
 class IndexType(Enum):
     FLAT = "flat"
