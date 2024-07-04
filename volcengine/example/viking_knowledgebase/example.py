@@ -8,31 +8,31 @@ sys.path.insert(0, seek)
 from volcengine.viking_knowledgebase import VikingKnowledgeBaseService, Collection, Doc, Point
 from volcengine.viking_knowledgebase.common import Field, FieldType, IndexType, EmbddingModelType
 
-collection_name = "test_hax_202406272"
-viking_knowledgebase_service = VikingKnowledgeBaseService()
-index = {
-  "index_type":IndexType.HNSW,
-  "index_config":{
-    "embedding_model": EmbddingModelType.EmbeddingModelDoubao,
-    "embedding_dimension": 1024
-  }
-}
-viking_knowledgebase_service.create_collection(collection_name=collection_name, index=index)
+collection_name = "test_hax_202407041"
+# viking_knowledgebase_service = VikingKnowledgeBaseService()
+# index = {
+#   "index_type":IndexType.HNSW,
+#   "index_config":{
+#     "embedding_model": EmbddingModelType.EmbeddingModelDoubao,
+#     "embedding_dimension": 1024
+#   }
+# }
+# viking_knowledgebase_service.create_collection(collection_name=collection_name, index=index)
 
 # collection_name = "hax_test"
 
 # project_name = 'y2y5c4r8evyi'
 # # project_name = 'ss_test'
 
-# viking_knowledgebase_service = VikingKnowledgeBaseService()
-# points = viking_knowledgebase_service.search_collection(collection_name=collection_name,query="贷款需要注意什么？", project=project_name)
-# for point in points:
-#     print(point.content)
-#     print(point.chunk_id)
-#     print(point.point_id)
-#     print(point.doc_id)
-#     print(point.project)
-#     print("=======")
+viking_knowledgebase_service = VikingKnowledgeBaseService()
+points = viking_knowledgebase_service.search_collection(collection_name=collection_name,query="贷款需要注意什么？", rerank_switch=True, retrieve_count=20)
+for point in points:
+    print(point.content)
+    print(point.chunk_id)
+    print(point.point_id)
+    print(point.doc_id)
+    print(point.project)
+    print("=======")
     
 # c = viking_knowledgebase_service.get_collection(collection_name=collection_name, project=project_name)
 # print(c.get_doc("_sys_auto_gen_doc_id-7155405830436663798", project=project_name).project)

@@ -162,25 +162,59 @@ class VodService(VodServiceConfig):
         apply_req.StorageClass = storage_class
         apply_req.ClientNetWorkMode = client_network_mode
         apply_req.ClientIDCMode = client_idc_mode
+        apply_req.NeedFallback = True
         resp = self.apply_upload_info(apply_req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
             raise Exception(resp.ResponseMetadata.Error)
-        upload_address = resp.Result.Data.UploadAddress
-        oid = upload_address.StoreInfos[0].StoreUri
-        session_key = upload_address.SessionKey
-        auth = upload_address.StoreInfos[0].Auth
-        host = upload_address.UploadHosts[0]
-        start = time.time()
-        file_size = os.path.getsize(file_path)
-        if file_size < MinChunkSize:
-            self.direct_upload(host, oid, auth, file_path, storage_class)
+        # using candidate address first
+        candidate_upload_address = resp.Result.Data.CandidateUploadAddresses
+        all_upload_address = []
+        if candidate_upload_address:
+            all_upload_address.extend(candidate_upload_address.MainUploadAddresses)
+            all_upload_address.extend(candidate_upload_address.BackupUploadAddresses)
+            all_upload_address.extend(candidate_upload_address.FallbackUploadAddresses)
+
+        if len(all_upload_address) > 0:
+            file_size = os.path.getsize(file_path)
+            for i, upload_address in enumerate(all_upload_address):
+                if len(upload_address.UploadHosts) == 0 or len(upload_address.StoreInfos) == 0 or not \
+                        upload_address.StoreInfos[0]:
+                    continue
+                tos_host = upload_address.UploadHosts[0]
+                oid = upload_address.StoreInfos[0].StoreUri
+                session_key = upload_address.SessionKey
+                auth = upload_address.StoreInfos[0].Auth
+                start = time.time()
+                try:
+                    if file_size < MinChunkSize:
+                        self.direct_upload(tos_host, oid, auth, file_path, storage_class)
+                    else:
+                        self.chunk_upload(file_path, tos_host, oid, auth, file_size, True, storage_class)
+                except Exception as e:
+                    print(f"upload failed, switch host to retry")
+                    continue
+                else:
+                    cost = (time.time() - start) * 1000
+                    avg_speed = float(file_size) / float(cost)
+                    return oid, session_key, avg_speed
+            raise Exception(f"upload failed")
         else:
-            self.chunk_upload(file_path, host, oid, auth, file_size, True, storage_class)
-        cost = (time.time() - start) * 1000
-        file_size = os.path.getsize(file_path)
-        avg_speed = float(file_size) / float(cost)
-        return oid, session_key, avg_speed
+            upload_address = resp.Result.Data.UploadAddress
+            oid = upload_address.StoreInfos[0].StoreUri
+            session_key = upload_address.SessionKey
+            auth = upload_address.StoreInfos[0].Auth
+            host = upload_address.UploadHosts[0]
+            start = time.time()
+            file_size = os.path.getsize(file_path)
+            if file_size < MinChunkSize:
+                self.direct_upload(host, oid, auth, file_path, storage_class)
+            else:
+                self.chunk_upload(file_path, host, oid, auth, file_size, True, storage_class)
+            cost = (time.time() - start) * 1000
+            file_size = os.path.getsize(file_path)
+            avg_speed = float(file_size) / float(cost)
+            return oid, session_key, avg_speed
 
     @retry(tries=3, delay=1, backoff=2)
     def direct_upload(self, host, oid, auth, file_path, storage_class):
@@ -407,12 +441,12 @@ class VodService(VodServiceConfig):
         else:
             return res
 
-        #
-        # CancelDirectEditTask.
-        #
-        # @param request VodCancelDirectEditTaskRequest
-        # @return VodCancelDirectEditTaskResponse
-        # @raise Exception
+    #
+    # CancelDirectEditTask.
+    #
+    # @param request VodCancelDirectEditTaskRequest
+    # @return VodCancelDirectEditTaskResponse
+    # @raise Exception
     def cancel_direct_edit_task(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
@@ -1040,6 +1074,75 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodDeleteTranscodesResponse(), True)
+
+    #
+    # GetFileInfos.
+    #
+    # @param request VodGetFileInfosRequest
+    # @return VodGetFileInfosResponse
+    # @raise Exception
+    def get_file_infos(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetFileInfos", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetFileInfosResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetFileInfosResponse(), True)
+
+    #
+    # UpdateFileStorageClass.
+    #
+    # @param request VodUpdateFileStorageClassRequest
+    # @return VodUpdateFileStorageClassResponse
+    # @raise Exception
+    def update_file_storage_class(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("UpdateFileStorageClass",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodUpdateFileStorageClassResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateFileStorageClassResponse(), True)
+
 
     #
     # DeleteMediaTosFile.

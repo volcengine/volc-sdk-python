@@ -313,7 +313,7 @@ class VikingKnowledgeBaseService(Service):
 
         await self.async_json_exception("UpdateCollection", {}, json.dumps(params))
 
-    def search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, project="default", resource_id=None):
+    def search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, project="default", resource_id=None, retrieve_count= None):
         params = {"name": collection_name, 
                   "query": query,
                   "limit": limit,
@@ -325,6 +325,8 @@ class VikingKnowledgeBaseService(Service):
             params["resource_id"] = resource_id
         if query_param != None:
             params["query_param"] = query_param
+        if retrieve_count != None:
+            params["retrieve_count"] = retrieve_count
         res = self.json_exception("SearchCollection", {}, json.dumps(params))
         data = json.loads(res)["data"]
         results = data.get("result_list")
@@ -338,7 +340,7 @@ class VikingKnowledgeBaseService(Service):
                 points.append(Point(result))
         return points
     
-    async def async_search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, project="default", resource_id=None):
+    async def async_search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, project="default", resource_id=None, retrieve_count= None):
         params = {"name": collection_name, 
                   "query": query,
                   "limit": limit,
@@ -350,6 +352,8 @@ class VikingKnowledgeBaseService(Service):
             params["resource_id"] = resource_id
         if query_param != None:
             params["query_param"] = query_param
+        if retrieve_count != None:
+            params["retrieve_count"] = retrieve_count
         res = await self.async_json_exception("SearchCollection", {}, json.dumps(params))
         data = json.loads(res)["data"]
         results = data.get("result_list")
