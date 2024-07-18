@@ -20,8 +20,12 @@ class Function:
                           'RecordType': record_type, 'Format': format_input}}
 
     @staticmethod
-    def get_start_workflow_func(template_id):
-        return {'Name': 'StartWorkflow', 'Input': {'TemplateId': template_id}}
+    def get_start_workflow_func(template_id, templates=None):
+        return {'Name': 'StartWorkflow', 'Input': {'TemplateId': template_id, 'Templates': templates}}
+
+    @staticmethod
+    def get_start_workflow_template_func(templates):
+        return {'Name': 'StartWorkflow', 'Input': {'Templates': templates}}
 
     @staticmethod
     def get_encryption_func(conf, policy):

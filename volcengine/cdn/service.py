@@ -185,9 +185,65 @@ api_info = {
     "BatchDeployCert": ApiInfo("POST", "/", {
         "Action": "BatchDeployCert", "Version": SERVICE_VERSION}, {}, {}),
 
+    # 删除托管在内容分发网络的证书: https://www.volcengine.com/docs/6454/597589
+    "DeleteCdnCertificate": ApiInfo("POST", "/", {
+        "Action": "DeleteCdnCertificate", "Version": SERVICE_VERSION}, {}, {}),
+
     # 查询计费结果数据: 
     "DescribeAccountingSummary": ApiInfo("POST", "/", {
         "Action": "DescribeAccountingSummary", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取访问统计的细分数据: 
+    "DescribeDistrictData": ApiInfo("POST", "/", {
+        "Action": "DescribeDistrictData", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取计费区域的细分数据: 
+    "DescribeEdgeData": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeData", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取访问统计的汇总数据: 
+    "DescribeDistrictSummary": ApiInfo("POST", "/", {
+        "Action": "DescribeDistrictSummary", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取计费区域的汇总数据: 
+    "DescribeEdgeSummary": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeSummary", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取回源统计的细分数据: 
+    "DescribeOriginData": ApiInfo("POST", "/", {
+        "Action": "DescribeOriginData", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取回源统计的汇总数据: 
+    "DescribeOriginSummary": ApiInfo("POST", "/", {
+        "Action": "DescribeOriginSummary", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取独立访客的细分数据: 
+    "DescribeUserData": ApiInfo("POST", "/", {
+        "Action": "DescribeUserData", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取访问数据的统计排名: 
+    "DescribeDistrictRanking": ApiInfo("POST", "/", {
+        "Action": "DescribeDistrictRanking", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取计费区域的统计排名: 
+    "DescribeEdgeRanking": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeRanking", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取回源数据的统计排名: 
+    "DescribeOriginRanking": ApiInfo("POST", "/", {
+        "Action": "DescribeOriginRanking", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取访问状态码排名数据: 
+    "DescribeEdgeStatusCodeRanking": ApiInfo("POST", "/", {
+        "Action": "DescribeEdgeStatusCodeRanking", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取回源状态码的统计排名: 
+    "DescribeOriginStatusCodeRanking": ApiInfo("POST", "/", {
+        "Action": "DescribeOriginStatusCodeRanking", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取热门对象的统计排名: 
+    "DescribeStatisticalRanking": ApiInfo("POST", "/", {
+        "Action": "DescribeStatisticalRanking", "Version": SERVICE_VERSION}, {}, {}),
 
 
 }
@@ -663,10 +719,150 @@ class CDNService(Service):
         res_json = json.loads(res)
         return res_json
 
+    def delete_cdn_certificate(self, params=None):
+        if params is None:
+            params = {}
+        action = "DeleteCdnCertificate"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
     def describe_accounting_summary(self, params=None):
         if params is None:
             params = {}
         action = "DescribeAccountingSummary"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_district_data(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDistrictData"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_edge_data(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeEdgeData"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_district_summary(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDistrictSummary"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_edge_summary(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeEdgeSummary"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_origin_data(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeOriginData"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_origin_summary(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeOriginSummary"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_user_data(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeUserData"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_district_ranking(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDistrictRanking"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_edge_ranking(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeEdgeRanking"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_origin_ranking(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeOriginRanking"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_edge_status_code_ranking(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeEdgeStatusCodeRanking"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_origin_status_code_ranking(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeOriginStatusCodeRanking"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_statistical_ranking(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeStatisticalRanking"
         res = self.send_request(action, params)
         if res == '':
             raise Exception("%s: empty response" % action)

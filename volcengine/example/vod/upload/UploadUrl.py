@@ -20,6 +20,12 @@ if __name__ == '__main__':
         url_set = req.URLSets.add()
         url_set.SourceUrl = url
         url_set.FileExtension = '.mp4'
+        impTemplate = url_set.Templates.add()
+        impTemplate.TemplateIds.extend(['imp template id'])
+        impTemplate.TemplateType = 'imp'
+        transcodeTemplate = url_set.Templates.add()
+        transcodeTemplate.TemplateIds.extend(['transcode template id'])
+        transcodeTemplate.TemplateType = 'transcode'
         url_set.CallbackArgs = 'my python callback args'
         customUrlHeaders = {'your header key': 'your header value'}
         url_set.CustomURLHeaders.update(**customUrlHeaders)

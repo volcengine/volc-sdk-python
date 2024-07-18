@@ -19,13 +19,16 @@ if __name__ == '__main__':
 
     get_meta_function = Function.get_meta_func()
     snapshot_function = Function.get_snapshot_func(2.3)
+    get_start_workflow_func = Function.get_start_workflow_template_func(
+        [{"TemplateIds": ["imp template id"], "TemplateType": "imp"},
+         {"TemplateIds": ["transcode template id"], "TemplateType": "transcode"}])
     apply_function = Function.get_add_option_info_func("title1", "tag1", "desc1", 0, False)
 
     try:
         req = VodUploadMediaRequest()
         req.SpaceName = space_name
         req.FilePath = file_path
-        req.Functions = json.dumps([get_meta_function, snapshot_function])
+        req.Functions = json.dumps([get_meta_function, snapshot_function, get_start_workflow_func])
         req.CallbackArgs = ''
         req.FileName = 'hello/vod.mp4'
         req.FileExtension = '.mp4'
