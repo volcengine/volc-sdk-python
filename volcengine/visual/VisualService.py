@@ -141,6 +141,19 @@ class VisualService(Service):
             "Img2ImgInpainting": ApiInfo("POST", "/", {"Action": "Img2ImgInpainting", "Version": "2022-08-31"}, {}, {}),
             "Img2ImgInpaintingEdit": ApiInfo("POST", "/", {"Action": "Img2ImgInpaintingEdit", "Version": "2022-08-31"},{}, {}),
             "Img2ImgOutpainting": ApiInfo("POST", "/", {"Action": "Img2ImgOutpainting", "Version": "2022-08-31"}, {},{}),
+            "Img2ImgCreateDisneyStyleNoFace": ApiInfo("POST", "/", {"Action": "Img2ImgCreateDisneyStyleNoFace","Version": "2022-08-31"}, {}, {}),
+            "Img2ImgCreatePastelBoys2D": ApiInfo("POST", "/",{"Action": "Img2ImgCreatePastelBoys2D", "Version": "2022-08-31"}, {},{}),
+            "Img2ImgCreateAesBlueline": ApiInfo("POST", "/",{"Action": "Img2ImgCreateAesBlueline", "Version": "2022-08-31"}, {},{}),
+            "Img2ImgCreateEtherRealMix": ApiInfo("POST", "/",{"Action": "Img2ImgCreateEtherRealMix", "Version": "2022-08-31"}, {},{}),
+            "Img2ImgCreateToonyou": ApiInfo("POST", "/", {"Action": "Img2ImgCreateToonyou", "Version": "2022-08-31"},{}, {}),
+            "Img2ImgCreateAnyloraMakoto": ApiInfo("POST", "/",{"Action": "Img2ImgCreateAnyloraMakoto", "Version": "2022-08-31"}, {},{}),
+            "Img2ImgCreateRevAnimated": ApiInfo("POST", "/",{"Action": "Img2ImgCreateRevAnimated", "Version": "2022-08-31"}, {},{}),
+            "Img2ImgCreateInkAndWater": ApiInfo("POST", "/",{"Action": "Img2ImgCreateInkAndWater", "Version": "2022-08-31"}, {},{}),
+            "Img2ImgWaterColorStyle": ApiInfo("POST", "/",{"Action": "Img2ImgWaterColorStyle", "Version": "2022-08-31"}, {}, {}),
+            "OCRPdfSubmitTask": ApiInfo("POST", "/", {"Action": "OCRPdfSubmitTask", "Version": "2021-08-23"}, {}, {}),
+            "OCRPdfQueryTask": ApiInfo("POST", "/", {"Action": "OCRPdfQueryTask", "Version": "2021-08-23"}, {}, {}),
+            "EntitySegment": ApiInfo("POST", "/", {"Action": "EntitySegment", "Version": "2022-08-31"}, {}, {}),
+            "Img2ImgAnimeAcceleratedMaintainID": ApiInfo("POST", "/", {"Action": "Img2ImgAnimeAcceleratedMaintainID","Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -185,6 +198,103 @@ class VisualService(Service):
                 return res_json
             except:
                 raise Exception(str(e))
+
+    def img2_img_anime_accelerated_maintain_id(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgAnimeAcceleratedMaintainID", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def entity_segment(self, form):
+        try:
+            res_json = self.common_json_handler("EntitySegment", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_pdf_submit_task(self, form):
+        try:
+            res_json = self.common_json_handler("OCRPdfSubmitTask", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def ocr_pdf_query_task(self, form):
+        try:
+            res_json = self.common_json_handler("OCRPdfQueryTask", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_create_disney_style_no_face(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgCreateDisneyStyleNoFace", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_create_pastel_boys2d(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgCreatePastelBoys2D", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_create_ether_real_mix(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgCreateEtherRealMix", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_create_toonyou(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgCreateToonyou", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_create_anylora_makoto(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgCreateAnyloraMakoto", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_create_rev_animated(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgCreateRevAnimated", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_create_aes_blueline(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgCreateAesBlueline", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_create_ink_and_water(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgCreateInkAndWater", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_water_color_style(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgWaterColorStyle", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+    def high_aes_smart_drawing_v2(self, form):
+        try:
+            res_json = self.common_json_handler("HighAesSmartDrawing", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
 
     def jpcartoon_cut(self, form):
         try:

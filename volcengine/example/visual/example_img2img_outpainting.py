@@ -12,19 +12,28 @@ if __name__ == '__main__':
 
     form = {
         "req_key": "i2i_outpainting",
-        "prompt": "蓝色的海洋",
-        "binary_data_base64": [""
+        "binary_data_base64": [
+            ""
         ],
-        "scale": 7,
-        "seed": -1,
+        "image_urls": [],
+        "custom_prompt": "蓝色海洋",
+        "return_url": True,
         "steps": 30,
         "strength": 0.8,
+        "scale": 7.0,
+        "seed": 0,
         "top": 0.1,
         "bottom": 0.1,
         "left": 1,
         "right": 1,
         "max_height": 1920,
-        "max_width": 1920
+        "max_width": 1920,
+        "logo_info": {
+            "add_logo": False,
+            "position": 0,
+            "language": 0,
+            "opacity": 0.3
+        }
     }
     resp = visual_service.img2img_outpainting(form)
     print(resp)

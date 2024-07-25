@@ -24,7 +24,7 @@ class VikingKnowledgeBaseService(Service):
                     VikingKnowledgeBaseService._instance = object.__new__(cls)
         return VikingKnowledgeBaseService._instance
 
-    def __init__(self, host="api-knowledgebase.ml_platform.cn-beijing.volces.com", region="cn-beijing", ak="", sk="", sts_token="", scheme='http',
+    def __init__(self, host="api-knowledgebase.mlp.cn-beijing.volces.com", region="cn-beijing", ak="", sk="", sts_token="", scheme='https',
                  connection_timeout=30, socket_timeout=30):
         self.service_info = VikingKnowledgeBaseService.get_service_info(host, region, scheme, connection_timeout, socket_timeout)
         self.api_info = VikingKnowledgeBaseService.get_api_info()

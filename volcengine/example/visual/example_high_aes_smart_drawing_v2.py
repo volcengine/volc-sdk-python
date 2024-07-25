@@ -11,16 +11,14 @@ if __name__ == '__main__':
     visual_service.set_sk('SK')
 
     form = {
-        "req_key": "i2i_inpainting",
-        "binary_data_base64": [
-            ""
-        ],
-        # "image_urls":[],
-        "return_url": True,
-        "steps": 30,
-        "strength": 0.8,
-        "scale": 7,
-        "seed": 0,
+        "req_key": "img2img_photoverse_executive_ID_photo",
+        # "binary_data_base64":[],
+        "return_url":True,
+        "image_urls": ["https://"],
+        "beautify_info":{
+            "whitening":1.0,
+            "dermabrasion":1.0
+        },
         "logo_info": {
             "add_logo": False,
             "position": 0,
@@ -28,5 +26,5 @@ if __name__ == '__main__':
             "opacity": 0.3
         }
     }
-    resp = visual_service.img2img_inpainting(form)
+    resp = visual_service.high_aes_smart_drawing_v2(form)
     print(resp)
