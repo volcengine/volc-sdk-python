@@ -3,7 +3,7 @@ import json
 import threading
 import aiohttp
 
-from .common import EnumEncoder   
+from .common import EnumEncoder
 from .Point import Point
 from .Collection import Collection
 from .exception import ERRCODE_EXCEPTION, VikingKnowledgeBaseException
@@ -24,7 +24,7 @@ class VikingKnowledgeBaseService(Service):
                     VikingKnowledgeBaseService._instance = object.__new__(cls)
         return VikingKnowledgeBaseService._instance
 
-    def __init__(self, host="api-knowledgebase.mlp.cn-beijing.volces.com", region="cn-beijing", ak="", sk="", sts_token="", scheme='https',
+    def __init__(self, host="api-knowledgebase.mlp.cn-beijing.volces.com", region="cn-beijing", ak="", sk="", sts_token="", scheme='http',
                  connection_timeout=30, socket_timeout=30):
         self.service_info = VikingKnowledgeBaseService.get_service_info(host, region, scheme, connection_timeout, socket_timeout)
         self.api_info = VikingKnowledgeBaseService.get_api_info()

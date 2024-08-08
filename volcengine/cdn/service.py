@@ -245,6 +245,26 @@ api_info = {
     "DescribeStatisticalRanking": ApiInfo("POST", "/", {
         "Action": "DescribeStatisticalRanking", "Version": SERVICE_VERSION}, {}, {}),
 
+    # 批量更新加速域名: 
+    "BatchUpdateCdnConfig": ApiInfo("POST", "/", {
+        "Action": "BatchUpdateCdnConfig", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 上传证书新版: 
+    "AddCertificate": ApiInfo("POST", "/", {
+        "Action": "AddCertificate", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 删除用量导出任务: 
+    "DeleteUsageReport": ApiInfo("POST", "/", {
+        "Action": "DeleteUsageReport", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 创建用量导出任务: 
+    "CreateUsageReport": ApiInfo("POST", "/", {
+        "Action": "CreateUsageReport", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 获取用量导出任务列表: 
+    "ListUsageReports": ApiInfo("POST", "/", {
+        "Action": "ListUsageReports", "Version": SERVICE_VERSION}, {}, {}),
+
 
 }
 
@@ -863,6 +883,56 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "DescribeStatisticalRanking"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def batch_update_cdn_config(self, params=None):
+        if params is None:
+            params = {}
+        action = "BatchUpdateCdnConfig"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def add_certificate(self, params=None):
+        if params is None:
+            params = {}
+        action = "AddCertificate"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def delete_usage_report(self, params=None):
+        if params is None:
+            params = {}
+        action = "DeleteUsageReport"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def create_usage_report(self, params=None):
+        if params is None:
+            params = {}
+        action = "CreateUsageReport"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def list_usage_reports(self, params=None):
+        if params is None:
+            params = {}
+        action = "ListUsageReports"
         res = self.send_request(action, params)
         if res == '':
             raise Exception("%s: empty response" % action)

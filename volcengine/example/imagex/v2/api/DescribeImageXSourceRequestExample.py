@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     query = {}
 
-    resp = service.get_image_service_subscription(query)
+    resp = service.describe_imagex_source_request(query)
     print(resp)

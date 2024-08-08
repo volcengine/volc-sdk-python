@@ -141,6 +141,8 @@ class VodServiceConfig(Service):
             "UpdateDomainAuthConfig": ApiInfo("GET", "/", {"Action": "UpdateDomainAuthConfig", "Version": "2023-02-01"}, {}, {}),
             "AddOrUpdateCertificate": ApiInfo("POST", "/",{"Action": "AddOrUpdateCertificate", "Version": "2023-07-01"}, {}, {}),
             "UpdateDomainUrlAuthConfig": ApiInfo("GET", "/", {"Action": "UpdateDomainUrlAuthConfig", "Version": "2023-07-01"}, {}, {}),
+            "UpdateDomainConfig": ApiInfo("GET", "/", {"Action": "UpdateDomainConfig", "Version": "2023-07-01"}, {}, {}),
+            "DescribeDomainConfig": ApiInfo("GET", "/", {"Action": "DescribeDomainConfig", "Version": "2023-07-01"}, {}, {}),
             # 回调管理
             "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
             "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2022-01-01"}, {}, {}),
@@ -160,7 +162,9 @@ class VodServiceConfig(Service):
             "DescribeVodEnhanceImageData": ApiInfo("GET", "/", {"Action": "DescribeVodEnhanceImageData", "Version": "2023-07-01"}, {}, {}),
             "DescribeVodSpaceEditStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceEditStatisData", "Version": "2023-07-01"}, {}, {}),
             "DescribeVodPlayedStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodPlayedStatisData", "Version": "2023-07-01"}, {}, {}),
-            "DescribeVodMostPlayedStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodMostPlayedStatisData", "Version": "2023-07-01"}, {}, {})
+            "DescribeVodMostPlayedStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodMostPlayedStatisData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodRealtimeMediaData": ApiInfo("GET", "/", {"Action": "DescribeVodRealtimeMediaData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodRealtimeMediaDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodRealtimeMediaDetailData", "Version": "2023-07-01"}, {}, {})
         }
         return api_info
 
