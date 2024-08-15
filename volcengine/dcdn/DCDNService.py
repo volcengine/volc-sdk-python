@@ -149,6 +149,10 @@ api_info = {
     # 查询GA源站的回源策略:
     "DescribeGAOriginPolicy": ApiInfo("POST", "/", {
         "Action": "DescribeGAOriginPolicy", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 查询WS的监控数据:
+    "DescribeWSStatistics": ApiInfo("POST", "/", {
+        "Action": "DescribeWSStatistics", "Version": SERVICE_VERSION}, {}, {}),
 }
 
 
@@ -269,6 +273,16 @@ class DCDNService(Service):
         if params is None:
             params = {}
         action = "DescribeStatistics"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_ws_statistics(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeWSStatistics"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)

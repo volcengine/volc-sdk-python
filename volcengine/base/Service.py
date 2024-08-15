@@ -99,6 +99,12 @@ class Service(object):
 
     def set_scheme(self, scheme):
         self.service_info.scheme = scheme
+    
+    def set_connection_timeout(self, connection_timeout):
+        self.service_info.connection_timeout = connection_timeout
+
+    def set_socket_timeout(self, socket_timeout):
+        self.service_info.socket_timeout = socket_timeout
 
     def get_sign_url(self, api, params):
         if not (api in self.api_info):

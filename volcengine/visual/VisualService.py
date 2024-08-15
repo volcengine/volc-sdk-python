@@ -26,7 +26,7 @@ class VisualService(Service):
     @staticmethod
     def get_service_info():
         service_info = ServiceInfo("visual.volcengineapi.com", {},
-                                   Credentials('', '', 'cv', 'cn-north-1'), 10, 30)
+                                   Credentials('', '', 'cv', 'cn-north-1'), 30, 30)
         return service_info
 
     @staticmethod
@@ -154,6 +154,10 @@ class VisualService(Service):
             "OCRPdfQueryTask": ApiInfo("POST", "/", {"Action": "OCRPdfQueryTask", "Version": "2021-08-23"}, {}, {}),
             "EntitySegment": ApiInfo("POST", "/", {"Action": "EntitySegment", "Version": "2022-08-31"}, {}, {}),
             "Img2ImgAnimeAcceleratedMaintainID": ApiInfo("POST", "/", {"Action": "Img2ImgAnimeAcceleratedMaintainID","Version": "2022-08-31"}, {}, {}),
+            "Img2ImgComicsStyle": ApiInfo("POST", "/", {"Action": "Img2ImgComicsStyle", "Version": "2022-08-31"}, {},{}),
+            "Img2ImgExquisiteStyle": ApiInfo("POST", "/", {"Action": "Img2ImgExquisiteStyle", "Version": "2022-08-31"},{}, {}),
+            "Text2ImgXLSft": ApiInfo("POST", "/", {"Action": "Text2ImgXLSft", "Version": "2022-08-31"}, {}, {}),
+            "Img2ImgXLSft": ApiInfo("POST", "/", {"Action": "Img2ImgXLSft", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -198,6 +202,48 @@ class VisualService(Service):
                 return res_json
             except:
                 raise Exception(str(e))
+
+    def cv_json_api(self, action, form):
+        try:
+            res_json = self.common_json_handler(action, form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cv_form_api(self, action, form):
+        try:
+            res_json = self.common_handler(action, form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_xl_sft(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgXLSft", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def text2_img_xl_sft(self, form):
+        try:
+            res_json = self.common_json_handler("Text2ImgXLSft", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_comics_style(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgComicsStyle", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2_img_exquisite_style(self, form):
+        try:
+            res_json = self.common_json_handler("Img2ImgExquisiteStyle", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
 
     def img2_img_anime_accelerated_maintain_id(self, form):
         try:
@@ -289,6 +335,7 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
+
     def high_aes_smart_drawing_v2(self, form):
         try:
             res_json = self.common_json_handler("HighAesSmartDrawing", form)
@@ -351,18 +398,21 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
+
     def face_swap_v2(self, form):
         try:
             res_json = self.common_json_handler("FaceSwapV2", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
+
     def faceswap_ai(self, form):
         try:
             res_json = self.common_json_handler("FaceswapAI", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
+
     def ocr_normal(self, form):
         try:
             res_json = self.common_handler("OCRNormal", form)
@@ -425,6 +475,7 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
+
     def video_scene_detect(self, form):
         try:
             res_json = self.common_handler("VideoSceneDetect", form)
@@ -733,6 +784,7 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
+
     def face_pretty(self, form):
         try:
             res_json = self.common_handler("FacePretty", form)
@@ -774,6 +826,7 @@ class VisualService(Service):
             return res_json
         except Exception as e:
             raise Exception(str(e))
+
     def potrait_effect(self, form):
         try:
             res_json = self.common_handler("PotraitEffect", form)
