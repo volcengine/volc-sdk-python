@@ -34,7 +34,7 @@ class VodServiceConfig(Service):
     def get_service_info(region):
         service_info_map = {
             'cn-north-1': ServiceInfo("vod.volcengineapi.com", {'Accept': 'application/json'},
-                                      Credentials('', '', 'vod', 'cn-north-1'), 60, 60),
+                                      Credentials('', '', 'vod', 'cn-north-1'), 60, 60,"https"),
             'ap-southeast-1': ServiceInfo("vod.ap-southeast-1.volcengineapi.com", {'Accept': 'application/json'},
                                       Credentials('', '', 'vod', 'ap-southeast-1'), 60, 60,"https"),
         }
@@ -85,6 +85,9 @@ class VodServiceConfig(Service):
             "ListVideoClassifications": ApiInfo("GET", "/", {"Action": "ListVideoClassifications", "Version": "2021-01-01"}, {}, {}),
             "ListSnapshots": ApiInfo("GET", "/", {"Action": "ListSnapshots", "Version": "2021-01-01"}, {}, {}),
             "ExtractMediaMetaTask": ApiInfo("GET", "/", {"Action": "ExtractMediaMetaTask", "Version": "2022-01-01"}, {}, {}),
+            #Object
+            "SubmitBlockObjectTasks": ApiInfo("POST", "/",{"Action": "SubmitBlockObjectTasks", "Version": "2023-07-01"},{}, {}),
+            "ListBlockObjectTasks": ApiInfo("POST", "/",{"Action": "ListBlockObjectTasks", "Version": "2023-07-01"},{}, {}),
             # 转码
             "StartWorkflow": ApiInfo("GET", "/", {"Action": "StartWorkflow", "Version": "2020-08-01"}, {}, {}),
             "RetrieveTranscodeResult": ApiInfo("GET", "/", {"Action": "RetrieveTranscodeResult", "Version": "2020-08-01"}, {}, {}),

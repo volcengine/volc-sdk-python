@@ -192,13 +192,13 @@ class VodService(VodServiceConfig):
                     else:
                         self.chunk_upload(file_path, tos_host, oid, auth, file_size, True, storage_class)
                 except Exception as e:
-                    print(f"upload failed, switch host to retry")
+                    print("upload failed, switch host to retry")
                     continue
                 else:
                     cost = (time.time() - start) * 1000
                     avg_speed = float(file_size) / float(cost)
                     return oid, session_key, avg_speed
-            raise Exception(f"upload failed")
+            raise Exception("upload failed")
         else:
             upload_address = resp.Result.Data.UploadAddress
             oid = upload_address.StoreInfos[0].StoreUri
@@ -631,6 +631,76 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodGetPlayInfoWithLiveTimeShiftSceneResponse(), True)
+
+    #
+    # SubmitBlockObjectTasks.
+    #
+    # @param request VodSubmitBlockObjectTasksRequest
+    # @return VodSubmitBlockObjectTasksResponse
+    # @raise Exception
+    def submit_block_object_tasks(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("SubmitBlockObjectTasks",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodSubmitBlockObjectTasksResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodSubmitBlockObjectTasksResponse(), True)
+
+
+    #
+    # ListBlockObjectTasks.
+    #
+    # @param request VodListBlockObjectTasksRequest
+    # @return VodListBlockObjectTasksResponse
+    # @raise Exception
+    def list_block_object_tasks(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("ListBlockObjectTasks",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodListBlockObjectTasksResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodListBlockObjectTasksResponse(), True)
+
 
     #
     # UploadMediaByUrl.

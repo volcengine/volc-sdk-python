@@ -147,13 +147,14 @@ class Text(object):
 
 
 class Data(object):
-    def __init__(self, fields, id=None, TTL=None, timestamp=None, score=None, text=None):
+    def __init__(self, fields, id=None, TTL=None, timestamp=None, score=None, text=None, dist=None):
         self._id = id
         self._fields = fields
         self._timestamp = timestamp
         self._TTL = TTL
         self._score = score
         self._text = text
+        self._dist = dist
 
     @property
     def text(self):
@@ -178,6 +179,10 @@ class Data(object):
     @property
     def timestamp(self):
         return self._timestamp
+    
+    @property
+    def dist(self):
+        return self._dist
 
 
 class VectorIndexParams(object):

@@ -79,7 +79,7 @@ class Index(object):
                     if output_fields != [] or output_fields is None:
                         fields = item["fields"]
                     # print(id, fields)
-                    data = Data(fields, id=id, timestamp=None, score=item["score"])
+                    data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
                 # print("==================")
             return datas
@@ -101,7 +101,7 @@ class Index(object):
                     fields = {}
                     if output_fields != [] or output_fields is None:
                         fields = item["fields"]
-                    data = Data(fields, id=id, timestamp=None, score=item["score"])
+                    data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
                 # print("==================")
             return datas
@@ -145,7 +145,7 @@ class Index(object):
                     if output_fields != [] or output_fields is None:
                         fields = item["fields"]
                     # print(id, fields)
-                    data = Data(fields, id=id, timestamp=None, score=item["score"])
+                    data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
                 # print("==================")
             return datas
@@ -167,7 +167,7 @@ class Index(object):
                     fields = {}
                     if output_fields != [] or output_fields is None:
                         fields = item["fields"]
-                    data = Data(fields, id=id, timestamp=None, score=item["score"])
+                    data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
                 # print("==================")
             return datas
@@ -214,7 +214,7 @@ class Index(object):
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
                 # print(id, fields)
-                data = Data(fields, id=id, timestamp=None, score=item["score"])
+                data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
             # print("==================")
         return datas
@@ -247,7 +247,7 @@ class Index(object):
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
                 # print(id, fields)
-                data = Data(fields, id=id, timestamp=None, score=item["score"])
+                data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
             # print("==================")
         return datas
@@ -297,7 +297,7 @@ class Index(object):
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
                 # print(id, fields)
-                data = Data(fields, id=id, timestamp=None, score=item["score"])
+                data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
             # print("==================")
         return datas
@@ -332,7 +332,7 @@ class Index(object):
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
                 # print(id, fields)
-                data = Data(fields, id=id, timestamp=None, score=item["score"])
+                data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
             # print("==================")
         return datas
@@ -380,7 +380,7 @@ class Index(object):
                 text = None
                 if "text" in item:
                     text = item["text"]
-                data = Data(fields, id=id, timestamp=None, score=item["score"], text=text)
+                data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
                 datas.append(data)
             # print("==================")
         return datas
@@ -414,7 +414,7 @@ class Index(object):
                 text = None
                 if "text" in item:
                     text = item["text"]
-                data = Data(fields, id=id, timestamp=None, score=item["score"], text=text)
+                data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
                 datas.append(data)
             # print("==================")
         return datas
