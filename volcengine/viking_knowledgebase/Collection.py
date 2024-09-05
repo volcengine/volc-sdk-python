@@ -19,6 +19,7 @@ class Collection(object):
             self.fields                 = [Field(field) for field in kwargs.get("fields", [])]
             self.project                = kwargs.get("project")
             self.resource_id            = kwargs.get("resource_id")
+            self.data_type              = kwargs.get("data_type", "")
 
     def add_doc(self, add_type, doc_id=None, doc_name=None, doc_type=None, tos_path=None, url=None, meta=None, project="default", resource_id=None, collection_name=None):
         params = {"collection_name": self.collection_name, "add_type": add_type, "project":project}

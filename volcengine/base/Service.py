@@ -196,6 +196,7 @@ class Service(object):
     def put(self, url, file_path, headers):
         with open(file_path, 'rb') as f:
             resp = self.session.put(url, headers=headers, data=f)
+            headers["X-Tt-Logid"] = resp.headers.get("X-Tt-Logid", "")
             if resp.status_code == 200:
                 return True, resp.text.encode("utf-8")
             else:
@@ -203,6 +204,7 @@ class Service(object):
 
     def put_data(self, url, data, headers):
         resp = self.session.put(url, headers=headers, data=data)
+        headers["X-Tt-Logid"] = resp.headers.get("X-Tt-Logid", "")
         if resp.status_code == 200:
             return True, resp.text.encode("utf-8")
         else:

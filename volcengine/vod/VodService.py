@@ -145,6 +145,7 @@ class VodService(VodServiceConfig):
         req.SessionKey = session_key
         req.Functions = request.Functions
         req.CallbackArgs = request.CallbackArgs
+        req.ExpireTime = request.ExpireTime
         resp = self.commit_upload_info(req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
@@ -192,7 +193,7 @@ class VodService(VodServiceConfig):
                     else:
                         self.chunk_upload(file_path, tos_host, oid, auth, file_size, True, storage_class)
                 except Exception as e:
-                    print("upload failed, switch host to retry")
+                    print("upload failed, switch host to retry.. reason: {}".format(e))
                     continue
                 else:
                     cost = (time.time() - start) * 1000
@@ -231,11 +232,12 @@ class VodService(VodServiceConfig):
             headers['X-Upload-Storage-Class'] = 'ia'
 
         upload_status, resp = self.put(url, file_path, headers)
+        resp_text = str(resp, encoding='utf8')
         if not upload_status:
-            raise Exception("direct upload error")
+            raise Exception("direct upload error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
         resp = json.loads(resp)
         if resp.get('success') is None or resp['success'] != 0:
-            raise Exception("direct upload error")
+            raise Exception("direct upload error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
 
     def chunk_upload(self, file_path, host, oid, auth, size, is_large_file, storage_class):
         upload_id = self.init_upload_part(host, oid, auth, is_large_file, storage_class)
@@ -276,11 +278,12 @@ class VodService(VodServiceConfig):
             headers['X-Upload-Storage-Class'] = 'ia'
 
         upload_status, resp = self.put_data(url, None, headers)
-        resp = json.loads(resp)
+        resp_text = str(resp, encoding='utf8')
         if not upload_status:
-            raise Exception("init upload error")
+            raise Exception("init upload error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
+        resp = json.loads(resp)
         if resp.get('success') is None or resp['success'] != 0:
-            raise Exception("init upload error")
+            raise Exception("init upload error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
         return resp['payload']['uploadID']
 
     @retry(tries=3, delay=1, backoff=2)
@@ -333,11 +336,12 @@ class VodService(VodServiceConfig):
             headers['X-Upload-Storage-Class'] = 'ia'
 
         upload_status, resp = self.put_data(url, data, headers)
-        resp = json.loads(resp)
+        resp_text = str(resp, encoding='utf8')
         if not upload_status:
-            raise Exception("init upload error")
+            raise Exception("commit upload part error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
+        resp = json.loads(resp)
         if resp.get('success') is None or resp['success'] != 0:
-            raise Exception("init upload error")
+            raise Exception("commit upload part error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
 
     def get_upload_sts2_with_expired_time(self, expired_time):
         actions = ["vod:ApplyUploadInfo", "vod:CommitUploadInfo"]
@@ -380,6 +384,28 @@ class VodService(VodServiceConfig):
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), VodSubmitDirectEditTaskAsyncResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
+    #
+    # SubmitDirectEditTaskSync.
+    #
+    # @param request VodSubmitDirectEditTaskSyncRequest
+    # @return VodSubmitDirectEditTaskSyncResponse
+    # @raise Exception
+    def submit_direct_edit_task_sync(self, request):
+
+        try:
+            params = MessageToDict(request, False, True)
+            params['EditParam'] = json.loads(request.EditParam)
+            res = self.json("SubmitDirectEditTaskSync", {}, json.dumps(params))
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodSubmitDirectEditTaskSyncResponse(), True)
             except Exception:
                 raise Argument
             else:

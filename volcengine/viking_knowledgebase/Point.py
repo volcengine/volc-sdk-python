@@ -17,6 +17,7 @@ class Point(object):
         
         self.project                = kwargs.get("project", "default")
         self.resource_id            = kwargs.get("resource_id")
+        self.table_chunk_fields     = kwargs.get("table_chunk_fields")
 
     @property
     @deprecated(reason="The 'doc_id' property is deprecated. Use 'doc_info.doc_id' instead.")

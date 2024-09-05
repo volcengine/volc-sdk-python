@@ -151,6 +151,7 @@ class VodServiceConfig(Service):
             "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2022-01-01"}, {}, {}),
             # 视频编辑
             "SubmitDirectEditTaskAsync": ApiInfo("POST", "/",{"Action": "SubmitDirectEditTaskAsync", "Version": "2018-01-01"}, {},{}),
+            "SubmitDirectEditTaskSync": ApiInfo("POST", "/",{"Action": "SubmitDirectEditTaskSync", "Version": "2018-01-01"}, {},{}),
             "GetDirectEditResult": ApiInfo("POST", "/", {"Action": "GetDirectEditResult", "Version": "2018-01-01"}, {}, {}),
             "GetDirectEditProgress": ApiInfo("GET", "/", {"Action": "GetDirectEditProgress", "Version": "2018-01-01"}, {}, {}),
             "CancelDirectEditTask": ApiInfo("POST", "/", {"Action": "CancelDirectEditTask", "Version": "2018-01-01"}, {}, {}),

@@ -202,8 +202,11 @@ class VikingKnowledgeBaseService(Service):
                                     "empty response due to unknown error, please contact customer service") from None
         return res
 
-    def create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default"):
-        params = {"name": collection_name, "description": description, "index": index, "preprocessing": preprocessing, "project": project}
+    def create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default", data_type="unstructured_data", table_config=None):
+        params = {"name": collection_name, "description": description, "index": index, 
+                  "preprocessing": preprocessing, "project": project, "data_type": data_type}
+        if table_config is not None:
+            params["table_config"] = table_config
         res = self.json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
         data = json.loads(res)["data"]
         params["resource_id"] = data["resource_id"]
@@ -214,8 +217,11 @@ class VikingKnowledgeBaseService(Service):
                 params["fields"] = fields
         return Collection(self, collection_name, params)
 
-    async def async_create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default"):
-        params = {"name": collection_name, "description": description, "index": index, "preprocessing":preprocessing, "project": project}
+    async def async_create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default", data_type="unstructured_data", table_config=None):
+        params = {"name": collection_name, "description": description, "index": index, 
+                  "preprocessing": preprocessing, "project": project, "data_type": data_type}
+        if table_config is not None:
+            params["table_config"] = table_config
         res = await self.async_json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
         data = json.loads(res)["data"]
         params["resource_id"] = data["resource_id"]
