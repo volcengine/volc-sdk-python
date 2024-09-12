@@ -11,18 +11,34 @@ if __name__ == '__main__':
     visual_service.set_sk('SK')
 
     form = {
-        "req_key": "img2img_exquisite_style",
-        "binary_data_base64":[],
+        "req_key": "i2i_xl_sft",
+        # "binary_data_base64":[],
         "image_urls": [
             "https://xxx"
         ],
+        "prompt": "美女",
+        "seed": -1,
+        "ddim_step": 20,
+        "scale": 7.0,
+        "controlnet_args": [
+            {
+                "type": "pose",
+                "strength": 0.4,
+                "binary_data_index": 0
+            }
+        ],
+        "style_reference_args": {
+            "id_weight": 0.2,
+            "style_weight": 0.0,
+            "binary_data_index": 0
+        },
         "return_url": True,
         "logo_info": {
             "add_logo": True,
             "position": 2,
             "language": 0,
-            "opacity": 1.0
+            "opacity": 1
         }
     }
-    resp = visual_service.img2_img_exquisite_style(form)
+    resp = visual_service.img2img_xl_sft(form)
     print(resp)

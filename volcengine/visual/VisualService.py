@@ -158,6 +158,11 @@ class VisualService(Service):
             "Img2ImgExquisiteStyle": ApiInfo("POST", "/", {"Action": "Img2ImgExquisiteStyle", "Version": "2022-08-31"},{}, {}),
             "Text2ImgXLSft": ApiInfo("POST", "/", {"Action": "Text2ImgXLSft", "Version": "2022-08-31"}, {}, {}),
             "Img2ImgXLSft": ApiInfo("POST", "/", {"Action": "Img2ImgXLSft", "Version": "2022-08-31"}, {}, {}),
+            "CVGetResult": ApiInfo("POST", "/", {"Action": "CVGetResult", "Version": "2022-08-31"}, {}, {}),
+            "CVSubmitTask": ApiInfo("POST", "/", {"Action": "CVSubmitTask", "Version": "2022-08-31"}, {}, {}),
+            "CVSync2AsyncGetResult": ApiInfo("POST", "/", {"Action": "CVSync2AsyncGetResult", "Version": "2022-08-31"},{}, {}),
+            "CVSync2AsyncSubmitTask": ApiInfo("POST", "/",{"Action": "CVSync2AsyncSubmitTask", "Version": "2022-08-31"}, {}, {}),
+            "CVProcess": ApiInfo("POST", "/", {"Action": "CVProcess", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -217,35 +222,70 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_xl_sft(self, form):
+    def cv_process(self, form):
+        try:
+            res_json = self.common_json_handler("CVProcess", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cv_submit_task(self, form):
+        try:
+            res_json = self.common_json_handler("CVSubmitTask", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cv_get_result(self, form):
+        try:
+            res_json = self.common_json_handler("CVGetResult", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cv_sync2async_submit_task(self, form):
+        try:
+            res_json = self.common_json_handler("CVSync2AsyncSubmitTask", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cv_sync2async_get_result(self, form):
+        try:
+            res_json = self.common_json_handler("CVSync2AsyncGetResult", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def img2img_xl_sft(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgXLSft", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def text2_img_xl_sft(self, form):
+    def text2img_xl_sft(self, form):
         try:
             res_json = self.common_json_handler("Text2ImgXLSft", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_comics_style(self, form):
+    def img2img_comics_style(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgComicsStyle", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_exquisite_style(self, form):
+    def img2img_exquisite_style(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgExquisiteStyle", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_anime_accelerated_maintain_id(self, form):
+    def img2img_anime_accelerated_maintain_id(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgAnimeAcceleratedMaintainID", form)
             return res_json
@@ -273,63 +313,63 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_create_disney_style_no_face(self, form):
+    def img2img_create_disney_style_no_face(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgCreateDisneyStyleNoFace", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_create_pastel_boys2d(self, form):
+    def img2img_create_pastel_boys2d(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgCreatePastelBoys2D", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_create_ether_real_mix(self, form):
+    def img2img_create_ether_real_mix(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgCreateEtherRealMix", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_create_toonyou(self, form):
+    def img2img_create_toonyou(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgCreateToonyou", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_create_anylora_makoto(self, form):
+    def img2img_create_anylora_makoto(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgCreateAnyloraMakoto", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_create_rev_animated(self, form):
+    def img2img_create_rev_animated(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgCreateRevAnimated", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_create_aes_blueline(self, form):
+    def img2img_create_aes_blueline(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgCreateAesBlueline", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_create_ink_and_water(self, form):
+    def img2img_create_ink_and_water(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgCreateInkAndWater", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_img_water_color_style(self, form):
+    def img2img_water_color_style(self, form):
         try:
             res_json = self.common_json_handler("Img2ImgWaterColorStyle", form)
             return res_json
@@ -813,7 +853,7 @@ class VisualService(Service):
         except Exception as e:
             raise Exception(str(e))
 
-    def img2_video3D(self, form):
+    def img2video3d(self, form):
         try:
             res_json = self.common_json_handler("Img2Video3D", form)
             return res_json

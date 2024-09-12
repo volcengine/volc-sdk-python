@@ -35,5 +35,5 @@ if __name__ == '__main__':
         #     "opacity": 1
         # }
     }
-    resp = visual_service.img2_img_anime_accelerated_maintain_id(form)
+    resp = visual_service.img2img_anime_accelerated_maintain_id(form)
     print(resp)

@@ -8,7 +8,7 @@ from volcengine.viking_db.common import Data, VectorOrder, ScalarOrder
 class Index(object):
     def __init__(self, collection_name, index_name, vector_index, scalar_index, stat, viking_db_service, description="",
                  cpu_quota=2, partition_by=None, create_time=None, update_time=None, update_person=None,
-                 index_cost=None, shard_count=None):
+                 index_cost=None, shard_count=None, shard_policy=None):
         self.collection_name = collection_name
         self.index_name = index_name
         self.description = description
@@ -23,6 +23,7 @@ class Index(object):
         self.update_person = update_person
         self.index_cost = index_cost
         self.shard_count = shard_count
+        self.shard_policy = shard_policy
         # 获取primary_key
         col = self.viking_db_service.get_exception("GetCollection", {"collection_name": self.collection_name})
         col = json.loads(col)

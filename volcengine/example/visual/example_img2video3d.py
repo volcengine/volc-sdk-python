@@ -34,5 +34,5 @@ if __name__ == '__main__':
         }
     }
 
-    resp = visual_service.img2_video3D(form)
+    resp = visual_service.img2video3d(form)
     print(resp)

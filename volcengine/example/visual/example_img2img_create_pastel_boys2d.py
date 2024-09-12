@@ -11,7 +11,7 @@ if __name__ == '__main__':
     visual_service.set_sk('SK')
 
     form = {
-        "req_key": "image2image-ai_create-pastel_boys_2D-id",
+        "req_key": "img2img_pastel_boys_style",
         # "binary_data_base64": [],
         "image_urls": [
             "https://"],
@@ -36,5 +36,5 @@ if __name__ == '__main__':
         }
     }
 
-    resp = visual_service.img2_img_create_pastel_boys2d(form)
+    resp = visual_service.img2img_create_pastel_boys2d(form)
     print(resp)

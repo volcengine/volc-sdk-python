@@ -28,5 +28,12 @@ class Function:
         return {'Name': 'StartWorkflow', 'Input': {'Templates': templates}}
 
     @staticmethod
+    def get_caption_func(title, format, vid, fid, language, source, tag, action_type, store_uri, auto_publish=False):
+        return {'Name': 'CaptionUpload',
+                'Input': {'Title': title, 'Format': format, 'Vid': vid, 'Fid': fid, 'Language': language,
+                          'Source': source, 'Tag': tag, 'ActionType': action_type, 'StoreUri': store_uri,
+                          'AutoPublish': auto_publish}}
+
+    @staticmethod
     def get_encryption_func(conf, policy):
         return {'Name': 'Encryption', 'Input': {'Config': conf, 'PolicyParams': policy}}

@@ -25,5 +25,5 @@ if __name__ == '__main__':
             "opacity": 1.0
         }
     }
-    resp = visual_service.img2_img_comics_style(form)
+    resp = visual_service.img2img_comics_style(form)
     print(resp)

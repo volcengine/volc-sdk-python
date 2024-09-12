@@ -11,7 +11,7 @@ if __name__ == '__main__':
     visual_service.set_sk('SK')
 
     form = {
-        "req_key": "image2image-ai_create-ether_real_mix-id",
+        "req_key": "img2img_real_mix_style",
         # "binary_data_base64":[],
         "image_urls": [
             "https://"
@@ -37,5 +37,5 @@ if __name__ == '__main__':
         }
     }
 
-    resp = visual_service.img2_img_create_ether_real_mix(form)
+    resp = visual_service.img2img_create_ether_real_mix(form)
     print(resp)

@@ -32,13 +32,6 @@ if __name__ == '__main__':
     # body 参考接口文档 请求Body传参部分
     form = {
         "req_key": "xxxx",
-        "return_url":False,
-        "logo_info": {
-            "add_logo": False,
-            "position": 0,
-            "language": 0,
-            "opacity": 0.3
-        }
         # ...
     }
 

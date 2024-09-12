@@ -1,6 +1,7 @@
 # coding:utf-8
 from __future__ import print_function
 
+from volcengine import visual
 from volcengine.visual.VisualService import VisualService
 
 if __name__ == '__main__':
@@ -11,12 +12,9 @@ if __name__ == '__main__':
     visual_service.set_sk('SK')
 
     form = {
-        "req_key": "img2img_water_color_style",
-        # "binary_data_base64":[],
-        "image_urls": [
-            "https://"],
-        "return_url": True,
+        "req_key": "xxx",
+        # ...
     }
 
-    resp = visual_service.img2_img_water_color_style(form)
+    resp = visual_service.cv_process(form)
     print(resp)

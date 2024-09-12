@@ -11,7 +11,7 @@ if __name__ == '__main__':
     visual_service.set_sk('SK')
 
     form = {
-        "req_key": "image2image-ai_create-toonyou_jp",
+        "req_key": "img2img_cartoon_style",
         # "binary_data_base64":[],
         "image_urls": [
             "https://"],
@@ -43,5 +43,5 @@ if __name__ == '__main__':
         }
     }
 
-    resp = visual_service.img2_img_create_toonyou(form)
+    resp = visual_service.img2img_create_toonyou(form)
     print(resp)

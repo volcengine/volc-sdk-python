@@ -11,21 +11,29 @@ if __name__ == '__main__':
     visual_service.set_sk('SK')
 
     form = {
-        "req_key": "image2image-ai_create-anylora_makoto",
+        "req_key": "img2img_disney_3d_style",
         # "binary_data_base64":[],
         "image_urls": [
-            "https://"],
+            "https://"
+        ],
         "prompt": "",
-        "sub_prompts": [],
+        "sub_prompts": [
+        ],
+        "u_prompt": "embedding:EasyNegative, nsfw, (worst quality:2), (low quality:2)",
         "strength": 0.6,
         "seed": -1,
         "scale": 8,
         "ddim_steps": 20,
-        "lora_map": {'300XHC_anylora_1106': {'strength_model': 0.2, 'strength_clip': 0.2},
-                     'animeoutlineV4_16': {'strength_model': 0, 'strength_clip': 0}},
+        "lora_map": {
+            "3Dpet_Disney01": {
+                "strength_clip": 0.6,
+                "strength_model": 0.6
+            }
+        },
         "clip_skip": 1,
-        "controlnet_weight": 1,
+        "controlnet_weight": 0.4,
         "sampler_name": "dpmpp_2m",
+        "scheduler": "karras",
         "long_resolution": 704,
         "cn_mode": 0,
         "id_weight": 1.0,
@@ -38,7 +46,8 @@ if __name__ == '__main__':
             "language": 0,
             "opacity": 0.3
         }
+
     }
 
-    resp = visual_service.img2_img_create_anylora_makoto(form)
+    resp = visual_service.img2img_create_disney_style_no_face(form)
     print(resp)

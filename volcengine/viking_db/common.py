@@ -2,6 +2,13 @@
 import json
 from enum import Enum
 
+class ShardType(Enum):
+    """
+    type of shard policy
+    """
+    Auto = "auto"
+    Custom = "custom"
+
 
 class FieldType(Enum):
     """

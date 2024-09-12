@@ -139,7 +139,7 @@ if __name__ == '__main__':
     #         default_val=True
     #     ),
     # ]
-    # res = vikingdb_service.async_create_collection("example", fields, "This is an example")
+    # res = vikingdb_service.create_collection("example", fields, "This is an example")
     # # 返回一个collection实例
     # print(res)
     #
@@ -157,14 +157,14 @@ if __name__ == '__main__':
     #
     # vector_index = VectorIndexParams(distance=DistanceType.COSINE,index_type=IndexType.DiskANN,
     #                                  quant=QuantType.Float)
-    # res = vikingdb_service.create_index("example","example_index6", vector_index, cpu_quota=2,
-    #                                     description="This is an index", scalar_index=['price', 'like'])
-    # 返回一个index实例
+    # res = vikingdb_service.create_index("example","test2", vector_index, cpu_quota=2,
+    #                                     description="This is an index", scalar_index=['price', 'like'], shard_policy=ShardType.Custom, shard_count=10)
+    # # 返回一个index实例
     # print(res)
     #
-    # res = vikingdb_service.get_index("example", "example_index")
-    # 返回一个index实例
-    # print(res.shard_count)
+    # res = vikingdb_service.get_index("example", "test2")
+    # # 返回一个index实例
+    # print(res.shard_count, res.shard_policy)
     #
     # vikingdb_service.drop_index("example", "example_index")  # 无返回
     #
@@ -172,7 +172,7 @@ if __name__ == '__main__':
     # 返回一个列表
     # for item in res:
     #     print(item.shard_count)
-    #     print(item.update_person)
+    #     print(item.shard_policy)
     #     print(item.update_time)
     #     print(item.create_time)
     #
@@ -379,229 +379,229 @@ if __name__ == '__main__':
     # score = vikingdb_service.rerank("退改", "如果您需要人工服务，可以拨打人工客服电话：4006660921", "转人工")
     # print(score)
 
-    async def create_collection():
-        fields = [
-            Field(
-                field_name="doc_id",
-                field_type=FieldType.String,
-                is_primary_key=True
-            ),
-            Field(
-                field_name="text_vector",
-                field_type=FieldType.Vector,
-                dim=10
-            ),
-            Field(
-                field_name="like",
-                field_type=FieldType.Int64,
-                default_val=0
-            ),
-            Field(
-                field_name="price",
-                field_type=FieldType.Float32,
-                default_val=0
-            ),
-            Field(
-                field_name="author",
-                field_type=FieldType.List_String,
-                default_val=[]
-            ),
-            Field(
-                field_name="aim",
-                field_type=FieldType.Bool,
-                default_val=True
-            ),
-        ]
-        res = await vikingdb_service.async_create_collection("async", fields, "This is an example")
-        print(res)
+    # async def create_collection():
+    #     fields = [
+    #         Field(
+    #             field_name="doc_id",
+    #             field_type=FieldType.String,
+    #             is_primary_key=True
+    #         ),
+    #         Field(
+    #             field_name="text_vector",
+    #             field_type=FieldType.Vector,
+    #             dim=10
+    #         ),
+    #         Field(
+    #             field_name="like",
+    #             field_type=FieldType.Int64,
+    #             default_val=0
+    #         ),
+    #         Field(
+    #             field_name="price",
+    #             field_type=FieldType.Float32,
+    #             default_val=0
+    #         ),
+    #         Field(
+    #             field_name="author",
+    #             field_type=FieldType.List_String,
+    #             default_val=[]
+    #         ),
+    #         Field(
+    #             field_name="aim",
+    #             field_type=FieldType.Bool,
+    #             default_val=True
+    #         ),
+    #     ]
+    #     res = await vikingdb_service.async_create_collection("async", fields, "This is an example")
+    #     print(res)
 
 
-    async def get_collection():
-        res = await vikingdb_service.async_get_collection("async")
-        for item in res.fields:
-            print(item.field_type, item.field_name)
+    # async def get_collection():
+    #     res = await vikingdb_service.async_get_collection("async")
+    #     for item in res.fields:
+    #         print(item.field_type, item.field_name)
 
 
-    async def del_collection():
-        await vikingdb_service.async_drop_collection("async")
+    # async def del_collection():
+    #     await vikingdb_service.async_drop_collection("async")
 
 
-    async def list_collections():
-        res = await vikingdb_service.async_list_collections()
-        print(res)
+    # async def list_collections():
+    #     res = await vikingdb_service.async_list_collections()
+    #     print(res)
 
 
-    async def create_index():
-        vector_index = VectorIndexParams(distance=DistanceType.COSINE, index_type=IndexType.HNSW,
-                                         quant=QuantType.Float)
-        res = await vikingdb_service.async_create_index("async", "async", vector_index, cpu_quota=2,
-                                                        description="This is an index", scalar_index=['price', 'like'])
-        print(res)
+    # async def create_index():
+    #     vector_index = VectorIndexParams(distance=DistanceType.COSINE, index_type=IndexType.HNSW,
+    #                                      quant=QuantType.Float)
+    #     res = await vikingdb_service.async_create_index("async", "async", vector_index, cpu_quota=2,
+    #                                                     description="This is an index", scalar_index=['price', 'like'], shard_policy=ShardType.Custom, shard_count=10)
+    #     print(res)
 
 
     async def get_index():
         res = await vikingdb_service.async_get_index("async", "async")
-        print(res.vector_index)
+        print(res.shard_count, res.shard_policy)
 
 
-    async def del_index():
-        await vikingdb_service.async_drop_index("async", "async")
+    # async def del_index():
+    #     await vikingdb_service.async_drop_index("async", "async")
 
 
-    async def list_index():
-        res = await vikingdb_service.async_list_indexes("async")
-        print(res)
-        for item in res:
-            print(item.index_name)
+    # async def list_index():
+    #     res = await vikingdb_service.async_list_indexes("async")
+    #     print(res)
+    #     for item in res:
+    #         print(item.index_name)
 
 
-    async def embedding():
-        list = [RawData("text", "hello1"), RawData("text", "hello2")]
-        res = await vikingdb_service.async_embedding(EmbModel("bge_large_zh"), list)
-        print(res)
+    # async def embedding():
+    #     list = [RawData("text", "hello1"), RawData("text", "hello2")]
+    #     res = await vikingdb_service.async_embedding(EmbModel("bge_large_zh"), list)
+    #     print(res)
 
 
-    async def update_index():
-        await vikingdb_service.async_update_index("async", "async", shard_count=3)
+    # async def update_index():
+    #     await vikingdb_service.async_update_index("async", "async", shard_count=3)
 
 
-    async def update_collection():
-        fields = [
-            Field(
-                field_name="like1",
-                field_type=FieldType.Float32,
-                default_val=0
-            ),
-            Field(
-                field_name="price1",
-                field_type=FieldType.String,
-                default_val=""
-            ),
-        ]
-        await vikingdb_service.async_update_collection("async1", fields)
+    # async def update_collection():
+    #     fields = [
+    #         Field(
+    #             field_name="like1",
+    #             field_type=FieldType.Float32,
+    #             default_val=0
+    #         ),
+    #         Field(
+    #             field_name="price1",
+    #             field_type=FieldType.String,
+    #             default_val=""
+    #         ),
+    #     ]
+    #     await vikingdb_service.async_update_collection("async1", fields)
 
 
-    async def rerank():
-        score = await vikingdb_service.async_rerank("退改", "如果您需要人工服务，可以拨打人工客服电话：4006660921",
-                                                    "转人工")
-        print(score)
+    # async def rerank():
+    #     score = await vikingdb_service.async_rerank("退改", "如果您需要人工服务，可以拨打人工客服电话：4006660921",
+    #                                                 "转人工")
+    #     print(score)
 
 
-    async def batch_rerank():
-        datas = [{
-            "query": "退改",
-            "content": "如果您需要人工服务，可以拨打人工客服电话：4006660921",
-            "title": "无"
-        }, {
-            "query": "退改",
-            "content": "1、1日票 1.5日票 2日票的退款政策： -到访日前2天的00:00前，免费退款 - 到访日前2天的00:00至到访日前夜23:59期间,退款需扣除服务费（人民币80元） - 到访日当天（00:00 之后），不可退款 2、半日票的退款政策： - 未使用的们票可在所选入...",
-            "title": "门票退改政策｜北京环球影城的门票退改政策"
-        }, {
-            "query": "退改",
-            "content": "如果您需要人工服务，可以拨打人工客服电话：4006660921",
-        }]
-        res = await vikingdb_service.async_batch_rerank(datas)
-        print(res)
+    # async def batch_rerank():
+    #     datas = [{
+    #         "query": "退改",
+    #         "content": "如果您需要人工服务，可以拨打人工客服电话：4006660921",
+    #         "title": "无"
+    #     }, {
+    #         "query": "退改",
+    #         "content": "1、1日票 1.5日票 2日票的退款政策： -到访日前2天的00:00前，免费退款 - 到访日前2天的00:00至到访日前夜23:59期间,退款需扣除服务费（人民币80元） - 到访日当天（00:00 之后），不可退款 2、半日票的退款政策： - 未使用的们票可在所选入...",
+    #         "title": "门票退改政策｜北京环球影城的门票退改政策"
+    #     }, {
+    #         "query": "退改",
+    #         "content": "如果您需要人工服务，可以拨打人工客服电话：4006660921",
+    #     }]
+    #     res = await vikingdb_service.async_batch_rerank(datas)
+    #     print(res)
 
 
-    async def embedding_v2():
-        list = [RawData("text", "hello1"), RawData("text", "hello2")]
-        res = await vikingdb_service.async_embedding_v2(EmbModel("bge-m3"), list)
-        print(res)
+    # async def embedding_v2():
+    #     list = [RawData("text", "hello1"), RawData("text", "hello2")]
+    #     res = await vikingdb_service.async_embedding_v2(EmbModel("bge-m3"), list)
+    #     print(res)
 
 
-    async def upsert_data():
-        def gen_random_vector(dim):
-            res = [0, ] * dim
-            for i in range(dim):
-                res[i] = random.random() - 0.5
-            return res
+    # async def upsert_data():
+    #     def gen_random_vector(dim):
+    #         res = [0, ] * dim
+    #         for i in range(dim):
+    #             res[i] = random.random() - 0.5
+    #         return res
 
-        collection = await vikingdb_service.async_get_collection("async")
-        field1 = {"doc_id": "111", "text_vector": gen_random_vector(10), "like": 1, "price": 1.11,
-                  "author": ["gy"], "aim": True}
-        field2 = {"doc_id": "222", "text_vector": gen_random_vector(10), "like": 2, "price": 2.22,
-                  "author": ["gy", "xjq"], "aim": False}
-        field3 = {"doc_id": "333", "text_vector": gen_random_vector(10), "like": 3, "price": 3.33,
-                  "author": ["gy", "xjq"], "aim": False}
-        field4 = {"doc_id": "444", "text_vector": gen_random_vector(10), "like": 4, "price": 4.44,
-                  "author": ["gy", "xjq"], "aim": False}
-        data1 = Data(field1)
-        data2 = Data(field2)
-        data3 = Data(field3)
-        data4 = Data(field4)
-        datas = [data1, data2, data3, data4]
-        await collection.async_upsert_data(datas)
-
-
-    async def fetch_data():
-        collection = vikingdb_service.get_collection("async")
-        res = await collection.async_fetch_data(["111", "222"])
-        for item in res:
-            print(item.fields)
+    #     collection = await vikingdb_service.async_get_collection("async")
+    #     field1 = {"doc_id": "111", "text_vector": gen_random_vector(10), "like": 1, "price": 1.11,
+    #               "author": ["gy"], "aim": True}
+    #     field2 = {"doc_id": "222", "text_vector": gen_random_vector(10), "like": 2, "price": 2.22,
+    #               "author": ["gy", "xjq"], "aim": False}
+    #     field3 = {"doc_id": "333", "text_vector": gen_random_vector(10), "like": 3, "price": 3.33,
+    #               "author": ["gy", "xjq"], "aim": False}
+    #     field4 = {"doc_id": "444", "text_vector": gen_random_vector(10), "like": 4, "price": 4.44,
+    #               "author": ["gy", "xjq"], "aim": False}
+    #     data1 = Data(field1)
+    #     data2 = Data(field2)
+    #     data3 = Data(field3)
+    #     data4 = Data(field4)
+    #     datas = [data1, data2, data3, data4]
+    #     await collection.async_upsert_data(datas)
 
 
-    async def del_data():
-        collection = vikingdb_service.get_collection("async")
-        res = await collection.async_delete_data("111")
+    # async def fetch_data():
+    #     collection = vikingdb_service.get_collection("async")
+    #     res = await collection.async_fetch_data(["111", "222"])
+    #     for item in res:
+    #         print(item.fields)
 
 
-    async def search_by_id():
-        index = await vikingdb_service.async_get_index("async", "async")
-        res = await index.async_search_by_id("222")
-        for item in res:
-            print(item.fields)
+    # async def del_data():
+    #     collection = vikingdb_service.get_collection("async")
+    #     res = await collection.async_delete_data("111")
 
 
-    async def search_by_vector():
-        def gen_random_vector(dim):
-            res = [0, ] * dim
-            for i in range(dim):
-                res[i] = random.random() - 0.5
-            return res
-
-        index = await vikingdb_service.async_get_index("async", "async")
-        res = await index.async_search_by_vector(gen_random_vector(10))
-        for item in res:
-            print(item.fields)
+    # async def search_by_id():
+    #     index = await vikingdb_service.async_get_index("async", "async")
+    #     res = await index.async_search_by_id("222")
+    #     for item in res:
+    #         print(item.fields)
 
 
-    async def index_fetch_data():
-        index = await vikingdb_service.async_get_index("async", "async")
-        res = await index.async_fetch_data(["111", "222", "333", "444"])
-        for item in res:
-            print(item.fields)
+    # async def search_by_vector():
+    #     def gen_random_vector(dim):
+    #         res = [0, ] * dim
+    #         for i in range(dim):
+    #             res[i] = random.random() - 0.5
+    #         return res
+
+    #     index = await vikingdb_service.async_get_index("async", "async")
+    #     res = await index.async_search_by_vector(gen_random_vector(10))
+    #     for item in res:
+    #         print(item.fields)
 
 
-    async def search():
-        index = vikingdb_service.get_index("async", "async")
+    # async def index_fetch_data():
+    #     index = await vikingdb_service.async_get_index("async", "async")
+    #     res = await index.async_fetch_data(["111", "222", "333", "444"])
+    #     for item in res:
+    #         print(item.fields)
 
-        def gen_random_vector(dim):
-            res = [0, ] * dim
-            for i in range(dim):
-                res[i] = random.random() - 0.5
-            return res
 
-        res = index.search(order=VectorOrder(gen_random_vector(10)), limit=2,
-                           output_fields=["doc_id", "like", "text_vector"],
-                           filter={"op": "range", "field": "price", "lt": 3.5})
-        print("-----------search_vector---------")
-        for item in res:
-            print(item)
-            print(item.score)
-        print("-----------search_scalar---------")
-        res = index.search(order=ScalarOrder("price", Order.Desc), limit=6,
-                           output_fields=["price"],
-                           filter={"op": "range", "field": "price", "lt": 5})
-        for item in res:
-            print(item)
-            print(item.score)
-        print("-----------search_None---------")
-        res = index.search(limit=5, output_fields=["doc_id", "like"],
-                           filter={"op": "range", "field": "price", "lt": 3.5})
-        for item in res:
-            print(item.fields)
-            print(item.score)
+    # async def search():
+    #     index = vikingdb_service.get_index("async", "async")
+
+    #     def gen_random_vector(dim):
+    #         res = [0, ] * dim
+    #         for i in range(dim):
+    #             res[i] = random.random() - 0.5
+    #         return res
+
+    #     res = index.search(order=VectorOrder(gen_random_vector(10)), limit=2,
+    #                        output_fields=["doc_id", "like", "text_vector"],
+    #                        filter={"op": "range", "field": "price", "lt": 3.5})
+    #     print("-----------search_vector---------")
+    #     for item in res:
+    #         print(item)
+    #         print(item.score)
+    #     print("-----------search_scalar---------")
+    #     res = index.search(order=ScalarOrder("price", Order.Desc), limit=6,
+    #                        output_fields=["price"],
+    #                        filter={"op": "range", "field": "price", "lt": 5})
+    #     for item in res:
+    #         print(item)
+    #         print(item.score)
+    #     print("-----------search_None---------")
+    #     res = index.search(limit=5, output_fields=["doc_id", "like"],
+    #                        filter={"op": "range", "field": "price", "lt": 3.5})
+    #     for item in res:
+    #         print(item.fields)
+    #         print(item.score)
 
 
     # asyncio.run(create_collection())
@@ -609,7 +609,7 @@ if __name__ == '__main__':
     # asyncio.run(del_collection())
     # asyncio.run(list_collections())
     # asyncio.run(create_index())
-    # asyncio.run(get_index())
+    asyncio.run(get_index())
     # asyncio.run(del_index())
     # asyncio.run(list_index())
     # asyncio.run(embedding())

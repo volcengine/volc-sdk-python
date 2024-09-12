@@ -566,7 +566,7 @@ class VikingDBService(Service):
         return collections
 
     def create_index(self, collection_name, index_name, vector_index=None, cpu_quota=2, description="", partition_by="",
-                     scalar_index=None, shard_count=None):
+                     scalar_index=None, shard_count=None, shard_policy=None):
         """
         create an index.
 
@@ -602,6 +602,8 @@ class VikingDBService(Service):
             params["scalar_index"] = scalar_index
         if shard_count is not None:
             params["shard_count"] = shard_count
+        if shard_policy is not None:
+            params["shard_policy"] = shard_policy.value
         # print(params)
         res = self.json_exception("CreateIndex", {}, json.dumps(params))
         # print(res)
@@ -610,7 +612,7 @@ class VikingDBService(Service):
         return index
 
     async def async_create_index(self, collection_name, index_name, vector_index=None, cpu_quota=2, description="",
-                                 partition_by="", scalar_index=None, shard_count=None):
+                                 partition_by="", scalar_index=None, shard_count=None,  shard_policy=None):
         params = {
             "collection_name": collection_name,
             "index_name": index_name,
@@ -624,6 +626,8 @@ class VikingDBService(Service):
             params["scalar_index"] = scalar_index
         if shard_count is not None:
             params["shard_count"] = shard_count
+        if shard_policy is not None:
+            params["shard_policy"] = shard_policy.value
         # print(params)
         res = await self.async_json_exception("CreateIndex", {}, json.dumps(params))
         # print(res)
@@ -650,7 +654,7 @@ class VikingDBService(Service):
         vector_index = scalar_index = partition_by = status = None
         cpu_quota = 2
         description = ""
-        shard_count = index_cost = create_time = update_time = update_person = None
+        shard_count = shard_policy = index_cost = create_time = update_time = update_person = None
         # print(res["data"])
         if "vector_index" in res["data"]:
             vector_index = res["data"]["vector_index"]
@@ -681,10 +685,12 @@ class VikingDBService(Service):
             index_cost = res["data"]["index_cost"]
         if "shard_count" in res["data"]:
             shard_count = res["data"]["shard_count"]
+        if "shard_policy" in res["data"]:
+            shard_policy = res["data"]["shard_policy"]
         # print(collection_name, index_name, vector_index, scalar_index, description, cpu_quota, partition_by, status)
         index = Index(collection_name, index_name, vector_index, scalar_index, status, self, description=description,
                       cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time, update_time=update_time,
-                      update_person=update_person, index_cost=index_cost, shard_count=shard_count)
+                      update_person=update_person, index_cost=index_cost, shard_count=shard_count, shard_policy=shard_policy)
         return index
 
     async def async_get_index(self, collection_name, index_name):
@@ -702,7 +708,7 @@ class VikingDBService(Service):
         vector_index = scalar_index = partition_by = status = None
         cpu_quota = 2
         description = ""
-        shard_count = index_cost = create_time = update_time = update_person = None
+        shard_count = shard_policy = index_cost = create_time = update_time = update_person = None
         if "vector_index" in res:
             vector_index = res["vector_index"]
         if "range_index" in res:
@@ -730,10 +736,12 @@ class VikingDBService(Service):
             index_cost = res["index_cost"]
         if "shard_count" in res:
             shard_count = res["shard_count"]
+        if "shard_policy" in res:
+            shard_policy = res["shard_policy"]
         # print(collection_name, index_name, vector_index, scalar_index, description, cpu_quota, partition_by, status)
         index = Index(collection_name, index_name, vector_index, scalar_index, status, self, description=description,
                       cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time, update_time=update_time,
-                      update_person=update_person, index_cost=index_cost, shard_count=shard_count)
+                      update_person=update_person, index_cost=index_cost, shard_count=shard_count, shard_policy=shard_policy)
         return index
 
     def drop_index(self, collection_name, index_name):
@@ -778,7 +786,7 @@ class VikingDBService(Service):
             vector_index = scalar_index = partition_by = status = None
             cpu_quota = 2
             description = index_name = ""
-            shard_count = index_cost = create_time = update_time = update_person = None
+            shard_count = shard_policy = index_cost = create_time = update_time = update_person = None
             if "index_name" in item:
                 index_name = item["index_name"]
             if "vector_index" in item:
@@ -810,12 +818,14 @@ class VikingDBService(Service):
                 index_cost = item["index_cost"]
             if "shard_count" in item:
                 shard_count = item["shard_count"]
+            if "shard_policy" in item:
+                shard_policy = item["shard_policy"]
             # print(collection_name, index_name, vector_index, scalar_index, description, cpu_quota, partition_by, status)
             index = Index(collection_name, index_name, vector_index, scalar_index, status, self,
                           description=description,
                           cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time,
                           update_time=update_time, update_person=update_person, index_cost=index_cost,
-                          shard_count=shard_count)
+                          shard_count=shard_count, shard_policy=shard_policy)
             indexes.append(index)
         # print(indexes)
         return indexes
