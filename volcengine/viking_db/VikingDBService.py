@@ -27,7 +27,7 @@ class VikingDBService(Service):
         return VikingDBService._instance
 
     def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk="", scheme='http',
-                 connection_timeout=30, socket_timeout=30):
+                 connection_timeout=30, socket_timeout=30, proxy=None):
         self.service_info = VikingDBService.get_service_info(host, region, scheme, connection_timeout, socket_timeout)
         self.api_info = VikingDBService.get_api_info()
         super(VikingDBService, self).__init__(self.service_info, self.api_info)
@@ -35,6 +35,16 @@ class VikingDBService(Service):
             self.set_ak(ak)
         if sk:
             self.set_sk(sk)
+
+        if proxy is not None:
+            if "http:" in proxy:
+                self.session.proxies.update({
+                    'http': proxy,
+                })
+            if "https:" in proxy:
+                self.session.proxies.update({
+                    'https': proxy,
+                })
 
         try:
             res = self.get_body("Ping", {}, json.dumps({}))
