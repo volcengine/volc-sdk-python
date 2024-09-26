@@ -94,6 +94,8 @@ class VikingKnowledgeBaseService(Service):
             # Service
             "Ping":                   ApiInfo("GET", "/ping", {}, {},
                                         {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "Rerank":                 ApiInfo("POST", "/api/knowledge/service/rerank", {}, {},
+                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
         return api_info
 
@@ -319,20 +321,26 @@ class VikingKnowledgeBaseService(Service):
 
         await self.async_json_exception("UpdateCollection", {}, json.dumps(params))
 
-    def search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, project="default", resource_id=None, retrieve_count= None):
+    def search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, 
+                          project="default", resource_id=None, retrieve_count= None, endpoint_id=None, rerank_model="Doubao-pro-4k-rerank",
+                          rerank_only_chunk=False):
         params = {"name": collection_name, 
                   "query": query,
                   "limit": limit,
                   "dense_weight": dense_weight,
                   "rerank_switch": rerank_switch,
-                  "project": project
-                  }
+                  "project": project,
+                  "rerank_model": rerank_model,
+                  "rerank_only_chunk": rerank_only_chunk,
+                }
         if resource_id != None:
             params["resource_id"] = resource_id
         if query_param != None:
             params["query_param"] = query_param
         if retrieve_count != None:
             params["retrieve_count"] = retrieve_count
+        if endpoint_id != None:
+            params["endpoint_id"] = endpoint_id
         res = self.json_exception("SearchCollection", {}, json.dumps(params))
         data = json.loads(res)["data"]
         results = data.get("result_list")
@@ -346,20 +354,26 @@ class VikingKnowledgeBaseService(Service):
                 points.append(Point(result))
         return points
     
-    async def async_search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, project="default", resource_id=None, retrieve_count= None):
+    async def async_search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, 
+                          project="default", resource_id=None, retrieve_count= None, endpoint_id=None, rerank_model="Doubao-pro-4k-rerank",
+                          rerank_only_chunk=False):
         params = {"name": collection_name, 
                   "query": query,
                   "limit": limit,
                   "dense_weight": dense_weight,
                   "rerank_switch": rerank_switch,
-                  "project": project
-                  }
+                  "project": project,
+                  "rerank_model": rerank_model,
+                  "rerank_only_chunk": rerank_only_chunk,
+                }
         if resource_id != None:
             params["resource_id"] = resource_id
         if query_param != None:
             params["query_param"] = query_param
         if retrieve_count != None:
             params["retrieve_count"] = retrieve_count
+        if endpoint_id != None:
+            params["endpoint_id"] = endpoint_id
         res = await self.async_json_exception("SearchCollection", {}, json.dumps(params))
         data = json.loads(res)["data"]
         results = data.get("result_list")
@@ -441,4 +455,26 @@ class VikingKnowledgeBaseService(Service):
         
         return ret
     
+    def rerank(self, datas, rerank_model="Doubao-pro-4k-rerank", endpoint_id=None):
+        params = {
+            "datas": datas,
+            "rerank_model": rerank_model
+        }
+        
+        if endpoint_id != None:
+            params["endpoint_id"] = endpoint_id
+        
+        res = self.json_exception("Rerank", {}, json.dumps(params))
+        return json.loads(res)
     
+    async def async_rerank(self, datas, rerank_model="Doubao-pro-4k-rerank", endpoint_id=None):
+        params = {
+            "datas": datas,
+            "rerank_model": rerank_model
+        }
+        
+        if endpoint_id != None:
+            params["endpoint_id"] = endpoint_id
+        
+        res = await self.async_json_exception("Rerank", {}, json.dumps(params))
+        return json.loads(res)

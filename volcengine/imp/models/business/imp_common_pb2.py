@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n)com.volcengine.service.imp.model.businessB\013ImpWorkflowP\001ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/business\240\001\001\330\001\001\312\002 Volc\\Service\\Imp\\Models\\Business\342\002#Volc\\Service\\Imp\\Models\\GPBMetadata',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dimp/business/imp_common.proto\x12\x1eVolcengine.Imp.Models.Business\"R\n\tInputPath\x12\x0c\n\x04Type\x18\x01 \x01(\t\x12\x11\n\tTosBucket\x18\x02 \x01(\t\x12\x14\n\x0cVodSpaceName\x18\x03 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x04 \x01(\t\"\xc8\x01\n\tJobOutput\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x12\n\nProperties\x18\x02 \x01(\t\x12\x0c\n\x04\x43ode\x18\x03 \x01(\t\x12\x15\n\rFileMessageId\x18\x04 \x01(\t\x12\x10\n\x08TaskType\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x12\n\nActivityId\x18\x07 \x01(\t\x12\x11\n\tStartTime\x18\x08 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\t \x01(\t\x12\x14\n\x0cTemplateName\x18\n \x01(\t\"\x8e\x02\n\x0cJobExecution\x12\r\n\x05JobId\x18\x01 \x01(\t\x12<\n\tInputPath\x18\x02 \x01(\x0b\x32).Volcengine.Imp.Models.Business.InputPath\x12\x39\n\x06Output\x18\x03 \x03(\x0b\x32).Volcengine.Imp.Models.Business.JobOutput\x12\x0e\n\x06Status\x18\x04 \x01(\t\x12\x10\n\x08\x43reateAt\x18\x05 \x01(\t\x12\x12\n\nFinishedAt\x18\x06 \x01(\t\x12\x12\n\nTemplateId\x18\x07 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x08 \x01(\t\x12\x11\n\tJobSource\x18\t \x01(\t\"P\n\x06Params\x12\x46\n\x0eOverrideParams\x18\x01 \x01(\x0b\x32..Volcengine.Imp.Models.Business.OverrideParams\"^\n\x0eOverrideParams\x12L\n\nSmartErase\x18\x01 \x03(\x0b\x32\x38.Volcengine.Imp.Models.Business.SmartEraseOverrideParams\"\x9e\x01\n\x18SmartEraseOverrideParams\x12\x12\n\nActivityId\x18\x01 \x03(\t\x12<\n\tWatermark\x18\x02 \x01(\x0b\x32).Volcengine.Imp.Models.Business.Watermark\x12\x30\n\x03OCR\x18\x03 \x01(\x0b\x32#.Volcengine.Imp.Models.Business.OCR\"K\n\tWatermark\x12>\n\nDetectRect\x18\x01 \x03(\x0b\x32*.Volcengine.Imp.Models.Business.DetectRect\"E\n\x03OCR\x12>\n\nDetectRect\x18\x01 \x03(\x0b\x32*.Volcengine.Imp.Models.Business.DetectRect\"<\n\nDetectRect\x12\n\n\x02X1\x18\x01 \x01(\x01\x12\n\n\x02Y1\x18\x02 \x01(\x01\x12\n\n\x02X2\x18\x03 \x01(\x01\x12\n\n\x02Y2\x18\x04 \x01(\x01\x42\xcc\x01\n)com.volcengine.service.imp.model.businessB\x0bImpWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Imp\\Models\\Business\xe2\x02#Volc\\Service\\Imp\\Models\\GPBMetadatab\x06proto3'
+  serialized_pb=b'\n\x1dimp/business/imp_common.proto\x12\x1eVolcengine.Imp.Models.Business\"R\n\tInputPath\x12\x0c\n\x04Type\x18\x01 \x01(\t\x12\x11\n\tTosBucket\x18\x02 \x01(\t\x12\x14\n\x0cVodSpaceName\x18\x03 \x01(\t\x12\x0e\n\x06\x46ileId\x18\x04 \x01(\t\"\xc8\x01\n\tJobOutput\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x12\n\nProperties\x18\x02 \x01(\t\x12\x0c\n\x04\x43ode\x18\x03 \x01(\t\x12\x15\n\rFileMessageId\x18\x04 \x01(\t\x12\x10\n\x08TaskType\x18\x05 \x01(\t\x12\x0e\n\x06Status\x18\x06 \x01(\t\x12\x12\n\nActivityId\x18\x07 \x01(\t\x12\x11\n\tStartTime\x18\x08 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\t \x01(\t\x12\x14\n\x0cTemplateName\x18\n \x01(\t\"\x8e\x02\n\x0cJobExecution\x12\r\n\x05JobId\x18\x01 \x01(\t\x12<\n\tInputPath\x18\x02 \x01(\x0b\x32).Volcengine.Imp.Models.Business.InputPath\x12\x39\n\x06Output\x18\x03 \x03(\x0b\x32).Volcengine.Imp.Models.Business.JobOutput\x12\x0e\n\x06Status\x18\x04 \x01(\t\x12\x10\n\x08\x43reateAt\x18\x05 \x01(\t\x12\x12\n\nFinishedAt\x18\x06 \x01(\t\x12\x12\n\nTemplateId\x18\x07 \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x08 \x01(\t\x12\x11\n\tJobSource\x18\t \x01(\t\"P\n\x06Params\x12\x46\n\x0eOverrideParams\x18\x01 \x01(\x0b\x32..Volcengine.Imp.Models.Business.OverrideParams\"\xa4\x01\n\x0eOverrideParams\x12L\n\nSmartErase\x18\x01 \x03(\x0b\x32\x38.Volcengine.Imp.Models.Business.SmartEraseOverrideParams\x12\x44\n\x06Output\x18\x02 \x03(\x0b\x32\x34.Volcengine.Imp.Models.Business.OutputOverrideParams\"\x9e\x01\n\x18SmartEraseOverrideParams\x12\x12\n\nActivityId\x18\x01 \x03(\t\x12<\n\tWatermark\x18\x02 \x01(\x0b\x32).Volcengine.Imp.Models.Business.Watermark\x12\x30\n\x03OCR\x18\x03 \x01(\x0b\x32#.Volcengine.Imp.Models.Business.OCR\"K\n\tWatermark\x12>\n\nDetectRect\x18\x01 \x03(\x0b\x32*.Volcengine.Imp.Models.Business.DetectRect\"E\n\x03OCR\x12>\n\nDetectRect\x18\x01 \x03(\x0b\x32*.Volcengine.Imp.Models.Business.DetectRect\"<\n\nDetectRect\x12\n\n\x02X1\x18\x01 \x01(\x01\x12\n\n\x02Y1\x18\x02 \x01(\x01\x12\n\n\x02X2\x18\x03 \x01(\x01\x12\n\n\x02Y2\x18\x04 \x01(\x01\"j\n\x14OutputOverrideParams\x12\x12\n\nActivityId\x18\x01 \x03(\t\x12>\n\nOutputPath\x18\x02 \x01(\x0b\x32*.Volcengine.Imp.Models.Business.OutputPath\"U\n\nOutputPath\x12\x0c\n\x04Type\x18\x01 \x01(\t\x12\x11\n\tTosBucket\x18\x02 \x01(\t\x12\x14\n\x0cVodSpaceName\x18\x03 \x01(\t\x12\x10\n\x08\x46ileName\x18\x04 \x01(\tB\xcc\x01\n)com.volcengine.service.imp.model.businessB\x0bImpWorkflowP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/imp/models/business\xa0\x01\x01\xd8\x01\x01\xca\x02 Volc\\Service\\Imp\\Models\\Business\xe2\x02#Volc\\Service\\Imp\\Models\\GPBMetadatab\x06proto3'
 )
 
 
@@ -308,6 +308,13 @@ _OVERRIDEPARAMS = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='Output', full_name='Volcengine.Imp.Models.Business.OverrideParams.Output', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -320,8 +327,8 @@ _OVERRIDEPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=707,
-  serialized_end=801,
+  serialized_start=708,
+  serialized_end=872,
 )
 
 
@@ -366,8 +373,8 @@ _SMARTERASEOVERRIDEPARAMS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=804,
-  serialized_end=962,
+  serialized_start=875,
+  serialized_end=1033,
 )
 
 
@@ -398,8 +405,8 @@ _WATERMARK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=964,
-  serialized_end=1039,
+  serialized_start=1035,
+  serialized_end=1110,
 )
 
 
@@ -430,8 +437,8 @@ _OCR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1041,
-  serialized_end=1110,
+  serialized_start=1112,
+  serialized_end=1181,
 )
 
 
@@ -483,18 +490,112 @@ _DETECTRECT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1112,
-  serialized_end=1172,
+  serialized_start=1183,
+  serialized_end=1243,
+)
+
+
+_OUTPUTOVERRIDEPARAMS = _descriptor.Descriptor(
+  name='OutputOverrideParams',
+  full_name='Volcengine.Imp.Models.Business.OutputOverrideParams',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ActivityId', full_name='Volcengine.Imp.Models.Business.OutputOverrideParams.ActivityId', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='OutputPath', full_name='Volcengine.Imp.Models.Business.OutputOverrideParams.OutputPath', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1245,
+  serialized_end=1351,
+)
+
+
+_OUTPUTPATH = _descriptor.Descriptor(
+  name='OutputPath',
+  full_name='Volcengine.Imp.Models.Business.OutputPath',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='Type', full_name='Volcengine.Imp.Models.Business.OutputPath.Type', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='TosBucket', full_name='Volcengine.Imp.Models.Business.OutputPath.TosBucket', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='VodSpaceName', full_name='Volcengine.Imp.Models.Business.OutputPath.VodSpaceName', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='FileName', full_name='Volcengine.Imp.Models.Business.OutputPath.FileName', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1353,
+  serialized_end=1438,
 )
 
 _JOBEXECUTION.fields_by_name['InputPath'].message_type = _INPUTPATH
 _JOBEXECUTION.fields_by_name['Output'].message_type = _JOBOUTPUT
 _PARAMS.fields_by_name['OverrideParams'].message_type = _OVERRIDEPARAMS
 _OVERRIDEPARAMS.fields_by_name['SmartErase'].message_type = _SMARTERASEOVERRIDEPARAMS
+_OVERRIDEPARAMS.fields_by_name['Output'].message_type = _OUTPUTOVERRIDEPARAMS
 _SMARTERASEOVERRIDEPARAMS.fields_by_name['Watermark'].message_type = _WATERMARK
 _SMARTERASEOVERRIDEPARAMS.fields_by_name['OCR'].message_type = _OCR
 _WATERMARK.fields_by_name['DetectRect'].message_type = _DETECTRECT
 _OCR.fields_by_name['DetectRect'].message_type = _DETECTRECT
+_OUTPUTOVERRIDEPARAMS.fields_by_name['OutputPath'].message_type = _OUTPUTPATH
 DESCRIPTOR.message_types_by_name['InputPath'] = _INPUTPATH
 DESCRIPTOR.message_types_by_name['JobOutput'] = _JOBOUTPUT
 DESCRIPTOR.message_types_by_name['JobExecution'] = _JOBEXECUTION
@@ -504,6 +605,8 @@ DESCRIPTOR.message_types_by_name['SmartEraseOverrideParams'] = _SMARTERASEOVERRI
 DESCRIPTOR.message_types_by_name['Watermark'] = _WATERMARK
 DESCRIPTOR.message_types_by_name['OCR'] = _OCR
 DESCRIPTOR.message_types_by_name['DetectRect'] = _DETECTRECT
+DESCRIPTOR.message_types_by_name['OutputOverrideParams'] = _OUTPUTOVERRIDEPARAMS
+DESCRIPTOR.message_types_by_name['OutputPath'] = _OUTPUTPATH
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 InputPath = _reflection.GeneratedProtocolMessageType('InputPath', (_message.Message,), {
@@ -568,6 +671,20 @@ DetectRect = _reflection.GeneratedProtocolMessageType('DetectRect', (_message.Me
   # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.DetectRect)
   })
 _sym_db.RegisterMessage(DetectRect)
+
+OutputOverrideParams = _reflection.GeneratedProtocolMessageType('OutputOverrideParams', (_message.Message,), {
+  'DESCRIPTOR' : _OUTPUTOVERRIDEPARAMS,
+  '__module__' : 'imp.business.imp_common_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.OutputOverrideParams)
+  })
+_sym_db.RegisterMessage(OutputOverrideParams)
+
+OutputPath = _reflection.GeneratedProtocolMessageType('OutputPath', (_message.Message,), {
+  'DESCRIPTOR' : _OUTPUTPATH,
+  '__module__' : 'imp.business.imp_common_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Imp.Models.Business.OutputPath)
+  })
+_sym_db.RegisterMessage(OutputPath)
 
 
 DESCRIPTOR._options = None

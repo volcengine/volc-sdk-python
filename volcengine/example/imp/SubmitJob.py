@@ -19,7 +19,7 @@ if __name__ == '__main__':
         req.InputPath.FileId = 'your vid'
         req.TemplateId = 'your template id'
         req.CallbackArgs = 'your callback args'
-
+        # SmartEraseOverrideParams
         smart_erase = SmartEraseOverrideParams()
         watermark_detect = DetectRect()
         watermark_detect.X1 = 0
@@ -35,6 +35,14 @@ if __name__ == '__main__':
         smart_erase.Watermark.DetectRect.append(watermark_detect)
         smart_erase.OCR.DetectRect.append(ocr_detect)
         req.Params.OverrideParams.SmartErase.append(smart_erase)
+        # OutputOverrideParams
+        output = OutputOverrideParams()
+        output.ActivityId.append("*")
+        output.OutputPath.Type = "your storage type"
+        output.OutputPath.VodSpaceName = "your vod spaceName"
+        output.OutputPath.TosBucket = "your tos bucketName"
+        output.OutputPath.FileName = "output FileName"
+        req.Params.OverrideParams.Output.append(output)
 
         resp = imp_service.submit_job(req)
     except Exception:

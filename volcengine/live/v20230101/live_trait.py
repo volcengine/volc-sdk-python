@@ -1090,6 +1090,41 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def create_cloud_mix_task(self, body):
+        res = self.api_post('CreateCloudMixTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_cloud_mix_task(self, body):
+        res = self.api_post('UpdateCloudMixTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def get_cloud_mix_task_detail(self, body):
+        res = self.api_post('GetCloudMixTaskDetail', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def list_cloud_mix_task(self, body):
+        res = self.api_post('ListCloudMixTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_cloud_mix_task(self, body):
+        res = self.api_post('DeleteCloudMixTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def delete_subtitle_transcode_preset(self, body):
         res = self.api_post('DeleteSubtitleTranscodePreset', [], json.dumps(body))
         if res == '':

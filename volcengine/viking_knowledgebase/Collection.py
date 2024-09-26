@@ -172,7 +172,7 @@ class Collection(object):
         if resource_id is not None:
             params["resource_id"] = resource_id
         res = self.viking_knowledgebase_service.json_exception("ListPoints", {}, json.dumps(params))
-        point_list = json.loads(res)["data"]["point_list"]
+        point_list = json.loads(res)["data"].get("point_list", [])
         points = []
         for item in point_list:
             item["project"] = project
@@ -186,7 +186,7 @@ class Collection(object):
         if resource_id is not None:
             params["resource_id"] = resource_id
         res = await self.viking_knowledgebase_service.async_json_exception("ListPoints", {}, json.dumps(params))
-        point_list = json.loads(res)["data"]["point_list"]
+        point_list = json.loads(res)["data"].get("point_list", [])
         points = []
         for item in point_list:
             item["project"] = project
