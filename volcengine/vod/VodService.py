@@ -139,7 +139,7 @@ class VodService(VodServiceConfig):
 
     def upload_media(self, request):
         oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "", request.FileName,
-                                                      request.FileExtension, request.StorageClass, request.ClientNetWorkMode, request.ClientIDCMode)
+                                                      request.FileExtension, request.StorageClass, request.ClientNetWorkMode, request.ClientIDCMode, request.UploadHostPrefer)
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
         req.SessionKey = session_key
@@ -152,7 +152,7 @@ class VodService(VodServiceConfig):
             raise Exception(resp.ResponseMetadata.Error)
         return resp
 
-    def upload_tob(self, space_name, file_path, file_type, file_name, file_extension, storage_class, client_network_mode, client_idc_mode):
+    def upload_tob(self, space_name, file_path, file_type, file_name, file_extension, storage_class, client_network_mode, client_idc_mode, upload_host_prefer):
         if not os.path.isfile(file_path):
             raise Exception("no such file on file path")
         apply_req = VodApplyUploadInfoRequest()
@@ -164,6 +164,7 @@ class VodService(VodServiceConfig):
         apply_req.ClientNetWorkMode = client_network_mode
         apply_req.ClientIDCMode = client_idc_mode
         apply_req.NeedFallback = True
+        apply_req.UploadHostPrefer = upload_host_prefer
         resp = self.apply_upload_info(apply_req)
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
@@ -355,7 +356,7 @@ class VodService(VodServiceConfig):
 
     def upload_material(self, request):
         oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType,
-                                                      request.FileName, request.FileExtension, 0, request.ClientNetWorkMode, request.ClientIDCMode)
+                                                      request.FileName, request.FileExtension, 0, request.ClientNetWorkMode, request.ClientIDCMode, request.UploadHostPrefer)
 
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName

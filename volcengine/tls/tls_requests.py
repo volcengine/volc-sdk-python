@@ -1658,7 +1658,8 @@ class SetAlarmRequest(TLSRequest):
     def __init__(self, alarm_name: str = None, query_request: List[QueryRequest] = None,
                  request_cycle: RequestCycle = None, condition: str = None, alarm_period: int = None,
                  alarm_notify_group: List[str] = None, status: bool = None, trigger_period: int = None,
-                 user_define_msg: str = None, severity: str = None, alarm_period_detail: AlarmPeriodSetting = None):
+                 user_define_msg: str = None, severity: str = None, alarm_period_detail: AlarmPeriodSetting = None,
+                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None):
         """
         :param project_id: 日志项目ID
         :type project_id: str
@@ -1684,6 +1685,10 @@ class SetAlarmRequest(TLSRequest):
         :type severity: str
         :param alarm_period_detail: 告警通知发送的周期
         :type alarm_period_detail: AlarmPeriodSetting
+        :param join_configurations: 告警检索分析结果集合操作的相关配置
+        :type join_configurations: List[JoinConfig]
+        :param trigger_conditions: 告警触发条件列表
+        :type trigger_conditions: List[TriggerCondition]
         """
         self.alarm_name = alarm_name
         self.query_request = query_request
@@ -1696,6 +1701,8 @@ class SetAlarmRequest(TLSRequest):
         self.user_define_msg = user_define_msg
         self.severity = severity
         self.alarm_period_detail = alarm_period_detail
+        self.join_configurations = join_configurations
+        self.trigger_conditions = trigger_conditions
 
     def get_api_input(self):
         body = super(SetAlarmRequest, self).get_api_input()
@@ -1708,15 +1715,23 @@ class SetAlarmRequest(TLSRequest):
                 body[QUERY_REQUEST].append(one_query_request.json())
         if self.alarm_period_detail is not None:
             body[ALARM_PERIOD_DETAIL] = self.alarm_period_detail.json()
-
+        if self.join_configurations is not None:
+            body[JOIN_CONFIGURATIONS] = []
+            for one_join_configuration in self.join_configurations:
+                body[JOIN_CONFIGURATIONS].append(one_join_configuration.json())
+        if self.trigger_conditions is not None:
+            body[TRIGGER_CONDITIONS] = []
+            for one_trigger_condition in self.trigger_conditions:
+                body[TRIGGER_CONDITIONS].append(one_trigger_condition.json())
         return body
 
 
 class CreateAlarmRequest(SetAlarmRequest):
-    def __init__(self, project_id: str, alarm_name: str, query_request: List[QueryRequest],
-                 request_cycle: RequestCycle, condition: str, alarm_period: int, alarm_notify_group: List[str],
-                 status: bool = True, trigger_period: int = 1, user_define_msg: str = None,
-                 severity: str = "notice", alarm_period_detail: AlarmPeriodSetting = None):
+    def __init__(self, project_id: str, alarm_name: str, query_request: List[QueryRequest], request_cycle: RequestCycle,
+                 condition: str, alarm_period: int, alarm_notify_group: List[str], status: bool = True,
+                 trigger_period: int = 1, user_define_msg: str = None, severity: str = "notice",
+                 alarm_period_detail: AlarmPeriodSetting = None, join_configurations: List[JoinConfig] = None,
+                 trigger_conditions: List[TriggerCondition] = None):
         """
         :param project_id: 日志项目ID
         :type project_id: str
@@ -1742,10 +1757,14 @@ class CreateAlarmRequest(SetAlarmRequest):
         :type severity: str
         :param alarm_period_detail: 告警通知发送的周期
         :type alarm_period_detail: AlarmPeriodSetting
+        :param join_configurations: 告警检索分析结果集合操作的相关配置
+        :type join_configurations: List[JoinConfig]
+        :param trigger_conditions: 告警触发条件列表
+        :type trigger_conditions: List[TriggerCondition]
         """
         super(CreateAlarmRequest, self).__init__(alarm_name, query_request, request_cycle, condition, alarm_period,
-                                                 alarm_notify_group, status, trigger_period, user_define_msg,
-                                                 severity, alarm_period_detail)
+                                                 alarm_notify_group, status, trigger_period, user_define_msg, severity,
+                                                 alarm_period_detail, join_configurations, trigger_conditions)
         self.project_id = project_id
 
     def check_validation(self):
@@ -1781,7 +1800,8 @@ class ModifyAlarmRequest(SetAlarmRequest):
     def __init__(self, alarm_id: str, alarm_name: str = None, query_request: List[QueryRequest] = None,
                  request_cycle: RequestCycle = None, condition: str = None, alarm_period: int = None,
                  alarm_notify_group: List[str] = None, status: bool = None, trigger_period: int = None,
-                 user_define_msg: str = None, severity: str = None, alarm_period_detail: AlarmPeriodSetting = None):
+                 user_define_msg: str = None, severity: str = None, alarm_period_detail: AlarmPeriodSetting = None,
+                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None):
         """
         :param alarm_id: 告警策略ID
         :type alarm_id: str
@@ -1807,10 +1827,14 @@ class ModifyAlarmRequest(SetAlarmRequest):
         :type severity: str
         :param alarm_period_detail: 告警通知发送的周期
         :type alarm_period_detail: AlarmPeriodSetting
+        :param join_configurations: 告警检索分析结果集合操作的相关配置
+        :type join_configurations: List[JoinConfig]
+        :param trigger_conditions: 告警触发条件列表
+        :type trigger_conditions: List[TriggerCondition]
         """
         super(ModifyAlarmRequest, self).__init__(alarm_name, query_request, request_cycle, condition, alarm_period,
-                                                 alarm_notify_group, status, trigger_period, user_define_msg,
-                                                 severity, alarm_period_detail)
+                                                 alarm_notify_group, status, trigger_period, user_define_msg, severity,
+                                                 alarm_period_detail, join_configurations, trigger_conditions)
         self.alarm_id = alarm_id
 
     def check_validation(self):

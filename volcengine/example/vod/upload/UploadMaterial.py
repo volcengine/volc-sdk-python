@@ -37,6 +37,7 @@ if __name__ == '__main__':
         req.Functions = json.dumps([get_meta_function, snapshot_function, add_option_function])
         req.CallbackArgs = ''
         req.FileExtension = '.mp4'
+        req.UploadHostPrefer = ''
 
         resp = vod_service.upload_material(req)
     except Exception:
@@ -80,6 +81,7 @@ if __name__ == '__main__':
         req.CallbackArgs = ''
         req.FileName = ''
         req.FileExtension = '.jpg'
+        req.UploadHostPrefer = ''
 
         resp = vod_service.upload_material(req)
     except Exception:
@@ -122,6 +124,7 @@ if __name__ == '__main__':
         req.CallbackArgs = ''
         req.FileName = ''
         req.FileExtension = '.vtt'
+        req.UploadHostPrefer = ''
 
         resp = vod_service.upload_material(req)
     except Exception:

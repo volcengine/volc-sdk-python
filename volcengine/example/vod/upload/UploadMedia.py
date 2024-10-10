@@ -37,6 +37,7 @@ if __name__ == '__main__':
         req.FileName = 'hello/vod.mp4'
         req.FileExtension = '.mp4'
         req.StorageClass = 0
+        req.UploadHostPrefer = ''
         resp = vod_service.upload_media(req)
     except Exception:
         raise

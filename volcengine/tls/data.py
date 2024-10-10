@@ -1709,15 +1709,18 @@ class QueryRequest(TLSData):
 
 
 class RequestCycle(TLSData):
-    def __init__(self, cycle_type: str, time: int):
+    def __init__(self, cycle_type: str, time: int, cron_tab: str = None):
         """
         :param cycle_type: 执行周期类型，Period：周期执行，Fixed：定期执行
         :type cycle_type:str
         :param time:告警任务执行的周期，或者定期执行的时间点。单位为分钟，取值范围为 1~1440
         :type time:int
+        :param cron_tab:Cron表达式，日志服务通过 Cron 表达式指定告警任务定时执行。Cron 表达式的最小粒度为分钟，24 小时制
+        :type cron_tab:str
         """
         self.cycle_type = cycle_type
         self.time = time
+        self.cron_tab = cron_tab
 
     def get_time(self):
         """
@@ -1733,15 +1736,23 @@ class RequestCycle(TLSData):
         """
         return self.cycle_type
 
+    def get_cron_tab(self):
+        """
+        :return:Cron表达式，日志服务通过 Cron 表达式指定告警任务定时执行
+        :rtype: str
+        """
+        return self.cron_tab
+
     @classmethod
     def set_attributes(cls, data: dict):
         cycle_type = data.get(TYPE)
         time = data.get(TIME)
+        cron_tab = data.get(CRON_TAB)
 
-        return cls(cycle_type, time)
+        return cls(cycle_type, time, cron_tab)
 
     def json(self):
-        return {TYPE: self.cycle_type, TIME: self.time}
+        return {TYPE: self.cycle_type, TIME: self.time, CRON_TAB: self.cron_tab}
 
 
 class AlarmNotifyGroupInfo(TLSData):
@@ -1828,13 +1839,26 @@ class AlarmPeriodSetting(TLSData):
         return {SMS: self.sms, PHONE: self.phone, EMAIL: self.email, GENERAL_WEBHOOK: self.general_webhook}
 
 
+class JoinConfig(TLSData):
+    def __init__(self, set_operation_type: str, condition: str = None):
+        self.condition = condition
+        self.set_operation_type = set_operation_type
+
+
+class TriggerCondition(TLSData):
+    def __init__(self, severity: str = "notice", condition: str = None, count_condition: str = None):
+        self.severity = severity
+        self.condition = condition
+        self.count_condition = count_condition
+
 class AlarmInfo(TLSData):
     def __init__(self, alarm_name: str = None, alarm_id: str = None, project_id: str = None, status: bool = None,
                  query_request: List[QueryRequest] = None, request_cycle: RequestCycle = None, condition: str = None,
                  trigger_period: int = None, alarm_period: int = None,
                  alarm_notify_group: List[AlarmNotifyGroupInfo] = None, user_define_msg: str = None,
                  create_time: str = None, modify_time: str = None,
-                 severity: str = None, alarm_period_detail: AlarmPeriodSetting = None):
+                 severity: str = None, alarm_period_detail: AlarmPeriodSetting = None,
+                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None):
         self.alarm_name = alarm_name
         self.alarm_id = alarm_id
         self.project_id = project_id
@@ -1850,6 +1874,8 @@ class AlarmInfo(TLSData):
         self.modify_time = modify_time
         self.severity = severity
         self.alarm_period_detail = alarm_period_detail
+        self.join_configurations = join_configurations
+        self.trigger_conditions = trigger_conditions
 
     def get_alarm_name(self):
         """
@@ -1956,6 +1982,20 @@ class AlarmInfo(TLSData):
         """
         return self.alarm_period_detail
 
+    def get_join_configurations(self):
+        """
+        :return: 告警策略的 Join 配置
+        :rtype: List[JoinConfig]
+        """
+        return self.join_configurations
+
+    def get_trigger_conditions(self):
+        """
+        :return: 告警策略的触发条件
+        :rtype: List[TriggerCondition]
+        """
+        return self.trigger_conditions
+
     @classmethod
     def set_attributes(cls, data: dict):
         alarm_info = super(AlarmInfo, cls).set_attributes(data)
@@ -1979,6 +2019,14 @@ class AlarmInfo(TLSData):
                 email = data[ALARM_PERIOD_DETAIL].get(EMAIL)
                 general_webhook = data[ALARM_PERIOD_DETAIL].get(GENERAL_WEBHOOK)
                 alarm_info.alarm_period_detail = AlarmPeriodSetting(sms, phone, email, general_webhook)
+        if JOIN_CONFIGURATIONS in data and data[JOIN_CONFIGURATIONS] is not None:
+            alarm_info.join_configurations = []
+            for join_configuration in data[JOIN_CONFIGURATIONS]:
+                alarm_info.join_configurations.append(JoinConfig.set_attributes(data=join_configuration))
+        if TRIGGER_CONDITIONS in data and data[TRIGGER_CONDITIONS] is not None:
+            alarm_info.trigger_conditions = []
+            for trigger_condition in data[TRIGGER_CONDITIONS]:
+                alarm_info.trigger_conditions.append(TriggerCondition.set_attributes(data=trigger_condition))
 
         return alarm_info
 
