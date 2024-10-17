@@ -16,7 +16,7 @@ _sym_db = _symbol_database.Default()
 from volcengine.vod.models.business import vod_common_pb2 as volcengine_dot_vod_dot_business_dot_vod__common__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(volcengine/vod/business/vod_upload.proto\x12\x1eVolcengine.Vod.Models.Business\x1a(volcengine/vod/business/vod_common.proto\"\x99\x04\n\x12VodUrlUploadURLSet\x12\x11\n\tSourceUrl\x18\x01 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x02 \x01(\t\x12\x0b\n\x03Md5\x18\x03 \x01(\t\x12\x12\n\nTemplateId\x18\x04 \x01(\t\x12\r\n\x05Title\x18\x05 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x06 \x01(\t\x12\x0c\n\x04Tags\x18\x07 \x01(\t\x12\x10\n\x08\x43\x61tegory\x18\x08 \x01(\t\x12\x10\n\x08\x46ileName\x18\t \x01(\t\x12\x18\n\x10\x43lassificationId\x18\n \x01(\x03\x12\x14\n\x0cStorageClass\x18\x0b \x01(\x05\x12\x15\n\rFileExtension\x18\x0c \x01(\t\x12\x1e\n\x16UrlEncryptionAlgorithm\x18\r \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x0e \x01(\x08\x12\x62\n\x10\x43ustomURLHeaders\x18\x0f \x03(\x0b\x32H.Volcengine.Vod.Models.Business.VodUrlUploadURLSet.CustomURLHeadersEntry\x12\x44\n\tTemplates\x18\x10 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodUploadTemplate\x1a\x37\n\x15\x43ustomURLHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"M\n\x12VodUrlResponseData\x12\x37\n\x04\x44\x61ta\x18\x01 \x03(\x0b\x32).Volcengine.Vod.Models.Business.ValuePair\"-\n\tValuePair\x12\r\n\x05JobId\x18\x01 \x01(\t\x12\x11\n\tSourceUrl\x18\x02 \x01(\t\"R\n\x0cVodQueryData\x12\x42\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodQueryUploadResult\"p\n\x14VodQueryUploadResult\x12@\n\rMediaInfoList\x18\x01 \x03(\x0b\x32).Volcengine.Vod.Models.Business.VodURLSet\x12\x16\n\x0eNotExistJobIds\x18\x02 \x03(\t\"^\n\rVodCommitData\x12M\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32?.Volcengine.Vod.Models.Business.VodCommitUploadInfoResponseData\"\xa7\x01\n\x1fVodCommitUploadInfoResponseData\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x41\n\nSourceInfo\x18\x02 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x11\n\tPosterUri\x18\x03 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x04 \x01(\t\x12\x0b\n\x03Mid\x18\x05 \x01(\t\"\xdb\x01\n\tVodURLSet\x12\x11\n\tRequestId\x18\x01 \x01(\t\x12\r\n\x05JobId\x18\x02 \x01(\t\x12\x11\n\tSourceUrl\x18\x03 \x01(\t\x12\r\n\x05State\x18\x04 \x01(\t\x12\x0b\n\x03Vid\x18\x05 \x01(\t\x12\x11\n\tSpaceName\x18\x06 \x01(\t\x12\x11\n\tAccountId\x18\x07 \x01(\t\x12\x41\n\nSourceInfo\x18\x08 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x14\n\x0c\x43\x61llbackArgs\x18\t \x01(\t\"`\n\x18VodApplyUploadInfoResult\x12\x44\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodApplyUploadInfoData\"\xbd\x01\n\x16VodApplyUploadInfoData\x12G\n\rUploadAddress\x18\x01 \x01(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodUploadAddress\x12Z\n\x18\x43\x61ndidateUploadAddresses\x18\x02 \x01(\x0b\x32\x38.Volcengine.Vod.Models.Business.CandidateUploadAddresses\"\xc2\x01\n\x10VodUploadAddress\x12@\n\nStoreInfos\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodStoreInfo\x12\x13\n\x0bUploadHosts\x18\x02 \x03(\t\x12\x43\n\x0cUploadHeader\x18\x03 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.VodHeaderPair\x12\x12\n\nSessionKey\x18\x04 \x01(\t\"\x84\x02\n\x18\x43\x61ndidateUploadAddresses\x12J\n\x13MainUploadAddresses\x18\x01 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.UploadAddress\x12L\n\x15\x42\x61\x63kupUploadAddresses\x18\x02 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.UploadAddress\x12N\n\x17\x46\x61llbackUploadAddresses\x18\x03 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.UploadAddress\".\n\x0cVodStoreInfo\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x0c\n\x04\x41uth\x18\x02 \x01(\t\"+\n\rVodHeaderPair\x12\x0b\n\x03Key\x18\x01 \x01(\t\x12\r\n\x05Value\x18\x02 \x01(\t\"b\n\x19VodCommitUploadInfoResult\x12\x45\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodCommitUploadInfoData\"\x89\x01\n\x17VodCommitUploadInfoData\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x11\n\tPosterUri\x18\x02 \x01(\t\x12\x41\n\nSourceInfo\x18\x03 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x0b\n\x03Mid\x18\x04 \x01(\t\"\xbc\x03\n\x16VodUploadFunctionInput\x12\x14\n\x0cSnapshotTime\x18\x01 \x01(\x01\x12\r\n\x05Title\x18\x02 \x01(\t\x12\x0c\n\x04Tags\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\x12\x10\n\x08\x43\x61tegory\x18\x05 \x01(\t\x12\x12\n\nRecordType\x18\x06 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x07 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x08 \x01(\x05\x12\x12\n\nTemplateId\x18\t \x01(\t\x12\x0b\n\x03Vid\x18\n \x01(\t\x12\x0b\n\x03\x46id\x18\x0b \x01(\t\x12\x10\n\x08Language\x18\x0c \x01(\t\x12\x10\n\x08StoreUri\x18\r \x01(\t\x12\x0e\n\x06Source\x18\x0e \x01(\t\x12\x0b\n\x03Tag\x18\x0f \x01(\t\x12\x13\n\x0b\x41utoPublish\x18\x10 \x01(\x08\x12\x12\n\nActionType\x18\x11 \x01(\t\x12\x16\n\x0eIsHlsIndexOnly\x18\x12 \x01(\x08\x12\x14\n\x0cHlsMediaSize\x18\x13 \x01(\t\x12\x44\n\tTemplates\x18\x14 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodUploadTemplate\"h\n\x11VodUploadFunction\x12\x0c\n\x04Name\x18\x01 \x01(\t\x12\x45\n\x05Input\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodUploadFunctionInput\"\xc8\x01\n\x15\x43ommitUploadInfoParam\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x02 \x01(\t\x12\x12\n\nSessionKey\x18\x03 \x01(\t\x12\x44\n\tFunctions\x18\x04 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodUploadFunction\x12\x13\n\x0bGetMetaMode\x18\x05 \x01(\t\x12\x17\n\x0fVodUploadSource\x18\x06 \x01(\t\"\x95\x01\n\x15\x43ommitRequestBodyJson\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x13\n\x0bGetMetaMode\x18\x05 \x01(\t\x12\x17\n\x0fVodUploadSource\x18\x06 \x01(\t\"\xb8\x02\n\x14\x41pplyUploadInfoParam\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ileType\x18\x02 \x01(\t\x12\x12\n\nSessionKey\x18\x03 \x01(\t\x12\x10\n\x08\x46ileSize\x18\x04 \x01(\x01\x12\x11\n\tMediaType\x18\x05 \x01(\t\x12\x0f\n\x07TosKeys\x18\x06 \x01(\t\x12\x15\n\rFileExtension\x18\x07 \x01(\t\x12\x12\n\nFilePrefix\x18\x08 \x01(\t\x12\x17\n\x0f\x46lushUploadMode\x18\t \x01(\x05\x12\x0b\n\x03Md5\x18\n \x01(\t\x12\x14\n\x0cStorageClass\x18\x0b \x01(\x05\x12\x18\n\x10UploadHostPrefer\x18\x0c \x01(\t\x12\x19\n\x11\x43lientNetWorkMode\x18\x65 \x01(\t\x12\x15\n\rClientIDCMode\x18\x66 \x01(\t\"\x96\x01\n\x0e\x43ommitResponse\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0b\n\x03Mid\x18\x02 \x01(\t\x12\x41\n\nSourceInfo\x18\x03 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x11\n\tPosterUri\x18\x04 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\t\">\n\x11VodUploadTemplate\x12\x13\n\x0bTemplateIds\x18\x01 \x03(\t\x12\x14\n\x0cTemplateType\x18\x02 \x01(\t\"\x84\x01\n\x13VodUploadOptionInfo\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x13\n\x0bTemplateIds\x18\x02 \x03(\t\x12\x44\n\tTemplates\x18\x03 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodUploadTemplate\"\x98\x02\n\x15VodUploadCallbackData\x12\x0c\n\x04\x43ode\x18\x01 \x01(\t\x12\x0f\n\x07Message\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x0b\n\x03Vid\x18\x04 \x01(\t\x12\x0b\n\x03Mid\x18\x05 \x01(\t\x12\x11\n\tSpaceName\x18\x06 \x01(\t\x12\x41\n\nSourceInfo\x18\x07 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x11\n\tPosterUri\x18\x08 \x01(\t\x12G\n\nOptionInfo\x18\t \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodUploadOptionInfo\"\xa1\x01\n\x10\x43\x61llbackResponse\x12\x11\n\tRequestId\x18\x01 \x01(\t\x12\x0f\n\x07Version\x18\x02 \x01(\t\x12\x11\n\tEventTime\x18\x03 \x01(\t\x12\x11\n\tEventType\x18\x04 \x01(\t\x12\x43\n\x04\x44\x61ta\x18\x05 \x01(\x0b\x32\x35.Volcengine.Vod.Models.Business.VodUploadCallbackData\"+\n\tStoreInfo\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x0c\n\x04\x41uth\x18\x02 \x01(\t\"(\n\nHeaderPair\x12\x0b\n\x03Key\x18\x01 \x01(\t\x12\r\n\x05Value\x18\x02 \x01(\t\"\xb9\x01\n\rUploadAddress\x12=\n\nStoreInfos\x18\x01 \x03(\x0b\x32).Volcengine.Vod.Models.Business.StoreInfo\x12\x13\n\x0bUploadHosts\x18\x02 \x03(\t\x12@\n\x0cUploadHeader\x18\x03 \x03(\x0b\x32*.Volcengine.Vod.Models.Business.HeaderPair\x12\x12\n\nSessionKey\x18\x04 \x01(\t\"\xae\x01\n\x11\x46lushUploadResult\x12\x13\n\x0b\x46lushUpload\x18\x01 \x01(\x08\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x0b\n\x03Mid\x18\x03 \x01(\t\x12\x41\n\nSourceInfo\x18\x04 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x11\n\tPosterUri\x18\x05 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x06 \x01(\t\"\xb5\x01\n\rApplyResponse\x12\x44\n\rUploadAddress\x18\x01 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.UploadAddress\x12L\n\x11\x46lushUploadResult\x18\x02 \x01(\x0b\x32\x31.Volcengine.Vod.Models.Business.FlushUploadResult\x12\x10\n\x08SDKParam\x18\x03 \x01(\t\"\xa7\x01\n\x19SubmitMoveObjectTaskParam\x12\x13\n\x0bSourceSpace\x18\x01 \x01(\t\x12\x16\n\x0eSourceFileName\x18\x02 \x01(\t\x12\x13\n\x0bTargetSpace\x18\x03 \x01(\t\x12\x16\n\x0eTargetFileName\x18\x04 \x01(\t\x12\x18\n\x10SaveSourceObject\x18\x05 \x01(\x08\x12\x16\n\x0e\x46orceOverwrite\x18\x06 \x01(\x08\"m\n\x1fVodSubmitMoveObjectTaskRespData\x12J\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.SubmitMoveObjectTaskRespData\"X\n\x1cSubmitMoveObjectTaskRespData\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\x12\x13\n\x0bSourceSpace\x18\x02 \x01(\t\x12\x13\n\x0bTargetSpace\x18\x03 \x01(\t\"X\n\x1cQueryMoveObjectTaskInfoParam\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\x12\x13\n\x0bSourceSpace\x18\x02 \x01(\t\x12\x13\n\x0bTargetSpace\x18\x03 \x01(\t\"r\n!VodQueryMoveObjectTaskInfoResData\x12M\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32?.Volcengine.Vod.Models.Business.QueryMoveObjectTaskInfoRespData\"\x81\x01\n\x1fQueryMoveObjectTaskInfoRespData\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\x12\x13\n\x0bSourceSpace\x18\x02 \x01(\t\x12\x13\n\x0bTargetSpace\x18\x03 \x01(\t\x12\r\n\x05State\x18\x04 \x01(\t\x12\x15\n\rTaskRunResult\x18\x05 \x01(\t*B\n\x10StorageClassType\x12\x0b\n\x07\x44\x65\x66\x61ult\x10\x00\x12\x0c\n\x08Standard\x10\x01\x12\x0b\n\x07\x41rchive\x10\x02\x12\x06\n\x02IA\x10\x03\x42\xcd\x01\n)com.volcengine.service.vod.model.businessB\tVodUploadP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(volcengine/vod/business/vod_upload.proto\x12\x1eVolcengine.Vod.Models.Business\x1a(volcengine/vod/business/vod_common.proto\"\x99\x04\n\x12VodUrlUploadURLSet\x12\x11\n\tSourceUrl\x18\x01 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x02 \x01(\t\x12\x0b\n\x03Md5\x18\x03 \x01(\t\x12\x12\n\nTemplateId\x18\x04 \x01(\t\x12\r\n\x05Title\x18\x05 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x06 \x01(\t\x12\x0c\n\x04Tags\x18\x07 \x01(\t\x12\x10\n\x08\x43\x61tegory\x18\x08 \x01(\t\x12\x10\n\x08\x46ileName\x18\t \x01(\t\x12\x18\n\x10\x43lassificationId\x18\n \x01(\x03\x12\x14\n\x0cStorageClass\x18\x0b \x01(\x05\x12\x15\n\rFileExtension\x18\x0c \x01(\t\x12\x1e\n\x16UrlEncryptionAlgorithm\x18\r \x01(\t\x12\x19\n\x11\x45nableLowPriority\x18\x0e \x01(\x08\x12\x62\n\x10\x43ustomURLHeaders\x18\x0f \x03(\x0b\x32H.Volcengine.Vod.Models.Business.VodUrlUploadURLSet.CustomURLHeadersEntry\x12\x44\n\tTemplates\x18\x10 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodUploadTemplate\x1a\x37\n\x15\x43ustomURLHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"M\n\x12VodUrlResponseData\x12\x37\n\x04\x44\x61ta\x18\x01 \x03(\x0b\x32).Volcengine.Vod.Models.Business.ValuePair\"-\n\tValuePair\x12\r\n\x05JobId\x18\x01 \x01(\t\x12\x11\n\tSourceUrl\x18\x02 \x01(\t\"R\n\x0cVodQueryData\x12\x42\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32\x34.Volcengine.Vod.Models.Business.VodQueryUploadResult\"p\n\x14VodQueryUploadResult\x12@\n\rMediaInfoList\x18\x01 \x03(\x0b\x32).Volcengine.Vod.Models.Business.VodURLSet\x12\x16\n\x0eNotExistJobIds\x18\x02 \x03(\t\"^\n\rVodCommitData\x12M\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32?.Volcengine.Vod.Models.Business.VodCommitUploadInfoResponseData\"\xa7\x01\n\x1fVodCommitUploadInfoResponseData\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x41\n\nSourceInfo\x18\x02 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x11\n\tPosterUri\x18\x03 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x04 \x01(\t\x12\x0b\n\x03Mid\x18\x05 \x01(\t\"\xdb\x01\n\tVodURLSet\x12\x11\n\tRequestId\x18\x01 \x01(\t\x12\r\n\x05JobId\x18\x02 \x01(\t\x12\x11\n\tSourceUrl\x18\x03 \x01(\t\x12\r\n\x05State\x18\x04 \x01(\t\x12\x0b\n\x03Vid\x18\x05 \x01(\t\x12\x11\n\tSpaceName\x18\x06 \x01(\t\x12\x11\n\tAccountId\x18\x07 \x01(\t\x12\x41\n\nSourceInfo\x18\x08 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x14\n\x0c\x43\x61llbackArgs\x18\t \x01(\t\"`\n\x18VodApplyUploadInfoResult\x12\x44\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodApplyUploadInfoData\"\x8f\x02\n\x16VodApplyUploadInfoData\x12G\n\rUploadAddress\x18\x01 \x01(\x0b\x32\x30.Volcengine.Vod.Models.Business.VodUploadAddress\x12Z\n\x18\x43\x61ndidateUploadAddresses\x18\x02 \x01(\x0b\x32\x38.Volcengine.Vod.Models.Business.CandidateUploadAddresses\x12P\n\x13VpcTosUploadAddress\x18\x03 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VpcTosUploadAddress\"\xc2\x01\n\x10VodUploadAddress\x12@\n\nStoreInfos\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.VodStoreInfo\x12\x13\n\x0bUploadHosts\x18\x02 \x03(\t\x12\x43\n\x0cUploadHeader\x18\x03 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.VodHeaderPair\x12\x12\n\nSessionKey\x18\x04 \x01(\t\"\x84\x02\n\x18\x43\x61ndidateUploadAddresses\x12J\n\x13MainUploadAddresses\x18\x01 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.UploadAddress\x12L\n\x15\x42\x61\x63kupUploadAddresses\x18\x02 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.UploadAddress\x12N\n\x17\x46\x61llbackUploadAddresses\x18\x03 \x03(\x0b\x32-.Volcengine.Vod.Models.Business.UploadAddress\".\n\x0cVodStoreInfo\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x0c\n\x04\x41uth\x18\x02 \x01(\t\"+\n\rVodHeaderPair\x12\x0b\n\x03Key\x18\x01 \x01(\t\x12\r\n\x05Value\x18\x02 \x01(\t\"\xb1\x02\n\x13VpcTosUploadAddress\x12\x12\n\nUploadMode\x18\x01 \x01(\t\x12\x0e\n\x06PutUrl\x18\x02 \x01(\t\x12\x46\n\x0ePartUploadInfo\x18\x03 \x01(\x0b\x32..Volcengine.Vod.Models.Business.PartUploadInfo\x12]\n\rPutUrlHeaders\x18\x04 \x03(\x0b\x32\x46.Volcengine.Vod.Models.Business.VpcTosUploadAddress.PutUrlHeadersEntry\x12\x19\n\x11QuickCompleteMode\x18\x05 \x01(\t\x1a\x34\n\x12PutUrlHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xef\x01\n\x0ePartUploadInfo\x12\x10\n\x08PartSize\x18\x01 \x01(\x03\x12\x13\n\x0bPartPutUrls\x18\x02 \x03(\t\x12\x17\n\x0f\x43ompletePartUrl\x18\x03 \x01(\t\x12\x62\n\x12\x43ompleteUrlHeaders\x18\x04 \x03(\x0b\x32\x46.Volcengine.Vod.Models.Business.PartUploadInfo.CompleteUrlHeadersEntry\x1a\x39\n\x17\x43ompleteUrlHeadersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"b\n\x19VodCommitUploadInfoResult\x12\x45\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32\x37.Volcengine.Vod.Models.Business.VodCommitUploadInfoData\"\x89\x01\n\x17VodCommitUploadInfoData\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x11\n\tPosterUri\x18\x02 \x01(\t\x12\x41\n\nSourceInfo\x18\x03 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x0b\n\x03Mid\x18\x04 \x01(\t\"\xbc\x03\n\x16VodUploadFunctionInput\x12\x14\n\x0cSnapshotTime\x18\x01 \x01(\x01\x12\r\n\x05Title\x18\x02 \x01(\t\x12\x0c\n\x04Tags\x18\x03 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x04 \x01(\t\x12\x10\n\x08\x43\x61tegory\x18\x05 \x01(\t\x12\x12\n\nRecordType\x18\x06 \x01(\x05\x12\x0e\n\x06\x46ormat\x18\x07 \x01(\t\x12\x18\n\x10\x43lassificationId\x18\x08 \x01(\x05\x12\x12\n\nTemplateId\x18\t \x01(\t\x12\x0b\n\x03Vid\x18\n \x01(\t\x12\x0b\n\x03\x46id\x18\x0b \x01(\t\x12\x10\n\x08Language\x18\x0c \x01(\t\x12\x10\n\x08StoreUri\x18\r \x01(\t\x12\x0e\n\x06Source\x18\x0e \x01(\t\x12\x0b\n\x03Tag\x18\x0f \x01(\t\x12\x13\n\x0b\x41utoPublish\x18\x10 \x01(\x08\x12\x12\n\nActionType\x18\x11 \x01(\t\x12\x16\n\x0eIsHlsIndexOnly\x18\x12 \x01(\x08\x12\x14\n\x0cHlsMediaSize\x18\x13 \x01(\t\x12\x44\n\tTemplates\x18\x14 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodUploadTemplate\"h\n\x11VodUploadFunction\x12\x0c\n\x04Name\x18\x01 \x01(\t\x12\x45\n\x05Input\x18\x02 \x01(\x0b\x32\x36.Volcengine.Vod.Models.Business.VodUploadFunctionInput\"\xc8\x01\n\x15\x43ommitUploadInfoParam\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x02 \x01(\t\x12\x12\n\nSessionKey\x18\x03 \x01(\t\x12\x44\n\tFunctions\x18\x04 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodUploadFunction\x12\x13\n\x0bGetMetaMode\x18\x05 \x01(\t\x12\x17\n\x0fVodUploadSource\x18\x06 \x01(\t\"\x95\x01\n\x15\x43ommitRequestBodyJson\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x12\n\nSessionKey\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x11\n\tFunctions\x18\x04 \x01(\t\x12\x13\n\x0bGetMetaMode\x18\x05 \x01(\t\x12\x17\n\x0fVodUploadSource\x18\x06 \x01(\t\"\xb8\x02\n\x14\x41pplyUploadInfoParam\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x10\n\x08\x46ileType\x18\x02 \x01(\t\x12\x12\n\nSessionKey\x18\x03 \x01(\t\x12\x10\n\x08\x46ileSize\x18\x04 \x01(\x01\x12\x11\n\tMediaType\x18\x05 \x01(\t\x12\x0f\n\x07TosKeys\x18\x06 \x01(\t\x12\x15\n\rFileExtension\x18\x07 \x01(\t\x12\x12\n\nFilePrefix\x18\x08 \x01(\t\x12\x17\n\x0f\x46lushUploadMode\x18\t \x01(\x05\x12\x0b\n\x03Md5\x18\n \x01(\t\x12\x14\n\x0cStorageClass\x18\x0b \x01(\x05\x12\x18\n\x10UploadHostPrefer\x18\x0c \x01(\t\x12\x19\n\x11\x43lientNetWorkMode\x18\x65 \x01(\t\x12\x15\n\rClientIDCMode\x18\x66 \x01(\t\"\x96\x01\n\x0e\x43ommitResponse\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0b\n\x03Mid\x18\x02 \x01(\t\x12\x41\n\nSourceInfo\x18\x03 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x11\n\tPosterUri\x18\x04 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x05 \x01(\t\">\n\x11VodUploadTemplate\x12\x13\n\x0bTemplateIds\x18\x01 \x03(\t\x12\x14\n\x0cTemplateType\x18\x02 \x01(\t\"\x84\x01\n\x13VodUploadOptionInfo\x12\x12\n\nTemplateId\x18\x01 \x01(\t\x12\x13\n\x0bTemplateIds\x18\x02 \x03(\t\x12\x44\n\tTemplates\x18\x03 \x03(\x0b\x32\x31.Volcengine.Vod.Models.Business.VodUploadTemplate\"\x98\x02\n\x15VodUploadCallbackData\x12\x0c\n\x04\x43ode\x18\x01 \x01(\t\x12\x0f\n\x07Message\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x03 \x01(\t\x12\x0b\n\x03Vid\x18\x04 \x01(\t\x12\x0b\n\x03Mid\x18\x05 \x01(\t\x12\x11\n\tSpaceName\x18\x06 \x01(\t\x12\x41\n\nSourceInfo\x18\x07 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x11\n\tPosterUri\x18\x08 \x01(\t\x12G\n\nOptionInfo\x18\t \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VodUploadOptionInfo\"\xa1\x01\n\x10\x43\x61llbackResponse\x12\x11\n\tRequestId\x18\x01 \x01(\t\x12\x0f\n\x07Version\x18\x02 \x01(\t\x12\x11\n\tEventTime\x18\x03 \x01(\t\x12\x11\n\tEventType\x18\x04 \x01(\t\x12\x43\n\x04\x44\x61ta\x18\x05 \x01(\x0b\x32\x35.Volcengine.Vod.Models.Business.VodUploadCallbackData\"+\n\tStoreInfo\x12\x10\n\x08StoreUri\x18\x01 \x01(\t\x12\x0c\n\x04\x41uth\x18\x02 \x01(\t\"(\n\nHeaderPair\x12\x0b\n\x03Key\x18\x01 \x01(\t\x12\r\n\x05Value\x18\x02 \x01(\t\"\xb9\x01\n\rUploadAddress\x12=\n\nStoreInfos\x18\x01 \x03(\x0b\x32).Volcengine.Vod.Models.Business.StoreInfo\x12\x13\n\x0bUploadHosts\x18\x02 \x03(\t\x12@\n\x0cUploadHeader\x18\x03 \x03(\x0b\x32*.Volcengine.Vod.Models.Business.HeaderPair\x12\x12\n\nSessionKey\x18\x04 \x01(\t\"\xae\x01\n\x11\x46lushUploadResult\x12\x13\n\x0b\x46lushUpload\x18\x01 \x01(\x08\x12\x0b\n\x03Vid\x18\x02 \x01(\t\x12\x0b\n\x03Mid\x18\x03 \x01(\t\x12\x41\n\nSourceInfo\x18\x04 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.VodSourceInfo\x12\x11\n\tPosterUri\x18\x05 \x01(\t\x12\x14\n\x0c\x43\x61llbackArgs\x18\x06 \x01(\t\"\x87\x02\n\rApplyResponse\x12\x44\n\rUploadAddress\x18\x01 \x01(\x0b\x32-.Volcengine.Vod.Models.Business.UploadAddress\x12L\n\x11\x46lushUploadResult\x18\x02 \x01(\x0b\x32\x31.Volcengine.Vod.Models.Business.FlushUploadResult\x12\x10\n\x08SDKParam\x18\x03 \x01(\t\x12P\n\x13VpcTosUploadAddress\x18\x05 \x01(\x0b\x32\x33.Volcengine.Vod.Models.Business.VpcTosUploadAddress\"\xa7\x01\n\x19SubmitMoveObjectTaskParam\x12\x13\n\x0bSourceSpace\x18\x01 \x01(\t\x12\x16\n\x0eSourceFileName\x18\x02 \x01(\t\x12\x13\n\x0bTargetSpace\x18\x03 \x01(\t\x12\x16\n\x0eTargetFileName\x18\x04 \x01(\t\x12\x18\n\x10SaveSourceObject\x18\x05 \x01(\x08\x12\x16\n\x0e\x46orceOverwrite\x18\x06 \x01(\x08\"m\n\x1fVodSubmitMoveObjectTaskRespData\x12J\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32<.Volcengine.Vod.Models.Business.SubmitMoveObjectTaskRespData\"X\n\x1cSubmitMoveObjectTaskRespData\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\x12\x13\n\x0bSourceSpace\x18\x02 \x01(\t\x12\x13\n\x0bTargetSpace\x18\x03 \x01(\t\"X\n\x1cQueryMoveObjectTaskInfoParam\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\x12\x13\n\x0bSourceSpace\x18\x02 \x01(\t\x12\x13\n\x0bTargetSpace\x18\x03 \x01(\t\"r\n!VodQueryMoveObjectTaskInfoResData\x12M\n\x04\x44\x61ta\x18\x01 \x01(\x0b\x32?.Volcengine.Vod.Models.Business.QueryMoveObjectTaskInfoRespData\"\x81\x01\n\x1fQueryMoveObjectTaskInfoRespData\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\x12\x13\n\x0bSourceSpace\x18\x02 \x01(\t\x12\x13\n\x0bTargetSpace\x18\x03 \x01(\t\x12\r\n\x05State\x18\x04 \x01(\t\x12\x15\n\rTaskRunResult\x18\x05 \x01(\t*B\n\x10StorageClassType\x12\x0b\n\x07\x44\x65\x66\x61ult\x10\x00\x12\x0c\n\x08Standard\x10\x01\x12\x0b\n\x07\x41rchive\x10\x02\x12\x06\n\x02IA\x10\x03\x42\xcd\x01\n)com.volcengine.service.vod.model.businessB\tVodUploadP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 _STORAGECLASSTYPE = DESCRIPTOR.enum_types_by_name['StorageClassType']
 StorageClassType = enum_type_wrapper.EnumTypeWrapper(_STORAGECLASSTYPE)
@@ -41,6 +41,10 @@ _VODUPLOADADDRESS = DESCRIPTOR.message_types_by_name['VodUploadAddress']
 _CANDIDATEUPLOADADDRESSES = DESCRIPTOR.message_types_by_name['CandidateUploadAddresses']
 _VODSTOREINFO = DESCRIPTOR.message_types_by_name['VodStoreInfo']
 _VODHEADERPAIR = DESCRIPTOR.message_types_by_name['VodHeaderPair']
+_VPCTOSUPLOADADDRESS = DESCRIPTOR.message_types_by_name['VpcTosUploadAddress']
+_VPCTOSUPLOADADDRESS_PUTURLHEADERSENTRY = _VPCTOSUPLOADADDRESS.nested_types_by_name['PutUrlHeadersEntry']
+_PARTUPLOADINFO = DESCRIPTOR.message_types_by_name['PartUploadInfo']
+_PARTUPLOADINFO_COMPLETEURLHEADERSENTRY = _PARTUPLOADINFO.nested_types_by_name['CompleteUrlHeadersEntry']
 _VODCOMMITUPLOADINFORESULT = DESCRIPTOR.message_types_by_name['VodCommitUploadInfoResult']
 _VODCOMMITUPLOADINFODATA = DESCRIPTOR.message_types_by_name['VodCommitUploadInfoData']
 _VODUPLOADFUNCTIONINPUT = DESCRIPTOR.message_types_by_name['VodUploadFunctionInput']
@@ -169,6 +173,36 @@ VodHeaderPair = _reflection.GeneratedProtocolMessageType('VodHeaderPair', (_mess
   # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodHeaderPair)
   })
 _sym_db.RegisterMessage(VodHeaderPair)
+
+VpcTosUploadAddress = _reflection.GeneratedProtocolMessageType('VpcTosUploadAddress', (_message.Message,), {
+
+  'PutUrlHeadersEntry' : _reflection.GeneratedProtocolMessageType('PutUrlHeadersEntry', (_message.Message,), {
+    'DESCRIPTOR' : _VPCTOSUPLOADADDRESS_PUTURLHEADERSENTRY,
+    '__module__' : 'volcengine.vod.business.vod_upload_pb2'
+    # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VpcTosUploadAddress.PutUrlHeadersEntry)
+    })
+  ,
+  'DESCRIPTOR' : _VPCTOSUPLOADADDRESS,
+  '__module__' : 'volcengine.vod.business.vod_upload_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VpcTosUploadAddress)
+  })
+_sym_db.RegisterMessage(VpcTosUploadAddress)
+_sym_db.RegisterMessage(VpcTosUploadAddress.PutUrlHeadersEntry)
+
+PartUploadInfo = _reflection.GeneratedProtocolMessageType('PartUploadInfo', (_message.Message,), {
+
+  'CompleteUrlHeadersEntry' : _reflection.GeneratedProtocolMessageType('CompleteUrlHeadersEntry', (_message.Message,), {
+    'DESCRIPTOR' : _PARTUPLOADINFO_COMPLETEURLHEADERSENTRY,
+    '__module__' : 'volcengine.vod.business.vod_upload_pb2'
+    # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.PartUploadInfo.CompleteUrlHeadersEntry)
+    })
+  ,
+  'DESCRIPTOR' : _PARTUPLOADINFO,
+  '__module__' : 'volcengine.vod.business.vod_upload_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.PartUploadInfo)
+  })
+_sym_db.RegisterMessage(PartUploadInfo)
+_sym_db.RegisterMessage(PartUploadInfo.CompleteUrlHeadersEntry)
 
 VodCommitUploadInfoResult = _reflection.GeneratedProtocolMessageType('VodCommitUploadInfoResult', (_message.Message,), {
   'DESCRIPTOR' : _VODCOMMITUPLOADINFORESULT,
@@ -337,8 +371,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._serialized_options = b'\n)com.volcengine.service.vod.model.businessB\tVodUploadP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata'
   _VODURLUPLOADURLSET_CUSTOMURLHEADERSENTRY._options = None
   _VODURLUPLOADURLSET_CUSTOMURLHEADERSENTRY._serialized_options = b'8\001'
-  _STORAGECLASSTYPE._serialized_start=5920
-  _STORAGECLASSTYPE._serialized_end=5986
+  _VPCTOSUPLOADADDRESS_PUTURLHEADERSENTRY._options = None
+  _VPCTOSUPLOADADDRESS_PUTURLHEADERSENTRY._serialized_options = b'8\001'
+  _PARTUPLOADINFO_COMPLETEURLHEADERSENTRY._options = None
+  _PARTUPLOADINFO_COMPLETEURLHEADERSENTRY._serialized_options = b'8\001'
+  _STORAGECLASSTYPE._serialized_start=6634
+  _STORAGECLASSTYPE._serialized_end=6700
   _VODURLUPLOADURLSET._serialized_start=119
   _VODURLUPLOADURLSET._serialized_end=656
   _VODURLUPLOADURLSET_CUSTOMURLHEADERSENTRY._serialized_start=601
@@ -360,59 +398,67 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _VODAPPLYUPLOADINFORESULT._serialized_start=1470
   _VODAPPLYUPLOADINFORESULT._serialized_end=1566
   _VODAPPLYUPLOADINFODATA._serialized_start=1569
-  _VODAPPLYUPLOADINFODATA._serialized_end=1758
-  _VODUPLOADADDRESS._serialized_start=1761
-  _VODUPLOADADDRESS._serialized_end=1955
-  _CANDIDATEUPLOADADDRESSES._serialized_start=1958
-  _CANDIDATEUPLOADADDRESSES._serialized_end=2218
-  _VODSTOREINFO._serialized_start=2220
-  _VODSTOREINFO._serialized_end=2266
-  _VODHEADERPAIR._serialized_start=2268
-  _VODHEADERPAIR._serialized_end=2311
-  _VODCOMMITUPLOADINFORESULT._serialized_start=2313
-  _VODCOMMITUPLOADINFORESULT._serialized_end=2411
-  _VODCOMMITUPLOADINFODATA._serialized_start=2414
-  _VODCOMMITUPLOADINFODATA._serialized_end=2551
-  _VODUPLOADFUNCTIONINPUT._serialized_start=2554
-  _VODUPLOADFUNCTIONINPUT._serialized_end=2998
-  _VODUPLOADFUNCTION._serialized_start=3000
-  _VODUPLOADFUNCTION._serialized_end=3104
-  _COMMITUPLOADINFOPARAM._serialized_start=3107
-  _COMMITUPLOADINFOPARAM._serialized_end=3307
-  _COMMITREQUESTBODYJSON._serialized_start=3310
-  _COMMITREQUESTBODYJSON._serialized_end=3459
-  _APPLYUPLOADINFOPARAM._serialized_start=3462
-  _APPLYUPLOADINFOPARAM._serialized_end=3774
-  _COMMITRESPONSE._serialized_start=3777
-  _COMMITRESPONSE._serialized_end=3927
-  _VODUPLOADTEMPLATE._serialized_start=3929
-  _VODUPLOADTEMPLATE._serialized_end=3991
-  _VODUPLOADOPTIONINFO._serialized_start=3994
-  _VODUPLOADOPTIONINFO._serialized_end=4126
-  _VODUPLOADCALLBACKDATA._serialized_start=4129
-  _VODUPLOADCALLBACKDATA._serialized_end=4409
-  _CALLBACKRESPONSE._serialized_start=4412
-  _CALLBACKRESPONSE._serialized_end=4573
-  _STOREINFO._serialized_start=4575
-  _STOREINFO._serialized_end=4618
-  _HEADERPAIR._serialized_start=4620
-  _HEADERPAIR._serialized_end=4660
-  _UPLOADADDRESS._serialized_start=4663
-  _UPLOADADDRESS._serialized_end=4848
-  _FLUSHUPLOADRESULT._serialized_start=4851
-  _FLUSHUPLOADRESULT._serialized_end=5025
-  _APPLYRESPONSE._serialized_start=5028
-  _APPLYRESPONSE._serialized_end=5209
-  _SUBMITMOVEOBJECTTASKPARAM._serialized_start=5212
-  _SUBMITMOVEOBJECTTASKPARAM._serialized_end=5379
-  _VODSUBMITMOVEOBJECTTASKRESPDATA._serialized_start=5381
-  _VODSUBMITMOVEOBJECTTASKRESPDATA._serialized_end=5490
-  _SUBMITMOVEOBJECTTASKRESPDATA._serialized_start=5492
-  _SUBMITMOVEOBJECTTASKRESPDATA._serialized_end=5580
-  _QUERYMOVEOBJECTTASKINFOPARAM._serialized_start=5582
-  _QUERYMOVEOBJECTTASKINFOPARAM._serialized_end=5670
-  _VODQUERYMOVEOBJECTTASKINFORESDATA._serialized_start=5672
-  _VODQUERYMOVEOBJECTTASKINFORESDATA._serialized_end=5786
-  _QUERYMOVEOBJECTTASKINFORESPDATA._serialized_start=5789
-  _QUERYMOVEOBJECTTASKINFORESPDATA._serialized_end=5918
+  _VODAPPLYUPLOADINFODATA._serialized_end=1840
+  _VODUPLOADADDRESS._serialized_start=1843
+  _VODUPLOADADDRESS._serialized_end=2037
+  _CANDIDATEUPLOADADDRESSES._serialized_start=2040
+  _CANDIDATEUPLOADADDRESSES._serialized_end=2300
+  _VODSTOREINFO._serialized_start=2302
+  _VODSTOREINFO._serialized_end=2348
+  _VODHEADERPAIR._serialized_start=2350
+  _VODHEADERPAIR._serialized_end=2393
+  _VPCTOSUPLOADADDRESS._serialized_start=2396
+  _VPCTOSUPLOADADDRESS._serialized_end=2701
+  _VPCTOSUPLOADADDRESS_PUTURLHEADERSENTRY._serialized_start=2649
+  _VPCTOSUPLOADADDRESS_PUTURLHEADERSENTRY._serialized_end=2701
+  _PARTUPLOADINFO._serialized_start=2704
+  _PARTUPLOADINFO._serialized_end=2943
+  _PARTUPLOADINFO_COMPLETEURLHEADERSENTRY._serialized_start=2886
+  _PARTUPLOADINFO_COMPLETEURLHEADERSENTRY._serialized_end=2943
+  _VODCOMMITUPLOADINFORESULT._serialized_start=2945
+  _VODCOMMITUPLOADINFORESULT._serialized_end=3043
+  _VODCOMMITUPLOADINFODATA._serialized_start=3046
+  _VODCOMMITUPLOADINFODATA._serialized_end=3183
+  _VODUPLOADFUNCTIONINPUT._serialized_start=3186
+  _VODUPLOADFUNCTIONINPUT._serialized_end=3630
+  _VODUPLOADFUNCTION._serialized_start=3632
+  _VODUPLOADFUNCTION._serialized_end=3736
+  _COMMITUPLOADINFOPARAM._serialized_start=3739
+  _COMMITUPLOADINFOPARAM._serialized_end=3939
+  _COMMITREQUESTBODYJSON._serialized_start=3942
+  _COMMITREQUESTBODYJSON._serialized_end=4091
+  _APPLYUPLOADINFOPARAM._serialized_start=4094
+  _APPLYUPLOADINFOPARAM._serialized_end=4406
+  _COMMITRESPONSE._serialized_start=4409
+  _COMMITRESPONSE._serialized_end=4559
+  _VODUPLOADTEMPLATE._serialized_start=4561
+  _VODUPLOADTEMPLATE._serialized_end=4623
+  _VODUPLOADOPTIONINFO._serialized_start=4626
+  _VODUPLOADOPTIONINFO._serialized_end=4758
+  _VODUPLOADCALLBACKDATA._serialized_start=4761
+  _VODUPLOADCALLBACKDATA._serialized_end=5041
+  _CALLBACKRESPONSE._serialized_start=5044
+  _CALLBACKRESPONSE._serialized_end=5205
+  _STOREINFO._serialized_start=5207
+  _STOREINFO._serialized_end=5250
+  _HEADERPAIR._serialized_start=5252
+  _HEADERPAIR._serialized_end=5292
+  _UPLOADADDRESS._serialized_start=5295
+  _UPLOADADDRESS._serialized_end=5480
+  _FLUSHUPLOADRESULT._serialized_start=5483
+  _FLUSHUPLOADRESULT._serialized_end=5657
+  _APPLYRESPONSE._serialized_start=5660
+  _APPLYRESPONSE._serialized_end=5923
+  _SUBMITMOVEOBJECTTASKPARAM._serialized_start=5926
+  _SUBMITMOVEOBJECTTASKPARAM._serialized_end=6093
+  _VODSUBMITMOVEOBJECTTASKRESPDATA._serialized_start=6095
+  _VODSUBMITMOVEOBJECTTASKRESPDATA._serialized_end=6204
+  _SUBMITMOVEOBJECTTASKRESPDATA._serialized_start=6206
+  _SUBMITMOVEOBJECTTASKRESPDATA._serialized_end=6294
+  _QUERYMOVEOBJECTTASKINFOPARAM._serialized_start=6296
+  _QUERYMOVEOBJECTTASKINFOPARAM._serialized_end=6384
+  _VODQUERYMOVEOBJECTTASKINFORESDATA._serialized_start=6386
+  _VODQUERYMOVEOBJECTTASKINFORESDATA._serialized_end=6500
+  _QUERYMOVEOBJECTTASKINFORESPDATA._serialized_start=6503
+  _QUERYMOVEOBJECTTASKINFORESPDATA._serialized_end=6632
 # @@protoc_insertion_point(module_scope)

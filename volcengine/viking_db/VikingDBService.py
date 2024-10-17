@@ -307,8 +307,10 @@ class VikingDBService(Service):
             if field.pipeline_name is not None:
                 _field["pipeline_name"] = field.pipeline_name
             _fields.append(_field)
-        assert primary_key is not None
-        params["primary_key"] = primary_key
+        if primary_key:
+            params["primary_key"] = primary_key
+        else:
+            params["primary_key"] = "__AUTO_ID__"
         params["fields"] = _fields
         # print(params)
         self.json_exception("CreateCollection", {}, json.dumps(params))
@@ -334,8 +336,10 @@ class VikingDBService(Service):
             if field.pipeline_name is not None:
                 _field["pipeline_name"] = field.pipeline_name
             _fields.append(_field)
-        assert primary_key is not None
-        params["primary_key"] = primary_key
+        if primary_key:
+            params["primary_key"] = primary_key
+        else:
+            params["primary_key"] = "__AUTO_ID__"
         params["fields"] = _fields
         # print(params)
         await self.async_json_exception("CreateCollection", {}, json.dumps(params))

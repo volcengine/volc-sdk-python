@@ -30,7 +30,7 @@ class Collection(object):
             self.update_time = update_time
         if update_person is not None:
             self.update_person = update_person
-    def upsert_data(self, data: Union[Data, List[Data]]):
+    def upsert_data(self, data: Union[Data, List[Data]], async_upsert=False):
         """
         Insert and overwrite data in fields within a collection
 
@@ -44,6 +44,8 @@ class Collection(object):
             if data.TTL is not None:
                 ttl = data.TTL
             params = {"collection_name": self.collection_name, "fields": fields_arr, "ttl": ttl}
+            if async_upsert:
+                params["async"]=True
             # print(params)
             res = self.viking_db_service.json_exception("UpsertData", {}, json.dumps(params))
         elif isinstance(data, list):
@@ -59,15 +61,19 @@ class Collection(object):
                     record[item.TTL] = [item.fields]
             for item in record:
                 params = {"collection_name": self.collection_name, "fields": record[item], "ttl": item}
+                if async_upsert:
+                    params["async"]=True
                 res = self.viking_db_service.json_exception("UpsertData", {}, json.dumps(params))
 
-    async def async_upsert_data(self, data: Union[Data, List[Data]]):
+    async def async_upsert_data(self, data: Union[Data, List[Data]], async_upsert=False):
         if isinstance(data, Data):
             fields_arr = [data.fields]
             ttl = 0
             if data.TTL is not None:
                 ttl = data.TTL
             params = {"collection_name": self.collection_name, "fields": fields_arr, "ttl": ttl}
+            if async_upsert:
+                params["async"]=True
             # print(params)
             res = await self.viking_db_service.async_json_exception("UpsertData", {}, json.dumps(params))
         elif isinstance(data, list):
@@ -83,6 +89,8 @@ class Collection(object):
                     record[item.TTL] = [item.fields]
             for item in record:
                 params = {"collection_name": self.collection_name, "fields": record[item], "ttl": item}
+                if async_upsert:
+                    params["async"]=True
                 res = await self.viking_db_service.async_json_exception("UpsertData", {}, json.dumps(params))
 
 

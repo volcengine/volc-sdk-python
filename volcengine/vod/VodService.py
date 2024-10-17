@@ -14,6 +14,7 @@ import time
 import datetime
 import volcengine.vod
 from volcengine.util.Util import Util
+from volcengine.vod.helper.FileSectionReader import FileSectionReader
 from volcengine.vod.models.request.request_vod_pb2 import *
 from volcengine.vod.models.response.response_vod_pb2 import *
 
@@ -139,7 +140,7 @@ class VodService(VodServiceConfig):
 
     def upload_media(self, request):
         oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, "", request.FileName,
-                                                      request.FileExtension, request.StorageClass, request.ClientNetWorkMode, request.ClientIDCMode, request.UploadHostPrefer)
+                                                      request.FileExtension, request.StorageClass, request.ClientNetWorkMode, request.ClientIDCMode, request.UploadHostPrefer, request.ChunkSize)
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName
         req.SessionKey = session_key
@@ -152,11 +153,15 @@ class VodService(VodServiceConfig):
             raise Exception(resp.ResponseMetadata.Error)
         return resp
 
-    def upload_tob(self, space_name, file_path, file_type, file_name, file_extension, storage_class, client_network_mode, client_idc_mode, upload_host_prefer):
+    def upload_tob(self, space_name, file_path, file_type, file_name, file_extension, storage_class, client_network_mode, client_idc_mode, upload_host_prefer, chunk_size):
         if not os.path.isfile(file_path):
             raise Exception("no such file on file path")
+        if chunk_size < MinChunkSize:
+            chunk_size = MinChunkSize
+        file_size = os.path.getsize(file_path)
         apply_req = VodApplyUploadInfoRequest()
         apply_req.SpaceName = space_name
+        apply_req.FileSize = file_size
         apply_req.FileType = file_type
         apply_req.FileName = file_name
         apply_req.FileExtension = file_extension
@@ -169,6 +174,20 @@ class VodService(VodServiceConfig):
         if resp.ResponseMetadata.Error.Code != '':
             print(resp.ResponseMetadata.RequestId)
             raise Exception(resp.ResponseMetadata.Error)
+
+        vpc_upload_address = resp.Result.Data.VpcTosUploadAddress
+        if vpc_upload_address:
+            upload_address = resp.Result.Data.UploadAddress
+            oid = upload_address.StoreInfos[0].StoreUri
+            session_key = upload_address.SessionKey
+
+            start = time.time()
+            if vpc_upload_address.UploadMode != "":
+                self.vpc_upload(vpc_upload_address, file_path, file_size)
+                cost = (time.time() - start) * 1000
+                avg_speed = float(file_size) / float(cost)
+                return oid, session_key, avg_speed
+
         # using candidate address first
         candidate_upload_address = resp.Result.Data.CandidateUploadAddresses
         all_upload_address = []
@@ -189,10 +208,10 @@ class VodService(VodServiceConfig):
                 auth = upload_address.StoreInfos[0].Auth
                 start = time.time()
                 try:
-                    if file_size < MinChunkSize:
+                    if file_size < chunk_size:
                         self.direct_upload(tos_host, oid, auth, file_path, storage_class)
                     else:
-                        self.chunk_upload(file_path, tos_host, oid, auth, file_size, True, storage_class)
+                        self.chunk_upload(file_path, tos_host, oid, auth, file_size, True, storage_class, chunk_size)
                 except Exception as e:
                     print("upload failed, switch host to retry.. reason: {}".format(e))
                     continue
@@ -209,14 +228,82 @@ class VodService(VodServiceConfig):
             host = upload_address.UploadHosts[0]
             start = time.time()
             file_size = os.path.getsize(file_path)
-            if file_size < MinChunkSize:
+            if file_size < chunk_size:
                 self.direct_upload(host, oid, auth, file_path, storage_class)
             else:
-                self.chunk_upload(file_path, host, oid, auth, file_size, True, storage_class)
+                self.chunk_upload(file_path, host, oid, auth, file_size, True, storage_class, chunk_size)
             cost = (time.time() - start) * 1000
             file_size = os.path.getsize(file_path)
             avg_speed = float(file_size) / float(cost)
             return oid, session_key, avg_speed
+
+    def vpc_upload(self, vpc_upload_address, file_path, file_size):
+        if vpc_upload_address.QuickCompleteMode == "enable":
+            return
+
+        if vpc_upload_address.UploadMode == "direct":
+            self.vpc_put(vpc_upload_address, file_path)
+        elif vpc_upload_address.UploadMode == "part":
+            self.vpc_part_upload(vpc_upload_address.PartUploadInfo, file_path, file_size)
+
+    def vpc_put(self, vpc_upload_address, file_path):
+        put_url = vpc_upload_address.PutUrl
+        put_headers = vpc_upload_address.PutUrlHeaders
+        with open(file_path, 'rb') as f:
+            resp = self.session.put(put_url, headers=put_headers, data=f)
+            if resp.status_code != 200:
+                log_id = resp.headers.get("x-tos-request-id", "")
+                raise Exception("vpc put error, logId: {}".format(log_id))
+
+    def vpc_part_put(self, put_url, content):
+        resp = self.session.put(put_url, data=content)
+        if resp.status_code != 200:
+            log_id = resp.headers.get("x-tos-request-id", "")
+            raise Exception("vpc part put error, logId: {}".format(log_id))
+
+        etag = resp.headers.get("ETag", "")
+        return etag
+
+    def vpc_post(self, post_url, data, headers):
+        resp = self.session.post(post_url, data=data, headers=headers)
+        if resp.status_code != 200:
+            log_id = resp.headers.get("x-tos-request-id", "")
+            raise Exception("vpc post error, logId: {}".format(log_id))
+
+    def vpc_part_upload(self, part_upload_info, file_path, file_size):
+        chunk_size = part_upload_info.PartSize
+        total_num = file_size // chunk_size
+        if len(part_upload_info.PartPutUrls) != total_num + 1:
+            raise Exception("mismatch part upload")
+
+        offset = 0
+        etag_list = []
+        with open(file_path, 'rb') as f:
+            for i in range(0, total_num):
+                put_url = part_upload_info.PartPutUrls[i]
+                sr = FileSectionReader(f, chunk_size, init_offset=offset, can_reset=True)
+                etag = self.vpc_part_put(put_url, sr)
+                etag_list.append(etag)
+                offset += chunk_size
+
+            last_chunk_size = file_size - offset
+            put_url = part_upload_info.PartPutUrls[total_num]
+            sr = FileSectionReader(f, last_chunk_size, init_offset=offset, can_reset=True)
+            etag = self.vpc_part_put(put_url, sr)
+            etag_list.append(etag)
+
+        post_data = self.vpc_generate_body(etag_list)
+        self.vpc_post(part_upload_info.CompletePartUrl, post_data, part_upload_info.CompleteUrlHeaders)
+
+    def vpc_generate_body(self, etag_list):
+        if len(etag_list) == 0:
+            raise Exception('etag list empty')
+        s = []
+        for i in range(len(etag_list)):
+            s.append("{" + '"PartNumber": {}, "ETag": {}'.format(i + 1, etag_list[i]) + "}")
+        comma = ','
+
+        return '{"Parts":[' + comma.join(s) + ']}'
 
     @retry(tries=3, delay=1, backoff=2)
     def direct_upload(self, host, oid, auth, file_path, storage_class):
@@ -240,15 +327,15 @@ class VodService(VodServiceConfig):
         if resp.get('success') is None or resp['success'] != 0:
             raise Exception("direct upload error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
 
-    def chunk_upload(self, file_path, host, oid, auth, size, is_large_file, storage_class):
+    def chunk_upload(self, file_path, host, oid, auth, size, is_large_file, storage_class, chunk_size):
         upload_id = self.init_upload_part(host, oid, auth, is_large_file, storage_class)
-        n = size // MinChunkSize
+        n = size // chunk_size
         last_num = n - 1
         parts = []
         meta = {}
         with open(file_path, 'rb') as f:
             for i in range(0, last_num):
-                data = f.read(MinChunkSize)
+                data = f.read(chunk_size)
                 part_number = i
                 if is_large_file:
                     part_number = i + 1
@@ -356,7 +443,7 @@ class VodService(VodServiceConfig):
 
     def upload_material(self, request):
         oid, session_key, avg_speed = self.upload_tob(request.SpaceName, request.FilePath, request.FileType,
-                                                      request.FileName, request.FileExtension, 0, request.ClientNetWorkMode, request.ClientIDCMode, request.UploadHostPrefer)
+                                                      request.FileName, request.FileExtension, 0, request.ClientNetWorkMode, request.ClientIDCMode, request.UploadHostPrefer, request.ChunkSize)
 
         req = VodCommitUploadInfoRequest()
         req.SpaceName = request.SpaceName

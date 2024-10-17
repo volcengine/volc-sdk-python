@@ -40,7 +40,7 @@ class VodServiceConfig(Service):
         }
         service_info = service_info_map.get(region, None)
         if not service_info:
-            service_info = ServiceInfo("vod-{}.volcengineapi.com".format(region), {'Accept': 'application/json'},
+            service_info = ServiceInfo("vod.{}.volcengineapi.com".format(region), {'Accept': 'application/json'},
                                        Credentials('', '', 'vod', region), 60, 60, "https")
 
         return service_info

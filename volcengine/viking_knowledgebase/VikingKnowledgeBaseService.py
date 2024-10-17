@@ -71,7 +71,10 @@ class VikingKnowledgeBaseService(Service):
             "SearchCollection":     ApiInfo("POST", "/api/knowledge/collection/search", {}, {},
                                         {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "SearchAndGenerate":    ApiInfo("POST", "/api/knowledge/collection/search_and_generate", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),        
+                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+
+            "SearchKnowledge": ApiInfo("POST", "/api/knowledge/collection/search_knowledge", {}, {},
+                                       {'Accept': 'application/json', 'Content-Type': 'application/json'}),
 
             # Doc
             "AddDoc":               ApiInfo("POST", "/api/knowledge/doc/add", {}, {},
@@ -96,6 +99,10 @@ class VikingKnowledgeBaseService(Service):
                                         {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "Rerank":                 ApiInfo("POST", "/api/knowledge/service/rerank", {}, {},
                                         {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+
+            # Chat
+            "ChatCompletion": ApiInfo("POST", "/api/knowledge/chat/completions", {}, {},
+                                      {'Accept': 'application/json', 'Content-Type': 'application/json'}),
         }
         return api_info
 
@@ -478,3 +485,83 @@ class VikingKnowledgeBaseService(Service):
         
         res = await self.async_json_exception("Rerank", {}, json.dumps(params))
         return json.loads(res)
+
+    def search_knowledge(self, collection_name, query, pre_processing, query_param=None, limit=10, dense_weight=0.5, post_processing=None,
+                         project="default", resource_id=None):
+        params = {
+            "name": collection_name,
+            "query": query,
+            "project": project,
+            "limit": limit,
+            "dense_weight": dense_weight,
+            "pre_processing": pre_processing,
+        }
+        if resource_id is not None:
+            params["resource_id"] = resource_id
+        if query_param is not None:
+            params["query_param"] = query_param
+        if post_processing is not None:
+            params["post_processing"] = post_processing
+        res = self.json_exception("SearchKnowledge", {}, json.dumps(params))
+        data = json.loads(res)["data"]
+        ret = {
+            "rewrite_query": data.get("rewrite_query"),
+            "result_list": data.get("result_list")
+        }
+        return ret
+
+    async def async_search_knowledge(self, collection_name, query, pre_processing, query_param=None, limit=10, dense_weight=0.5, post_processing=None,
+                                     project="default", resource_id=None):
+        params = {
+            "name": collection_name,
+            "query": query,
+            "project": project,
+            "limit": limit,
+            "dense_weight": dense_weight,
+            "pre_processing": pre_processing,
+        }
+        if resource_id is not None:
+            params["resource_id"] = resource_id
+        if query_param is not None:
+            params["query_param"] = query_param
+        if post_processing is not None:
+            params["post_processing"] = post_processing
+        res = await self.async_json_exception("SearchKnowledge", {}, json.dumps(params))
+        data = json.loads(res)["data"]
+        ret = {
+            "rewrite_query": data.get("rewrite_query"),
+            "result_list": data.get("result_list")
+        }
+        return ret
+
+    def chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True):
+        params = {
+            "model": model,
+            "messages": messages,
+            "return_token_usage": return_token_usage,
+            "max_tokens": max_tokens,
+            "temperature": temperature
+        }
+        res = self.json_exception("ChatCompletion", {}, json.dumps(params))
+        data = json.loads(res)["data"]
+        ret = {
+            "generated_answer": data.get("generated_answer"),
+            "usage": data.get("usage")
+        }
+        return ret
+
+    async def async_chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True):
+        params = {
+            "model": model,
+            "messages": messages,
+            "return_token_usage": return_token_usage,
+            "max_tokens": max_tokens,
+            "temperature": temperature
+        }
+        res = await self.async_json_exception("ChatCompletion", {}, json.dumps(params))
+        data = json.loads(res)["data"]
+        ret = {
+            "generated_answer": data.get("generated_answer"),
+            "usage": data.get("usage")
+        }
+        return ret
