@@ -1398,6 +1398,40 @@ class VodService(VodServiceConfig):
             return Parse(res, VodGetMediaListResponse(), True)
 
     #
+    # DeleteMaterial.
+    #
+    # @param request VodDeleteMaterialRequest
+    # @return VodDeleteMaterialResponse
+    # @raise Exception
+    def delete_material(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DeleteMaterial", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDeleteMaterialResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDeleteMaterialResponse(), True)
+
+    #
     # GetSubtitleInfoList.
     #
     # @param request VodGetSubtitleInfoListRequest

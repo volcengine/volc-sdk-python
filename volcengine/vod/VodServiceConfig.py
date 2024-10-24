@@ -72,6 +72,7 @@ class VodServiceConfig(Service):
             "DeleteMediaTosFile": ApiInfo("POST", "/", {"Action": "DeleteMediaTosFile", "Version": "2022-12-01"}, {}, {}),
             "GetFileInfos": ApiInfo("GET", "/", {"Action": "GetFileInfos", "Version": "2023-07-01"}, {}, {}),
             "GetMediaList": ApiInfo("GET", "/", {"Action": "GetMediaList", "Version": "2022-12-01"}, {}, {}),
+            "DeleteMaterial": ApiInfo("GET", "/", {"Action": "DeleteMaterial", "Version": "2023-07-01"}, {}, {}),
             "GetSubtitleInfoList": ApiInfo("GET", "/", {"Action": "GetSubtitleInfoList", "Version": "2020-08-01"}, {}, {}),
             "UpdateSubtitleStatus": ApiInfo("GET", "/", {"Action": "UpdateSubtitleStatus", "Version": "2020-08-01"}, {}, {}),
             "UpdateSubtitleInfo": ApiInfo("GET", "/", {"Action": "UpdateSubtitleInfo", "Version": "2020-08-01"}, {}, {}),

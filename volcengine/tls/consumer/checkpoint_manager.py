@@ -57,24 +57,27 @@ class CheckpointManager:
 
     def upload_checkpoint(self):
         with self.map_lock.gen_wlock():
-            project_id = self.consumer_config.project_id
-            consumer_group_name = self.consumer_config.consumer_group_name
-            uploaded_checkpoint_list = []
+            checkpoint_snapshot = self.checkpoint_info_map.items()
+        project_id = self.consumer_config.project_id
+        consumer_group_name = self.consumer_config.consumer_group_name
+        uploaded_checkpoint_map = {}
 
-            try:
-                for key, value in self.checkpoint_info_map.items():
-                    shard_info = value.shard_info
-                    topic_id = shard_info.topic_id
-                    shard_id = shard_info.shard_id
-                    checkpoint = value.checkpoint
+        try:
+            for key, value in checkpoint_snapshot:
+                shard_info = value.shard_info
+                topic_id = shard_info.topic_id
+                shard_id = shard_info.shard_id
+                checkpoint = value.checkpoint
 
-                    req = ModifyCheckpointRequest(project_id, topic_id, shard_id, consumer_group_name, checkpoint)
-                    self.tls_service.modify_checkpoint(req)
+                req = ModifyCheckpointRequest(project_id, topic_id, shard_id, consumer_group_name, checkpoint)
+                self.tls_service.modify_checkpoint(req)
 
-                    uploaded_checkpoint_list.append(key)
-            except TLSException as e:
-                self.logger.error("Uploading checkpoint failed.")
-                raise e
-            finally:
-                for key in uploaded_checkpoint_list:
-                    del self.checkpoint_info_map[key]
+                uploaded_checkpoint_map[key] = value
+        except TLSException as e:
+            self.logger.error("Uploading checkpoint failed.")
+            raise e
+        finally:
+            with self.map_lock.gen_wlock():
+                for key, value in uploaded_checkpoint_map:
+                    if value.checkpoint == self.checkpoint_info_map[key].checkpoint:
+                        del self.checkpoint_info_map[key]
