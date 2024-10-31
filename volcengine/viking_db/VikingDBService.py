@@ -1,6 +1,8 @@
 # coding:utf-8
 import json
+import re
 import threading
+import time
 
 import aiohttp
 
@@ -178,16 +180,11 @@ class VikingDBService(Service):
 
     # get参数放在url里面，异常处理
     def get_exception(self, api, params):
-        # res = self.get(api, params)
-        # if res == '':
-        #     raise VikingDBException(1000028, "missed",
-        #                             "empty response due to unknown error, please contact customer service")
-        # return res
         try:
             res = self.get(api, params)
         except Exception as e:
             try:
-                res_json = json.loads(e.args[0].decode("utf-8"))
+                res_json = json.loads(e.args[0])
             except:
                 raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
@@ -354,9 +351,21 @@ class VikingDBService(Service):
         :rtype: Collection
         """
         params = {"collection_name": collection_name}
-        # params不用解析成json格式，否则后续代码无法识别
-        res = self.get_exception("GetCollection", params)
-        # 转换为字典形式
+        retry_count = 3
+        for i in range(retry_count):
+            try:
+                res = self.get_exception("GetCollection", params)
+            except Exception as e:
+                message, code, request_id = extract_exception_details(str(e))
+                if code == None:
+                    raise e
+                if code == 1000029 and i != retry_count-1:
+                    time.sleep((i * 2 + 1))
+                    continue
+                else:
+                    raise e
+            break
+
         res = json.loads(res)
         description = ""
         stat = None
@@ -663,7 +672,20 @@ class VikingDBService(Service):
             "collection_name": collection_name,
             "index_name": index_name,
         }
-        res = self.get_exception("GetIndex", params)
+        retry_count = 3
+        for i in range(retry_count):
+            try:
+                res = self.get_exception("GetIndex", params)
+            except Exception as e:
+                message, code, request_id = extract_exception_details(str(e))
+                if code == None:
+                    raise e
+                if code == 1000029 and i != retry_count-1:
+                    time.sleep((i * 2 + 1))
+                    continue
+                else:
+                    raise e
+            break
         res = json.loads(res)
         vector_index = scalar_index = partition_by = status = None
         cpu_quota = 2
@@ -1092,3 +1114,14 @@ class VikingDBService(Service):
         # print(res["data"])
 
         return res["data"]
+        
+def extract_exception_details(exception_message):
+    pattern = r"message:(.*?), code:(\d+), request_id:([a-fA-F0-9]+)"
+    match = re.search(pattern, exception_message)
+    if match:
+        message = match.group(1).strip()
+        code = int(match.group(2).strip())
+        request_id = match.group(3).strip()
+        return message, code, request_id
+    else:
+        return None, None, None

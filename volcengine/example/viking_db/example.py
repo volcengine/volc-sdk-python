@@ -36,6 +36,7 @@ if __name__ == '__main__':
     #     ),
     # ]
     # res = vikingdb_service.create_collection("sparse", fields)
+    # print(res)
 
     # res = vikingdb_service.get_collection("sparse")
     # for item in res.fields:
@@ -68,8 +69,8 @@ if __name__ == '__main__':
     #                                  quant=QuantType.Float)
     # res = vikingdb_service.create_index("sparse", "sparse", vector_index)
 
-    # res = vikingdb_service.get_index("sparse", "sparse")
-    # print(res.vector_index)
+    res = vikingdb_service.get_index("sparse", "sparse")
+    print(res.vector_index)
 
     # index = vikingdb_service.get_index("sparse", "sparse")
     # res = index.search_by_vector(vector=gen_random_vector(10), sparse_vectors={"he": 0.05}, dense_weight=0.1)
@@ -439,9 +440,9 @@ if __name__ == '__main__':
     #     print(res)
 
 
-    async def get_index():
-        res = await vikingdb_service.async_get_index("async", "async")
-        print(res.shard_count, res.shard_policy)
+    # async def get_index():
+    #     res = await vikingdb_service.async_get_index("async", "async")
+    #     print(res.shard_count, res.shard_policy)
 
 
     # async def del_index():
@@ -609,7 +610,7 @@ if __name__ == '__main__':
     # asyncio.run(del_collection())
     # asyncio.run(list_collections())
     # asyncio.run(create_index())
-    asyncio.run(get_index())
+    # asyncio.run(get_index())
     # asyncio.run(del_index())
     # asyncio.run(list_index())
     # asyncio.run(embedding())

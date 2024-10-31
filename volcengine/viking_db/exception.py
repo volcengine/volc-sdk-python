@@ -3,7 +3,7 @@ class VikingDBServerException(Exception):
     def __init__(self, code, request_id, message=None):
         self.code = code
         self.request_id = request_id
-        self.message = "{}, code:{}，request_id:{}".format(message, self.code, self.request_id)
+        self.message = "message:{}, code:{}, request_id:{}".format(message, self.code, self.request_id)
 
     def __str__(self):
         return self.message
@@ -129,6 +129,34 @@ class ListEmbeddingModelsException(VikingDBServerException):
         super().__init__(code, request_id, message)
 
 
+class QuotaLimiterException(VikingDBServerException):
+    def __init__(self, code, request_id, message=None):
+        super().__init__(code, request_id, message)
+
+class RerankException(VikingDBServerException):
+    def __init__(self, code, request_id, message=None):
+        super().__init__(code, request_id, message)
+
+class CollectionAliasNotExistException(VikingDBServerException):
+    def __init__(self, code, request_id, message=None):
+        super().__init__(code, request_id, message)
+
+class UserNoOrderException(VikingDBServerException):
+    def __init__(self, code, request_id, message=None):
+        super().__init__(code, request_id, message)
+
+class UserOverdueException(VikingDBServerException):
+    def __init__(self, code, request_id, message=None):
+        super().__init__(code, request_id, message)
+
+class HTTPErrException(VikingDBServerException):
+    def __init__(self, code, request_id, message=None):
+        super().__init__(code, request_id, message)
+
+class TaskNotFoundException(VikingDBServerException):
+    def __init__(self, code, request_id, message=None):
+        super().__init__(code, request_id, message)
+
 class VikingDBException(VikingDBServerException):
     def __init__(self, code, request_id, message=None):
         self.code = code
@@ -168,7 +196,13 @@ ERRCODE_EXCEPTION = {
     1000025: CalcEmbeddingFailedException,
     1000026: ListEmbeddingModelsException,
     1000028: VikingDBException,
-
+    1000029: QuotaLimiterException,
+    1000030: RerankException,
+    1000031: CollectionAliasNotExistException,
+    1000032: UserNoOrderException,
+    1000033: UserOverdueException,
+    1000034: HTTPErrException,
+    1000035: TaskNotFoundException,
 }
 
 # volcanoOK             errCode = 0
