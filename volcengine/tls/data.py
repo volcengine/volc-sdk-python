@@ -340,12 +340,18 @@ class FullTextInfo(TLSData):
 
 class ValueInfo(TLSData):
     def __init__(self, value_type: str, delimiter: str = None, case_sensitive: bool = False,
-                 include_chinese: bool = False, sql_flag: bool = False):
+                 include_chinese: bool = False, sql_flag: bool = False, index_all: bool = False, json_keys = None):
         self.value_type = value_type
         self.delimiter = delimiter
         self.case_sensitive = case_sensitive
         self.include_chinese = include_chinese
         self.sql_flag = sql_flag
+        self.index_all = index_all
+
+        if value_type == "json":
+            self.json_keys = json_keys
+        else:
+            self.json_keys = None
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -354,8 +360,10 @@ class ValueInfo(TLSData):
         case_sensitive = data.get(CASE_SENSITIVE)
         include_chinese = data.get(INCLUDE_CHINESE)
         sql_flag = data.get(SQL_FLAG)
+        index_all = data.get(INDEX_ALL)
+        json_keys = data.get(JSON_KEYS)
 
-        return cls(value_type, delimiter, case_sensitive, include_chinese, sql_flag)
+        return cls(value_type, delimiter, case_sensitive, include_chinese, sql_flag, index_all, json_keys)
 
 
 class KeyValueInfo(TLSData):
@@ -567,6 +575,41 @@ class HistogramInfo(TLSData):
         :rtype:long
         """
         return self.time
+
+class HistogramInfoV1(TLSData):
+    def __init__(self, count: int = None, start_time: int = None, end_time: int = None, result_status: str = None):
+        self.count = count
+        self.start_time = start_time
+        self.end_time = end_time
+        self.result_status = result_status
+
+    def get_count(self):
+        """
+        :return:子区间中对应搜索结果的数量，即该时段内符合条件的日志条数
+        :rtype:int
+        """
+        return self.count
+
+    def get_start_time(self):
+        """
+        :return:查询的开始时间点，单位为毫秒
+        :rtype:long
+        """
+        return self.start_time
+
+    def get_end_time(self):
+        """
+        :return:查询的开始时间点，单位为毫秒
+        :rtype:long
+        """
+        return self.end_time
+
+    def get_result_status(self):
+        """
+        :return:查询的状态
+        :rtype:str
+        """
+        return self.result_status
 
 
 class TaskInfo(TLSData):

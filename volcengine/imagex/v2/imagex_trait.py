@@ -57,17 +57,50 @@ class ImagexTrait(Service):
         return res_json
 
 
+    def update_image_domain_volc_origin(self, query={}, body={}):
+        return self.imagex_post('UpdateImageDomainVolcOrigin', query, json.dumps(body))
+            
     def del_domain(self, query={}, body={}):
         return self.imagex_post('DelDomain', query, json.dumps(body))
+            
+    def add_domain_v_1(self, query={}, body={}):
+        return self.imagex_post('AddDomainV1', query, json.dumps(body))
+            
+    def update_image_domain_ip_auth(self, query={}, body={}):
+        return self.imagex_post('UpdateImageDomainIPAuth', query, json.dumps(body))
             
     def update_refer(self, query={}, body={}):
         return self.imagex_post('UpdateRefer', query, json.dumps(body))
             
+    def update_image_domain_ua_access(self, query={}, body={}):
+        return self.imagex_post('UpdateImageDomainUaAccess', query, json.dumps(body))
+            
     def update_https(self, query={}, body={}):
         return self.imagex_post('UpdateHttps', query, json.dumps(body))
             
+    def update_image_domain_download_speed_limit(self, query={}, body={}):
+        return self.imagex_post('UpdateImageDomainDownloadSpeedLimit', query, json.dumps(body))
+            
     def update_response_header(self, query={}, body={}):
         return self.imagex_post('UpdateResponseHeader', query, json.dumps(body))
+            
+    def update_image_domain_area_access(self, query={}, body={}):
+        return self.imagex_post('UpdateImageDomainAreaAccess', query, json.dumps(body))
+            
+    def update_domain_adaptive_fmt(self, query={}, body={}):
+        return self.imagex_post('UpdateDomainAdaptiveFmt', query, json.dumps(body))
+            
+    def update_image_domain_config(self, query={}, body={}):
+        return self.imagex_post('UpdateImageDomainConfig', query, json.dumps(body))
+            
+    def update_advance(self, query={}, body={}):
+        return self.imagex_post('UpdateAdvance', query, json.dumps(body))
+            
+    def update_image_domain_bandwidth_limit(self, query={}, body={}):
+        return self.imagex_post('UpdateImageDomainBandwidthLimit', query, json.dumps(body))
+            
+    def update_slim_config(self, query={}, body={}):
+        return self.imagex_post('UpdateSlimConfig', query, json.dumps(body))
             
     def set_default_domain(self, body={}):
         return self.imagex_post('SetDefaultDomain', [], json.dumps(body))
@@ -83,6 +116,48 @@ class ImagexTrait(Service):
             
     def get_service_domains(self, query={}):
         return self.imagex_get('GetServiceDomains', query)
+            
+    def delete_image_monitor_rules(self, query={}, body={}):
+        return self.imagex_post('DeleteImageMonitorRules', query, json.dumps(body))
+            
+    def delete_image_monitor_records(self, query={}, body={}):
+        return self.imagex_post('DeleteImageMonitorRecords', query, json.dumps(body))
+            
+    def create_image_monitor_rule(self, query={}, body={}):
+        return self.imagex_post('CreateImageMonitorRule', query, json.dumps(body))
+            
+    def update_image_monitor_rule(self, query={}, body={}):
+        return self.imagex_post('UpdateImageMonitorRule', query, json.dumps(body))
+            
+    def update_image_monitor_rule_status(self, query={}, body={}):
+        return self.imagex_post('UpdateImageMonitorRuleStatus', query, json.dumps(body))
+            
+    def get_image_alert_records(self, query={}, body={}):
+        return self.imagex_post('GetImageAlertRecords', query, json.dumps(body))
+            
+    def get_image_monitor_rules(self, query={}):
+        return self.imagex_get('GetImageMonitorRules', query)
+            
+    def create_image_setting_rule(self, query={}, body={}):
+        return self.imagex_post('CreateImageSettingRule', query, json.dumps(body))
+            
+    def delete_image_setting_rule(self, query={}, body={}):
+        return self.imagex_post('DeleteImageSettingRule', query, json.dumps(body))
+            
+    def update_image_setting_rule_priority(self, query={}, body={}):
+        return self.imagex_post('UpdateImageSettingRulePriority', query, json.dumps(body))
+            
+    def update_image_setting_rule(self, query={}, body={}):
+        return self.imagex_post('UpdateImageSettingRule', query, json.dumps(body))
+            
+    def get_image_settings(self, query={}):
+        return self.imagex_get('GetImageSettings', query)
+            
+    def get_image_setting_rule_history(self, query={}):
+        return self.imagex_get('GetImageSettingRuleHistory', query)
+            
+    def get_image_setting_rules(self, query={}):
+        return self.imagex_get('GetImageSettingRules', query)
             
     def create_image_migrate_task(self, body={}):
         return self.imagex_post('CreateImageMigrateTask', [], json.dumps(body))
@@ -107,6 +182,9 @@ class ImagexTrait(Service):
             
     def rerun_image_migrate_task(self, query={}, body={}):
         return self.imagex_post('RerunImageMigrateTask', query, json.dumps(body))
+            
+    def get_image_add_on_tag(self, query={}):
+        return self.imagex_get('GetImageAddOnTag', query)
             
     def describe_imagex_source_request_bandwidth(self, query={}):
         return self.imagex_get('DescribeImageXSourceRequestBandwidth', query)
@@ -336,8 +414,20 @@ class ImagexTrait(Service):
     def describe_imagex_sensible_top_unknown_url(self, body={}):
         return self.imagex_post('DescribeImageXSensibleTopUnknownURL', [], json.dumps(body))
             
+    def create_batch_process_task(self, query={}, body={}):
+        return self.imagex_post('CreateBatchProcessTask', query, json.dumps(body))
+            
+    def get_batch_process_result(self, query={}, body={}):
+        return self.imagex_post('GetBatchProcessResult', query, json.dumps(body))
+            
+    def get_batch_task_info(self, query={}):
+        return self.imagex_get('GetBatchTaskInfo', query)
+            
     def update_image_resource_status(self, query={}, body={}):
         return self.imagex_post('UpdateImageResourceStatus', query, json.dumps(body))
+            
+    def update_file_storage_class(self, query={}, body={}):
+        return self.imagex_post('UpdateFileStorageClass', query, json.dumps(body))
             
     def get_image_storage_files(self, query={}):
         return self.imagex_get('GetImageStorageFiles', query)
@@ -345,11 +435,17 @@ class ImagexTrait(Service):
     def delete_image_upload_files(self, query={}, body={}):
         return self.imagex_post('DeleteImageUploadFiles', query, json.dumps(body))
             
+    def create_file_restore(self, query={}, body={}):
+        return self.imagex_post('CreateFileRestore', query, json.dumps(body))
+            
     def update_image_upload_files(self, query={}, body={}):
         return self.imagex_post('UpdateImageUploadFiles', query, json.dumps(body))
             
     def commit_image_upload(self, query={}, body={}):
         return self.imagex_post('CommitImageUpload', query, json.dumps(body))
+            
+    def update_image_file_ct(self, query={}, body={}):
+        return self.imagex_post('UpdateImageFileCT', query, json.dumps(body))
             
     def apply_image_upload(self, query={}):
         return self.imagex_get('ApplyImageUpload', query)
@@ -365,9 +461,6 @@ class ImagexTrait(Service):
             
     def preview_image_upload_file(self, query={}):
         return self.imagex_get('PreviewImageUploadFile', query)
-            
-    def get_image_service_subscription(self, query={}):
-        return self.imagex_get('GetImageServiceSubscription', query)
             
     def get_image_service(self, query={}):
         return self.imagex_get('GetImageService', query)
@@ -444,6 +537,9 @@ class ImagexTrait(Service):
     def get_image_super_resolution_result(self, body={}):
         return self.imagex_post('GetImageSuperResolutionResult', [], json.dumps(body))
             
+    def get_denoising_image(self, query={}, body={}):
+        return self.imagex_post('GetDenoisingImage', query, json.dumps(body))
+            
     def get_image_duplicate_detection(self, query={}, body={}):
         return self.imagex_post('GetImageDuplicateDetection', query, json.dumps(body))
             
@@ -468,23 +564,53 @@ class ImagexTrait(Service):
     def get_image_quality(self, query={}, body={}):
         return self.imagex_post('GetImageQuality', query, json.dumps(body))
             
+    def get_license_plate_detection(self, query={}, body={}):
+        return self.imagex_post('GetLicensePlateDetection', query, json.dumps(body))
+            
     def get_private_image_type(self, query={}, body={}):
         return self.imagex_post('GetPrivateImageType', query, json.dumps(body))
+            
+    def get_ai_generate_image(self, query={}, body={}):
+        return self.imagex_post('GetAiGenerateImage', query, json.dumps(body))
+            
+    def create_cv_image_generate_task(self, query={}, body={}):
+        return self.imagex_post('CreateCVImageGenerateTask', query, json.dumps(body))
             
     def create_hidden_watermark_image(self, query={}, body={}):
         return self.imagex_post('CreateHiddenWatermarkImage', query, json.dumps(body))
             
+    def update_image_exif_data(self, query={}, body={}):
+        return self.imagex_post('UpdateImageExifData', query, json.dumps(body))
+            
     def get_image_detect_result(self, query={}, body={}):
         return self.imagex_post('GetImageDetectResult', query, json.dumps(body))
+            
+    def get_cv_image_generate_result(self, query={}, body={}):
+        return self.imagex_post('GetCVImageGenerateResult', query, json.dumps(body))
             
     def create_image_hm_extract(self, query={}, body={}):
         return self.imagex_post('CreateImageHmExtract', query, json.dumps(body))
             
+    def get_cv_text_generate_image(self, query={}, body={}):
+        return self.imagex_post('GetCVTextGenerateImage', query, json.dumps(body))
+            
+    def get_cv_image_generate_task(self, query={}, body={}):
+        return self.imagex_post('GetCVImageGenerateTask', query, json.dumps(body))
+            
     def create_image_hm_embed(self, body={}):
         return self.imagex_post('CreateImageHmEmbed', [], json.dumps(body))
             
+    def get_cv_anime_generate_image(self, query={}, body={}):
+        return self.imagex_post('GetCVAnimeGenerateImage', query, json.dumps(body))
+            
     def get_comprehensive_enhance_image(self, body={}):
         return self.imagex_post('GetComprehensiveEnhanceImage', [], json.dumps(body))
+            
+    def get_image_ai_generate_task(self, query={}):
+        return self.imagex_get('GetImageAiGenerateTask', query)
+            
+    def get_product_aigc_result(self, query={}, body={}):
+        return self.imagex_post('GetProductAIGCResult', query, json.dumps(body))
             
     def get_image_erase_models(self, query={}):
         return self.imagex_get('GetImageEraseModels', query)
@@ -501,14 +627,26 @@ class ImagexTrait(Service):
     def update_image_auth_key(self, query={}, body={}):
         return self.imagex_post('UpdateImageAuthKey', query, json.dumps(body))
             
+    def update_res_event_rule(self, query={}, body={}):
+        return self.imagex_post('UpdateResEventRule', query, json.dumps(body))
+            
     def update_service_name(self, query={}, body={}):
         return self.imagex_post('UpdateServiceName', query, json.dumps(body))
+            
+    def update_storage_rules(self, query={}, body={}):
+        return self.imagex_post('UpdateStorageRules', query, json.dumps(body))
             
     def update_image_object_access(self, query={}, body={}):
         return self.imagex_post('UpdateImageObjectAccess', query, json.dumps(body))
             
+    def update_image_upload_overwrite(self, query={}, body={}):
+        return self.imagex_post('UpdateImageUploadOverwrite', query, json.dumps(body))
+            
     def update_image_mirror_conf(self, query={}, body={}):
         return self.imagex_post('UpdateImageMirrorConf', query, json.dumps(body))
+            
+    def get_image_service_subscription(self, query={}):
+        return self.imagex_get('GetImageServiceSubscription', query)
             
     def get_image_auth_key(self, query={}):
         return self.imagex_get('GetImageAuthKey', query)
@@ -534,8 +672,65 @@ class ImagexTrait(Service):
     def get_image_analyze_result(self, query={}):
         return self.imagex_get('GetImageAnalyzeResult', query)
             
+    def delete_image_elements(self, query={}, body={}):
+        return self.imagex_post('DeleteImageElements', query, json.dumps(body))
+            
+    def delete_image_background_colors(self, query={}, body={}):
+        return self.imagex_post('DeleteImageBackgroundColors', query, json.dumps(body))
+            
+    def delete_image_style(self, query={}, body={}):
+        return self.imagex_post('DeleteImageStyle', query, json.dumps(body))
+            
+    def create_image_style(self, query={}, body={}):
+        return self.imagex_post('CreateImageStyle', query, json.dumps(body))
+            
+    def update_image_style_meta(self, query={}, body={}):
+        return self.imagex_post('UpdateImageStyleMeta', query, json.dumps(body))
+            
+    def add_image_elements(self, query={}, body={}):
+        return self.imagex_post('AddImageElements', query, json.dumps(body))
+            
+    def add_image_background_colors(self, query={}, body={}):
+        return self.imagex_post('AddImageBackgroundColors', query, json.dumps(body))
+            
+    def update_image_style(self, query={}, body={}):
+        return self.imagex_post('UpdateImageStyle', query, json.dumps(body))
+            
+    def get_image_fonts(self, query={}):
+        return self.imagex_get('GetImageFonts', query)
+            
+    def get_image_elements(self, query={}):
+        return self.imagex_get('GetImageElements', query)
+            
+    def get_image_background_colors(self, query={}):
+        return self.imagex_get('GetImageBackgroundColors', query)
+            
+    def get_image_styles(self, query={}):
+        return self.imagex_get('GetImageStyles', query)
+            
+    def get_image_style_detail(self, query={}):
+        return self.imagex_get('GetImageStyleDetail', query)
+            
     def get_image_style_result(self, query={}, body={}):
         return self.imagex_post('GetImageStyleResult', query, json.dumps(body))
+            
+    def download_cert(self, query={}):
+        return self.imagex_get('DownloadCert', query)
+            
+    def del_cert(self, query={}, body={}):
+        return self.imagex_post('DelCert', query, json.dumps(body))
+            
+    def add_cert(self, query={}, body={}):
+        return self.imagex_post('AddCert', query, json.dumps(body))
+            
+    def get_image_all_domain_cert(self, query={}):
+        return self.imagex_get('GetImageAllDomainCert', query)
+            
+    def get_cert_info(self, query={}):
+        return self.imagex_get('GetCertInfo', query)
+            
+    def get_all_certs(self, query={}):
+        return self.imagex_get('GetAllCerts', query)
             
     def create_image_template(self, query={}, body={}):
         return self.imagex_post('CreateImageTemplate', query, json.dumps(body))
@@ -545,6 +740,9 @@ class ImagexTrait(Service):
             
     def delete_image_template(self, query={}, body={}):
         return self.imagex_post('DeleteImageTemplate', query, json.dumps(body))
+            
+    def create_image_templates_by_import(self, query={}, body={}):
+        return self.imagex_post('CreateImageTemplatesByImport', query, json.dumps(body))
             
     def create_templates_from_bin(self, query={}, body={}):
         return self.imagex_post('CreateTemplatesFromBin', query, json.dumps(body))
@@ -563,6 +761,9 @@ class ImagexTrait(Service):
             
     def delete_image_audit_result(self, body={}):
         return self.imagex_post('DeleteImageAuditResult', [], json.dumps(body))
+            
+    def get_sync_audit_result(self, query={}, body={}):
+        return self.imagex_post('GetSyncAuditResult', query, json.dumps(body))
             
     def update_image_audit_task_status(self, body={}):
         return self.imagex_post('UpdateImageAuditTaskStatus', [], json.dumps(body))

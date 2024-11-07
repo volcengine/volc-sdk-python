@@ -1,4 +1,5 @@
 # coding:utf-8
+from .Task import Task
 import json
 import re
 import threading
@@ -30,7 +31,7 @@ class VikingDBService(Service):
 
     def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk="", scheme='http',
                  connection_timeout=30, socket_timeout=30, proxy=None):
-        self.service_info = VikingDBService.get_service_info(host, region, scheme, connection_timeout, socket_timeout)
+        self.service_info = VikingDBService.get_service_info(host, region, scheme, connection_timeout, socket_timeout, ak, sk)
         self.api_info = VikingDBService.get_api_info()
         super(VikingDBService, self).__init__(self.service_info, self.api_info)
         if ak:
@@ -61,9 +62,9 @@ class VikingDBService(Service):
         self.api_info = api_info
 
     @staticmethod
-    def get_service_info(host, region, scheme, connection_timeout, socket_timeout):
+    def get_service_info(host, region, scheme, connection_timeout, socket_timeout, ak, sk):
         service_info = ServiceInfo(host, {"Host": host},
-                                   Credentials('', '', 'air', region), connection_timeout, socket_timeout,
+                                   Credentials(ak, sk, 'air', region), connection_timeout, socket_timeout,
                                    scheme=scheme)
         return service_info
 
@@ -114,6 +115,15 @@ class VikingDBService(Service):
                             {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "EmbeddingV2": ApiInfo("POST", "/api/data/embedding/version/2", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "CreateTask": ApiInfo("POST", "/api/task/create", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "GetTask": ApiInfo("POST", "/api/task/info", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "ListTask": ApiInfo("POST", "/api/task/list", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "DropTask": ApiInfo("POST", "/api/task/drop", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+                                   
         }
         return api_info
 
@@ -1114,6 +1124,70 @@ class VikingDBService(Service):
         # print(res["data"])
 
         return res["data"]
+    
+    def package_task(self, res_data):
+        collection_name = ""
+        create_time = ""
+        process_info = None
+        task_id = ""
+        task_params = None
+        task_status = ""
+        task_type = ""
+        update_person = ""
+        update_time = ""
+        if "collection_name" in res_data:
+            collection_name = res_data["collection_name"]
+        if "create_time" in res_data:
+            create_time = res_data["create_time"]
+        if "process_info" in res_data:
+            process_info = res_data["process_info"]
+        if "task_id" in res_data:
+            task_id = res_data["task_id"]
+        if "task_params" in res_data:
+            task_params = res_data["task_params"]
+        if "task_status" in res_data:
+            task_status = res_data["task_status"]
+        if "task_type" in res_data:
+            task_type = res_data["task_type"]
+        if "update_person" in res_data:
+            update_person = res_data["update_person"]
+        if "update_time" in res_data:
+            update_time = res_data["update_time"]
+        # print(collection_name, create_time, process_info, task_id, task_params, task_status, task_type, update_person, update_time)
+        return Task(collection_name, create_time, process_info, task_id, task_params, task_status, task_type, update_person, update_time)
+
+    
+    def create_task(self, task_type, task_params):
+        params = {"task_type": task_type.value, "task_params": task_params}
+        res = self.json_exception("CreateTask", {}, json.dumps(params))
+        res = json.loads(res)
+        if "data" in res:
+            if "task_id" in res["data"]:
+                return res["data"]["task_id"]
+        return ""
+    
+    def get_task(self, task_id):
+        params = {"task_id": task_id}
+        res = self.json_exception("GetTask", {}, json.dumps(params))
+        res = json.loads(res)
+        if "data" in res:
+            return self.package_task(res["data"])
+        else: 
+            return None
+    
+    def list_tasks(self):
+        res = self.json_exception("ListTask", {}, json.dumps({}))
+        res = json.loads(res)
+        tasks = []
+        if "data" in res:
+            for item in res["data"]:
+                tasks.append(self.package_task(item))
+        return tasks
+    
+    def drop_task(self, task_id):
+        params = {"task_id": task_id}
+        res = self.json_exception("DropTask", {}, json.dumps(params))
+
         
 def extract_exception_details(exception_message):
     pattern = r"message:(.*?), code:(\d+), request_id:([a-fA-F0-9]+)"

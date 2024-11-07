@@ -43,6 +43,7 @@ API_INFO = {
     DESCRIBE_LOG_CONTEXT: ApiInfo(HTTP_POST, DESCRIBE_LOG_CONTEXT, {}, {}, {}),
     WEB_TRACKS: ApiInfo(HTTP_POST, WEB_TRACKS, {}, {}, {}),
     DESCRIBE_HISTOGRAM: ApiInfo(HTTP_POST, DESCRIBE_HISTOGRAM, {}, {}, {}),
+    DESCRIBE_HISTOGRAM_V1: ApiInfo(HTTP_POST, DESCRIBE_HISTOGRAM_V1, {}, {}, {}),
     CREATE_DOWNLOAD_TASK: ApiInfo(HTTP_POST, CREATE_DOWNLOAD_TASK, {}, {}, {}),
     DESCRIBE_DOWNLOAD_TASKS: ApiInfo(HTTP_GET, DESCRIBE_DOWNLOAD_TASKS, {}, {}, {}),
     DESCRIBE_DOWNLOAD_URL: ApiInfo(HTTP_GET, DESCRIBE_DOWNLOAD_URL, {}, {}, {}),
@@ -440,11 +441,21 @@ class TLSService(Service):
         return WebTracksResponse(response)
 
     def describe_histogram(self, describe_histogram_request: DescribeHistogramRequest) -> DescribeHistogramResponse:
+        """
+        Deprecated, use describe_histogram_v1 instead.
+        """
         if describe_histogram_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_HISTOGRAM, body=describe_histogram_request.get_api_input())
 
         return DescribeHistogramResponse(response)
+
+    def describe_histogram_v1(self, describe_histogram_v1_request: DescribeHistogramV1Request) -> DescribeHistogramV1Response:
+        if describe_histogram_v1_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_HISTOGRAM_V1, body=describe_histogram_v1_request.get_api_input())
+
+        return DescribeHistogramV1Response(response)
 
     def create_download_task(self, create_download_task_request: CreateDownloadTaskRequest) \
             -> CreateDownloadTaskResponse:

@@ -61,6 +61,9 @@ class Order(Enum):
     Asc = "asc"
     Desc = "desc"
 
+class TaskType(Enum):
+    Data_Import = "data_import"
+
 
 class EmbModel(object):
     def __init__(self, model_name, params=None):

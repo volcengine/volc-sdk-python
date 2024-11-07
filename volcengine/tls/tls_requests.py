@@ -853,6 +853,35 @@ class DescribeHistogramRequest(TLSRequest):
             return False
         return True
 
+class DescribeHistogramV1Request(TLSRequest):
+    def __init__(self, topic_id: str, query: str, start_time: int, end_time: int, interval: int = None):
+        """
+        :param topic_id: 日志主题id
+        :type topic_id:str
+        :param query:查询分析语句
+        :type query:str
+        :param start_time:查询开始时间点，精确到毫秒
+        :type start_time:int
+        :param end_time:endTime 查询结束时间点，精确到毫秒
+        :type end_time:int
+        :param interval:直方图的子区间长度。单位为毫秒
+        :type interval:int
+        """
+        self.topic_id = topic_id
+        self.query = query
+        self.start_time = start_time
+        self.end_time = end_time
+        self.interval = interval
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        if self.topic_id is None or self.query is None:
+            return False
+        return True
+
 
 class CreateDownloadTaskRequest(TLSRequest):
     def __init__(self, task_name: str, topic_id: str, query: str, start_time: int, end_time: int,

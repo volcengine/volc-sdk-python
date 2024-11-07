@@ -56,6 +56,17 @@ if __name__ == "__main__":
     tls_service.put_logs_v2(PutLogsV2Request(topic_id, logs))
     time.sleep(30)
 
+    # 查询日志直方图情况
+    # 请根据您的需要，填写topic_id、query、start_time、end_time、interval
+    # DescribeHistogramV1 API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/1347899
+    start_time = int(round(time.time())) - 60
+    end_time = start_time + 60 * 2
+    # Deprecated, use DescribeHistogramV1 instead.
+    describe_histogram_request = DescribeHistogramRequest(topic_id, "", start_time, end_time, interval=None)
+    describe_histogram_response = tls_service.describe_histogram(describe_histogram_request)
+    describe_histogram_v1_request = DescribeHistogramV1Request(topic_id, "", start_time, end_time, interval=None)
+    describe_histogram_v1_response = tls_service.describe_histogram_v1(describe_histogram_v1_request)
+
     # 查询消费游标
     # 请根据您的需要，填写topic_id、shard_id和from_time
     # DescribeCursor API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112193

@@ -41,9 +41,22 @@ if __name__ == "__main__":
                              include_chinese=False, sql_flag=False)
     value_info_b = ValueInfo(value_type="long", delimiter="", case_sensitive=False,
                              include_chinese=False, sql_flag=True)
+
+    value_c1_json_keys = ValueInfo(value_type="text", delimiter="", case_sensitive=False,
+                                  include_chinese=False, sql_flag=True)
+    value_c2_json_keys = ValueInfo(value_type="long", delimiter="", case_sensitive=False,
+                                  include_chinese=False, sql_flag=True)
+    value_info_c = ValueInfo(value_type="json", delimiter="", case_sensitive=False,
+                             include_chinese=False, sql_flag=True, index_all=True,
+                             json_keys=[
+                                 KeyValueInfo("test", value_c1_json_keys).json(),
+                                 KeyValueInfo("key-l", value_c2_json_keys).json(),
+                             ])
+
     key_value_info_a = KeyValueInfo(key="test1", value=value_info_a)
     key_value_info_b = KeyValueInfo(key="test2", value=value_info_b)
-    key_value = [key_value_info_a, key_value_info_b]
+    key_value_info_c = KeyValueInfo(key="test3", value=value_info_c)
+    key_value = [key_value_info_a, key_value_info_b, key_value_info_c]
     create_index_request = CreateIndexRequest(topic_id=create_topic_response.topic_id, full_text=full_text,
                                               key_value=key_value)
     create_index_response = tls_service.create_index(create_index_request)

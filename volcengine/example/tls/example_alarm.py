@@ -45,6 +45,14 @@ if __name__ == "__main__":
     create_alarm_notify_group_response = tls_service.create_alarm_notify_group(create_alarm_notify_group_request)
     alarm_notify_group_id = create_alarm_notify_group_response.get_alarm_notify_group_id()
 
+    # 获取不存在告警组的测试
+    # 请根据您的需要，填写alarm_notify_group_name等参数
+    # DescribeAlarmNotifyGroups API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112223
+    describe_alarm_notify_groups_request = DescribeAlarmNotifyGroupsRequest(alarm_notify_group_id="no-exists-notify-group-id" + now,)
+    describe_alarm_notify_groups_response = tls_service.describe_alarm_notify_groups(
+        describe_alarm_notify_groups_request)
+    print("topics total: {}\n" . format(describe_alarm_notify_groups_response.get_total()))
+
     # 获取告警组
     # 请根据您的需要，填写alarm_notify_group_name等参数
     # DescribeAlarmNotifyGroups API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112223

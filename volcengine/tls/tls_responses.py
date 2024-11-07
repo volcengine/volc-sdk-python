@@ -427,6 +427,39 @@ class DescribeHistogramResponse(TLSResponse):
         """
         return self.interval
 
+class DescribeHistogramV1Response(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeHistogramV1Response, self).__init__(response)
+
+        self.histogram = []
+        self.result_status = self.response[RESULT_STATUS]
+        self.total_count = self.response[TOTAL_COUNT]
+
+        histogram = self.response[HISTOGRAM]
+
+        for i in range(len(histogram)):
+            self.histogram.append(HistogramInfoV1.set_attributes(data=histogram[i]))
+
+    def get_histogram(self):
+        """
+        :return:所有子区间的结果集
+        :rtype:List[HistogramInfo]
+        """
+        return self.histogram
+
+    def get_result_status(self):
+        """
+        :return:查询的状态
+        :rtype:str
+        """
+        return self.result_status
+
+    def get_total_count(self):
+        """
+        :return:请求所有直方图数据总和
+        :rtype:int
+        """
+        return self.total_count
 
 class CreateDownloadTaskResponse(TLSResponse):
     def __init__(self, response: Response):
@@ -772,6 +805,9 @@ class DescribeAlarmNotifyGroupsResponse(TLSResponse):
 
         self.total = self.response[TOTAL]
         self.alarm_notify_groups = []
+
+        if self.response[ALARM_NOTIFY_GROUPS] is None:
+            self.response[ALARM_NOTIFY_GROUPS] = []
 
         for i in range(len(self.response[ALARM_NOTIFY_GROUPS])):
             self.alarm_notify_groups.append(AlarmNotifyGroupInfo.set_attributes(

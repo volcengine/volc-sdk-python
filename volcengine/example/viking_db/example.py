@@ -16,6 +16,19 @@ if __name__ == '__main__':
     vikingdb_service.set_ak("")
     vikingdb_service.set_sk("")
 
+    # id = vikingdb_service.create_task(TaskType.Data_Import, {"tos_path": "demo-1028/demo_1030", "file_type":"json", "ignore_error":False, "collection_name":"sparse"})
+    # print(id)
+
+    # task = vikingdb_service.get_task("01f7f554-46b9-55d6-af6c-b2aa9502d229")
+    # print(task.process_info["err_msg"])
+
+    # tasks = vikingdb_service.list_tasks()
+    # for item in tasks:
+    #     print(item.process_info)
+
+    # res = vikingdb_service.drop_task("01f7f554-46b9-55d6-af6c-b2aa9502d229")
+
+
 
     # dense_sparse
     # fields = [
@@ -69,8 +82,8 @@ if __name__ == '__main__':
     #                                  quant=QuantType.Float)
     # res = vikingdb_service.create_index("sparse", "sparse", vector_index)
 
-    res = vikingdb_service.get_index("sparse", "sparse")
-    print(res.vector_index)
+    # res = vikingdb_service.get_index("sparse", "sparse")
+    # print(res.vector_index)
 
     # index = vikingdb_service.get_index("sparse", "sparse")
     # res = index.search_by_vector(vector=gen_random_vector(10), sparse_vectors={"he": 0.05}, dense_weight=0.1)
