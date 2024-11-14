@@ -171,7 +171,8 @@ class VodServiceConfig(Service):
             "DescribeVodPlayedStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodPlayedStatisData", "Version": "2023-07-01"}, {}, {}),
             "DescribeVodMostPlayedStatisData": ApiInfo("GET", "/", {"Action": "DescribeVodMostPlayedStatisData", "Version": "2023-07-01"}, {}, {}),
             "DescribeVodRealtimeMediaData": ApiInfo("GET", "/", {"Action": "DescribeVodRealtimeMediaData", "Version": "2023-07-01"}, {}, {}),
-            "DescribeVodRealtimeMediaDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodRealtimeMediaDetailData", "Version": "2023-07-01"}, {}, {})
+            "DescribeVodRealtimeMediaDetailData": ApiInfo("GET", "/", {"Action": "DescribeVodRealtimeMediaDetailData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeVodVidTrafficFileLog": ApiInfo("GET", "/", {"Action": "DescribeVodVidTrafficFileLog", "Version": "2023-07-01"}, {}, {})
         }
         return api_info
 

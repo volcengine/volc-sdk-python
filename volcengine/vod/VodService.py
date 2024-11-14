@@ -4367,3 +4367,37 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, DescribeVodRealtimeMediaDetailDataResponse(), True)
 
+    #
+    # DescribeVodVidTrafficFileLog.
+    #
+    # @param request DescribeVodVidTrafficFileLogRequest
+    # @return DescribeVodVidTrafficFileLogResponse
+    # @raise Exception
+    def describe_vod_vid_traffic_file_log(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeVodVidTrafficFileLog", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), DescribeVodVidTrafficFileLogResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, DescribeVodVidTrafficFileLogResponse(), True)
+
