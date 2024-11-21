@@ -74,8 +74,8 @@ if __name__ == '__main__':
     # datas = [data1, data2, data3, data4]
     # collection.upsert_data(datas)
 
-    # collection = vikingdb_service.get_collection("sparse")
-    # res = collection.fetch_data("111")
+    # collection = vikingdb_service.get_collection("example")
+    # res = collection.fetch_data(555)
     # print(res.fields)
 
     # vector_index = VectorIndexParams(distance=DistanceType.COSINE, index_type=IndexType.HNSW_HYBRID,
@@ -85,11 +85,11 @@ if __name__ == '__main__':
     # res = vikingdb_service.get_index("sparse", "sparse")
     # print(res.vector_index)
 
-    # index = vikingdb_service.get_index("sparse", "sparse")
-    # res = index.search_by_vector(vector=gen_random_vector(10), sparse_vectors={"he": 0.05}, dense_weight=0.1)
+    # index = vikingdb_service.get_index("sparse_go", "sparse_go_test5")
+    # res = index.search_by_vector(vector=gen_random_vector(12), sparse_vectors={"he": 0.05}, dense_weight=0.1, retry=True)
     # print(res)
 
-    # index = vikingdb_service.get_index("sparse", "sparse")
+    # index = vikingdb_service.get_index("sparse_go", "sparse_go_test5")
     # res = index.search_by_id("111", dense_weight=0.1)
     # print(res)
 
@@ -130,7 +130,7 @@ if __name__ == '__main__':
     #     Field(
     #         field_name="text_vector",
     #         field_type=FieldType.Vector,
-    #         dim=10
+    #         dim=12
     #     ),
     #     Field(
     #         field_name="like",
@@ -153,7 +153,7 @@ if __name__ == '__main__':
     #         default_val=True
     #     ),
     # ]
-    # res = vikingdb_service.create_collection("example", fields, "This is an example")
+    # res = vikingdb_service.create_collection("example1", fields, "This is an example")
     # # 返回一个collection实例
     # print(res)
     #
@@ -171,16 +171,16 @@ if __name__ == '__main__':
     #
     # vector_index = VectorIndexParams(distance=DistanceType.COSINE,index_type=IndexType.DiskANN,
     #                                  quant=QuantType.Float)
-    # res = vikingdb_service.create_index("example","test2", vector_index, cpu_quota=2,
+    # res = vikingdb_service.create_index("example1","example1", vector_index, cpu_quota=2,
     #                                     description="This is an index", scalar_index=['price', 'like'], shard_policy=ShardType.Custom, shard_count=10)
     # # 返回一个index实例
     # print(res)
     #
-    # res = vikingdb_service.get_index("example", "test2")
-    # # 返回一个index实例
+    # res = vikingdb_service.get_index("example", "example")
+    # 返回一个index实例
     # print(res.shard_count, res.shard_policy)
     #
-    # vikingdb_service.drop_index("example", "example_index")  # 无返回
+    # vikingdb_service.drop_index("example", "example")  # 无返回
     #
     # res = vikingdb_service.list_indexes("example")
     # 返回一个列表
@@ -214,12 +214,13 @@ if __name__ == '__main__':
     # datas.append(data3)
     # datas.append(data4)
     # collection.upsert_data(datas)  # 无返回
+
     #
     # collection = vikingdb_service.get_collection("example")
     # res = collection.fetch_data("111")
     # print(res.fields)
     # res = collection.fetch_data(["111", "222", "333", "444"])
-    # 返回一个列表
+    # # 返回一个列表
     # for item in res:
     #     print(item)
     #     print(item.fields)
@@ -227,19 +228,17 @@ if __name__ == '__main__':
     # collection = vikingdb_service.get_collection("example")
     # collection.delete_data("11")  # 无返回
     #
-    # index = vikingdb_service.get_index("example", "example_index")
-    # res = index.fetch_data(["11", "33"], partition="1", output_fields=["doc_id", "like"])
-    # 返回一个列表
+    # index = vikingdb_service.get_index("sparse_go", "sparse_go_test5")
+    # res = index.fetch_data(["111"])
+    # # 返回一个列表
     # for item in res:
     #     print(item)
     #     print(item.fields)
     #
-    # index = vikingdb_service.get_index("example", "example_index")
-    # res = index.search_by_id("111", limit=2, output_fields=["doc_id", "like", "text_vector"])
-    # 返回一个列表
-    # for item in res:
-    #     print(item)
-    #     print(item.score)
+    # index = vikingdb_service.get_index("sparse_go", "sparse_go_test5")
+    # res = index.search_by_vector(gen_random_vector(10), sparse_vectors={'1':1.1})
+    # # 返回一个列表
+    # print(res)
 
     # index = vikingdb_service.get_index("example", "example_index")
     # def gen_random_vector(dim):
@@ -317,11 +316,9 @@ if __name__ == '__main__':
     # ]
     # res = vikingdb_service.create_collection("example_text", fields, "This is an example include text")
     #
-    # vector_index = VectorIndexParams(distance=DistanceType.COSINE, index_type=IndexType.HNSW,
-    #                                  quant=QuantType.Float)
-    # res = vikingdb_service.create_index("example_text", "example_index_text", vector_index, cpu_quota=2,
-    #                                     description="This is an index include text", partition_by="like",
-    #                                     scalar_index=None)
+    # vector_index = VectorIndexParams(distance=DistanceType.IP, index_type=IndexType.FLAT,
+    #                                  quant=QuantType.Int8)
+    # res = vikingdb_service.create_index("example", "example1")
     #
     # collection = vikingdb_service.get_collection("example_text")
     # field1 = {"doc_id": "11", "text": {"text":"this is one"}, "like": 1, "price": 1.11,
@@ -531,7 +528,7 @@ if __name__ == '__main__':
     #             res[i] = random.random() - 0.5
     #         return res
 
-    #     collection = await vikingdb_service.async_get_collection("async")
+    #     collection = await vikingdb_service.async_get_collection("example")
     #     field1 = {"doc_id": "111", "text_vector": gen_random_vector(10), "like": 1, "price": 1.11,
     #               "author": ["gy"], "aim": True}
     #     field2 = {"doc_id": "222", "text_vector": gen_random_vector(10), "like": 2, "price": 2.22,

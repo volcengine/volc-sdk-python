@@ -2,6 +2,10 @@
 import json
 from enum import Enum
 
+INITIAL_RETRY_DELAY = 0.5
+MAX_RETRY_DELAY = 8.0
+MAX_RETRIES = 3
+
 class ShardType(Enum):
     """
     type of shard policy
@@ -63,7 +67,6 @@ class Order(Enum):
 
 class TaskType(Enum):
     Data_Import = "data_import"
-
 
 class EmbModel(object):
     def __init__(self, model_name, params=None):

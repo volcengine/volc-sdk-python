@@ -1,4 +1,5 @@
 # coding:utf-8
+from random import random
 from .Task import Task
 import json
 import re
@@ -282,6 +283,40 @@ class VikingDBService(Service):
                 return resp
             else:
                 raise Exception(resp)
+            
+    def _retry_request(self, api, params, body, remaining_retries=3):
+        try: 
+            method = self.api_info[api].method
+            if method == "GET":
+                res = self.get_body(api, params, body)
+            else:
+                res = self.json(api, params, body)
+        except Exception as e:
+            try:
+                res_json = json.loads(e.args[0].decode("utf-8"))
+            except:
+                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+            code = res_json.get("code", 1000028)
+            request_id = res_json.get("request_id", 1000028)
+            message = res_json.get("message", None)
+            if code == 1000029 and remaining_retries > 0:
+                remaining_retries  = remaining_retries - 1
+                timeout = self._calculate_retry_timeout(remaining_retries)
+                time.sleep(timeout)
+                return self._retry_request(api, params, body, remaining_retries)
+            else:
+                raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
+        if res == '':
+            raise VikingDBException(1000028, "missed",
+                                    "empty response due to unknown error, please contact customer service") from None
+        return res
+    
+    def _calculate_retry_timeout(self, remaining_retries):
+        nb_retries = MAX_RETRIES - remaining_retries
+        sleep_seconds = min(INITIAL_RETRY_DELAY * pow(2.0, nb_retries), MAX_RETRY_DELAY)
+        jitter = 1 - 0.25 * random()
+        timeout = sleep_seconds * jitter
+        return timeout if timeout >= 0 else 0
 
     def create_collection(self, collection_name, fields, description=""):
         """
@@ -361,21 +396,7 @@ class VikingDBService(Service):
         :rtype: Collection
         """
         params = {"collection_name": collection_name}
-        retry_count = 3
-        for i in range(retry_count):
-            try:
-                res = self.get_exception("GetCollection", params)
-            except Exception as e:
-                message, code, request_id = extract_exception_details(str(e))
-                if code == None:
-                    raise e
-                if code == 1000029 and i != retry_count-1:
-                    time.sleep((i * 2 + 1))
-                    continue
-                else:
-                    raise e
-            break
-
+        res = self._retry_request("GetCollection", {}, json.dumps(params))
         res = json.loads(res)
         description = ""
         stat = None
@@ -682,20 +703,7 @@ class VikingDBService(Service):
             "collection_name": collection_name,
             "index_name": index_name,
         }
-        retry_count = 3
-        for i in range(retry_count):
-            try:
-                res = self.get_exception("GetIndex", params)
-            except Exception as e:
-                message, code, request_id = extract_exception_details(str(e))
-                if code == None:
-                    raise e
-                if code == 1000029 and i != retry_count-1:
-                    time.sleep((i * 2 + 1))
-                    continue
-                else:
-                    raise e
-            break
+        res = self._retry_request("GetIndex", {}, json.dumps(params))
         res = json.loads(res)
         vector_index = scalar_index = partition_by = status = None
         cpu_quota = 2
@@ -1187,15 +1195,3 @@ class VikingDBService(Service):
     def drop_task(self, task_id):
         params = {"task_id": task_id}
         res = self.json_exception("DropTask", {}, json.dumps(params))
-
-        
-def extract_exception_details(exception_message):
-    pattern = r"message:(.*?), code:(\d+), request_id:([a-fA-F0-9]+)"
-    match = re.search(pattern, exception_message)
-    if match:
-        message = match.group(1).strip()
-        code = int(match.group(2).strip())
-        request_id = match.group(3).strip()
-        return message, code, request_id
-    else:
-        return None, None, None

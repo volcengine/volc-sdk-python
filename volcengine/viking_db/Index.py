@@ -2,7 +2,7 @@
 import json
 from typing import Union, List
 
-from volcengine.viking_db.common import Data, VectorOrder, ScalarOrder
+from volcengine.viking_db.common import MAX_RETRIES, Data, VectorOrder, ScalarOrder
 
 
 class Index(object):
@@ -30,7 +30,7 @@ class Index(object):
         # print(col["data"]["primary_key"])
         self.primary_key = col["data"]["primary_key"]
 
-    def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None):
+    def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, retry=False):
         """
         Search for vectors or scalars similar to a given vector or scalar.
 
@@ -51,10 +51,10 @@ class Index(object):
             if order.vector is not None:
                 res = self.search_by_vector(order.vector, sparse_vectors=order.sparse_vectors, filter=filter,
                                             limit=limit,
-                                            output_fields=output_fields, partition=partition, dense_weight=dense_weight)
+                                            output_fields=output_fields, partition=partition, dense_weight=dense_weight, retry=retry)
             elif order.id is not None:
                 res = self.search_by_id(order.id, filter=filter, limit=limit,
-                                        output_fields=output_fields, partition=partition, dense_weight=dense_weight)
+                                        output_fields=output_fields, partition=partition, dense_weight=dense_weight, retry=retry)
             return res
         elif isinstance(order, ScalarOrder):
             search = {}
@@ -66,7 +66,8 @@ class Index(object):
                 search['filter'] = filter
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             # print(params)
-            res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
+            remaining_retries = MAX_RETRIES if retry else 0
+            res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
             res = json.loads(res)
             # print(res["data"])
 
@@ -91,7 +92,8 @@ class Index(object):
             if filter is not None:
                 search['filter'] = filter
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
-            res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
+            remaining_retries = MAX_RETRIES if retry else 0
+            res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
             res = json.loads(res)
 
             datas = []
@@ -173,7 +175,7 @@ class Index(object):
                 # print("==================")
             return datas
 
-    def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None):
+    def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, retry=False):
         """
         Search for vectors similar to a given vector based on its id.
 
@@ -200,7 +202,8 @@ class Index(object):
             search['dense_weight'] = dense_weight
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
-        res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
+        remaining_retries = MAX_RETRIES if retry else 0
+        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
         res = json.loads(res)
         # print(res["data"])
 
@@ -254,7 +257,7 @@ class Index(object):
         return datas
 
     def search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None,
-                         partition="default", dense_weight=None):
+                         partition="default", dense_weight=None, retry=False):
         """
         Search for vectors similar to a given vector.
 
@@ -284,7 +287,8 @@ class Index(object):
             search['dense_weight'] = dense_weight
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
-        res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
+        remaining_retries = MAX_RETRIES if retry else 0
+        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
         res = json.loads(res)
         # print(res["data"])
 
@@ -338,7 +342,7 @@ class Index(object):
             # print("==================")
         return datas
 
-    def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None):
+    def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, retry=False):
         """
         Search for text similar to a given text.
 
@@ -364,7 +368,8 @@ class Index(object):
         if dense_weight is not None:
             search['dense_weight'] = dense_weight
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
-        res = self.viking_db_service.json_exception("SearchIndex", {}, json.dumps(params))
+        remaining_retries = MAX_RETRIES if retry else 0
+        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
         res = json.loads(res)
         # print(res["data"])
 
@@ -429,7 +434,7 @@ class Index(object):
                 params["output_fields"] = output_fields
             if partition != "":
                 params["partition"] = partition
-            res = self.viking_db_service.get_body_exception("FetchIndexData", {}, json.dumps(params))
+            res = self.viking_db_service._retry_request("FetchIndexData", {}, json.dumps(params))
             res = json.loads(res)
             # res["data"]是一个list
             # print(res["data"][0]["fields"])
@@ -446,7 +451,7 @@ class Index(object):
                 params["output_fields"] = output_fields
             if partition != "":
                 params["partition"] = partition
-            res = self.viking_db_service.get_body_exception("FetchIndexData", {}, json.dumps(params))
+            res = self.viking_db_service._retry_request("FetchIndexData", {}, json.dumps(params))
             res = json.loads(res)
             # print(res)
             for item in res["data"]:

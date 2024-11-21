@@ -30,6 +30,7 @@ class Collection(object):
             self.update_time = update_time
         if update_person is not None:
             self.update_person = update_person
+
     def upsert_data(self, data: Union[Data, List[Data]], async_upsert=False):
         """
         Insert and overwrite data in fields within a collection
@@ -47,7 +48,7 @@ class Collection(object):
             if async_upsert:
                 params["async"]=True
             # print(params)
-            res = self.viking_db_service.json_exception("UpsertData", {}, json.dumps(params))
+            res = self.viking_db_service._retry_request("UpsertData", {}, json.dumps(params))
         elif isinstance(data, list):
             fields_arr = []
             ttl = 0
@@ -63,7 +64,7 @@ class Collection(object):
                 params = {"collection_name": self.collection_name, "fields": record[item], "ttl": item}
                 if async_upsert:
                     params["async"]=True
-                res = self.viking_db_service.json_exception("UpsertData", {}, json.dumps(params))
+                res = self.viking_db_service._retry_request("UpsertData", {}, json.dumps(params))
 
     async def async_upsert_data(self, data: Union[Data, List[Data]], async_upsert=False):
         if isinstance(data, Data):
@@ -132,7 +133,7 @@ class Collection(object):
         if isinstance(id, str) or isinstance(id, int):
             params = {"collection_name": self.collection_name, "primary_keys": id}
             # print(params)
-            res = self.viking_db_service.get_body_exception("FetchData", {}, json.dumps(params))
+            res = self.viking_db_service._retry_request("FetchData", {}, json.dumps(params))
             # print(res)
             # res是一个列表,只有一个元素
             res = json.loads(res)
@@ -141,7 +142,7 @@ class Collection(object):
             return data
         elif isinstance(id, List):
             params = {"collection_name": self.collection_name, "primary_keys": id}
-            res = self.viking_db_service.get_body_exception("FetchData", {}, json.dumps(params))
+            res = self.viking_db_service._retry_request("FetchData", {}, json.dumps(params))
             res = json.loads(res)
             # print(res["data"],self.primary_key)
             datas = []
