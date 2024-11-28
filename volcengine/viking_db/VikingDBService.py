@@ -124,7 +124,8 @@ class VikingDBService(Service):
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "DropTask": ApiInfo("POST", "/api/task/drop", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-                                   
+            "UpdateTask": ApiInfo("POST", "/api/task/update", {}, {},
+                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),                                    
         }
         return api_info
 
@@ -1195,3 +1196,10 @@ class VikingDBService(Service):
     def drop_task(self, task_id):
         params = {"task_id": task_id}
         res = self.json_exception("DropTask", {}, json.dumps(params))
+
+    def update_task(self, task_id, task_status):
+        params = {
+            "task_id": task_id,
+            "task_status": task_status.value
+        }
+        res = self.json_exception("UpdateTask", {}, json.dumps(params))

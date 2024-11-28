@@ -163,6 +163,8 @@ class VisualService(Service):
             "CVSync2AsyncGetResult": ApiInfo("POST", "/", {"Action": "CVSync2AsyncGetResult", "Version": "2022-08-31"},{}, {}),
             "CVSync2AsyncSubmitTask": ApiInfo("POST", "/",{"Action": "CVSync2AsyncSubmitTask", "Version": "2022-08-31"}, {}, {}),
             "CVProcess": ApiInfo("POST", "/", {"Action": "CVProcess", "Version": "2022-08-31"}, {}, {}),
+            "CertLivenessVerifyQuery": ApiInfo("POST", "/",
+                                               {"Action": "CertLivenessVerifyQuery", "Version": "2022-08-31"}, {}, {}),
         }
         return api_info
 
@@ -253,6 +255,13 @@ class VisualService(Service):
     def cv_sync2async_get_result(self, form):
         try:
             res_json = self.common_json_handler("CVSync2AsyncGetResult", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cert_pro_liveness_verify_query(self, form):
+        try:
+            res_json = self.common_json_handler("CertLivenessVerifyQuery", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))

@@ -67,6 +67,16 @@ class Order(Enum):
 
 class TaskType(Enum):
     Data_Import = "data_import"
+    Filter_Delete = "filter_delete"
+
+class TaskStatus(Enum):
+    Init = "init"
+    Queued = "queued"
+    Running = "running"
+    Done = "done"
+    Fail = "fail"
+    Confirm = "confirm"
+    Confirmed = "confirmed"
 
 class EmbModel(object):
     def __init__(self, model_name, params=None):

@@ -133,14 +133,6 @@ class TLSService(Service):
             sleep_ms = 0
         return sleep_ms
 
-    def __new__(cls, *args, **kwargs):
-        if not hasattr(TLSService, "_instance"):
-            with TLSService._instance_lock:
-                if not hasattr(TLSService, "_instance"):
-                    TLSService._instance = object.__new__(cls)
-
-        return TLSService._instance
-
     def __init__(self, endpoint: str, access_key_id: str, access_key_secret: str, region: str,
                  security_token: str = None, scheme: str = "https", timeout: int = 60,
                  api_version=API_VERSION_V_0_3_0):

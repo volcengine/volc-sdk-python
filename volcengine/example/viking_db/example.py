@@ -13,14 +13,19 @@ sys.path.insert(0, "/data00/home/xiejianqiao.1027/project/volc-sdk-python/volcen
 
 if __name__ == '__main__':
     vikingdb_service = VikingDBService()
-    vikingdb_service.set_ak("")
-    vikingdb_service.set_sk("")
+    vikingdb_service.set_ak()
+    vikingdb_service.set_sk()
+
+    # id = vikingdb_service.create_task(TaskType.Filter_Delete, {"collection_name": "example", "filter": {"like": [2]}})
+    # print(id)
+
+    # res = vikingdb_service.update_task("ae6f9a4e-9a68-5374-9687-36017c1ddd3e", task_status=TaskStatus.Confirmed)
 
     # id = vikingdb_service.create_task(TaskType.Data_Import, {"tos_path": "demo-1028/demo_1030", "file_type":"json", "ignore_error":False, "collection_name":"sparse"})
     # print(id)
 
-    # task = vikingdb_service.get_task("01f7f554-46b9-55d6-af6c-b2aa9502d229")
-    # print(task.process_info["err_msg"])
+    # task = vikingdb_service.get_task("bc5e952d-3f95-5e0c-b310-548933890308")
+    # print(task.task_status)
 
     # tasks = vikingdb_service.list_tasks()
     # for item in tasks:
@@ -153,7 +158,7 @@ if __name__ == '__main__':
     #         default_val=True
     #     ),
     # ]
-    # res = vikingdb_service.create_collection("example1", fields, "This is an example")
+    # res = vikingdb_service.create_collection("example", fields, "This is an example")
     # # 返回一个collection实例
     # print(res)
     #
@@ -196,13 +201,13 @@ if __name__ == '__main__':
     #         res[i] = random.random() - 0.5
     #     return res
     # collection = vikingdb_service.get_collection("example")
-    # field1 = {"doc_id": "111", "text_vector": gen_random_vector(10), "like": 1, "price": 1.11,
+    # field1 = {"doc_id": "111", "text_vector": gen_random_vector(12), "like": 1, "price": 1.11,
     #           "author": ["gy"], "aim": True}
-    # field2 = {"doc_id": "222", "text_vector": gen_random_vector(10), "like": 2, "price": 2.22,
+    # field2 = {"doc_id": "222", "text_vector": gen_random_vector(12), "like": 2, "price": 2.22,
     #           "author": ["gy", "xjq"], "aim": False}
-    # field3 = {"doc_id": "333", "text_vector": gen_random_vector(10), "like": 3, "price": 3.33,
+    # field3 = {"doc_id": "333", "text_vector": gen_random_vector(12), "like": 3, "price": 3.33,
     #           "author": ["gy", "xjq"], "aim": False}
-    # field4 = {"doc_id": "444", "text_vector": gen_random_vector(10), "like": 4, "price": 4.44,
+    # field4 = {"doc_id": "444", "text_vector": gen_random_vector(12), "like": 4, "price": 4.44,
     #           "author": ["gy", "xjq"], "aim": False}
     # data1 = Data(field1)
     # data2 = Data(field2)
@@ -217,7 +222,7 @@ if __name__ == '__main__':
 
     #
     # collection = vikingdb_service.get_collection("example")
-    # res = collection.fetch_data("111")
+    # res = collection.fetch_data("333")
     # print(res.fields)
     # res = collection.fetch_data(["111", "222", "333", "444"])
     # # 返回一个列表
