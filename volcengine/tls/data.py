@@ -1883,7 +1883,7 @@ class AlarmPeriodSetting(TLSData):
 
 
 class JoinConfig(TLSData):
-    def __init__(self, set_operation_type: str, condition: str = None):
+    def __init__(self, set_operation_type: str = None, condition: str = None):
         self.condition = condition
         self.set_operation_type = set_operation_type
 

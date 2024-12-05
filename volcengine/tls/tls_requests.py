@@ -181,7 +181,7 @@ class DescribeProjectsRequest(TLSRequest):
 
 class CreateTopicRequest(TLSRequest):
     def __init__(self, topic_name: str, project_id: str, ttl: int, shard_count: int, description: str = None,
-                 auto_split: bool = True, max_split_shard: int = 10, enable_tracking: bool = False,
+                 auto_split: bool = True, max_split_shard: int = 50, enable_tracking: bool = False,
                  time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = True):
         """
         :param topic_name: 日志主题名称

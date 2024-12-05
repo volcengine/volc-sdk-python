@@ -85,6 +85,24 @@ if __name__ == "__main__":
     create_alarm_response = tls_service.create_alarm(create_alarm_request)
     alarm_id = create_alarm_response.alarm_id
 
+    # 创建告警策略 - 关联检索分析结果
+    # 请根据您的需要，填写project_id、alarm_name、query_request、request_cycle、condition、alarm_period、alarm_notify_group等参数
+    # CreateAlarm API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112216
+    query_request_1 = QueryRequest(topic_id=topic_id, query="Failed | select count(*) as errCount", number=1,
+                                 start_time_offset=-15, end_time_offset=0)
+    query_request_2 = QueryRequest(topic_id=topic_id, query="Error | select count(*) as errCount", number=2,
+                                 start_time_offset=-15, end_time_offset=0)
+    request_cycle = RequestCycle(cycle_type="Period", time=10)
+    join_configurations = [JoinConfig(set_operation_type="CrossJoin", condition="")]
+    trigger_conditions = [TriggerCondition(condition="$1.errCount + $2.errCount >= 10", severity="warning")]
+    create_alarm_request = CreateAlarmRequest(project_id, alarm_name="alarm-name-with-join-configurations", query_request=[query_request_1, query_request_2],
+                                              request_cycle=request_cycle, condition="", alarm_period=60,
+                                              alarm_notify_group=[alarm_notify_group_id],
+                                              join_configurations=join_configurations,
+                                              trigger_conditions=trigger_conditions)
+    create_alarm_response = tls_service.create_alarm(create_alarm_request)
+    alarm_id_2 = create_alarm_response.alarm_id
+
     # 修改告警策略
     # 请根据您的需要，填写待修改的alarm_id和其它参数
     # ModifyAlarm API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112218
@@ -105,6 +123,8 @@ if __name__ == "__main__":
     # DeleteAlarm API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112217
     delete_alarm_request = DeleteAlarmRequest(alarm_id)
     delete_alarm_response = tls_service.delete_alarm(delete_alarm_request)
+
+    tls_service.delete_alarm(DeleteAlarmRequest(alarm_id_2))
 
     # 删除告警组
     # 请根据您的需要，填写待删除的alarm_notify_group_id
