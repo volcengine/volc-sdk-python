@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.describe_deny_config(body)
+    resp = service.describe_live_top_play_data(body)
     print(resp)

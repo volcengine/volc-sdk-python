@@ -57,13 +57,13 @@ class CheckpointManager:
 
     def upload_checkpoint(self):
         with self.map_lock.gen_wlock():
-            checkpoint_snapshot = self.checkpoint_info_map.items()
+            checkpoint_snapshot = self.checkpoint_info_map.copy()
         project_id = self.consumer_config.project_id
         consumer_group_name = self.consumer_config.consumer_group_name
         uploaded_checkpoint_map = {}
 
         try:
-            for key, value in checkpoint_snapshot:
+            for key, value in checkpoint_snapshot.items():
                 shard_info = value.shard_info
                 topic_id = shard_info.topic_id
                 shard_id = shard_info.shard_id
@@ -78,6 +78,6 @@ class CheckpointManager:
             raise e
         finally:
             with self.map_lock.gen_wlock():
-                for key, value in uploaded_checkpoint_map:
+                for key, value in uploaded_checkpoint_map.items():
                     if value.checkpoint == self.checkpoint_info_map[key].checkpoint:
                         del self.checkpoint_info_map[key]

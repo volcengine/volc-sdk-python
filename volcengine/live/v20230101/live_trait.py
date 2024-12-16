@@ -705,6 +705,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_live_top_play_data(self, body):
+        res = self.api_post('DescribeLiveTopPlayData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_live_region_data(self, body):
         res = self.api_post('DescribeLiveRegionData', [], json.dumps(body))
         if res == '':
@@ -929,13 +936,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def describe_deny_config(self, body):
-        res = self.api_post('DescribeDenyConfig', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def describe_referer(self, body):
         res = self.api_post('DescribeReferer', [], json.dumps(body))
         if res == '':
@@ -945,13 +945,6 @@ class LiveTrait(Service):
             
     def describe_auth(self, body):
         res = self.api_post('DescribeAuth', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def update_deny_config(self, body):
-        res = self.api_post('UpdateDenyConfig', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
