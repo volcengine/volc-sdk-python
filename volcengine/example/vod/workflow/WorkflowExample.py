@@ -23,6 +23,7 @@ if __name__ == '__main__':
         req.Input.MergeFrom(WorkflowParams())
         req.Priority = 0
         req.CallbackArgs = 'your callback args'
+        req.ClientToken = 'your ClientToken'
         resp = vod_service.start_workflow(req)
     except Exception:
         raise
