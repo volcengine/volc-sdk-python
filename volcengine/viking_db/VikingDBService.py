@@ -293,10 +293,12 @@ class VikingDBService(Service):
             else:
                 res = self.json(api, params, body)
         except Exception as e:
+            err_msg = "request exception: {}".format(e)
             try:
                 res_json = json.loads(e.args[0].decode("utf-8"))
             except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+                raise VikingDBException(1000028, "missed",
+                                        "res json load error: {}, due to last error: {}".format(str(e), err_msg)) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)

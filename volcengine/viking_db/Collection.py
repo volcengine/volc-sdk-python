@@ -11,6 +11,16 @@ from volcengine.viking_db.common import Data
 class Collection(object):
     def __init__(self, collection_name, fields, viking_db_service, primary_key, indexes=None, stat=None,
                  description="", create_time=None, update_time=None, update_person=None):
+        """
+        :param collection_name: the name of VikingDB collection.
+        :type collection_name: str
+        :param fields: fields(schema) defination, including field_name, field_type, default_val, and dim or pipeline_name for embedding related field
+        :type fields: list[Field]
+        :param viking_db_service: VikingDBService instance.
+        :type viking_db_service: VikingDBService
+        :param primary_key: field_name of primary key in collection, or "__AUTO_ID__" to use auto int64 id.
+        :type primary_key: str
+        """
         self.collection_name = collection_name
         self.fields = fields
         self.viking_db_service = viking_db_service
@@ -38,6 +48,8 @@ class Collection(object):
         :param data: The data you want to insert or overwrite.
         :type data: Data or list[Data]
         :rtype: None
+        :param async_upsert: Whether to use async upsert, if enabled, writing will be faster but the data will not be updated in index immediately but after next round of index building finished.
+        :type async_upsert: bool
         """
         if isinstance(data, Data):
             fields_arr = [data.fields]
@@ -101,7 +113,6 @@ class Collection(object):
 
         :param id: The data id you want to delete.
         :type id: str or list[str] or int or list[int]
-        :rtype: None
         """
         if isinstance(id, str) or isinstance(id, int):
             params = {"collection_name": self.collection_name, "primary_keys": id}

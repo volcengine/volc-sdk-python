@@ -9,6 +9,30 @@ class Index(object):
     def __init__(self, collection_name, index_name, vector_index, scalar_index, stat, viking_db_service, description="",
                  cpu_quota=2, partition_by=None, create_time=None, update_time=None, update_person=None,
                  index_cost=None, shard_count=None, shard_policy=None):
+        """
+        :param collection_name: the name of VikingDB collection.
+        :type collection_name: str
+        :param index_name: the name of VikingDB index.
+        :type index_name: str
+        :param vector_index: ANN vector index information.
+        :type vector_index: dict
+        :param scalar_index: scalar index information.
+        :type scalar_index: set
+        :param stat: index status like 'READY'.
+        :type stat: str
+        :param viking_db_service: VikingDBService instance.
+        :type viking_db_service: VikingDBService
+        :param description: the description of index.
+        :type description: str
+        :param cpu_quota: allocated cpu quota of the index.
+        :type cpu_quota: int
+        :param partition_by: the name of sub-index, if not specified, the sub-index is single default.
+        :type partition_by: str
+        :param shard_count: the number of shards, by default it's 1.
+        :type shard_count: int
+        :param shard_policy: the sharding policy of the index, by default it's 'auto'.
+        :type shard_policy: str
+        """
         self.collection_name = collection_name
         self.index_name = index_name
         self.description = description
@@ -45,6 +69,10 @@ class Index(object):
         :param partition: the name of sub-index.
         :type partition: int or str or list[int] or list[str]
         :rtype: list
+        :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
+        :type dense_weight: float
+        :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
+        :type retry: bool
         """
         if isinstance(order, VectorOrder):
             res = []
@@ -190,6 +218,10 @@ class Index(object):
         :param partition: the name of sub-index.
         :type partition: int or str or list[int] or list[str]
         :rtype: list
+        :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
+        :type dense_weight: float
+        :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
+        :type retry: bool
         """
         search = {}
         order_by_id = {"primary_keys": id}
@@ -272,6 +304,10 @@ class Index(object):
         :param partition: the name of sub-index.
         :type partition: int or str or list[int] or list[str]
         :rtype: list
+        :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
+        :type dense_weight: float
+        :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
+        :type retry: bool
         """
         # vector是一个向量，不是list，但是数据库要求传入的是个列表
         search = {}
@@ -357,6 +393,10 @@ class Index(object):
         :param partition: the name of sub-index.
         :type partition: int or str or list[int] or list[str]
         :rtype: list
+        :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
+        :type dense_weight: float
+        :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
+        :type retry: bool
         """
         search = {}
         order_by_raw = {"text": text.text}
@@ -426,6 +466,16 @@ class Index(object):
         return datas
 
     def fetch_data(self, id: Union[str, List[str], int, List[int]], output_fields=None, partition=""):
+        """
+        Fetch data by primary key (id).
+        this method is much faster than Collection.fetch_data() due to indexed.
+        :param text: the given primary key or keys.
+        :type text: str or int or list[str] or list[int]
+        :param output_fields: specify the list of scalar fields to be returned.
+        :type output_fields: list
+        :param partition: the name of sub-index.
+        :type partition: int or str or list[int] or list[str]
+        """
         params = {}
         if isinstance(id, str) or isinstance(id, int):
             params = {"collection_name": self.collection_name, "index_name": self.index_name,

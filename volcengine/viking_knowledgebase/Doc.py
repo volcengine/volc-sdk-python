@@ -2,6 +2,9 @@ from .common import Field
 import json
 
 class Doc(object):
+    """
+    KnowledgeBase Doc data wrapper
+    """
     def __init__(self, kwargs):
         self.collection_name    = kwargs.get("collection_name")
         self.doc_name           = kwargs.get("doc_name")

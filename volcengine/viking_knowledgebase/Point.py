@@ -2,7 +2,10 @@ from deprecated import deprecated
 
 from .Doc import Doc    
 
-class Point(object):  
+class Point(object):
+    """
+    Knowledge Point data wrapper
+    """
     def __init__(self, kwargs):
         self.collection_name        = kwargs.get("collection_name")
         self.point_id               = kwargs.get("point_id")

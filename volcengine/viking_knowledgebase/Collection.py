@@ -5,6 +5,9 @@ from .Doc import Doc
 from .Point import Point
 
 class Collection(object):
+    """
+    KnowledgeBase Collection
+    """
     def __init__(self, viking_knowledgebase_service, collection_name, kwargs=None):
         self.viking_knowledgebase_service      = viking_knowledgebase_service
         self.collection_name        = collection_name

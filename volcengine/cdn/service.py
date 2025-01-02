@@ -285,6 +285,14 @@ api_info = {
     "AddSharedConfig": ApiInfo("POST", "/", {
         "Action": "AddSharedConfig", "Version": SERVICE_VERSION}, {}, {}),
 
+    # 接入域名校验: 
+    "CheckDomain": ApiInfo("POST", "/", {
+        "Action": "CheckDomain", "Version": SERVICE_VERSION}, {}, {}),
+
+    # DNS校验信息生成: 
+    "DescribeRetrieveInfo": ApiInfo("POST", "/", {
+        "Action": "DescribeRetrieveInfo", "Version": SERVICE_VERSION}, {}, {}),
+
 
 }
 
@@ -1003,6 +1011,26 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "AddSharedConfig"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def check_domain(self, params=None):
+        if params is None:
+            params = {}
+        action = "CheckDomain"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_retrieve_info(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeRetrieveInfo"
         res = self.send_request(action, params)
         if res == '':
             raise Exception("%s: empty response" % action)
