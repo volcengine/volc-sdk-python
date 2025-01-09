@@ -68,6 +68,7 @@ class Order(Enum):
 class TaskType(Enum):
     Data_Import = "data_import"
     Filter_Delete = "filter_delete"
+    Data_export = "data_export"
 
 class TaskStatus(Enum):
     Init = "init"

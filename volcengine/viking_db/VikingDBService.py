@@ -92,6 +92,8 @@ class VikingDBService(Service):
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "UpsertData": ApiInfo("POST", "/api/collection/upsert_data", {}, {},
                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "UpdateData": ApiInfo("POST", "/api/collection/update_data", {}, {},
+                                  {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "DeleteData": ApiInfo("POST", "/api/collection/del_data", {}, {},
                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "FetchData": ApiInfo("GET", "/api/collection/fetch_data", {}, {},

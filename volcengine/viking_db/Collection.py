@@ -78,6 +78,35 @@ class Collection(object):
                     params["async"]=True
                 res = self.viking_db_service._retry_request("UpsertData", {}, json.dumps(params))
 
+    def update_data(self, data: Union[Data, List[Data]]):
+        """
+        Update data in fields within a collection
+
+        :param data: The data field you want to update. must contain primary key
+        :type data: Data or list[Data]
+        """
+        if isinstance(data, Data):
+            fields_arr = [data.fields]
+            ttl = 0
+            if data.TTL is not None:
+                ttl = data.TTL
+            params = {"collection_name": self.collection_name, "fields": fields_arr, "ttl": ttl}
+            res = self.viking_db_service._retry_request("UpdateData", {}, json.dumps(params))
+        elif isinstance(data, list):
+            fields_arr = []
+            ttl = 0
+            record = {}
+            for item in data:
+                if item.TTL in record:
+                    fields = record[item.TTL]
+                    fields.append(item.fields)
+                    record[item.TTL] = fields
+                else:
+                    record[item.TTL] = [item.fields]
+            for item in record:
+                params = {"collection_name": self.collection_name, "fields": record[item], "ttl": item}
+                res = self.viking_db_service._retry_request("UpdateData", {}, json.dumps(params))
+
     async def async_upsert_data(self, data: Union[Data, List[Data]], async_upsert=False):
         if isinstance(data, Data):
             fields_arr = [data.fields]
