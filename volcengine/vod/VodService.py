@@ -390,11 +390,12 @@ class VodService(VodServiceConfig):
             headers['X-Upload-Storage-Class'] = 'ia'
 
         upload_status, resp = self.put_data(url, data, headers)
+        resp_text = str(resp, encoding='utf8')
         if not upload_status:
-            raise Exception(url + json.dumps(resp))
+            raise Exception("upload part error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
         resp = json.loads(resp)
         if resp.get('success') is None or resp['success'] != 0:
-            raise Exception("upload part error")
+            raise Exception("upload part error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
         return check_sum, resp['payload']
 
     @staticmethod

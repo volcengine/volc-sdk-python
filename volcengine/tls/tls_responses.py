@@ -931,6 +931,9 @@ class DescribeConsumerGroupsResponse(TLSResponse):
         self.consumer_groups = []
         consumer_groups = self.response[CONSUMER_GROUPS]
 
+        if consumer_groups is None:
+            return
+
         for i in range(len(consumer_groups)):
             self.consumer_groups.append(ConsumerGroup.set_attributes(data=consumer_groups[i]))
 

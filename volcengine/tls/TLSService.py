@@ -145,10 +145,24 @@ class TLSService(Service):
         self.__timeout = timeout
         self.__api_version = api_version
 
+        self.check_scheme_and_endpoint()
+
         self.__logger = get_logger("tls-python-sdk-logger")
         self.__logger.info("Successfully initialize the TLS client.")
 
         super(TLSService, self).__init__(service_info=self.get_service_info(), api_info=API_INFO)
+
+    def check_scheme_and_endpoint(self):
+        schemes = {
+            "http://": "http",
+            "https://": "https",
+        }
+
+        for prefix, scheme in schemes.items():
+            if self.__endpoint.startswith(prefix):
+                self.__scheme = scheme
+                self.__endpoint = self.__endpoint[len(prefix):]
+                return
 
     def get_region(self):
         return self.__region

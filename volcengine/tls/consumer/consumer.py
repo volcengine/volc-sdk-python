@@ -17,7 +17,7 @@ from volcengine.tls.consumer.log_consumer import LogConsumer
 from volcengine.tls.data import ConsumeShard
 from volcengine.tls.log_pb2 import LogGroupList
 from volcengine.tls.tls_exception import TLSException
-from volcengine.tls.tls_requests import CreateConsumerGroupRequest
+from volcengine.tls.tls_requests import CreateConsumerGroupRequest, DescribeConsumerGroupsRequest
 from volcengine.tls.util import get_logger
 
 
@@ -95,6 +95,16 @@ class TLSConsumer:
         self.tls_service.reset_access_key_token(access_key_id, access_key_secret, security_token)
 
     def init(self):
+
+        req = DescribeConsumerGroupsRequest(project_id=self.consumer_config.project_id,
+                                           consumer_group_name=self.consumer_config.consumer_group_name)
+
+        res = self.tls_service.describe_consumer_groups(req)
+
+        for consumer_group in res.consumer_groups:
+            if consumer_group.consumer_group_name == self.consumer_config.consumer_group_name:
+                return
+
         req = CreateConsumerGroupRequest(project_id=self.consumer_config.project_id,
                                          consumer_group_name=self.consumer_config.consumer_group_name,
                                          topic_id_list=self.consumer_config.topic_id_list,

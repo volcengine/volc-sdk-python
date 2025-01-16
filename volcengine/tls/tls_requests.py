@@ -2070,7 +2070,8 @@ class ModifyConsumerGroupRequest(TLSRequest):
 
 
 class DescribeConsumerGroupsRequest(TLSRequest):
-    def __init__(self, project_id: str, page_number: int = 1, page_size: int = 20):
+    def __init__(self, project_id: str, page_number: int = 1, page_size: int = 20, consumer_group_name: str = None,
+                 project_name: str = None, topic_id: str = None):
         """
         :param project_id: 日志项目ID
         :type project_id: str
@@ -2082,6 +2083,9 @@ class DescribeConsumerGroupsRequest(TLSRequest):
         self.project_id = project_id
         self.page_number = page_number
         self.page_size = page_size
+        self.consumer_group_name = consumer_group_name
+        self.project_name = project_name
+        self.topic_id = topic_id
 
     def check_validation(self):
         """
