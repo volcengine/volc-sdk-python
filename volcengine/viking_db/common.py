@@ -1,6 +1,7 @@
 # coding:utf-8
 import json
 from enum import Enum
+from typing import List
 
 INITIAL_RETRY_DELAY = 0.5
 MAX_RETRY_DELAY = 8.0
@@ -47,6 +48,7 @@ class IndexType(Enum):
     IVF = "ivf"
     DiskANN = "DiskANN"
     HNSW_HYBRID = "hnsw_hybrid"
+    SORT = "sort"
 
 class QuantType(Enum):
     """
@@ -208,6 +210,49 @@ class Data(object):
     def dist(self):
         return self._dist
 
+class AggResult(object):
+    def __init__(self, agg_op, group_by_field, agg_result):
+        self._agg_op = agg_op
+        self._group_by_field = group_by_field
+        self._agg_result = agg_result
+
+    @property
+    def agg_op(self):
+        return self._agg_op
+
+    @property
+    def group_by_field(self):
+        return self._group_by_field
+
+    @property
+    def agg_result(self):
+        return self._agg_result
+
+class SortResultItem(object):
+    def __init__(self, primary_key, score):
+        self._primary_key = primary_key
+        self._score = score
+
+    @property
+    def primary_key(self):
+        return self._primary_key
+
+    @property
+    def score(self):
+        return self._score
+
+class IndexSortResult(object):
+    def __init__(self, sort_result: List[SortResultItem], primary_key_not_exist: List):
+        self._sort_result: List[SortResultItem] = sort_result
+        self._primary_key_not_exist = primary_key_not_exist
+
+    @property
+    def sort_result(self):
+        return self._sort_result
+
+    @property
+    def primary_key_not_exist(self):
+        return self._primary_key_not_exist
 
 class VectorIndexParams(object):
     def __init__(self, distance=DistanceType.IP, index_type=IndexType.HNSW, quant=QuantType.Int8, **kwargs):

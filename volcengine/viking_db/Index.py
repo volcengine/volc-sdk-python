@@ -1,8 +1,9 @@
 # coding:utf-8
 import json
-from typing import Union, List
+from typing import Union, List, Dict
 
-from volcengine.viking_db.common import MAX_RETRIES, Data, VectorOrder, ScalarOrder
+from volcengine.viking_db.common import (MAX_RETRIES, Data, VectorOrder, ScalarOrder,
+                                         AggResult, IndexSortResult, SortResultItem)
 
 
 class Index(object):
@@ -51,10 +52,11 @@ class Index(object):
         # 获取primary_key
         col = self.viking_db_service.get_exception("GetCollection", {"collection_name": self.collection_name})
         col = json.loads(col)
-        # print(col["data"]["primary_key"])
         self.primary_key = col["data"]["primary_key"]
 
-    def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, retry=False):
+    def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
+               primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
+               retry=False):
         """
         Search for vectors or scalars similar to a given vector or scalar.
 
@@ -68,21 +70,32 @@ class Index(object):
         :type output_fields: list
         :param partition: the name of sub-index.
         :type partition: int or str or list[int] or list[str]
-        :rtype: list
+        :type: list
         :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
         :type dense_weight: float
+        :type primary_key_in: filter data by primary key value, list[int] or list[str]
+        :type: list
+        :type primary_key_not_in: filter out data by primary key value, list[int] or list[str]
+        :type: list
+        :type post_process_ops: post process operators
+        :type: list[dict]
+        :type post_process_input_limit: number of data input to post process operators
+        :type: int
         :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
         :type retry: bool
         """
         if isinstance(order, VectorOrder):
             res = []
             if order.vector is not None:
-                res = self.search_by_vector(order.vector, sparse_vectors=order.sparse_vectors, filter=filter,
-                                            limit=limit,
-                                            output_fields=output_fields, partition=partition, dense_weight=dense_weight, retry=retry)
+                res = self.search_by_vector(order.vector, sparse_vectors=order.sparse_vectors, filter=filter, limit=limit,
+                                            output_fields=output_fields, partition=partition, dense_weight=dense_weight,
+                                            primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
+                                            retry=retry)
             elif order.id is not None:
                 res = self.search_by_id(order.id, filter=filter, limit=limit,
-                                        output_fields=output_fields, partition=partition, dense_weight=dense_weight, retry=retry)
+                                        output_fields=output_fields, partition=partition, dense_weight=dense_weight,
+                                        primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
+                                        retry=retry)
             return res
         elif isinstance(order, ScalarOrder):
             search = {}
@@ -92,26 +105,30 @@ class Index(object):
                 search["output_fields"] = output_fields
             if filter is not None:
                 search['filter'] = filter
+            if primary_key_in is not None:
+                search['primary_key_in'] = primary_key_in
+            if primary_key_not_in is not None:
+                search['primary_key_not_in'] = primary_key_not_in
+            if post_process_ops is not None:
+                search['post_process_ops'] = post_process_ops
+            if post_process_input_limit is not None:
+                search['post_process_input_limit'] = post_process_input_limit
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             # print(params)
             remaining_retries = MAX_RETRIES if retry else 0
             res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
             res = json.loads(res)
-            # print(res["data"])
 
             datas = []
             # 返回数据是个列表，每个id又对应一个列表，但是这里输入id好像只能传一个值，所以要for两次
             for items in res["data"]:
                 for item in items:
-                    # print(item)
                     id = item[self.primary_key]
                     fields = {}
                     if output_fields != [] or output_fields is None:
                         fields = item["fields"]
-                    # print(id, fields)
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
-                # print("==================")
             return datas
         elif order is None:
             search = {"limit": limit, "partition": partition}
@@ -119,13 +136,20 @@ class Index(object):
                 search["output_fields"] = output_fields
             if filter is not None:
                 search['filter'] = filter
+            if primary_key_in is not None:
+                search['primary_key_in'] = primary_key_in
+            if primary_key_not_in is not None:
+                search['primary_key_not_in'] = primary_key_not_in
+            if post_process_ops is not None:
+                search['post_process_ops'] = post_process_ops
+            if post_process_input_limit is not None:
+                search['post_process_input_limit'] = post_process_input_limit
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             remaining_retries = MAX_RETRIES if retry else 0
             res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
             res = json.loads(res)
 
             datas = []
-            # print(res)
             for items in res["data"]:
                 for item in items:
                     id = item[self.primary_key]
@@ -134,23 +158,22 @@ class Index(object):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
-                # print("==================")
             return datas
 
     async def async_search(self, order=None, filter=None, limit=10, output_fields=None, partition="default",
-                           dense_weight=None):
+                           dense_weight=None, primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
         if isinstance(order, VectorOrder):
             res = []
             if order.vector is not None:
-                res = await self.async_search_by_vector(order.vector, sparse_vectors=order.sparse_vectors,
-                                                        filter=filter,
-                                                        limit=limit,
-                                                        output_fields=output_fields, partition=partition,
-                                                        dense_weight=dense_weight)
+                res = await self.async_search_by_vector(order.vector, sparse_vectors=order.sparse_vectors, filter=filter, limit=limit,
+                                                        output_fields=output_fields, partition=partition, dense_weight=dense_weight,
+                                                        primary_key_in=None, primary_key_not_in=None,
+                                                        post_process_ops=None, post_process_input_limit=None)
             elif order.id is not None:
-                res = await self.async_search_by_id(order.id, filter=filter, limit=limit,
-                                                    output_fields=output_fields, partition=partition,
-                                                    dense_weight=dense_weight)
+                res = await self.async_search_by_id(order.id, filter=filter, limit=limit, output_fields=output_fields,
+                                                    partition=partition, dense_weight=dense_weight,
+                                                    primary_key_in=None, primary_key_not_in=None,
+                                                    post_process_ops=None, post_process_input_limit=None)
             return res
         elif isinstance(order, ScalarOrder):
             search = {}
@@ -160,25 +183,28 @@ class Index(object):
                 search["output_fields"] = output_fields
             if filter is not None:
                 search['filter'] = filter
+            if primary_key_in is not None:
+                search['primary_key_in'] = primary_key_in
+            if primary_key_not_in is not None:
+                search['primary_key_not_in'] = primary_key_not_in
+            if post_process_ops is not None:
+                search['post_process_ops'] = post_process_ops
+            if post_process_input_limit is not None:
+                search['post_process_input_limit'] = post_process_input_limit
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
-            # print(params)
             res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
             res = json.loads(res)
-            # print(res["data"])
 
             datas = []
             # 返回数据是个列表，每个id又对应一个列表，但是这里输入id好像只能传一个值，所以要for两次
             for items in res["data"]:
                 for item in items:
-                    # print(item)
                     id = item[self.primary_key]
                     fields = {}
                     if output_fields != [] or output_fields is None:
                         fields = item["fields"]
-                    # print(id, fields)
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
-                # print("==================")
             return datas
         elif order is None:
             search = {"limit": limit, "partition": partition}
@@ -186,12 +212,19 @@ class Index(object):
                 search["output_fields"] = output_fields
             if filter is not None:
                 search['filter'] = filter
+            if primary_key_in is not None:
+                search['primary_key_in'] = primary_key_in
+            if primary_key_not_in is not None:
+                search['primary_key_not_in'] = primary_key_not_in
+            if post_process_ops is not None:
+                search['post_process_ops'] = post_process_ops
+            if post_process_input_limit is not None:
+                search['post_process_input_limit'] = post_process_input_limit
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
             res = json.loads(res)
 
             datas = []
-            # print(res)
             for items in res["data"]:
                 for item in items:
                     id = item[self.primary_key]
@@ -200,10 +233,11 @@ class Index(object):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
-                # print("==================")
             return datas
 
-    def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, retry=False):
+    def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
+                     primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
+                     retry=False):
         """
         Search for vectors similar to a given vector based on its id.
 
@@ -220,6 +254,14 @@ class Index(object):
         :rtype: list
         :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
         :type dense_weight: float
+        :type primary_key_in: filter data by primary key value, list[int] or list[str]
+        :type: list
+        :type primary_key_not_in: filter out data by primary key value, list[int] or list[str]
+        :type: list
+        :type post_process_ops: post process operators
+        :type: list[dict]
+        :type post_process_input_limit: number of data input to post process operators
+        :type: int
         :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
         :type retry: bool
         """
@@ -232,6 +274,14 @@ class Index(object):
             search['filter'] = filter
         if dense_weight is not None:
             search['dense_weight'] = dense_weight
+        if primary_key_in is not None:
+            search['primary_key_in'] = primary_key_in
+        if primary_key_not_in is not None:
+            search['primary_key_not_in'] = primary_key_not_in
+        if post_process_ops is not None:
+            search['post_process_ops'] = post_process_ops
+        if post_process_input_limit is not None:
+            search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         remaining_retries = MAX_RETRIES if retry else 0
@@ -255,8 +305,8 @@ class Index(object):
             # print("==================")
         return datas
 
-    async def async_search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default",
-                                 dense_weight=None):
+    async def async_search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
+                                 primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
         search = {}
         order_by_id = {"primary_keys": id}
         search = {"order_by_vector": order_by_id, "limit": limit, "partition": partition}
@@ -266,6 +316,14 @@ class Index(object):
             search['filter'] = filter
         if dense_weight is not None:
             search['dense_weight'] = dense_weight
+        if primary_key_in is not None:
+            search['primary_key_in'] = primary_key_in
+        if primary_key_not_in is not None:
+            search['primary_key_not_in'] = primary_key_not_in
+        if post_process_ops is not None:
+            search['post_process_ops'] = post_process_ops
+        if post_process_input_limit is not None:
+            search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
@@ -288,8 +346,8 @@ class Index(object):
             # print("==================")
         return datas
 
-    def search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None,
-                         partition="default", dense_weight=None, retry=False):
+    def search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
+                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=False):
         """
         Search for vectors similar to a given vector.
 
@@ -306,6 +364,14 @@ class Index(object):
         :rtype: list
         :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
         :type dense_weight: float
+        :type primary_key_in: filter data by primary key value, list[int] or list[str]
+        :type: list
+        :type primary_key_not_in: filter out data by primary key value, list[int] or list[str]
+        :type: list
+        :type post_process_ops: post process operators
+        :type: list[dict]
+        :type post_process_input_limit: number of data input to post process operators
+        :type: int
         :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
         :type retry: bool
         """
@@ -321,30 +387,33 @@ class Index(object):
             search['filter'] = filter
         if dense_weight is not None:
             search['dense_weight'] = dense_weight
+        if primary_key_in is not None:
+            search['primary_key_in'] = primary_key_in
+        if primary_key_not_in is not None:
+            search['primary_key_not_in'] = primary_key_not_in
+        if post_process_ops is not None:
+            search['post_process_ops'] = post_process_ops
+        if post_process_input_limit is not None:
+            search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
-        # print(params)
         remaining_retries = MAX_RETRIES if retry else 0
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
         res = json.loads(res)
-        # print(res["data"])
 
         datas = []
         # 返回数据是个列表，每个vector又对应一个列表，但是这里输入vector好像只能传一个值，所以要for两次
         for items in res["data"]:
             for item in items:
-                # print(item)
                 id = item[self.primary_key]
                 fields = {}
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
-                # print(id, fields)
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
-            # print("==================")
         return datas
 
-    async def async_search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None,
-                                     partition="default", dense_weight=None):
+    async def async_search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
+                                     primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
         # vector是一个向量，不是list，但是数据库要求传入的是个列表
         search = {}
         order_by_vector = {"vectors": [vector]}
@@ -357,28 +426,32 @@ class Index(object):
             search['filter'] = filter
         if dense_weight is not None:
             search['dense_weight'] = dense_weight
+        if primary_key_in is not None:
+            search['primary_key_in'] = primary_key_in
+        if primary_key_not_in is not None:
+            search['primary_key_not_in'] = primary_key_not_in
+        if post_process_ops is not None:
+            search['post_process_ops'] = post_process_ops
+        if post_process_input_limit is not None:
+            search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
-        # print(params)
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
-        # print(res["data"])
 
         datas = []
         # 返回数据是个列表，每个vector又对应一个列表，但是这里输入vector好像只能传一个值，所以要for两次
         for items in res["data"]:
             for item in items:
-                # print(item)
                 id = item[self.primary_key]
                 fields = {}
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
-                # print(id, fields)
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
-            # print("==================")
         return datas
 
-    def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, retry=False):
+    def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
+                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=False):
         """
         Search for text similar to a given text.
 
@@ -395,6 +468,16 @@ class Index(object):
         :rtype: list
         :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
         :type dense_weight: float
+        :type need_instruction: whether need instruction for embedding
+        :type: bool
+        :type primary_key_in: filter data by primary key value, list[int] or list[str]
+        :type: list
+        :type primary_key_not_in: filter out data by primary key value, list[int] or list[str]
+        :type: list
+        :type post_process_ops: post process operators
+        :type: list[dict]
+        :type post_process_input_limit: number of data input to post process operators
+        :type: int
         :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
         :type retry: bool
         """
@@ -407,32 +490,38 @@ class Index(object):
             search['filter'] = filter
         if dense_weight is not None:
             search['dense_weight'] = dense_weight
+        if need_instruction is not None:
+            search['need_instruction'] = need_instruction
+        if primary_key_in is not None:
+            search['primary_key_in'] = primary_key_in
+        if primary_key_not_in is not None:
+            search['primary_key_not_in'] = primary_key_not_in
+        if post_process_ops is not None:
+            search['post_process_ops'] = post_process_ops
+        if post_process_input_limit is not None:
+            search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining_retries = MAX_RETRIES if retry else 0
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
         res = json.loads(res)
-        # print(res["data"])
 
         datas = []
         # 返回数据是个列表，每个vector又对应一个列表，但是这里输入vector好像只能传一个值，所以要for两次
         for items in res["data"]:
             for item in items:
-                # print(item)
                 id = item[self.primary_key]
                 fields = {}
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
-                # print(id, fields)
                 text = None
                 if "text" in item:
                     text = item["text"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
                 datas.append(data)
-            # print("==================")
         return datas
 
-    async def async_search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default",
-                                   dense_weight=None):
+    async def async_search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
+                                   primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
         search = {}
         order_by_raw = {"text": text.text}
         search = {"order_by_raw": order_by_raw, "limit": limit, "partition": partition}
@@ -442,28 +531,113 @@ class Index(object):
             search['filter'] = filter
         if dense_weight is not None:
             search['dense_weight'] = dense_weight
+        if need_instruction is not None:
+            search['need_instruction'] = need_instruction
+        if primary_key_in is not None:
+            search['primary_key_in'] = primary_key_in
+        if primary_key_not_in is not None:
+            search['primary_key_not_in'] = primary_key_not_in
+        if post_process_ops is not None:
+            search['post_process_ops'] = post_process_ops
+        if post_process_input_limit is not None:
+            search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
-        # print(res["data"])
 
         datas = []
         # 返回数据是个列表，每个vector又对应一个列表，但是这里输入vector好像只能传一个值，所以要for两次
         for items in res["data"]:
             for item in items:
-                # print(item)
                 id = item[self.primary_key]
                 fields = {}
                 if output_fields != [] or output_fields is None:
                     fields = item["fields"]
-                # print(id, fields)
                 text = None
                 if "text" in item:
                     text = item["text"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
                 datas.append(data)
-            # print("==================")
         return datas
+
+    def search_agg(self, agg: Dict[str, any], filter=None, partition="default", retry=False) -> AggResult:
+        """
+        Search and aggregate the data.
+
+        :param agg: the aggregation operator.
+        :type agg: dict
+        :param filter: filter conditions.
+        :type filter: dict
+        :param partition: the name of sub-index.
+        :type partition: int or str or list[int] or list[str]
+        :rtype: list
+        :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
+        :type retry: bool
+        """
+        params = {"collection_name": self.collection_name, "index_name": self.index_name,
+                  "search": {"partition": partition}, "agg": agg}
+        if filter is not None:
+            params["search"]["filter"] = filter
+        remaining_retries = MAX_RETRIES if retry else 0
+        res = self.viking_db_service._retry_request("SearchAgg", {}, json.dumps(params), remaining_retries)
+        res = json.loads(res)
+        data = res["data"]
+        return AggResult(
+            agg_op=data["agg_op"],
+            group_by_field=data["group_by_field"],
+            agg_result=data["agg_result"],
+        )
+
+    async def async_search_agg(self, agg: Dict[str, any], filter=None, partition="default") -> AggResult:
+        params = {"collection_name": self.collection_name, "index_name": self.index_name,
+                  "search": {"partition": partition}, "agg": agg}
+        if filter is not None:
+            params["search"]["filter"] = filter
+        res = await self.viking_db_service.async_json_exception("SearchAgg", {}, json.dumps(params))
+        res = json.loads(res)
+        data = res["data"]
+        return AggResult(
+            agg_op=data["agg_op"],
+            group_by_field=data["group_by_field"],
+            agg_result=data["agg_result"],
+        )
+
+    def sort(self, query_vector: List[float], primary_keys: List, retry=False):
+        """
+        Index sort: input a query vector and primary key list, get the sorted score list.
+
+        :param query_vector: one query vector.
+        :type query_vector: list
+        :param primary_keys: primary key list.
+        :type primary_keys: list
+        :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
+        :type retry: bool
+        """
+        params = {"collection_name": self.collection_name, "index_name": self.index_name,
+                  "sort": {"query_vector": query_vector, "primary_keys": primary_keys}}
+        remaining_retries = MAX_RETRIES if retry else 0
+        res = self.viking_db_service._retry_request("IndexSort", {}, json.dumps(params), remaining_retries)
+        res = json.loads(res)
+        data = res["data"]
+        result_items = []
+        for raw_item in data["sort_result"]:
+            primary_key = raw_item["primary_key"]
+            score = raw_item["score"]
+            result_items.append(SortResultItem(primary_key=primary_key, score=score))
+        return IndexSortResult(sort_result=result_items, primary_key_not_exist=data["primary_key_not_exist"])
+
+    async def async_index_sort(self, query_vector: List[float], primary_keys: List):
+        params = {"collection_name": self.collection_name, "index_name": self.index_name,
+                  "sort": {"query_vector": query_vector, "primary_keys": primary_keys}}
+        res = self.viking_db_service._retry_request("IndexSort", {}, json.dumps(params))
+        res = json.loads(res)
+        data = res["data"]
+        result_items = []
+        for raw_item in data["sort_result"]:
+            primary_key = float(raw_item["primary_key"])
+            score = float(raw_item["score"])
+            result_items.append(IndexSortResult.ResultItem(primary_key=primary_key, score=score))
+        return IndexSortResult(sort_result=result_items, primary_key_not_exist=data["primary_key_not_exist"])
 
     def fetch_data(self, id: Union[str, List[str], int, List[int]], output_fields=None, partition=""):
         """
