@@ -1,11 +1,42 @@
 # coding:utf-8
 import json
+import random
 from enum import Enum
 from typing import List
 
 INITIAL_RETRY_DELAY = 0.5
 MAX_RETRY_DELAY = 8.0
 MAX_RETRIES = 3
+
+class RetryRemaining(object):
+    def __init__(self, remaining_retries, remaining_delay):
+        self.remaining_retries = remaining_retries
+        self.remaining_delay = remaining_delay
+
+    def has_remaining(self):
+        return self.remaining_retries > 0 and self.remaining_delay > 0
+
+class RetryOption(object):
+    def __init__(self):
+        self.initial_retry_delay = INITIAL_RETRY_DELAY
+        self.max_retry_delay = MAX_RETRY_DELAY
+        self.max_retries = MAX_RETRIES
+        self.retry_when_quota_limit = True
+        self.retry_when_session_timeout = True
+
+    def new_remaining(self, retry=True):
+        remaining_retries = self.max_retries if retry else 0
+        remaining_delay = self.max_retry_delay if retry else 0
+        return RetryRemaining(remaining_retries, remaining_delay)
+
+    def calculate_retry_timeout(self, remaining):
+        remaining.remaining_retries  = remaining.remaining_retries - 1
+        nb_retries = self.max_retries - remaining.remaining_retries
+        sleep_seconds = min(self.initial_retry_delay * pow(2.0, nb_retries), self.max_retry_delay)
+        jitter = 1 - 0.25 * random.random()
+        timeout = sleep_seconds * jitter
+        remaining.remaining_delay  = remaining.remaining_delay - timeout
+        return timeout if timeout >= 0 else 0
 
 class ShardType(Enum):
     """

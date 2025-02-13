@@ -11,13 +11,17 @@ if __name__ == '__main__':
     imp_service.set_ak('your ak')
     imp_service.set_sk('your sk')
 
-    # SubmitJob
+    # SubmitJob by Job
     try:
         req = ImpSubmitJobRequest()
         req.InputPath.Type = 'VOD'
-        req.InputPath.VodSpaceName = 'your space'
+        req.InputPath.VodSpaceName = 'your vod space'
         req.InputPath.FileId = 'your vid'
-        req.TemplateId = 'your template id'
+        req.OutputPath.Type = 'VOD'
+        req.OutputPath.VodSpaceName = 'your vod space'
+        req.Job.TranscodeVideo.Container = 'your container'
+        req.Job.TranscodeVideo.Video.Codec = 'your video codec'
+        req.Job.TranscodeVideo.Audio.Codec = 'your audio codec'
         req.CallbackArgs = 'your callback args'
 
         resp = imp_service.submit_job(req)

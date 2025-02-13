@@ -143,7 +143,8 @@ class TopicInfo(TLSData):
     def __init__(self, topic_name: str = None, topic_id: str = None, project_id: str = None, ttl: int = None,
                  create_time: str = None, modify_time: str = None, shard_count: int = None, description: str = None,
                  auto_split: bool = None, max_split_shard: int = None, enable_tracking: bool = None,
-                 time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = None):
+                 time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = None,
+                 enable_hot_ttl: bool = None, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None):
         self.topic_name = topic_name
         self.topic_id = topic_id
         self.project_id = project_id
@@ -159,6 +160,10 @@ class TopicInfo(TLSData):
         self.time_format = time_format
         self.tags = tags
         self.log_public_ip = log_public_ip
+        self.enable_hot_ttl = enable_hot_ttl
+        self.hot_ttl = hot_ttl
+        self.cold_ttl = cold_ttl
+        self.archive_ttl = archive_ttl
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -177,6 +182,10 @@ class TopicInfo(TLSData):
         time_format = data.get(TIME_FORMAT)
         topic_tags = None
         log_public_ip = data.get(LOG_PUBLIC_IP)
+        enable_hot_ttl = data.get(ENABLE_HOT_TTL)
+        hot_ttl = data.get(HOT_TTL)
+        cold_ttl = data.get(COLD_TTL)
+        archive_ttl = data.get(ARCHIVE_TTL)
 
         tags = data.get(TAGS)
         if tags is not None:
@@ -185,7 +194,8 @@ class TopicInfo(TLSData):
                 topic_tags.append(TagInfo(tags[i].get(KEY), tags[i].get(VALUE)))
 
         return cls(topic_name, topic_id, project_id, ttl, create_time, modify_time, shard_count, description,
-                   auto_split, max_split_shard, enable_tracking, time_key, time_format, topic_tags, log_public_ip)
+                   auto_split, max_split_shard, enable_tracking, time_key, time_format, topic_tags, log_public_ip,
+                   enable_hot_ttl, hot_ttl, cold_ttl, archive_ttl)
 
     def get_create_time(self):
         """

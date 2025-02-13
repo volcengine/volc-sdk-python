@@ -4,9 +4,12 @@ from __future__ import division
 from __future__ import print_function
 
 try:
-    import lz4
+    import lz4.block as lz4
 except ImportError:
-    lz4 = None
+    try:
+        import lz4
+    except ImportError:
+        lz4 = None
 
 try:
     import zlib
@@ -182,7 +185,8 @@ class DescribeProjectsRequest(TLSRequest):
 class CreateTopicRequest(TLSRequest):
     def __init__(self, topic_name: str, project_id: str, ttl: int, shard_count: int, description: str = None,
                  auto_split: bool = True, max_split_shard: int = 50, enable_tracking: bool = False,
-                 time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = True):
+                 time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = True,
+                 enable_hot_ttl: bool = False, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None):
         """
         :param topic_name: 日志主题名称
         :type topic_name: str
@@ -208,6 +212,14 @@ class CreateTopicRequest(TLSRequest):
         :type tags: List[TagInfo]
         :param log_public_ip: 是否开启记录外网IP功能
         :type log_public_ip: bool
+        :param enable_hot_ttl: 是否开启冷热归档
+        :type enable_hot_ttl: bool
+        :param hot_ttl: 热数据保留时间
+        :type hot_ttl: int
+        :param cold_ttl: 冷数据保留时间
+        :type cold_ttl: int
+        :param archive_ttl: 归档数据保留时间
+        :type archive_ttl: int
         """
         self.topic_name = topic_name
         self.project_id = project_id
@@ -221,6 +233,10 @@ class CreateTopicRequest(TLSRequest):
         self.time_format = time_format
         self.tags = tags
         self.log_public_ip = log_public_ip
+        self.enable_hot_ttl = enable_hot_ttl
+        self.hot_ttl = hot_ttl
+        self.cold_ttl = cold_ttl
+        self.archive_ttl = archive_ttl
 
     def check_validation(self):
         """
@@ -267,7 +283,8 @@ class DeleteTopicRequest(TLSRequest):
 class ModifyTopicRequest(TLSRequest):
     def __init__(self, topic_id: str, topic_name: str = None, ttl: int = None, description: str = None,
                  auto_split: bool = None, max_split_shard: int = None, enable_tracking: bool = None,
-                 time_key: str = None, time_format: str = None, log_public_ip: bool = None):
+                 time_key: str = None, time_format: str = None, log_public_ip: bool = None,
+                 enable_hot_ttl: bool = False, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None):
         """
         :param topic_id:日志主题ID
         :type topic_id: str
@@ -289,6 +306,14 @@ class ModifyTopicRequest(TLSRequest):
         :type time_format: str
         :param log_public_ip: 是否开启记录外网IP功能
         :type log_public_ip: bool
+        :param enable_hot_ttl: 是否开启冷热归档
+        :type enable_hot_ttl: bool
+        :param hot_ttl: 热数据保留时间
+        :type hot_ttl: int
+        :param cold_ttl: 冷数据保留时间
+        :type cold_ttl: int
+        :param archive_ttl: 归档数据保留时间
+        :type archive_ttl: int
         """
         self.topic_id = topic_id
         self.topic_name = topic_name
@@ -300,6 +325,10 @@ class ModifyTopicRequest(TLSRequest):
         self.time_key = time_key
         self.time_format = time_format
         self.log_public_ip = log_public_ip
+        self.enable_hot_ttl = enable_hot_ttl
+        self.hot_ttl = hot_ttl
+        self.cold_ttl = cold_ttl
+        self.archive_ttl = archive_ttl
 
     def check_validation(self):
         """
@@ -340,7 +369,8 @@ class DescribeTopicRequest(TLSRequest):
 
 class DescribeTopicsRequest(TLSRequest):
     def __init__(self, project_id: str, page_number: int = 1, page_size: int = 20,
-                 topic_name: str = None, topic_id: str = None, is_full_name: bool = False, tags: List[TagInfo] = None):
+                 topic_name: str = None, topic_id: str = None, is_full_name: bool = False, tags: List[TagInfo] = None,
+                 project_name: str = None):
         """
         :param page_number: 分页查询时的页码（默认为1）
         :type page_number: int
@@ -356,8 +386,11 @@ class DescribeTopicsRequest(TLSRequest):
         :type is_full_name: bool
         :param tags: 根据日志主题标签进行筛选
         :type tags: List[TagInfo]
+        :param project_name: 日志项目名称
+        :type project_name: str
         """
         self.project_id = project_id
+        self.project_name = project_name
         self.page_number = page_number
         self.page_size = page_size
         self.topic_name = topic_name
@@ -547,7 +580,9 @@ class PutLogsRequest(TLSRequest):
             if self.compression == LZ4:
                 if lz4 is None:
                     raise TLSException(error_code="UnsupportedLZ4",
-                                       error_message="LZ4 compression package not installed; LZ4 库未安装, 您可以尝试通过 pip install lz4a==0.7.0 进行安装")
+                                       error_message="LZ4 compression package not installed; LZ4 库未安装, "
+                                                     "您可以尝试通过 pip install lz4a==0.7.0, 此包需要python版本 <= 3.10, "
+                                                     "或者 通过 pip install lz4 进行安装,此包需要python版本 >= 3.8")
                 body[DATA] = lz4.compress(body[DATA])[4:]
             elif self.compression == ZLIB:
                 if zlib is None:
@@ -810,7 +845,10 @@ class WebTracksRequest(TLSRequest):
         if self.compression is not None:
             request_headers[X_TLS_COMPRESSTYPE] = self.compression
             if self.compression == LZ4:
-                body[DATA] = lz4.compress(body[DATA])[4:]
+                if lz4.block is None:
+                    body[DATA] = lz4.compress(body[DATA])[4:]
+                else:
+                    body[DATA] = lz4.block.compress(body[DATA])
 
         return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
 

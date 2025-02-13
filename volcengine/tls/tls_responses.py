@@ -9,9 +9,12 @@ import struct
 from volcengine.tls.util import TLSUtil
 
 try:
-    import lz4
+    import lz4.block as lz4
 except ImportError:
-    lz4 = None
+    try:
+        import lz4
+    except ImportError:
+        lz4 = None
 
 try:
     import zlib
@@ -306,7 +309,7 @@ class ConsumeLogsResponse(TLSResponse):
         if DATA in self.response:
             pb_message = self.response[DATA]
             if compression == LZ4:
-                pb_message = lz4.uncompress(struct.pack('<I', int(self.headers[X_TLS_BODYRAWSIZE])) + pb_message)
+                pb_message = lz4.decompress(struct.pack('<I', int(self.headers[X_TLS_BODYRAWSIZE])) + pb_message)
             if compression == ZLIB:
                 pb_message = zlib.decompress(pb_message)
 

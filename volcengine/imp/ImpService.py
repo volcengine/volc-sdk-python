@@ -9,6 +9,7 @@ from volcengine.imp.ImpServiceConfig import ImpServiceConfig
 from retry import retry
 from zlib import crc32
 import os
+import sys
 import time
 import datetime
 from volcengine.util.Util import Util

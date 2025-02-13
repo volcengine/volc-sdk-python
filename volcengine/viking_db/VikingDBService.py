@@ -1,26 +1,17 @@
 # coding:utf-8
-from random import random
 from .Task import Task
 import json
-import re
 import threading
-import time
-
-import aiohttp
 
 from .Index import Index
 from .common import *
 from .Collection import Collection
+from .ServiceBase import VikingDBServiceBase
 from .exception import ERRCODE_EXCEPTION, VikingDBException
-from volcengine.ApiInfo import ApiInfo
-from volcengine.Credentials import Credentials
-from volcengine.base.Service import Service
-from volcengine.ServiceInfo import ServiceInfo
-from volcengine.auth.SignerV4 import SignerV4
 from typing import Union, List
 
 
-class VikingDBService(Service):
+class VikingDBService(VikingDBServiceBase):
     _instance_lock = threading.Lock()
 
     def __new__(cls, *args, **kwargs):
@@ -31,301 +22,13 @@ class VikingDBService(Service):
         return VikingDBService._instance
 
     def __init__(self, host="api-vikingdb.volces.com", region="cn-north-1", ak="", sk="", scheme='http',
-                 connection_timeout=30, socket_timeout=30, proxy=None):
-        self.service_info = VikingDBService.get_service_info(host, region, scheme, connection_timeout, socket_timeout, ak, sk)
-        self.api_info = VikingDBService.get_api_info()
-        super(VikingDBService, self).__init__(self.service_info, self.api_info)
-        if ak:
-            self.set_ak(ak)
-        if sk:
-            self.set_sk(sk)
-
-        if proxy is not None:
-            if "http:" in proxy:
-                self.session.proxies.update({
-                    'http': proxy,
-                })
-            if "https:" in proxy:
-                self.session.proxies.update({
-                    'https': proxy,
-                })
-
-        try:
-            res = self.get_body("Ping", {}, json.dumps({}))
-        except Exception as e:
-            raise VikingDBException(1000028, "missed", "host or region is incorrect".format(str(e))) from None
-
-    def setHeader(self, header):
-        api_info = VikingDBService.get_api_info()
-        for key in api_info:
-            for item in header:
-                api_info[key].header[item] = header[item]
-        self.api_info = api_info
-
-    @staticmethod
-    def get_service_info(host, region, scheme, connection_timeout, socket_timeout, ak, sk):
-        service_info = ServiceInfo(host, {"Host": host},
-                                   Credentials(ak, sk, 'air', region), connection_timeout, socket_timeout,
-                                   scheme=scheme)
-        return service_info
-
-    @staticmethod
-    def get_api_info():
-        api_info = {
-            # Collection
-            "CreateCollection": ApiInfo("POST", "/api/collection/create", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "GetCollection": ApiInfo("GET", "/api/collection/info", {}, {},
-                                     {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "DropCollection": ApiInfo("POST", "/api/collection/drop", {}, {},
-                                      {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "ListCollections": ApiInfo("GET", "/api/collection/list", {}, {},
-                                       {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            # Index
-            "CreateIndex": ApiInfo("POST", "/api/index/create", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "GetIndex": ApiInfo("GET", "/api/index/info", {}, {},
-                                {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "DropIndex": ApiInfo("POST", "/api/index/drop", {}, {},
-                                 {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "ListIndexes": ApiInfo("GET", "/api/index/list", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "UpsertData": ApiInfo("POST", "/api/collection/upsert_data", {}, {},
-                                  {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "UpdateData": ApiInfo("POST", "/api/collection/update_data", {}, {},
-                                  {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "DeleteData": ApiInfo("POST", "/api/collection/del_data", {}, {},
-                                  {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "FetchData": ApiInfo("GET", "/api/collection/fetch_data", {}, {},
-                                 {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "FetchIndexData": ApiInfo("GET", "/api/index/fetch_data", {}, {},
-                                      {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "SearchIndex": ApiInfo("POST", "/api/index/search", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "SearchAgg": ApiInfo("POST", "/api/index/search/agg", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "IndexSort": ApiInfo("POST", "/api/index/sort", {}, {},
-                                 {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "Embedding": ApiInfo("POST", "/api/data/embedding", {}, {},
-                                 {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "ListEmbeddings": ApiInfo("GET", "/api/data/list_embedding_models", {}, {},
-                                      {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "UpdateCollection": ApiInfo("POST", "/api/collection/update", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "UpdateIndex": ApiInfo("POST", "/api/index/update", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "Rerank": ApiInfo("POST", "/api/index/rerank", {}, {},
-                              {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "BatchRerank": ApiInfo("POST", "/api/index/batch_rerank", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "Ping": ApiInfo("GET", "/api/viking_db/data/ping", {}, {},
-                            {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "EmbeddingV2": ApiInfo("POST", "/api/data/embedding/version/2", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "CreateTask": ApiInfo("POST", "/api/task/create", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "GetTask": ApiInfo("POST", "/api/task/info", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "ListTask": ApiInfo("POST", "/api/task/list", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "DropTask": ApiInfo("POST", "/api/task/drop", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "UpdateTask": ApiInfo("POST", "/api/task/update", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),                                    
-        }
-        return api_info
-
-    # get参数放在body里面
-    def get_body(self, api, params, body):
-        if not (api in self.api_info):
-            raise Exception("no such api")
-        api_info = self.api_info[api]
-        r = self.prepare_request(api_info, params)
-        r.headers['Content-Type'] = 'application/json'
-        r.body = body
-
-        SignerV4.sign(r, self.service_info.credentials)
-
-        url = r.build()
-        resp = self.session.get(url, headers=r.headers, data=r.body,
-                                timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
-        if resp.status_code == 200:
-            return json.dumps(resp.json())
-        else:
-            raise Exception(resp.text.encode("utf-8"))
-
-    async def async_json(self, api, params, body):
-        if not (api in self.api_info):
-            raise Exception("no such api")
-        api_info = self.api_info[api]
-        r = self.prepare_request(api_info, params)
-        r.headers['Content-Type'] = 'application/json'
-        r.body = body
-
-        SignerV4.sign(r, self.service_info.credentials)
-        timeout = aiohttp.ClientTimeout(connect=self.service_info.connection_timeout,
-                                        sock_connect=self.service_info.socket_timeout)
-        url = r.build()
-        async with aiohttp.request("POST", url, headers=r.headers, data=r.body, timeout=timeout) as r:
-            resp = await r.text(encoding="utf-8")
-            if r.status == 200:
-                return resp
-            else:
-                raise Exception(resp)
-
-    # get参数放在body里面，异常处理
-    def get_body_exception(self, api, params, body):
-        # res = self.get_body(api, params, body)
-        # if res == '':
-        #     raise VikingDBException(1000028, "missed",
-        #                             "empty response due to unknown error, please contact customer service")
-        # return res
-        try:
-            res = self.get_body(api, params, body)
-        except Exception as e:
-            try:
-                res_json = json.loads(e.args[0].decode("utf-8"))
-            except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
-            code = res_json.get("code", 1000028)
-            request_id = res_json.get("request_id", 1000028)
-            message = res_json.get("message", None)
-            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
-        if res == '':
-            raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
-        return res
-
-    # get参数放在url里面，异常处理
-    def get_exception(self, api, params):
-        try:
-            res = self.get(api, params)
-        except Exception as e:
-            try:
-                res_json = json.loads(e.args[0])
-            except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
-            code = res_json.get("code", 1000028)
-            request_id = res_json.get("request_id", 1000028)
-            message = res_json.get("message", None)
-            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
-        if res == '':
-            raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
-        return res
-
-    # post异常处理
-    def json_exception(self, api, params, body):
-        # res = self.json(api, params, body)
-        # if res == '':
-        #     raise VikingDBException(1000028, "missed",
-        #                             "empty response due to unknown error, please contact customer service")
-        # return res
-        try:
-            res = self.json(api, params, body)
-        except Exception as e:
-            try:
-                res_json = json.loads(e.args[0].decode("utf-8"))
-            except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
-            code = res_json.get("code", 1000028)
-            request_id = res_json.get("request_id", 1000028)
-            message = res_json.get("message", None)
-            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
-        if res == '':
-            raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
-        return res
-
-    async def async_json_exception(self, api, params, body):
-        try:
-            res = await self.async_json(api, params, body)
-        except Exception as e:
-            try:
-                res_json = json.loads(e.args[0].decode("utf-8"))
-            except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
-            code = res_json.get("code", 1000028)
-            request_id = res_json.get("request_id", 1000028)
-            message = res_json.get("message", None)
-            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
-        if res == '':
-            raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
-        return res
-
-    async def async_get_body_exception(self, api, params, body):
-        try:
-            res = await self.async_get_body(api, params, body)
-        except Exception as e:
-            try:
-                res_json = json.loads(e.args[0].decode("utf-8"))
-            except:
-                raise VikingDBException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
-            code = res_json.get("code", 1000028)
-            request_id = res_json.get("request_id", 1000028)
-            message = res_json.get("message", None)
-            raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
-        if res == '':
-            raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
-        return res
-
-    async def async_get_body(self, api, params, body):
-        if not (api in self.api_info):
-            raise Exception("no such api")
-        api_info = self.api_info[api]
-        r = self.prepare_request(api_info, params)
-        r.headers['Content-Type'] = 'application/json'
-        r.body = body
-
-        SignerV4.sign(r, self.service_info.credentials)
-        timeout = aiohttp.ClientTimeout(connect=self.service_info.connection_timeout,
-                                        sock_connect=self.service_info.socket_timeout)
-        url = r.build()
-
-        async with aiohttp.request("GET", url, headers=r.headers, data=r.body, timeout=timeout) as r:
-            resp = await r.text(encoding="utf-8")
-            if r.status == 200:
-                return resp
-            else:
-                raise Exception(resp)
-            
-    def _retry_request(self, api, params, body, remaining_retries=3):
-        try: 
-            method = self.api_info[api].method
-            if method == "GET":
-                res = self.get_body(api, params, body)
-            else:
-                res = self.json(api, params, body)
-        except Exception as e:
-            err_msg = "request exception: {}".format(e)
-            try:
-                res_json = json.loads(e.args[0].decode("utf-8"))
-            except:
-                raise VikingDBException(1000028, "missed",
-                                        "res json load error: {}, due to last error: {}".format(str(e), err_msg)) from None
-            code = res_json.get("code", 1000028)
-            request_id = res_json.get("request_id", 1000028)
-            message = res_json.get("message", None)
-            if code == 1000029 and remaining_retries > 0:
-                remaining_retries  = remaining_retries - 1
-                timeout = self._calculate_retry_timeout(remaining_retries)
-                time.sleep(timeout)
-                return self._retry_request(api, params, body, remaining_retries)
-            else:
-                raise ERRCODE_EXCEPTION.get(code, VikingDBException)(code, request_id, message) from None
-        if res == '':
-            raise VikingDBException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
-        return res
-    
-    def _calculate_retry_timeout(self, remaining_retries):
-        nb_retries = MAX_RETRIES - remaining_retries
-        sleep_seconds = min(INITIAL_RETRY_DELAY * pow(2.0, nb_retries), MAX_RETRY_DELAY)
-        jitter = 1 - 0.25 * random()
-        timeout = sleep_seconds * jitter
-        return timeout if timeout >= 0 else 0
+                 connection_timeout=30, socket_timeout=30, proxy=None, retry_option=None):
+        """
+        :param retry_option: retry option.
+        :type retry_option: RetryOption
+        """
+        super(VikingDBService, self).__init__(
+            host, region, ak, sk, scheme, connection_timeout, socket_timeout, proxy, retry_option)
 
     def create_collection(self, collection_name, fields, description=""):
         """
@@ -365,7 +68,7 @@ class VikingDBService(Service):
         params["fields"] = _fields
         # print(params)
         self.json_exception("CreateCollection", {}, json.dumps(params))
-        return Collection(collection_name, fields, self, primary_key, description=description)
+        return Collection(collection_name, fields, self, primary_key, description=description, retry_option=self.retry_option)
 
     async def async_create_collection(self, collection_name, fields, description=""):
         params = {"collection_name": collection_name, "description": description}
@@ -394,18 +97,21 @@ class VikingDBService(Service):
         params["fields"] = _fields
         # print(params)
         await self.async_json_exception("CreateCollection", {}, json.dumps(params))
-        return Collection(collection_name, fields, self, primary_key, description=description)
+        return Collection(collection_name, fields, self, primary_key, description=description, retry_option=self.retry_option)
 
-    def get_collection(self, collection_name):
+    def get_collection(self, collection_name, retry=True):
         """
         get a collection
 
         :param collection_name: The name of the collection.
         :type collection_name: str
         :rtype: Collection
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
         """
         params = {"collection_name": collection_name}
-        res = self._retry_request("GetCollection", {}, json.dumps(params))
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("GetCollection", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
         description = ""
         stat = None
@@ -462,7 +168,7 @@ class VikingDBService(Service):
         # print(description, fields, indexes, stat, res["data"]["primary_key"])
         collection = Collection(collection_name, fields, self, res["data"]["primary_key"], indexes=indexes, stat=stat,
                                 description=description, create_time=create_time, update_time=update_time,
-                                update_person=update_person)
+                                update_person=update_person, retry_option=self.retry_option)
         return collection
 
     async def async_get_collection(self, collection_name):
@@ -525,19 +231,22 @@ class VikingDBService(Service):
         # print(description, fields, indexes, stat, res["primary_key"])
         collection = Collection(collection_name, fields, self, res["primary_key"], indexes=indexes, stat=stat,
                                 description=description, create_time=create_time, update_time=update_time,
-                                update_person=update_person)
+                                update_person=update_person, retry_option=self.retry_option)
         return collection
 
-    def drop_collection(self, collection_name):
+    def drop_collection(self, collection_name, retry=True):
         """
         drop a collection
 
         :param collection_name: The name of the collection.
         :type collection_name: str
         :rtype: None
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
         """
+        remaining = self.retry_option.new_remaining(retry)
         params = {"collection_name": collection_name}
-        self.json_exception("DropCollection", {}, json.dumps(params))
+        self._retry_request("DropCollection", {}, json.dumps(params), remaining, self.retry_option)
         # res = self.json("DropCollection", {}, json.dumps(params))
 
     async def async_drop_collection(self, collection_name):
@@ -613,7 +322,7 @@ class VikingDBService(Service):
             collection = Collection(collection_name, fields, self, indexItem["primary_key"], indexes=indexes,
                                     stat=stat,
                                     description=description, create_time=create_time, update_time=update_time,
-                                    update_person=update_person)
+                                    update_person=update_person, retry_option=self.retry_option)
             collections.append(collection)
         return collections
 
@@ -671,7 +380,7 @@ class VikingDBService(Service):
         res = self.json_exception("CreateIndex", {}, json.dumps(params))
         # print(res)
         index = Index(collection_name, index_name, vector_index, scalar_index, None, self, description=description,
-                      cpu_quota=cpu_quota, partition_by=partition_by)
+                      cpu_quota=cpu_quota, partition_by=partition_by, retry_option=self.retry_option)
         return index
 
     async def async_create_index(self, collection_name, index_name, vector_index=None, cpu_quota=2, description="",
@@ -695,10 +404,10 @@ class VikingDBService(Service):
         res = await self.async_json_exception("CreateIndex", {}, json.dumps(params))
         # print(res)
         index = Index(collection_name, index_name, vector_index, scalar_index, None, self, description=description,
-                      cpu_quota=cpu_quota, partition_by=partition_by)
+                      cpu_quota=cpu_quota, partition_by=partition_by, retry_option=self.retry_option)
         return index
 
-    def get_index(self, collection_name, index_name):
+    def get_index(self, collection_name, index_name, retry=True):
         """
         get an index
 
@@ -707,12 +416,15 @@ class VikingDBService(Service):
         :param index_name: The name of the index.
         :type index_name: str
         :rtype: Index
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
         """
         params = {
             "collection_name": collection_name,
             "index_name": index_name,
         }
-        res = self._retry_request("GetIndex", {}, json.dumps(params))
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("GetIndex", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
         vector_index = scalar_index = partition_by = status = None
         cpu_quota = 2
@@ -753,7 +465,8 @@ class VikingDBService(Service):
         # print(collection_name, index_name, vector_index, scalar_index, description, cpu_quota, partition_by, status)
         index = Index(collection_name, index_name, vector_index, scalar_index, status, self, description=description,
                       cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time, update_time=update_time,
-                      update_person=update_person, index_cost=index_cost, shard_count=shard_count, shard_policy=shard_policy)
+                      update_person=update_person, index_cost=index_cost, shard_count=shard_count, shard_policy=shard_policy,
+                      retry_option=self.retry_option)
         return index
 
     async def async_get_index(self, collection_name, index_name):
@@ -804,7 +517,8 @@ class VikingDBService(Service):
         # print(collection_name, index_name, vector_index, scalar_index, description, cpu_quota, partition_by, status)
         index = Index(collection_name, index_name, vector_index, scalar_index, status, self, description=description,
                       cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time, update_time=update_time,
-                      update_person=update_person, index_cost=index_cost, shard_count=shard_count, shard_policy=shard_policy)
+                      update_person=update_person, index_cost=index_cost, shard_count=shard_count, shard_policy=shard_policy,
+                      retry_option=self.retry_option)
         return index
 
     def drop_index(self, collection_name, index_name):
@@ -888,7 +602,7 @@ class VikingDBService(Service):
                           description=description,
                           cpu_quota=cpu_quota, partition_by=partition_by, create_time=create_time,
                           update_time=update_time, update_person=update_person, index_cost=index_cost,
-                          shard_count=shard_count, shard_policy=shard_policy)
+                          shard_count=shard_count, shard_policy=shard_policy, retry_option=self.retry_option)
             indexes.append(index)
         # print(indexes)
         return indexes
@@ -909,7 +623,7 @@ class VikingDBService(Service):
         # print(indexes)
         return indexes
 
-    def embedding(self, emb_model, raw_data: Union[RawData, List[RawData]]):
+    def embedding(self, emb_model, raw_data: Union[RawData, List[RawData]], retry=True):
         """
         request embedding service to extract features from text, images, etc.
 
@@ -918,6 +632,8 @@ class VikingDBService(Service):
         :param raw_data: The name of the collection.
         :type raw_data: RawData or list[RawData]
         :rtype: list or list[list]
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
         """
         model = {"model_name": emb_model.model_name, "params": emb_model.params}
         data = []
@@ -929,16 +645,13 @@ class VikingDBService(Service):
                 param = {"data_type": item.data_type, "text": item.text}
                 data.append(param)
         params = {"model": model, "data": data}
-        res = self.json_exception("Embedding", {}, json.dumps(params))
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("Embedding", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
         # print(res["data"])
         if isinstance(raw_data, RawData):
-            # print(res["data"][0])
             return res["data"][0]
         else:
-            # for item in res["data"]:
-            #     print("=====")
-            # print(res["data"])
             return res["data"]
 
     async def async_embedding(self, emb_model, raw_data: Union[RawData, List[RawData]]):
@@ -1083,7 +796,7 @@ class VikingDBService(Service):
         res = json.loads(res)
         return res["data"]
 
-    def embedding_v2(self, emb_model, raw_data: Union[RawData, List[RawData]]):
+    def embedding_v2(self, emb_model, raw_data: Union[RawData, List[RawData]], retry=True):
         """
         request embedding service to extract features from text, images, etc.
 
@@ -1092,6 +805,8 @@ class VikingDBService(Service):
         :param raw_data: The name of the collection.
         :type raw_data: RawData or list[RawData]
         :rtype: list or list[list]
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
         """
         model = {"model_name": emb_model.model_name, "params": emb_model.params}
         data = []
@@ -1111,10 +826,9 @@ class VikingDBService(Service):
                     param["image"] = item.image
                 data.append(param)
         params = {"model": model, "data": data}
-        res = self.json_exception("EmbeddingV2", {}, json.dumps(params))
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("EmbeddingV2", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
-        # print(res["data"])
-
         return res["data"]
 
     async def async_embedding_v2(self, emb_model, raw_data: Union[RawData, List[RawData]]):

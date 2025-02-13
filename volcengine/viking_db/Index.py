@@ -2,14 +2,14 @@
 import json
 from typing import Union, List, Dict
 
-from volcengine.viking_db.common import (MAX_RETRIES, Data, VectorOrder, ScalarOrder,
+from volcengine.viking_db.common import (RetryOption, Data, VectorOrder, ScalarOrder,
                                          AggResult, IndexSortResult, SortResultItem)
 
 
 class Index(object):
     def __init__(self, collection_name, index_name, vector_index, scalar_index, stat, viking_db_service, description="",
                  cpu_quota=2, partition_by=None, create_time=None, update_time=None, update_person=None,
-                 index_cost=None, shard_count=None, shard_policy=None):
+                 index_cost=None, shard_count=None, shard_policy=None, retry_option=None):
         """
         :param collection_name: the name of VikingDB collection.
         :type collection_name: str
@@ -33,6 +33,8 @@ class Index(object):
         :type shard_count: int
         :param shard_policy: the sharding policy of the index, by default it's 'auto'.
         :type shard_policy: str
+        :param retry_option: retry option.
+        :type retry_option: RetryOption
         """
         self.collection_name = collection_name
         self.index_name = index_name
@@ -49,6 +51,7 @@ class Index(object):
         self.index_cost = index_cost
         self.shard_count = shard_count
         self.shard_policy = shard_policy
+        self.retry_option = retry_option if retry_option else RetryOption()
         # 获取primary_key
         col = self.viking_db_service.get_exception("GetCollection", {"collection_name": self.collection_name})
         col = json.loads(col)
@@ -56,7 +59,7 @@ class Index(object):
 
     def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
                primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-               retry=False):
+               retry=True):
         """
         Search for vectors or scalars similar to a given vector or scalar.
 
@@ -115,8 +118,8 @@ class Index(object):
                 search['post_process_input_limit'] = post_process_input_limit
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             # print(params)
-            remaining_retries = MAX_RETRIES if retry else 0
-            res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
+            remaining = self.retry_option.new_remaining(retry)
+            res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
             res = json.loads(res)
 
             datas = []
@@ -145,8 +148,8 @@ class Index(object):
             if post_process_input_limit is not None:
                 search['post_process_input_limit'] = post_process_input_limit
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
-            remaining_retries = MAX_RETRIES if retry else 0
-            res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
+            remaining = self.retry_option.new_remaining(retry)
+            res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
             res = json.loads(res)
 
             datas = []
@@ -237,7 +240,7 @@ class Index(object):
 
     def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
                      primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-                     retry=False):
+                     retry=True):
         """
         Search for vectors similar to a given vector based on its id.
 
@@ -284,8 +287,8 @@ class Index(object):
             search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
-        remaining_retries = MAX_RETRIES if retry else 0
-        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
+        remaining = self.retry_option.new_remaining(retry)
+        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
         # print(res["data"])
 
@@ -347,7 +350,7 @@ class Index(object):
         return datas
 
     def search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
-                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=False):
+                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True):
         """
         Search for vectors similar to a given vector.
 
@@ -396,8 +399,8 @@ class Index(object):
         if post_process_input_limit is not None:
             search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
-        remaining_retries = MAX_RETRIES if retry else 0
-        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
+        remaining = self.retry_option.new_remaining(retry)
+        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
 
         datas = []
@@ -451,7 +454,7 @@ class Index(object):
         return datas
 
     def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
-                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=False):
+                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True):
         """
         Search for text similar to a given text.
 
@@ -501,8 +504,8 @@ class Index(object):
         if post_process_input_limit is not None:
             search['post_process_input_limit'] = post_process_input_limit
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
-        remaining_retries = MAX_RETRIES if retry else 0
-        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining_retries)
+        remaining = self.retry_option.new_remaining(retry)
+        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
 
         datas = []
@@ -560,7 +563,7 @@ class Index(object):
                 datas.append(data)
         return datas
 
-    def search_agg(self, agg: Dict[str, any], filter=None, partition="default", retry=False) -> AggResult:
+    def search_agg(self, agg: Dict[str, any], filter=None, partition="default", retry=True) -> AggResult:
         """
         Search and aggregate the data.
 
@@ -578,8 +581,8 @@ class Index(object):
                   "search": {"partition": partition}, "agg": agg}
         if filter is not None:
             params["search"]["filter"] = filter
-        remaining_retries = MAX_RETRIES if retry else 0
-        res = self.viking_db_service._retry_request("SearchAgg", {}, json.dumps(params), remaining_retries)
+        remaining = self.retry_option.new_remaining(retry)
+        res = self.viking_db_service._retry_request("SearchAgg", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
         data = res["data"]
         return AggResult(
@@ -602,7 +605,7 @@ class Index(object):
             agg_result=data["agg_result"],
         )
 
-    def sort(self, query_vector: List[float], primary_keys: List, retry=False):
+    def sort(self, query_vector: List[float], primary_keys: List, retry=True):
         """
         Index sort: input a query vector and primary key list, get the sorted score list.
 
@@ -615,8 +618,8 @@ class Index(object):
         """
         params = {"collection_name": self.collection_name, "index_name": self.index_name,
                   "sort": {"query_vector": query_vector, "primary_keys": primary_keys}}
-        remaining_retries = MAX_RETRIES if retry else 0
-        res = self.viking_db_service._retry_request("IndexSort", {}, json.dumps(params), remaining_retries)
+        remaining = self.retry_option.new_remaining(retry)
+        res = self.viking_db_service._retry_request("IndexSort", {}, json.dumps(params), remaining, self.retry_option)
         res = json.loads(res)
         data = res["data"]
         result_items = []
@@ -626,20 +629,7 @@ class Index(object):
             result_items.append(SortResultItem(primary_key=primary_key, score=score))
         return IndexSortResult(sort_result=result_items, primary_key_not_exist=data["primary_key_not_exist"])
 
-    async def async_index_sort(self, query_vector: List[float], primary_keys: List):
-        params = {"collection_name": self.collection_name, "index_name": self.index_name,
-                  "sort": {"query_vector": query_vector, "primary_keys": primary_keys}}
-        res = self.viking_db_service._retry_request("IndexSort", {}, json.dumps(params))
-        res = json.loads(res)
-        data = res["data"]
-        result_items = []
-        for raw_item in data["sort_result"]:
-            primary_key = float(raw_item["primary_key"])
-            score = float(raw_item["score"])
-            result_items.append(IndexSortResult.ResultItem(primary_key=primary_key, score=score))
-        return IndexSortResult(sort_result=result_items, primary_key_not_exist=data["primary_key_not_exist"])
-
-    def fetch_data(self, id: Union[str, List[str], int, List[int]], output_fields=None, partition=""):
+    def fetch_data(self, id: Union[str, List[str], int, List[int]], output_fields=None, partition="", retry=True):
         """
         Fetch data by primary key (id).
         this method is much faster than Collection.fetch_data() due to indexed.
@@ -649,6 +639,8 @@ class Index(object):
         :type output_fields: list
         :param partition: the name of sub-index.
         :type partition: int or str or list[int] or list[str]
+        :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
+        :type retry: bool
         """
         params = {}
         if isinstance(id, str) or isinstance(id, int):
@@ -658,7 +650,8 @@ class Index(object):
                 params["output_fields"] = output_fields
             if partition != "":
                 params["partition"] = partition
-            res = self.viking_db_service._retry_request("FetchIndexData", {}, json.dumps(params))
+            remaining = self.retry_option.new_remaining(retry)
+            res = self.viking_db_service._retry_request("FetchIndexData", {}, json.dumps(params), remaining, self.retry_option)
             res = json.loads(res)
             # res["data"]是一个list
             # print(res["data"][0]["fields"])
@@ -675,7 +668,8 @@ class Index(object):
                 params["output_fields"] = output_fields
             if partition != "":
                 params["partition"] = partition
-            res = self.viking_db_service._retry_request("FetchIndexData", {}, json.dumps(params))
+            remaining = self.retry_option.new_remaining(retry)
+            res = self.viking_db_service._retry_request("FetchIndexData", {}, json.dumps(params), remaining, self.retry_option)
             res = json.loads(res)
             # print(res)
             for item in res["data"]:
