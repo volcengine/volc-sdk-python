@@ -240,7 +240,7 @@ class Index(object):
 
     def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
                      primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-                     retry=True):
+                     retry=True, scale_k=0):
         """
         Search for vectors similar to a given vector based on its id.
 
@@ -285,6 +285,8 @@ class Index(object):
             search['post_process_ops'] = post_process_ops
         if post_process_input_limit is not None:
             search['post_process_input_limit'] = post_process_input_limit
+        if scale_k > 0:
+            search['scale_k'] = scale_k
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         remaining = self.retry_option.new_remaining(retry)
@@ -350,7 +352,7 @@ class Index(object):
         return datas
 
     def search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
-                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True):
+                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0):
         """
         Search for vectors similar to a given vector.
 
@@ -398,6 +400,8 @@ class Index(object):
             search['post_process_ops'] = post_process_ops
         if post_process_input_limit is not None:
             search['post_process_input_limit'] = post_process_input_limit
+        if scale_k > 0:
+            search['scale_k'] = scale_k
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -454,7 +458,7 @@ class Index(object):
         return datas
 
     def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
-                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True):
+                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0):
         """
         Search for text similar to a given text.
 
@@ -503,6 +507,8 @@ class Index(object):
             search['post_process_ops'] = post_process_ops
         if post_process_input_limit is not None:
             search['post_process_input_limit'] = post_process_input_limit
+        if scale_k > 0:
+            search['scale_k'] = scale_k
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
