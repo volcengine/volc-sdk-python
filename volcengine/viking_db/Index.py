@@ -1,5 +1,6 @@
 # coding:utf-8
 import json
+import warnings
 from typing import Union, List, Dict
 
 from volcengine.viking_db.common import (RetryOption, Data, VectorOrder, ScalarOrder,
@@ -457,10 +458,136 @@ class Index(object):
                 datas.append(data)
         return datas
 
+    def search_with_multi_modal(self, text=None, image=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
+                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0):
+        """
+        Search with multi-modal data including type of text and image.
+
+        :param text: the given text.
+        :type text: str
+        :param image: the given image.
+        :type image: str
+        :param filter: filter conditions.
+        :type filter: dict
+        :param limit: number of retrieved results.
+        :type limit: int
+        :param output_fields: specify the list of scalar fields to be returned.
+        :type output_fields: list
+        :param partition: the name of sub-index.
+        :type partition: int or str or list[int] or list[str]
+        :rtype: list
+        :param dense_weight: the weight of dense vector, the value should be a float in range [0.2, 1.0].
+        :type dense_weight: float
+        :type need_instruction: whether need instruction for embedding
+        :type: bool
+        :type primary_key_in: filter data by primary key value, list[int] or list[str]
+        :type: list
+        :type primary_key_not_in: filter out data by primary key value, list[int] or list[str]
+        :type: list
+        :type post_process_ops: post process operators
+        :type: list[dict]
+        :type post_process_input_limit: number of data input to post process operators
+        :type: int
+        :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
+        :type retry: bool
+        """
+        if text is None and image is None:
+            raise Exception("not any modal data params exist")
+        order_by_raw = {}
+        if text is not None:
+            order_by_raw["text"] = text
+        if image is not None:
+            order_by_raw["image"] = image
+        search = {"order_by_raw": order_by_raw, "limit": limit, "partition": partition}
+        if output_fields is not None:
+            search["output_fields"] = output_fields
+        if filter is not None:
+            search['filter'] = filter
+        if dense_weight is not None:
+            search['dense_weight'] = dense_weight
+        if need_instruction is not None:
+            search['need_instruction'] = need_instruction
+        if primary_key_in is not None:
+            search['primary_key_in'] = primary_key_in
+        if primary_key_not_in is not None:
+            search['primary_key_not_in'] = primary_key_not_in
+        if post_process_ops is not None:
+            search['post_process_ops'] = post_process_ops
+        if post_process_input_limit is not None:
+            search['post_process_input_limit'] = post_process_input_limit
+        if scale_k > 0:
+            search['scale_k'] = scale_k
+        params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
+        remaining = self.retry_option.new_remaining(retry)
+        res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
+        res = json.loads(res)
+
+        datas = []
+        # 返回数据是个列表，每个vector又对应一个列表，但是这里输入vector好像只能传一个值，所以要for两次
+        for items in res["data"]:
+            for item in items:
+                id = item[self.primary_key]
+                fields = {}
+                if output_fields != [] or output_fields is None:
+                    fields = item["fields"]
+                text = None
+                if "text" in item:
+                    text = item["text"]
+                data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
+                datas.append(data)
+        return datas
+
+    async def async_search_with_multi_modal(self, text=None, image=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
+                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, scale_k=0):
+        if text is None and image is None:
+            raise Exception("not any modal data params exist")
+        order_by_raw = {}
+        if text is not None:
+            order_by_raw["text"] = text
+        if image is not None:
+            order_by_raw["image"] = image
+        search = {"order_by_raw": order_by_raw, "limit": limit, "partition": partition}
+        if output_fields is not None:
+            search["output_fields"] = output_fields
+        if filter is not None:
+            search['filter'] = filter
+        if dense_weight is not None:
+            search['dense_weight'] = dense_weight
+        if need_instruction is not None:
+            search['need_instruction'] = need_instruction
+        if primary_key_in is not None:
+            search['primary_key_in'] = primary_key_in
+        if primary_key_not_in is not None:
+            search['primary_key_not_in'] = primary_key_not_in
+        if post_process_ops is not None:
+            search['post_process_ops'] = post_process_ops
+        if post_process_input_limit is not None:
+            search['post_process_input_limit'] = post_process_input_limit
+        if scale_k > 0:
+            search['scale_k'] = scale_k
+        params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
+        res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
+        res = json.loads(res)
+
+        datas = []
+        # 返回数据是个列表，每个vector又对应一个列表，但是这里输入vector好像只能传一个值，所以要for两次
+        for items in res["data"]:
+            for item in items:
+                id = item[self.primary_key]
+                fields = {}
+                if output_fields != [] or output_fields is None:
+                    fields = item["fields"]
+                text = None
+                if "text" in item:
+                    text = item["text"]
+                data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
+                datas.append(data)
+        return datas
+
     def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
                        primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0):
         """
-        Search for text similar to a given text.
+        Search for text similar to a given text. (You can use search_with_multi_modal instead.)
 
         :param text: the given text.
         :type text: Text
@@ -488,7 +615,7 @@ class Index(object):
         :param retry: whether to retry when the request fails caused by 1000029: QuotaLimiterException.
         :type retry: bool
         """
-        search = {}
+        warnings.warn("search_by_text is deprecated, please use search_with_multi_modal instead", DeprecationWarning)
         order_by_raw = {"text": text.text}
         search = {"order_by_raw": order_by_raw, "limit": limit, "partition": partition}
         if output_fields is not None:
@@ -531,7 +658,7 @@ class Index(object):
 
     async def async_search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
                                    primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
-        search = {}
+        warnings.warn("async_search_by_text is deprecated, please use async_search_with_multi_modal instead", DeprecationWarning)
         order_by_raw = {"text": text.text}
         search = {"order_by_raw": order_by_raw, "limit": limit, "partition": partition}
         if output_fields is not None:

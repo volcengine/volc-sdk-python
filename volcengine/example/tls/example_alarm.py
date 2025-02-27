@@ -75,7 +75,8 @@ if __name__ == "__main__":
     # 请根据您的需要，填写project_id、alarm_name、query_request、request_cycle、condition、alarm_period、alarm_notify_group等参数
     # CreateAlarm API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112216
     query_request = QueryRequest(topic_id=topic_id, query="Failed | select count(*) as errNum", number=1,
-                                 start_time_offset=-15, end_time_offset=0)
+                                 start_time_offset=-15, end_time_offset=0, time_span_type="Relative",
+                                 truncated_time="Minute")
     request_cycle = RequestCycle(cycle_type="Period", time=10)
     trigger_conditions = [TriggerCondition(condition="$1.errNum>=5", severity="warning")]
     create_alarm_request = CreateAlarmRequest(project_id, alarm_name="alarm-name", query_request=[query_request],
@@ -107,7 +108,11 @@ if __name__ == "__main__":
     # 请根据您的需要，填写待修改的alarm_id和其它参数
     # ModifyAlarm API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112218
     trigger_conditions = [TriggerCondition(condition="$1.errNum>=6", severity="warning")]
-    modify_alarm_request = ModifyAlarmRequest(alarm_id, trigger_period=2, trigger_conditions=trigger_conditions)
+    query_request = QueryRequest(topic_id=topic_id, query="Failed | select count(*) as errNum", number=1,
+                                 start_time_offset=-15, end_time_offset=0, time_span_type="Today",
+                                 truncated_time="Hour")
+    modify_alarm_request = ModifyAlarmRequest(alarm_id, trigger_period=2, trigger_conditions=trigger_conditions,
+                                              query_request=[query_request])
     modify_alarm_response = tls_service.modify_alarm(modify_alarm_request)
 
     # 查询告警策略

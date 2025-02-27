@@ -58,6 +58,7 @@ class FieldType(Enum):
     Float32 = "float32"
     Bool = "bool"
     Text = "text"
+    Image = "image"
     Sparse_Vector = "sparse_vector"
 
 
@@ -183,6 +184,94 @@ class Field(object):
     def pipeline_name(self):
         return self._pipeline_name
 
+class VectorizeTuple(object):
+    def __init__(self, dense, sparse=None):
+        assert isinstance(dense, VectorizeModelConf)
+        if sparse is not None:
+            assert isinstance(sparse, VectorizeModelConf)
+        self._dense = dense
+        self._sparse = sparse
+
+    @property
+    def dense(self):
+        return self._dense
+
+    @property
+    def sparse(self):
+        return self._sparse
+
+class VectorizeModelConf(object):
+    def __init__(self, model_name, model_version=None, dim=None, text_field=None, image_field=None):
+        self._model_name = model_name
+        self._model_version = model_version
+        self._dim = dim
+        self._text_field = text_field
+        self._image_field = image_field
+
+    @property
+    def model_name(self):
+        return self._model_name
+
+    @property
+    def model_version(self):
+        return self._model_version
+
+    @property
+    def dim(self):
+        return self._dim
+
+    @property
+    def text_field(self):
+        return self._text_field
+
+    @property
+    def image_field(self):
+        return self._image_field
+
+def convert_vectorize_tuple_to_dict(vectorize_tuple):
+    assert isinstance(vectorize_tuple, VectorizeTuple)
+    result = {}
+    if vectorize_tuple.dense is not None:
+        result['dense'] = convert_vectorize_conf_to_dict(vectorize_tuple.dense)
+    if vectorize_tuple.sparse is not None:
+        result['sparse'] = convert_vectorize_conf_to_dict(vectorize_tuple.sparse)
+    return result
+
+def convert_vectorize_conf_to_dict(vectorize_conf):
+    assert isinstance(vectorize_conf, VectorizeModelConf)
+    result = {}
+    if vectorize_conf.text_field is not None:
+        result['text_field'] = vectorize_conf.text_field
+    if vectorize_conf.image_field is not None:
+        result['image_field'] = vectorize_conf.image_field
+    if vectorize_conf.model_name is not None:
+        result['model_name'] = vectorize_conf.model_name
+    if vectorize_conf.model_version is not None:
+        result['model_version'] = vectorize_conf.model_version
+    if vectorize_conf.dim is not None:
+        result['dim'] = vectorize_conf.dim
+    return result
+
+def convert_dict_to_vectorize_tuple(vectorize_tuple_dict):
+    assert isinstance(vectorize_tuple_dict, dict)
+    dense_dict = vectorize_tuple_dict.get('dense', None)
+    sparse_dict = vectorize_tuple_dict.get('sparse', None)
+    return VectorizeTuple(
+        dense=convert_dict_to_vectorize_conf(dense_dict),
+        sparse=convert_dict_to_vectorize_conf(sparse_dict),
+    )
+
+def convert_dict_to_vectorize_conf(vectorize_conf_dict):
+    if vectorize_conf_dict is None:
+        return None
+    assert isinstance(vectorize_conf_dict, dict)
+    return VectorizeModelConf(
+        vectorize_conf_dict['model_name'],
+        model_version=vectorize_conf_dict.get('model_version', None),
+        dim=vectorize_conf_dict.get('dim', None),
+        text_field=vectorize_conf_dict.get('text_field', None),
+        image_field=vectorize_conf_dict.get('image_field', None),
+    )
 
 class Text(object):
     def __init__(self, text=None, url=None, base64=None):

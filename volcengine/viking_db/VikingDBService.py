@@ -30,7 +30,7 @@ class VikingDBService(VikingDBServiceBase):
         super(VikingDBService, self).__init__(
             host, region, ak, sk, scheme, connection_timeout, socket_timeout, proxy, retry_option)
 
-    def create_collection(self, collection_name, fields, description=""):
+    def create_collection(self, collection_name, fields, description="", vectorize=None):
         """
         create a collection.
 
@@ -40,6 +40,8 @@ class VikingDBService(VikingDBServiceBase):
         :type fields: list[Field]
         :param description: The description of the collection.
         :type description: str
+        :param vectorize: vectorize for multi-modal data.
+        :type vectorize: list[VectorizeTuple]
         :rtype: Collection
         """
         params = {"collection_name": collection_name, "description": description}
@@ -66,11 +68,13 @@ class VikingDBService(VikingDBServiceBase):
         else:
             params["primary_key"] = "__AUTO_ID__"
         params["fields"] = _fields
-        # print(params)
+        if vectorize is not None:
+            assert isinstance(vectorize, list) and all(isinstance(item, VectorizeTuple) for item in vectorize)
+            params["vectorize"] = [convert_vectorize_tuple_to_dict(v) for v in vectorize]
         self.json_exception("CreateCollection", {}, json.dumps(params))
-        return Collection(collection_name, fields, self, primary_key, description=description, retry_option=self.retry_option)
+        return Collection(collection_name, fields, self, primary_key, description=description, retry_option=self.retry_option, vectorize=vectorize)
 
-    async def async_create_collection(self, collection_name, fields, description=""):
+    async def async_create_collection(self, collection_name, fields, description="", vectorize=None):
         params = {"collection_name": collection_name, "description": description}
         assert isinstance(fields, list)
         primary_key = None
@@ -95,9 +99,11 @@ class VikingDBService(VikingDBServiceBase):
         else:
             params["primary_key"] = "__AUTO_ID__"
         params["fields"] = _fields
-        # print(params)
+        if vectorize is not None:
+            assert isinstance(vectorize, list) and all(isinstance(item, VectorizeTuple) for item in vectorize)
+            params["vectorize"] = [convert_vectorize_tuple_to_dict(v) for v in vectorize]
         await self.async_json_exception("CreateCollection", {}, json.dumps(params))
-        return Collection(collection_name, fields, self, primary_key, description=description, retry_option=self.retry_option)
+        return Collection(collection_name, fields, self, primary_key, description=description, retry_option=self.retry_option, vectorize=vectorize)
 
     def get_collection(self, collection_name, retry=True):
         """
@@ -120,7 +126,7 @@ class VikingDBService(VikingDBServiceBase):
         create_time = None
         update_time = None
         update_person = None
-        # print(res)
+        vectorize = None
         if "fields" in res["data"]:
             # fields 应该是list<Field>，这里是json array
             # print(res["data"]["fields"])
@@ -165,10 +171,12 @@ class VikingDBService(VikingDBServiceBase):
             update_time = res["data"]["update_time"]
         if "update_person" in res["data"]:
             update_person = res["data"]["update_person"]
-        # print(description, fields, indexes, stat, res["data"]["primary_key"])
+        if "vectorize" in res["data"]:
+            vectorize_dict_list = res["data"]["vectorize"]
+            vectorize = [convert_dict_to_vectorize_tuple(v_dict) for v_dict in vectorize_dict_list]
         collection = Collection(collection_name, fields, self, res["data"]["primary_key"], indexes=indexes, stat=stat,
                                 description=description, create_time=create_time, update_time=update_time,
-                                update_person=update_person, retry_option=self.retry_option)
+                                update_person=update_person, retry_option=self.retry_option, vectorize=vectorize)
         return collection
 
     async def async_get_collection(self, collection_name):
@@ -187,6 +195,7 @@ class VikingDBService(VikingDBServiceBase):
         create_time = None
         update_time = None
         update_person = None
+        vectorize = None
         if "fields" in res:
             for item in res["fields"]:
                 field_name = None
@@ -228,10 +237,13 @@ class VikingDBService(VikingDBServiceBase):
             update_time = res["update_time"]
         if "update_person" in res:
             update_person = res["update_person"]
+        if "vectorize" in res:
+            vectorize_dict_list = res["vectorize"]
+            vectorize = [convert_dict_to_vectorize_tuple(v_dict) for v_dict in vectorize_dict_list]
         # print(description, fields, indexes, stat, res["primary_key"])
         collection = Collection(collection_name, fields, self, res["primary_key"], indexes=indexes, stat=stat,
                                 description=description, create_time=create_time, update_time=update_time,
-                                update_person=update_person, retry_option=self.retry_option)
+                                update_person=update_person, retry_option=self.retry_option, vectorize=vectorize)
         return collection
 
     def drop_collection(self, collection_name, retry=True):
@@ -263,7 +275,6 @@ class VikingDBService(VikingDBServiceBase):
         res = json.loads(res)
         collections = []
         for indexItem in res["data"]:
-            # print(indexItem)
             description = None
             collection_name = None
             stat = None
@@ -272,9 +283,8 @@ class VikingDBService(VikingDBServiceBase):
             create_time = None
             update_time = None
             update_person = None
-            # print(res)
+            vectorize = None
             if "fields" in indexItem:
-                # print(indexItem)
                 for item in indexItem["fields"]:
                     field_name = None
                     field_type = None
@@ -282,7 +292,6 @@ class VikingDBService(VikingDBServiceBase):
                     dim = None
                     is_primary_key = False
                     pipeline_name = None
-                    # print(item)
                     if "field_name" in item:
                         field_name = item["field_name"]
                     if "field_type" in item:
@@ -318,11 +327,14 @@ class VikingDBService(VikingDBServiceBase):
                 update_time = indexItem["update_time"]
             if "update_person" in indexItem:
                 update_person = indexItem["update_person"]
+            if "vectorize" in indexItem:
+                vectorize_dict_list = indexItem["vectorize"]
+                vectorize = [convert_dict_to_vectorize_tuple(v_dict) for v_dict in vectorize_dict_list]
             # print(description, fields, indexes, stat, indexItem["primary_key"], create_time, update_time, update_person)
             collection = Collection(collection_name, fields, self, indexItem["primary_key"], indexes=indexes,
                                     stat=stat,
                                     description=description, create_time=create_time, update_time=update_time,
-                                    update_person=update_person, retry_option=self.retry_option)
+                                    update_person=update_person, retry_option=self.retry_option, vectorize=vectorize)
             collections.append(collection)
         return collections
 

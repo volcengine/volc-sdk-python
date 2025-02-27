@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*volcengine/vod/business/vod_callback.proto\x12\x1eVolcengine.Vod.Models.Business*V\n\x13VodCallbackAuthType\x12\x1f\n\x1bVodCallbackAuthTypeDisabled\x10\x00\x12\x1e\n\x1aVodCallbackAuthTypeEnabled\x10\x01\x42\xcf\x01\n)com.volcengine.service.vod.model.businessB\x0bVodCallbackP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n*volcengine/vod/business/vod_callback.proto\x12\x1eVolcengine.Vod.Models.Business\"\xd0\x01\n\x0c\x42ianqueEvent\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x11\n\tEventType\x18\x02 \x01(\t\x12\x14\n\x0c\x43\x61llbackName\x18\x03 \x01(\t\x12\x14\n\x0c\x43\x61llbackType\x18\x04 \x01(\t\x12\x13\n\x0b\x43\x61llbackUrl\x18\x05 \x01(\t\x12\x17\n\x0f\x43\x61llbackMessage\x18\x07 \x01(\t\x12\x0e\n\x06Status\x18\x08 \x01(\t\x12\x11\n\tEventTime\x18\t \x01(\x01\x12\x14\n\x0c\x45rrorMessage\x18\n \x01(\t\x12\r\n\x05LogId\x18\x0b \x01(\t\"\x81\x01\n\x0f\x43\x61llbackRecords\x12\x44\n\x0e\x43\x61llbackEvents\x18\x01 \x03(\x0b\x32,.Volcengine.Vod.Models.Business.BianqueEvent\x12\x19\n\x11\x43ontinuationToken\x18\x02 \x01(\t\x12\r\n\x05Limit\x18\x03 \x01(\x05*V\n\x13VodCallbackAuthType\x12\x1f\n\x1bVodCallbackAuthTypeDisabled\x10\x00\x12\x1e\n\x1aVodCallbackAuthTypeEnabled\x10\x01\x42\xcf\x01\n)com.volcengine.service.vod.model.businessB\x0bVodCallbackP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 _VODCALLBACKAUTHTYPE = DESCRIPTOR.enum_types_by_name['VodCallbackAuthType']
 VodCallbackAuthType = enum_type_wrapper.EnumTypeWrapper(_VODCALLBACKAUTHTYPE)
@@ -23,10 +23,30 @@ VodCallbackAuthTypeDisabled = 0
 VodCallbackAuthTypeEnabled = 1
 
 
+_BIANQUEEVENT = DESCRIPTOR.message_types_by_name['BianqueEvent']
+_CALLBACKRECORDS = DESCRIPTOR.message_types_by_name['CallbackRecords']
+BianqueEvent = _reflection.GeneratedProtocolMessageType('BianqueEvent', (_message.Message,), {
+  'DESCRIPTOR' : _BIANQUEEVENT,
+  '__module__' : 'volcengine.vod.business.vod_callback_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.BianqueEvent)
+  })
+_sym_db.RegisterMessage(BianqueEvent)
+
+CallbackRecords = _reflection.GeneratedProtocolMessageType('CallbackRecords', (_message.Message,), {
+  'DESCRIPTOR' : _CALLBACKRECORDS,
+  '__module__' : 'volcengine.vod.business.vod_callback_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.CallbackRecords)
+  })
+_sym_db.RegisterMessage(CallbackRecords)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n)com.volcengine.service.vod.model.businessB\013VodCallbackP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata'
-  _VODCALLBACKAUTHTYPE._serialized_start=78
-  _VODCALLBACKAUTHTYPE._serialized_end=164
+  _VODCALLBACKAUTHTYPE._serialized_start=421
+  _VODCALLBACKAUTHTYPE._serialized_end=507
+  _BIANQUEEVENT._serialized_start=79
+  _BIANQUEEVENT._serialized_end=287
+  _CALLBACKRECORDS._serialized_start=290
+  _CALLBACKRECORDS._serialized_end=419
 # @@protoc_insertion_point(module_scope)

@@ -6,7 +6,7 @@ from volcengine.viking_db.common import Data, RetryOption
 
 class Collection(object):
     def __init__(self, collection_name, fields, viking_db_service, primary_key, indexes=None, stat=None,
-                 description="", create_time=None, update_time=None, update_person=None, retry_option=None):
+                 description="", create_time=None, update_time=None, update_person=None, retry_option=None, vectorize=None):
         """
         :param collection_name: the name of VikingDB collection.
         :type collection_name: str
@@ -23,6 +23,7 @@ class Collection(object):
         self.fields = fields
         self.viking_db_service = viking_db_service
         self.primary_key = primary_key
+        self.vectorize = vectorize
         if indexes is not None:
             self.indexes = indexes
         else:

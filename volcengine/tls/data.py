@@ -1685,7 +1685,8 @@ class Receiver(TLSData):
 
 class QueryRequest(TLSData):
     def __init__(self, topic_id: str, query: str, number: int,
-                 start_time_offset: int, end_time_offset: int, topic_name: str = None):
+                 start_time_offset: int, end_time_offset: int, topic_name: str = None, time_span_type: str = None,
+                 truncated_time: str = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -1699,6 +1700,10 @@ class QueryRequest(TLSData):
         :type end_time_offset: int
         :param topic_name: 告警策略执行的日志主题名称
         :type topic_name: str
+        :param time_span_type: 查询是否是整点时间, 新增整点时间,非必填,空白时默认为Relative
+        :type time_span_type: str
+        :param truncated_time: 对时间取整,对分钟/小时取整
+        :type truncated_time: str
         """
         self.topic_id = topic_id
         self.query = query
@@ -1706,6 +1711,8 @@ class QueryRequest(TLSData):
         self.start_time_offset = start_time_offset
         self.end_time_offset = end_time_offset
         self.topic_name = topic_name
+        self.time_span_type = time_span_type
+        self.truncated_time = truncated_time
 
     def get_number(self):
         """
@@ -1749,6 +1756,20 @@ class QueryRequest(TLSData):
         """
         return self.end_time_offset
 
+    def get_time_span_type(self):
+        """
+        :return: 查询是否是整点时间, 新增整点时间,非必填,空白时默认为Relative
+        :rtype: str
+        """
+        return self.time_span_type
+
+    def get_truncated_time(self):
+        """
+        :return: 对时间取整,对分钟/小时取整
+        :rtype: str
+        """
+        return self.truncated_time
+
     @classmethod
     def set_attributes(cls, data: dict):
         topic_id = data.get(TOPIC_ID)
@@ -1757,8 +1778,10 @@ class QueryRequest(TLSData):
         number = data.get(NUMBER)
         start_time_offset = data.get(START_TIME_OFFSET)
         end_time_offset = data.get(END_TIME_OFFSET)
+        time_span_type = data.get(TIME_SPAN_TYPE)
+        truncated_time = data.get(TRUNCATED_TIME)
 
-        return cls(topic_id, query, number, start_time_offset, end_time_offset, topic_name)
+        return cls(topic_id, query, number, start_time_offset, end_time_offset, topic_name, time_span_type, truncated_time)
 
 
 class RequestCycle(TLSData):

@@ -8,6 +8,7 @@ from volcengine.Policy import *
 from volcengine.imagex.v2.const import *
 
 from retry import retry
+from urllib.parse import quote
 
 try:
     import queue
@@ -84,7 +85,7 @@ class Uploader:
 
     @retry(tries=3, delay=1, backoff=2)
     def upload_by_host(self, store_info, img_data):
-        url = "https://{}/{}".format(self.host, store_info["StoreUri"])
+        url = "https://{}/{}".format(self.host, quote(store_info["StoreUri"]))
         check_sum = crc32(img_data) & 0xFFFFFFFF
         check_sum = "%08x" % check_sum
         headers = {"Content-CRC32": check_sum, "Authorization": store_info["Auth"]}
@@ -117,7 +118,7 @@ class Uploader:
 
     @retry(tries=3, delay=1, backoff=2)
     def init_upload_part(self, store_info, is_large_file):
-        url = "https://{}/{}?uploads".format(self.host, store_info["StoreUri"])
+        url = "https://{}/{}?uploads".format(self.host, quote(store_info["StoreUri"]))
         headers = {"Authorization": store_info["Auth"]}
         if is_large_file:
             headers["X-Storage-Mode"] = "gateway"
@@ -132,7 +133,7 @@ class Uploader:
     @retry(tries=3, delay=1, backoff=2)
     def upload_part(self, store_info, upload_id, part_number, data, is_large_file):
         url = "https://{}/{}?partNumber={}&uploadID={}".format(
-            self.host, store_info["StoreUri"], part_number, upload_id
+            self.host, quote(store_info["StoreUri"]), part_number, upload_id
         )
         check_sum = crc32(data) & 0xFFFFFFFF
         check_sum = "%08x" % check_sum
@@ -161,7 +162,7 @@ class Uploader:
     @retry(tries=3, delay=1, backoff=2)
     def upload_merge_part(self, store_info, upload_id, check_sum_list, is_large_file):
         url = "https://{}/{}?uploadID={}".format(
-            self.host, store_info["StoreUri"], upload_id
+            self.host, quote(store_info["StoreUri"]), upload_id
         )
         data = self.generate_merge_body(check_sum_list)
         headers = {"Authorization": store_info["Auth"]}
