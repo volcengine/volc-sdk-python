@@ -12,7 +12,7 @@ from volcengine.Credentials import Credentials
 from volcengine.base.Service import Service
 from volcengine.ServiceInfo import ServiceInfo
 from volcengine.auth.SignerV4 import SignerV4
-
+from .RespIter import RespIter
 
 class VikingKnowledgeBaseService(Service):
     _instance_lock = threading.Lock()
@@ -193,7 +193,53 @@ class VikingKnowledgeBaseService(Service):
             raise VikingKnowledgeBaseException(1000028, "missed",
                                     "empty response due to unknown error, please contact customer service") from None
         return res
+    
+    def _stream_json_exception(self, api, params, body):
+        try:
+            res_stream = self._stream_json(api, params, body)
+            for res in res_stream:
+                yield res
+        except Exception as e:
+            try:
+                res_json = json.loads(e.args[0].decode("utf-8"))
+            except:
+                raise VikingKnowledgeBaseException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+            code = res_json.get("code", 1000028)
+            request_id = res_json.get("request_id", 1000028)
+            message = res_json.get("message", None)
+            raise ERRCODE_EXCEPTION.get(code, VikingKnowledgeBaseException)(code, request_id, message) from None
+        if res == '':
+            raise VikingKnowledgeBaseException(1000028, "missed",
+                                    "empty response due to unknown error, please contact customer service") from None
+        return res
+    
+    def _stream_json(self, api, params, body):
+        if not (api in self.api_info):
+            raise Exception("no such api")
+        api_info = self.api_info[api]
+        r = self.prepare_request(api_info, params)
+        r.headers['Content-Type'] = 'application/json'
+        r.headers['Accept'] = 'text/event-stream'
+        r.body = body
 
+        SignerV4.sign(r, self.service_info.credentials)
+
+        url = r.build()
+        resp = self.session.post(url, headers=r.headers, data=r.body, stream=True,
+                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
+        if resp.status_code == 200:
+            for line in resp.iter_lines():
+                decode_line = line.decode('utf-8')
+                if decode_line =="":
+                    continue
+                data_str = decode_line.split("data:")[1]
+                data_dict = json.loads(data_str)
+                yield json.dumps(data_dict)
+                if 'end'  in data_dict['data']:
+                    break    
+        else:
+            raise Exception(resp.text.encode("utf-8"))
+        
     async def async_json_exception(self, api, params, body):
         try:
             res = await self.async_json(api, params, body)
@@ -536,7 +582,7 @@ class VikingKnowledgeBaseService(Service):
         }
         return ret
 
-    def chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True, api_key=None):
+    def chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True, api_key=None,stream=False):
         params = {
             "model": model,
             "messages": messages,
@@ -544,15 +590,21 @@ class VikingKnowledgeBaseService(Service):
             "max_tokens": max_tokens,
             "temperature": temperature
         }
+
         if api_key is not None:
             params["api_key"] = api_key
-        res = self.json_exception("ChatCompletion", {}, json.dumps(params))
-        data = json.loads(res)["data"]
-        ret = {
-            "generated_answer": data.get("generated_answer"),
-            "usage": data.get("usage")
-        }
-        return ret
+        if stream:
+            params['stream'] = True
+            res_stream = self._stream_json_exception("ChatCompletion", {}, json.dumps(params))
+            return RespIter(self._generate_responses(res_stream))
+        else:
+            res = self.json_exception("ChatCompletion", {}, json.dumps(params))
+            data = json.loads(res)["data"]
+            ret = {
+                "generated_answer": data.get("generated_answer"),
+                "usage": data.get("usage")
+            }
+            return ret
 
     async def async_chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True, api_key=None):
         params = {
@@ -571,3 +623,11 @@ class VikingKnowledgeBaseService(Service):
             "usage": data.get("usage")
         }
         return ret
+    
+    def _generate_responses(self, res_stream):
+        for res in res_stream:
+            data = json.loads(res)["data"]
+            yield {
+                "generated_answer": data.get("generated_answer"),
+                "usage": data.get("usage")
+            }

@@ -21,3 +21,30 @@ for point in points:
     print(point.project)
     print("=======")
     
+#假定用户已经在知识库中创建了一个collection，并上传了文档，A公司_2022年财报.pdf，A公司_2023年财报.pdf
+m_messages = [{
+    "role": "system",
+    "content": """ system pe """
+    },
+    {
+        "role": "user",
+        "content": "22年A公司财报中提到的风险,在23年应对的如何" # 用户提问
+    }
+]
+# chat_completion without streaming
+print("#"*10,"chat_completion without streaming","#"*10)
+res = viking_knowledgebase_service.chat_completion(model="Doubao-pro-32k", messages=m_messages, max_tokens=4096,
+                                                    temperature=0.1)
+data = res["generated_answer"]
+token_usage = res["usage"]
+print(data)
+print(token_usage)
+# chat_completion with streaming
+print("#"*10,"chat_completion with streaming","#"*10)
+res = viking_knowledgebase_service.chat_completion(model="Doubao-pro-32k", messages=m_messages, max_tokens=4096,
+                                                    temperature=0.1,stream=True)
+for data in res:
+    print(data,end="",flush=True)
+print("")
+print(res.token_usage())
+    
