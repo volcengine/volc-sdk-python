@@ -1330,6 +1330,50 @@ class VodService(VodServiceConfig):
 
 
     #
+    # GetInnerAuditURLs.
+    #
+    # @param request VodGetInnerAuditURLsRequest
+    # @return VodGetInnerAuditURLsResponse
+    # @raise Exception
+    def get_inner_audit_u_r_ls(self, request):
+        try:
+            jsonData = MessageToJson(request, False, True)
+            res = self.json("GetInnerAuditURLs",{},jsonData)
+        except Exception as Argument:
+            try:
+                ArgumentStr = Argument.args[0].decode("utf-8")
+                resp = Parse(ArgumentStr, VodGetInnerAuditURLsResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetInnerAuditURLsResponse(), True)
+
+
+    #
+    # GetAdAuditResultByVid.
+    #
+    # @param request VodGetAdAuditResultByVidRequest
+    # @return VodGetAdAuditResultByVidResponse
+    # @raise Exception
+    def get_ad_audit_result_by_vid(self, request):
+        try:
+            jsonData = MessageToJson(request, False, True)
+            res = self.json("GetAdAuditResultByVid",{},jsonData)
+        except Exception as Argument:
+            try:
+                ArgumentStr = Argument.args[0].decode("utf-8")
+                resp = Parse(ArgumentStr, VodGetAdAuditResultByVidResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetAdAuditResultByVidResponse(), True)
+
+
+    #
     # DeleteMediaTosFile.
     #
     # @param request VodDeleteMediaTosFileRequest

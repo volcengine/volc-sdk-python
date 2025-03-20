@@ -64,6 +64,8 @@ class VodServiceConfig(Service):
             "UpdateMediaInfo": ApiInfo("GET", "/", {"Action": "UpdateMediaInfo", "Version": "2020-08-01"}, {}, {}),
             "UpdateMediaPublishStatus": ApiInfo("GET", "/", {"Action": "UpdateMediaPublishStatus", "Version": "2020-08-01"}, {}, {}),
             "UpdateMediaStorageClass": ApiInfo("GET", "/", {"Action": "UpdateMediaStorageClass", "Version": "2022-12-01"}, {}, {}),
+            "GetInnerAuditURLs": ApiInfo("POST", "/", {"Action": "GetInnerAuditURLs", "Version": "2023-07-01"}, {}, {}),
+            "GetAdAuditResultByVid": ApiInfo("POST", "/", {"Action": "GetAdAuditResultByVid", "Version": "2023-07-01"}, {}, {}),
             "GetMediaInfos": ApiInfo("GET", "/", {"Action": "GetMediaInfos", "Version": "2022-12-01"}, {}, {}),
             "GetMediaInfos20230701": ApiInfo("GET", "/", {"Action": "GetMediaInfos", "Version": "2023-07-01"}, {}, {}),
             "GetRecommendedPoster": ApiInfo("GET", "/", {"Action": "GetRecommendedPoster", "Version": "2020-08-01"}, {}, {}),
