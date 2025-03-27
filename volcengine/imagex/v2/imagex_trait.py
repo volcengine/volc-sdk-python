@@ -186,6 +186,9 @@ class ImagexTrait(Service):
     def get_image_add_on_tag(self, query={}):
         return self.imagex_get('GetImageAddOnTag', query)
             
+    def describe_imagex_cube_usage(self, query={}):
+        return self.imagex_get('DescribeImageXCubeUsage', query)
+            
     def describe_imagex_source_request_bandwidth(self, query={}):
         return self.imagex_get('DescribeImageXSourceRequestBandwidth', query)
             
@@ -197,6 +200,9 @@ class ImagexTrait(Service):
             
     def describe_imagex_bucket_retrieval_usage(self, query={}):
         return self.imagex_get('DescribeImageXBucketRetrievalUsage', query)
+            
+    def describe_imagexai_request_cnt_usage(self, query={}):
+        return self.imagex_get('DescribeImageXAIRequestCntUsage', query)
             
     def describe_imagex_summary(self, query={}):
         return self.imagex_get('DescribeImageXSummary', query)
@@ -269,6 +275,24 @@ class ImagexTrait(Service):
             
     def describe_imagexcdn_top_request_data(self, query={}):
         return self.imagex_get('DescribeImageXCDNTopRequestData', query)
+            
+    def describe_imagex_heif_encode_file_in_size_by_time(self, query={}, body={}):
+        return self.imagex_post('DescribeImageXHeifEncodeFileInSizeByTime', query, json.dumps(body))
+            
+    def describe_imagex_heif_encode_file_out_size_by_time(self, query={}, body={}):
+        return self.imagex_post('DescribeImageXHeifEncodeFileOutSizeByTime', query, json.dumps(body))
+            
+    def describe_imagex_heif_encode_success_count_by_time(self, query={}, body={}):
+        return self.imagex_post('DescribeImageXHeifEncodeSuccessCountByTime', query, json.dumps(body))
+            
+    def describe_imagex_heif_encode_success_rate_by_time(self, query={}, body={}):
+        return self.imagex_post('DescribeImageXHeifEncodeSuccessRateByTime', query, json.dumps(body))
+            
+    def describe_imagex_heif_encode_duration_by_time(self, query={}, body={}):
+        return self.imagex_post('DescribeImageXHeifEncodeDurationByTime', query, json.dumps(body))
+            
+    def describe_imagex_heif_encode_error_code_by_time(self, query={}, body={}):
+        return self.imagex_post('DescribeImageXHeifEncodeErrorCodeByTime', query, json.dumps(body))
             
     def describe_imagex_exceed_resolution_ratio_all(self, body={}):
         return self.imagex_post('DescribeImageXExceedResolutionRatioAll', [], json.dumps(body))
@@ -447,6 +471,9 @@ class ImagexTrait(Service):
     def update_image_file_ct(self, query={}, body={}):
         return self.imagex_post('UpdateImageFileCT', query, json.dumps(body))
             
+    def apply_vpc_upload_info(self, query={}):
+        return self.imagex_get('ApplyVpcUploadInfo', query)
+            
     def apply_image_upload(self, query={}):
         return self.imagex_get('ApplyImageUpload', query)
             
@@ -570,9 +597,6 @@ class ImagexTrait(Service):
     def get_private_image_type(self, query={}, body={}):
         return self.imagex_post('GetPrivateImageType', query, json.dumps(body))
             
-    def get_ai_generate_image(self, query={}, body={}):
-        return self.imagex_post('GetAiGenerateImage', query, json.dumps(body))
-            
     def create_cv_image_generate_task(self, query={}, body={}):
         return self.imagex_post('CreateCVImageGenerateTask', query, json.dumps(body))
             
@@ -635,6 +659,9 @@ class ImagexTrait(Service):
             
     def update_storage_rules(self, query={}, body={}):
         return self.imagex_post('UpdateStorageRules', query, json.dumps(body))
+            
+    def update_storage_rules_v_2(self, query={}, body={}):
+        return self.imagex_post('UpdateStorageRulesV2', query, json.dumps(body))
             
     def update_image_object_access(self, query={}, body={}):
         return self.imagex_post('UpdateImageObjectAccess', query, json.dumps(body))
@@ -716,12 +743,6 @@ class ImagexTrait(Service):
             
     def download_cert(self, query={}):
         return self.imagex_get('DownloadCert', query)
-            
-    def del_cert(self, query={}, body={}):
-        return self.imagex_post('DelCert', query, json.dumps(body))
-            
-    def add_cert(self, query={}, body={}):
-        return self.imagex_post('AddCert', query, json.dumps(body))
             
     def get_image_all_domain_cert(self, query={}):
         return self.imagex_get('GetImageAllDomainCert', query)

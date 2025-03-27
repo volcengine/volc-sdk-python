@@ -273,6 +273,8 @@ class VodService(VodServiceConfig):
     def vpc_part_upload(self, part_upload_info, file_path, file_size):
         chunk_size = part_upload_info.PartSize
         total_num = file_size // chunk_size
+        if file_size % chunk_size == 0:
+            total_num -= 1
         if len(part_upload_info.PartPutUrls) != total_num + 1:
             raise Exception("mismatch part upload")
 
