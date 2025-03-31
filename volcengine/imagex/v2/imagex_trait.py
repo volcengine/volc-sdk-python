@@ -447,6 +447,18 @@ class ImagexTrait(Service):
     def get_batch_task_info(self, query={}):
         return self.imagex_get('GetBatchTaskInfo', query)
             
+    def ai_process(self, query={}, body={}):
+        return self.imagex_post('AIProcess', query, json.dumps(body))
+            
+    def create_image_ai_task(self, query={}, body={}):
+        return self.imagex_post('CreateImageAITask', query, json.dumps(body))
+            
+    def get_image_ai_tasks(self, query={}):
+        return self.imagex_get('GetImageAITasks', query)
+            
+    def get_image_ai_details(self, query={}):
+        return self.imagex_get('GetImageAIDetails', query)
+            
     def update_image_resource_status(self, query={}, body={}):
         return self.imagex_post('UpdateImageResourceStatus', query, json.dumps(body))
             
