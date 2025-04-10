@@ -60,7 +60,7 @@ class Index(object):
 
     def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
                primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-               retry=True):
+               retry=True, filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
         """
         Search for vectors or scalars similar to a given vector or scalar.
 
@@ -94,12 +94,12 @@ class Index(object):
                 res = self.search_by_vector(order.vector, sparse_vectors=order.sparse_vectors, filter=filter, limit=limit,
                                             output_fields=output_fields, partition=partition, dense_weight=dense_weight,
                                             primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-                                            retry=retry)
+                                            retry=retry, filter_pre_ann_limit=filter_pre_ann_limit, filter_pre_ann_ratio=filter_pre_ann_ratio)
             elif order.id is not None:
                 res = self.search_by_id(order.id, filter=filter, limit=limit,
                                         output_fields=output_fields, partition=partition, dense_weight=dense_weight,
                                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-                                        retry=retry)
+                                        retry=retry, filter_pre_ann_limit=filter_pre_ann_limit, filter_pre_ann_ratio=filter_pre_ann_ratio)
             return res
         elif isinstance(order, ScalarOrder):
             search = {}
@@ -117,6 +117,10 @@ class Index(object):
                 search['post_process_ops'] = post_process_ops
             if post_process_input_limit is not None:
                 search['post_process_input_limit'] = post_process_input_limit
+            if filter_pre_ann_limit >= 0:
+                search['filter_pre_ann_limit'] = filter_pre_ann_limit
+            if filter_pre_ann_ratio >= 0.0:
+                search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             # print(params)
             remaining = self.retry_option.new_remaining(retry)
@@ -241,7 +245,7 @@ class Index(object):
 
     def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
                      primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-                     retry=True, scale_k=0):
+                     retry=True, scale_k=0, filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
         """
         Search for vectors similar to a given vector based on its id.
 
@@ -288,6 +292,10 @@ class Index(object):
             search['post_process_input_limit'] = post_process_input_limit
         if scale_k > 0:
             search['scale_k'] = scale_k
+        if filter_pre_ann_limit >= 0:
+            search['filter_pre_ann_limit'] = filter_pre_ann_limit
+        if filter_pre_ann_ratio >= 0.0:
+            search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         remaining = self.retry_option.new_remaining(retry)
@@ -353,7 +361,8 @@ class Index(object):
         return datas
 
     def search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
-                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0):
+                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0,
+                         filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
         """
         Search for vectors similar to a given vector.
 
@@ -403,6 +412,10 @@ class Index(object):
             search['post_process_input_limit'] = post_process_input_limit
         if scale_k > 0:
             search['scale_k'] = scale_k
+        if filter_pre_ann_limit >= 0:
+            search['filter_pre_ann_limit'] = filter_pre_ann_limit
+        if filter_pre_ann_ratio >= 0.0:
+            search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -459,7 +472,8 @@ class Index(object):
         return datas
 
     def search_with_multi_modal(self, text=None, image=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
-                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0):
+                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0,
+                       filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
         """
         Search with multi-modal data including type of text and image.
 
@@ -517,6 +531,10 @@ class Index(object):
             search['post_process_input_limit'] = post_process_input_limit
         if scale_k > 0:
             search['scale_k'] = scale_k
+        if filter_pre_ann_limit >= 0:
+            search['filter_pre_ann_limit'] = filter_pre_ann_limit
+        if filter_pre_ann_ratio >= 0.0:
+            search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -585,7 +603,8 @@ class Index(object):
         return datas
 
     def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
-                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0):
+                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0,
+                       filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
         """
         Search for text similar to a given text. (You can use search_with_multi_modal instead.)
 
@@ -636,6 +655,10 @@ class Index(object):
             search['post_process_input_limit'] = post_process_input_limit
         if scale_k > 0:
             search['scale_k'] = scale_k
+        if filter_pre_ann_limit >= 0:
+            search['filter_pre_ann_limit'] = filter_pre_ann_limit
+        if filter_pre_ann_ratio >= 0.0:
+            search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
