@@ -103,6 +103,7 @@ class TaskType(Enum):
     Data_Import = "data_import"
     Filter_Delete = "filter_delete"
     Data_export = "data_export"
+    Filter_Update = "filter_update"
 
 class TaskStatus(Enum):
     Init = "init"

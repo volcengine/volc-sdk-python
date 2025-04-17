@@ -60,7 +60,7 @@ class Index(object):
 
     def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
                primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-               retry=True, filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
+               retry=True, filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0, **kwargs):
         """
         Search for vectors or scalars similar to a given vector or scalar.
 
@@ -94,12 +94,12 @@ class Index(object):
                 res = self.search_by_vector(order.vector, sparse_vectors=order.sparse_vectors, filter=filter, limit=limit,
                                             output_fields=output_fields, partition=partition, dense_weight=dense_weight,
                                             primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-                                            retry=retry, filter_pre_ann_limit=filter_pre_ann_limit, filter_pre_ann_ratio=filter_pre_ann_ratio)
+                                            retry=retry, filter_pre_ann_limit=filter_pre_ann_limit, filter_pre_ann_ratio=filter_pre_ann_ratio, **kwargs)
             elif order.id is not None:
                 res = self.search_by_id(order.id, filter=filter, limit=limit,
                                         output_fields=output_fields, partition=partition, dense_weight=dense_weight,
                                         primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-                                        retry=retry, filter_pre_ann_limit=filter_pre_ann_limit, filter_pre_ann_ratio=filter_pre_ann_ratio)
+                                        retry=retry, filter_pre_ann_limit=filter_pre_ann_limit, filter_pre_ann_ratio=filter_pre_ann_ratio, **kwargs)
             return res
         elif isinstance(order, ScalarOrder):
             search = {}
@@ -121,6 +121,12 @@ class Index(object):
                 search['filter_pre_ann_limit'] = filter_pre_ann_limit
             if filter_pre_ann_ratio >= 0.0:
                 search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
+            offset = kwargs.get("offset", -1)
+            if offset >= 0:
+                search['offset'] = offset
+            need_search_count = kwargs.get("need_search_count", False)
+            if need_search_count:
+                search['need_search_count'] = need_search_count
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             # print(params)
             remaining = self.retry_option.new_remaining(retry)
@@ -137,6 +143,9 @@ class Index(object):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
+            extend_info = res.get('extend', {})
+            if need_search_count:
+                return datas, extend_info
             return datas
         elif order is None:
             search = {"limit": limit, "partition": partition}
@@ -152,6 +161,12 @@ class Index(object):
                 search['post_process_ops'] = post_process_ops
             if post_process_input_limit is not None:
                 search['post_process_input_limit'] = post_process_input_limit
+            offset = kwargs.get("offset", -1)
+            if offset >= 0:
+                search['offset'] = offset
+            need_search_count = kwargs.get("need_search_count", False)
+            if need_search_count:
+                search['need_search_count'] = need_search_count
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             remaining = self.retry_option.new_remaining(retry)
             res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -166,10 +181,13 @@ class Index(object):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
+            extend_info = res.get('extend', {})
+            if need_search_count:
+                return datas, extend_info
             return datas
 
     async def async_search(self, order=None, filter=None, limit=10, output_fields=None, partition="default",
-                           dense_weight=None, primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
+                           dense_weight=None, primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, **kwargs):
         if isinstance(order, VectorOrder):
             res = []
             if order.vector is not None:
@@ -199,6 +217,12 @@ class Index(object):
                 search['post_process_ops'] = post_process_ops
             if post_process_input_limit is not None:
                 search['post_process_input_limit'] = post_process_input_limit
+            offset = kwargs.get("offset", -1)
+            if offset >= 0:
+                search['offset'] = offset
+            need_search_count = kwargs.get("need_search_count", False)
+            if need_search_count:
+                search['need_search_count'] = need_search_count
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
             res = json.loads(res)
@@ -213,6 +237,9 @@ class Index(object):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
+            extend_info = res.get('extend', {})
+            if need_search_count:
+                return datas, extend_info
             return datas
         elif order is None:
             search = {"limit": limit, "partition": partition}
@@ -228,6 +255,12 @@ class Index(object):
                 search['post_process_ops'] = post_process_ops
             if post_process_input_limit is not None:
                 search['post_process_input_limit'] = post_process_input_limit
+            offset = kwargs.get("offset", -1)
+            if offset >= 0:
+                search['offset'] = offset
+            need_search_count = kwargs.get("need_search_count", False)
+            if need_search_count:
+                search['need_search_count'] = need_search_count
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
             res = json.loads(res)
@@ -241,11 +274,14 @@ class Index(object):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
+            extend_info = res.get('extend', {})
+            if need_search_count:
+                return datas, extend_info
             return datas
 
     def search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
                      primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None,
-                     retry=True, scale_k=0, filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
+                     retry=True, scale_k=0, filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0, **kwargs):
         """
         Search for vectors similar to a given vector based on its id.
 
@@ -296,6 +332,12 @@ class Index(object):
             search['filter_pre_ann_limit'] = filter_pre_ann_limit
         if filter_pre_ann_ratio >= 0.0:
             search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
+        offset = kwargs.get("offset", -1)
+        if offset >= 0:
+            search['offset'] = offset
+        need_search_count = kwargs.get("need_search_count", False)
+        if need_search_count:
+            search['need_search_count'] = need_search_count
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         remaining = self.retry_option.new_remaining(retry)
@@ -317,10 +359,13 @@ class Index(object):
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
             # print("==================")
+        extend_info = res.get('extend', {})
+        if need_search_count:
+            return datas, extend_info
         return datas
 
     async def async_search_by_id(self, id, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
-                                 primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
+                                 primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, **kwargs):
         search = {}
         order_by_id = {"primary_keys": id}
         search = {"order_by_vector": order_by_id, "limit": limit, "partition": partition}
@@ -338,6 +383,12 @@ class Index(object):
             search['post_process_ops'] = post_process_ops
         if post_process_input_limit is not None:
             search['post_process_input_limit'] = post_process_input_limit
+        offset = kwargs.get("offset", -1)
+        if offset >= 0:
+            search['offset'] = offset
+        need_search_count = kwargs.get("need_search_count", False)
+        if need_search_count:
+            search['need_search_count'] = need_search_count
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
@@ -358,11 +409,14 @@ class Index(object):
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
             # print("==================")
+        extend_info = res.get('extend', {})
+        if need_search_count:
+            return datas, extend_info
         return datas
 
     def search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
                          primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0,
-                         filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
+                         filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0, **kwargs):
         """
         Search for vectors similar to a given vector.
 
@@ -416,6 +470,12 @@ class Index(object):
             search['filter_pre_ann_limit'] = filter_pre_ann_limit
         if filter_pre_ann_ratio >= 0.0:
             search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
+        offset = kwargs.get("offset", -1)
+        if offset >= 0:
+            search['offset'] = offset
+        need_search_count = kwargs.get("need_search_count", False)
+        if need_search_count:
+            search['need_search_count'] = need_search_count
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -431,10 +491,13 @@ class Index(object):
                     fields = item["fields"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
+        extend_info = res.get('extend', {})
+        if need_search_count:
+            return datas, extend_info
         return datas
 
     async def async_search_by_vector(self, vector, sparse_vectors=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
-                                     primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
+                                     primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, **kwargs):
         # vector是一个向量，不是list，但是数据库要求传入的是个列表
         search = {}
         order_by_vector = {"vectors": [vector]}
@@ -455,6 +518,12 @@ class Index(object):
             search['post_process_ops'] = post_process_ops
         if post_process_input_limit is not None:
             search['post_process_input_limit'] = post_process_input_limit
+        offset = kwargs.get("offset", -1)
+        if offset >= 0:
+            search['offset'] = offset
+        need_search_count = kwargs.get("need_search_count", False)
+        if need_search_count:
+            search['need_search_count'] = need_search_count
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -469,11 +538,14 @@ class Index(object):
                     fields = item["fields"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
+        extend_info = res.get('extend', {})
+        if need_search_count:
+            return datas, extend_info
         return datas
 
     def search_with_multi_modal(self, text=None, image=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
                        primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0,
-                       filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
+                       filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0, **kwargs):
         """
         Search with multi-modal data including type of text and image.
 
@@ -535,6 +607,12 @@ class Index(object):
             search['filter_pre_ann_limit'] = filter_pre_ann_limit
         if filter_pre_ann_ratio >= 0.0:
             search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
+        offset = kwargs.get("offset", -1)
+        if offset >= 0:
+            search['offset'] = offset
+        need_search_count = kwargs.get("need_search_count", False)
+        if need_search_count:
+            search['need_search_count'] = need_search_count
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -553,10 +631,13 @@ class Index(object):
                     text = item["text"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
                 datas.append(data)
+        extend_info = res.get('extend', {})
+        if need_search_count:
+            return datas, extend_info
         return datas
 
     async def async_search_with_multi_modal(self, text=None, image=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
-                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, scale_k=0):
+                       primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, scale_k=0, **kwargs):
         if text is None and image is None:
             raise Exception("not any modal data params exist")
         order_by_raw = {}
@@ -583,6 +664,12 @@ class Index(object):
             search['post_process_input_limit'] = post_process_input_limit
         if scale_k > 0:
             search['scale_k'] = scale_k
+        offset = kwargs.get("offset", -1)
+        if offset >= 0:
+            search['offset'] = offset
+        need_search_count = kwargs.get("need_search_count", False)
+        if need_search_count:
+            search['need_search_count'] = need_search_count
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -600,11 +687,14 @@ class Index(object):
                     text = item["text"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
                 datas.append(data)
+        extend_info = res.get('extend', {})
+        if need_search_count:
+            return datas, extend_info
         return datas
 
     def search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
                        primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, retry=True, scale_k=0,
-                       filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0):
+                       filter_pre_ann_limit=-1, filter_pre_ann_ratio=-1.0, **kwargs):
         """
         Search for text similar to a given text. (You can use search_with_multi_modal instead.)
 
@@ -659,6 +749,12 @@ class Index(object):
             search['filter_pre_ann_limit'] = filter_pre_ann_limit
         if filter_pre_ann_ratio >= 0.0:
             search['filter_pre_ann_ratio'] = filter_pre_ann_ratio
+        offset = kwargs.get("offset", -1)
+        if offset >= 0:
+            search['offset'] = offset
+        need_search_count = kwargs.get("need_search_count", False)
+        if need_search_count:
+            search['need_search_count'] = need_search_count
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -677,10 +773,13 @@ class Index(object):
                     text = item["text"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
                 datas.append(data)
+        extend_info = res.get('extend', {})
+        if need_search_count:
+            return datas, extend_info
         return datas
 
     async def async_search_by_text(self, text, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None, need_instruction=None,
-                                   primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None):
+                                   primary_key_in=None, primary_key_not_in=None, post_process_ops=None, post_process_input_limit=None, **kwargs):
         warnings.warn("async_search_by_text is deprecated, please use async_search_with_multi_modal instead", DeprecationWarning)
         order_by_raw = {"text": text.text}
         search = {"order_by_raw": order_by_raw, "limit": limit, "partition": partition}
@@ -700,6 +799,12 @@ class Index(object):
             search['post_process_ops'] = post_process_ops
         if post_process_input_limit is not None:
             search['post_process_input_limit'] = post_process_input_limit
+        offset = kwargs.get("offset", -1)
+        if offset >= 0:
+            search['offset'] = offset
+        need_search_count = kwargs.get("need_search_count", False)
+        if need_search_count:
+            search['need_search_count'] = need_search_count
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -717,6 +822,9 @@ class Index(object):
                     text = item["text"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], text=text, dist=item.get('dist', None))
                 datas.append(data)
+        extend_info = res.get('extend', {})
+        if need_search_count:
+            return datas, extend_info
         return datas
 
     def search_agg(self, agg: Dict[str, any], filter=None, partition="default", retry=True) -> AggResult:

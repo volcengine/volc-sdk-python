@@ -78,6 +78,7 @@ class VmsService(Service):
             "BindYBForAXYB": ApiInfo("POST", "/", {"Action": "BindYBForAXYB", "Version": SERVICE_VERSION}, {}, {}),
             "UpdateAXYB": ApiInfo("POST", "/", {"Action": "UpdateAXYB", "Version": SERVICE_VERSION}, {}, {}),
             "UnbindAXYB": ApiInfo("POST", "/", {"Action": "UnbindAXYB", "Version": SERVICE_VERSION}, {}, {}),
+            "RouteAAuth": ApiInfo("POST", "/", {"Action": "RouteAAuth", "Version": SERVICE_VERSION}, {}, {}),
             "NumberPoolList": ApiInfo("POST", "/", {"Action": "NumberPoolList", "Version": SERVICE_VERSION}, {}, {}),
             "NumberList": ApiInfo("GET", "/", {"Action": "NumberList", "Version": SERVICE_VERSION}, {}, {}),
             "CreateNumberPool": ApiInfo("POST", "/",
@@ -315,6 +316,13 @@ class VmsService(Service):
     def unbind_axyb(self, form):
         try:
             return self.common_handler("UnbindAXYB", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def route_a_auth(self, form):
+        try:
+            return self.common_handler("RouteAAuth", form)
         except Exception as e:
             raise Exception(str(e))
 
