@@ -121,6 +121,8 @@ class VodServiceConfig(Service):
             "UpdateSpace": ApiInfo("GET", "/", {"Action": "UpdateSpace", "Version": "2021-01-01"}, {}, {}),
             "UpdateSpaceUploadConfig": ApiInfo("GET", "/", {"Action": "UpdateSpaceUploadConfig", "Version": "2022-01-01"}, {}, {}),
             "DescribeVodSpaceStorageData": ApiInfo("GET", "/", {"Action": "DescribeVodSpaceStorageData", "Version": "2023-07-01"}, {}, {}),
+            "DescribeUploadSpaceConfig": ApiInfo("GET", "/", {"Action": "DescribeUploadSpaceConfig", "Version": "2023-07-01"}, {}, {}),
+            "UpdateUploadSpaceConfig": ApiInfo("POST", "/", {"Action": "UpdateUploadSpaceConfig", "Version": "2023-07-01"}, {}, {}),
             # 分发加速
             "AddDomainToScheduler": ApiInfo("GET", "/", {"Action": "AddDomainToScheduler", "Version": "2023-07-01"}, {}, {}),
             "RemoveDomainFromScheduler": ApiInfo("GET", "/", {"Action": "RemoveDomainFromScheduler", "Version": "2023-07-01"}, {}, {}),

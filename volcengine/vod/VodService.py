@@ -2848,6 +2848,62 @@ class VodService(VodServiceConfig):
             return Parse(res, VodUpdateSpaceUploadConfigResponse(), True)
 
     #
+    # DescribeUploadSpaceConfig.
+    #
+    # @param request VodDescribeUploadSpaceConfigRequest
+    # @return VodDescribeUploadSpaceConfigResponse
+    # @raise Exception
+    def describe_upload_space_config(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeUploadSpaceConfig", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDescribeUploadSpaceConfigResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDescribeUploadSpaceConfigResponse(), True)
+
+    #
+    # UpdateUploadSpaceConfig.
+    #
+    # @param request VodUpdateUploadSpaceConfigRequest
+    # @return VodUpdateUploadSpaceConfigResponse
+    # @raise Exception
+    def update_upload_space_config(self, request):
+        try:
+            jsonData = MessageToJson(request, False, True)
+            res = self.json("UpdateUploadSpaceConfig",{},jsonData)
+        except Exception as Argument:
+            try:
+                ArgumentStr = Argument.args[0].decode("utf-8")
+                resp = Parse(ArgumentStr, VodUpdateUploadSpaceConfigResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodUpdateUploadSpaceConfigResponse(), True)
+
+
+    #
     # AddDomainToScheduler.
     #
     # @param request VodAddDomainToSchedulerRequest

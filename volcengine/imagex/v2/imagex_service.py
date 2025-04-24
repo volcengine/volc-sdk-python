@@ -60,7 +60,7 @@ class ImagexService(ImagexTrait):
 
         session_key = addr["SessionKey"]
         host = addr["UploadHosts"][0]
-        uploader = self.do_upload(file_paths, host, addr["StoreInfos"])
+        uploader = self.do_upload(file_paths, host, addr["StoreInfos"], params)
         if len(uploader.successOids) == 0:
             raise Exception("no file uploaded")
 
@@ -112,7 +112,7 @@ class ImagexService(ImagexTrait):
 
         session_key = addr["SessionKey"]
         host = addr["UploadHosts"][0]
-        uploader = self.do_upload(img_datas, host, addr["StoreInfos"])
+        uploader = self.do_upload(img_datas, host, addr["StoreInfos"], params)
         if len(uploader.successOids) == 0:
             raise Exception("no file uploaded")
 
@@ -284,9 +284,9 @@ class ImagexService(ImagexTrait):
             log_id = resp.headers.get("x-tos-request-id", "")
             raise Exception("put error: code resp.status_code{} logId {}".format(resp.status_code, log_id))
 
-    def do_upload(self, file_paths_or_bytes, host, store_infos):
+    def do_upload(self, file_paths_or_bytes, host, store_infos, params=None):
         threads = []
-        uploader = Uploader(self, host, store_infos, file_paths_or_bytes)
+        uploader = Uploader(self, host, store_infos, file_paths_or_bytes, params)
         for i in range(UPLOAD_THREADS):
             thread = threading.Thread(target=uploader.async_upload)
             thread.start()

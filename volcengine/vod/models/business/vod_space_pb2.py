@@ -15,7 +15,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'volcengine/vod/business/vod_space.proto\x12\x1eVolcengine.Vod.Models.Business\"\xe7\x01\n\x0cVodSpaceInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\x12\x13\n\x0bProjectName\x18\x04 \x01(\t\x12\x12\n\nBucketName\x18\x05 \x01(\t\x12\x14\n\x0c\x42ucketStatus\x18\x06 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x07 \x01(\t\x12\x10\n\x08UserName\x18\x08 \x01(\t\x12\x11\n\tCreatedAt\x18\t \x01(\t\x12\x0c\n\x04Type\x18\n \x01(\t\x12\x16\n\x0eMediaSyncLevel\x18\x0b \x01(\t\x12\x15\n\rCanUseArchive\x18\x0c \x01(\x08\"/\n\x0eVodStorageData\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12\x0f\n\x07Storage\x18\x02 \x01(\x03\"\xf8\x01\n$VodDescribeVodSpaceStorageDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x0c\n\x04Type\x18\x05 \x01(\t\x12\x12\n\nRegionList\x18\x06 \x03(\t\x12\x19\n\x11LatestStorageData\x18\x07 \x01(\x03\x12G\n\x0fStorageDataList\x18\x08 \x03(\x0b\x32..Volcengine.Vod.Models.Business.VodStorageData*\xa3\x01\n\x17VodSpaceUploadConfigKey\x12$\n UndefinedVodSpaceUploadConfigKey\x10\x00\x12/\n+CustomUploadFilePathVodSpaceUploadConfigKey\x10\x01\x12\x31\n-AutoPublishAfterUploadVodSpaceUploadConfigKey\x10\x02\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodSpaceP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'volcengine/vod/business/vod_space.proto\x12\x1eVolcengine.Vod.Models.Business\"\xe7\x01\n\x0cVodSpaceInfo\x12\x11\n\tSpaceName\x18\x01 \x01(\t\x12\x0e\n\x06Region\x18\x03 \x01(\t\x12\x13\n\x0bProjectName\x18\x04 \x01(\t\x12\x12\n\nBucketName\x18\x05 \x01(\t\x12\x14\n\x0c\x42ucketStatus\x18\x06 \x01(\t\x12\x13\n\x0b\x44\x65scription\x18\x07 \x01(\t\x12\x10\n\x08UserName\x18\x08 \x01(\t\x12\x11\n\tCreatedAt\x18\t \x01(\t\x12\x0c\n\x04Type\x18\n \x01(\t\x12\x16\n\x0eMediaSyncLevel\x18\x0b \x01(\t\x12\x15\n\rCanUseArchive\x18\x0c \x01(\x08\"/\n\x0eVodStorageData\x12\x0c\n\x04Time\x18\x01 \x01(\t\x12\x0f\n\x07Storage\x18\x02 \x01(\x03\"\xf8\x01\n$VodDescribeVodSpaceStorageDataResult\x12\x11\n\tSpaceList\x18\x01 \x03(\t\x12\x11\n\tStartTime\x18\x02 \x01(\t\x12\x0f\n\x07\x45ndTime\x18\x03 \x01(\t\x12\x13\n\x0b\x41ggregation\x18\x04 \x01(\x05\x12\x0c\n\x04Type\x18\x05 \x01(\t\x12\x12\n\nRegionList\x18\x06 \x03(\t\x12\x19\n\x11LatestStorageData\x18\x07 \x01(\x03\x12G\n\x0fStorageDataList\x18\x08 \x03(\x0b\x32..Volcengine.Vod.Models.Business.VodStorageData\"\xe6\x03\n\x14VodUploadSpaceConfig\x12\x12\n\nAutoPoster\x18\x01 \x01(\t\x12N\n\x12\x43ustomPosterConfig\x18\x02 \x01(\x0b\x32\x32.Volcengine.Vod.Models.Business.CustomPosterConfig\x12\x15\n\rGetPosterMode\x18\x03 \x01(\t\x12\x1b\n\x13\x41utoPosterCandidate\x18\x04 \x01(\t\x12\x15\n\rAutoTranscode\x18\x05 \x01(\t\x12H\n\x0fTranscodeConfig\x18\x06 \x01(\x0b\x32/.Volcengine.Vod.Models.Business.TranscodeConfig\x12\x1a\n\x12\x41utoSetVideoStatus\x18\x07 \x01(\t\x12\x17\n\x0fUploadOverwrite\x18\x08 \x01(\t\x12\x1d\n\x15\x43\x61llbackReturnPlayUrl\x18\t \x01(\t\x12\x1b\n\x13\x43\x61llbackReturnRunId\x18\n \x01(\t\x12\x13\n\x0bGetMetaMode\x18\x0b \x01(\t\x12\x1f\n\x17\x41utoGetArchiveVideoMeta\x18\x0c \x01(\t\x12\x1a\n\x12\x41utoGetIAVideoMeta\x18\r \x01(\t\x12\x12\n\nMetaGetMd5\x18\x0e \x01(\t\"H\n\x12\x43ustomPosterConfig\x12\x1c\n\x14\x43ustomTemplateStatus\x18\x01 \x01(\t\x12\x14\n\x0cPathTemplate\x18\x02 \x01(\t\"K\n\x0fTranscodeConfig\x12\x1d\n\x15\x44\x65\x66\x61ultTemplateStatus\x18\x01 \x01(\t\x12\x19\n\x11\x44\x65\x66\x61ultTemplateId\x18\x02 \x01(\t*\xa3\x01\n\x17VodSpaceUploadConfigKey\x12$\n UndefinedVodSpaceUploadConfigKey\x10\x00\x12/\n+CustomUploadFilePathVodSpaceUploadConfigKey\x10\x01\x12\x31\n-AutoPublishAfterUploadVodSpaceUploadConfigKey\x10\x02\x42\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodSpaceP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 _VODSPACEUPLOADCONFIGKEY = DESCRIPTOR.enum_types_by_name['VodSpaceUploadConfigKey']
 VodSpaceUploadConfigKey = enum_type_wrapper.EnumTypeWrapper(_VODSPACEUPLOADCONFIGKEY)
@@ -27,6 +27,9 @@ AutoPublishAfterUploadVodSpaceUploadConfigKey = 2
 _VODSPACEINFO = DESCRIPTOR.message_types_by_name['VodSpaceInfo']
 _VODSTORAGEDATA = DESCRIPTOR.message_types_by_name['VodStorageData']
 _VODDESCRIBEVODSPACESTORAGEDATARESULT = DESCRIPTOR.message_types_by_name['VodDescribeVodSpaceStorageDataResult']
+_VODUPLOADSPACECONFIG = DESCRIPTOR.message_types_by_name['VodUploadSpaceConfig']
+_CUSTOMPOSTERCONFIG = DESCRIPTOR.message_types_by_name['CustomPosterConfig']
+_TRANSCODECONFIG = DESCRIPTOR.message_types_by_name['TranscodeConfig']
 VodSpaceInfo = _reflection.GeneratedProtocolMessageType('VodSpaceInfo', (_message.Message,), {
   'DESCRIPTOR' : _VODSPACEINFO,
   '__module__' : 'volcengine.vod.business.vod_space_pb2'
@@ -48,16 +51,43 @@ VodDescribeVodSpaceStorageDataResult = _reflection.GeneratedProtocolMessageType(
   })
 _sym_db.RegisterMessage(VodDescribeVodSpaceStorageDataResult)
 
+VodUploadSpaceConfig = _reflection.GeneratedProtocolMessageType('VodUploadSpaceConfig', (_message.Message,), {
+  'DESCRIPTOR' : _VODUPLOADSPACECONFIG,
+  '__module__' : 'volcengine.vod.business.vod_space_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.VodUploadSpaceConfig)
+  })
+_sym_db.RegisterMessage(VodUploadSpaceConfig)
+
+CustomPosterConfig = _reflection.GeneratedProtocolMessageType('CustomPosterConfig', (_message.Message,), {
+  'DESCRIPTOR' : _CUSTOMPOSTERCONFIG,
+  '__module__' : 'volcengine.vod.business.vod_space_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.CustomPosterConfig)
+  })
+_sym_db.RegisterMessage(CustomPosterConfig)
+
+TranscodeConfig = _reflection.GeneratedProtocolMessageType('TranscodeConfig', (_message.Message,), {
+  'DESCRIPTOR' : _TRANSCODECONFIG,
+  '__module__' : 'volcengine.vod.business.vod_space_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.TranscodeConfig)
+  })
+_sym_db.RegisterMessage(TranscodeConfig)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n)com.volcengine.service.vod.model.businessB\010VodSpaceP\001ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\240\001\001\330\001\001\302\002\000\312\002 Volc\\Service\\Vod\\Models\\Business\342\002#Volc\\Service\\Vod\\Models\\GPBMetadata'
-  _VODSPACEUPLOADCONFIGKEY._serialized_start=610
-  _VODSPACEUPLOADCONFIGKEY._serialized_end=773
+  _VODSPACEUPLOADCONFIGKEY._serialized_start=1250
+  _VODSPACEUPLOADCONFIGKEY._serialized_end=1413
   _VODSPACEINFO._serialized_start=76
   _VODSPACEINFO._serialized_end=307
   _VODSTORAGEDATA._serialized_start=309
   _VODSTORAGEDATA._serialized_end=356
   _VODDESCRIBEVODSPACESTORAGEDATARESULT._serialized_start=359
   _VODDESCRIBEVODSPACESTORAGEDATARESULT._serialized_end=607
+  _VODUPLOADSPACECONFIG._serialized_start=610
+  _VODUPLOADSPACECONFIG._serialized_end=1096
+  _CUSTOMPOSTERCONFIG._serialized_start=1098
+  _CUSTOMPOSTERCONFIG._serialized_end=1170
+  _TRANSCODECONFIG._serialized_start=1172
+  _TRANSCODECONFIG._serialized_end=1247
 # @@protoc_insertion_point(module_scope)
