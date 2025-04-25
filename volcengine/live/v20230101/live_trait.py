@@ -243,13 +243,6 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def update_snapshot_preset(self, body):
-        res = self.api_post('UpdateSnapshotPreset', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def describe_cdn_snapshot_history(self, body):
         res = self.api_post('DescribeCDNSnapshotHistory', [], json.dumps(body))
         if res == '':
@@ -264,22 +257,8 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def list_vhost_snapshot_preset(self, body):
-        res = self.api_post('ListVhostSnapshotPreset', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
     def create_snapshot_preset_v2(self, body):
         res = self.api_post('CreateSnapshotPresetV2', [], json.dumps(body))
-        if res == '':
-            raise Exception("empty response")
-        res_json = json.loads(res)
-        return res_json
-            
-    def create_snapshot_preset(self, body):
-        res = self.api_post('CreateSnapshotPreset', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -845,6 +824,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_live_edge_stat_data(self, body):
+        res = self.api_post('DescribeLiveEdgeStatData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_live_isp_data(self, body):
         res = self.api_post('DescribeLiveISPData', [], json.dumps(body))
         if res == '':
@@ -1141,6 +1127,97 @@ class LiveTrait(Service):
             
     def create_subtitle_transcode_preset(self, body):
         res = self.api_post('CreateSubtitleTranscodePreset', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def create_live_pad_preset(self, body):
+        res = self.api_post('CreateLivePadPreset', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_live_pad_preset(self, body):
+        res = self.api_post('DeleteLivePadPreset', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def stop_live_pad_stream(self, body):
+        res = self.api_post('StopLivePadStream', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_live_pad_preset(self, body):
+        res = self.api_post('UpdateLivePadPreset', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_pad_stream_list(self, body):
+        res = self.api_post('DescribeLivePadStreamList', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_pad_preset_detail(self, body):
+        res = self.api_post('DescribeLivePadPresetDetail', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def create_carousel_task(self, body):
+        res = self.api_post('CreateCarouselTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_carousel_task(self, body):
+        res = self.api_post('DeleteCarouselTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_carousel_task(self, body):
+        res = self.api_post('UpdateCarouselTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def get_carousel_detail(self, body):
+        res = self.api_post('GetCarouselDetail', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def list_carousel_task(self, body):
+        res = self.api_post('ListCarouselTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def create_high_light_task(self, body):
+        res = self.api_post('CreateHighLightTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_task_by_account_id(self, body):
+        res = self.api_post('DeleteTaskByAccountID', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

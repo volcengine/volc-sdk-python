@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.create_snapshot_preset(body)
+    resp = service.stop_live_pad_stream(body)
     print(resp)

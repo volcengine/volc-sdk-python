@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.update_snapshot_preset(body)
+    resp = service.get_carousel_detail(body)
     print(resp)

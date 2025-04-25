@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.list_vhost_snapshot_preset(body)
+    resp = service.update_live_pad_preset(body)
     print(resp)
