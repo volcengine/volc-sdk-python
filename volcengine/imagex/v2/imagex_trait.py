@@ -198,6 +198,9 @@ class ImagexTrait(Service):
     def describe_imagex_source_request(self, query={}):
         return self.imagex_get('DescribeImageXSourceRequest', query)
             
+    def describe_imagex_storage_usage(self, query={}):
+        return self.imagex_get('DescribeImageXStorageUsage', query)
+            
     def describe_imagex_bucket_retrieval_usage(self, query={}):
         return self.imagex_get('DescribeImageXBucketRetrievalUsage', query)
             
@@ -501,6 +504,9 @@ class ImagexTrait(Service):
     def preview_image_upload_file(self, query={}):
         return self.imagex_get('PreviewImageUploadFile', query)
             
+    def get_image_erase_result(self, body={}):
+        return self.imagex_post('GetImageEraseResult', [], json.dumps(body))
+            
     def get_image_service(self, query={}):
         return self.imagex_get('GetImageService', query)
             
@@ -569,9 +575,6 @@ class ImagexTrait(Service):
             
     def get_image_ps_detection(self, query={}, body={}):
         return self.imagex_post('GetImagePSDetection', query, json.dumps(body))
-            
-    def get_image_erase_result(self, body={}):
-        return self.imagex_post('GetImageEraseResult', [], json.dumps(body))
             
     def get_image_super_resolution_result(self, body={}):
         return self.imagex_post('GetImageSuperResolutionResult', [], json.dumps(body))
