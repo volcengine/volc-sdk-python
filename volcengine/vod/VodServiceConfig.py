@@ -52,6 +52,7 @@ class VodServiceConfig(Service):
             "GetPlayInfo": ApiInfo("GET", "/", {"Action": "GetPlayInfo", "Version": "2020-08-01"}, {}, {}),
             "GetAllPlayInfo": ApiInfo("GET", "/", {"Action": "GetAllPlayInfo", "Version": "2022-01-01"}, {}, {}),
             "GetPrivateDrmPlayAuth": ApiInfo("GET", "/", {"Action": "GetPrivateDrmPlayAuth", "Version": "2020-08-01"}, {}, {}),
+            "CreateHlsDecryptionKey": ApiInfo("GET", "/", {"Action": "CreateHlsDecryptionKey", "Version": "2023-07-01"}, {}, {}),
             "GetHlsDecryptionKey": ApiInfo("GET", "/", {"Action": "GetHlsDecryptionKey", "Version": "2020-08-01"}, {}, {}),
             "DescribeDrmDataKey": ApiInfo("GET", "/", {"Action": "DescribeDrmDataKey", "Version": "2023-07-01"}, {}, {}),
             "GetPlayInfoWithLiveTimeShiftScene": ApiInfo("GET", "/", {"Action": "GetPlayInfoWithLiveTimeShiftScene", "Version": "2021-11-01"}, {}, {}),
