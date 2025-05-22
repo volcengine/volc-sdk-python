@@ -108,11 +108,17 @@ class ImagexTrait(Service):
     def describe_image_volc_cdn_access_log(self, query={}, body={}):
         return self.imagex_post('DescribeImageVolcCdnAccessLog', query, json.dumps(body))
             
+    def verify_domain_owner(self, query={}, body={}):
+        return self.imagex_post('VerifyDomainOwner', query, json.dumps(body))
+            
     def get_response_header_validate_keys(self):
         return self.imagex_get('GetResponseHeaderValidateKeys', {})
             
     def get_domain_config(self, query={}):
         return self.imagex_get('GetDomainConfig', query)
+            
+    def get_domain_owner_verify_content(self, query={}):
+        return self.imagex_get('GetDomainOwnerVerifyContent', query)
             
     def get_service_domains(self, query={}):
         return self.imagex_get('GetServiceDomains', query)
@@ -618,6 +624,9 @@ class ImagexTrait(Service):
     def create_hidden_watermark_image(self, query={}, body={}):
         return self.imagex_post('CreateHiddenWatermarkImage', query, json.dumps(body))
             
+    def create_hm_extract_task(self, query={}, body={}):
+        return self.imagex_post('CreateHmExtractTask', query, json.dumps(body))
+            
     def update_image_exif_data(self, query={}, body={}):
         return self.imagex_post('UpdateImageExifData', query, json.dumps(body))
             
@@ -656,6 +665,9 @@ class ImagexTrait(Service):
             
     def get_dedup_task_status(self, query={}):
         return self.imagex_get('GetDedupTaskStatus', query)
+            
+    def get_image_hm_extract_task_info(self, query={}, body={}):
+        return self.imagex_post('GetImageHmExtractTaskInfo', query, json.dumps(body))
             
     def create_image_service(self, body={}):
         return self.imagex_post('CreateImageService', [], json.dumps(body))
