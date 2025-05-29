@@ -4,7 +4,7 @@ decorator==4.4.2
 idna==2.10
 Naked==0.1.31
 pycryptodome==3.9.9
-pytz==2020.5
+pytz>=2020.5
 PyYAML~=6.0.1
 redo==2.0.4
 requests>=2.25.1

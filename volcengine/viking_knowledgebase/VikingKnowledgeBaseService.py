@@ -182,7 +182,8 @@ class VikingKnowledgeBaseService(Service):
             res = self.json(api, params, body)
         except Exception as e:
             try:
-                res_json = json.loads(e.args[0].decode("utf-8"))
+                err_msg = e.args[0].decode("utf-8") if isinstance(e.args[0], bytes) else str(e.args[0])
+                res_json = json.loads(err_msg)
             except:
                 raise VikingKnowledgeBaseException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
@@ -245,7 +246,8 @@ class VikingKnowledgeBaseService(Service):
             res = await self.async_json(api, params, body)
         except Exception as e:
             try:
-                res_json = json.loads(e.args[0].decode("utf-8"))
+                err_msg = e.args[0].decode("utf-8") if isinstance(e.args[0], bytes) else str(e.args[0])
+                res_json = json.loads(err_msg)
             except:
                 raise VikingKnowledgeBaseException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)

@@ -56,6 +56,7 @@ class Index(object):
         # 获取primary_key
         col = self.viking_db_service.get_exception("GetCollection", {"collection_name": self.collection_name})
         col = json.loads(col)
+        self._is_client = False
         self.primary_key = col["data"]["primary_key"]
 
     def search(self, order=None, filter=None, limit=10, output_fields=None, partition="default", dense_weight=None,
@@ -127,6 +128,8 @@ class Index(object):
             need_search_count = kwargs.get("need_search_count", False)
             if need_search_count:
                 search['need_search_count'] = need_search_count
+            if self._is_client:
+                search['replace_primay'] = True
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             # print(params)
             remaining = self.retry_option.new_remaining(retry)
@@ -167,6 +170,8 @@ class Index(object):
             need_search_count = kwargs.get("need_search_count", False)
             if need_search_count:
                 search['need_search_count'] = need_search_count
+            if self._is_client:
+                search['replace_primay'] = True
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             remaining = self.retry_option.new_remaining(retry)
             res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -223,6 +228,8 @@ class Index(object):
             need_search_count = kwargs.get("need_search_count", False)
             if need_search_count:
                 search['need_search_count'] = need_search_count
+            if self._is_client:
+                search['replace_primay'] = True
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
             res = json.loads(res)
@@ -261,6 +268,8 @@ class Index(object):
             need_search_count = kwargs.get("need_search_count", False)
             if need_search_count:
                 search['need_search_count'] = need_search_count
+            if self._is_client:
+                search['replace_primay'] = True
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
             res = json.loads(res)
@@ -338,6 +347,8 @@ class Index(object):
         need_search_count = kwargs.get("need_search_count", False)
         if need_search_count:
             search['need_search_count'] = need_search_count
+        if self._is_client:
+            search['replace_primay'] = True
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         remaining = self.retry_option.new_remaining(retry)
@@ -389,6 +400,8 @@ class Index(object):
         need_search_count = kwargs.get("need_search_count", False)
         if need_search_count:
             search['need_search_count'] = need_search_count
+        if self._is_client:
+            search['replace_primay'] = True
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
@@ -476,6 +489,8 @@ class Index(object):
         need_search_count = kwargs.get("need_search_count", False)
         if need_search_count:
             search['need_search_count'] = need_search_count
+        if self._is_client:
+            search['replace_primay'] = True
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -524,6 +539,8 @@ class Index(object):
         need_search_count = kwargs.get("need_search_count", False)
         if need_search_count:
             search['need_search_count'] = need_search_count
+        if self._is_client:
+            search['replace_primay'] = True
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -613,6 +630,8 @@ class Index(object):
         need_search_count = kwargs.get("need_search_count", False)
         if need_search_count:
             search['need_search_count'] = need_search_count
+        if self._is_client:
+            search['replace_primay'] = True
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -670,6 +689,8 @@ class Index(object):
         need_search_count = kwargs.get("need_search_count", False)
         if need_search_count:
             search['need_search_count'] = need_search_count
+        if self._is_client:
+            search['replace_primay'] = True
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -755,6 +776,8 @@ class Index(object):
         need_search_count = kwargs.get("need_search_count", False)
         if need_search_count:
             search['need_search_count'] = need_search_count
+        if self._is_client:
+            search['replace_primay'] = True
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -805,6 +828,8 @@ class Index(object):
         need_search_count = kwargs.get("need_search_count", False)
         if need_search_count:
             search['need_search_count'] = need_search_count
+        if self._is_client:
+            search['replace_primay'] = True
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -932,6 +957,8 @@ class Index(object):
                 params["output_fields"] = output_fields
             if partition != "":
                 params["partition"] = partition
+            if self._is_client:
+                params['replace_primay'] = True
             remaining = self.retry_option.new_remaining(retry)
             res = self.viking_db_service._retry_request("FetchIndexData", {}, json.dumps(params), remaining, self.retry_option)
             res = json.loads(res)
@@ -972,6 +999,8 @@ class Index(object):
                 params["output_fields"] = output_fields
             if partition != "":
                 params["partition"] = partition
+            if self._is_client:
+                params['replace_primay'] = True
             res = await self.viking_db_service.async_get_body_exception("FetchIndexData", {}, json.dumps(params))
             res = json.loads(res)
             # print(res)

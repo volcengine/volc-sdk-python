@@ -39,6 +39,7 @@ class Collection(object):
             self.update_time = update_time
         if update_person is not None:
             self.update_person = update_person
+        self._is_client = False
         self.retry_option = retry_option if retry_option else RetryOption()
 
     def upsert_data(self, data: Union[Data, List[Data]], async_upsert=False, retry=True):
@@ -200,6 +201,8 @@ class Collection(object):
             return data
         elif isinstance(id, List):
             params = {"collection_name": self.collection_name, "primary_keys": id}
+            if self._is_client:
+                params['replace_primay'] = True
             res = self.viking_db_service._retry_request("FetchData", {}, json.dumps(params), remaining, self.retry_option)
             res = json.loads(res)
             datas = []
@@ -221,6 +224,8 @@ class Collection(object):
             return data
         elif isinstance(id, List):
             params = {"collection_name": self.collection_name, "primary_keys": id}
+            if self._is_client:
+                params['replace_primay'] = True
             res = await self.viking_db_service.async_get_body_exception("FetchData", {}, json.dumps(params))
             res = json.loads(res)
             # print(res["data"],self.primary_key)
