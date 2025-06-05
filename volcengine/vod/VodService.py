@@ -3584,34 +3584,20 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodGetContentBlockTasksResponse(), True)
 
-
-    #
-    # CreateDomain.
-    #
-    # @param request VodCreateDomainV2Request
-    # @return VodCreateDomainV2Response
-    # @raise Exception
+        #
+        # CreateDomain.
+        #
+        # @param request VodCreateDomainV2Request
+        # @return VodCreateDomainV2Response
+        # @raise Exception
     def create_domain(self, request):
         try:
-            if sys.version_info[0] == 3:
-                jsonData = MessageToJson(request, False, True)
-                params = json.loads(jsonData)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            else:
-                params = MessageToDict(request, False, True)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str, unicode)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            res = self.get("CreateDomain", params)
+            jsonData = MessageToJson(request, False, True)
+            res = self.json("CreateDomain", {}, jsonData)
         except Exception as Argument:
             try:
-                resp = Parse(Argument.__str__(), VodCreateDomainV2Response(), True)
+                ArgumentStr = Argument.args[0].decode("utf-8")
+                resp = Parse(ArgumentStr, VodCreateDomainV2Response(), True)
             except Exception:
                 raise Argument
             else:
@@ -3832,25 +3818,12 @@ class VodService(VodServiceConfig):
     # @raise Exception
     def update_domain_config(self, request):
         try:
-            if sys.version_info[0] == 3:
-                jsonData = MessageToJson(request, False, True)
-                params = json.loads(jsonData)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            else:
-                params = MessageToDict(request, False, True)
-                for k, v in params.items():
-                    if isinstance(v, (int, float, bool, str, unicode)) is True:
-                        continue
-                    else:
-                        params[k] = json.dumps(v)
-            res = self.get("UpdateDomainConfig", params)
+            jsonData = MessageToJson(request, False, True)
+            res = self.json("UpdateDomainConfig",{},jsonData)
         except Exception as Argument:
             try:
-                resp = Parse(Argument.__str__(), VodUpdateDomainConfigResponse(), True)
+                ArgumentStr = Argument.args[0].decode("utf-8")
+                resp = Parse(ArgumentStr, VodUpdateDomainConfigResponse(), True)
             except Exception:
                 raise Argument
             else:
