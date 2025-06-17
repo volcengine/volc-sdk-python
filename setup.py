@@ -7,7 +7,7 @@ from volcengine import VERSION
 install_requires = [
     "requests>=2.25.1",
     "retry==0.9.2",
-    "pytz==2020.5",
+    "pytz>=2020.5",
     "pycryptodome==3.9.9",
     "protobuf>=3.18.3",
     "google>=3.0.0",
