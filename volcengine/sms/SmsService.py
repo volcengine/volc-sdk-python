@@ -41,7 +41,8 @@ class SmsService(Service):
             "SendBatchSms": ApiInfo("POST", "/", {"Action": "SendBatchSms", "Version": "2021-01-01"}, {}, {}),
             "Conversion": ApiInfo("POST", "/", {"Action": "Conversion", "Version": "2020-01-01"}, {}, {}),
             "GetSmsTemplateAndOrderList": ApiInfo("GET", "/",
-                                                  {"Action": "GetSmsTemplateAndOrderList", "Version": "2021-01-11"}, {},
+                                                  {"Action": "GetSmsTemplateAndOrderList",
+                                                      "Version": "2021-01-11"}, {},
                                                   {}),
             "ApplySmsTemplate": ApiInfo("POST", "/", {"Action": "ApplySmsTemplate", "Version": "2021-01-11"}, {}, {}),
             "DeleteSmsTemplate": ApiInfo("POST", "/", {"Action": "DeleteSmsTemplate", "Version": "2021-01-11"}, {}, {}),
@@ -49,7 +50,8 @@ class SmsService(Service):
             "GetSubAccountDetail": ApiInfo("GET", "/", {"Action": "GetSubAccountDetail", "Version": "2021-01-11"}, {},
                                            {}),
             "GetSignatureAndOrderList": ApiInfo("GET", "/",
-                                                {"Action": "GetSignatureAndOrderList", "Version": "2021-01-11"}, {},
+                                                {"Action": "GetSignatureAndOrderList",
+                                                    "Version": "2021-01-11"}, {},
                                                 {}),
             "ApplySmsSignature": ApiInfo("POST", "/", {"Action": "ApplySmsSignature", "Version": "2021-01-11"}, {}, {}),
             "DeleteSignature": ApiInfo("POST", "/", {"Action": "DeleteSignature", "Version": "2021-01-11"}, {},
@@ -62,10 +64,12 @@ class SmsService(Service):
             "InsertSubAccount": ApiInfo("POST", "/", {"Action": "InsertSubAccount", "Version": "2021-01-11"},
                                         {},
                                         {}),
-            "GetSmsSendDetails": ApiInfo("POST","/", {"Action": "GetSmsSendDetails", "Version": "2021-01-11"}, {}, {}),
-            "ApplySignatureIdent": ApiInfo("POST","/", {"Action": "ApplySignatureIdent", "Version": "2021-01-11"}, {}, {}),
-            "GetSignatureIdentList": ApiInfo("POST","/", {"Action": "GetSignatureIdentList", "Version": "2021-01-11"}, {}, {}),
-            "BatchBindSignatureIdent": ApiInfo("POST","/", {"Action": "BatchBindSignatureIdent", "Version": "2021-01-11"}, {}, {})
+            "GetSmsSendDetails": ApiInfo("POST", "/", {"Action": "GetSmsSendDetails", "Version": "2021-01-11"}, {}, {}),
+            "ApplySignatureIdent": ApiInfo("POST", "/", {"Action": "ApplySignatureIdent", "Version": "2021-01-11"}, {}, {}),
+            "GetSignatureIdentList": ApiInfo("POST", "/", {"Action": "GetSignatureIdentList", "Version": "2021-01-11"}, {}, {}),
+            "BatchBindSignatureIdent": ApiInfo("POST", "/", {"Action": "BatchBindSignatureIdent", "Version": "2021-01-11"}, {}, {}),
+            "ApplySmsSignatureV2": ApiInfo("POST", "/", {"Action": "ApplySmsSignatureV2", "Version": "2021-01-11"}, {}, {}),
+            "UpdateSmsSignature": ApiInfo("POST", "/", {"Action": "UpdateSmsSignature", "Version": "2021-01-11"}, {}, {})
         }
         return api_info
 
@@ -233,24 +237,38 @@ class SmsService(Service):
         if res == '':
             raise Exception("empty response")
         return json.loads(res)
-    
+
     @retry(tries=2, delay=0)
     def apply_signature_ident(self, body):
         res = self.json('ApplySignatureIdent', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)
-    
+
     @retry(tries=2, delay=0)
     def get_signature_ident_list(self, body):
         res = self.json('GetSignatureIdentList', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)
-    
+
     @retry(tries=2, delay=0)
     def batch_bind_signature_ident(self, body):
         res = self.json('BatchBindSignatureIdent', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        return json.loads(res)
+
+    @retry(tries=2, delay=0)
+    def apply_sms_signature_v2(self, body):
+        res = self.json('ApplySmsSignatureV2', {}, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        return json.loads(res)
+
+    @retry(tries=2, delay=0)
+    def update_sms_signature(self, body):
+        res = self.json('UpdateSmsSignature', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)

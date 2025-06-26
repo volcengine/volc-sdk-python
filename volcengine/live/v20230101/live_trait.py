@@ -474,8 +474,8 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
-    def restart_pull_to_push_task(self, body):
-        res = self.api_post('RestartPullToPushTask', [], json.dumps(body))
+    def continue_pull_to_push_task(self, body):
+        res = self.api_post('ContinuePullToPushTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -511,6 +511,13 @@ class LiveTrait(Service):
             
     def list_pull_to_push_task_v2(self, body):
         res = self.api_post('ListPullToPushTaskV2', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def relaunch_pull_to_push_task(self, body):
+        res = self.api_post('RelaunchPullToPushTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -712,6 +719,13 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_live_callback_data(self, body):
+        res = self.api_post('DescribeLiveCallbackData', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def describe_live_batch_stream_session_data(self, body):
         res = self.api_post('DescribeLiveBatchStreamSessionData', [], json.dumps(body))
         if res == '':
@@ -756,6 +770,13 @@ class LiveTrait(Service):
             
     def describe_live_batch_push_stream_avg_metrics(self, body):
         res = self.api_post('DescribeLiveBatchPushStreamAvgMetrics', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_live_batch_stream_transcode_data(self, body):
+        res = self.api_post('DescribeLiveBatchStreamTranscodeData', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
@@ -1218,6 +1239,20 @@ class LiveTrait(Service):
             
     def delete_task_by_account_id(self, body):
         res = self.api_post('DeleteTaskByAccountID', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_high_light_task_by_account_id(self, body):
+        res = self.api_post('DescribeHighLightTaskByAccountID', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def list_high_light_task(self, body):
+        res = self.api_post('ListHighLightTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

@@ -10,5 +10,5 @@ if __name__ == '__main__':
 
     body = {}
 
-    resp = service.restart_pull_to_push_task(body)
+    resp = service.relaunch_pull_to_push_task(body)
     print(resp)
