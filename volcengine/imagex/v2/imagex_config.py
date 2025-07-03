@@ -274,7 +274,7 @@ api_info = {
     "GetAllImageTemplates": ApiInfo("GET", "/", {"Action": "GetAllImageTemplates", "Version": "2018-08-01"}, {}, {}),
     "CreateImageAuditTask": ApiInfo("POST", "/", {"Action": "CreateImageAuditTask", "Version": "2023-05-01"}, {}, {}),
     "DeleteImageAuditResult": ApiInfo("POST", "/", {"Action": "DeleteImageAuditResult", "Version": "2023-05-01"}, {}, {}),
-    "GetSyncAuditResult": ApiInfo("POST", "/", {"Action": "GetSyncAuditResult", "Version": "2018-08-01"}, {}, {}),
+    "GetSyncAuditResult": ApiInfo("POST", "/", {"Action": "GetSyncAuditResult", "Version": "2023-05-01"}, {}, {}),
     "UpdateImageAuditTaskStatus": ApiInfo("POST", "/", {"Action": "UpdateImageAuditTaskStatus", "Version": "2023-05-01"}, {}, {}),
     "UpdateImageAuditTask": ApiInfo("POST", "/", {"Action": "UpdateImageAuditTask", "Version": "2023-05-01"}, {}, {}),
     "UpdateAuditImageStatus": ApiInfo("POST", "/", {"Action": "UpdateAuditImageStatus", "Version": "2023-05-01"}, {}, {}),
