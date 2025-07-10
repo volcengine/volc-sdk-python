@@ -1,3 +1,4 @@
+# coding:utf-8
 from volcengine.viking_db import Collection, VikingDBService
 from volcengine.viking_db.common import RetryOption
 

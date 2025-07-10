@@ -30,7 +30,7 @@ class VikingDBService(VikingDBServiceBase):
         super(VikingDBService, self).__init__(
             host, region, ak, sk, scheme, connection_timeout, socket_timeout, proxy, retry_option)
 
-    def create_collection(self, collection_name, fields, description="", vectorize=None):
+    def create_collection(self, collection_name, fields, description="", vectorize=None, project="default"):
         """
         create a collection.
 
@@ -42,9 +42,11 @@ class VikingDBService(VikingDBServiceBase):
         :type description: str
         :param vectorize: vectorize for multi-modal data.
         :type vectorize: list[VectorizeTuple]
+        :param project: The name of the project.
+        :type project: str
         :rtype: Collection
         """
-        params = {"collection_name": collection_name, "description": description}
+        params = {"collection_name": collection_name, "description": description, "project": project}
         assert isinstance(fields, list)
         primary_key = None
         _fields = []
@@ -265,13 +267,18 @@ class VikingDBService(VikingDBServiceBase):
         params = {"collection_name": collection_name}
         await self.async_json_exception("DropCollection", {}, json.dumps(params))
 
-    def list_collections(self):
+    def list_collections(self, project=""):
         """
         list collections
 
+        :param project: The name of the project.
+        :type project: str
         :rtype: list[Collection]
         """
-        res = self.get_exception("ListCollections", {})
+        params = {
+            "project": project
+        }
+        res = self.get_body_exception("ListCollections", {}, json.dumps(params))
         res = json.loads(res)
         collections = []
         for indexItem in res["data"]:

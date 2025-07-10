@@ -130,6 +130,8 @@ class Index(object):
                 search['need_search_count'] = need_search_count
             if self._is_client:
                 search['replace_primay'] = True
+            if kwargs.get("need_return_vector", False):
+                search['need_return_vector'] = kwargs['need_return_vector']
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             # print(params)
             remaining = self.retry_option.new_remaining(retry)
@@ -142,7 +144,7 @@ class Index(object):
                 for item in items:
                     id = item[self.primary_key]
                     fields = {}
-                    if output_fields != [] or output_fields is None:
+                    if output_fields != [] or output_fields is None or item.get('fields', None):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
@@ -172,6 +174,8 @@ class Index(object):
                 search['need_search_count'] = need_search_count
             if self._is_client:
                 search['replace_primay'] = True
+            if kwargs.get("need_return_vector", False):
+                search['need_return_vector'] = kwargs['need_return_vector']
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             remaining = self.retry_option.new_remaining(retry)
             res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -182,7 +186,7 @@ class Index(object):
                 for item in items:
                     id = item[self.primary_key]
                     fields = {}
-                    if output_fields != [] or output_fields is None:
+                    if output_fields != [] or output_fields is None or item.get('fields', None):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
@@ -230,6 +234,8 @@ class Index(object):
                 search['need_search_count'] = need_search_count
             if self._is_client:
                 search['replace_primay'] = True
+            if kwargs.get("need_return_vector", False):
+                search['need_return_vector'] = kwargs['need_return_vector'] 
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
             res = json.loads(res)
@@ -240,7 +246,7 @@ class Index(object):
                 for item in items:
                     id = item[self.primary_key]
                     fields = {}
-                    if output_fields != [] or output_fields is None:
+                    if output_fields != [] or output_fields is None or item.get('fields', None):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
@@ -270,6 +276,8 @@ class Index(object):
                 search['need_search_count'] = need_search_count
             if self._is_client:
                 search['replace_primay'] = True
+            if kwargs.get("need_return_vector", False):
+                search['need_return_vector'] = kwargs['need_return_vector']
             params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
             res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
             res = json.loads(res)
@@ -279,7 +287,7 @@ class Index(object):
                 for item in items:
                     id = item[self.primary_key]
                     fields = {}
-                    if output_fields != [] or output_fields is None:
+                    if output_fields != [] or output_fields is None or item.get('fields', None):
                         fields = item["fields"]
                     data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                     datas.append(data)
@@ -349,6 +357,8 @@ class Index(object):
             search['need_search_count'] = need_search_count
         if self._is_client:
             search['replace_primay'] = True
+        if kwargs.get("need_return_vector", False):
+            search['need_return_vector'] = kwargs['need_return_vector']
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         remaining = self.retry_option.new_remaining(retry)
@@ -364,7 +374,7 @@ class Index(object):
                 id = item[self.primary_key]
                 # print(id)
                 fields = {}
-                if output_fields != [] or output_fields is None:
+                if output_fields != [] or output_fields is None or item.get('fields', None):
                     fields = item["fields"]
                 # print(id, fields)
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
@@ -402,6 +412,8 @@ class Index(object):
             search['need_search_count'] = need_search_count
         if self._is_client:
             search['replace_primay'] = True
+        if kwargs.get("need_return_vector", False):
+            search['need_return_vector'] = kwargs['need_return_vector']
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         # print(params)
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
@@ -416,7 +428,7 @@ class Index(object):
                 id = item[self.primary_key]
                 # print(id)
                 fields = {}
-                if output_fields != [] or output_fields is None:
+                if output_fields != [] or output_fields is None or item.get('fields', None):
                     fields = item["fields"]
                 # print(id, fields)
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
@@ -491,6 +503,8 @@ class Index(object):
             search['need_search_count'] = need_search_count
         if self._is_client:
             search['replace_primay'] = True
+        if kwargs.get("need_return_vector", False):
+            search['need_return_vector'] = kwargs['need_return_vector']
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -502,7 +516,7 @@ class Index(object):
             for item in items:
                 id = item[self.primary_key]
                 fields = {}
-                if output_fields != [] or output_fields is None:
+                if output_fields != [] or output_fields is None or item.get('fields', None):
                     fields = item["fields"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
@@ -541,6 +555,8 @@ class Index(object):
             search['need_search_count'] = need_search_count
         if self._is_client:
             search['replace_primay'] = True
+        if kwargs.get("need_return_vector", False):
+            search['need_return_vector'] = kwargs['need_return_vector']
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -551,7 +567,7 @@ class Index(object):
             for item in items:
                 id = item[self.primary_key]
                 fields = {}
-                if output_fields != [] or output_fields is None:
+                if output_fields != [] or output_fields is None or item.get('fields', None):
                     fields = item["fields"]
                 data = Data(fields, id=id, timestamp=None, score=item["score"], dist=item.get('dist', None))
                 datas.append(data)
@@ -632,6 +648,8 @@ class Index(object):
             search['need_search_count'] = need_search_count
         if self._is_client:
             search['replace_primay'] = True
+        if kwargs.get("need_return_vector", False):
+            search['need_return_vector'] = kwargs['need_return_vector']
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -643,7 +661,7 @@ class Index(object):
             for item in items:
                 id = item[self.primary_key]
                 fields = {}
-                if output_fields != [] or output_fields is None:
+                if output_fields != [] or output_fields is None or item.get('fields', None):
                     fields = item["fields"]
                 text = None
                 if "text" in item:
@@ -691,6 +709,8 @@ class Index(object):
             search['need_search_count'] = need_search_count
         if self._is_client:
             search['replace_primay'] = True
+        if kwargs.get("need_return_vector", False):
+            search['need_return_vector'] = kwargs['need_return_vector']
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -701,7 +721,7 @@ class Index(object):
             for item in items:
                 id = item[self.primary_key]
                 fields = {}
-                if output_fields != [] or output_fields is None:
+                if output_fields != [] or output_fields is None or item.get('fields', None):
                     fields = item["fields"]
                 text = None
                 if "text" in item:
@@ -778,6 +798,8 @@ class Index(object):
             search['need_search_count'] = need_search_count
         if self._is_client:
             search['replace_primay'] = True
+        if kwargs.get("need_return_vector", False):
+            search['need_return_vector'] = kwargs['need_return_vector']
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         remaining = self.retry_option.new_remaining(retry)
         res = self.viking_db_service._retry_request("SearchIndex", {}, json.dumps(params), remaining, self.retry_option)
@@ -789,7 +811,7 @@ class Index(object):
             for item in items:
                 id = item[self.primary_key]
                 fields = {}
-                if output_fields != [] or output_fields is None:
+                if output_fields != [] or output_fields is None or item.get('fields', None):
                     fields = item["fields"]
                 text = None
                 if "text" in item:
@@ -830,6 +852,8 @@ class Index(object):
             search['need_search_count'] = need_search_count
         if self._is_client:
             search['replace_primay'] = True
+        if kwargs.get("need_return_vector", False):
+            search['need_return_vector'] = kwargs['need_return_vector']
         params = {"collection_name": self.collection_name, "index_name": self.index_name, "search": search}
         res = await self.viking_db_service.async_json_exception("SearchIndex", {}, json.dumps(params))
         res = json.loads(res)
@@ -840,7 +864,7 @@ class Index(object):
             for item in items:
                 id = item[self.primary_key]
                 fields = {}
-                if output_fields != [] or output_fields is None:
+                if output_fields != [] or output_fields is None or item.get('fields', None):
                     fields = item["fields"]
                 text = None
                 if "text" in item:
