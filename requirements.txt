@@ -3,12 +3,12 @@ chardet>=4.0.0
 decorator==4.4.2
 idna==2.10
 Naked==0.1.31
-pycryptodome==3.9.9
+pycryptodome>=3.9.9,<4.0.0
 pytz>=2020.5
 PyYAML~=6.0.1
 redo==2.0.4
 requests>=2.25.1
-retry==0.9.2
+retry>=0.9.2,<1.0.0
 shellescape==3.8.1
 urllib3~=1.26.16
 setuptools>=44.1.1

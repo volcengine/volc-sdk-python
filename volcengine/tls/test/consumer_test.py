@@ -4,8 +4,6 @@ import time
 import unittest
 import uuid
 
-from google.protobuf.internal.testing_refleaks import TestCase
-
 from volcengine.tls import tls_requests
 from volcengine.tls.consumer.consumer import LogProcessor, TLSConsumer
 from volcengine.tls.consumer.consumer_model import ConsumerConfig
@@ -92,8 +90,7 @@ class TestTLSService(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @TestCase
-    def testConsumer(self):
+    def test_consumer(self):
         # 配置消费组的必填参数，ConsumerConfig构造函数设定了一些默认参数，您也可根据需要自定义配置
         consumer_config = ConsumerConfig(
             project_id=self.project_id,

@@ -18,4 +18,4 @@ if __name__ == '__main__':
     req = dict()
 
     resp = gameProtector.risk_result(params, req)
-    print resp
+    print(resp)

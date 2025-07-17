@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+import math
 
 try:
     import lz4.block as lz4
@@ -564,14 +565,63 @@ class PutLogsRequest(TLSRequest):
         """
         if self.topic_id is None or self.log_group_list is None:
             return False
+
+        if not self.log_group_list.log_groups:
+            return False
+
+        if not any(log_group.logs for log_group in self.log_group_list.log_groups):
+            return False
+
         return True
 
     def get_api_input(self):
+
+        log_cnt = 0
+        max_log_time = -math.inf
+        min_log_time = math.inf
+
+        for log_group in self.log_group_list.log_groups:
+            log_group_count = len(log_group.logs)
+            if log_group_count == 0:
+                continue
+
+            log_cnt += log_group_count
+
+            normalized_time = 0
+
+            for log in log_group.logs:
+                if log.time <= 0:
+                    log.time = int(time.time() * 1000)
+                    normalized_time = log.time
+                # s
+                elif log.time < 1e10:
+                    normalized_time = log.time * 1000
+                # ms
+                elif log.time < 1e15:
+                    normalized_time = log.time
+                # ns
+                else:
+                    normalized_time = log.time // int(1e6)
+
+                if normalized_time >= max_log_time:
+                    max_log_time = normalized_time
+
+                if normalized_time <= min_log_time:
+                    min_log_time = normalized_time
+
         pb_log_group_list = self.log_group_list.SerializeToString()
 
-        params = {TOPIC_ID: self.topic_id}
+        params = {
+            TOPIC_ID: self.topic_id,
+        }
         body = {DATA: pb_log_group_list}
-        request_headers = {CONTENT_TYPE: APPLICATION_X_PROTOBUF, X_TLS_BODYRAWSIZE: str(len(pb_log_group_list))}
+        request_headers = {
+            CONTENT_TYPE: APPLICATION_X_PROTOBUF,
+            X_TLS_BODYRAWSIZE: str(len(pb_log_group_list)),
+            LOG_COUNT: str(log_cnt),
+            EARLIEST_LOG_TIME: str(min_log_time),
+            LATEST_LOG_TIME: str(max_log_time),
+        }
 
         if self.hash_key is not None:
             request_headers[X_TLS_HASHKEY] = self.hash_key

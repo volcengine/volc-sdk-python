@@ -378,10 +378,7 @@ class TLSService(Service):
             log_group.filename = request.logs.filename
         for v in request.logs.logs:
             new_log = log_group.logs.add()
-            if v.time <= 0:
-                new_log.time = int(time.time() * 1000)
-            else:
-                new_log.time = v.time
+            new_log.time = v.time
             for key in v.log_dict.keys():
                 log_content = new_log.contents.add()
                 log_content.key = str(key)
