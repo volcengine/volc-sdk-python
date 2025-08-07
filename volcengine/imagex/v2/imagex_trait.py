@@ -210,6 +210,9 @@ class ImagexTrait(Service):
     def describe_imagex_bucket_retrieval_usage(self, query={}):
         return self.imagex_get('DescribeImageXBucketRetrievalUsage', query)
             
+    def describe_imagex_add_on_qps_usage(self, query={}):
+        return self.imagex_get('DescribeImageXAddOnQPSUsage', query)
+            
     def describe_imagexai_request_cnt_usage(self, query={}):
         return self.imagex_get('DescribeImageXAIRequestCntUsage', query)
             
@@ -461,6 +464,27 @@ class ImagexTrait(Service):
             
     def create_image_ai_task(self, query={}, body={}):
         return self.imagex_post('CreateImageAITask', query, json.dumps(body))
+            
+    def create_image_ai_process_queue(self, query={}, body={}):
+        return self.imagex_post('CreateImageAIProcessQueue', query, json.dumps(body))
+            
+    def delete_image_ai_process_queue(self, query={}, body={}):
+        return self.imagex_post('DeleteImageAIProcessQueue', query, json.dumps(body))
+            
+    def create_image_ai_process_callback(self, query={}, body={}):
+        return self.imagex_post('CreateImageAIProcessCallback', query, json.dumps(body))
+            
+    def update_image_ai_process_queue(self, query={}, body={}):
+        return self.imagex_post('UpdateImageAIProcessQueue', query, json.dumps(body))
+            
+    def update_image_ai_process_queue_status(self, query={}, body={}):
+        return self.imagex_post('UpdateImageAIProcessQueueStatus', query, json.dumps(body))
+            
+    def delete_image_ai_process_detail(self, query={}, body={}):
+        return self.imagex_post('DeleteImageAIProcessDetail', query, json.dumps(body))
+            
+    def get_image_ai_process_queues(self, query={}):
+        return self.imagex_get('GetImageAIProcessQueues', query)
             
     def get_image_ai_tasks(self, query={}):
         return self.imagex_get('GetImageAITasks', query)
