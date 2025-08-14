@@ -62,6 +62,17 @@ class ContentSecurityService(Service):
                     "ImageResultV2": ApiInfo("GET", "/", {"Action": "ImageResult", "Version": "2022-08-26"}, {}, {}),
                     "CloseAudioLiveRisk": ApiInfo("POST", "/", {"Action": "CloseAudioLive", "Version": "2022-04-25"}, {}, {}),
                     "CloseVideoLiveRisk": ApiInfo("POST", "/", {"Action": "CloseVideoLive", "Version": "2022-04-25"}, {}, {}),
+                    "CreateCustomLib": ApiInfo("POST", "/", {"Action": "CreateCustomLib", "Version": "2023-10-01"}, {}, {}),
+                    "UpdateCustomLib": ApiInfo("POST", "/", {"Action": "UpdateCustomLib", "Version": "2023-10-01"}, {}, {}),
+                    "ChangeCustomContentsStatus": ApiInfo("POST", "/", {"Action": "ChangeCustomContentsStatus", "Version": "2023-10-01"}, {}, {}),
+                    "DeleteCustomLib": ApiInfo("POST", "/", {"Action": "DeleteCustomLib", "Version": "2023-10-01"}, {}, {}),
+                    "GetCustomLib": ApiInfo("GET", "/", {"Action": "GetCustomLib", "Version": "2023-10-01"}, {}, {}),
+                    "GetTextLibContent": ApiInfo("GET", "/", {"Action": "GetTextLibContent", "Version": "2023-10-01"}, {}, {}),
+                    "UploadTextLibContent": ApiInfo("POST", "/", {"Action": "UploadTextLibContent", "Version": "2023-10-01"}, {}, {}),
+                    "DeleteTextLibContent": ApiInfo("POST", "/", {"Action": "DeleteTextLibContent", "Version": "2023-10-01"}, {}, {}),
+                    "GetImageLibContent": ApiInfo("GET", "/", {"Action": "GetImageLibContent", "Version": "2023-10-01"}, {}, {}),
+                    "DeleteImageLibContent": ApiInfo("POST", "/", {"Action": "DeleteImageLibContent", "Version": "2023-10-01"}, {}, {}),
+                    "UploadImageLibContent": ApiInfo("POST", "/", {"Action": "UploadImageLibContent", "Version": "2023-10-01"}, {}, {}),
                     }
 
         return api_info
@@ -246,6 +257,83 @@ class ContentSecurityService(Service):
 
     def close_audio_live_risk(self, params, body):
         res = self.json("CloseAudioLiveRisk", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def create_custom_lib(self, params, body):
+        res = self.json("CreateCustomLib", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+        
+    def update_custom_lib(self, params, body):
+        res = self.json("UpdateCustomLib", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def change_custom_contents_status(self, params, body):
+        res = self.json("ChangeCustomContentsStatus", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+    
+    def delete_custom_lib(self, params, body):
+        res = self.json("DeleteCustomLib", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+    
+    def get_custom_lib(self, params, body):
+        res = self.get("GetCustomLib", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+    
+    def get_text_lib_content(self, params, body):
+        res = self.get("GetTextLibContent", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json  
+
+    def upload_text_lib_content(self, params, body):
+        res = self.json("UploadTextLibContent", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json 
+
+    def delete_text_lib_content(self, params, body):
+        res = self.json("DeleteTextLibContent", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def get_image_lib_content(self, params, body):
+        res = self.get("GetImageLibContent", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json  
+    
+    def delete_image_lib_content(self, params, body):
+        res = self.json("DeleteImageLibContent", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def upload_image_lib_content(self, params, body):
+        res = self.json("UploadImageLibContent", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

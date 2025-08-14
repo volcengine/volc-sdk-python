@@ -141,6 +141,28 @@ api_info = {
     # 获取边缘层节点的所有 IP:
     "DescribeDcdnEdgeIp": ApiInfo("POST", "/", {
         "Action": "DescribeDcdnEdgeIp", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 查询封禁IP
+    "DescribeBlockIP": ApiInfo("POST", "/", {
+        "Action": "DescribeBlockIP", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 海量IP封禁
+    "BatchBlockIP":  ApiInfo("POST", "/", {
+        "Action": "BatchBlockIP", "Version": SERVICE_VERSION}, {}, {}),
+
+    "DescribeDcdnOriginIp": ApiInfo("POST", "/", {
+        "Action": "DescribeDcdnOriginIp", "Version": SERVICE_VERSION}, {}, {}),
+
+    "DescribeL2IPs": ApiInfo("POST", "/", {
+        "Action": "DescribeL2IPs", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 查询域名归属验证信息: https://www.volcengine.com/docs/6559/1339302
+    "DescribeVerifyContent": ApiInfo("GET", "/", {
+        "Action": "DescribeVerifyContent", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 验证域名归属关系: https://www.volcengine.com/docs/6559/1339303
+    "VerifyDomainOwnership": ApiInfo("POST", "/", {
+        "Action": "VerifyDomainOwnership", "Version": SERVICE_VERSION}, {}, {}),
     
     # 更新GA源站的回源策略:
     "UpdateGAOriginPolicy": ApiInfo("POST", "/", {
@@ -509,10 +531,40 @@ class DCDNService(Service):
         res_json = json.loads(res)
         return res_json
 
+    def describe_block_ip(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeBlockIP"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def batch_block_ip(self, params=None):
+        if params is None:
+            params = {}
+        action = "BatchBlockIP"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
     def update_ga_origin_policy(self, params=None):
         if params is None:
             params = {}
         action = "UpdateGAOriginPolicy"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_dcdn_origin_ip(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDcdnOriginIp"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)
@@ -523,6 +575,36 @@ class DCDNService(Service):
         if params is None:
             params = {}
         action = "DescribeGAOriginPolicy"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_l2_ips(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeL2IPs"
+        res = self.json(action, [], json.dumps(params))
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_verify_content(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeVerifyContent"
+        res = self.get(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def verify_domain_ownership(self, params=None):
+        if params is None:
+            params = {}
+        action = "VerifyDomainOwnership"
         res = self.json(action, [], json.dumps(params))
         if res == '':
             raise Exception("%s: empty response" % action)

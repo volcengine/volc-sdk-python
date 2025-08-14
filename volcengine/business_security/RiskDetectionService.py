@@ -41,7 +41,7 @@ class RiskDetectService(Service):
                     "MobileStatusV2": ApiInfo("POST", "/", {"Action": "MobileStatus", "Version": "2022-04-13"}, {}, {}),
                     "ElementVerifyV2": ApiInfo("POST", "/", {"Action": "ElementVerify", "Version": "2022-04-13"}, {}, {}),
                     "SimpleRiskStat": ApiInfo("GET", "/", {"Action": "SimpleRiskStat", "Version": "2022-12-23"}, {}, {}),
-                    "ContentRiskStat": ApiInfo("GET", "/", {"Action": "ContentRiskStat", "Version": "2022-12-23"}, {}, {})
+                    "ContentRiskStat": ApiInfo("GET", "/", {"Action": "ContentRiskStat", "Version": "2022-12-23"}, {}, {}),
                 }
 
         return api_info
