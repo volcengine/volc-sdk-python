@@ -831,11 +831,23 @@ class ImagexTrait(Service):
     def create_image_audit_task(self, body={}):
         return self.imagex_post('CreateImageAuditTask', [], json.dumps(body))
             
+    def create_video_audit_task(self, query={}, body={}):
+        return self.imagex_post('CreateVideoAuditTask', query, json.dumps(body))
+            
+    def create_audio_audit_task(self, query={}, body={}):
+        return self.imagex_post('CreateAudioAuditTask', query, json.dumps(body))
+            
     def delete_image_audit_result(self, body={}):
         return self.imagex_post('DeleteImageAuditResult', [], json.dumps(body))
             
     def get_sync_audit_result(self, query={}, body={}):
         return self.imagex_post('GetSyncAuditResult', query, json.dumps(body))
+            
+    def single_image_audit(self, query={}, body={}):
+        return self.imagex_post('SingleImageAudit', query, json.dumps(body))
+            
+    def batch_image_audit(self, query={}, body={}):
+        return self.imagex_post('BatchImageAudit', query, json.dumps(body))
             
     def update_image_audit_task_status(self, body={}):
         return self.imagex_post('UpdateImageAuditTaskStatus', [], json.dumps(body))
@@ -846,14 +858,29 @@ class ImagexTrait(Service):
     def update_audit_image_status(self, body={}):
         return self.imagex_post('UpdateAuditImageStatus', [], json.dumps(body))
             
+    def update_video_audit_task(self, query={}, body={}):
+        return self.imagex_post('UpdateVideoAuditTask', query, json.dumps(body))
+            
+    def update_audio_audit_task(self, query={}, body={}):
+        return self.imagex_post('UpdateAudioAuditTask', query, json.dumps(body))
+            
     def get_image_audit_tasks(self, query={}):
         return self.imagex_get('GetImageAuditTasks', query)
+            
+    def get_image_audit_task_result(self, query={}):
+        return self.imagex_get('GetImageAuditTaskResult', query)
             
     def get_image_audit_result(self, query={}):
         return self.imagex_get('GetImageAuditResult', query)
             
     def get_audit_entrys_count(self, query={}):
         return self.imagex_get('GetAuditEntrysCount', query)
+            
+    def get_video_audit_result(self, query={}):
+        return self.imagex_get('GetVideoAuditResult', query)
+            
+    def get_audio_audit_result(self, query={}):
+        return self.imagex_get('GetAudioAuditResult', query)
             
     def create_image_retry_audit_task(self, body={}):
         return self.imagex_post('CreateImageRetryAuditTask', [], json.dumps(body))
