@@ -1,5 +1,6 @@
 # coding:utf-8
 import json
+import os
 import threading
 import aiohttp
 
@@ -13,6 +14,15 @@ from volcengine.base.Service import Service
 from volcengine.ServiceInfo import ServiceInfo
 from volcengine.auth.SignerV4 import SignerV4
 from .RespIter import RespIter
+
+
+def _get_common_viking_request_header():
+    common_header = {'Accept': 'application/json', 'Content-Type': 'application/json'}
+    debug_mode = os.getenv("VOLC_VIKING_DEBUG", None)
+    if debug_mode and debug_mode == "1":
+        common_header["X-Viking-Debug"] = "1"
+    return common_header
+
 
 class VikingKnowledgeBaseService(Service):
     _instance_lock = threading.Lock()
@@ -54,55 +64,55 @@ class VikingKnowledgeBaseService(Service):
                                    scheme=scheme)
         return service_info
 
-    @staticmethod 
+    @staticmethod
     def get_api_info():
         api_info = {
             # Collection
-            "CreateCollection":     ApiInfo("POST", "/api/knowledge/collection/create", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "GetCollection":        ApiInfo("POST", "/api/knowledge/collection/info", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "DropCollection":       ApiInfo("POST", "/api/knowledge/collection/delete", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "ListCollections":      ApiInfo("POST", "/api/knowledge/collection/list", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "UpdateCollection":     ApiInfo("POST", "/api/knowledge/collection/update", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "SearchCollection":     ApiInfo("POST", "/api/knowledge/collection/search", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "SearchAndGenerate":    ApiInfo("POST", "/api/knowledge/collection/search_and_generate", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "CreateCollection": ApiInfo("POST", "/api/knowledge/collection/create", {}, {},
+                                        _get_common_viking_request_header()),
+            "GetCollection": ApiInfo("POST", "/api/knowledge/collection/info", {}, {},
+                                     _get_common_viking_request_header()),
+            "DropCollection": ApiInfo("POST", "/api/knowledge/collection/delete", {}, {},
+                                      _get_common_viking_request_header()),
+            "ListCollections": ApiInfo("POST", "/api/knowledge/collection/list", {}, {},
+                                       _get_common_viking_request_header()),
+            "UpdateCollection": ApiInfo("POST", "/api/knowledge/collection/update", {}, {},
+                                        _get_common_viking_request_header()),
+            "SearchCollection": ApiInfo("POST", "/api/knowledge/collection/search", {}, {},
+                                        _get_common_viking_request_header()),
+            "SearchAndGenerate": ApiInfo("POST", "/api/knowledge/collection/search_and_generate", {}, {},
+                                         _get_common_viking_request_header()),
 
             "SearchKnowledge": ApiInfo("POST", "/api/knowledge/collection/search_knowledge", {}, {},
-                                       {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+                                       _get_common_viking_request_header()),
 
             # Doc
-            "AddDoc":               ApiInfo("POST", "/api/knowledge/doc/add", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "DeleteDoc":            ApiInfo("POST", "/api/knowledge/doc/delete", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "GetDocInfo":           ApiInfo("POST", "/api/knowledge/doc/info", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "ListDocs":             ApiInfo("POST", "/api/knowledge/doc/list", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "UpdateDocMeta":        ApiInfo("POST", "/api/knowledge/doc/update_meta", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}), 
+            "AddDoc": ApiInfo("POST", "/api/knowledge/doc/add", {}, {},
+                              _get_common_viking_request_header()),
+            "DeleteDoc": ApiInfo("POST", "/api/knowledge/doc/delete", {}, {},
+                                 _get_common_viking_request_header()),
+            "GetDocInfo": ApiInfo("POST", "/api/knowledge/doc/info", {}, {},
+                                  _get_common_viking_request_header()),
+            "ListDocs": ApiInfo("POST", "/api/knowledge/doc/list", {}, {},
+                                _get_common_viking_request_header()),
+            "UpdateDocMeta": ApiInfo("POST", "/api/knowledge/doc/update_meta", {}, {},
+                                     _get_common_viking_request_header()),
 
             # Point
-            "GetPointInfo":           ApiInfo("POST", "/api/knowledge/point/info", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "ListPoints":             ApiInfo("POST", "/api/knowledge/point/list", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            
+            "GetPointInfo": ApiInfo("POST", "/api/knowledge/point/info", {}, {},
+                                    _get_common_viking_request_header()),
+            "ListPoints": ApiInfo("POST", "/api/knowledge/point/list", {}, {},
+                                  _get_common_viking_request_header()),
+
             # Service
-            "Ping":                   ApiInfo("GET", "/ping", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
-            "Rerank":                 ApiInfo("POST", "/api/knowledge/service/rerank", {}, {},
-                                        {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "Ping": ApiInfo("GET", "/ping", {}, {},
+                            _get_common_viking_request_header()),
+            "Rerank": ApiInfo("POST", "/api/knowledge/service/rerank", {}, {},
+                              _get_common_viking_request_header()),
 
             # Chat
             "ChatCompletion": ApiInfo("POST", "/api/knowledge/chat/completions", {}, {},
-                                      {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+                                      _get_common_viking_request_header()),
         }
         return api_info
 
@@ -130,6 +140,9 @@ class VikingKnowledgeBaseService(Service):
         api_info = self.api_info[api]
         r = self.prepare_request(api_info, params)
         r.headers['Content-Type'] = 'application/json'
+        debug_mode = os.getenv("VOLC_VIKING_DEBUG", None)
+        if debug_mode and debug_mode == "1":
+            r.headers["X-Viking-Debug"] = "1"
         r.body = body
 
         SignerV4.sign(r, self.service_info.credentials)
@@ -176,7 +189,26 @@ class VikingKnowledgeBaseService(Service):
             raise VikingKnowledgeBaseException(1000028, "missed",
                                     "empty response due to unknown error, please contact customer service") from None
         return res
-    
+
+    def json(self, api, params, body):
+        if not (api in self.api_info):
+            raise Exception("no such api")
+        api_info = self.api_info[api]
+        r = self.prepare_request(api_info, params)
+        r.body = body
+        r.headers['Content-Type'] = 'application/json'
+        debug_mode = os.getenv("VOLC_VIKING_DEBUG", None)
+        if debug_mode and debug_mode == "1":
+            r.headers["X-Viking-Debug"] = "1"
+        SignerV4.sign(r, self.service_info.credentials)
+        url = r.build()
+        resp = self.session.post(url, headers=r.headers, data=r.body,
+                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
+        if resp.status_code == 200:
+            return json.dumps(resp.json())
+        else:
+            raise Exception(resp.text.encode("utf-8"))
+
     def json_exception(self, api, params, body):
         try:
             res = self.json(api, params, body)

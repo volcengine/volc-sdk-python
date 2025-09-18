@@ -1,6 +1,4 @@
-from deprecated import deprecated
-
-from .Doc import Doc    
+from .Doc import Doc
 
 class Point(object):
     """
@@ -23,6 +21,6 @@ class Point(object):
         self.table_chunk_fields     = kwargs.get("table_chunk_fields")
 
     @property
-    @deprecated(reason="The 'doc_id' property is deprecated. Use 'doc_info.doc_id' instead.")
     def doc_id(self):
+        # The 'doc_id' property is deprecated. Use 'doc_info.doc_id' instead.
         return self.doc_info.doc_id
