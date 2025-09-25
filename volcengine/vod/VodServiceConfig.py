@@ -156,6 +156,8 @@ class VodServiceConfig(Service):
             "DescribeDomainConfig": ApiInfo("GET", "/", {"Action": "DescribeDomainConfig", "Version": "2023-07-01"}, {}, {}),
             "VerifyDomainOwner": ApiInfo("GET", "/", {"Action": "VerifyDomainOwner", "Version": "2023-07-01"}, {}, {}),
             "DescribeDomainVerifyContent": ApiInfo("GET", "/", {"Action": "DescribeDomainVerifyContent", "Version": "2023-07-01"}, {}, {}),
+            "DescribeCdnEdgeIp": ApiInfo("GET", "/", {"Action": "DescribeCdnEdgeIp", "Version": "2023-07-01"}, {}, {}),
+            "DescribeCdnRegionAndIsp": ApiInfo("GET", "/", {"Action": "DescribeCdnRegionAndIsp", "Version": "2023-07-01"}, {}, {}),
             # 回调管理
             "AddCallbackSubscription": ApiInfo("GET", "/", {"Action": "AddCallbackSubscription", "Version": "2021-12-01"}, {}, {}),
             "SetCallbackEvent": ApiInfo("GET", "/", {"Action": "SetCallbackEvent", "Version": "2022-01-01"}, {}, {}),

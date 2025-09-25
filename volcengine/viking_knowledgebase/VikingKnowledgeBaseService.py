@@ -2,18 +2,19 @@
 import json
 import os
 import threading
+
 import aiohttp
 
-from .common import EnumEncoder
-from .Point import Point
-from .Collection import Collection
-from .exception import ERRCODE_EXCEPTION, VikingKnowledgeBaseException
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
-from volcengine.base.Service import Service
 from volcengine.ServiceInfo import ServiceInfo
 from volcengine.auth.SignerV4 import SignerV4
+from volcengine.base.Service import Service
+from .Collection import Collection
+from .Point import Point
 from .RespIter import RespIter
+from .common import EnumEncoder
+from .exception import ERRCODE_EXCEPTION, VikingKnowledgeBaseException
 
 
 def _get_common_viking_request_header():
@@ -34,9 +35,11 @@ class VikingKnowledgeBaseService(Service):
                     VikingKnowledgeBaseService._instance = object.__new__(cls)
         return VikingKnowledgeBaseService._instance
 
-    def __init__(self, host="api-knowledgebase.mlp.cn-beijing.volces.com", region="cn-beijing", ak="", sk="", sts_token="", scheme='http',
+    def __init__(self, host="api-knowledgebase.mlp.cn-beijing.volces.com", region="cn-beijing", ak="", sk="",
+                 sts_token="", scheme='http',
                  connection_timeout=30, socket_timeout=30):
-        self.service_info = VikingKnowledgeBaseService.get_service_info(host, region, scheme, connection_timeout, socket_timeout)
+        self.service_info = VikingKnowledgeBaseService.get_service_info(host, region, scheme, connection_timeout,
+                                                                        socket_timeout)
         self.api_info = VikingKnowledgeBaseService.get_api_info()
         super(VikingKnowledgeBaseService, self).__init__(self.service_info, self.api_info)
         if ak:
@@ -48,7 +51,8 @@ class VikingKnowledgeBaseService(Service):
         try:
             self.get_body("Ping", {}, json.dumps({}))
         except Exception as e:
-            raise VikingKnowledgeBaseException(1000028, "missed", "host or region is incorrect".format(str(e))) from None
+            raise VikingKnowledgeBaseException(1000028, "missed",
+                                               "host or region is incorrect".format(str(e))) from None
 
     def setHeader(self, header):
         api_info = VikingKnowledgeBaseService.get_api_info()
@@ -134,11 +138,14 @@ class VikingKnowledgeBaseService(Service):
         else:
             raise Exception(resp.text.encode("utf-8"))
 
-    async def async_json(self, api, params, body):
+    async def async_json(self, api, params, body, headers=None):
         if not (api in self.api_info):
             raise Exception("no such api")
         api_info = self.api_info[api]
         r = self.prepare_request(api_info, params)
+        if headers:
+            for key in headers:
+                r.headers[key] = headers[key]
         r.headers['Content-Type'] = 'application/json'
         debug_mode = os.getenv("VOLC_VIKING_DEBUG", None)
         if debug_mode and debug_mode == "1":
@@ -163,16 +170,17 @@ class VikingKnowledgeBaseService(Service):
             try:
                 res_json = json.loads(e.args[0].decode("utf-8"))
             except:
-                raise VikingKnowledgeBaseException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+                raise VikingKnowledgeBaseException(1000028, "missed",
+                                                   "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)
             raise ERRCODE_EXCEPTION.get(code, VikingKnowledgeBaseException)(code, request_id, message) from None
         if res == '':
             raise VikingKnowledgeBaseException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
+                                               "empty response due to unknown error, please contact customer service") from None
         return res
-    
+
     def get_exception(self, api, params):
         try:
             res = self.get(api, params)
@@ -180,77 +188,67 @@ class VikingKnowledgeBaseService(Service):
             try:
                 res_json = json.loads(e.args[0].decode("utf-8"))
             except:
-                raise VikingKnowledgeBaseException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+                raise VikingKnowledgeBaseException(1000028, "missed",
+                                                   "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)
             raise ERRCODE_EXCEPTION.get(code, VikingKnowledgeBaseException)(code, request_id, message) from None
         if res == '':
             raise VikingKnowledgeBaseException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
+                                               "empty response due to unknown error, please contact customer service") from None
         return res
 
     def json(self, api, params, body):
-        if not (api in self.api_info):
-            raise Exception("no such api")
-        api_info = self.api_info[api]
-        r = self.prepare_request(api_info, params)
-        r.body = body
-        r.headers['Content-Type'] = 'application/json'
-        debug_mode = os.getenv("VOLC_VIKING_DEBUG", None)
-        if debug_mode and debug_mode == "1":
-            r.headers["X-Viking-Debug"] = "1"
-        SignerV4.sign(r, self.service_info.credentials)
-        url = r.build()
-        resp = self.session.post(url, headers=r.headers, data=r.body,
-                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
-        if resp.status_code == 200:
-            return json.dumps(resp.json())
-        else:
-            raise Exception(resp.text.encode("utf-8"))
+        return self._json(api, params, body, headers=None)
 
-    def json_exception(self, api, params, body):
+    def json_exception(self, api, params, body, headers=None):
         try:
-            res = self.json(api, params, body)
+            res = self._json(api, params, body, headers=headers)
         except Exception as e:
             try:
                 err_msg = e.args[0].decode("utf-8") if isinstance(e.args[0], bytes) else str(e.args[0])
                 res_json = json.loads(err_msg)
             except:
-                raise VikingKnowledgeBaseException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+                raise VikingKnowledgeBaseException(1000028, "missed",
+                                                   "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)
             raise ERRCODE_EXCEPTION.get(code, VikingKnowledgeBaseException)(code, request_id, message) from None
         if res == '':
             raise VikingKnowledgeBaseException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
+                                               "empty response due to unknown error, please contact customer service") from None
         return res
-    
-    def _stream_json_exception(self, api, params, body):
+
+    def _stream_json_exception(self, api, params, body, headers=None):
         try:
-            res_stream = self._stream_json(api, params, body)
+            res_stream = self._stream_json(api, params, body, headers=headers)
             for res in res_stream:
                 yield res
         except Exception as e:
             try:
                 res_json = json.loads(e.args[0].decode("utf-8"))
             except:
-                raise VikingKnowledgeBaseException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+                raise VikingKnowledgeBaseException(1000028, "missed",
+                                                   "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)
             raise ERRCODE_EXCEPTION.get(code, VikingKnowledgeBaseException)(code, request_id, message) from None
         if res == '':
             raise VikingKnowledgeBaseException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
+                                               "empty response due to unknown error, please contact customer service") from None
         return res
-    
-    def _stream_json(self, api, params, body):
+
+    def _stream_json(self, api, params, body, headers=None):
         if not (api in self.api_info):
             raise Exception("no such api")
         api_info = self.api_info[api]
         r = self.prepare_request(api_info, params)
+        if headers:
+            for key in headers:
+                r.headers[key] = headers[key]
         r.headers['Content-Type'] = 'application/json'
         r.headers['Accept'] = 'text/event-stream'
         r.body = body
@@ -263,40 +261,64 @@ class VikingKnowledgeBaseService(Service):
         if resp.status_code == 200:
             for line in resp.iter_lines():
                 decode_line = line.decode('utf-8')
-                if decode_line =="":
+                if decode_line == "":
                     continue
                 data_str = decode_line.split("data:")[1]
                 data_dict = json.loads(data_str)
                 yield json.dumps(data_dict)
-                if 'end'  in data_dict['data']:
-                    break    
+                if 'end' in data_dict['data']:
+                    break
         else:
             raise Exception(resp.text.encode("utf-8"))
-        
-    async def async_json_exception(self, api, params, body):
+
+    def _json(self, api, params, body, headers=None):
+        if not (api in self.api_info):
+            raise Exception("no such api")
+        api_info = self.api_info[api]
+        r = self.prepare_request(api_info, params)
+        if headers:
+            for key in headers:
+                r.headers[key] = headers[key]
+        r.headers['Content-Type'] = 'application/json'
+        r.body = body
+        debug_mode = os.getenv("VOLC_VIKING_DEBUG", None)
+        if debug_mode and debug_mode == "1":
+            r.headers["X-Viking-Debug"] = "1"
+        SignerV4.sign(r, self.service_info.credentials)
+        url = r.build()
+        resp = self.session.post(url, headers=r.headers, data=r.body,
+                                 timeout=(self.service_info.connection_timeout, self.service_info.socket_timeout))
+        if resp.status_code == 200:
+            return json.dumps(resp.json())
+        else:
+            raise Exception(resp.text.encode("utf-8"))
+
+    async def async_json_exception(self, api, params, body, headers=None):
         try:
-            res = await self.async_json(api, params, body)
+            res = await self.async_json(api, params, body, headers=headers)
         except Exception as e:
             try:
                 err_msg = e.args[0].decode("utf-8") if isinstance(e.args[0], bytes) else str(e.args[0])
                 res_json = json.loads(err_msg)
             except:
-                raise VikingKnowledgeBaseException(1000028, "missed", "json load res error, res:{}".format(str(e))) from None
+                raise VikingKnowledgeBaseException(1000028, "missed",
+                                                   "json load res error, res:{}".format(str(e))) from None
             code = res_json.get("code", 1000028)
             request_id = res_json.get("request_id", 1000028)
             message = res_json.get("message", None)
             raise ERRCODE_EXCEPTION.get(code, VikingKnowledgeBaseException)(code, request_id, message) from None
         if res == '':
             raise VikingKnowledgeBaseException(1000028, "missed",
-                                    "empty response due to unknown error, please contact customer service") from None
+                                               "empty response due to unknown error, please contact customer service") from None
         return res
 
-    def create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default", data_type="unstructured_data", table_config=None):
-        params = {"name": collection_name, "description": description, "index": index, 
+    def create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default",
+                          data_type="unstructured_data", table_config=None, headers=None):
+        params = {"name": collection_name, "description": description, "index": index,
                   "preprocessing": preprocessing, "project": project, "data_type": data_type}
         if table_config is not None:
             params["table_config"] = table_config
-        res = self.json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
+        res = self.json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder), headers=headers)
         data = json.loads(res)["data"]
         params["resource_id"] = data["resource_id"]
         if index is not None and index.get("index_config") is not None:
@@ -306,12 +328,15 @@ class VikingKnowledgeBaseService(Service):
                 params["fields"] = fields
         return Collection(self, collection_name, params)
 
-    async def async_create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default", data_type="unstructured_data", table_config=None):
-        params = {"name": collection_name, "description": description, "index": index, 
+    async def async_create_collection(self, collection_name, index=None, description="", preprocessing=None,
+                                      project="default", data_type="unstructured_data", table_config=None,
+                                      headers=None):
+        params = {"name": collection_name, "description": description, "index": index,
                   "preprocessing": preprocessing, "project": project, "data_type": data_type}
         if table_config is not None:
             params["table_config"] = table_config
-        res = await self.async_json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder))
+        res = await self.async_json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder),
+                                              headers=headers)
         data = json.loads(res)["data"]
         params["resource_id"] = data["resource_id"]
         if index is not None and index.get("index_config") is not None:
@@ -320,11 +345,11 @@ class VikingKnowledgeBaseService(Service):
             params["fields"] = fields
         return Collection(self, collection_name, params)
 
-    def get_collection(self, collection_name, project="default", resource_id=None):
+    def get_collection(self, collection_name, project="default", resource_id=None, headers=None):
         params = {"name": collection_name, "project": project}
         if resource_id != None:
             params["resource_id"] = resource_id
-        res = self.json_exception("GetCollection", {}, json.dumps(params))
+        res = self.json_exception("GetCollection", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         now_index_list = data["pipeline_list"][0]["index_list"][0]
         fields = now_index_list["index_config"]["fields"]
@@ -332,11 +357,11 @@ class VikingKnowledgeBaseService(Service):
 
         return Collection(self, collection_name, data)
 
-    async def async_get_collection(self, collection_name, project="default", resource_id=None):
+    async def async_get_collection(self, collection_name, project="default", resource_id=None, headers=None):
         params = {"name": collection_name, "project": project}
         if resource_id != None:
             params["resource_id"] = resource_id
-        res = await self.async_json_exception("GetCollection", {}, json.dumps(params))
+        res = await self.async_json_exception("GetCollection", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         now_index_list = data["pipeline_list"][0]["index_list"][0]
         fields = now_index_list["index_config"]["fields"]
@@ -344,23 +369,23 @@ class VikingKnowledgeBaseService(Service):
 
         return Collection(self, collection_name, data)
 
-    def drop_collection(self, collection_name, project="default", resource_id=None):
-        params = {"name": collection_name, "project":project}
+    def drop_collection(self, collection_name, project="default", resource_id=None, headers=None):
+        params = {"name": collection_name, "project": project}
         if resource_id != None:
             params["resource_id"] = resource_id
-        self.json_exception("DropCollection", {}, json.dumps(params))
+        self.json_exception("DropCollection", {}, json.dumps(params), headers=headers)
 
-    async def async_drop_collection(self, collection_name, project="default", resource_id=None):
-        params = {"name": collection_name, "project":project}
+    async def async_drop_collection(self, collection_name, project="default", resource_id=None, headers=None):
+        params = {"name": collection_name, "project": project}
         if resource_id != None:
             params["resource_id"] = resource_id
-        await self.async_json_exception("DropCollection", {}, json.dumps(params))
+        await self.async_json_exception("DropCollection", {}, json.dumps(params), headers=headers)
 
-    def list_collections(self, project=None, brief=False):
+    def list_collections(self, project=None, brief=False, headers=None):
         params = {"brief": brief}
         if project is not None:
             params["project"] = project
-        res = self.json_exception("ListCollections", {}, json.dumps(params))
+        res = self.json_exception("ListCollections", {}, json.dumps(params), headers=headers)
         collection_list = json.loads(res)["data"]["collection_list"]
         collections = []
         for collection in collection_list:
@@ -371,11 +396,11 @@ class VikingKnowledgeBaseService(Service):
 
         return collections
 
-    async def async_list_collections(self, project=None, brief=False):
+    async def async_list_collections(self, project=None, brief=False, headers=None):
         params = {"brief": brief}
         if project is not None:
             params["project"] = project
-        res = await self.async_json_exception("ListCollections", {}, json.dumps(params))
+        res = await self.async_json_exception("ListCollections", {}, json.dumps(params), headers=headers)
         collection_list = json.loads(res)["data"]["collection_list"]
         collections = []
         for collection in collection_list:
@@ -386,32 +411,36 @@ class VikingKnowledgeBaseService(Service):
 
         return collections
 
-    def update_collection(self, collection_name, description=None, cpu_quota=None, project="default", resource_id=None):
-        params = {"name": collection_name, "project":project}
+    def update_collection(self, collection_name, description=None, cpu_quota=None, project="default", resource_id=None,
+                          headers=None):
+        params = {"name": collection_name, "project": project}
         if resource_id != None:
             params["resource_id"] = resource_id
-        if description  != None:
+        if description != None:
             params["description"] = description
-        if cpu_quota    != None:
+        if cpu_quota != None:
             params["cpu_quota"] = cpu_quota
 
-        self.json_exception("UpdateCollection", {}, json.dumps(params))
+        self.json_exception("UpdateCollection", {}, json.dumps(params), headers=headers)
 
-    async def async_update_collection(self, collection_name, description=None, cpu_quota=None, project="default", resource_id=None):
-        params = {"name": collection_name, "project":project}
+    async def async_update_collection(self, collection_name, description=None, cpu_quota=None, project="default",
+                                      resource_id=None, headers=None):
+        params = {"name": collection_name, "project": project}
         if resource_id != None:
             params["resource_id"] = resource_id
-        if description  != None:
+        if description != None:
             params["description"] = description
-        if cpu_quota    != None:
+        if cpu_quota != None:
             params["cpu_quota"] = cpu_quota
 
-        await self.async_json_exception("UpdateCollection", {}, json.dumps(params))
+        await self.async_json_exception("UpdateCollection", {}, json.dumps(params), headers=headers)
 
-    def search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, 
-                          project="default", resource_id=None, retrieve_count= None, endpoint_id=None, rerank_model="Doubao-pro-4k-rerank",
-                          rerank_only_chunk=False):
-        params = {"name": collection_name, 
+    def search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5,
+                          rerank_switch=False,
+                          project="default", resource_id=None, retrieve_count=None, endpoint_id=None,
+                          rerank_model="Doubao-pro-4k-rerank",
+                          rerank_only_chunk=False, headers=None):
+        params = {"name": collection_name,
                   "query": query,
                   "limit": limit,
                   "dense_weight": dense_weight,
@@ -419,7 +448,7 @@ class VikingKnowledgeBaseService(Service):
                   "project": project,
                   "rerank_model": rerank_model,
                   "rerank_only_chunk": rerank_only_chunk,
-                }
+                  }
         if resource_id != None:
             params["resource_id"] = resource_id
         if query_param != None:
@@ -428,7 +457,7 @@ class VikingKnowledgeBaseService(Service):
             params["retrieve_count"] = retrieve_count
         if endpoint_id != None:
             params["endpoint_id"] = endpoint_id
-        res = self.json_exception("SearchCollection", {}, json.dumps(params))
+        res = self.json_exception("SearchCollection", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         results = data.get("result_list")
         points = []
@@ -436,15 +465,17 @@ class VikingKnowledgeBaseService(Service):
             for result in results:
                 result['collection_name'] = collection_name
                 result['project'] = project
-                if resource_id is not None :
+                if resource_id is not None:
                     result['resource_id'] = resource_id
                 points.append(Point(result))
         return points
-    
-    async def async_search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5, rerank_switch=False, 
-                          project="default", resource_id=None, retrieve_count= None, endpoint_id=None, rerank_model="Doubao-pro-4k-rerank",
-                          rerank_only_chunk=False):
-        params = {"name": collection_name, 
+
+    async def async_search_collection(self, collection_name, query, query_param=None, limit=10, dense_weight=0.5,
+                                      rerank_switch=False,
+                                      project="default", resource_id=None, retrieve_count=None, endpoint_id=None,
+                                      rerank_model="Doubao-pro-4k-rerank",
+                                      rerank_only_chunk=False, headers=None):
+        params = {"name": collection_name,
                   "query": query,
                   "limit": limit,
                   "dense_weight": dense_weight,
@@ -452,7 +483,7 @@ class VikingKnowledgeBaseService(Service):
                   "project": project,
                   "rerank_model": rerank_model,
                   "rerank_only_chunk": rerank_only_chunk,
-                }
+                  }
         if resource_id != None:
             params["resource_id"] = resource_id
         if query_param != None:
@@ -461,7 +492,7 @@ class VikingKnowledgeBaseService(Service):
             params["retrieve_count"] = retrieve_count
         if endpoint_id != None:
             params["endpoint_id"] = endpoint_id
-        res = await self.async_json_exception("SearchCollection", {}, json.dumps(params))
+        res = await self.async_json_exception("SearchCollection", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         results = data.get("result_list")
         points = []
@@ -469,17 +500,18 @@ class VikingKnowledgeBaseService(Service):
             for result in results:
                 result['collection_name'] = collection_name
                 result['project'] = project
-                if resource_id is not None :
+                if resource_id is not None:
                     result['resource_id'] = resource_id
                 points.append(Point(result))
         return points
-    
-    def search_and_generate(self, collection_name, query, query_param=None, retrieve_param=None, llm_param=None, project="default", resource_id=None):
-        params = {"name": collection_name, 
+
+    def search_and_generate(self, collection_name, query, query_param=None, retrieve_param=None, llm_param=None,
+                            project="default", resource_id=None, headers=None):
+        params = {"name": collection_name,
                   "query": query,
                   "project": project
                   }
-        
+
         if resource_id != None:
             params["resource_id"] = resource_id
         if query_param != None:
@@ -488,8 +520,8 @@ class VikingKnowledgeBaseService(Service):
             params["retrieve_param"] = retrieve_param
         if llm_param != None:
             params["llm_param"] = llm_param
-            
-        res = self.json_exception("SearchAndGenerate", {}, json.dumps(params))
+
+        res = self.json_exception("SearchAndGenerate", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         results = data.get("result_list")
         points = []
@@ -505,15 +537,16 @@ class VikingKnowledgeBaseService(Service):
             "usage": data.get("usage"),
             "refs": points
         }
-        
+
         return ret
-    
-    async def async_search_and_generate(self, collection_name, query, query_param=None, retrieve_param=None, llm_param=None, project="default", resource_id=None):
-        params = {"name": collection_name, 
+
+    async def async_search_and_generate(self, collection_name, query, query_param=None, retrieve_param=None,
+                                        llm_param=None, project="default", resource_id=None, headers=None):
+        params = {"name": collection_name,
                   "query": query,
                   "project": project
                   }
-        
+
         if resource_id != None:
             params["resource_id"] = resource_id
         if query_param != None:
@@ -522,8 +555,8 @@ class VikingKnowledgeBaseService(Service):
             params["retrieve_param"] = retrieve_param
         if llm_param != None:
             params["llm_param"] = llm_param
-            
-        res = await self.async_json_exception("SearchAndGenerate", {}, json.dumps(params))
+
+        res = await self.async_json_exception("SearchAndGenerate", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         results = data.get("result_list")
         points = []
@@ -539,35 +572,36 @@ class VikingKnowledgeBaseService(Service):
             "usage": data.get("usage"),
             "refs": points
         }
-        
+
         return ret
-    
-    def rerank(self, datas, rerank_model="Doubao-pro-4k-rerank", endpoint_id=None):
+
+    def rerank(self, datas, rerank_model="Doubao-pro-4k-rerank", endpoint_id=None, headers=None):
         params = {
             "datas": datas,
             "rerank_model": rerank_model
         }
-        
+
         if endpoint_id != None:
             params["endpoint_id"] = endpoint_id
-        
-        res = self.json_exception("Rerank", {}, json.dumps(params))
-        return json.loads(res)
-    
-    async def async_rerank(self, datas, rerank_model="Doubao-pro-4k-rerank", endpoint_id=None):
-        params = {
-            "datas": datas,
-            "rerank_model": rerank_model
-        }
-        
-        if endpoint_id != None:
-            params["endpoint_id"] = endpoint_id
-        
-        res = await self.async_json_exception("Rerank", {}, json.dumps(params))
+
+        res = self.json_exception("Rerank", {}, json.dumps(params), headers=headers)
         return json.loads(res)
 
-    def search_knowledge(self, collection_name, query, pre_processing=None, query_param=None, limit=10, dense_weight=0.5, post_processing=None,
-                         project="default", resource_id=None):
+    async def async_rerank(self, datas, rerank_model="Doubao-pro-4k-rerank", endpoint_id=None, headers=None):
+        params = {
+            "datas": datas,
+            "rerank_model": rerank_model
+        }
+
+        if endpoint_id != None:
+            params["endpoint_id"] = endpoint_id
+
+        res = await self.async_json_exception("Rerank", {}, json.dumps(params), headers=headers)
+        return json.loads(res)
+
+    def search_knowledge(self, collection_name, query, pre_processing=None, query_param=None, limit=10,
+                         dense_weight=0.5, post_processing=None,
+                         project="default", resource_id=None, headers=None):
         params = {
             "name": collection_name,
             "query": query,
@@ -583,7 +617,7 @@ class VikingKnowledgeBaseService(Service):
             params["post_processing"] = post_processing
         if pre_processing is not None:
             params["pre_processing"] = pre_processing
-        res = self.json_exception("SearchKnowledge", {}, json.dumps(params))
+        res = self.json_exception("SearchKnowledge", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         ret = {
             "rewrite_query": data.get("rewrite_query"),
@@ -591,8 +625,9 @@ class VikingKnowledgeBaseService(Service):
         }
         return ret
 
-    async def async_search_knowledge(self, collection_name, query, pre_processing=None, query_param=None, limit=10, dense_weight=0.5, post_processing=None,
-                                     project="default", resource_id=None):
+    async def async_search_knowledge(self, collection_name, query, pre_processing=None, query_param=None, limit=10,
+                                     dense_weight=0.5, post_processing=None,
+                                     project="default", resource_id=None, headers=None):
         params = {
             "name": collection_name,
             "query": query,
@@ -608,7 +643,7 @@ class VikingKnowledgeBaseService(Service):
             params["post_processing"] = post_processing
         if pre_processing is not None:
             params["pre_processing"] = pre_processing
-        res = await self.async_json_exception("SearchKnowledge", {}, json.dumps(params))
+        res = await self.async_json_exception("SearchKnowledge", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         ret = {
             "rewrite_query": data.get("rewrite_query"),
@@ -616,7 +651,8 @@ class VikingKnowledgeBaseService(Service):
         }
         return ret
 
-    def chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True, api_key=None,stream=False):
+    def chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True, api_key=None,
+                        stream=False, headers=None):
         params = {
             "model": model,
             "messages": messages,
@@ -629,10 +665,10 @@ class VikingKnowledgeBaseService(Service):
             params["api_key"] = api_key
         if stream:
             params['stream'] = True
-            res_stream = self._stream_json_exception("ChatCompletion", {}, json.dumps(params))
+            res_stream = self._stream_json_exception("ChatCompletion", {}, json.dumps(params), headers=headers)
             return RespIter(self._generate_responses(res_stream))
         else:
-            res = self.json_exception("ChatCompletion", {}, json.dumps(params))
+            res = self.json_exception("ChatCompletion", {}, json.dumps(params), headers)
             data = json.loads(res)["data"]
             ret = {
                 "generated_answer": data.get("generated_answer"),
@@ -640,7 +676,8 @@ class VikingKnowledgeBaseService(Service):
             }
             return ret
 
-    async def async_chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True, api_key=None):
+    async def async_chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True,
+                                    api_key=None, headers=None):
         params = {
             "model": model,
             "messages": messages,
@@ -650,14 +687,14 @@ class VikingKnowledgeBaseService(Service):
         }
         if api_key is not None:
             params["api_key"] = api_key
-        res = await self.async_json_exception("ChatCompletion", {}, json.dumps(params))
+        res = await self.async_json_exception("ChatCompletion", {}, json.dumps(params), headers=headers)
         data = json.loads(res)["data"]
         ret = {
             "generated_answer": data.get("generated_answer"),
             "usage": data.get("usage")
         }
         return ret
-    
+
     def _generate_responses(self, res_stream):
         for res in res_stream:
             data = json.loads(res)["data"]

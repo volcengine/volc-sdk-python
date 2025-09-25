@@ -3866,6 +3866,73 @@ class VodService(VodServiceConfig):
             return Parse(res, VodDescribeDomainConfigResponse(), True)
 
     #
+    # DescribeCdnEdgeIp.
+    #
+    # @param request VodDescribeCdnEdgeIpRequest
+    # @return VodDescribeCdnEdgeIpResponse
+    # @raise Exception
+    def describe_cdn_edge_ip(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeCdnEdgeIp", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDescribeCdnEdgeIpResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDescribeCdnEdgeIpResponse(), True)
+    #
+    # DescribeCdnRegionAndIsp.
+    #
+    # @param request VodDescribeCdnRegionAndIspRequest
+    # @return VodDescribeCdnRegionAndIspResponse
+    # @raise Exception
+    def describe_cdn_region_and_isp(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("DescribeCdnRegionAndIsp", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDescribeCdnRegionAndIspResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDescribeCdnRegionAndIspResponse(), True)
+
+    #
     # AddCallbackSubscription.
     #
     # @param request VodAddCallbackSubscriptionRequest
