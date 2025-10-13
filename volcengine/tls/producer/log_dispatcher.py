@@ -37,7 +37,7 @@ class LogDispatcher:
             self.client = TLSService(client_config.endpoint, client_config.access_key_id,
                                      client_config.access_key_secret, client_config.region, client_config.token)
         except Exception as e:
-            self.LOG.error("Failed to create TLS client", e)
+            self.LOG.error("Failed to create TLS client", exc_info=e)
             raise TLSException(error_code="Initialization Error", error_message="Failed to create TLS client")
 
     def _create_thread_pool(self) -> ThreadPoolExecutor:

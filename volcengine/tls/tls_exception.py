@@ -13,6 +13,9 @@ from volcengine.tls.const import *
 
 class TLSException(Exception):
     def __init__(self, response: Response = None, error_code: str = None, error_message: str = None):
+        self.http_code = 0
+        self.request_id = ""
+        self.response_header = {}
         if response is not None:
             self.http_code = response.status_code
             self.response_header = response.headers

@@ -39,6 +39,12 @@ class RcLlmAgentService(Service):
             "LlmCustomizeRisk": ApiInfo("POST", "/openapi/v1/rc_llm/custom_risk", {"Action": "LlmCustomizeRisk", "Version": "2022-08-26"}, {}, {}),
             "AsyncLlmCustomizeRisk": ApiInfo("POST", "/openapi/v1/rc_llm/async_custom_risk", {"Action": "AsyncLlmCustomizeRisk", "Version": "2022-08-26"}, {}, {}),
             "GetCustomizeRiskResult": ApiInfo("GET", "/openapi/v1/rc_llm/custom_risk_result", {"Action": "GetCustomizeRiskResult", "Version": "2022-08-26"}, {},{}),
+            "LlmMultiModeration": ApiInfo("POST", "/openapi/v1/rc_llm/multi_moderation",
+                                         {"Action": "LlmMultiModeration", "Version": "2022-08-26"}, {}, {}),
+            "AsyncLlmMultiModeration": ApiInfo("POST", "/openapi/v1/rc_llm/async_multi_moderation",
+                                              {"Action": "AsyncLlmMultiModeration", "Version": "2022-08-26"}, {}, {}),
+            "GetMultiModerationResult": ApiInfo("GET", "/openapi/v1/rc_llm/multi_moderation_result",
+                                               {"Action": "GetMultiModerationResult", "Version": "2022-08-26"}, {}, {}),
             }
 
         return api_info
@@ -98,6 +104,33 @@ class RcLlmAgentService(Service):
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def get_customize_risk_result(self, params, body):
         res = self.get("GetCustomizeRiskResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def llm_multi_moderation(self, params, body):
+        res = self.json("LlmMultiModeration", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def async_llm_multi_moderation(self, params, body):
+        res = self.json("AsyncLlmMultiModeration", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def get_multi_moderation_result(self, params, body):
+        res = self.get("GetMultiModerationResult", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

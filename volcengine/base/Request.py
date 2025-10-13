@@ -20,8 +20,15 @@ class Request(object):
         self.connection_timeout = 0
         self.socket_timeout = 0
 
-    def set_shema(self, schema):
+    def set_schema(self, schema):
         self.schema = schema
+
+    def set_shema(self, schema):
+        """
+        Deprecated: Use set_schema() instead.
+        This method will be removed in a future version.
+        """
+        self.set_schema(schema)
 
     def set_method(self, method):
         self.method = method

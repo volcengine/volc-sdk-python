@@ -49,7 +49,7 @@ class CallBack:
 
 
 class Attempt:
-    def __init__(self, success: bool, request_id: str, error_code: str = "", error_message: str = "",
+    def __init__(self, success: bool, request_id: str = "", error_code: str = "", error_message: str = "",
                  http_code: int = -1):
         self.success = success
         self.request_id = request_id

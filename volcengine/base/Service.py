@@ -113,7 +113,7 @@ class Service(object):
 
         mquery = self.merge(api_info.query, params)
         r = Request()
-        r.set_shema(self.service_info.scheme)
+        r.set_schema(self.service_info.scheme)
         r.set_method(api_info.method)
         r.set_path(api_info.path)
         r.set_query(mquery)
@@ -225,7 +225,7 @@ class Service(object):
         socket_timeout = self.service_info.socket_timeout
 
         r = Request()
-        r.set_shema(self.service_info.scheme)
+        r.set_schema(self.service_info.scheme)
         r.set_method(api_info.method)
         r.set_connection_timeout(connection_timeout)
         r.set_socket_timeout(socket_timeout)
