@@ -19,6 +19,11 @@ service_info_map = {
         'imagex-us-east-1.volcengineapi.com',
         {'Accept': 'application/json'},
         Credentials('', '', 'ImageX', 'us-east-1'),
+        10, 10, "https"),
+    'ap-southeast-1': ServiceInfo(
+        'imagex.ap-southeast-1.volcengineapi.com',
+        {'Accept': 'application/json'},
+        Credentials('', '', 'ImageX', 'ap-southeast-1'),
         10, 10, "https")
 }
 
