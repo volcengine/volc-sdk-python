@@ -293,6 +293,34 @@ api_info = {
     "DescribeRetrieveInfo": ApiInfo("POST", "/", {
         "Action": "DescribeRetrieveInfo", "Version": SERVICE_VERSION}, {}, {}),
 
+    # 查询域名版本列表: 
+    "ListDomainVersions": ApiInfo("POST", "/", {
+        "Action": "ListDomainVersions", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 查询域名环境版本: 
+    "DescribeDomainEnvVersion": ApiInfo("POST", "/", {
+        "Action": "DescribeDomainEnvVersion", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 创建域名版本: 
+    "CreateDomainVersion": ApiInfo("POST", "/", {
+        "Action": "CreateDomainVersion", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 删除域名版本: 
+    "DeleteDomainVersion": ApiInfo("POST", "/", {
+        "Action": "DeleteDomainVersion", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 查询域名版本: 
+    "DescribeDomainVersion": ApiInfo("POST", "/", {
+        "Action": "DescribeDomainVersion", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 修改域名版本: 
+    "UpdateDomainVersion": ApiInfo("POST", "/", {
+        "Action": "UpdateDomainVersion", "Version": SERVICE_VERSION}, {}, {}),
+
+    # 发布域名版本: 
+    "ReleaseDomainVersion": ApiInfo("POST", "/", {
+        "Action": "ReleaseDomainVersion", "Version": SERVICE_VERSION}, {}, {}),
+
 
 }
 
@@ -1031,6 +1059,76 @@ class CDNService(Service):
         if params is None:
             params = {}
         action = "DescribeRetrieveInfo"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def list_domain_versions(self, params=None):
+        if params is None:
+            params = {}
+        action = "ListDomainVersions"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_domain_env_version(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDomainEnvVersion"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def create_domain_version(self, params=None):
+        if params is None:
+            params = {}
+        action = "CreateDomainVersion"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def delete_domain_version(self, params=None):
+        if params is None:
+            params = {}
+        action = "DeleteDomainVersion"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def describe_domain_version(self, params=None):
+        if params is None:
+            params = {}
+        action = "DescribeDomainVersion"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def update_domain_version(self, params=None):
+        if params is None:
+            params = {}
+        action = "UpdateDomainVersion"
+        res = self.send_request(action, params)
+        if res == '':
+            raise Exception("%s: empty response" % action)
+        res_json = json.loads(res)
+        return res_json
+
+    def release_domain_version(self, params=None):
+        if params is None:
+            params = {}
+        action = "ReleaseDomainVersion"
         res = self.send_request(action, params)
         if res == '':
             raise Exception("%s: empty response" % action)

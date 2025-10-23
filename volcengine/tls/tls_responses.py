@@ -6,6 +6,7 @@ from __future__ import print_function
 import json
 import struct
 
+from volcengine.tls import log_content_patch
 from volcengine.tls.util import TLSUtil
 
 try:
@@ -25,7 +26,6 @@ from requests import Response
 
 from volcengine.tls.log_pb2 import LogGroupList
 from volcengine.tls.data import *
-from volcengine.tls.tls_exception import TLSException
 
 
 class TLSResponse:
@@ -314,7 +314,10 @@ class ConsumeLogsResponse(TLSResponse):
                 pb_message = zlib.decompress(pb_message)
 
             self.pb_message = LogGroupList()
-            self.pb_message.ParseFromString(pb_message)
+            try:
+                self.pb_message.ParseFromString(pb_message)
+            except Exception as e:
+                log_content_patch.ParseLogGroupListFromString(self.pb_message, pb_message)
 
     def get_x_tls_count(self):
         """
