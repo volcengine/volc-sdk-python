@@ -709,6 +709,8 @@ class DescribeRuleResponse(TLSResponse):
 
         self.project_id = self.response[PROJECT_ID]
         self.project_name = self.response[PROJECT_NAME]
+        self.topic_id = self.response[TOPIC_ID]
+        self.topic_name = self.response[TOPIC_NAME]
         self.rule_info = RuleInfo.set_attributes(data=self.response[RULE_INFO])
         self.response[RULE_INFO] = self.rule_info
         self.host_group_infos = []

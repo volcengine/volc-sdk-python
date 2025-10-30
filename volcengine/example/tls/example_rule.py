@@ -4,6 +4,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import time
 
 from volcengine.tls.TLSService import TLSService
 from volcengine.tls.tls_requests import *
@@ -40,14 +41,19 @@ if __name__ == "__main__":
     paths = ["/data/nginx/log/*/*/*.log"]
     log_type = "delimiter_log"
     extract_rule = ExtractRule(delimiter="#", keys=["time", "level", "msg"],
-                               time_key="time", time_format="%Y-%m-%dT%H:%M:%S,%f",
+                               time_key="time", time_format="%Y-%m-%dT%H:%M:%S,%f", time_zone="Asia/Shanghai",
+                               time_extract_regex="\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2},\\d{3}",
+                               enable_nanosecond=True, time_sample="2018-05-22 15:35:53.850#INFO#XXXX",
                                filter_key_regex=[FilterKeyRegex("msg", ".*ERROR.*")],
                                un_match_up_load_switch=True, un_match_log_key="LogParseFailed")
     exclude_paths = [ExcludePath("File", "/data/nginx/log/*/*/exclude.log"),
                      ExcludePath("Path", "/data/nginx/log/*/exclude/")]
     user_define_rule = UserDefineRule(ParsePathRule(path_sample="/var/logs/instanceid_any_podname/test.log",
                                                     regex="\\/var\\/logs\\/([a-z]*)_any_([a-z]*)\\/test\\.log",
-                                                    keys=["instance-id", "pod-name"]))
+                                                    keys=["instance-id", "pod-name"]), enable_raw_log=True,
+                                      raw_log_key="raw_log_key", enable_hostname=True, hostname_key="hostname",
+                                      enable_host_group_label=True, host_group_label_key="host_group_label",
+                                      tail_size_kb=1024, ignore_older=24, multi_collects_type="RuleID", tail_files=True)
     log_sample = "2018-05-22 15:35:53.850#INFO#XXXX"
     input_type = 2
     container_rule = ContainerRule(container_name_regex=".*Name.*",
@@ -64,7 +70,10 @@ if __name__ == "__main__":
                                                                   exclude_pod_label_regex={"Key1": "Value1",
                                                                                            "Key2": "Value2"},
                                                                   pod_name_regex=".*Name.*",
-                                                                  label_tag={"Key1": "Value1", "Key2": "Value2"}))
+                                                                  label_tag={"Key1": "Value1", "Key2": "Value2"},
+                                                                  enable_all_label_tag=True,
+                                                                  include_pod_annotation_regex={"Key1": "Value1"},
+                                                                  exclude_pod_annotation_regex={"Key2": "Value2"}))
     create_rule_request = CreateRuleRequest(topic_id, rule_name, paths, log_type, extract_rule, exclude_paths,
                                             user_define_rule, log_sample, input_type, container_rule)
     create_rule_response = tls_service.create_rule(create_rule_request)
@@ -88,8 +97,19 @@ if __name__ == "__main__":
     # 修改采集配置
     # 请根据您的需要，填写待修改的rule_id、rule_name或其它参数
     # ModifyRule API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112201
-    modify_rule_request = ModifyRuleRequest(rule_id, rule_name="change-rule-name-" + now)
+    modify_rule_request = ModifyRuleRequest(rule_id, rule_name="change-rule-name-" + now, pause=1)
     modify_rule_response = tls_service.modify_rule(modify_rule_request)
+
+    # 验证新增字段 - 查询采集配置并检查新增字段
+    describe_rule_request = DescribeRuleRequest(rule_id)
+    describe_rule_response = tls_service.describe_rule(describe_rule_request)
+    rule_info = describe_rule_response.get_rule_info()
+    print("修改后的规则名称: {}".format(rule_info.get_rule_name()))
+    
+    # 验证查询采集配置列表的新增参数
+    describe_rules_request = DescribeRulesRequest(project_name="project-name-" + now, log_type="delimiter_log", pause=1)
+    describe_rules_response = tls_service.describe_rules(describe_rules_request)
+    print("查询到 {} 个暂停的采集配置".format(len([r for r in describe_rules_response.get_rule_infos() if hasattr(r, 'pause') and r.pause])))
 
     # 创建机器组
     create_host_group_request = CreateHostGroupRequest(host_group_name="host-group-name", host_group_type="IP",
@@ -115,6 +135,10 @@ if __name__ == "__main__":
     # DeleteRule API的请求参数规范请参阅 https://www.volcengine.com/docs/6470/112200
     delete_rule_request = DeleteRuleRequest(rule_id)
     delete_rule_response = tls_service.delete_rule(delete_rule_request)
+
+     # 删除机器组
+    delete_host_group_request = DeleteHostGroupRequest(host_group_id)
+    delete_host_group_response = tls_service.delete_host_group(delete_host_group_request)
 
     # 删除日志主题
     tls_service.delete_topic(DeleteTopicRequest(topic_id))

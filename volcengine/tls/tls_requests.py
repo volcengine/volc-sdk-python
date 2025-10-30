@@ -1503,7 +1503,7 @@ class ModifyRuleRequest(SetRuleRequest):
     def __init__(self, rule_id: str, rule_name: str = None, paths: List[str] = None, log_type: str = None,
                  extract_rule: ExtractRule = None, exclude_paths: List[ExcludePath] = None,
                  user_define_rule: UserDefineRule = None, log_sample: str = None, input_type: int = None,
-                 container_rule: ContainerRule = None):
+                 container_rule: ContainerRule = None, pause: int = None):
         """
         :param rule_id: 采集配置ID
         :type rule_id: str
@@ -1525,15 +1525,20 @@ class ModifyRuleRequest(SetRuleRequest):
         :type input_type: int
         :param container_rule: 容器采集规则
         :type container_rule: ContainerRule
+        :param pause: 是否暂停采集，0代表开启，1代表暂停
+        :type pause: int
         """
         super(ModifyRuleRequest, self).__init__(rule_name, paths, log_type, extract_rule, exclude_paths,
                                                 user_define_rule, log_sample, input_type, container_rule)
 
         self.rule_id = rule_id
+        self.pause = pause
 
     def get_api_input(self):
         body = super(ModifyRuleRequest, self).get_api_input()
         body[RULE_ID] = self.rule_id
+        if self.pause is not None:
+            body[PAUSE] = self.pause
 
         return body
 
@@ -1566,11 +1571,16 @@ class DescribeRuleRequest(TLSRequest):
 
 
 class DescribeRulesRequest(TLSRequest):
-    def __init__(self, project_id: str, rule_id: str = None, rule_name: str = None,
-                 topic_id: str = None, topic_name: str = None, page_number: int = 1, page_size: int = 20):
+    def __init__(self, project_id: str = None, project_name: str = None, iam_project_name: str = None,
+                 rule_id: str = None, rule_name: str = None, topic_id: str = None, topic_name: str = None,
+                 page_number: int = 1, page_size: int = 20, log_type: str = None, pause: int = None,):
         """
         :param rule_id:采集配置的 ID
         :type rule_id:str
+        :param project_name: 日志项目名称
+        :type project_name: str
+        :param iam_project_name: IAM 项目名称
+        :type iam_project_name: str
         :param rule_name:采集配置的名称
         :type rule_name:
         :param page_number: 分页查询时的页码。默认为 1
@@ -1583,22 +1593,29 @@ class DescribeRulesRequest(TLSRequest):
         :type topic_name: string
         :param project_id: 日志项目 ID
         :type project_id: string
+        :param log_type: 日志类型
+        :type log_type: str
+        :param pause: 是否暂停采集配置，0代表开启，1代表暂停
+        :type pause: int
         """
         self.project_id = project_id
+        self.project_name = project_name
+        self.iam_project_name = iam_project_name
         self.rule_id = rule_id
         self.rule_name = rule_name
         self.topic_id = topic_id
         self.topic_name = topic_name
         self.page_number = page_number
         self.page_size = page_size
+        self.log_type = log_type
+        self.pause = pause
+
 
     def check_validation(self):
         """
         :return: 参数是否合法
         :rtype: bool
         """
-        if self.project_id is None:
-            return False
         return True
 
 

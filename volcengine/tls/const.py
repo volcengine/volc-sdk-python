@@ -204,6 +204,7 @@ HOST_INFOS = "HostInfos"
 HEARTBEAT_STATUS = "HeartbeatStatus"
 
 RULE_ID = "RuleId"
+PAUSE = "Pause"
 RULE_NAME = "RuleName"
 PATHS = "Paths"
 LOG_TYPE = "LogType"
@@ -250,6 +251,8 @@ CLOSE_TIMEOUT = "CloseTimeout"
 CLOSE_REMOVED = "CloseRemoved"
 CLOSE_RENAMED = "CloseRenamed"
 CLOSE_EOF = "CloseEOF"
+NO_LINE_TERMINATOR_EOF_MAX_TIME = "NoLineTerminatorEOFMaxTime"
+
 
 ALARM_NOTIFY_GROUP_ID = "AlarmNotifyGroupId"
 ALARM_NOTIFY_GROUP_NAME = "AlarmNotifyGroupName"

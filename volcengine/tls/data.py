@@ -925,9 +925,9 @@ class LogTemplate(TLSData):
 
 class ExtractRule(TLSData):
     def __init__(self, delimiter: str = None, begin_regex: str = None, log_regex: str = None, keys: List[str] = None,
-                 time_key: str = None, time_format: str = None, filter_key_regex: List[FilterKeyRegex] = None,
+                 time_key: str = None, time_format: str = None, time_zone: str = None, filter_key_regex: List[FilterKeyRegex] = None,
                  un_match_up_load_switch: bool = None, un_match_log_key: str = None, log_template: LogTemplate = None,
-                 quote: str = None):
+                 quote: str = None, time_extract_regex: str = None, enable_nanosecond: bool = False, time_sample: str = None):
         """
         :param delimiter: 日志分隔符
         :type delimiter: str
@@ -941,7 +941,9 @@ class ExtractRule(TLSData):
         :type time_key: str
         :param time_format: 时间字段的解析格式
         :type time_format: str
-        :param filter_key_regex: 时间字段的解析格式
+        :param time_zone: 日志时间字段的时区
+        :type time_zone: str
+        :param filter_key_regex: 过滤字段的正则表达式
         :type filter_key_regex: List[FilterKeyRegex]
         :param un_match_up_load_switch: 是否上传解析失败的日志
         :type un_match_up_load_switch: bool
@@ -951,6 +953,12 @@ class ExtractRule(TLSData):
         :type log_template: LogTemplate
         :param quote: 引用符
         :type quote: str
+        :param time_extract_regex: 时间字段的解析正则表达式
+        :type time_extract_regex: str
+        :param enable_nanosecond: 是否开启解析纳秒级时间
+        :type enable_nanosecond: bool
+        :param time_sample: 时间字段的样本日志
+        :type time_sample: str
         """
         assert (time_key is None and time_format is None) or (time_key is not None and time_format is not None)
         assert (un_match_up_load_switch is None and un_match_log_key is None) or \
@@ -962,11 +970,15 @@ class ExtractRule(TLSData):
         self.keys = keys
         self.time_key = time_key
         self.time_format = time_format
+        self.time_zone = time_zone
         self.filter_key_regex = filter_key_regex
         self.un_match_up_load_switch = un_match_up_load_switch
         self.un_match_log_key = un_match_log_key
         self.log_template = log_template
         self.quote = quote
+        self.time_extract_regex = time_extract_regex
+        self.enable_nanosecond = enable_nanosecond
+        self.time_sample = time_sample
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -1113,13 +1125,15 @@ class Plugin(TLSData):
 
 
 class Advanced(TLSData):
-    def __init__(self, close_inactive: int = 60, close_timeout: int = 0,
+    def __init__(self, close_inactive: int = 60, close_timeout: int = 0, no_line_terminator_eof_max_time: int = 5,
                  close_removed: bool = False, close_renamed: bool = False, close_eof: bool = False):
         """
         :param close_inactive: 释放日志文件句柄的等待时间
         :type close_inactive: int
         :param close_timeout: LogCollector监控日志文件的最大时长
         :type close_timeout: int
+        :param no_line_terminator_eof_max_time: 日志文件无行终止符时，最大等待时间
+        :type no_line_terminator_eof_max_time: int
         :param close_removed: 日志文件被移除之后，是否释放该日志文件的句柄
         :type close_removed: bool
         :param close_renamed: 日志文件被重命名之后，是否释放该日志文件的句柄
@@ -1127,6 +1141,7 @@ class Advanced(TLSData):
         :param close_eof: 读取至日志文件的末尾之后，是否释放该日志文件的句柄
         :type close_eof: bool
         """
+        self.no_line_terminator_eof_max_time = no_line_terminator_eof_max_time
         self.close_inactive = close_inactive
         self.close_timeout = close_timeout
         self.close_removed = close_removed
@@ -1146,6 +1161,15 @@ class Advanced(TLSData):
         :rtype: int
         """
         return self.close_timeout
+    
+    def get_no_line_terminator_eof_max_time(self):
+        """
+        :return: 日志文件无行终止符时，最大等待时间
+        :rtype: int
+        """
+        return self.no_line_terminator_eof_max_time
+
+
 
     def get_close_removed(self):
         """
@@ -1170,13 +1194,16 @@ class Advanced(TLSData):
 
     def json(self):
         return {CLOSE_INACTIVE: self.close_inactive, CLOSE_TIMEOUT: self.close_timeout,
-                CLOSE_REMOVED: self.close_removed, CLOSE_RENAMED: self.close_renamed, CLOSE_EOF: self.close_eof}
+                CLOSE_REMOVED: self.close_removed, CLOSE_RENAMED: self.close_renamed, CLOSE_EOF: self.close_eof,
+                NO_LINE_TERMINATOR_EOF_MAX_TIME: self.no_line_terminator_eof_max_time}
 
 
 class UserDefineRule(TLSData):
     def __init__(self, parse_path_rule: ParsePathRule = None, shard_hash_key: ShardHashKey = None,
                  enable_raw_log: bool = False, fields: dict = None, plugin: Plugin = None, advanced: Advanced = None,
-                 tail_files: bool = False):
+                 tail_files: bool = False, raw_log_key: str = None, enable_hostname: bool = False,
+                 hostname_key: str = None, host_group_label_key: str = None, enable_host_group_label: bool = False,
+                 tail_size_kb: int = None, ignore_older: int = None, multi_collects_type: str = None):
         """
         :param parse_path_rule: 解析采集路径的规则
         :type parse_path_rule: ParsePathRule
@@ -1192,6 +1219,22 @@ class UserDefineRule(TLSData):
         :type advanced: Advanced
         :param tail_files: LogCollector采集策略，即指定LogCollector采集增量日志还是全量日志
         :type tail_files: bool
+        :param raw_log_key: 原始日志的键名
+        :type raw_log_key: str
+        :param enable_hostname: 是否添加主机名字段
+        :type enable_hostname: bool
+        :param hostname_key: 主机名字段的键名
+        :type hostname_key: str
+        :param host_group_label_key: 主机分组标签字段的键名
+        :type host_group_label_key: str
+        :param enable_host_group_label: 是否添加主机分组标签字段
+        :type enable_host_group_label: bool
+        :param tail_size_kb: 增量采集的回溯阈值。
+        :type tail_size_kb: int
+        :param ignore_older: 忽略多久没有更新的日志文件, 单位为小时。
+        :type ignore_older: int
+        :param multi_collects_type: 允许多次采集日志文件。空、RuleID、TopicIDRuleName
+        :type multi_collects_type: str
         """
         self.parse_path_rule = parse_path_rule
         self.shard_hash_key = shard_hash_key
@@ -1200,6 +1243,14 @@ class UserDefineRule(TLSData):
         self.plugin = plugin
         self.advanced = advanced
         self.tail_files = tail_files
+        self.raw_log_key = raw_log_key
+        self.enable_hostname = enable_hostname
+        self.hostname_key = hostname_key
+        self.host_group_label_key = host_group_label_key
+        self.enable_host_group_label = enable_host_group_label
+        self.tail_size_kb = tail_size_kb
+        self.ignore_older = ignore_older
+        self.multi_collects_type = multi_collects_type
 
     def get_enable_raw_log(self):
         """
@@ -1250,6 +1301,63 @@ class UserDefineRule(TLSData):
         """
         return self.tail_files
 
+    def get_raw_log_key(self):
+        """
+        :return: 原始日志的键名
+        :rtype: str
+        """
+        return self.raw_log_key
+
+    def get_enable_hostname(self):
+        """
+        :return: 是否添加主机名字段
+        :rtype: bool
+        """
+        return self.enable_hostname
+
+    def get_hostname_key(self):
+        """
+        :return: 主机名字段的键名
+        :rtype: str
+        """
+        return self.hostname_key
+
+    def get_host_group_label_key(self):
+        """
+        :return: 主机分组标签字段的键名
+        :rtype: str
+        """
+        return self.host_group_label_key
+
+    def get_enable_host_group_label(self):
+        """
+        :return: 是否添加主机分组标签字段
+        :rtype: bool
+        """
+        return self.enable_host_group_label
+    def get_tail_size_kb(self):
+        """
+        :return: 增量采集的回溯阈值。
+        :rtype: int
+        """
+        return self.tail_size_kb
+
+    def get_ignore_older(self):
+        """
+        :return: 忽略多久没有更新的日志文件, 单位为小时。
+        :rtype: int
+        """
+        return self.ignore_older
+
+    def get_multi_collects_type(self):
+        """
+        :return: 允许多次采集日志文件。空、RuleID、TopicIDRuleName
+        :rtype: str
+        """
+        return self.multi_collects_type
+
+
+
     @classmethod
     def set_attributes(cls, data: dict):
         user_define_rule = super(UserDefineRule, cls).set_attributes(data)
@@ -1263,6 +1371,7 @@ class UserDefineRule(TLSData):
         if ADVANCED in data:
             user_define_rule.advanced = Advanced(close_inactive=data[ADVANCED].get(CLOSE_INACTIVE),
                                                  close_timeout=data[ADVANCED].get(CLOSE_TIMEOUT),
+                                                 no_line_terminator_eof_max_time=data[ADVANCED].get(NO_LINE_TERMINATOR_EOF_MAX_TIME),
                                                  close_removed=data[ADVANCED].get(CLOSE_REMOVED),
                                                  close_renamed=data[ADVANCED].get(CLOSE_RENAMED),
                                                  close_eof=data[ADVANCED].get(CLOSE_EOF))
@@ -1287,7 +1396,9 @@ class UserDefineRule(TLSData):
 class KubernetesRule(TLSData):
     def __init__(self, namespace_name_regex: str = None, workload_type: str = None, workload_name_regex: str = None,
                  include_pod_label_regex: Dict[str, str] = None, exclude_pod_label_regex: Dict[str, str] = None,
-                 pod_name_regex: str = None, label_tag: Dict[str, str] = None, annotation_tag: Dict[str, str] = None):
+                 pod_name_regex: str = None, label_tag: Dict[str, str] = None, annotation_tag: Dict[str, str] = None,
+                 enable_all_label_tag: bool = False, exclude_pod_annotation_regex: Dict[str, str] = None,
+                 include_pod_annotation_regex: Dict[str, str] = None,):
         """
         :param namespace_name_regex: 待采集的Kubernetes Namespace名称，不指定Namespace名称时表示采集全部容器
         :type namespace_name_regex: str
@@ -1305,6 +1416,12 @@ class KubernetesRule(TLSData):
         :type label_tag: Dict[str, str]
         :param annotation_tag: 是否将Kubernetes Annotation作为日志标签，添加到原始日志数据中
         :type annotation_tag: Dict[str, str]
+        :param enable_all_label_tag: 是否将所有 Kubernetes Label 作为日志标签，添加到原始日志数据中
+        :type enable_all_label_tag: bool
+        :param exclude_pod_annotation_regex: 通过 Pod Annotation 黑名单指定不采集的容器，不启用表示采集全部容器
+        :type exclude_pod_annotation_regex: Dict[str, str]
+        :param include_pod_annotation_regex: Pod Annotation 白名单用于指定待采集的容器
+        :type include_pod_annotation_regex: Dict[str, str]
         """
         self.namespace_name_regex = namespace_name_regex
         self.workload_type = workload_type
@@ -1314,6 +1431,9 @@ class KubernetesRule(TLSData):
         self.pod_name_regex = pod_name_regex
         self.label_tag = label_tag
         self.annotation_tag = annotation_tag
+        self.enable_all_label_tag = enable_all_label_tag
+        self.exclude_pod_annotation_regex = exclude_pod_annotation_regex
+        self.include_pod_annotation_regex = include_pod_annotation_regex
 
     def get_include_pod_label_regex(self):
         """
@@ -1370,6 +1490,24 @@ class KubernetesRule(TLSData):
         :rtype: Dict[str, str]
         """
         return self.annotation_tag
+    def get_enable_all_label_tag(self):
+        """
+        :return: 是否将所有 Kubernetes Label 作为日志标签，添加到原始日志数据中
+        :rtype: bool
+        """
+        return self.enable_all_label_tag
+    def get_exclude_pod_annotation_regex(self):
+        """
+        :return: 通过 Pod Annotation 黑名单指定不采集的容器，不启用表示采集全部容器
+        :rtype: Dict[str, str]
+        """
+        return self.exclude_pod_annotation_regex
+    def get_include_pod_annotation_regex(self):
+        """
+        :return: Pod Annotation 白名单用于指定待采集的容器
+        :rtype: Dict[str, str]
+        """
+        return self.include_pod_annotation_regex
 
 
 class ContainerRule(TLSData):
