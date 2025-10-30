@@ -944,3 +944,274 @@ class VikingDBService(VikingDBServiceBase):
             "task_status": task_status.value
         }
         res = self.json_exception("UpdateTask", {}, json.dumps(params))
+
+    def search_vector_v2(self, collection_name, index_name, dense_vector, limit=10, retry=True):
+        """
+        Search for vectors using VikingDB v2 API.
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param dense_vector: The dense vector to search for.
+        :type dense_vector: list
+        :param limit: Number of results to return.
+        :type limit: int
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "dense_vector": dense_vector,
+            "limit": limit
+        }
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("SearchVectorV2", {}, json.dumps(params), remaining, self.retry_option)
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    async def async_search_vector_v2(self, collection_name, index_name, dense_vector, limit=10):
+        """
+        Search for vectors using VikingDB v2 API (async version).
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param dense_vector: The dense vector to search for.
+        :type dense_vector: list
+        :param limit: Number of results to return.
+        :type limit: int
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "dense_vector": dense_vector,
+            "limit": limit
+        }
+        res = await self.async_json_exception("SearchVectorV2", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    def search_by_multi_modal(self, collection_name, index_name, text, need_instruction=True, output_fields=None, limit=10, retry=True):
+        """
+        Search using multi-modal data (text, image, etc.) with VikingDB v2 API.
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param text: The text query for multi-modal search.
+        :type text: str
+        :param need_instruction: Whether to use instruction for search.
+        :type need_instruction: bool
+        :param output_fields: List of fields to return in results.
+        :type output_fields: list
+        :param limit: Number of results to return.
+        :type limit: int
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "text": text,
+            "need_instruction": need_instruction,
+            "limit": limit
+        }
+        if output_fields is not None:
+            params["output_fields"] = output_fields
+        
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("SearchByMultiModal", {}, json.dumps(params), remaining, self.retry_option)
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    async def async_search_by_multi_modal(self, collection_name, index_name, text, need_instruction=True, output_fields=None, limit=10):
+        """
+        Search using multi-modal data (text, image, etc.) with VikingDB v2 API (async version).
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param text: The text query for multi-modal search.
+        :type text: str
+        :param need_instruction: Whether to use instruction for search.
+        :type need_instruction: bool
+        :param output_fields: List of fields to return in results.
+        :type output_fields: list
+        :param limit: Number of results to return.
+        :type limit: int
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "text": text,
+            "need_instruction": need_instruction,
+            "limit": limit
+        }
+        if output_fields is not None:
+            params["output_fields"] = output_fields
+        
+        res = await self.async_json_exception("SearchByMultiModal", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    def search_by_id(self, collection_name, index_name, id, limit=10, retry=True):
+        """
+        Search for data by ID using VikingDB v2 API.
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param id: The ID to search for.
+        :type id: str
+        :param limit: Number of results to return.
+        :type limit: int
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "id": id,
+            "limit": limit
+        }
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("SearchById", {}, json.dumps(params), remaining, self.retry_option)
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    async def async_search_by_id(self, collection_name, index_name, id, limit=10):
+        """
+        Search for data by ID using VikingDB v2 API (async version).
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param id: The ID to search for.
+        :type id: str
+        :param limit: Number of results to return.
+        :type limit: int
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "id": id,
+            "limit": limit
+        }
+        res = await self.async_json_exception("SearchById", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    def search_scalar(self, collection_name, index_name, field, order="desc", limit=10, retry=True):
+        """
+        Search for data by scalar field using VikingDB v2 API.
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param field: The scalar field name to search by.
+        :type field: str
+        :param order: Sort order ("asc" or "desc").
+        :type order: str
+        :param limit: Number of results to return.
+        :type limit: int
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "field": field,
+            "order": order,
+            "limit": limit
+        }
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("SearchScalar", {}, json.dumps(params), remaining, self.retry_option)
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    async def async_search_scalar(self, collection_name, index_name, field, order="desc", limit=10):
+        """
+        Search for data by scalar field using VikingDB v2 API (async version).
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param field: The scalar field name to search by.
+        :type field: str
+        :param order: Sort order ("asc" or "desc").
+        :type order: str
+        :param limit: Number of results to return.
+        :type limit: int
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "field": field,
+            "order": order,
+            "limit": limit
+        }
+        res = await self.async_json_exception("SearchScalar", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    def search_random(self, collection_name, index_name, limit=10, retry=True):
+        """
+        Search for random data using VikingDB v2 API.
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param limit: Number of results to return.
+        :type limit: int
+        :param retry: Whether to retry when QuotaLimiterException occurs.
+        :type retry: bool
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "limit": limit
+        }
+        remaining = self.retry_option.new_remaining(retry)
+        res = self._retry_request("SearchRandom", {}, json.dumps(params), remaining, self.retry_option)
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
+
+    async def async_search_random(self, collection_name, index_name, limit=10):
+        """
+        Search for random data using VikingDB v2 API (async version).
+
+        :param collection_name: The name of the collection.
+        :type collection_name: str
+        :param index_name: The name of the index.
+        :type index_name: str
+        :param limit: Number of results to return.
+        :type limit: int
+        :rtype: dict
+        """
+        params = {
+            "collection_name": collection_name,
+            "index_name": index_name,
+            "limit": limit
+        }
+        res = await self.async_json_exception("SearchRandom", {}, json.dumps(params))
+        res = json.loads(res)
+        return res["result"] if "result" in res else res
