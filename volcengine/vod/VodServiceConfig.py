@@ -57,7 +57,7 @@ class VodServiceConfig(Service):
             "DescribeDrmDataKey": ApiInfo("GET", "/", {"Action": "DescribeDrmDataKey", "Version": "2023-07-01"}, {}, {}),
             "GetPlayInfoWithLiveTimeShiftScene": ApiInfo("GET", "/", {"Action": "GetPlayInfoWithLiveTimeShiftScene", "Version": "2021-11-01"}, {}, {}),
             # 上传
-            "UploadMediaByUrl": ApiInfo("GET", "/", {"Action": "UploadMediaByUrl", "Version": "2020-08-01"}, {}, {}),
+            "UploadMediaByUrl": ApiInfo("POST", "/", {"Action": "UploadMediaByUrl", "Version": "2020-08-01"}, {}, {}),
             "QueryUploadTaskInfo": ApiInfo("GET", "/", {"Action": "QueryUploadTaskInfo", "Version": "2020-08-01"}, {}, {}),
             "ApplyUploadInfo": ApiInfo("GET", "/", {"Action": "ApplyUploadInfo", "Version": "2022-01-01"}, {}, {}),
             "CommitUploadInfo": ApiInfo("GET", "/", {"Action": "CommitUploadInfo", "Version": "2022-01-01"}, {}, {}),

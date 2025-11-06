@@ -2364,3 +2364,298 @@ class RemoveTagsFromResourceRequest(TLSRequest):
         :rtype: bool
         """
         return self.resource_type is not None and self.resources_list is not None and self.tag_key_list is not None
+
+class CreateImportTaskRequest(TLSRequest):
+    def __init__(self, topic_id: str, task_name: str, source_type: str, import_source_info: ImportSourceInfo,
+                 target_info: TargetInfo, project_id: str = None, description: str = None):
+        """
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param task_name: 导入任务名称
+        :type task_name: str
+        :param source_type: 导入任务源类型:tos、kafka
+        :type source_type: str
+        :param import_source_info: 导入任务源信息
+        :type import_source_info: ImportSourceInfo
+        :param target_info: 导入任务目标信息
+        :type target_info: TargetInfo
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param description: 导入任务描述
+        :type description: str
+        """
+        self.project_id = project_id
+        self.topic_id = topic_id
+        self.task_name = task_name
+        self.source_type = source_type
+        self.import_source_info = import_source_info
+        self.target_info = target_info
+        self.description = description
+
+    def get_api_input(self):
+        body = super(CreateImportTaskRequest, self).get_api_input()
+        del body[PROJECT_ID]
+        if self.project_id is not None:
+            body[PROJECT_ID_UPPERCASE] = self.project_id
+        del body[TOPIC_ID]
+        body[TOPIC_ID_UPPERCASE] = self.topic_id
+        if self.import_source_info is not None:
+            body[IMPORT_SOURCE_INFO] = self.import_source_info.json()
+
+        if self.target_info is not None:
+            body[TARGET_INFO] = self.target_info.json()
+
+        return body
+
+class DeleteImportTaskRequest(TLSRequest):
+    def __init__(self, task_id: str):
+        """
+        :param task_id: 导入任务ID
+        :type task_id: str
+        """
+        self.task_id = task_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.task_id is not None
+
+class ModifyImportTaskRequest(CreateImportTaskRequest):
+    def __init__(self, task_id: str, status: int, topic_id: str, task_name: str, source_type: str, import_source_info: ImportSourceInfo,
+                 target_info: TargetInfo, project_id: str = None, description: str = None):
+        """
+        :param task_id: 导入任务ID
+        :type task_id: str
+        :param status: 导入任务状态:0：导入中。1：导入完成。2：导入异常。3：停止中。4：已停止。5：重启中。
+        :type status: int
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param task_name: 导入任务名称
+        :type task_name: str
+        :param source_type: 导入任务源类型:tos、kafka
+        :type source_type: str
+        :param import_source_info: 导入任务源信息
+        :type import_source_info: ImportSourceInfo
+        :param target_info: 导入任务目标信息
+        :type target_info: TargetInfo
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param description: 导入任务描述
+        :type description: str
+        """
+        super(ModifyImportTaskRequest, self).__init__(topic_id, task_name, source_type, import_source_info, target_info, project_id, description)
+        self.task_id = task_id
+        self.status = status
+
+class DescribeImportTaskRequest(TLSRequest):
+    def __init__(self, task_id: str):
+        """
+        :param task_id: 导入任务ID
+        :type task_id: str
+        """
+        self.task_id = task_id
+
+class DescribeImportTasksRequest(TLSRequest):
+    def __init__(self, task_id: str = None, task_name: str = None, project_id: str = None, project_name: str = None,
+                 iam_project_name: str = None, topic_id: str = None, topic_name: str = None,page_number: int = 1,
+                 page_size: int = 20, source_type: str = None, status: int = None):
+        """
+        :param task_id: 导入任务ID
+        :type task_id: str
+        :param task_name: 导入任务名称
+        :type task_name: str
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param project_name: 日志项目名称
+        :type project_name: str
+        :param iam_project_name: 日志项目名称（IAM）
+        :type iam_project_name: str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param topic_name: 日志主题名称
+        :type topic_name: str
+        :param page_number: 分页查询时的页码。默认为 1，即从第一页数据开始返回。
+        :type page_number: int
+        :param page_size: 分页大小。默认为 20，最大为 100。
+        :type page_size: int
+        :param source_type: 导入任务源类型:tos、kafka
+        :type source_type: str
+        :param status: 导入任务状态:0：导入中。1：导入完成。2：导入异常。3：停止中。4：已停止。5：重启中。
+        :type status: int
+        """
+        self.task_id = task_id
+        self.task_name = task_name
+        self.project_id = project_id
+        self.project_name = project_name
+        self.iam_project_name = iam_project_name
+        self.topic_id = topic_id
+        self.topic_name = topic_name
+        self.page_number = page_number
+        self.page_size = page_size
+        self.source_type = source_type
+        self.status = status
+
+
+class CreateShipperRequest(TLSRequest):
+    def __init__(self, topic_id: str, shipper_name: str, shipper_type: str, content_info: ContentInfo,
+                 tos_shipper_info: TosShipperInfo = None, kafka_shipper_info: KafkaShipperInfo = None,
+                 shipper_start_time: int = None, shipper_end_time: int = None, role_trn: str = None):
+        """
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param shipper_name: 投递配置名称
+        :type shipper_name: str
+        :param shipper_type: 投递类型: tos、kafka
+        :type shipper_type: str
+        :param content_info: 日志内容的投递格式配置
+        :type content_info: ContentInfo
+        :param tos_shipper_info: 投递到TOS的相关配置
+        :type tos_shipper_info: TosShipperInfo, optional
+        :param kafka_shipper_info: 投递到Kafka的相关配置
+        :type kafka_shipper_info: KafkaShipperInfo, optional
+        :param shipper_start_time: 投递开始时间，毫秒时间戳
+        :type shipper_start_time: int, optional
+        :param shipper_end_time: 投递结束时间，毫秒时间戳
+        :type shipper_end_time: int, optional
+        :param role_trn: 自定义角色的Trn
+        :type role_trn: str, optional
+        """
+        self.topic_id = topic_id
+        self.shipper_name = shipper_name
+        self.shipper_type = shipper_type
+        self.content_info = content_info
+        self.tos_shipper_info = tos_shipper_info
+        self.kafka_shipper_info = kafka_shipper_info
+        self.shipper_start_time = shipper_start_time
+        self.shipper_end_time = shipper_end_time
+        self.role_trn = role_trn
+
+    def get_api_input(self):
+        api_input = super(CreateShipperRequest, self).get_api_input()
+        api_input[CONTENT_INFO] = self.content_info.json()
+        if self.tos_shipper_info:
+            api_input[TOS_SHIPPER_INFO] = self.tos_shipper_info.json()
+        if self.kafka_shipper_info:
+            api_input[KAFKA_SHIPPER_INFO] = self.kafka_shipper_info.json()
+        return api_input
+
+
+class DeleteShipperRequest(TLSRequest):
+    def __init__(self, shipper_id: str):
+        """
+        :param shipper_id: 投递配置ID
+        :type shipper_id: str
+        """
+        self.shipper_id = shipper_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.shipper_id is not None
+
+
+class ModifyShipperRequest(TLSRequest):
+    def __init__(self, shipper_id: str, shipper_name: str = None, shipper_type: str = None,
+                 content_info: ContentInfo = None, tos_shipper_info: TosShipperInfo = None,
+                 kafka_shipper_info: KafkaShipperInfo = None, status: bool = None, role_trn: str = None):
+        """
+        :param shipper_id: 投递配置ID
+        :type shipper_id: str
+        :param shipper_name: 投递配置名称
+        :type shipper_name: str, optional
+        :param shipper_type: 投递类型: tos、kafka
+        :type shipper_type: str, optional
+        :param content_info: 日志内容的投递格式配置
+        :type content_info: ContentInfo, optional
+        :param tos_shipper_info: 投递到TOS的相关配置
+        :type tos_shipper_info: TosShipperInfo, optional
+        :param kafka_shipper_info: 投递到Kafka的相关配置
+        :type kafka_shipper_info: KafkaShipperInfo, optional
+        :param status: 是否开启投递配置
+        :type status: bool, optional
+        :param role_trn: 自定义角色的Trn
+        :type role_trn: str, optional
+        """
+        self.shipper_id = shipper_id
+        self.shipper_name = shipper_name
+        self.shipper_type = shipper_type
+        self.content_info = content_info
+        self.tos_shipper_info = tos_shipper_info
+        self.kafka_shipper_info = kafka_shipper_info
+        self.status = status
+        self.role_trn = role_trn
+
+    def get_api_input(self):
+        api_input = super(ModifyShipperRequest, self).get_api_input()
+        if self.content_info:
+            api_input[CONTENT_INFO] = self.content_info.json()
+        if self.tos_shipper_info:
+            api_input[TOS_SHIPPER_INFO] = self.tos_shipper_info.json()
+        if self.kafka_shipper_info:
+            api_input[KAFKA_SHIPPER_INFO] = self.kafka_shipper_info.json()
+        return api_input
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.shipper_id is not None
+
+
+class DescribeShipperRequest(TLSRequest):
+    def __init__(self, shipper_id: str):
+        """
+        :param shipper_id: 投递配置ID
+        :type shipper_id: str
+        """
+        self.shipper_id = shipper_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.shipper_id is not None
+
+
+class DescribeShippersRequest(TLSRequest):
+    def __init__(self, project_id: str = None, project_name: str = None, iam_project_name: str = None,
+                 shipper_id: str = None, shipper_name: str = None, topic_id: str = None,
+                 topic_name: str = None, shipper_type: str = None, page_number: int = 1, page_size: int = 20):
+        """
+        :param project_id: 日志项目ID
+        :type project_id: str, optional
+        :param project_name: 日志项目名称
+        :type project_name: str, optional
+        :param iam_project_name: IAM项目名称
+        :type iam_project_name: str, optional
+        :param shipper_id: 投递配置ID
+        :type shipper_id: str, optional
+        :param shipper_name: 投递配置名称
+        :type shipper_name: str, optional
+        :param topic_id: 日志主题ID
+        :type topic_id: str, optional
+        :param topic_name: 日志主题名称
+        :type topic_name: str, optional
+        :param shipper_type: 投递类型: tos、kafka
+        :type shipper_type: str, optional
+        :param page_number: 分页查询时的页码
+        :type page_number: int, optional
+        :param page_size: 分页大小
+        :type page_size: int, optional
+        """
+        self.project_id = project_id
+        self.project_name = project_name
+        self.iam_project_name = iam_project_name
+        self.shipper_id = shipper_id
+        self.shipper_name = shipper_name
+        self.topic_id = topic_id
+        self.topic_name = topic_name
+        self.shipper_type = shipper_type
+        self.page_number = page_number
+        self.page_size = page_size

@@ -92,7 +92,19 @@ API_INFO = {
     DESCRIBE_CHECKPOINT: ApiInfo(HTTP_GET, DESCRIBE_CHECKPOINT, {}, {}, {}),
     # APIs of resource labels.
     ADD_TAGS_TO_RESOURCE: ApiInfo(HTTP_POST, ADD_TAGS_TO_RESOURCE, {}, {}, {}),
-    REMOVE_TAGS_FROM_RESOURCE: ApiInfo(HTTP_POST, REMOVE_TAGS_FROM_RESOURCE, {}, {}, {})
+    REMOVE_TAGS_FROM_RESOURCE: ApiInfo(HTTP_POST, REMOVE_TAGS_FROM_RESOURCE, {}, {}, {}),
+    # APIs of import task.
+    CREATE_IMPORT_TASK: ApiInfo(HTTP_POST, CREATE_IMPORT_TASK, {}, {}, {}),
+    DELETE_IMPORT_TASK: ApiInfo(HTTP_DELETE, DELETE_IMPORT_TASK, {}, {}, {}),
+    MODIFY_IMPORT_TASK: ApiInfo(HTTP_PUT, MODIFY_IMPORT_TASK, {}, {}, {}),
+    DESCRIBE_IMPORT_TASKS: ApiInfo(HTTP_GET, DESCRIBE_IMPORT_TASKS, {}, {}, {}),
+    DESCRIBE_IMPORT_TASK: ApiInfo(HTTP_GET, DESCRIBE_IMPORT_TASK, {}, {}, {}),
+    # APIs of shipper.
+    CREATE_SHIPPER: ApiInfo(HTTP_POST, CREATE_SHIPPER, {}, {}, {}),
+    DELETE_SHIPPER: ApiInfo(HTTP_DELETE, DELETE_SHIPPER, {}, {}, {}),
+    MODIFY_SHIPPER: ApiInfo(HTTP_PUT, MODIFY_SHIPPER, {}, {}, {}),
+    DESCRIBE_SHIPPERS: ApiInfo(HTTP_GET, DESCRIBE_SHIPPERS, {}, {}, {}),
+    DESCRIBE_SHIPPER: ApiInfo(HTTP_GET, DESCRIBE_SHIPPER, {}, {}, {})
 }
 
 HEADER_API_VERSION = "x-tls-apiversion"
@@ -776,3 +788,52 @@ class TLSService(Service):
         response = self.__request(api=REMOVE_TAGS_FROM_RESOURCE, body=remove_tags_from_resource_request.get_api_input())
 
         return RemoveTagsFromResourceResponse(response)
+
+    def create_import_task(self, create_import_task_request: CreateImportTaskRequest) -> CreateImportTaskResponse:
+        response = self.__request(api=CREATE_IMPORT_TASK, body=create_import_task_request.get_api_input())
+        return CreateImportTaskResponse(response)
+
+    def delete_import_task(self, delete_import_task_request: DeleteImportTaskRequest) -> DeleteImportTaskResponse:
+        if not delete_import_task_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_IMPORT_TASK, body=delete_import_task_request.get_api_input())
+        return DeleteImportTaskResponse(response)
+
+    def modify_import_task(self, modify_import_task_request: ModifyImportTaskRequest) -> ModifyImportTaskResponse:
+        response = self.__request(api=MODIFY_IMPORT_TASK, body=modify_import_task_request.get_api_input())
+        return ModifyImportTaskResponse(response)
+
+    def describe_import_task(self, describe_import_task_request: DescribeImportTaskRequest) -> DescribeImportTaskResponse:
+        response = self.__request(api=DESCRIBE_IMPORT_TASK, params=describe_import_task_request.get_api_input())
+        return DescribeImportTaskResponse(response)
+
+    def describe_import_tasks(self, describe_import_tasks_request: DescribeImportTasksRequest) -> DescribeImportTasksResponse:
+        response = self.__request(api=DESCRIBE_IMPORT_TASKS, params=describe_import_tasks_request.get_api_input())
+        return DescribeImportTasksResponse(response)
+
+    def create_shipper(self, create_shipper_request: CreateShipperRequest) -> CreateShipperResponse:
+        response = self.__request(api=CREATE_SHIPPER, body=create_shipper_request.get_api_input())
+        return CreateShipperResponse(response)
+
+    def delete_shipper(self, delete_shipper_request: DeleteShipperRequest) -> DeleteShipperResponse:
+        if not delete_shipper_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_SHIPPER, body=delete_shipper_request.get_api_input())
+        return DeleteShipperResponse(response)
+
+    def modify_shipper(self, modify_shipper_request: ModifyShipperRequest) -> ModifyShipperResponse:
+        if not modify_shipper_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_SHIPPER, body=modify_shipper_request.get_api_input())
+        return ModifyShipperResponse(response)
+
+    def describe_shipper(self, describe_shipper_request: DescribeShipperRequest) -> DescribeShipperResponse:
+
+        if not describe_shipper_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_SHIPPER, params=describe_shipper_request.get_api_input())
+        return DescribeShipperResponse(response)
+
+    def describe_shippers(self, describe_shippers_request: DescribeShippersRequest) -> DescribeShippersResponse:
+        response = self.__request(api=DESCRIBE_SHIPPERS, params=describe_shippers_request.get_api_input())
+        return DescribeShippersResponse(response)

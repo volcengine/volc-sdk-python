@@ -11,7 +11,7 @@ from volcengine.Credentials import Credentials
 from volcengine.ServiceInfo import ServiceInfo
 from volcengine.base.Service import Service
 from volcengine.Policy import *
-from requests import exceptions
+from requests import delete, exceptions
 
 SERVICE_VERSION = "2022-01-01"
 
@@ -78,6 +78,12 @@ class VmsService(Service):
             "BindYBForAXYB": ApiInfo("POST", "/", {"Action": "BindYBForAXYB", "Version": SERVICE_VERSION}, {}, {}),
             "UpdateAXYB": ApiInfo("POST", "/", {"Action": "UpdateAXYB", "Version": SERVICE_VERSION}, {}, {}),
             "UnbindAXYB": ApiInfo("POST", "/", {"Action": "UnbindAXYB", "Version": SERVICE_VERSION}, {}, {}),
+            "BindAXG": ApiInfo("POST", "/", {"Action": "BindAXG", "Version": SERVICE_VERSION}, {}, {}),
+            "UnbindAXG": ApiInfo("POST", "/", {"Action": "UnbindAXG", "Version": SERVICE_VERSION}, {}, {}),
+            "UpdateAXG": ApiInfo("POST", "/", {"Action": "UpdateAXG", "Version": SERVICE_VERSION}, {}, {}),
+            "CreateAXGGroup": ApiInfo("POST", "/", {"Action": "CreateAXGGroup", "Version": SERVICE_VERSION}, {}, {}),
+            "UpdateAXGGroup": ApiInfo("POST", "/", {"Action": "UpdateAXGGroup", "Version": SERVICE_VERSION}, {}, {}),
+            "DeleteAXGGroup": ApiInfo("POST", "/", {"Action": "DeleteAXGGroup", "Version": SERVICE_VERSION}, {}, {}),
             "RouteAAuth": ApiInfo("POST", "/", {"Action": "RouteAAuth", "Version": SERVICE_VERSION}, {}, {}),
             "NumberPoolList": ApiInfo("POST", "/", {"Action": "NumberPoolList", "Version": SERVICE_VERSION}, {}, {}),
             "NumberList": ApiInfo("GET", "/", {"Action": "NumberList", "Version": SERVICE_VERSION}, {}, {}),
@@ -316,6 +322,54 @@ class VmsService(Service):
     def unbind_axyb(self, form):
         try:
             return self.common_handler("UnbindAXYB", form)
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def bind_axg(self, body):
+        try:
+            res_json = self.do_json_handler("BindAXG", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def unbind_axg(self, body):
+        try:
+            res_json = self.do_json_handler("UnbindAXG", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def update_axg(self, body):
+        try:
+            res_json = self.do_json_handler("UpdateAXG", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def create_axg_group(self, body):
+        try:
+            res_json = self.do_json_handler("CreateAXGGroup", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def update_axg_group(self, body):
+        try:
+            res_json = self.do_json_handler("UpdateAXGGroup", body)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    @retry(tries=2, delay=0)
+    def delete_axg_group(self, body):
+        try:
+            res_json = self.do_json_handler("DeleteAXGGroup", body)
+            return res_json
         except Exception as e:
             raise Exception(str(e))
 

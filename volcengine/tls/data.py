@@ -2274,3 +2274,399 @@ class ConsumeShard(TLSData):
         shard_id = data.get(SHARD_ID_UPPERCASE)
 
         return cls(topic_id, shard_id)
+
+class TosSourceInfo(TLSData):
+    def __init__(self, bucket: str = None, region: str = None, compress_type: str = None, prefix: str = None):
+        """
+        :param bucket: TOS 存储桶名称
+        :type bucket: str
+        :param region: TOS 存储桶所在区域
+        :type region: str
+        :param compress_type: 日志压缩类型，可选值为 "none"、"gzip"、"lz4"、"snappy"
+        :type compress_type: str
+        :param prefix: 日志文件前缀，例如 "log/"
+        :type prefix: str, optional
+        """
+        self.bucket = bucket
+        self.region = region
+        self.compress_type = compress_type
+        self.prefix = prefix
+
+    def json(self):
+        return {
+            "bucket": self.bucket,
+            "region": self.region,
+            "compress_type": self.compress_type,
+            "prefix": self.prefix,
+        }
+
+class KafkaSourceInfo(TLSData):
+    def __init__(self, host: str = None, topic: str = None, encode: str = None, protocol: str = None,
+                 is_need_auth: bool = None, initial_offset: int = None,
+                 time_source_default: int = None, group: str = None, username: str = None, password: str = None,
+                 mechanism: str = None, instance_id: str = None):
+        """
+        :param host: Kafka 集群地址，多个服务地址之间需使用半角逗号（,）分隔。
+        :type host: str
+        :param topic: Kafka Topic 名称。 多个 Kafka Topic 之间应使用半角逗号（,）分隔。
+        :type topic: str
+        :param encode: 数据的编码格式。可选值包括 UTF-8、GBK。
+        :type encode: str
+        :param protocol: Kafka 协议，可选值为 "plaintext"、"ssl"
+        :type protocol: str
+        :param is_need_auth: 是否开启鉴权。如果您使用的是公网服务地址，建议开启鉴权。
+        :type is_need_auth: bool
+        :param initial_offset: 数据导入的起始位置。0：最早时间，即从指定的 Kafka Topic 中的第一条数据开始导入；1：最近时间，即从指定的 Kafka Topic 中最新生成的数据开始导入。
+        :type initial_offset: int, optional
+        :param time_source_default: 指定日志时间。0：使用 Kafka 消息时间戳；1：使用系统当前时间。
+        :type time_source_default: int, optional
+        :param group: 消费者组 ID，可选值为 None
+        :type group: str, optional
+        :param username: 用于身份认证的 Kafka SASL 用户名。
+        :type username: str, optional
+        :param password: 用于身份认证的 Kafka SASL 用户密码。
+        :type password: str, optional
+        :param mechanism: 密码认证机制，可选值包括 PLAIN、SCRAM-SHA-256 和 SCRAM-SHA-512。
+        :type mechanism: str, optional
+        :param instance_id: 当您使用的是火山引擎消息队列 Kafka 版时，应设置为 Kafka 实例 ID。
+        :type instance_id: str, optional
+        """
+        self.host = host
+        self.topic = topic
+        self.encode = encode
+        self.protocol = protocol
+        self.is_need_auth = is_need_auth
+        self.initial_offset = initial_offset
+        self.time_source_default = time_source_default
+        self.group = group
+        self.username = username
+        self.password = password
+        self.mechanism = mechanism
+        self.instance_id = instance_id
+
+    def json(self):
+        return {
+            "host": self.host,
+            "topic": self.topic,
+            "encode": self.encode,
+            "protocol": self.protocol,
+            "is_need_auth": self.is_need_auth,
+            "initial_offset": self.initial_offset,
+            "time_source_default": self.time_source_default,
+            "group": self.group,
+            "username": self.username,
+            "password": self.password,
+            "mechanism": self.mechanism,
+            "instance_id": self.instance_id,
+        }
+
+class ImportSourceInfo(TLSData):
+    def __init__(self, tos_source_info: TosSourceInfo = None, kafka_source_info: KafkaSourceInfo = None):
+        self.tos_source_info = tos_source_info
+        self.kafka_source_info = kafka_source_info
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        tos_source_info = None
+        kafka_source_info = None
+        if TOS_SOURCE_INFO in data:
+            tos_source_info = TosSourceInfo.set_attributes(data=data[TOS_SOURCE_INFO])
+        if KAFKA_SOURCE_INFO in data:
+            kafka_source_info = KafkaSourceInfo.set_attributes(data=data[KAFKA_SOURCE_INFO])
+
+        return cls(tos_source_info, kafka_source_info)
+    def json(self):
+        source_info = {}
+        if self.tos_source_info is not None:
+            source_info[TOS_SOURCE_INFO] = self.tos_source_info.json()
+        if self.kafka_source_info is not None:
+            source_info[KAFKA_SOURCE_INFO] = self.kafka_source_info.json()
+        return source_info
+
+class ImportExtractRule(TLSData):
+    def __init__(self, delimiter: str = None, begin_regex: str = None, keys: List[str] = None,
+                 time_key: str = None, time_format: str = None, time_zone: str = None, un_match_up_load_switch: bool = None,
+                 un_match_log_key: str = None, quote: str = None, time_extract_regex: str = None, skip_line_count: int = None,
+                 time_sample: str = None):
+        assert (time_key is None and time_format is None) or (time_key is not None and time_format is not None)
+        assert (un_match_up_load_switch is None and un_match_log_key is None) or \
+               (un_match_up_load_switch is not None and un_match_log_key is not None)
+
+        self.delimiter = delimiter
+        self.begin_regex = begin_regex
+        self.keys = keys
+        self.time_key = time_key
+        self.time_format = time_format
+        self.time_zone = time_zone
+        self.un_match_up_load_switch = un_match_up_load_switch
+        self.un_match_log_key = un_match_log_key
+        self.quote = quote
+        self.time_extract_regex = time_extract_regex
+        self.skip_line_count = skip_line_count
+        self.time_sample = time_sample
+
+class TargetInfo(TLSData):
+    def __init__(self, region: str = None, log_type: str = None, extract_rule: ImportExtractRule = None, log_sample: str = None):
+        """
+        :param region: 日志主题所在区域
+        :type region: str
+        :param log_type: 日志类型:delimiter_log、multiline_log、minimalist_log、json_log
+        :type log_type: str
+        :param extract_rule: 提取规则
+        :type extract_rule: ImportExtractRule, optional
+        :param log_sample: 日志样例。设置 log_type 为 multiline_log 时，需要配置日志样例
+        :type log_sample: str, optional
+        """
+        self.region = region
+        self.log_type = log_type
+        self.log_sample = log_sample
+        self.extract_rule = extract_rule
+
+    def json(self):
+        target_info = super(TargetInfo, self).json()
+        if self.extract_rule is not None:
+            target_info[EXTRACT_RULE] = self.extract_rule.json()
+        return target_info
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        target_info = super(TargetInfo, cls).set_attributes(data)
+        if EXTRACT_RULE in data:
+            target_info.extract_rule = ImportExtractRule.set_attributes(data=data[EXTRACT_RULE])
+        return target_info
+
+class TaskStatistics(TLSData):
+    def __init__(self, total: int = None, failed: int = None, skipped: int = None, not_exist: int = None,
+                 bytes_total: int = None, task_status: str = None, transferred: int = None, bytes_transferred: int = None,):
+        self.total = total
+        self.failed = failed
+        self.skipped = skipped
+        self.not_exist = not_exist
+        self.bytes_total = bytes_total
+        self.task_status = task_status
+        self.transferred = transferred
+        self.bytes_transferred = bytes_transferred
+
+
+class ImportTaskInfo(TLSData):
+    def __init__(self, task_id: str = None, status: int = None, topic_id: str = None, task_name: str = None, project_id: str = None,
+                 topic_name: str = None, project_name: str = None, create_time: str = None, source_type: str = None, description: str = None,
+                 import_source_info: ImportSourceInfo = None, target_info: TargetInfo = None, task_statistics: TaskStatistics = None):
+        self.task_id = task_id
+        self.status = status
+        self.topic_id = topic_id
+        self.task_name = task_name
+        self.project_id = project_id
+        self.topic_name = topic_name
+        self.project_name = project_name
+        self.create_time = create_time
+        self.source_type = source_type
+        self.description = description
+        self.import_source_info = import_source_info
+        self.target_info = target_info
+        self.task_statistics = task_statistics
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        import_task_info = super(ImportTaskInfo, cls).set_attributes(data)
+        if TASK_STATISTICS in data:
+            import_task_info.task_statistics = TaskStatistics.set_attributes(data=data[TASK_STATISTICS])
+
+        if IMPORT_SOURCE_INFO in data:
+            import_task_info.import_source_info = ImportSourceInfo.set_attributes(data=data[IMPORT_SOURCE_INFO])
+
+        if TARGET_INFO in data:
+            import_task_info.target_info = TargetInfo.set_attributes(data=data[TARGET_INFO])
+
+        return import_task_info
+
+class JsonInfo(TLSData):
+    def __init__(self, enable: bool = None, keys: List[str] = None, escape: bool = None):
+        """
+        :param enable: 启用标志
+        :type enable: bool, optional
+        :param keys: 需要投递的字段列表
+        :type keys: List[str], optional
+        :param escape: 是否转义
+        :type escape: bool, optional
+        """
+        self.enable = enable
+        self.keys = keys
+        self.escape = escape
+
+
+class CsvInfo(TLSData):
+    def __init__(self, keys: List[str] = None, delimiter: str = None, escape_char: str = None,
+                 print_header: bool = None, non_field_content: str = None):
+        """
+        :param keys: 需要投递的字段列表
+        :type keys: List[str], optional
+        :param delimiter: 分隔符
+        :type delimiter: str, optional
+        :param escape_char: 转义符
+        :type escape_char: str, optional
+        :param print_header: 首行是否打印Key
+        :type print_header: bool, optional
+        :param non_field_content: 无效字段填充内容
+        :type non_field_content: str, optional
+        """
+        self.keys = keys
+        self.delimiter = delimiter
+        self.escape_char = escape_char
+        self.print_header = print_header
+        self.non_field_content = non_field_content
+
+class ContentInfo(TLSData):
+    def __init__(self, format: str = None, json_info: JsonInfo = None, csv_info: CsvInfo = None):
+        """
+        :param format: 日志内容解析格式,投递到 TOS 时，支持配置为 json、csv。投递到 Kafka 时，支持配置为 original、json。
+        :type format: str, optional
+        :param json_info: JSON格式日志内容配置
+        :type json_info: JsonInfo, optional
+        :param csv_info: CSV格式日志内容配置
+        :type csv_info: CsvInfo, optional
+        """
+        self.format = format
+        self.json_info = json_info
+        self.csv_info = csv_info
+
+    def json(self):
+        content_info = super(ContentInfo, self).json()
+        if self.json_info:
+            content_info[JSON_INFO] = self.json_info.json()
+        if self.csv_info:
+            content_info[CSV_INFO] = self.csv_info.json()
+        return content_info
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        content_info = super(ContentInfo, cls).set_attributes(data)
+        if JSON_INFO in data:
+            content_info.json_info = JsonInfo.set_attributes(data=data[JSON_INFO])
+
+        if CSV_INFO in data:
+            content_info.csv_info = CsvInfo.set_attributes(data=data[CSV_INFO])
+
+        return content_info
+
+
+
+class TosShipperInfo(TLSData):
+    def __init__(self, bucket: str = None, prefix: str = None, max_size: int = None, compress: str = None,
+                 interval: int = None, partition_format: str = None):
+        """
+        :param bucket: TOS存储桶名称
+        :type bucket: str, optional
+        :param prefix: 存储桶的顶级目录名称
+        :type prefix: str, optional
+        :param max_size: 每个分区最大可投递的原始文件大小，单位为MiB
+        :type max_size: int, optional
+        :param compress: 压缩格式
+        :type compress: str, optional
+        :param interval: 投递时间间隔，单位为秒
+        :type interval: int, optional
+        :param partition_format: 投递日志的分区规则
+        :type partition_format: str, optional
+        """
+        self.bucket = bucket
+        self.prefix = prefix
+        self.max_size = max_size
+        self.compress = compress
+        self.interval = interval
+        self.partition_format = partition_format
+
+
+class KafkaShipperInfo(TLSData):
+    def __init__(self, instance: str = None, kafka_topic: str = None, compress: str = None,
+                 start_time: int = None, end_time: int = None):
+        """
+        :param instance: Kafka实例
+        :type instance: str, optional
+        :param kafka_topic: Kafka Topic名称
+        :type kafka_topic: str, optional
+        :param compress: 压缩格式
+        :type compress: str, optional
+        :param start_time: 投递开始时间，毫秒时间戳
+        :type start_time: int, optional
+        :param end_time: 投递结束时间，毫秒时间戳
+        :type end_time: int, optional
+        """
+        self.instance = instance
+        self.kafka_topic = kafka_topic
+        self.compress = compress
+        self.start_time = start_time
+        self.end_time = end_time
+
+
+class ShipperInfo(TLSData):
+    def __init__(self, shipper_id: str = None, shipper_name: str = None, project_id: str = None,
+                 project_name: str = None, topic_id: str = None, topic_name: str = None,
+                 shipper_type: str = None, status: bool = None, create_time: str = None,
+                 modify_time: str = None, shipper_start_time: int = None, shipper_end_time: int = None,
+                 content_info: ContentInfo = None, tos_shipper_info: TosShipperInfo = None,
+                 kafka_shipper_info: KafkaShipperInfo = None, dashboard_id: str = None,
+                 role_trn: str = None):
+        """
+        :param shipper_id: 投递配置ID
+        :type shipper_id: str, optional
+        :param shipper_name: 投递配置名称
+        :type shipper_name: str, optional
+        :param project_id: 日志项目ID
+        :type project_id: str, optional
+        :param project_name: 日志项目名称
+        :type project_name: str, optional
+        :param topic_id: 日志主题ID
+        :type topic_id: str, optional
+        :param topic_name: 日志主题名称
+        :type topic_name: str, optional
+        :param shipper_type: 投递类型
+        :type shipper_type: str, optional
+        :param status: 是否开启投递配置
+        :type status: bool, optional
+        :param create_time: 创建时间
+        :type create_time: str, optional
+        :param modify_time: 修改时间
+        :type modify_time: str, optional
+        :param shipper_start_time: 投递开始时间
+        :type shipper_start_time: int, optional
+        :param shipper_end_time: 投递结束时间
+        :type shipper_end_time: int, optional
+        :param content_info: 日志内容的投递格式配置
+        :type content_info: ContentInfo, optional
+        :param tos_shipper_info: 投递到TOS的相关信息
+        :type tos_shipper_info: TosShipperInfo, optional
+        :param kafka_shipper_info: 投递到Kafka的相关信息
+        :type kafka_shipper_info: KafkaShipperInfo, optional
+        :param dashboard_id: 投递的默认内置仪表盘ID
+        :type dashboard_id: str, optional
+        :param role_trn: 自定义角色的Trn
+        :type role_trn: str, optional
+        """
+        self.shipper_id = shipper_id
+        self.shipper_name = shipper_name
+        self.project_id = project_id
+        self.project_name = project_name
+        self.topic_id = topic_id
+        self.topic_name = topic_name
+        self.shipper_type = shipper_type
+        self.status = status
+        self.create_time = create_time
+        self.modify_time = modify_time
+        self.shipper_start_time = shipper_start_time
+        self.shipper_end_time = shipper_end_time
+        self.content_info = content_info
+        self.tos_shipper_info = tos_shipper_info
+        self.kafka_shipper_info = kafka_shipper_info
+        self.dashboard_id = dashboard_id
+        self.role_trn = role_trn
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        shipper_info = super(ShipperInfo, cls).set_attributes(data)
+        if CONTENT_INFO in data:
+            shipper_info.content_info = ContentInfo.set_attributes(data=data[CONTENT_INFO])
+        if TOS_SHIPPER_INFO in data:
+            shipper_info.tos_shipper_info = TosShipperInfo.set_attributes(data=data[TOS_SHIPPER_INFO])
+        if KAFKA_SHIPPER_INFO in data:
+            shipper_info.kafka_shipper_info = KafkaShipperInfo.set_attributes(data=data[KAFKA_SHIPPER_INFO])
+        return shipper_info

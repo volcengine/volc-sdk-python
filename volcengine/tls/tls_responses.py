@@ -986,3 +986,237 @@ class AddTagsToResourceResponse(TLSResponse):
 class RemoveTagsFromResourceResponse(TLSResponse):
     def __init__(self, response: Response):
         super(RemoveTagsFromResourceResponse, self).__init__(response)
+
+class CreateImportTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(CreateImportTaskResponse, self).__init__(response)
+        self.task_id = self.response[TASK_ID]
+
+    def get_task_id(self):
+        """
+        :return:导入任务id
+        :rtype: str
+        """
+        return self.task_id
+
+class DeleteImportTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(DeleteImportTaskResponse, self).__init__(response)
+
+class ModifyImportTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(ModifyImportTaskResponse, self).__init__(response)
+
+class DescribeImportTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(DescribeImportTaskResponse, self).__init__(response)
+        self.task_info = None
+        if TASK_INFO in self.response and self.response[TASK_INFO]:
+            self.task_info = ImportTaskInfo.set_attributes(data=self.response[TASK_INFO])
+
+    def get_task_info(self):
+        """
+        :return:导入任务详情
+        :rtype: ImportTaskInfo
+        """
+        return self.task_info
+
+
+
+class DescribeImportTasksResponse(TLSResponse):
+    def __init__(self, response):
+        super(DescribeImportTasksResponse, self).__init__(response)
+        self.total = self.response[TOTAL]
+        task_info = self.response[TASK_INFO]
+        self.task_info = []
+
+        if task_info is None:
+            return
+
+        for i in range(len(task_info)):
+            self.task_info.append(ImportTaskInfo.set_attributes(data=task_info[i]))
+
+    def get_task_info(self):
+        """
+        :return:导入任务详情列表
+        :rtype: list[ImportTaskInfo]
+        """
+        return self.task_info
+
+    def get_total(self):
+        """
+        :return:导入任务总数
+        :rtype: int
+        """
+        return self.total
+
+
+class CreateShipperResponse(TLSResponse):
+    def __init__(self, response):
+        super(CreateShipperResponse, self).__init__(response)
+        self.shipper_id = self.response[SHIPPER_ID]
+
+    def get_shipper_id(self):
+        """
+        :return:投递配置id
+        :rtype: str
+        """
+        return self.shipper_id
+
+
+class DeleteShipperResponse(TLSResponse):
+    def __init__(self, response):
+        super(DeleteShipperResponse, self).__init__(response)
+
+
+class ModifyShipperResponse(TLSResponse):
+    def __init__(self, response):
+        super(ModifyShipperResponse, self).__init__(response)
+
+
+class DescribeShipperResponse(TLSResponse):
+    def __init__(self, response):
+        super(DescribeShipperResponse, self).__init__(response)
+        self.shipper_id = self.response[SHIPPER_ID]
+        self.shipper_name = self.response[SHIPPER_NAME]
+        self.project_id = self.response[PROJECT_ID]
+        self.project_name = self.response[PROJECT_NAME]
+        self.topic_id = self.response[TOPIC_ID]
+        self.topic_name = self.response[TOPIC_NAME]
+        self.shipper_type = self.response[SHIPPER_TYPE]
+        self.status = self.response[STATUS]
+        self.create_time = self.response[CREATE_TIME]
+        self.modify_time = self.response[MODIFY_TIME]
+        self.shipper_start_time = self.response[SHIPPER_START_TIME]
+        self.shipper_end_time = self.response[SHIPPER_END_TIME]
+        self.content_info = ContentInfo.set_attributes(data=self.response[CONTENT_INFO])
+        self.tos_shipper_info = None
+        if TOS_SHIPPER_INFO in self.response and self.response[TOS_SHIPPER_INFO]:
+            self.tos_shipper_info = TosShipperInfo.set_attributes(data=self.response[TOS_SHIPPER_INFO])
+        self.kafka_shipper_info = None
+        if KAFKA_SHIPPER_INFO in self.response and self.response[KAFKA_SHIPPER_INFO]:
+            self.kafka_shipper_info = KafkaShipperInfo.set_attributes(data=self.response[KAFKA_SHIPPER_INFO])
+        self.dashboard_id = self.response[DASHBOARD_ID]
+        self.role_trn = self.response[ROLE_TRN]
+
+    def get_shipper_id(self):
+        """
+        :return:投递配置id
+        :rtype: str
+        """
+        return self.shipper_id
+    def get_shipper_name(self):
+        """
+        :return:投递配置名称
+        :rtype: str
+        """
+        return self.shipper_name
+    def get_project_id(self):
+        """
+        :return:项目id
+        :rtype: str
+        """
+        return self.project_id
+    def get_topic_id(self):
+        """
+        :return:日志主题id
+        :rtype: str
+        """
+        return self.topic_id
+    def get_topic_name(self):
+        """
+        :return:日志主题名称
+        :rtype: str
+        """
+        return self.topic_name
+    def get_shipper_type(self):
+        """
+        :return:投递配置类型
+        :rtype: str
+        """
+        return self.shipper_type
+    def get_status(self):
+        """
+        :return:投递配置状态
+        :rtype: str
+        """
+        return self.status
+    def get_create_time(self):
+        """
+        :return:创建时间
+        :rtype: str
+        """
+        return self.create_time
+    def get_modify_time(self):
+        """
+        :return:修改时间
+        :rtype: str
+        """
+        return self.modify_time
+    def get_shipper_start_time(self):
+        """
+        :return:投递配置开始时间
+        :rtype: int
+        """
+        return self.shipper_start_time
+    def get_shipper_end_time(self):
+        """
+        :return:投递配置结束时间
+        :rtype: int
+        """
+        return self.shipper_end_time
+    def get_content_info(self):
+        """
+        :return:投递配置内容信息
+        :rtype: ContentInfo
+        """
+        return self.content_info
+    def get_tos_shipper_info(self):
+        """
+        :return:投递配置TOS信息
+        :rtype: TosShipperInfo
+        """
+        return self.tos_shipper_info
+    def get_kafka_shipper_info(self):
+        """
+        :return:投递配置Kafka信息
+        :rtype: KafkaShipperInfo
+        """
+        return self.kafka_shipper_info
+    def get_dashboard_id(self):
+        """
+        :return:监控看板id
+        :rtype: str
+        """
+        return self.dashboard_id
+    def get_role_trn(self):
+        """
+        :return:角色trn
+        :rtype: str
+        """
+        return self.role_trn
+
+
+class DescribeShippersResponse(TLSResponse):
+    def __init__(self, response):
+        super(DescribeShippersResponse, self).__init__(response)
+        self.total = self.response[TOTAL]
+        self.shippers = []
+        
+        shippers_data = self.response.get(SHIPPERS, [])
+        for shipper_data in shippers_data:
+            self.shippers.append(ShipperInfo.set_attributes(data=shipper_data))
+
+    def get_total(self):
+        """
+        :return:投递配置总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_shippers(self):
+        """
+        :return:投递配置列表
+        :rtype: List[ShipperInfo]
+        """
+        return self.shippers

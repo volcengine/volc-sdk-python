@@ -876,7 +876,7 @@ class VodService(VodServiceConfig):
                         continue
                     else:
                         params[k] = json.dumps(v)
-            res = self.get("UploadMediaByUrl", params)
+            res = self.post("UploadMediaByUrl",{},params)
         except Exception as Argument:
             try:
                 resp = Parse(Argument.__str__(), VodUrlUploadResponse(), True)
@@ -886,6 +886,7 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodUrlUploadResponse(), True)
+
 
     #
     # QueryUploadTaskInfo.
@@ -3584,16 +3585,17 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodGetContentBlockTasksResponse(), True)
 
-        #
-        # CreateDomain.
-        #
-        # @param request VodCreateDomainV2Request
-        # @return VodCreateDomainV2Response
-        # @raise Exception
+
+    #
+    # CreateDomain.
+    #
+    # @param request VodCreateDomainV2Request
+    # @return VodCreateDomainV2Response
+    # @raise Exception
     def create_domain(self, request):
         try:
             jsonData = MessageToJson(request, False, True)
-            res = self.json("CreateDomain", {}, jsonData)
+            res = self.json("CreateDomain",{},jsonData)
         except Exception as Argument:
             try:
                 ArgumentStr = Argument.args[0].decode("utf-8")
@@ -3604,6 +3606,7 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodCreateDomainV2Response(), True)
+
 
     #
     # UpdateDomainExpire.
@@ -3831,6 +3834,7 @@ class VodService(VodServiceConfig):
         else:
             return Parse(res, VodUpdateDomainConfigResponse(), True)
 
+
     #
     # DescribeDomainConfig.
     #
@@ -3898,6 +3902,7 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodDescribeCdnEdgeIpResponse(), True)
+
     #
     # DescribeCdnRegionAndIsp.
     #
@@ -4645,3 +4650,4 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, DescribeVodVidTrafficFileLogResponse(), True)
+
