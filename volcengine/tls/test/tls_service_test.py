@@ -3,6 +3,7 @@ import unittest
 
 from volcengine.tls.TLSService import TLSService
 
+
 class TestTLSService(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
@@ -13,7 +14,8 @@ class TestTLSService(unittest.TestCase):
         self.access_key_secret = os.environ["VOLCENGINE_ACCESS_KEY_SECRET"]
 
     def test_tls_service(self):
-        tls_client1 = TLSService(self.endpoint, self.access_key_id, self.access_key_secret, self.region)
+        tls_client1 = TLSService(
+            self.endpoint, self.access_key_id, self.access_key_secret, self.region)
         tls_client2 = TLSService(
             self.endpoint + "test",
             self.access_key_id + "test",
@@ -27,22 +29,26 @@ class TestTLSService(unittest.TestCase):
 
     def test_check_scheme_and_endpoint(self):
         endpoint = "http://tls-cn-beijing.ivolces.com"
-        tls_client = TLSService(endpoint, self.access_key_id, self.access_key_secret, self.region)
+        tls_client = TLSService(
+            endpoint, self.access_key_id, self.access_key_secret, self.region)
         server_info = tls_client.get_service_info()
         self.assertEqual("http", server_info.scheme)
         self.assertEqual("tls-cn-beijing.ivolces.com", server_info.host)
 
         endpoint = "https://tls-cn-beijing.ivolces.com"
-        tls_client = TLSService(endpoint, self.access_key_id, self.access_key_secret, self.region)
+        tls_client = TLSService(
+            endpoint, self.access_key_id, self.access_key_secret, self.region)
         server_info = tls_client.get_service_info()
         self.assertEqual("https", server_info.scheme)
         self.assertEqual("tls-cn-beijing.ivolces.com", server_info.host)
 
         endpoint = "tls-cn-beijing.ivolces.com"
-        tls_client = TLSService(endpoint, self.access_key_id, self.access_key_secret, self.region)
+        tls_client = TLSService(
+            endpoint, self.access_key_id, self.access_key_secret, self.region)
         server_info = tls_client.get_service_info()
         self.assertEqual("https", server_info.scheme)
         self.assertEqual(endpoint, server_info.host)
+
 
 if __name__ == '__main__':
     unittest.main()

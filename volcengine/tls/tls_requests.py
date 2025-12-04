@@ -187,7 +187,8 @@ class CreateTopicRequest(TLSRequest):
     def __init__(self, topic_name: str, project_id: str, ttl: int, shard_count: int, description: str = None,
                  auto_split: bool = True, max_split_shard: int = 50, enable_tracking: bool = False,
                  time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = True,
-                 enable_hot_ttl: bool = False, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None):
+                 enable_hot_ttl: bool = False, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None,
+                 encrypt_conf: EncryptConf = None):
         """
         :param topic_name: 日志主题名称
         :type topic_name: str
@@ -221,6 +222,8 @@ class CreateTopicRequest(TLSRequest):
         :type cold_ttl: int
         :param archive_ttl: 归档数据保留时间
         :type archive_ttl: int
+        :param encrypt_conf: kms加密配置
+        :type encrypt_conf: EncryptConf
         """
         self.topic_name = topic_name
         self.project_id = project_id
@@ -238,6 +241,7 @@ class CreateTopicRequest(TLSRequest):
         self.hot_ttl = hot_ttl
         self.cold_ttl = cold_ttl
         self.archive_ttl = archive_ttl
+        self.encrypt_conf = encrypt_conf
 
     def check_validation(self):
         """
@@ -285,7 +289,8 @@ class ModifyTopicRequest(TLSRequest):
     def __init__(self, topic_id: str, topic_name: str = None, ttl: int = None, description: str = None,
                  auto_split: bool = None, max_split_shard: int = None, enable_tracking: bool = None,
                  time_key: str = None, time_format: str = None, log_public_ip: bool = None,
-                 enable_hot_ttl: bool = False, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None):
+                 enable_hot_ttl: bool = False, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None,
+                 encrypt_conf: EncryptConf = None):
         """
         :param topic_id:日志主题ID
         :type topic_id: str
@@ -330,6 +335,7 @@ class ModifyTopicRequest(TLSRequest):
         self.hot_ttl = hot_ttl
         self.cold_ttl = cold_ttl
         self.archive_ttl = archive_ttl
+        self.encrypt_conf = encrypt_conf
 
     def check_validation(self):
         """

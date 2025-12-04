@@ -78,7 +78,8 @@ class ProjectInfo(TLSData):
             tags = data[TAGS]
             project_info.tags = []
             for i in range(len(tags)):
-                project_info.tags.append(TagInfo(tags[i].get(KEY), tags[i].get(VALUE)))
+                project_info.tags.append(
+                    TagInfo(tags[i].get(KEY), tags[i].get(VALUE)))
 
         return project_info
 
@@ -139,12 +140,57 @@ class ProjectInfo(TLSData):
         return self.tags
 
 
+class EncryptUserCmkConf(TLSData):
+    def __init__(self, user_cmk_id: str, trn: str, region_id: str):
+        self.user_cmk_id = user_cmk_id
+        self.trn = trn
+        self.region_id = region_id
+
+    @classmethod
+    def set_attributes(cls, data):
+        user_cmk_id = data.get(USER_CMK_ID)
+        trn = data.get(TRN)
+        region_id = data.get(REGION_ID)
+
+        return cls(user_cmk_id, trn, region_id)
+
+    def json(self):
+        return {
+            USER_CMK_ID: self.user_cmk_id,
+            TRN: self.trn,
+            REGION_ID: self.region_id,
+        }
+
+
+class EncryptConf(TLSData):
+    def __init__(self, enable: bool = False, encrypt_type: str = "default", user_cmk_info: EncryptUserCmkConf = None):
+        self.enable = enable
+        self.encrypt_type = encrypt_type
+        self.user_cmk_info = user_cmk_info
+
+    @classmethod
+    def set_attributes(cls, data):
+        enable = data.get(ENABLE_ENCRYPT_CONF)
+        encrypt_type = data.get(ENCRYPT_TYPE)
+        user_cmk_info = data.get(USER_CMK_INFO)
+
+        return cls(enable, encrypt_type, user_cmk_info)
+
+    def json(self):
+        return {
+            ENABLE_ENCRYPT_CONF: self.enable,
+            ENCRYPT_TYPE: self.encrypt_type,
+            USER_CMK_INFO: self.user_cmk_info.json() if self.user_cmk_info is not None else None,
+        }
+
+
 class TopicInfo(TLSData):
     def __init__(self, topic_name: str = None, topic_id: str = None, project_id: str = None, ttl: int = None,
                  create_time: str = None, modify_time: str = None, shard_count: int = None, description: str = None,
                  auto_split: bool = None, max_split_shard: int = None, enable_tracking: bool = None,
                  time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = None,
-                 enable_hot_ttl: bool = None, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None):
+                 enable_hot_ttl: bool = None, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None,
+                 encrypt_conf: EncryptConf = None):
         self.topic_name = topic_name
         self.topic_id = topic_id
         self.project_id = project_id
@@ -164,6 +210,7 @@ class TopicInfo(TLSData):
         self.hot_ttl = hot_ttl
         self.cold_ttl = cold_ttl
         self.archive_ttl = archive_ttl
+        self.encrypt_conf = encrypt_conf
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -186,16 +233,18 @@ class TopicInfo(TLSData):
         hot_ttl = data.get(HOT_TTL)
         cold_ttl = data.get(COLD_TTL)
         archive_ttl = data.get(ARCHIVE_TTL)
+        encrypt_conf = data.get(ENCRYPT_CONF)
 
         tags = data.get(TAGS)
         if tags is not None:
             topic_tags = []
             for i in range(len(tags)):
-                topic_tags.append(TagInfo(tags[i].get(KEY), tags[i].get(VALUE)))
+                topic_tags.append(
+                    TagInfo(tags[i].get(KEY), tags[i].get(VALUE)))
 
         return cls(topic_name, topic_id, project_id, ttl, create_time, modify_time, shard_count, description,
                    auto_split, max_split_shard, enable_tracking, time_key, time_format, topic_tags, log_public_ip,
-                   enable_hot_ttl, hot_ttl, cold_ttl, archive_ttl)
+                   enable_hot_ttl, hot_ttl, cold_ttl, archive_ttl, encrypt_conf)
 
     def get_create_time(self):
         """
@@ -350,7 +399,7 @@ class FullTextInfo(TLSData):
 
 class ValueInfo(TLSData):
     def __init__(self, value_type: str, delimiter: str = None, case_sensitive: bool = False,
-                 include_chinese: bool = False, sql_flag: bool = False, index_all: bool = False, json_keys = None):
+                 include_chinese: bool = False, sql_flag: bool = False, index_all: bool = False, json_keys=None):
         self.value_type = value_type
         self.delimiter = delimiter
         self.case_sensitive = case_sensitive
@@ -509,7 +558,8 @@ class SearchResult(TLSData):
         search_result = super(SearchResult, cls).set_attributes(data)
 
         if ANALYSIS_RESULT in data:
-            search_result.analysis_result = AnalysisResult.set_attributes(data=data[ANALYSIS_RESULT])
+            search_result.analysis_result = AnalysisResult.set_attributes(
+                data=data[ANALYSIS_RESULT])
 
         return search_result
 
@@ -585,6 +635,7 @@ class HistogramInfo(TLSData):
         :rtype:long
         """
         return self.time
+
 
 class HistogramInfoV1(TLSData):
     def __init__(self, count: int = None, start_time: int = None, end_time: int = None, result_status: str = None):
@@ -960,7 +1011,8 @@ class ExtractRule(TLSData):
         :param time_sample: 时间字段的样本日志
         :type time_sample: str
         """
-        assert (time_key is None and time_format is None) or (time_key is not None and time_format is not None)
+        assert (time_key is None and time_format is None) or (
+            time_key is not None and time_format is not None)
         assert (un_match_up_load_switch is None and un_match_log_key is None) or \
                (un_match_up_load_switch is not None and un_match_log_key is not None)
 
@@ -987,7 +1039,8 @@ class ExtractRule(TLSData):
         if FILTER_KEY_REGEX in data:
             extract_rule.filter_key_regex = []
             for one_filter_key_regex in data[FILTER_KEY_REGEX]:
-                extract_rule.filter_key_regex.append(FilterKeyRegex.set_attributes(data=one_filter_key_regex))
+                extract_rule.filter_key_regex.append(
+                    FilterKeyRegex.set_attributes(data=one_filter_key_regex))
         if LOG_TEMPLATE in data:
             extract_rule.log_template = LogTemplate(log_type=data[LOG_TEMPLATE].get(TYPE),
                                                     log_format=data[LOG_TEMPLATE].get(FORMAT))
@@ -1161,7 +1214,7 @@ class Advanced(TLSData):
         :rtype: int
         """
         return self.close_timeout
-    
+
     def get_no_line_terminator_eof_max_time(self):
         """
         :return: 日志文件无行终止符时，最大等待时间
@@ -1363,17 +1416,23 @@ class UserDefineRule(TLSData):
         user_define_rule = super(UserDefineRule, cls).set_attributes(data)
 
         if SHARD_HASH_KEY in data:
-            user_define_rule.shard_hash_key = ShardHashKey(hash_key=data[SHARD_HASH_KEY].get(HASH_KEY))
+            user_define_rule.shard_hash_key = ShardHashKey(
+                hash_key=data[SHARD_HASH_KEY].get(HASH_KEY))
         if PARSE_PATH_RULE in data:
-            user_define_rule.parse_path_rule = ParsePathRule.set_attributes(data[PARSE_PATH_RULE])
+            user_define_rule.parse_path_rule = ParsePathRule.set_attributes(
+                data[PARSE_PATH_RULE])
         if PLUGIN in data:
-            user_define_rule.plugin = Plugin(processors=data[PLUGIN].get(PROCESSORS))
+            user_define_rule.plugin = Plugin(
+                processors=data[PLUGIN].get(PROCESSORS))
         if ADVANCED in data:
             user_define_rule.advanced = Advanced(close_inactive=data[ADVANCED].get(CLOSE_INACTIVE),
-                                                 close_timeout=data[ADVANCED].get(CLOSE_TIMEOUT),
+                                                 close_timeout=data[ADVANCED].get(
+                                                     CLOSE_TIMEOUT),
+                                                 close_removed=data[ADVANCED].get(
+                                                     CLOSE_REMOVED),
+                                                 close_renamed=data[ADVANCED].get(
+                                                     CLOSE_RENAMED),
                                                  no_line_terminator_eof_max_time=data[ADVANCED].get(NO_LINE_TERMINATOR_EOF_MAX_TIME),
-                                                 close_removed=data[ADVANCED].get(CLOSE_REMOVED),
-                                                 close_renamed=data[ADVANCED].get(CLOSE_RENAMED),
                                                  close_eof=data[ADVANCED].get(CLOSE_EOF))
 
         return user_define_rule
@@ -1605,7 +1664,8 @@ class ContainerRule(TLSData):
         container_rule = super(ContainerRule, cls).set_attributes(data)
 
         if KUBERNETES_RULE in data:
-            container_rule.kubernetes_rule = KubernetesRule.set_attributes(data=data[KUBERNETES_RULE])
+            container_rule.kubernetes_rule = KubernetesRule.set_attributes(
+                data=data[KUBERNETES_RULE])
 
         return container_rule
 
@@ -1702,15 +1762,19 @@ class RuleInfo(TLSData):
         rule_info = super(RuleInfo, cls).set_attributes(data)
 
         if EXTRACT_RULE in data:
-            rule_info.extract_rule = ExtractRule.set_attributes(data=data[EXTRACT_RULE])
+            rule_info.extract_rule = ExtractRule.set_attributes(
+                data=data[EXTRACT_RULE])
         if EXCLUDE_PATHS in data:
             rule_info.exclude_paths = []
             for exclude_path in data[EXCLUDE_PATHS]:
-                rule_info.exclude_paths.append(ExcludePath.set_attributes(data=exclude_path))
+                rule_info.exclude_paths.append(
+                    ExcludePath.set_attributes(data=exclude_path))
         if USER_DEFINE_RULE in data:
-            rule_info.user_define_rule = UserDefineRule.set_attributes(data=data[USER_DEFINE_RULE])
+            rule_info.user_define_rule = UserDefineRule.set_attributes(
+                data=data[USER_DEFINE_RULE])
         if CONTAINER_RULE in data:
-            rule_info.container_rule = ContainerRule.set_attributes(data=data[CONTAINER_RULE])
+            rule_info.container_rule = ContainerRule.set_attributes(
+                data=data[CONTAINER_RULE])
 
         return rule_info
 
@@ -2032,12 +2096,14 @@ class AlarmNotifyGroupInfo(TLSData):
 
     @classmethod
     def set_attributes(cls, data: dict):
-        alarm_notify_group_info = super(AlarmNotifyGroupInfo, cls).set_attributes(data)
+        alarm_notify_group_info = super(
+            AlarmNotifyGroupInfo, cls).set_attributes(data)
 
         if RECEIVERS in data:
             alarm_notify_group_info.receivers = []
             for receiver in data[RECEIVERS]:
-                alarm_notify_group_info.receivers.append(Receiver.set_attributes(data=receiver))
+                alarm_notify_group_info.receivers.append(
+                    Receiver.set_attributes(data=receiver))
 
         return alarm_notify_group_info
 
@@ -2064,6 +2130,7 @@ class TriggerCondition(TLSData):
         self.severity = severity
         self.condition = condition
         self.count_condition = count_condition
+
 
 class AlarmInfo(TLSData):
     def __init__(self, alarm_name: str = None, alarm_id: str = None, project_id: str = None, status: bool = None,
@@ -2215,15 +2282,18 @@ class AlarmInfo(TLSData):
         alarm_info = super(AlarmInfo, cls).set_attributes(data)
 
         if REQUEST_CYCLE in data:
-            alarm_info.request_cycle = RequestCycle.set_attributes(data=data[REQUEST_CYCLE])
+            alarm_info.request_cycle = RequestCycle.set_attributes(
+                data=data[REQUEST_CYCLE])
         if QUERY_REQUEST in data:
             alarm_info.query_request = []
             for one_query_request in data[QUERY_REQUEST]:
-                alarm_info.query_request.append(QueryRequest.set_attributes(data=one_query_request))
+                alarm_info.query_request.append(
+                    QueryRequest.set_attributes(data=one_query_request))
         if ALARM_NOTIFY_GROUP in data:
             alarm_info.alarm_notify_group = []
             for alarm_notify_group in data[ALARM_NOTIFY_GROUP]:
-                alarm_info.alarm_notify_group.append(AlarmNotifyGroupInfo.set_attributes(data=alarm_notify_group))
+                alarm_info.alarm_notify_group.append(
+                    AlarmNotifyGroupInfo.set_attributes(data=alarm_notify_group))
         if ALARM_PERIOD_DETAIL in data:
             if len(data[ALARM_PERIOD_DETAIL]) == 0:
                 alarm_info.alarm_period_detail = None
@@ -2231,16 +2301,20 @@ class AlarmInfo(TLSData):
                 sms = data[ALARM_PERIOD_DETAIL].get(SMS)
                 phone = data[ALARM_PERIOD_DETAIL].get(PHONE)
                 email = data[ALARM_PERIOD_DETAIL].get(EMAIL)
-                general_webhook = data[ALARM_PERIOD_DETAIL].get(GENERAL_WEBHOOK)
-                alarm_info.alarm_period_detail = AlarmPeriodSetting(sms, phone, email, general_webhook)
+                general_webhook = data[ALARM_PERIOD_DETAIL].get(
+                    GENERAL_WEBHOOK)
+                alarm_info.alarm_period_detail = AlarmPeriodSetting(
+                    sms, phone, email, general_webhook)
         if JOIN_CONFIGURATIONS in data and data[JOIN_CONFIGURATIONS] is not None:
             alarm_info.join_configurations = []
             for join_configuration in data[JOIN_CONFIGURATIONS]:
-                alarm_info.join_configurations.append(JoinConfig.set_attributes(data=join_configuration))
+                alarm_info.join_configurations.append(
+                    JoinConfig.set_attributes(data=join_configuration))
         if TRIGGER_CONDITIONS in data and data[TRIGGER_CONDITIONS] is not None:
             alarm_info.trigger_conditions = []
             for trigger_condition in data[TRIGGER_CONDITIONS]:
-                alarm_info.trigger_conditions.append(TriggerCondition.set_attributes(data=trigger_condition))
+                alarm_info.trigger_conditions.append(
+                    TriggerCondition.set_attributes(data=trigger_condition))
 
         return alarm_info
 
