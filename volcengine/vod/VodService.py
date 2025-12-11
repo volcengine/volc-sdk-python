@@ -577,6 +577,57 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error)
         else:
             return res
+    #
+    # AsyncVCreativeTask.
+    #
+    # @param request VodAsyncVCreativeTaskRequest
+    # @return VodAsyncVCreativeTaskResponse
+    # @raise Exception
+    def async_v_creative_task(self, request):
+        try:
+            jsonData = MessageToJson(request, False, True)
+            res = self.json("AsyncVCreativeTask", {}, jsonData)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodAsyncVCreativeTaskResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error)
+        else:
+            return res
+    #
+    # GetVCreativeTaskResult.
+    #
+    # @param request VodGetVCreativeTaskResultRequest
+    # @return VodGetVCreativeTaskResultResponse
+    # @raise Exception
+    def get_v_creative_task_result(self, request):
+        try:
+            params = MessageToDict(request, False, True)
+            if sys.version_info[0] == 3:
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetVCreativeTaskResult", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetVCreativeTaskResultResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return res
+
 
 
     #
