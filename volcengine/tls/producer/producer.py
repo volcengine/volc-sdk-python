@@ -68,7 +68,7 @@ class TLSProducer:
         if filename is not None:
             log_group.filename = filename
         for v in logs:
-            new_log = log_group.logs.add()
+            new_log = log_group.logs.add()  # pylint: disable=no-member
             new_log.time = v.time
             for key in v.log_dict.keys():
                 log_content = new_log.contents.add()

@@ -62,6 +62,7 @@ MODIFY_INDEX = "/ModifyIndex"
 DESCRIBE_INDEX = "/DescribeIndex"
 
 DESCRIBE_SHARDS = "/DescribeShards"
+MANUAL_SHARD_SPLIT = "/ManualShardSplit"
 
 CREATE_HOST_GROUP = "/CreateHostGroup"
 DELETE_HOST_GROUP = "/DeleteHostGroup"
@@ -119,12 +120,37 @@ MODIFY_SHIPPER = "/ModifyShipper"
 DESCRIBE_SHIPPERS = "/DescribeShippers"
 DESCRIBE_SHIPPER = "/DescribeShipper"
 
+# ETL APIs
+DESCRIBE_ETL_TASK = "/DescribeETLTask"
+
+# APIs of account.
+ACTIVE_TLS_ACCOUNT = "/ActiveTlsAccount"
+
+# Trace APIs
+CREATE_TRACE_INSTANCE = "/CreateTraceInstance"
+DELETE_TRACE_INSTANCE = "/DeleteTraceInstance"
+MODIFY_TRACE_INSTANCE = "/ModifyTraceInstance"
+DESCRIBE_TRACE_INSTANCE = "/DescribeTraceInstance"
+DESCRIBE_TRACE_INSTANCES = "/DescribeTraceInstances"
+
+# Trace related fields
+TRACE_INSTANCE_ID = "TraceInstanceId"
+TRACE_INSTANCE_NAME = "TraceInstanceName"
+TRACE_INSTANCES = "TraceInstances"
+TRACE_INSTANCE_STATUS = "TraceInstanceStatus"
+TRACE_TOPIC_ID = "TraceTopicId"
+TRACE_TOPIC_NAME = "TraceTopicName"
+DEPENDENCY_TOPIC_ID = "DependencyTopicId"
+DEPENDENCY_TOPIC_TOPIC_NAME = "DependencyTopicTopicName"
+
+CANCEL_DOWNLOAD_TASK = "/CancelDownloadTask"
 
 # TLS API fields
 DATA = "Data"
 
 REQUEST_ID = "RequestId"
 DESCRIPTION = "Description"
+NAME = "Name"
 PAGE_NUMBER = "PageNumber"
 PAGE_SIZE = "PageSize"
 TOTAL = "Total"
@@ -156,6 +182,8 @@ ENCRYPT_CONF = "EncryptConf"
 FULL_TEXT = "FullText"
 KEY_VALUE = "KeyValue"
 USER_INNER_KEY_VALUE = "UserInnerKeyValue"
+MAX_TEXT_LEN = "MaxTextLen"
+ENABLE_AUTO_INDEX = "EnableAutoIndex"
 KEY = "Key"
 VALUE = "Value"
 CASE_SENSITIVE = "CaseSensitive"
@@ -165,6 +193,9 @@ VALUE_TYPE = "ValueType"
 SQL_FLAG = "SqlFlag"
 INDEX_ALL = "IndexAll"
 JSON_KEYS = "JsonKeys"
+AUTO_INDEX_FLAG = "AutoIndexFlag"
+ENABLE_AUTO_INDEX = "EnableAutoIndex"
+MAX_TEXT_LEN = "MaxTextLen"
 
 SHARD_ID = "ShardId"
 SHARDS = "Shards"
@@ -269,6 +300,7 @@ NO_LINE_TERMINATOR_EOF_MAX_TIME = "NoLineTerminatorEOFMaxTime"
 
 
 ALARM_NOTIFY_GROUP_ID = "AlarmNotifyGroupId"
+
 ALARM_NOTIFY_GROUP_NAME = "AlarmNotifyGroupName"
 NOTIFY_TYPE = "NotifyType"
 TRIGGER = "Trigger"
@@ -362,3 +394,31 @@ ENCRYPT_TYPE = "encrypt_type"
 REGION_ID = "region_id"
 USER_CMK_ID = "user_cmk_id"
 USER_CMK_INFO = "user_cmk_info"
+
+# ETL Task fields
+DSL_TYPE = "DSLType"
+ETL_STATUS = "ETLStatus"
+ENABLE = "Enable"
+FROM_TIME = "FromTime"
+LAST_ENABLE_TIME = "LastEnableTime"
+SCRIPT = "Script"
+SOURCE_TOPIC_ID = "SourceTopicId"
+SOURCE_TOPIC_NAME = "SourceTopicName"
+TARGET_RESOURCES = "TargetResources"
+TASK_TYPE = "TaskType"
+TO_TIME = "ToTime"
+ALIAS = "Alias"
+
+# Trace API fields
+TRACE_INSTANCE_ID = "TraceInstanceId"
+TRACE_INSTANCE_NAME = "TraceInstanceName"
+TRACE_INSTANCES = "TraceInstances"
+TRACE_TOPIC_ID = "TraceTopicId"
+TRACE_TOPIC_NAME = "TraceTopicName"
+DEPENDENCY_TOPIC_ID = "DependencyTopicId"
+DEPENDENCY_TOPIC_TOPIC_NAME = "DependencyTopicTopicName"
+TRACE_INSTANCE_STATUS = "TraceInstanceStatus"
+
+# GetAccountStatus API
+GET_ACCOUNT_STATUS = "/GetAccountStatus"
+ARCH_VERSION = "ArchVersion"

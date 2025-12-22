@@ -242,6 +242,8 @@ class DescribeIndexResponse(TLSResponse):
 
         self.create_time = self.response[CREATE_TIME]
         self.modify_time = self.response[MODIFY_TIME]
+        self.enable_auto_index = self.response.get(ENABLE_AUTO_INDEX, False)
+        self.max_text_len = self.response.get(MAX_TEXT_LEN, 2048)
 
     def get_create_time(self):
         """
@@ -277,6 +279,20 @@ class DescribeIndexResponse(TLSResponse):
         :rtype: List[KeyValueInfo]
         """
         return self.user_inner_key_value
+
+    def get_enable_auto_index(self):
+        """
+        :return: 是否开启索引自动更新
+        :rtype: bool
+        """
+        return self.enable_auto_index
+
+    def get_max_text_len(self):
+        """
+        :return: 统计字段值的最大长度
+        :rtype: int
+        """
+        return self.max_text_len
 
 
 class PutLogsResponse(TLSResponse):
@@ -545,6 +561,24 @@ class DescribeShardsResponse(TLSResponse):
         :rtype: int
         """
         return self.total
+
+
+class ManualShardSplitResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ManualShardSplitResponse, self).__init__(response)
+
+        self.shards = []
+        shards = self.response[SHARDS]
+
+        for shard in shards:
+            self.shards.append(QueryResp.set_attributes(data=shard))
+
+    def get_shards(self):
+        """
+        :return: 日志分区的范围等详细信息
+        :rtype: List[QueryResp]
+        """
+        return self.shards
 
 
 class CreateHostGroupResponse(TLSResponse):
@@ -1197,12 +1231,17 @@ class DescribeShipperResponse(TLSResponse):
         return self.role_trn
 
 
+class ActiveTlsAccountResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ActiveTlsAccountResponse, self).__init__(response)
+
+
 class DescribeShippersResponse(TLSResponse):
     def __init__(self, response):
         super(DescribeShippersResponse, self).__init__(response)
         self.total = self.response[TOTAL]
         self.shippers = []
-        
+
         shippers_data = self.response.get(SHIPPERS, [])
         for shipper_data in shippers_data:
             self.shippers.append(ShipperInfo.set_attributes(data=shipper_data))
@@ -1220,3 +1259,249 @@ class DescribeShippersResponse(TLSResponse):
         :rtype: List[ShipperInfo]
         """
         return self.shippers
+
+
+class CreateTraceInstanceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateTraceInstanceResponse, self).__init__(response)
+
+        self.trace_instance_id = self.response[TRACE_INSTANCE_ID]
+
+    def get_trace_instance_id(self):
+        """
+        :return: Trace实例id
+        :rtype: str
+        """
+        return self.trace_instance_id
+
+
+class DeleteTraceInstanceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteTraceInstanceResponse, self).__init__(response)
+
+class DescribeTraceInstanceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeTraceInstanceResponse, self).__init__(response)
+
+        self.trace_instance = TraceInstanceInfo.set_attributes(data=self.response)
+
+    def get_trace_instance(self):
+        """
+        :return: Trace实例信息
+        :rtype: TraceInstanceInfo
+        """
+        return self.trace_instance
+
+
+class DescribeTraceInstancesResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeTraceInstancesResponse, self).__init__(response)
+
+        self.total = self.response[TOTAL]
+        self.trace_instances = []
+
+        trace_instances_data = self.response.get(TRACE_INSTANCES, [])
+        for trace_instance_data in trace_instances_data:
+            self.trace_instances.append(TraceInstanceInfo.set_attributes(data=trace_instance_data))
+
+    def get_total(self):
+        """
+        :return: Trace实例总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_trace_instances(self):
+        """
+        :return: Trace实例列表
+        :rtype: List[TraceInstanceInfo]
+        """
+        return self.trace_instances
+
+
+class ModifyTraceInstanceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ModifyTraceInstanceResponse, self).__init__(response)
+
+
+class DescribeETLTaskResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeETLTaskResponse, self).__init__(response)
+
+        # 基础字段
+        self.create_time = self.response.get(CREATE_TIME)
+        self.dsl_type = self.response.get(DSL_TYPE)
+        self.description = self.response.get(DESCRIPTION)
+        self.etl_status = self.response.get(ETL_STATUS)
+        self.enable = self.response.get(ENABLE)
+        self.from_time = self.response.get(FROM_TIME)
+        self.last_enable_time = self.response.get(LAST_ENABLE_TIME)
+        self.modify_time = self.response.get(MODIFY_TIME)
+        self.name = self.response.get(NAME)
+        self.project_id = self.response.get(PROJECT_ID)
+        self.project_name = self.response.get(PROJECT_NAME)
+        self.script = self.response.get(SCRIPT)
+        self.source_topic_id = self.response.get(SOURCE_TOPIC_ID)
+        self.source_topic_name = self.response.get(SOURCE_TOPIC_NAME)
+        self.task_id = self.response.get(TASK_ID)
+        self.task_type = self.response.get(TASK_TYPE)
+        self.to_time = self.response.get(TO_TIME)
+
+        # 目标资源列表
+        self.target_resources = []
+        target_resources_data = self.response.get(TARGET_RESOURCES, [])
+        if target_resources_data:
+            for target_resource_data in target_resources_data:
+                self.target_resources.append(TargetResourceInfo.set_attributes(data=target_resource_data))
+
+    def get_create_time(self):
+        """\
+        :return: 加工任务的创建时间
+        :rtype: str
+        """
+        return self.create_time
+
+    def get_dsl_type(self):
+        """\
+        :return: DSL 类型
+        :rtype: str
+        """
+        return self.dsl_type
+
+    def get_description(self):
+        """\
+        :return: 数据加工任务的描述信息
+        :rtype: str
+        """
+        return self.description
+
+    def get_etl_status(self):
+        """\
+        :return: 任务调度状态
+        :rtype: str
+        """
+        return self.etl_status
+
+    def get_enable(self):
+        """\
+        :return: 是否启用数据任务
+        :rtype: bool
+        """
+        return self.enable
+
+    def get_from_time(self):
+        """\
+        :return: 待加工数据的开始时间
+        :rtype: int
+        """
+        return self.from_time
+
+    def get_last_enable_time(self):
+        """\
+        :return: 最近启动时间
+        :rtype: str
+        """
+        return self.last_enable_time
+
+    def get_modify_time(self):
+        """\
+        :return: 加工任务的修改时间
+        :rtype: str
+        """
+        return self.modify_time
+
+    def get_name(self):
+        """\
+        :return: 加工任务名称
+        :rtype: str
+        """
+        return self.name
+
+    def get_project_id(self):
+        """\
+        :return: 待加工数据所在的日志项目 ID
+        :rtype: str
+        """
+        return self.project_id
+
+    def get_project_name(self):
+        """\
+        :return: 待加工数据所在的日志项目名称
+        :rtype: str
+        """
+        return self.project_name
+
+    def get_script(self):
+        """\
+        :return: 加工规则
+        :rtype: str
+        """
+        return self.script
+
+    def get_source_topic_id(self):
+        """\
+        :return: 待加工数据所在的日志主题 ID
+        :rtype: str
+        """
+        return self.source_topic_id
+
+    def get_source_topic_name(self):
+        """\
+        :return: 待加工数据所在的日志主题名称
+        :rtype: str
+        """
+        return self.source_topic_name
+
+    def get_task_id(self):
+        """\
+        :return: 加工任务 ID
+        :rtype: str
+        """
+        return self.task_id
+
+    def get_task_type(self):
+        """\
+        :return: 任务类型
+        :rtype: str
+        """
+        return self.task_type
+
+    def get_to_time(self):
+        """\
+        :return: 日志加工数据范围的结束时间
+        :rtype: int
+        """
+        return self.to_time
+
+    def get_target_resources(self):
+        """\
+        :return: 输出目标的相关信息
+        :rtype: List[TargetResourceInfo]
+        """
+        return self.target_resources
+
+
+class CancelDownloadTaskResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CancelDownloadTaskResponse, self).__init__(response)
+
+
+class GetAccountStatusResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(GetAccountStatusResponse, self).__init__(response)
+        self.arch_version = self.response.get(ARCH_VERSION)
+        self.status = self.response.get(STATUS)
+
+    def get_arch_version(self):
+        """
+        :return: 日志服务版本：2.0：新架构；1.0：老架构
+        :rtype: str
+        """
+        return self.arch_version
+
+    def get_status(self):
+        """
+        :return: 是否已开通日志服务：Activated：已开通日志服务；NonActivated：未开通日志服务
+        :rtype: str
+        """
+        return self.status

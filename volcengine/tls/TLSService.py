@@ -6,6 +6,7 @@ from __future__ import print_function
 import hashlib
 import threading
 import random
+import time
 
 from volcengine.ApiInfo import ApiInfo
 from volcengine.Credentials import Credentials
@@ -14,7 +15,11 @@ from volcengine.auth.SignerV4 import SignerV4
 from volcengine.base.Service import Service
 from volcengine.tls.tls_requests import *
 from volcengine.tls.tls_responses import *
+from volcengine.tls.tls_requests import DescribeETLTaskRequest
+from volcengine.tls.tls_responses import DescribeETLTaskResponse
+from volcengine.tls.tls_responses import ModifyTraceInstanceResponse
 from volcengine.tls.tls_exception import TLSException
+from volcengine.tls.const import DELETE_TRACE_INSTANCE, DESCRIBE_TRACE_INSTANCE
 from volcengine.tls.util import get_logger
 
 API_INFO = {
@@ -47,8 +52,10 @@ API_INFO = {
     CREATE_DOWNLOAD_TASK: ApiInfo(HTTP_POST, CREATE_DOWNLOAD_TASK, {}, {}, {}),
     DESCRIBE_DOWNLOAD_TASKS: ApiInfo(HTTP_GET, DESCRIBE_DOWNLOAD_TASKS, {}, {}, {}),
     DESCRIBE_DOWNLOAD_URL: ApiInfo(HTTP_GET, DESCRIBE_DOWNLOAD_URL, {}, {}, {}),
+    CANCEL_DOWNLOAD_TASK: ApiInfo(HTTP_POST, CANCEL_DOWNLOAD_TASK, {}, {}, {}),
     # APIs of shards.
     DESCRIBE_SHARDS: ApiInfo(HTTP_GET, DESCRIBE_SHARDS, {}, {}, {}),
+    MANUAL_SHARD_SPLIT: ApiInfo(HTTP_POST, MANUAL_SHARD_SPLIT, {}, {}, {}),
     # APIs of host groups.
     CREATE_HOST_GROUP: ApiInfo(HTTP_POST, CREATE_HOST_GROUP, {}, {}, {}),
     DELETE_HOST_GROUP: ApiInfo(HTTP_DELETE, DELETE_HOST_GROUP, {}, {}, {}),
@@ -98,13 +105,19 @@ API_INFO = {
     DELETE_IMPORT_TASK: ApiInfo(HTTP_DELETE, DELETE_IMPORT_TASK, {}, {}, {}),
     MODIFY_IMPORT_TASK: ApiInfo(HTTP_PUT, MODIFY_IMPORT_TASK, {}, {}, {}),
     DESCRIBE_IMPORT_TASKS: ApiInfo(HTTP_GET, DESCRIBE_IMPORT_TASKS, {}, {}, {}),
-    DESCRIBE_IMPORT_TASK: ApiInfo(HTTP_GET, DESCRIBE_IMPORT_TASK, {}, {}, {}),
-    # APIs of shipper.
-    CREATE_SHIPPER: ApiInfo(HTTP_POST, CREATE_SHIPPER, {}, {}, {}),
-    DELETE_SHIPPER: ApiInfo(HTTP_DELETE, DELETE_SHIPPER, {}, {}, {}),
-    MODIFY_SHIPPER: ApiInfo(HTTP_PUT, MODIFY_SHIPPER, {}, {}, {}),
     DESCRIBE_SHIPPERS: ApiInfo(HTTP_GET, DESCRIBE_SHIPPERS, {}, {}, {}),
-    DESCRIBE_SHIPPER: ApiInfo(HTTP_GET, DESCRIBE_SHIPPER, {}, {}, {})
+    DESCRIBE_SHIPPER: ApiInfo(HTTP_GET, DESCRIBE_SHIPPER, {}, {}, {}),
+    DESCRIBE_ETL_TASK: ApiInfo(HTTP_GET, DESCRIBE_ETL_TASK, {}, {}, {}),
+    # APIs of account.
+    ACTIVE_TLS_ACCOUNT: ApiInfo(HTTP_POST, ACTIVE_TLS_ACCOUNT, {}, {}, {}),
+    # APIs of trace instance.
+    CREATE_TRACE_INSTANCE: ApiInfo(HTTP_POST, CREATE_TRACE_INSTANCE, {}, {}, {}),
+    DELETE_TRACE_INSTANCE: ApiInfo(HTTP_DELETE, DELETE_TRACE_INSTANCE, {}, {}, {}),
+    MODIFY_TRACE_INSTANCE: ApiInfo(HTTP_PUT, MODIFY_TRACE_INSTANCE, {}, {}, {}),
+    DESCRIBE_TRACE_INSTANCE: ApiInfo(HTTP_GET, DESCRIBE_TRACE_INSTANCE, {}, {}, {}),
+    DESCRIBE_TRACE_INSTANCES: ApiInfo(HTTP_GET, DESCRIBE_TRACE_INSTANCES, {}, {}, {}),
+    # APIs of account status.
+    GET_ACCOUNT_STATUS: ApiInfo(HTTP_GET, GET_ACCOUNT_STATUS, {}, {}, {})
 }
 
 HEADER_API_VERSION = "x-tls-apiversion"
@@ -383,19 +396,29 @@ class TLSService(Service):
 
     def put_logs_v2(self, request: PutLogsV2Request) -> PutLogsResponse:
         log_group_list = LogGroupList()
-        log_group = log_group_list.log_groups.add()
+        log_group = log_group_list.log_groups.add()  # pylint: disable=no-member
         if request.logs.source is not None:
             log_group.source = request.logs.source
         if request.logs.filename is not None:
             log_group.filename = request.logs.filename
+        # 添加日志组标签
+        if request.logs.log_tags:
+            for key, value in request.logs.log_tags.items():
+                log_tag = log_group.log_tags.add()
+                log_tag.key = str(key)
+                log_tag.value = str(value)
         for v in request.logs.logs:
             new_log = log_group.logs.add()
             new_log.time = v.time
+            # 设置纳秒级时间戳（如果提供）
+            if v.time_ns is not None:
+                new_log.TimeNs = v.time_ns
             for key in v.log_dict.keys():
                 log_content = new_log.contents.add()
                 log_content.key = str(key)
                 log_content.value = str(v.log_dict[key])
-        put_logs_request = PutLogsRequest(request.topic_id, log_group_list, request.hash_key, request.compression)
+        put_logs_request = PutLogsRequest(request.topic_id, log_group_list, 
+                                         request.hash_key, request.compression, request.content_md5)
         return self.put_logs(put_logs_request)
 
     def describe_cursor(self, describe_cursor_request: DescribeCursorRequest) -> DescribeCursorResponse:
@@ -502,6 +525,13 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_SHARDS, params=describe_shards_request.get_api_input())
 
         return DescribeShardsResponse(response)
+
+    def manual_shard_split(self, manual_shard_split_request: ManualShardSplitRequest) -> ManualShardSplitResponse:
+        if manual_shard_split_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MANUAL_SHARD_SPLIT, body=manual_shard_split_request.get_api_input())
+
+        return ManualShardSplitResponse(response)
 
     def create_host_group(self, create_host_group_request: CreateHostGroupRequest) -> CreateHostGroupResponse:
         if create_host_group_request.check_validation() is False:
@@ -834,6 +864,72 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_SHIPPER, params=describe_shipper_request.get_api_input())
         return DescribeShipperResponse(response)
 
+    def describe_etl_task(self, describe_etl_task_request: DescribeETLTaskRequest) -> DescribeETLTaskResponse:
+        if describe_etl_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_ETL_TASK, params=describe_etl_task_request.get_api_input())
+        return DescribeETLTaskResponse(response)
+
+    def create_trace_instance(self, create_trace_instance_request: CreateTraceInstanceRequest) -> CreateTraceInstanceResponse:
+        if create_trace_instance_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_TRACE_INSTANCE, body=create_trace_instance_request.get_api_input())
+        return CreateTraceInstanceResponse(response)
+
+    def delete_trace_instance(self, delete_trace_instance_request: DeleteTraceInstanceRequest) -> DeleteTraceInstanceResponse:
+        if delete_trace_instance_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_TRACE_INSTANCE, body=delete_trace_instance_request.get_api_input())
+        return DeleteTraceInstanceResponse(response)
+
+    def describe_trace_instance(self, describe_trace_instance_request: DescribeTraceInstanceRequest) -> DescribeTraceInstanceResponse:
+        if describe_trace_instance_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_TRACE_INSTANCE,
+                                  params=describe_trace_instance_request.get_api_input())
+        return DescribeTraceInstanceResponse(response)
+
+    def describe_trace_instances(self, describe_trace_instances_request: DescribeTraceInstancesRequest) -> DescribeTraceInstancesResponse:
+        if describe_trace_instances_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_TRACE_INSTANCES,
+                                  params=describe_trace_instances_request.get_api_input())
+        return DescribeTraceInstancesResponse(response)
+
+    def active_tls_account(self) -> ActiveTlsAccountResponse:
+        """\
+        激活TLS账户
+        :return: ActiveTlsAccountResponse
+        :rtype: ActiveTlsAccountResponse
+        """
+        response = self.__request(api=ACTIVE_TLS_ACCOUNT, body={})
+        return ActiveTlsAccountResponse(response)
+
     def describe_shippers(self, describe_shippers_request: DescribeShippersRequest) -> DescribeShippersResponse:
         response = self.__request(api=DESCRIBE_SHIPPERS, params=describe_shippers_request.get_api_input())
         return DescribeShippersResponse(response)
+
+    def cancel_download_task(self, cancel_download_task_request) -> 'CancelDownloadTaskResponse':
+        if not cancel_download_task_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CANCEL_DOWNLOAD_TASK, body=cancel_download_task_request.get_api_input())
+        return CancelDownloadTaskResponse(response)
+
+    def modify_trace_instance(self, modify_trace_instance_request: ModifyTraceInstanceRequest) -> ModifyTraceInstanceResponse:
+        """修改 Trace 实例
+
+        :param modify_trace_instance_request: 修改请求
+        :type modify_trace_instance_request: ModifyTraceInstanceRequest
+        :return: 修改结果
+        :rtype: ModifyTraceInstanceResponse
+        """
+        if not modify_trace_instance_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_TRACE_INSTANCE, body=modify_trace_instance_request.get_api_input())
+        return ModifyTraceInstanceResponse(response)
+
+    def get_account_status(self, get_account_status_request: GetAccountStatusRequest) -> GetAccountStatusResponse:
+        if get_account_status_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=GET_ACCOUNT_STATUS, params=get_account_status_request.get_api_input())
+        return GetAccountStatusResponse(response)

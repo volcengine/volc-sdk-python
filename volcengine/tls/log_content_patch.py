@@ -17,7 +17,7 @@ def ParseLogGroupListFromString(log_group_list, serialized_data):
         if field_num == 1 and wire_type == _wire_format.WIRETYPE_LENGTH_DELIMITED:
             pos = _parse_log_groups(log_group_list, buffer, pos, end)
         else:
-            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)
+            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)  # pylint: disable=no-member
     return pos
 
 
@@ -54,7 +54,7 @@ def ParseLogGroupFromString(log_group, serialized_data):
         elif field_num == 5 and wire_type == _wire_format.WIRETYPE_LENGTH_DELIMITED:
             pos = _parse_context_flow(log_group, buffer, pos, end)  # 补充：解析context_flow
         else:
-            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)
+            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)  # pylint: disable=no-member
     return pos
 
 def _parse_logs(log_group, buffer, pos, end):
@@ -124,7 +124,7 @@ def ParseLogTagFromString(log_tag, serialized_data):
         elif field_num == 2 and wire_type == _wire_format.WIRETYPE_LENGTH_DELIMITED:
             pos = _parse_value(log_tag, buffer, pos, end)
         else:
-            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)
+            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)  # pylint: disable=no-member
     return pos
 
 def _parse_key(item, buffer, pos, end):
@@ -159,7 +159,7 @@ def ParseLogFromString(log, serialized_data):
         elif field_num == 2 and wire_type == _wire_format.WIRETYPE_LENGTH_DELIMITED:
             pos = _parse_contents(log, buffer, pos, end)
         else:
-            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)
+            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)  # pylint: disable=no-member
     return pos
 
 def _parse_time(log, buffer, pos, end):
@@ -193,5 +193,5 @@ def ParseLogContentFromString(content, serialized_data):
         elif field_num == 2 and wire_type == _wire_format.WIRETYPE_LENGTH_DELIMITED:
             pos = _parse_value(content, buffer, pos, end)
         else:
-            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)
+            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)  # pylint: disable=no-member
     return pos

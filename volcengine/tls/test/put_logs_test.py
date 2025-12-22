@@ -102,7 +102,7 @@ class TestPutLogs(unittest.TestCase):
 
         count = 0
 
-        for log_group in log_group_list.log_groups:
+        for log_group in log_group_list.log_groups:  # pylint: disable=no-member
             for log in log_group.logs:
 
                 if log.time < int(1e10):

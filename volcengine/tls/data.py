@@ -78,7 +78,7 @@ class ProjectInfo(TLSData):
             tags = data[TAGS]
             project_info.tags = []
             for i in range(len(tags)):
-                project_info.tags.append(
+                project_info.tags.append(  # pylint: disable=no-member
                     TagInfo(tags[i].get(KEY), tags[i].get(VALUE)))
 
         return project_info
@@ -399,13 +399,15 @@ class FullTextInfo(TLSData):
 
 class ValueInfo(TLSData):
     def __init__(self, value_type: str, delimiter: str = None, case_sensitive: bool = False,
-                 include_chinese: bool = False, sql_flag: bool = False, index_all: bool = False, json_keys=None):
+                 include_chinese: bool = False, sql_flag: bool = False, index_all: bool = False,
+                 json_keys=None, auto_index_flag: bool = False):
         self.value_type = value_type
         self.delimiter = delimiter
         self.case_sensitive = case_sensitive
         self.include_chinese = include_chinese
         self.sql_flag = sql_flag
         self.index_all = index_all
+        self.auto_index_flag = auto_index_flag
 
         if value_type == "json":
             self.json_keys = json_keys
@@ -421,8 +423,17 @@ class ValueInfo(TLSData):
         sql_flag = data.get(SQL_FLAG)
         index_all = data.get(INDEX_ALL)
         json_keys = data.get(JSON_KEYS)
+        auto_index_flag = data.get(AUTO_INDEX_FLAG, False)
 
-        return cls(value_type, delimiter, case_sensitive, include_chinese, sql_flag, index_all, json_keys)
+        return cls(value_type, delimiter, case_sensitive, include_chinese, sql_flag,
+                   index_all, json_keys, auto_index_flag)
+
+    def get_auto_index_flag(self):
+        """
+        :return: 该索引是否是自动索引添加
+        :rtype: bool
+        """
+        return self.auto_index_flag
 
 
 class KeyValueInfo(TLSData):
@@ -479,7 +490,7 @@ class AnalysisResult(TLSData):
 class SearchResult(TLSData):
     def __init__(self, result_status: str = None, hit_count: int = None, list_over: bool = None, analysis: bool = None,
                  count: int = None, limit: int = None, context: str = None, logs: List[dict] = None,
-                 analysis_result: AnalysisResult = None):
+                 analysis_result: AnalysisResult = None, highlight: List[dict] = None, elapsed_millisecond: int = None):
         self.result_status = result_status
         self.hit_count = hit_count
         self.list_over = list_over
@@ -489,6 +500,8 @@ class SearchResult(TLSData):
         self.context = context
         self.logs = logs
         self.analysis_result = analysis_result
+        self.highlight = highlight
+        self.elapsed_millisecond = elapsed_millisecond
 
     def get_list_over(self):
         """
@@ -553,6 +566,20 @@ class SearchResult(TLSData):
         """
         return self.logs
 
+    def get_highlight(self):
+        """
+        :return:高亮显示的关键字
+        :rtype: List[dict]
+        """
+        return self.highlight
+
+    def get_elapsed_millisecond(self):
+        """
+        :return:本次检索所使用的时间，单位为毫秒
+        :rtype: int
+        """
+        return self.elapsed_millisecond
+
     @classmethod
     def set_attributes(cls, data: dict):
         search_result = super(SearchResult, cls).set_attributes(data)
@@ -566,55 +593,60 @@ class SearchResult(TLSData):
 
 class QueryResp(TLSData):
     def __init__(self, topic_id: str = None, shard_id: int = None, inclusive_begin_key: str = None,
-                 exclusive_end_key: str = None, status: str = None, modify_time: str = None):
+                 exclusive_end_key: str = None, status: str = None, modify_time: str = None,
+                 stop_write_time: str = None):
+        """查询分区信息
+
+        :param topic_id: 日志主题 ID
+        :type topic_id: str
+        :param shard_id: 分区 ID
+        :type shard_id: int
+        :param inclusive_begin_key: 分区起始的 key 值（包含）
+        :type inclusive_begin_key: str
+        :param exclusive_end_key: 分区结束的 key 值（不包含）
+        :type exclusive_end_key: str
+        :param status: 分区状态，readwrite：读写，readonly：只读
+        :type status: str
+        :param modify_time: 分区修改时间
+        :type modify_time: str
+        :param stop_write_time: 分区停止写入的时间
+        :type stop_write_time: str
+        """
         self.topic_id = topic_id
         self.shard_id = shard_id
         self.inclusive_begin_key = inclusive_begin_key
         self.exclusive_end_key = exclusive_end_key
         self.status = status
         self.modify_time = modify_time
+        self.stop_write_time = stop_write_time
 
     def get_exclusive_end_key(self):
-        """
-        :return:分区结束的 key 值
-        :rtype:str
-        """
+        """返回分区结束的 key 值"""
         return self.exclusive_end_key
 
     def get_inclusive_begin_key(self):
-        """
-        :return:分区起始的 key 值
-        :rtype:str
-        """
+        """返回分区起始的 key 值"""
         return self.inclusive_begin_key
 
     def get_shard_id(self):
-        """
-        :return:日志主题的分区 ID
-        :rtype: int
-        """
+        """返回日志主题的分区 ID"""
         return self.shard_id
 
     def get_modify_time(self):
-        """
-        :return:分区修改时间
-        :rtype:str
-        """
+        """返回分区修改时间"""
         return self.modify_time
 
     def get_topic_id(self):
-        """
-        :return:日志主题的 ID
-        :rtype:str
-        """
+        """返回日志主题的 ID"""
         return self.topic_id
 
     def get_status(self):
-        """
-        :return:分区状态 readwrite：读写，readonly：只读。
-        :rtype:str
-        """
+        """返回分区状态（readwrite：读写，readonly：只读）"""
         return self.status
+
+    def get_stop_write_time(self):
+        """返回分区停止写入的时间"""
+        return self.stop_write_time
 
 
 class HistogramInfo(TLSData):
@@ -1039,11 +1071,11 @@ class ExtractRule(TLSData):
         if FILTER_KEY_REGEX in data:
             extract_rule.filter_key_regex = []
             for one_filter_key_regex in data[FILTER_KEY_REGEX]:
-                extract_rule.filter_key_regex.append(
+                extract_rule.filter_key_regex.append(  # pylint: disable=no-member
                     FilterKeyRegex.set_attributes(data=one_filter_key_regex))
         if LOG_TEMPLATE in data:
             extract_rule.log_template = LogTemplate(log_type=data[LOG_TEMPLATE].get(TYPE),
-                                                    log_format=data[LOG_TEMPLATE].get(FORMAT))
+                                                    log_format=data[LOG_TEMPLATE].get(FORMAT))  # pylint: disable=no-member
 
         return extract_rule
 
@@ -1683,7 +1715,7 @@ class RuleInfo(TLSData):
                  paths: List[str] = None, log_type: str = None, extract_rule: ExtractRule = None,
                  exclude_paths: List[ExcludePath] = None, log_sample: str = None,
                  user_define_rule: UserDefineRule = None, create_time: str = None, modify_time: str = None,
-                 input_type: int = None, container_rule: ContainerRule = None):
+                 input_type: int = None, container_rule: ContainerRule = None, pause: int = None):
         self.topic_id = topic_id
         self.topic_name = topic_name
         self.rule_id = rule_id
@@ -1698,6 +1730,7 @@ class RuleInfo(TLSData):
         self.modify_time = modify_time
         self.input_type = input_type
         self.container_rule = container_rule
+        self.pause = pause
 
     def get_exclude_paths(self):
         """
@@ -1757,6 +1790,9 @@ class RuleInfo(TLSData):
     def get_log_sample(self):
         return self.log_sample
 
+    def get_pause(self):
+        return self.pause
+
     @classmethod
     def set_attributes(cls, data: dict):
         rule_info = super(RuleInfo, cls).set_attributes(data)
@@ -1767,7 +1803,7 @@ class RuleInfo(TLSData):
         if EXCLUDE_PATHS in data:
             rule_info.exclude_paths = []
             for exclude_path in data[EXCLUDE_PATHS]:
-                rule_info.exclude_paths.append(
+                rule_info.exclude_paths.append(  # pylint: disable=no-member
                     ExcludePath.set_attributes(data=exclude_path))
         if USER_DEFINE_RULE in data:
             rule_info.user_define_rule = UserDefineRule.set_attributes(
@@ -2102,7 +2138,7 @@ class AlarmNotifyGroupInfo(TLSData):
         if RECEIVERS in data:
             alarm_notify_group_info.receivers = []
             for receiver in data[RECEIVERS]:
-                alarm_notify_group_info.receivers.append(
+                alarm_notify_group_info.receivers.append(  # pylint: disable=no-member
                     Receiver.set_attributes(data=receiver))
 
         return alarm_notify_group_info
@@ -2287,12 +2323,12 @@ class AlarmInfo(TLSData):
         if QUERY_REQUEST in data:
             alarm_info.query_request = []
             for one_query_request in data[QUERY_REQUEST]:
-                alarm_info.query_request.append(
+                alarm_info.query_request.append(  # pylint: disable=no-member
                     QueryRequest.set_attributes(data=one_query_request))
         if ALARM_NOTIFY_GROUP in data:
             alarm_info.alarm_notify_group = []
             for alarm_notify_group in data[ALARM_NOTIFY_GROUP]:
-                alarm_info.alarm_notify_group.append(
+                alarm_info.alarm_notify_group.append(  # pylint: disable=no-member
                     AlarmNotifyGroupInfo.set_attributes(data=alarm_notify_group))
         if ALARM_PERIOD_DETAIL in data:
             if len(data[ALARM_PERIOD_DETAIL]) == 0:
@@ -2308,12 +2344,12 @@ class AlarmInfo(TLSData):
         if JOIN_CONFIGURATIONS in data and data[JOIN_CONFIGURATIONS] is not None:
             alarm_info.join_configurations = []
             for join_configuration in data[JOIN_CONFIGURATIONS]:
-                alarm_info.join_configurations.append(
+                alarm_info.join_configurations.append(  # pylint: disable=no-member
                     JoinConfig.set_attributes(data=join_configuration))
         if TRIGGER_CONDITIONS in data and data[TRIGGER_CONDITIONS] is not None:
             alarm_info.trigger_conditions = []
             for trigger_condition in data[TRIGGER_CONDITIONS]:
-                alarm_info.trigger_conditions.append(
+                alarm_info.trigger_conditions.append(  # pylint: disable=no-member
                     TriggerCondition.set_attributes(data=trigger_condition))
 
         return alarm_info
@@ -2744,3 +2780,167 @@ class ShipperInfo(TLSData):
         if KAFKA_SHIPPER_INFO in data:
             shipper_info.kafka_shipper_info = KafkaShipperInfo.set_attributes(data=data[KAFKA_SHIPPER_INFO])
         return shipper_info
+
+
+class TraceInstanceInfo(TLSData):
+    def __init__(self, trace_instance_id: str = None, trace_instance_name: str = None, project_id: str = None,
+                 project_name: str = None, trace_topic_id: str = None, trace_topic_name: str = None,
+                 dependency_topic_id: str = None, dependency_topic_topic_name: str = None,
+                 trace_instance_status: str = None, description: str = None,
+                 create_time: str = None, modify_time: str = None):
+        """
+        :param trace_instance_id: Trace实例ID
+        :type trace_instance_id: str, optional
+        :param trace_instance_name: Trace实例名称
+        :type trace_instance_name: str, optional
+        :param project_id: 日志项目ID
+        :type project_id: str, optional
+        :param project_name: 日志项目名称
+        :type project_name: str, optional
+        :param trace_topic_id: Trace Topic ID
+        :type trace_topic_id: str, optional
+        :param trace_topic_name: Trace Topic名称
+        :type trace_topic_name: str, optional
+        :param dependency_topic_id: Dependency Topic ID
+        :type dependency_topic_id: str, optional
+        :param dependency_topic_topic_name: Dependency Topic名称
+        :type dependency_topic_topic_name: str, optional
+        :param trace_instance_status: Trace实例状态
+        :type trace_instance_status: str, optional
+        :param description: Trace实例描述
+        :type description: str, optional
+        :param create_time: 创建时间
+        :type create_time: str, optional
+        :param modify_time: 修改时间
+        :type modify_time: str, optional
+        """
+        self.trace_instance_id = trace_instance_id
+        self.trace_instance_name = trace_instance_name
+        self.project_id = project_id
+        self.project_name = project_name
+        self.trace_topic_id = trace_topic_id
+        self.trace_topic_name = trace_topic_name
+        self.dependency_topic_id = dependency_topic_id
+        self.dependency_topic_topic_name = dependency_topic_topic_name
+        self.trace_instance_status = trace_instance_status
+        self.description = description
+        self.create_time = create_time
+        self.modify_time = modify_time
+
+    def get_trace_instance_id(self):
+        """返回 Trace实例ID"""
+        return self.trace_instance_id
+
+    def get_trace_instance_name(self):
+        """返回 Trace实例名称"""
+        return self.trace_instance_name
+
+    def get_trace_instance_status(self):
+        """返回 Trace实例状态"""
+        return self.trace_instance_status
+
+    def get_project_id(self):
+        """返回 日志项目ID"""
+        return self.project_id
+
+    def get_project_name(self):
+        """返回 日志项目名称"""
+        return self.project_name
+
+    def get_description(self):
+        """返回 Trace实例描述"""
+        return self.description
+
+    def get_create_time(self):
+        """返回 创建时间"""
+        return self.create_time
+
+    def get_modify_time(self):
+        """返回 修改时间"""
+        return self.modify_time
+
+    def get_trace_topic_id(self):
+        """返回 Trace Topic ID"""
+        return self.trace_topic_id
+
+    def get_trace_topic_name(self):
+        """返回 Trace Topic名称"""
+        return self.trace_topic_name
+
+    def get_dependency_topic_id(self):
+        """返回 Dependency Topic ID"""
+        return self.dependency_topic_id
+
+    def get_dependency_topic_topic_name(self):
+        """返回 Dependency Topic名称"""
+        return self.dependency_topic_topic_name
+
+
+class TargetResourceInfo(TLSData):
+    def __init__(self, alias: str = None, topic_id: str = None, project_id: str = None,
+                 project_name: str = None, region: str = None, topic_name: str = None, role_trn: str = None):
+        """\
+        :param alias: 自定义输出目标的名称
+        :type alias: str
+        :param topic_id: 用于存储加工后日志的日志主题 ID
+        :type topic_id: str
+        :param project_id: 用于存储加工后日志的日志项目 ID
+        :type project_id: str
+        :param project_name: 用于存储加工后日志的日志项目名称
+        :type project_name: str
+        :param region: 用于存储加工后日志的日志项目所属地域
+        :type region: str
+        :param topic_name: 用于存储加工后日志的日志主题名称
+        :type topic_name: str
+        :param role_trn: 跨账号授权角色名
+        :type role_trn: str
+        """
+        self.alias = alias
+        self.topic_id = topic_id
+        self.project_id = project_id
+        self.project_name = project_name
+        self.region = region
+        self.topic_name = topic_name
+        self.role_trn = role_trn
+
+    def get_alias(self):
+        """\
+        :return: 自定义输出目标的名称
+        :rtype: str
+        """
+        return self.alias
+
+    def get_topic_id(self):
+        """\
+        :return: 用于存储加工后日志的日志主题 ID
+        :rtype: str
+        """
+        return self.topic_id
+
+    def get_project_name(self):
+        """\
+        :return: 用于存储加工后日志的日志项目名称
+        :rtype: str
+        """
+        return self.project_name
+
+    def get_region(self):
+        """\
+        :return: 用于存储加工后日志的日志项目所属地域
+        :rtype: str
+        """
+        return self.region
+
+    def get_topic_name(self):
+        """\
+        :return: 用于存储加工后日志的日志主题名称
+        :type topic_name: str
+        """
+        return self.topic_name
+
+    def get_role_trn(self):
+        """\
+        :return: 跨账号授权角色名
+        :rtype: str
+        """
+        return self.role_trn

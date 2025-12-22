@@ -427,8 +427,10 @@ class DescribeTopicsRequest(TLSRequest):
 
 
 class SetIndexRequest(TLSRequest):
-    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None,
-                 user_inner_key_value: List[KeyValueInfo] = None):
+    def __init__(self, topic_id: str, full_text: FullTextInfo = None,
+                 key_value: List[KeyValueInfo] = None,
+                 user_inner_key_value: List[KeyValueInfo] = None,
+                 max_text_len: int = None, enable_auto_index: bool = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -438,11 +440,19 @@ class SetIndexRequest(TLSRequest):
         :type key_value: List[KeyValueInfo]
         :param user_inner_key_value: 预留字段索引配置
         :type user_inner_key_value: List[KeyValueInfo]
+        :param max_text_len: 统计字段值的最大长度，默认为2048，
+                               取值范围为64~16384，单位为字节
+        :type max_text_len: int
+        :param enable_auto_index: 是否开启索引自动更新，开启后系统将根据
+                                     新出现的字段自动添加到键值索引
+        :type enable_auto_index: bool
         """
         self.topic_id = topic_id
         self.full_text = full_text
         self.key_value = key_value
         self.user_inner_key_value = user_inner_key_value
+        self.max_text_len = max_text_len
+        self.enable_auto_index = enable_auto_index
 
     def get_api_input(self):
         body = {TOPIC_ID: self.topic_id}
@@ -457,13 +467,19 @@ class SetIndexRequest(TLSRequest):
             body[USER_INNER_KEY_VALUE] = []
             for key_value_info in self.user_inner_key_value:
                 body[USER_INNER_KEY_VALUE].append(key_value_info.json())
+        if self.max_text_len is not None:
+            body[MAX_TEXT_LEN] = self.max_text_len
+        if self.enable_auto_index is not None:
+            body[ENABLE_AUTO_INDEX] = self.enable_auto_index
 
         return body
 
 
 class CreateIndexRequest(SetIndexRequest):
-    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None,
-                 user_inner_key_value: List[KeyValueInfo] = None):
+    def __init__(self, topic_id: str, full_text: FullTextInfo = None,
+                 key_value: List[KeyValueInfo] = None,
+                 user_inner_key_value: List[KeyValueInfo] = None,
+                 max_text_len: int = None, enable_auto_index: bool = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -473,8 +489,16 @@ class CreateIndexRequest(SetIndexRequest):
         :type key_value: List[KeyValueInfo]
         :param user_inner_key_value: 预留字段索引配置
         :type user_inner_key_value: List[KeyValueInfo]
+        :param max_text_len: 统计字段值的最大长度，默认为2048，
+                               取值范围为64~16384，单位为字节
+        :type max_text_len: int
+        :param enable_auto_index: 是否开启索引自动更新，开启后系统将根据
+                                     新出现的字段自动添加到键值索引
+        :type enable_auto_index: bool
         """
-        super(CreateIndexRequest, self).__init__(topic_id, full_text, key_value, user_inner_key_value)
+        super(CreateIndexRequest, self).__init__(topic_id, full_text, key_value,
+                                                   user_inner_key_value, max_text_len,
+                                                   enable_auto_index)
 
     def check_validation(self):
         """
@@ -505,8 +529,10 @@ class DeleteIndexRequest(TLSRequest):
 
 
 class ModifyIndexRequest(SetIndexRequest):
-    def __init__(self, topic_id: str, full_text: FullTextInfo = None, key_value: List[KeyValueInfo] = None,
-                 user_inner_key_value: List[KeyValueInfo] = None):
+    def __init__(self, topic_id: str, full_text: FullTextInfo = None,
+                 key_value: List[KeyValueInfo] = None,
+                 user_inner_key_value: List[KeyValueInfo] = None,
+                 max_text_len: int = None, enable_auto_index: bool = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -516,8 +542,12 @@ class ModifyIndexRequest(SetIndexRequest):
         :type key_value: List[KeyValueInfo]
         :param user_inner_key_value: 预留字段索引配置
         :type user_inner_key_value: List[KeyValueInfo]
+        :param max_text_len: 统计字段值的最大长度，默认为 2048，取值范围为 64~16384，单位为字节
+        :type max_text_len: int
+        :param enable_auto_index: 是否开启索引自动更新
+        :type enable_auto_index: bool
         """
-        super(ModifyIndexRequest, self).__init__(topic_id, full_text, key_value, user_inner_key_value)
+        super(ModifyIndexRequest, self).__init__(topic_id, full_text, key_value, user_inner_key_value, max_text_len, enable_auto_index)
 
     def check_validation(self):
         """
@@ -548,7 +578,8 @@ class DescribeIndexRequest(TLSRequest):
 
 
 class PutLogsRequest(TLSRequest):
-    def __init__(self, topic_id: str, log_group_list: LogGroupList, hash_key: str = None, compression: str = LZ4):
+    def __init__(self, topic_id: str, log_group_list: LogGroupList, hash_key: str = None, 
+                 compression: str = LZ4, content_md5: str = None):
         """
         :param topic_id:日志主题 ID
         :type topic_id:str
@@ -558,11 +589,14 @@ class PutLogsRequest(TLSRequest):
         :type hash_key:str
         :param compression:压缩格式，支持lz4、zlib
         :type compression:str
+        :param content_md5:HTTP请求中Body内容的MD5哈希值，用于验证完整性
+        :type content_md5:str
         """
         self.topic_id = topic_id
         self.log_group_list = log_group_list
         self.hash_key = hash_key
         self.compression = compression
+        self.content_md5 = content_md5
 
     def check_validation(self):
         """
@@ -633,6 +667,8 @@ class PutLogsRequest(TLSRequest):
             request_headers[X_TLS_HASHKEY] = self.hash_key
         if self.compression is not None:
             request_headers[X_TLS_COMPRESSTYPE] = self.compression
+        if self.content_md5 is not None:
+            request_headers[CONTENT_MD5] = self.content_md5
             if self.compression == LZ4:
                 if lz4 is None:
                     raise TLSException(error_code="UnsupportedLZ4",
@@ -650,38 +686,45 @@ class PutLogsRequest(TLSRequest):
 
 
 class PutLogsV2LogContent:
-    def __init__(self, time: int, log_dict: dict):
+    def __init__(self, time: int, log_dict: dict, time_ns: int = None):
         """
         :param time: 时间戳，秒
         :type time: int
         :param log_dict: 待写入日志
         :type log_dict: dict
+        :param time_ns: 纳秒级时间戳
+        :type time_ns: int
         """
         self.time = time
         self.log_dict = log_dict
+        self.time_ns = time_ns
 
 
 class PutLogsV2Logs:
-    def __init__(self, source: str = None, filename: str = None):
+    def __init__(self, source: str = None, filename: str = None, log_tags: dict = None):
         """
         :param source: 日志来源，一般使用机器 IP 作为标识
         :type source:str
         :param filename: 日志路径
         :type filename:str
+        :param log_tags: 日志组标签，字典格式
+        :type log_tags:dict
         """
         self.source = source
         self.filename = filename
+        self.log_tags = log_tags or {}
         self.logs = []
 
-    def add_log(self, contents: dict, log_time: int = 0):
+    def add_log(self, contents: dict, log_time: int = 0, time_ns: int = None):
         if log_time == 0:
             log_time = int(time.time() * 1000)
-        log = PutLogsV2LogContent(log_time, contents)
+        log = PutLogsV2LogContent(log_time, contents, time_ns)
         self.logs.append(log)
 
 
 class PutLogsV2Request(TLSRequest):
-    def __init__(self, topic_id: str, logs: PutLogsV2Logs, hash_key: str = None, compression: str = LZ4):
+    def __init__(self, topic_id: str, logs: PutLogsV2Logs, hash_key: str = None, 
+                 compression: str = LZ4, content_md5: str = None):
         """
         :param topic_id:日志主题 ID
         :type topic_id:str
@@ -691,11 +734,14 @@ class PutLogsV2Request(TLSRequest):
         :type hash_key:str
         :param compression:压缩格式，支持lz4、zlib
         :type compression:str
+        :param content_md5:HTTP请求中Body内容的MD5哈希值，用于验证完整性
+        :type content_md5:str
         """
         self.topic_id = topic_id
         self.logs = logs
         self.hash_key = hash_key
         self.compression = compression
+        self.content_md5 = content_md5
 
 
 class DescribeCursorRequest(TLSRequest):
@@ -795,7 +841,7 @@ class ConsumeLogsRequest(TLSRequest):
 
 class SearchLogsRequest(TLSRequest):
     def __init__(self, topic_id: str, query: str, start_time: int, end_time: int, limit: int = None,
-                 context: str = None, sort: str = DESC):
+                 context: str = None, sort: str = DESC, highlight: bool = None, accurate_query: bool = None):
         """
         :param topic_id: 日志主题id
         :type topic_id:str
@@ -811,6 +857,10 @@ class SearchLogsRequest(TLSRequest):
         :type context:str
         :param sort:仅检索不分析时，日志的排序方式，生序asc降序desc
         :type sort:str
+        :param highlight:搜索的关键字在查询结果中是否高亮显示
+        :type highlight:bool
+        :param accurate_query:是否使用纳秒精度查询日志
+        :type accurate_query:bool
         """
         self.topic_id = topic_id
         self.query = query
@@ -819,6 +869,8 @@ class SearchLogsRequest(TLSRequest):
         self.limit = limit
         self.context = context
         self.sort = sort
+        self.highlight = highlight
+        self.accurate_query = accurate_query
 
     def check_validation(self):
         """
@@ -1087,6 +1139,31 @@ class DescribeShardsRequest(TLSRequest):
         :rtype: bool
         """
         if self.topic_id is None:
+            return False
+        return True
+
+
+class ManualShardSplitRequest(TLSRequest):
+    def __init__(self, topic_id: str, shard_id: int, number: int):
+        """
+        :param topic_id: 日志主题 ID
+        :type topic_id: str
+        :param shard_id: 待手动分裂的日志分区 ID
+        :type shard_id: int
+        :param number: 分区的分裂数量。应为非零偶数，例如 2、4、8 或 16。
+                     分裂后读写状态分区总数不能超过 256 个。
+        :type number: int
+        """
+        self.topic_id = topic_id
+        self.shard_id = shard_id
+        self.number = number
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        if self.topic_id is None or self.shard_id is None or self.number is None:
             return False
         return True
 
@@ -2455,6 +2532,25 @@ class ModifyImportTaskRequest(CreateImportTaskRequest):
         self.task_id = task_id
         self.status = status
 
+    def get_api_input(self):
+        body = super(ModifyImportTaskRequest, self).get_api_input()
+        body[TASK_ID] = self.task_id
+        body[STATUS] = self.status
+        return body
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return (self.task_id is not None and
+                self.status is not None and
+                self.topic_id is not None and
+                self.task_name is not None and
+                self.source_type is not None and
+                self.import_source_info is not None and
+                self.target_info is not None)
+
 class DescribeImportTaskRequest(TLSRequest):
     def __init__(self, task_id: str):
         """
@@ -2665,3 +2761,167 @@ class DescribeShippersRequest(TLSRequest):
         self.shipper_type = shipper_type
         self.page_number = page_number
         self.page_size = page_size
+
+
+class DescribeETLTaskRequest(TLSRequest):
+    def __init__(self, task_id: str):
+        """\
+        :param task_id: 待查询的加工任务 ID
+        :type task_id: str
+        """
+        self.task_id = task_id
+
+    def check_validation(self):
+        """\
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        if self.task_id is None:
+            return False
+        return True
+
+
+class CancelDownloadTaskRequest(TLSRequest):
+    def __init__(self, task_id: str):
+        """
+        :param task_id: 下载任务 ID
+        :type task_id: str
+        """
+        self.task_id = task_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        if self.task_id is None:
+            return False
+        return True
+
+class CreateTraceInstanceRequest(TLSRequest):
+    def __init__(self, project_id: str, trace_instance_name: str, description: str = None):
+        """
+        :param project_id: 日志主题所属的日志项目uuid
+        :type project_id: str
+        :param trace_instance_name: Trace实例名称:同一个日志项目下，日志主题名称不可重复;
+                                   只能包括小写字母、数字、中文和短划线（-）;
+                                   必须以小写字母、中文或者数字开头和结尾;长度为3~30字符
+        :type trace_instance_name: str
+        :param description: Trace实例描述信息：不支持<>、'、、；长度为0-64个字符
+        :type description: str
+        """
+        self.project_id = project_id
+        self.trace_instance_name = trace_instance_name
+        self.description = description
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.project_id is not None and self.trace_instance_name is not None
+
+
+class DeleteTraceInstanceRequest(TLSRequest):
+    def __init__(self, trace_instance_id: str):
+        """
+        :param trace_instance_id: Trace实例 ID
+        :type trace_instance_id: str
+        """
+        self.trace_instance_id = trace_instance_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.trace_instance_id is not None
+
+
+class ModifyTraceInstanceRequest(TLSRequest):
+    def __init__(self, trace_instance_id: str, description: str = None):
+        """
+        :param trace_instance_id: Trace实例 ID
+        :type trace_instance_id: str
+        :param description: Trace实例描述信息：不支持<>、'、、；长度为0-64个字符
+        :type description: str
+        """
+        self.trace_instance_id = trace_instance_id
+        self.description = description
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.trace_instance_id is not None
+
+
+class DescribeTraceInstanceRequest(TLSRequest):
+    def __init__(self, trace_instance_id: str):
+        """
+        :param trace_instance_id: Trace实例 ID
+        :type trace_instance_id: str
+        """
+        self.trace_instance_id = trace_instance_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.trace_instance_id is not None
+
+
+class DescribeTraceInstancesRequest(TLSRequest):
+    def __init__(self, page_number: int = 1, page_size: int = 20, trace_instance_name: str = None,
+                 trace_instance_id: str = None, project_id: str = None, project_name: str = None,
+                 status: str = None, iam_project_name: str = None):
+        """
+        :param page_number: 分页，默认从1开始
+        :type page_number: int
+        :param page_size: 分页大小限制，默认为20，最大为100
+        :type page_size: int
+        :param trace_instance_name: Trace实例名称，作为模糊查询使用。TraceInstanceName和TraceInstanceId只能提供一个
+        :type trace_instance_name: str
+        :param trace_instance_id: Trace实例ID，作为模糊查询使用
+        :type trace_instance_id: str
+        :param project_id: 日志项目ID
+        :type project_id: str
+        :param project_name: 日志项目名称
+        :type project_name: str
+        :param status: Trace实例的状态
+        :type status: str
+        :param iam_project_name: IAM日志项目名称
+        :type iam_project_name: str
+        """
+        self.page_number = page_number
+        self.page_size = page_size
+        self.trace_instance_name = trace_instance_name
+        self.trace_instance_id = trace_instance_id
+        self.project_id = project_id
+        self.project_name = project_name
+        self.status = status
+        self.iam_project_name = iam_project_name
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return True
+
+
+class GetAccountStatusRequest(TLSRequest):
+    def __init__(self):
+        """
+        GetAccountStatus 请求参数定义
+        """
+        pass
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return True

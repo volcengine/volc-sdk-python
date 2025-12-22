@@ -265,7 +265,7 @@ class BatchLog:
             return False
 
         # 添加日志组
-        self.log_group_list.log_groups.append(log_group)
+        self.log_group_list.log_groups.append(log_group)  # pylint: disable=no-member
 
         if call_back is not None:
             self.call_back_list.append(call_back)

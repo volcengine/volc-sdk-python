@@ -11,6 +11,9 @@ message Log
 {
   int64 time = 1;  // UNIX Time Format
   repeated LogContent contents = 2;
+  oneof OptionalTimeNs {
+    fixed32 TimeNs = 3;  // 纳秒级时间戳
+  }
 }
 
 message LogTag
