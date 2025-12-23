@@ -376,8 +376,11 @@ class IndexSortResult(object):
         return self._primary_key_not_exist
 
 class VectorIndexParams(object):
-    def __init__(self, distance=DistanceType.IP, index_type=IndexType.HNSW, quant=QuantType.Int8, **kwargs):
+    def __init__(self, distance, index_type=IndexType.HNSW, quant=QuantType.Int8, **kwargs):
         self._index_type = index_type
+        # 强感知distance参数
+        if not distance:
+            raise ValueError("distance is required")
         self._distance = distance
         self._quant = quant
         self._hnsw_m = kwargs.get("hnsw_m", 20)
