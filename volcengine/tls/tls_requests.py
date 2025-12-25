@@ -665,10 +665,10 @@ class PutLogsRequest(TLSRequest):
 
         if self.hash_key is not None:
             request_headers[X_TLS_HASHKEY] = self.hash_key
-        if self.compression is not None:
-            request_headers[X_TLS_COMPRESSTYPE] = self.compression
         if self.content_md5 is not None:
             request_headers[CONTENT_MD5] = self.content_md5
+        if self.compression is not None:
+            request_headers[X_TLS_COMPRESSTYPE] = self.compression
             if self.compression == LZ4:
                 if lz4 is None:
                     raise TLSException(error_code="UnsupportedLZ4",
@@ -880,6 +880,28 @@ class SearchLogsRequest(TLSRequest):
         if self.topic_id is None or self.query is None or self.start_time is None or self.end_time is None:
             return False
         return True
+
+    def get_api_input(self):
+        body = {
+            TOPIC_ID: self.topic_id,
+            QUERY: self.query,
+            START_TIME: self.start_time,
+            END_TIME: self.end_time,
+        }
+
+        if self.limit is not None:
+            body[LIMIT] = self.limit
+        if self.context is not None:
+            body[CONTEXT] = self.context
+        if self.sort is not None:
+            body[SORT] = self.sort
+        if self.highlight is not None:
+            # 后端 JSON 字段名为 HighLight（大小写不规则），不能用 snake_to_pascal 直接转换
+            body["HighLight"] = self.highlight
+        if self.accurate_query is not None:
+            body["AccurateQuery"] = self.accurate_query
+
+        return body
 
 
 class DescribeLogContextRequest(TLSRequest):

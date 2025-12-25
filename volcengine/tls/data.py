@@ -588,6 +588,16 @@ class SearchResult(TLSData):
             search_result.analysis_result = AnalysisResult.set_attributes(
                 data=data[ANALYSIS_RESULT])
 
+        # HighLight 字段在后端使用不规则大小写，pascal_to_snake 会将其转换为 "high_light"，
+        # 导致默认映射不到 SearchResult.highlight 属性，这里显式修正映射关系。
+        if "HighLight" in data:
+            search_result.highlight = data["HighLight"]
+
+        # ElapsedMillisecond 字段按常规 PascalCase -> snake_case 映射为 elapsed_millisecond，
+        # 但为了避免未来结构调整遗漏，这里也显式同步一次。
+        if "ElapsedMillisecond" in data:
+            search_result.elapsed_millisecond = data["ElapsedMillisecond"]
+
         return search_result
 
 
@@ -2470,27 +2480,84 @@ class KafkaSourceInfo(TLSData):
             "instance_id": self.instance_id,
         }
 
+class EsSourceInfo(TLSData):
+    def __init__(self, endpoint: str = None, import_mode: str = None, index: str = None,
+                 log_time_config: dict = None, max_import_time_delay_second: int = None,
+                 password: str = None, query_string: str = None, username: str = None):
+        """Elasticsearch 导入源配置
+
+        :param endpoint: Elasticsearch 访问地址
+        :type endpoint: str, optional
+        :param import_mode: 导入模式
+        :type import_mode: str, optional
+        :param index: Elasticsearch 索引名称
+        :type index: str, optional
+        :param log_time_config: 日志时间字段配置，对应后端的 LogTimeConfig
+        :type log_time_config: dict, optional
+        :param max_import_time_delay_second: 最大导入时间延迟（秒）
+        :type max_import_time_delay_second: int, optional
+        :param password: Elasticsearch 访问密码
+        :type password: str, optional
+        :param query_string: 查询语句
+        :type query_string: str, optional
+        :param username: Elasticsearch 访问用户名
+        :type username: str, optional
+        """
+        self.endpoint = endpoint
+        self.import_mode = import_mode
+        self.index = index
+        self.log_time_config = log_time_config
+        self.max_import_time_delay_second = max_import_time_delay_second
+        self.password = password
+        self.query_string = query_string
+        self.username = username
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        return super(EsSourceInfo, cls).set_attributes(data)
+
+    def json(self):
+        return {
+            "endpoint": self.endpoint,
+            "import_mode": self.import_mode,
+            "index": self.index,
+            "log_time_config": self.log_time_config,
+            "max_import_time_delay_second": self.max_import_time_delay_second,
+            "password": self.password,
+            "query_string": self.query_string,
+            "username": self.username,
+        }
+
+
 class ImportSourceInfo(TLSData):
-    def __init__(self, tos_source_info: TosSourceInfo = None, kafka_source_info: KafkaSourceInfo = None):
+    def __init__(self, tos_source_info: TosSourceInfo = None, kafka_source_info: KafkaSourceInfo = None,
+                 es_source_info: EsSourceInfo = None):
         self.tos_source_info = tos_source_info
         self.kafka_source_info = kafka_source_info
+        self.es_source_info = es_source_info
 
     @classmethod
     def set_attributes(cls, data: dict):
         tos_source_info = None
         kafka_source_info = None
+        es_source_info = None
         if TOS_SOURCE_INFO in data:
             tos_source_info = TosSourceInfo.set_attributes(data=data[TOS_SOURCE_INFO])
         if KAFKA_SOURCE_INFO in data:
             kafka_source_info = KafkaSourceInfo.set_attributes(data=data[KAFKA_SOURCE_INFO])
+        if "EsSourceInfo" in data:
+            es_source_info = EsSourceInfo.set_attributes(data=data["EsSourceInfo"])
 
-        return cls(tos_source_info, kafka_source_info)
+        return cls(tos_source_info, kafka_source_info, es_source_info)
+
     def json(self):
         source_info = {}
         if self.tos_source_info is not None:
             source_info[TOS_SOURCE_INFO] = self.tos_source_info.json()
         if self.kafka_source_info is not None:
             source_info[KAFKA_SOURCE_INFO] = self.kafka_source_info.json()
+        if self.es_source_info is not None:
+            source_info["EsSourceInfo"] = self.es_source_info.json()
         return source_info
 
 class ImportExtractRule(TLSData):
