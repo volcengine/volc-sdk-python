@@ -25,6 +25,10 @@ class TestManualShardSplit(unittest.TestCase):
 
     def test_manual_shard_split(self):
         """测试手动分区分裂功能"""
+        required_env = ["VOLCENGINE_ENDPOINT", "VOLCENGINE_REGION", "VOLCENGINE_ACCESS_KEY_ID", "VOLCENGINE_ACCESS_KEY_SECRET"]
+        if not all(os.environ.get(k) for k in required_env):
+            self.skipTest("缺少必要的环境变量，跳过手动分区分裂集成测试")
+
         # 创建项目
         project_name = f"tls-python-sdk-test-manual-shard-split-project-{self.generate_random_string()}"
         create_project_request = CreateProjectRequest(project_name=project_name, region=self.region)
@@ -104,20 +108,22 @@ class TestManualShardSplit(unittest.TestCase):
     def test_manual_shard_split_request_validation(self):
         """测试ManualShardSplitRequest参数验证"""
         # 测试缺少必需参数
-        with self.assertRaises(Exception):
-            invalid_request = ManualShardSplitRequest(
-                topic_id=None, shard_id=1, number=2)
-            invalid_request.check_validation()
-            
-        with self.assertRaises(Exception):
-            invalid_request = ManualShardSplitRequest(
-                topic_id="test-topic", shard_id=None, number=2)
-            invalid_request.check_validation()
-            
-        with self.assertRaises(Exception):
-            invalid_request = ManualShardSplitRequest(
-                topic_id="test-topic", shard_id=1, number=None)
-            invalid_request.check_validation()
+        invalid_request = ManualShardSplitRequest(
+            topic_id=None, shard_id=1, number=2)
+        self.assertFalse(invalid_request.check_validation())
+
+        invalid_request = ManualShardSplitRequest(
+            topic_id="test-topic", shard_id=None, number=2)
+        self.assertFalse(invalid_request.check_validation())
+
+        invalid_request = ManualShardSplitRequest(
+            topic_id="test-topic", shard_id=1, number=None)
+        self.assertFalse(invalid_request.check_validation())
+
+        # 测试合法参数
+        valid_request = ManualShardSplitRequest(
+            topic_id="test-topic", shard_id=1, number=2)
+        self.assertTrue(valid_request.check_validation())
 
 
 if __name__ == '__main__':

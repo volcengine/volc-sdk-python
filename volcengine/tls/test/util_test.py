@@ -3,6 +3,7 @@ import os
 
 from volcengine.tls.TLSService import TLSService
 
+
 def NewTLSService():
     return TLSService(
         endpoint=os.environ["VOLCENGINE_ENDPOINT"],
@@ -10,4 +11,3 @@ def NewTLSService():
         access_key_secret=os.environ["VOLCENGINE_ACCESS_KEY_SECRET"],
         region=os.environ["VOLCENGINE_REGION"],
     )
-

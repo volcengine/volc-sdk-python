@@ -10,7 +10,11 @@ from volcengine.tls.const import *
 
 
 def pascal_to_snake(pascal: str) -> str:
-    return re.sub(r"(?P<key>[A-Z])", r"_\g<key>", pascal).lower().strip('_')
+    # 先在小写/数字与大写字母之间插入下划线，再在连续大写后接小写的边界插入下划线，
+    # 以便正确处理诸如 ID、DSL 等缩略词。
+    s1 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", pascal)
+    s2 = re.sub(r"([A-Z]+)([A-Z][a-z0-9])", r"\1_\2", s1)
+    return s2.lower().strip('_')
 
 
 def snake_to_pascal(snake: str) -> str:
@@ -450,6 +454,17 @@ class KeyValueInfo(TLSData):
     def json(self):
         return {KEY: self.key, VALUE: self.value.json()}
 
+    @classmethod
+    def set_attributes(cls, data: dict):
+        key = data.get(KEY)
+        value = data.get(VALUE)
+
+        # 索引场景下 Value 是 ValueInfo，Trace 场景下 Value 为普通字符串
+        if isinstance(value, dict):
+            value = ValueInfo.set_attributes(data=value)
+
+        return cls(key=key, value=value)
+
 
 class AnalysisResult(TLSData):
     def __init__(self, analysis_schema: List[str] = None, analysis_type: dict = None, analysis_data: List[dict] = None):
@@ -715,10 +730,59 @@ class HistogramInfoV1(TLSData):
         return self.result_status
 
 
+class LogContextInfos(TLSData):
+    def __init__(self, source: str = None, context_flow: str = None, package_offset: int = None):
+        """下载上下文查询所需的日志信息
+
+        :param source: 日志来源的主机
+        :type source: str
+        :param context_flow: 指定日志所在的 LogGroup 的 ID
+        :type context_flow: str
+        :param package_offset: 指定日志在 LogGroup 中的序号
+        :type package_offset: int
+        """
+        self.source = source
+        self.context_flow = context_flow
+        self.package_offset = package_offset
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        if data is None:
+            return None
+
+        source = data.get(SOURCE)
+        context_flow = data.get(CONTEXT_FLOW)
+        package_offset = data.get(PACKAGE_OFFSET)
+
+        return cls(source, context_flow, package_offset)
+
+    def get_source(self):
+        """
+        :return: 日志来源的主机
+        :rtype: str
+        """
+        return self.source
+
+    def get_context_flow(self):
+        """
+        :return: 日志所在的 LogGroup 的 ID
+        :rtype: str
+        """
+        return self.context_flow
+
+    def get_package_offset(self):
+        """
+        :return: 日志在 LogGroup 中的序号
+        :rtype: int
+        """
+        return self.package_offset
+
+
 class TaskInfo(TLSData):
     def __init__(self, task_id: str = None, task_name: str = None, topic_id: str = None, query: str = None,
                  start_time: str = None, end_time: str = None, data_format: str = None, task_status: str = None,
-                 compression: str = None, create_time: str = None, log_size: int = None, log_count: int = None):
+                 compression: str = None, create_time: str = None, log_size: int = None, log_count: int = None,
+                 task_type: int = None, allow_incomplete: bool = None, log_context_infos: LogContextInfos = None):
         self.task_id = task_id
         self.task_name = task_name
         self.topic_id = topic_id
@@ -731,6 +795,9 @@ class TaskInfo(TLSData):
         self.create_time = create_time
         self.log_size = log_size
         self.log_count = log_count
+        self.task_type = task_type
+        self.allow_incomplete = allow_incomplete
+        self.log_context_infos = log_context_infos
 
     def get_task_name(self):
         """
@@ -815,6 +882,56 @@ class TaskInfo(TLSData):
         :rtype:str
         """
         return self.compression
+
+    def get_task_type(self):
+        """
+        :return:下载的日志类型
+        :rtype: int
+        """
+        return self.task_type
+
+    def get_allow_incomplete(self):
+        """
+        :return:是否允许下载查询不精确结果日志
+        :rtype: bool
+        """
+        return self.allow_incomplete
+
+    def get_log_context_infos(self):
+        """
+        :return:下载上下文查询所需的日志信息
+        :rtype: LogContextInfos
+        """
+        return self.log_context_infos
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        if data is None:
+            return None
+
+        task_id = data.get(TASK_ID)
+        task_name = data.get(TASK_NAME)
+        topic_id = data.get(TOPIC_ID)
+        query = data.get(QUERY)
+        start_time = data.get(START_TIME)
+        end_time = data.get(END_TIME)
+        data_format = data.get(DATA_FORMAT)
+        task_status = data.get(TASK_STATUS)
+        compression = data.get(COMPRESSION)
+        create_time = data.get(CREATE_TIME)
+        log_size = data.get(LOG_SIZE)
+        log_count = data.get(LOG_COUNT)
+        task_type = data.get(ETL_TASK_TYPE)
+        allow_incomplete = data.get(ALLOW_INCOMPLETE)
+
+        log_context_infos_data = data.get(LOG_CONTEXT_INFOS)
+        log_context_infos = None
+        if log_context_infos_data is not None:
+            log_context_infos = LogContextInfos.set_attributes(data=log_context_infos_data)
+
+        return cls(task_id, task_name, topic_id, query, start_time, end_time,
+                   data_format, task_status, compression, create_time, log_size,
+                   log_count, task_type, allow_incomplete, log_context_infos)
 
 
 class HostInfo(TLSData):
@@ -1797,11 +1914,15 @@ class RuleInfo(TLSData):
     def get_topic_id(self):
         return self.topic_id
 
+    def get_pause(self):
+        """
+        :return: 采集配置的运行状态。0：运行中，1：已暂停
+        :rtype: int
+        """
+        return self.pause
+
     def get_log_sample(self):
         return self.log_sample
-
-    def get_pause(self):
-        return self.pause
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -1853,9 +1974,17 @@ class HostGroupHostsRulesInfo(TLSData):
         return self.host_infos
 
 
+
+
+
 class Receiver(TLSData):
     def __init__(self, receiver_type: str, receiver_names: List[str], receiver_channels: List[str],
-                 start_time: str, end_time: str, webhook: str = None):
+                 start_time: str, end_time: str, webhook: str = None, general_webhook_url: str = None,
+                 general_webhook_body: str = None, alarm_webhook_at_users: List[str] = None,
+                 alarm_webhook_is_at_all: bool = None, alarm_webhook_at_groups: List[str] = None,
+                 general_webhook_method: str = None, general_webhook_headers: List['GeneralWebhookHeaderKV'] = None,
+                 alarm_content_template_id: str = None, alarm_webhook_integration_id: str = None,
+                 alarm_webhook_integration_name: str = None):
         """
         :param receiver_type:接受者类型
         :type receiver_type:str
@@ -1869,6 +1998,27 @@ class Receiver(TLSData):
         :type end_time:str
         :param webhook:飞书Webhook请求地址
         :type webhook:str
+        :param general_webhook_url:自定义接口回调地址
+        :type general_webhook_url:str
+        :param general_webhook_body:自定义 WebHook 请求体
+        :type general_webhook_body:str
+        :param alarm_webhook_at_users:通过 Webhook 集成配置发送通知到飞书、钉钉或企业微信时，需要提醒的用户名
+        :type alarm_webhook_at_users:List[str]
+        :param alarm_webhook_is_at_all:通过 Webhook 集成配置发送通知到飞书、钉钉或企业微信时，是否提醒所有人
+        :type alarm_webhook_is_at_all:bool
+        :param alarm_webhook_at_groups:通过 Webhook 集成配置发送通知到飞书、钉钉或企业微信时，需要提醒的用户组名称
+        :type alarm_webhook_at_groups:List[str]
+        :param general_webhook_method:自定义接口回调方法，仅支持设置为 POST 或 PUT
+        :type general_webhook_method:str
+        :param general_webhook_headers:自定义接口回调请求头
+        :type general_webhook_headers:List[GeneralWebhookHeaderKV]
+        :param alarm_content_template_id:告警内容模版 ID
+        :type alarm_content_template_id:str
+        :param alarm_webhook_integration_id:告警 Webhook 集成配置的 ID
+        :type alarm_webhook_integration_id:str
+        :param alarm_webhook_integration_name:告警 Webhook 集成配置的名称
+        :type alarm_webhook_integration_name:str
+        :type alarm_webhook_integration_name:str
         """
         self.receiver_type = receiver_type
         self.receiver_names = receiver_names
@@ -1876,6 +2026,16 @@ class Receiver(TLSData):
         self.start_time = start_time
         self.end_time = end_time
         self.webhook = webhook
+        self.general_webhook_url = general_webhook_url
+        self.general_webhook_body = general_webhook_body
+        self.alarm_webhook_at_users = alarm_webhook_at_users
+        self.alarm_webhook_is_at_all = alarm_webhook_is_at_all
+        self.alarm_webhook_at_groups = alarm_webhook_at_groups
+        self.general_webhook_method = general_webhook_method
+        self.general_webhook_headers = general_webhook_headers
+        self.alarm_content_template_id = alarm_content_template_id
+        self.alarm_webhook_integration_id = alarm_webhook_integration_id
+        self.alarm_webhook_integration_name = alarm_webhook_integration_name
 
     def get_start_time(self):
         """
@@ -1919,6 +2079,76 @@ class Receiver(TLSData):
         """
         return self.receiver_type
 
+    def get_general_webhook_url(self):
+        """
+        :return:自定义接口回调地址
+        :rtype: str
+        """
+        return self.general_webhook_url
+
+    def get_general_webhook_body(self):
+        """
+        :return:自定义 WebHook 请求体
+        :rtype: str
+        """
+        return self.general_webhook_body
+
+    def get_alarm_webhook_at_users(self):
+        """
+        :return:通过 Webhook 集成配置发送通知到飞书、钉钉或企业微信时，需要提醒的用户名
+        :rtype: List[str]
+        """
+        return self.alarm_webhook_at_users
+
+    def get_alarm_webhook_is_at_all(self):
+        """
+        :return:通过 Webhook 集成配置发送通知到飞书、钉钉或企业微信时，是否提醒所有人
+        :rtype: bool
+        """
+        return self.alarm_webhook_is_at_all
+
+    def get_alarm_webhook_at_groups(self):
+        """
+        :return:通过 Webhook 集成配置发送通知到飞书、钉钉或企业微信时，需要提醒的用户组名称
+        :rtype: List[str]
+        """
+        return self.alarm_webhook_at_groups
+
+    def get_general_webhook_method(self):
+        """
+        :return:自定义接口回调方法，仅支持设置为 POST 或 PUT
+        :rtype: str
+        """
+        return self.general_webhook_method
+
+    def get_general_webhook_headers(self):
+        """
+        :return:自定义接口回调请求头
+        :rtype: List[GeneralWebhookHeaderKV]
+        """
+        return self.general_webhook_headers
+
+    def get_alarm_content_template_id(self):
+        """
+        :return:告警内容模版 ID
+        :rtype: str
+        """
+        return self.alarm_content_template_id
+
+    def get_alarm_webhook_integration_id(self):
+        """
+        :return:告警 Webhook 集成配置的 ID
+        :rtype: str
+        """
+        return self.alarm_webhook_integration_id
+
+    def get_alarm_webhook_integration_name(self):
+        """
+        :return:告警 Webhook 集成配置的名称
+        :rtype: str
+        """
+        return self.alarm_webhook_integration_name
+
     @classmethod
     def set_attributes(cls, data: dict):
         receiver_type = data.get(RECEIVER_TYPE)
@@ -1927,14 +2157,64 @@ class Receiver(TLSData):
         start_time = data.get(START_TIME)
         end_time = data.get(END_TIME)
         webhook = data.get(WEBHOOK)
+        general_webhook_url = data.get(GENERAL_WEBHOOK_URL)
+        general_webhook_body = data.get(GENERAL_WEBHOOK_BODY)
+        alarm_webhook_at_users = data.get(ALARM_WEBHOOK_AT_USERS)
+        alarm_webhook_is_at_all = data.get(ALARM_WEBHOOK_IS_AT_ALL)
+        alarm_webhook_at_groups = data.get(ALARM_WEBHOOK_AT_GROUPS)
+        general_webhook_method = data.get(GENERAL_WEBHOOK_METHOD)
+        alarm_content_template_id = data.get(ALARM_CONTENT_TEMPLATE_ID)
+        alarm_webhook_integration_id = data.get(ALARM_WEBHOOK_INTEGRATION_ID)
+        alarm_webhook_integration_name = data.get(ALARM_WEBHOOK_INTEGRATION_NAME)
 
-        return cls(receiver_type, receiver_names, receiver_channels, start_time, end_time, webhook)
+        general_webhook_headers = None
+        if GENERAL_WEBHOOK_HEADERS in data and data[GENERAL_WEBHOOK_HEADERS] is not None:
+            general_webhook_headers = []
+            for header in data[GENERAL_WEBHOOK_HEADERS]:
+                general_webhook_headers.append(  # pylint: disable=no-member
+                    GeneralWebhookHeaderKV.set_attributes(data=header))
+
+        receiver = cls(receiver_type, receiver_names, receiver_channels, start_time, end_time, webhook,
+                      general_webhook_url, general_webhook_body, alarm_webhook_at_users, alarm_webhook_is_at_all,
+                      alarm_webhook_at_groups, general_webhook_method, general_webhook_headers,
+                      alarm_content_template_id, alarm_webhook_integration_id, alarm_webhook_integration_name)
+
+        return receiver
+
+    def json(self):
+        json_data = super(Receiver, self).json()
+
+        if self.general_webhook_url is not None:
+            json_data[GENERAL_WEBHOOK_URL] = self.general_webhook_url
+        if self.general_webhook_body is not None:
+            json_data[GENERAL_WEBHOOK_BODY] = self.general_webhook_body
+        if self.alarm_webhook_at_users is not None:
+            json_data[ALARM_WEBHOOK_AT_USERS] = self.alarm_webhook_at_users
+        if self.alarm_webhook_is_at_all is not None:
+            json_data[ALARM_WEBHOOK_IS_AT_ALL] = self.alarm_webhook_is_at_all
+        if self.alarm_webhook_at_groups is not None:
+            json_data[ALARM_WEBHOOK_AT_GROUPS] = self.alarm_webhook_at_groups
+        if self.general_webhook_method is not None:
+            json_data[GENERAL_WEBHOOK_METHOD] = self.general_webhook_method
+        if self.general_webhook_headers is not None:
+            json_data[GENERAL_WEBHOOK_HEADERS] = []
+            for header in self.general_webhook_headers:
+                json_data[GENERAL_WEBHOOK_HEADERS].append(header.json())
+        if self.alarm_content_template_id is not None:
+            json_data[ALARM_CONTENT_TEMPLATE_ID] = self.alarm_content_template_id
+        if self.alarm_webhook_integration_id is not None:
+            json_data[ALARM_WEBHOOK_INTEGRATION_ID] = self.alarm_webhook_integration_id
+        if self.alarm_webhook_integration_name is not None:
+            json_data[ALARM_WEBHOOK_INTEGRATION_NAME] = self.alarm_webhook_integration_name
+
+        return json_data
+
 
 
 class QueryRequest(TLSData):
     def __init__(self, topic_id: str, query: str, number: int,
                  start_time_offset: int, end_time_offset: int, topic_name: str = None, time_span_type: str = None,
-                 truncated_time: str = None):
+                 truncated_time: str = None, end_time_offset_unit: str = None, start_time_offset_unit: str = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -1952,6 +2232,10 @@ class QueryRequest(TLSData):
         :type time_span_type: str
         :param truncated_time: 对时间取整,对分钟/小时取整
         :type truncated_time: str
+        :param end_time_offset_unit: 查询结束时间范围单位, 默认值为分钟，支持秒/分钟/小时（Second，Minute，Hour）
+        :type end_time_offset_unit: str
+        :param start_time_offset_unit: 查询开始时间范围单位, 默认值为分钟，支持秒/分钟/小时（Second，Minute，Hour）
+        :type start_time_offset_unit: str
         """
         self.topic_id = topic_id
         self.query = query
@@ -1961,6 +2245,8 @@ class QueryRequest(TLSData):
         self.topic_name = topic_name
         self.time_span_type = time_span_type
         self.truncated_time = truncated_time
+        self.end_time_offset_unit = end_time_offset_unit
+        self.start_time_offset_unit = start_time_offset_unit
 
     def get_number(self):
         """
@@ -2033,18 +2319,21 @@ class QueryRequest(TLSData):
 
 
 class RequestCycle(TLSData):
-    def __init__(self, cycle_type: str, time: int, cron_tab: str = None):
+    def __init__(self, cycle_type: str, time: int, cron_tab: str = None, cron_time_zone: str = None):
         """
-        :param cycle_type: 执行周期类型，Period：周期执行，Fixed：定期执行
+        :param cycle_type: 执行周期类型，Period：周期执行，Fixed：定期执行，Cron：使用Cron表达式
         :type cycle_type:str
         :param time:告警任务执行的周期，或者定期执行的时间点。单位为分钟，取值范围为 1~1440
         :type time:int
         :param cron_tab:Cron表达式，日志服务通过 Cron 表达式指定告警任务定时执行。Cron 表达式的最小粒度为分钟，24 小时制
         :type cron_tab:str
+        :param cron_time_zone:设置 Type 为 Cron 时，还需设置时区
+        :type cron_time_zone:str
         """
         self.cycle_type = cycle_type
         self.time = time
         self.cron_tab = cron_tab
+        self.cron_time_zone = cron_time_zone
 
     def get_time(self):
         """
@@ -2067,22 +2356,37 @@ class RequestCycle(TLSData):
         """
         return self.cron_tab
 
+    def get_cron_time_zone(self):
+        """返回设置 Type 为 Cron 时的时区
+
+        :return: 时区信息
+        :rtype: str
+        """
+        return self.cron_time_zone
+
     @classmethod
     def set_attributes(cls, data: dict):
         cycle_type = data.get(TYPE)
         time = data.get(TIME)
         cron_tab = data.get(CRON_TAB)
+        cron_time_zone = data.get(CRON_TIME_ZONE)
 
-        return cls(cycle_type, time, cron_tab)
+        return cls(cycle_type, time, cron_tab, cron_time_zone)
 
     def json(self):
-        return {TYPE: self.cycle_type, TIME: self.time, CRON_TAB: self.cron_tab}
+        result = {TYPE: self.cycle_type, TIME: self.time}
+        if self.cron_tab is not None:
+            result[CRON_TAB] = self.cron_tab
+        if self.cron_time_zone is not None:
+            result[CRON_TIME_ZONE] = self.cron_time_zone
+        return result
 
 
 class AlarmNotifyGroupInfo(TLSData):
     def __init__(self, alarm_notify_group_name: str = None, alarm_notify_group_id: str = None,
                  notify_type: List[str] = None, receivers: List[Receiver] = None,
-                 create_time: str = None, modify_time: str = None, iam_project_name: str = None):
+                 create_time: str = None, modify_time: str = None, iam_project_name: str = None,
+                 notice_rules: List["NoticeRule"] = None):
         self.alarm_notify_group_name = alarm_notify_group_name
         self.alarm_notify_group_id = alarm_notify_group_id
         self.notify_type = notify_type
@@ -2090,6 +2394,7 @@ class AlarmNotifyGroupInfo(TLSData):
         self.create_time = create_time
         self.modify_time = modify_time
         self.iam_project_name = iam_project_name
+        self.notice_rules = notice_rules
 
     def get_alarm_notify_group_name(self):
         """
@@ -2140,6 +2445,13 @@ class AlarmNotifyGroupInfo(TLSData):
         """
         return self.iam_project_name
 
+    def get_notice_rules(self):
+        """
+        :return: 通知组规则
+        :rtype: List[NoticeRule]
+        """
+        return self.notice_rules
+
     @classmethod
     def set_attributes(cls, data: dict):
         alarm_notify_group_info = super(
@@ -2150,6 +2462,12 @@ class AlarmNotifyGroupInfo(TLSData):
             for receiver in data[RECEIVERS]:
                 alarm_notify_group_info.receivers.append(  # pylint: disable=no-member
                     Receiver.set_attributes(data=receiver))
+
+        if NOTICE_RULES in data and data[NOTICE_RULES] is not None:
+            alarm_notify_group_info.notice_rules = []
+            for notice_rule in data[NOTICE_RULES]:
+                alarm_notify_group_info.notice_rules.append(  # pylint: disable=no-member
+                    NoticeRule.set_attributes(data=notice_rule))
 
         return alarm_notify_group_info
 
@@ -2172,10 +2490,11 @@ class JoinConfig(TLSData):
 
 
 class TriggerCondition(TLSData):
-    def __init__(self, severity: str = "notice", condition: str = None, count_condition: str = None):
+    def __init__(self, severity: str = "notice", condition: str = None, count_condition: str = None, no_data: bool = None):
         self.severity = severity
         self.condition = condition
         self.count_condition = count_condition
+        self.no_data = no_data
 
 
 class AlarmInfo(TLSData):
@@ -2185,7 +2504,8 @@ class AlarmInfo(TLSData):
                  alarm_notify_group: List[AlarmNotifyGroupInfo] = None, user_define_msg: str = None,
                  create_time: str = None, modify_time: str = None,
                  severity: str = None, alarm_period_detail: AlarmPeriodSetting = None,
-                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None):
+                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None,
+                 send_resolved: bool = None):
         self.alarm_name = alarm_name
         self.alarm_id = alarm_id
         self.project_id = project_id
@@ -2203,6 +2523,7 @@ class AlarmInfo(TLSData):
         self.alarm_period_detail = alarm_period_detail
         self.join_configurations = join_configurations
         self.trigger_conditions = trigger_conditions
+        self.send_resolved = send_resolved
 
     def get_alarm_name(self):
         """
@@ -2323,6 +2644,13 @@ class AlarmInfo(TLSData):
         """
         return self.trigger_conditions
 
+    def get_send_resolved(self):
+        """
+        :return: 是否发送恢复通知
+        :rtype: bool
+        """
+        return self.send_resolved
+
     @classmethod
     def set_attributes(cls, data: dict):
         alarm_info = super(AlarmInfo, cls).set_attributes(data)
@@ -2361,17 +2689,22 @@ class AlarmInfo(TLSData):
             for trigger_condition in data[TRIGGER_CONDITIONS]:
                 alarm_info.trigger_conditions.append(  # pylint: disable=no-member
                     TriggerCondition.set_attributes(data=trigger_condition))
+        if SEND_RESOLVED in data:
+            alarm_info.send_resolved = data[SEND_RESOLVED]
 
         return alarm_info
 
 
 class ConsumerGroup(TLSData):
     def __init__(self, project_id: str = None, consumer_group_name: str = None,
-                 heartbeat_ttl: int = None, ordered_consume: bool = None):
+                 heartbeat_ttl: int = None, ordered_consume: bool = None, topic_id_list: List[str] = None,
+                 project_name: str = None):
         self.project_id = project_id
         self.consumer_group_name = consumer_group_name
         self.heartbeat_ttl = heartbeat_ttl
         self.ordered_consume = ordered_consume
+        self.topic_id_list = topic_id_list
+        self.project_name = project_name
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -2379,8 +2712,10 @@ class ConsumerGroup(TLSData):
         consumer_group_name = data.get(CONSUMER_GROUP_NAME)
         heartbeat_ttl = data.get(HEARTBEAT_TTL)
         ordered_consume = data.get(ORDERED_CONSUME)
+        topic_id_list = data.get(TOPIC_ID_LIST)
+        project_name = data.get(PROJECT_NAME)
 
-        return cls(project_id, consumer_group_name, heartbeat_ttl, ordered_consume)
+        return cls(project_id, consumer_group_name, heartbeat_ttl, ordered_consume, topic_id_list, project_name)
 
 
 class ConsumeShard(TLSData):
@@ -2559,6 +2894,8 @@ class ImportSourceInfo(TLSData):
         if self.es_source_info is not None:
             source_info["EsSourceInfo"] = self.es_source_info.json()
         return source_info
+
+
 
 class ImportExtractRule(TLSData):
     def __init__(self, delimiter: str = None, begin_regex: str = None, keys: List[str] = None,
@@ -2849,6 +3186,24 @@ class ShipperInfo(TLSData):
         return shipper_info
 
 
+class TargetResource(TLSData):
+    def __init__(self, alias: str, topic_id: str, region: str, role_trn: str = None):
+        """
+        :param alias: 自定义输出目标的名称，在数据加工规则中需要使用此名称指代输出目标
+        :type alias: str
+        :param topic_id: 用于存储加工后日志的日志主题
+        :type topic_id: str
+        :param region: 用于存储加工后日志的日志主题的地域
+        :type region: str
+        :param role_trn: 跨账号授权角色名
+        :type role_trn: str, optional
+        """
+        self.alias = alias
+        self.topic_id = topic_id
+        self.region = region
+        self.role_trn = role_trn
+
+
 class TraceInstanceInfo(TLSData):
     def __init__(self, trace_instance_id: str = None, trace_instance_name: str = None, project_id: str = None,
                  project_name: str = None, trace_topic_id: str = None, trace_topic_name: str = None,
@@ -2984,6 +3339,13 @@ class TargetResourceInfo(TLSData):
         """
         return self.topic_id
 
+    def get_project_id(self):
+        """\
+        :return: 用于存储加工后日志的日志项目 ID
+        :rtype: str
+        """
+        return self.project_id
+
     def get_project_name(self):
         """\
         :return: 用于存储加工后日志的日志项目名称
@@ -3011,3 +3373,806 @@ class TargetResourceInfo(TLSData):
         :rtype: str
         """
         return self.role_trn
+
+
+class EtlTaskInfo(TLSData):
+    def __init__(
+            self,
+            task_id: str = None,
+            name: str = None,
+            source_topic_id: str = None,
+            source_topic_name: str = None,
+            dsl_type: str = None,
+            script: str = None,
+            task_type: str = None,
+            target_resources: List[TargetResourceInfo] = None,
+            enable: bool = None,
+            description: str = None,
+            etl_status: str = None,
+            from_time: int = None,
+            to_time: int = None,
+            create_time: str = None,
+            modify_time: str = None,
+            last_enable_time: str = None,
+            dashboard_id: str = None,
+            project_id: str = None,
+            project_name: str = None):
+        """ETL 任务信息
+
+        对应服务端 DescribeETLTaskResp 结构，用于承载 DescribeETLTasks 返回的单个任务。
+        """
+        self.task_id = task_id
+        self.name = name
+        self.source_topic_id = source_topic_id
+        self.source_topic_name = source_topic_name
+        self.dsl_type = dsl_type
+        self.script = script
+        self.task_type = task_type
+        self.target_resources = target_resources
+        self.enable = enable
+        self.description = description
+        self.etl_status = etl_status
+        self.from_time = from_time
+        self.to_time = to_time
+        self.create_time = create_time
+        self.modify_time = modify_time
+        self.last_enable_time = last_enable_time
+        self.dashboard_id = dashboard_id
+        self.project_id = project_id
+        self.project_name = project_name
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        etl_task_info = super(EtlTaskInfo, cls).set_attributes(data)
+
+        if ETL_TARGET_RESOURCES in data and data[ETL_TARGET_RESOURCES] is not None:
+            etl_task_info.target_resources = []
+            for target_resource in data[ETL_TARGET_RESOURCES]:
+                etl_task_info.target_resources.append(  # pylint: disable=no-member
+                    TargetResourceInfo.set_attributes(data=target_resource)
+                )
+
+        return etl_task_info
+
+class RequestCycleInfo(TLSData):
+    def __init__(self, time: int = None, task_type: str = None, cron_tab: str = None, cron_time_zone: str = None):
+        """
+        :param time: 调度的周期或者定期执行的时间点（距离 00:00 的分钟数），取值范围为 1~1440，单位为分钟
+        :type time: int, optional
+        :param task_type: 调度周期类型。可选值：Period：按照周期进行调度，即每隔一段时间调度一次。
+                         Fixed：定期调度，即每天固定时间点调度一次。Cron：使用 Cron 表达式
+        :type task_type: str, optional
+        :param cron_tab: Cron 表达式，日志服务通过 Cron 表达式指定告警任务定时执行。
+                        Cron 表达式的最小粒度为分钟，24 小时制
+        :type cron_tab: str, optional
+        :param cron_time_zone: 设置 Type 为 Cron 时，还需设置时区
+        :type cron_time_zone: str, optional
+        """
+        self.time = time
+        self.type = task_type  # 使用 type 字段以匹配 API 响应格式
+        self.cron_tab = cron_tab
+        self.cron_time_zone = cron_time_zone
+
+
+class ScheduleSqlTaskInfo(TLSData):
+    def __init__(self, task_id: str = None, task_name: str = None, description: str = None,
+                 source_project_id: str = None, source_project_name: str = None,
+                 source_topic_id: str = None, source_topic_name: str = None,
+                 dest_region: str = None, dest_project_id: str = None,
+                 dest_topic_id: str = None, dest_topic_name: str = None,
+                 status: int = None, process_start_time: int = None,
+                 process_end_time: int = None, process_sql_delay: int = None,
+                 process_time_window: str = None, query: str = None,
+                 request_cycle: RequestCycleInfo = None, create_time_stamp: int = None,
+                 modify_time_stamp: int = None):
+        """
+        :param task_id: 定时 SQL 分析任务 ID
+        :type task_id: str, optional
+        :param task_name: 定时 SQL 分析任务名称
+        :type task_name: str, optional
+        :param description: 定时 SQL 分析任务的简单描述
+        :type description: str, optional
+        :param source_project_id: 源日志主题所属的日志项目 ID
+        :type source_project_id: str, optional
+        :param source_project_name: 源日志主题所属的日志项目名称
+        :type source_project_name: str, optional
+        :param source_topic_id: 进行定时 SQL 分析的原始日志所在的源日志主题 ID
+        :type source_topic_id: str, optional
+        :param source_topic_name: 进行定时 SQL 分析的原始日志所在的源日志主题名称
+        :type source_topic_name: str, optional
+        :param dest_region: 目标日志项目所属地域
+        :type dest_region: str, optional
+        :param dest_project_id: 用于存储定时 SQL 分析结果数据的目标日志主题所属日志项目
+        :type dest_project_id: str, optional
+        :param dest_topic_id: 用于存储定时 SQL 分析结果数据的目标日志主题 ID
+        :type dest_topic_id: str, optional
+        :param dest_topic_name: 用于存储定时 SQL 分析结果数据的目标日志主题名称
+        :type dest_topic_name: str, optional
+        :param status: 完成任务配置后是否立即启动定时 SQL 分析任务。0：关闭任务，后续需手动启动任务。1：立即启动
+        :type status: int, optional
+        :param process_start_time: 调度定时 SQL 任务的开始时间，即第一个实例的创建时间。格式为秒级时间戳
+        :type process_start_time: int, optional
+        :param process_end_time: 调度定时 SQL 任务的结束时间。格式为秒级时间戳
+        :type process_end_time: int, optional
+        :param process_sql_delay: 每次调度的延迟时间。单位为秒
+        :type process_sql_delay: int, optional
+        :param process_time_window: SQL 时间窗口
+        :type process_time_window: str, optional
+        :param query: 定时 SQL 分析任务定期执行的检索与分析语句
+        :type query: str, optional
+        :param request_cycle: 定时 SQL 分析任务的调度周期
+        :type request_cycle: RequestCycleInfo, optional
+        :param create_time_stamp: 定时 SQL 分析任务的创建时间
+        :type create_time_stamp: int, optional
+        :param modify_time_stamp: 定时 SQL 分析任务的最近一次修改时间
+        :type modify_time_stamp: int, optional
+        """
+        self.task_id = task_id
+        self.task_name = task_name
+        self.description = description
+        # 规范字段名：source_project_id/source_topic_id/dest_project_id/dest_topic_id
+        self.source_project_id = source_project_id
+        self.source_project_name = source_project_name
+        self.source_topic_id = source_topic_id
+        self.source_topic_name = source_topic_name
+        self.dest_region = dest_region
+        self.dest_project_id = dest_project_id
+        self.dest_topic_id = dest_topic_id
+        self.dest_topic_name = dest_topic_name
+        self.status = status
+        self.process_start_time = process_start_time
+        self.process_end_time = process_end_time
+        self.process_sql_delay = process_sql_delay
+        self.process_time_window = process_time_window
+        self.query = query
+        self.request_cycle = request_cycle
+        self.create_time_stamp = create_time_stamp
+        self.modify_time_stamp = modify_time_stamp
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        schedule_sql_task_info = super(ScheduleSqlTaskInfo, cls).set_attributes(data)
+
+        # 处理嵌套的 RequestCycle 对象
+        if REQUEST_CYCLE in data and data[REQUEST_CYCLE] is not None:
+            schedule_sql_task_info.request_cycle = RequestCycleInfo.set_attributes(data=data[REQUEST_CYCLE])
+
+        return schedule_sql_task_info
+
+
+class DingTalkContentTemplateInfo(TLSData):
+    def __init__(self, title: str = None, locale: str = None, content: str = None):
+        """
+        :param title: 告警通知内容的主题
+        :param locale: 告警通知中固定内容的语言，可选值为 zh-CN、en-US
+        :param content: 告警通知内容，支持普通文本格式，支持插入内容变量、内容函数等
+        """
+        self.title = title
+        self.locale = locale
+        self.content = content
+
+
+class EmailContentTemplateInfo(TLSData):
+    def __init__(self, locale: str = None, content: str = None, subject: str = None):
+        """
+        :param locale: 告警通知中固定内容的语言，可选值为 zh-CN、en-US
+        :param content: 告警通知内容，支持普通文本格式，支持插入内容变量、内容函数等
+        :param subject: 邮件通知的主题
+        """
+        self.locale = locale
+        self.content = content
+        self.subject = subject
+
+
+class LarkContentTemplateInfo(TLSData):
+    def __init__(self, title: str = None, locale: str = None, content: str = None):
+        """
+        :param title: 告警通知内容的主题
+        :param locale: 告警通知中固定内容的语言，可选值为 zh-CN、en-US
+        :param content: 告警通知内容，支持普通文本格式，支持插入内容变量、内容函数等
+        """
+        self.title = title
+        self.locale = locale
+        self.content = content
+
+
+class SmsContentTemplateInfo(TLSData):
+    def __init__(self, locale: str = None, content: str = None):
+        """
+        :param locale: 告警通知中固定内容的语言，可选值为 zh-CN、en-US
+        :param content: 告警通知内容，支持普通文本格式，支持插入内容变量、内容函数等
+        """
+        self.locale = locale
+        self.content = content
+
+
+class VmsContentTemplateInfo(TLSData):
+    def __init__(self, locale: str = None, content: str = None):
+        """
+        :param locale: 告警通知中固定内容的语言，可选值为 zh-CN、en-US
+        :param content: 告警通知内容，支持普通文本格式，支持插入内容变量、内容函数等
+        """
+        self.locale = locale
+        self.content = content
+
+
+class WeChatContentTemplateInfo(TLSData):
+    def __init__(self, title: str = None, locale: str = None, content: str = None):
+        """
+        :param title: 告警通知内容的主题
+        :param locale: 告警通知中固定内容的语言，可选值为 zh-CN、en-US
+        :param content: 告警通知内容，支持普通文本格式，支持插入内容变量、内容函数等
+        """
+        self.title = title
+        self.locale = locale
+        self.content = content
+
+
+class WebhookContentTemplateInfo(TLSData):
+    def __init__(self, content: str = None):
+        """
+        :param content: 告警通知内容，通常为 JSON 格式，支持插入内容变量、内容函数等
+        """
+        self.content = content
+
+
+class ContentTemplateInfo(TLSData):
+    def __init__(self, sms: SmsContentTemplateInfo = None, vms: VmsContentTemplateInfo = None,
+                 lark: LarkContentTemplateInfo = None, email: EmailContentTemplateInfo = None,
+                 we_chat: WeChatContentTemplateInfo = None, webhook: WebhookContentTemplateInfo = None,
+                 ding_talk: DingTalkContentTemplateInfo = None, is_default: bool = None,
+                 create_time: str = None, modify_time: str = None,
+                 alarm_content_template_id: str = None,
+                 alarm_content_template_name: str = None):
+        """告警内容模板信息
+
+        :param sms: 短信通知内容模板相关信息
+        :type sms: SmsContentTemplateInfo
+        :param vms: 电话通知内容模板相关信息
+        :type vms: VmsContentTemplateInfo
+        :param lark: 飞书通知内容模板相关信息
+        :type lark: LarkContentTemplateInfo
+        :param email: 邮件通知内容模板相关信息
+        :type email: EmailContentTemplateInfo
+        :param we_chat: 企业微信通知内容模板相关信息
+        :type we_chat: WeChatContentTemplateInfo
+        :param webhook: 自定义 Webhook 通知内容模板相关信息
+        :type webhook: WebhookContentTemplateInfo
+        :param ding_talk: 钉钉通知内容模板相关信息
+        :type ding_talk: DingTalkContentTemplateInfo
+        :param is_default: 是否为内置的内容模版
+        :type is_default: bool
+        :param create_time: 告警通知内容模版的创建时间
+        :type create_time: str
+        :param modify_time: 告警通知内容模板的修改时间
+        :type modify_time: str
+        :param alarm_content_template_id: 告警通知内容模板 ID
+        :type alarm_content_template_id: str
+        :param alarm_content_template_name: 告警通知内容模板名称
+        :type alarm_content_template_name: str
+        """
+        self.sms = sms
+        self.vms = vms
+        self.lark = lark
+        self.email = email
+        self.we_chat = we_chat
+        self.webhook = webhook
+        self.ding_talk = ding_talk
+        self.is_default = is_default
+        self.create_time = create_time
+        self.modify_time = modify_time
+        self.alarm_content_template_id = alarm_content_template_id
+        self.alarm_content_template_name = alarm_content_template_name
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        content_template_info = super(ContentTemplateInfo, cls).set_attributes(data)
+
+        sms_data = data.get("Sms")
+        if sms_data is None:
+            sms_data = data.get(SMS)
+        if sms_data is not None:
+            content_template_info.sms = SmsContentTemplateInfo.set_attributes(sms_data)
+
+        if VMS in data and data[VMS] is not None:
+            content_template_info.vms = VmsContentTemplateInfo.set_attributes(data[VMS])
+
+        if LARK in data and data[LARK] is not None:
+            content_template_info.lark = LarkContentTemplateInfo.set_attributes(data[LARK])
+
+        if EMAIL in data and data[EMAIL] is not None:
+            content_template_info.email = EmailContentTemplateInfo.set_attributes(data[EMAIL])
+
+        if WE_CHAT in data and data[WE_CHAT] is not None:
+            content_template_info.we_chat = WeChatContentTemplateInfo.set_attributes(data[WE_CHAT])
+
+        if WEBHOOK in data and data[WEBHOOK] is not None:
+            content_template_info.webhook = WebhookContentTemplateInfo.set_attributes(data[WEBHOOK])
+
+        if DING_TALK in data and data[DING_TALK] is not None:
+            content_template_info.ding_talk = DingTalkContentTemplateInfo.set_attributes(data[DING_TALK])
+
+        return content_template_info
+
+
+class GeneralWebhookHeaderKV(TLSData):
+    def __init__(self, key: str = None, value: str = None):
+        """自定义 Webhook 请求头键值对
+
+        :param key: 自定义请求头的 Key
+        :type key: str
+        :param value: 自定义请求头的 Value
+        :type value: str
+        """
+        self.key = key
+        self.value = value
+
+    def get_key(self):
+        """返回自定义请求头的 Key
+
+        :return: 自定义请求头的 Key
+        :rtype: str
+        """
+        return self.key
+
+    def get_value(self):
+        """返回自定义请求头的 Value
+
+        :return: 自定义请求头的 Value
+        :rtype: str
+        """
+        return self.value
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        """从字典构造 GeneralWebhookHeaderKV 对象"""
+        key = data.get(KEY)
+        value = data.get(VALUE)
+        return cls(key, value)
+
+class WebhookIntegrationInfo(TLSData):
+    def __init__(self, webhook_id: str = None, create_time: str = None, modify_time: str = None,
+                 webhook_url: str = None, webhook_name: str = None, webhook_type: str = None,
+                 webhook_method: str = None, webhook_secret: str = None,
+                 webhook_headers: List[GeneralWebhookHeaderKV] = None):
+        """告警 Webhook 集成配置信息
+
+        :param webhook_id: Webhook 集成配置 ID
+        :type webhook_id: str
+        :param create_time: Webhook 集成配置创建时间
+        :type create_time: str
+        :param modify_time: Webhook 集成配置最近一次修改时间
+        :type modify_time: str
+        :param webhook_url: Webhook 请求地址
+        :type webhook_url: str
+        :param webhook_name: Webhook 集成配置名称
+        :type webhook_name: str
+        :param webhook_type: Webhook 类型
+        :type webhook_type: str
+        :param webhook_method: 自定义 Webhook 请求方法
+        :type webhook_method: str
+        :param webhook_secret: Webhook 加密密钥
+        :type webhook_secret: str
+        :param webhook_headers: 自定义 Webhook 的请求头
+        :type webhook_headers: List[GeneralWebhookHeaderKV]
+        """
+        self.webhook_id = webhook_id
+        self.create_time = create_time
+        self.modify_time = modify_time
+        self.webhook_url = webhook_url
+        self.webhook_name = webhook_name
+        self.webhook_type = webhook_type
+        self.webhook_method = webhook_method
+        self.webhook_secret = webhook_secret
+        self.webhook_headers = webhook_headers
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        webhook_integration_info = super(WebhookIntegrationInfo, cls).set_attributes(data)
+
+        if WEBHOOK_HEADERS in data:
+            webhook_headers = data[WEBHOOK_HEADERS]
+            webhook_integration_info.webhook_headers = []
+            for header in webhook_headers:
+                webhook_integration_info.webhook_headers.append(  # pylint: disable=no-member
+                    GeneralWebhookHeaderKV(header.get(KEY), header.get(VALUE)))
+
+        return webhook_integration_info
+
+
+class ResourceTagInfo(TLSData):
+    def __init__(self, tag_key: str = None, tag_value: str = None, resource_id: str = None, resource_type: str = None):
+        """资源标签信息
+
+        :param tag_key: 标签 Key 的值
+        :param tag_value: 标签 Value 的值
+        :param resource_id: 资源 ID
+        :param resource_type: 资源类型
+        """
+        self.tag_key = tag_key
+        self.tag_value = tag_value
+        self.resource_id = resource_id
+        self.resource_type = resource_type
+
+
+class StatusInfo(TLSData):
+    def __init__(self, code: str = None, message: str = None):
+        """
+        :param code: 状态码
+        :type code: str
+        :param message: 错误消息
+        :type message: str
+        """
+        self.code = code
+        self.message = message
+
+
+class ResourceInfo(TLSData):
+    def __init__(self, attributes: List[KeyValueInfo] = None):
+        """
+        :param attributes: 资源属性列表
+        :type attributes: List[KeyValueInfo]
+        """
+        self.attributes = attributes
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        resource_info = super(ResourceInfo, cls).set_attributes(data)
+        
+        if ATTRIBUTES in data and data[ATTRIBUTES] is not None:
+            resource_info.attributes = []
+            for attr in data[ATTRIBUTES]:
+                resource_info.attributes.append(KeyValueInfo.set_attributes(data=attr))  # pylint: disable=no-member
+        
+        return resource_info
+
+
+class InstrumentationLibraryInfo(TLSData):
+    def __init__(self, name: str = None, version: str = None):
+        """
+        :param name: 检测库名称
+        :type name: str
+        :param version: 检测库版本
+        :type version: str
+        """
+        self.name = name
+        self.version = version
+
+
+class SpanLinkInfo(TLSData):
+    def __init__(self, trace_id: str = None, span_id: str = None, 
+                 trace_state: str = None, attributes: List[KeyValueInfo] = None):
+        """
+        :param trace_id: Trace ID
+        :type trace_id: str
+        :param span_id: Span ID
+        :type span_id: str
+        :param trace_state: Trace状态
+        :type trace_state: str
+        :param attributes: 属性列表
+        :type attributes: List[KeyValueInfo]
+        """
+        self.trace_id = trace_id
+        self.span_id = span_id
+        self.trace_state = trace_state
+        self.attributes = attributes
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        span_link = super(SpanLinkInfo, cls).set_attributes(data)
+
+        if ATTRIBUTES in data and data[ATTRIBUTES] is not None:
+            span_link.attributes = []
+            for attr in data[ATTRIBUTES]:
+                span_link.attributes.append(KeyValueInfo.set_attributes(data=attr))  # pylint: disable=no-member
+
+        return span_link
+
+
+class SpanEventInfo(TLSData):
+    def __init__(self, name: str = None, timestamp: int = None, attributes: List[KeyValueInfo] = None):
+        """
+        :param name: 事件名称
+        :type name: str
+        :param timestamp: 时间戳（微秒）
+        :type timestamp: int
+        :param attributes: 属性列表
+        :type attributes: List[KeyValueInfo]
+        """
+        self.name = name
+        self.timestamp = timestamp
+        self.attributes = attributes
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        span_event = super(SpanEventInfo, cls).set_attributes(data)
+
+        if ATTRIBUTES in data and data[ATTRIBUTES] is not None:
+            span_event.attributes = []
+            for attr in data[ATTRIBUTES]:
+                span_event.attributes.append(KeyValueInfo.set_attributes(data=attr))  # pylint: disable=no-member
+
+        return span_event
+
+
+class SpanInfo(TLSData):
+    def __init__(self, trace_id: str = None, span_id: str = None, kind: str = None, 
+                 name: str = None, start_time: int = None, end_time: int = None, 
+                 parent_span_id: str = None, trace_state: str = None, 
+                 status: StatusInfo = None, resource: ResourceInfo = None,
+                 attributes: List[KeyValueInfo] = None, links: List[SpanLinkInfo] = None,
+                 events: List[SpanEventInfo] = None, 
+                 instrumentation_library: InstrumentationLibraryInfo = None):
+        """
+        :param trace_id: Trace ID
+        :type trace_id: str
+        :param span_id: Span ID
+        :type span_id: str
+        :param kind: Span类型
+        :type kind: str
+        :param name: Span名称
+        :type name: str
+        :param start_time: 开始时间（微秒）
+        :type start_time: int
+        :param end_time: 结束时间（微秒）
+        :type end_time: int
+        :param parent_span_id: 父Span ID
+        :type parent_span_id: str
+        :param trace_state: Trace状态
+        :type trace_state: str
+        :param status: Span状态
+        :type status: StatusInfo
+        :param resource: 资源信息
+        :type resource: ResourceInfo
+        :param attributes: 属性列表
+        :type attributes: List[KeyValueInfo]
+        :param links: 链接列表
+        :type links: List[SpanLinkInfo]
+        :param events: 事件列表
+        :type events: List[SpanEventInfo]
+        :param instrumentation_library: 检测库信息
+        :type instrumentation_library: InstrumentationLibraryInfo
+        """
+        self.trace_id = trace_id
+        self.span_id = span_id
+        self.kind = kind
+        self.name = name
+        self.start_time = start_time
+        self.end_time = end_time
+        self.parent_span_id = parent_span_id
+        self.trace_state = trace_state
+        self.status = status
+        self.resource = resource
+        self.attributes = attributes
+        self.links = links
+        self.events = events
+        self.instrumentation_library = instrumentation_library
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        span_info = super(SpanInfo, cls).set_attributes(data)
+
+        if STATUS in data and data[STATUS] is not None:
+            span_info.status = StatusInfo.set_attributes(data=data[STATUS])
+
+        if RESOURCE in data and data[RESOURCE] is not None:
+            span_info.resource = ResourceInfo.set_attributes(data=data[RESOURCE])
+
+        if ATTRIBUTES in data and data[ATTRIBUTES] is not None:
+            span_info.attributes = []
+            for attr in data[ATTRIBUTES]:
+                span_info.attributes.append(KeyValueInfo.set_attributes(data=attr))  # pylint: disable=no-member
+
+        if LINKS in data and data[LINKS] is not None:
+            span_info.links = []
+            for link in data[LINKS]:
+                span_info.links.append(SpanLinkInfo.set_attributes(data=link))  # pylint: disable=no-member
+
+        if EVENTS in data and data[EVENTS] is not None:
+            span_info.events = []
+            for event in data[EVENTS]:
+                span_info.events.append(SpanEventInfo.set_attributes(data=event))  # pylint: disable=no-member
+
+        if INSTRUMENTATION_LIBRARY in data and data[INSTRUMENTATION_LIBRARY] is not None:
+            span_info.instrumentation_library = InstrumentationLibraryInfo.set_attributes(
+                data=data[INSTRUMENTATION_LIBRARY])  # pylint: disable=no-member
+
+        return span_info
+
+
+class TraceInfo(TLSData):
+    def __init__(self, spans: List[SpanInfo] = None,
+                 trace_id: str = None, service_name: str = None, operation_name: str = None,
+                 start_time: int = None, end_time: int = None, duration: int = None,
+                 status_code: str = None, attributes: dict = None):
+        """综合 Trace 信息结构
+
+        - DescribeTrace 场景：通过 spans 字段承载完整的 Span 列表；
+        - SearchTraces 场景：通过 trace_id / service_name / operation_name / start_time / end_time
+          / duration / status_code / attributes 等字段承载 Trace 概要。
+        """
+        self.spans = spans
+        self.trace_id = trace_id
+        self.service_name = service_name
+        self.operation_name = operation_name
+        self.start_time = start_time
+        self.end_time = end_time
+        self.duration = duration
+        self.status_code = status_code
+        self.attributes = attributes
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        trace_info = super(TraceInfo, cls).set_attributes(data)
+
+        if SPANS in data and data[SPANS] is not None:
+            trace_info.spans = []
+            for span in data[SPANS]:
+                trace_info.spans.append(SpanInfo.set_attributes(data=span))  # pylint: disable=no-member
+
+        return trace_info
+
+    def get_trace_id(self):
+        """返回 Trace ID"""
+        return getattr(self, "trace_id", None)
+
+    def get_service_name(self):
+        """返回服务名称"""
+        return getattr(self, "service_name", None)
+
+    def get_operation_name(self):
+        """返回操作名称"""
+        return getattr(self, "operation_name", None)
+
+    def get_start_time(self):
+        """返回开始时间（微秒）"""
+        return getattr(self, "start_time", None)
+
+    def get_end_time(self):
+        """返回结束时间（微秒）"""
+        return getattr(self, "end_time", None)
+
+    def get_duration(self):
+        """返回持续时间（微秒）"""
+        return getattr(self, "duration", None)
+
+    def get_status_code(self):
+        """返回状态码"""
+        return getattr(self, "status_code", None)
+
+    def get_attributes(self):
+        """返回自定义属性"""
+        return getattr(self, "attributes", None)
+
+
+class RuleNode(TLSData):
+    def __init__(self, type: str = None, value: List[str] = None, children: List['RuleNode'] = None):
+        """
+        :param type: 当前节点类型。可选值：Operation：操作节点。Condition：条件节点
+        :type type: str
+        :param value: 节点值
+        :type value: List[str]
+        :param children: 子节点
+        :type children: List[RuleNode]
+        """
+        self.type = type
+        self.value = value
+        self.children = children
+
+    def get_type(self):
+        """
+        :return: 当前节点类型
+        :rtype: str
+        """
+        return self.type
+
+    def get_value(self):
+        """
+        :return: 节点值
+        :rtype: List[str]
+        """
+        return self.value
+
+    def get_children(self):
+        """
+        :return: 子节点
+        :rtype: List[RuleNode]
+        """
+        return self.children
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        rule_node = super(RuleNode, cls).set_attributes(data)
+
+        if CHILDREN in data and data[CHILDREN] is not None:
+            rule_node.children = []
+            for child_data in data[CHILDREN]:
+                rule_node.children.append(  # pylint: disable=no-member
+                    RuleNode.set_attributes(child_data))
+
+        return rule_node
+
+    def json(self):
+        json_data = super(RuleNode, self).json()
+
+        if self.children is not None:
+            json_data[CHILDREN] = []
+            for child in self.children:
+                json_data[CHILDREN].append(child.json())
+
+        return json_data
+
+
+class NoticeRule(TLSData):
+    def __init__(self, has_next: bool = None, rule_node: RuleNode = None, 
+                 has_end_node: bool = None, receiver_infos: List[Receiver] = None):
+        """
+        :param has_next: 是否继续进入下一层的条件判断
+        :type has_next: bool
+        :param rule_node: 规则节点
+        :type rule_node: RuleNode
+        :param has_end_node: 后面是否存在结束节点
+        :type has_end_node: bool
+        :param receiver_infos: 通知渠道相关信息
+        :type receiver_infos: List[Receiver]
+        """
+        self.has_next = has_next
+        self.rule_node = rule_node
+        self.has_end_node = has_end_node
+        self.receiver_infos = receiver_infos
+
+    def get_has_next(self):
+        """
+        :return: 是否继续进入下一层的条件判断
+        :rtype: bool
+        """
+        return self.has_next
+
+    def get_rule_node(self):
+        """
+        :return: 规则节点
+        :rtype: RuleNode
+        """
+        return self.rule_node
+
+    def get_has_end_node(self):
+        """
+        :return: 后面是否存在结束节点
+        :rtype: bool
+        """
+        return self.has_end_node
+
+    def get_receiver_infos(self):
+        """
+        :return: 通知渠道相关信息
+        :rtype: List[Receiver]
+        """
+        return self.receiver_infos
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        notice_rule = super(NoticeRule, cls).set_attributes(data)
+
+        if RULE_NODE in data and data[RULE_NODE] is not None:
+            notice_rule.rule_node = RuleNode.set_attributes(data[RULE_NODE])
+
+        if RECEIVER_INFOS in data and data[RECEIVER_INFOS] is not None:
+            notice_rule.receiver_infos = []
+            for receiver_data in data[RECEIVER_INFOS]:
+                notice_rule.receiver_infos.append(  # pylint: disable=no-member
+                    Receiver.set_attributes(receiver_data))
+
+        return notice_rule
+
+    def json(self):
+        json_data = super(NoticeRule, self).json()
+
+        if self.rule_node is not None:
+            json_data[RULE_NODE] = self.rule_node.json()
+
+        if self.receiver_infos is not None:
+            json_data[RECEIVER_INFOS] = []
+            for receiver in self.receiver_infos:
+                json_data[RECEIVER_INFOS].append(receiver.json())
+
+        return json_data

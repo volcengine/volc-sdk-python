@@ -15,11 +15,12 @@ from volcengine.auth.SignerV4 import SignerV4
 from volcengine.base.Service import Service
 from volcengine.tls.tls_requests import *
 from volcengine.tls.tls_responses import *
-from volcengine.tls.tls_requests import DescribeETLTaskRequest
-from volcengine.tls.tls_responses import DescribeETLTaskResponse
+from volcengine.tls.tls_requests import DescribeETLTaskRequest, ModifyAlarmContentTemplateRequest
+from volcengine.tls.tls_responses import DescribeETLTaskResponse, ModifyAlarmContentTemplateResponse
 from volcengine.tls.tls_responses import ModifyTraceInstanceResponse
 from volcengine.tls.tls_exception import TLSException
-from volcengine.tls.const import DELETE_TRACE_INSTANCE, DESCRIBE_TRACE_INSTANCE
+from volcengine.tls.const import DELETE_TRACE_INSTANCE, DESCRIBE_TRACE_INSTANCE, DESCRIBE_TRACE, SEARCH_TRACES, \
+    CREATE_ALARM_CONTENT_TEMPLATE, CREATE_ALARM_WEBHOOK_INTEGRATION, DELETE_ALARM_WEBHOOK_INTEGRATION
 from volcengine.tls.util import get_logger
 
 API_INFO = {
@@ -84,6 +85,11 @@ API_INFO = {
     DELETE_ALARM: ApiInfo(HTTP_DELETE, DELETE_ALARM, {}, {}, {}),
     MODIFY_ALARM: ApiInfo(HTTP_PUT, MODIFY_ALARM, {}, {}, {}),
     DESCRIBE_ALARMS: ApiInfo(HTTP_GET, DESCRIBE_ALARMS, {}, {}, {}),
+    MODIFY_ALARM_CONTENT_TEMPLATE: ApiInfo(HTTP_PUT, MODIFY_ALARM_CONTENT_TEMPLATE, {}, {}, {}),
+    DELETE_ALARM_CONTENT_TEMPLATE: ApiInfo(HTTP_DELETE, DELETE_ALARM_CONTENT_TEMPLATE, {}, {}, {}),
+    DESCRIBE_ALARM_CONTENT_TEMPLATES: ApiInfo(HTTP_GET, DESCRIBE_ALARM_CONTENT_TEMPLATES, {}, {}, {}),
+    DESCRIBE_ALARM_WEBHOOK_INTEGRATIONS: ApiInfo(HTTP_GET, DESCRIBE_ALARM_WEBHOOK_INTEGRATIONS, {}, {}, {}),
+    MODIFY_ALARM_WEBHOOK_INTEGRATION: ApiInfo(HTTP_PUT, MODIFY_ALARM_WEBHOOK_INTEGRATION, {}, {}, {}),
     # APIs of Kafka consumer.
     OPEN_KAFKA_CONSUMER: ApiInfo(HTTP_PUT, OPEN_KAFKA_CONSUMER, {}, {}, {}),
     CLOSE_KAFKA_CONSUMER: ApiInfo(HTTP_PUT, CLOSE_KAFKA_CONSUMER, {}, {}, {}),
@@ -100,14 +106,36 @@ API_INFO = {
     # APIs of resource labels.
     ADD_TAGS_TO_RESOURCE: ApiInfo(HTTP_POST, ADD_TAGS_TO_RESOURCE, {}, {}, {}),
     REMOVE_TAGS_FROM_RESOURCE: ApiInfo(HTTP_POST, REMOVE_TAGS_FROM_RESOURCE, {}, {}, {}),
+    TAG_RESOURCES: ApiInfo(HTTP_POST, TAG_RESOURCES, {}, {}, {}),
+    UNTAG_RESOURCES: ApiInfo(HTTP_POST, UNTAG_RESOURCES, {}, {}, {}),
+    LIST_TAGS_FOR_RESOURCES: ApiInfo(HTTP_POST, LIST_TAGS_FOR_RESOURCES, {}, {}, {}),
     # APIs of import task.
     CREATE_IMPORT_TASK: ApiInfo(HTTP_POST, CREATE_IMPORT_TASK, {}, {}, {}),
     DELETE_IMPORT_TASK: ApiInfo(HTTP_DELETE, DELETE_IMPORT_TASK, {}, {}, {}),
     MODIFY_IMPORT_TASK: ApiInfo(HTTP_PUT, MODIFY_IMPORT_TASK, {}, {}, {}),
     DESCRIBE_IMPORT_TASKS: ApiInfo(HTTP_GET, DESCRIBE_IMPORT_TASKS, {}, {}, {}),
+    DESCRIBE_IMPORT_TASK: ApiInfo(HTTP_GET, DESCRIBE_IMPORT_TASK, {}, {}, {}),
+
+    # APIs of schedule sql tasks.
+    DESCRIBE_SCHEDULE_SQL_TASKS: ApiInfo(HTTP_GET, DESCRIBE_SCHEDULE_SQL_TASKS, {}, {}, {}),
+    # APIs of shipper.
+    CREATE_SHIPPER: ApiInfo(HTTP_POST, CREATE_SHIPPER, {}, {}, {}),
+    DELETE_SHIPPER: ApiInfo(HTTP_DELETE, DELETE_SHIPPER, {}, {}, {}),
+    MODIFY_SHIPPER: ApiInfo(HTTP_PUT, MODIFY_SHIPPER, {}, {}, {}),
     DESCRIBE_SHIPPERS: ApiInfo(HTTP_GET, DESCRIBE_SHIPPERS, {}, {}, {}),
     DESCRIBE_SHIPPER: ApiInfo(HTTP_GET, DESCRIBE_SHIPPER, {}, {}, {}),
+    # APIs of ETL tasks.
+    CREATE_ETL_TASK: ApiInfo(HTTP_POST, CREATE_ETL_TASK, {}, {}, {}),
+    DELETE_ETL_TASK: ApiInfo(HTTP_DELETE, DELETE_ETL_TASK, {}, {}, {}),
+    MODIFY_ETL_TASK: ApiInfo(HTTP_PUT, MODIFY_ETL_TASK, {}, {}, {}),
     DESCRIBE_ETL_TASK: ApiInfo(HTTP_GET, DESCRIBE_ETL_TASK, {}, {}, {}),
+    DESCRIBE_ETL_TASKS: ApiInfo(HTTP_GET, DESCRIBE_ETL_TASKS, {}, {}, {}),
+    MODIFY_ETL_TASK_STATUS: ApiInfo(HTTP_PUT, MODIFY_ETL_TASK_STATUS, {}, {}, {}),
+    # APIs of schedule SQL task.
+    CREATE_SCHEDULE_SQL_TASK: ApiInfo(HTTP_POST, CREATE_SCHEDULE_SQL_TASK, {}, {}, {}),
+    DELETE_SCHEDULE_SQL_TASK: ApiInfo(HTTP_DELETE, DELETE_SCHEDULE_SQL_TASK, {}, {}, {}),
+    DESCRIBE_SCHEDULE_SQL_TASK: ApiInfo(HTTP_GET, DESCRIBE_SCHEDULE_SQL_TASK, {}, {}, {}),
+    MODIFY_SCHEDULE_SQL_TASK: ApiInfo(HTTP_PUT, MODIFY_SCHEDULE_SQL_TASK, {}, {}, {}),
     # APIs of account.
     ACTIVE_TLS_ACCOUNT: ApiInfo(HTTP_POST, ACTIVE_TLS_ACCOUNT, {}, {}, {}),
     # APIs of trace instance.
@@ -116,8 +144,15 @@ API_INFO = {
     MODIFY_TRACE_INSTANCE: ApiInfo(HTTP_PUT, MODIFY_TRACE_INSTANCE, {}, {}, {}),
     DESCRIBE_TRACE_INSTANCE: ApiInfo(HTTP_GET, DESCRIBE_TRACE_INSTANCE, {}, {}, {}),
     DESCRIBE_TRACE_INSTANCES: ApiInfo(HTTP_GET, DESCRIBE_TRACE_INSTANCES, {}, {}, {}),
+    DESCRIBE_TRACE: ApiInfo(HTTP_POST, DESCRIBE_TRACE, {}, {}, {}),
+    SEARCH_TRACES: ApiInfo(HTTP_POST, SEARCH_TRACES, {}, {}, {}),
     # APIs of account status.
-    GET_ACCOUNT_STATUS: ApiInfo(HTTP_GET, GET_ACCOUNT_STATUS, {}, {}, {})
+    GET_ACCOUNT_STATUS: ApiInfo(HTTP_GET, GET_ACCOUNT_STATUS, {}, {}, {}),
+    # APIs of alarm content template.
+    CREATE_ALARM_CONTENT_TEMPLATE: ApiInfo(HTTP_POST, CREATE_ALARM_CONTENT_TEMPLATE, {}, {}, {}),
+    # APIs of alarm webhook integration.
+    CREATE_ALARM_WEBHOOK_INTEGRATION: ApiInfo(HTTP_POST, CREATE_ALARM_WEBHOOK_INTEGRATION, {}, {}, {}),
+    DELETE_ALARM_WEBHOOK_INTEGRATION: ApiInfo(HTTP_DELETE, DELETE_ALARM_WEBHOOK_INTEGRATION, {}, {}, {}),
 }
 
 HEADER_API_VERSION = "x-tls-apiversion"
@@ -417,7 +452,7 @@ class TLSService(Service):
                 log_content = new_log.contents.add()
                 log_content.key = str(key)
                 log_content.value = str(v.log_dict[key])
-        put_logs_request = PutLogsRequest(request.topic_id, log_group_list, 
+        put_logs_request = PutLogsRequest(request.topic_id, log_group_list,
                                          request.hash_key, request.compression, request.content_md5)
         return self.put_logs(put_logs_request)
 
@@ -706,6 +741,14 @@ class TLSService(Service):
 
         return DeleteAlarmResponse(response)
 
+    def delete_alarm_content_template(self, delete_alarm_content_template_request: DeleteAlarmContentTemplateRequest) \
+            -> DeleteAlarmContentTemplateResponse:
+        if delete_alarm_content_template_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_ALARM_CONTENT_TEMPLATE, body=delete_alarm_content_template_request.get_api_input())
+
+        return DeleteAlarmContentTemplateResponse(response)
+
     def modify_alarm(self, modify_alarm_request: ModifyAlarmRequest) -> ModifyAlarmResponse:
         if modify_alarm_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
@@ -719,6 +762,22 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_ALARMS, params=describe_alarms_request.get_api_input())
 
         return DescribeAlarmsResponse(response)
+
+    def modify_alarm_content_template(self, modify_alarm_content_template_request: ModifyAlarmContentTemplateRequest) -> ModifyAlarmContentTemplateResponse:
+        if modify_alarm_content_template_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_ALARM_CONTENT_TEMPLATE,
+                                  body=modify_alarm_content_template_request.get_api_input())
+
+        return ModifyAlarmContentTemplateResponse(response)
+
+    def modify_alarm_webhook_integration(self, modify_alarm_webhook_integration_request: ModifyAlarmWebhookIntegrationRequest) -> ModifyAlarmWebhookIntegrationResponse:
+        if modify_alarm_webhook_integration_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_ALARM_WEBHOOK_INTEGRATION,
+                                  body=modify_alarm_webhook_integration_request.get_api_input())
+
+        return ModifyAlarmWebhookIntegrationResponse(response)
 
     def open_kafka_consumer(self, open_kafka_consumer_request: OpenKafkaConsumerRequest) -> OpenKafkaConsumerResponse:
         if open_kafka_consumer_request.check_validation() is False:
@@ -819,6 +878,20 @@ class TLSService(Service):
 
         return RemoveTagsFromResourceResponse(response)
 
+    def tag_resources(self, tag_resources_request: TagResourcesRequest) -> TagResourcesResponse:
+        if not tag_resources_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=TAG_RESOURCES, body=tag_resources_request.get_api_input())
+
+        return TagResourcesResponse(response)
+
+    def untag_resources(self, untag_resources_request: UntagResourcesRequest) -> UntagResourcesResponse:
+        if not untag_resources_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=UNTAG_RESOURCES, body=untag_resources_request.get_api_input())
+
+        return UntagResourcesResponse(response)
+
     def create_import_task(self, create_import_task_request: CreateImportTaskRequest) -> CreateImportTaskResponse:
         response = self.__request(api=CREATE_IMPORT_TASK, body=create_import_task_request.get_api_input())
         return CreateImportTaskResponse(response)
@@ -833,7 +906,15 @@ class TLSService(Service):
         response = self.__request(api=MODIFY_IMPORT_TASK, body=modify_import_task_request.get_api_input())
         return ModifyImportTaskResponse(response)
 
+    def modify_schedule_sql_task(self, modify_schedule_sql_task_request: ModifyScheduleSqlTaskRequest) -> ModifyScheduleSqlTaskResponse:
+        if modify_schedule_sql_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_SCHEDULE_SQL_TASK, body=modify_schedule_sql_task_request.get_api_input())
+        return ModifyScheduleSqlTaskResponse(response)
+
     def describe_import_task(self, describe_import_task_request: DescribeImportTaskRequest) -> DescribeImportTaskResponse:
+        if describe_import_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_IMPORT_TASK, params=describe_import_task_request.get_api_input())
         return DescribeImportTaskResponse(response)
 
@@ -850,6 +931,12 @@ class TLSService(Service):
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DELETE_SHIPPER, body=delete_shipper_request.get_api_input())
         return DeleteShipperResponse(response)
+
+    def delete_etl_task(self, delete_etl_task_request: DeleteETLTaskRequest) -> DeleteETLTaskResponse:
+        if not delete_etl_task_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_ETL_TASK, body=delete_etl_task_request.get_api_input())
+        return DeleteETLTaskResponse(response)
 
     def modify_shipper(self, modify_shipper_request: ModifyShipperRequest) -> ModifyShipperResponse:
         if not modify_shipper_request.check_validation():
@@ -869,6 +956,13 @@ class TLSService(Service):
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=DESCRIBE_ETL_TASK, params=describe_etl_task_request.get_api_input())
         return DescribeETLTaskResponse(response)
+
+    def describe_etl_tasks(self, describe_etl_tasks_request: DescribeETLTasksRequest) -> DescribeETLTasksResponse:
+        """查询 ETL 任务列表，对应服务端 DescribeETLTasks 接口。"""
+        if not describe_etl_tasks_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_ETL_TASKS, params=describe_etl_tasks_request.get_api_input())
+        return DescribeETLTasksResponse(response)
 
     def create_trace_instance(self, create_trace_instance_request: CreateTraceInstanceRequest) -> CreateTraceInstanceResponse:
         if create_trace_instance_request.check_validation() is False:
@@ -928,8 +1022,155 @@ class TLSService(Service):
         response = self.__request(api=MODIFY_TRACE_INSTANCE, body=modify_trace_instance_request.get_api_input())
         return ModifyTraceInstanceResponse(response)
 
+    def search_traces(self, search_traces_request: SearchTracesRequest) -> SearchTracesResponse:
+        """查询 Trace 列表
+
+        :param search_traces_request: 查询请求
+        :type search_traces_request: SearchTracesRequest
+        :return: 查询结果
+        :rtype: SearchTracesResponse
+        """
+        if search_traces_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=SEARCH_TRACES, body=search_traces_request.get_api_input())
+        return SearchTracesResponse(response)
+
     def get_account_status(self, get_account_status_request: GetAccountStatusRequest) -> GetAccountStatusResponse:
         if get_account_status_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         response = self.__request(api=GET_ACCOUNT_STATUS, params=get_account_status_request.get_api_input())
         return GetAccountStatusResponse(response)
+
+    def describe_trace(self, describe_trace_request: DescribeTraceRequest) -> DescribeTraceResponse:
+        """查询Trace详情
+
+        :param describe_trace_request: 查询Trace请求
+        :type describe_trace_request: DescribeTraceRequest
+        :return: Trace详情响应
+        :rtype: DescribeTraceResponse
+        """
+        if describe_trace_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_TRACE, body=describe_trace_request.get_api_input())
+        return DescribeTraceResponse(response)
+
+    def create_etl_task(self, create_etl_task_request: CreateETLTaskRequest) -> CreateETLTaskResponse:
+        if create_etl_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_ETL_TASK, body=create_etl_task_request.get_api_input())
+        return CreateETLTaskResponse(response)
+
+    def modify_etl_task(self, modify_etl_task_request: ModifyETLTaskRequest) -> ModifyETLTaskResponse:
+        if modify_etl_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_ETL_TASK, body=modify_etl_task_request.get_api_input())
+        return ModifyETLTaskResponse(response)
+
+    def modify_etl_task_status(self, modify_etl_task_status_request: ModifyETLTaskStatusRequest) -> ModifyETLTaskStatusResponse:
+        if modify_etl_task_status_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_ETL_TASK_STATUS, body=modify_etl_task_status_request.get_api_input())
+        return ModifyETLTaskStatusResponse(response)
+
+    def create_schedule_sql_task(self, create_schedule_sql_task_request: CreateScheduleSqlTaskRequest) -> CreateScheduleSqlTaskResponse:
+        if create_schedule_sql_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_SCHEDULE_SQL_TASK, body=create_schedule_sql_task_request.get_api_input())
+        return CreateScheduleSqlTaskResponse(response)
+
+    def delete_schedule_sql_task(self, delete_schedule_sql_task_request: DeleteScheduleSqlTaskRequest) -> DeleteScheduleSqlTaskResponse:
+        if not delete_schedule_sql_task_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_SCHEDULE_SQL_TASK, body=delete_schedule_sql_task_request.get_api_input())
+        return DeleteScheduleSqlTaskResponse(response)
+
+    def describe_schedule_sql_task(self, describe_schedule_sql_task_request: DescribeScheduleSqlTaskRequest) -> DescribeScheduleSqlTaskResponse:
+        if describe_schedule_sql_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_SCHEDULE_SQL_TASK, params=describe_schedule_sql_task_request.get_api_input())
+        return DescribeScheduleSqlTaskResponse(response)
+
+    def describe_schedule_sql_tasks(self, describe_schedule_sql_tasks_request: DescribeScheduleSqlTasksRequest) -> DescribeScheduleSqlTasksResponse:
+        response = self.__request(api=DESCRIBE_SCHEDULE_SQL_TASKS, params=describe_schedule_sql_tasks_request.get_api_input())
+        return DescribeScheduleSqlTasksResponse(response)
+
+    def create_alarm_content_template(self,
+                                     create_alarm_content_template_request: CreateAlarmContentTemplateRequest) \
+            -> CreateAlarmContentTemplateResponse:
+        """创建告警通知内容模版
+
+        :param create_alarm_content_template_request: 创建告警通知内容模版请求
+        :type create_alarm_content_template_request: CreateAlarmContentTemplateRequest
+        :return: 创建告警通知内容模版响应
+        :rtype: CreateAlarmContentTemplateResponse
+        """
+        if create_alarm_content_template_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument",
+                               error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_ALARM_CONTENT_TEMPLATE,
+                                  body=create_alarm_content_template_request.get_api_input())
+        return CreateAlarmContentTemplateResponse(response)
+
+    def create_alarm_webhook_integration(self, create_alarm_webhook_integration_request: CreateAlarmWebhookIntegrationRequest) -> CreateAlarmWebhookIntegrationResponse:
+        """创建告警Webhook集成配置
+
+        :param create_alarm_webhook_integration_request: 创建告警Webhook集成请求
+        :type create_alarm_webhook_integration_request: CreateAlarmWebhookIntegrationRequest
+        :return: 创建告警Webhook集成响应
+        :rtype: CreateAlarmWebhookIntegrationResponse
+        """
+        if create_alarm_webhook_integration_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_ALARM_WEBHOOK_INTEGRATION,
+                                  body=create_alarm_webhook_integration_request.get_api_input())
+        return CreateAlarmWebhookIntegrationResponse(response)
+
+    def delete_alarm_webhook_integration(self, delete_alarm_webhook_integration_request: DeleteAlarmWebhookIntegrationRequest) -> DeleteAlarmWebhookIntegrationResponse:
+        """删除告警 Webhook 集成配置
+
+        :param delete_alarm_webhook_integration_request: 删除告警 Webhook 集成配置请求
+        :type delete_alarm_webhook_integration_request: DeleteAlarmWebhookIntegrationRequest
+        :return: 删除告警 Webhook 集成配置响应
+        :rtype: DeleteAlarmWebhookIntegrationResponse
+        """
+        if delete_alarm_webhook_integration_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_ALARM_WEBHOOK_INTEGRATION,
+                                  body=delete_alarm_webhook_integration_request.get_api_input())
+        return DeleteAlarmWebhookIntegrationResponse(response)
+
+    def describe_alarm_content_templates(self, describe_alarm_content_templates_request: DescribeAlarmContentTemplatesRequest) -> DescribeAlarmContentTemplatesResponse:
+        """查询告警通知内容模版列表
+
+        :param describe_alarm_content_templates_request: 查询请求
+        :type describe_alarm_content_templates_request: DescribeAlarmContentTemplatesRequest
+        :return: 查询结果
+        :rtype: DescribeAlarmContentTemplatesResponse
+        """
+        if describe_alarm_content_templates_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_ALARM_CONTENT_TEMPLATES,
+                                  params=describe_alarm_content_templates_request.get_api_input())
+        return DescribeAlarmContentTemplatesResponse(response)
+
+    def describe_alarm_webhook_integrations(self,
+                                            describe_alarm_webhook_integrations_request: DescribeAlarmWebhookIntegrationsRequest) \
+            -> DescribeAlarmWebhookIntegrationsResponse:
+        """查询告警 Webhook 集成配置列表"""
+        if describe_alarm_webhook_integrations_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_ALARM_WEBHOOK_INTEGRATIONS,
+                                  params=describe_alarm_webhook_integrations_request.get_api_input())
+        return DescribeAlarmWebhookIntegrationsResponse(response)
+
+    def list_tags_for_resources(self, list_tags_for_resources_request: ListTagsForResourcesRequest) -> ListTagsForResourcesResponse:
+        """查询资源标签
+
+        :param list_tags_for_resources_request: 查询请求
+        :return: 查询结果
+        """
+        if not list_tags_for_resources_request.check_validation():
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=LIST_TAGS_FOR_RESOURCES,
+                                  body=list_tags_for_resources_request.get_api_input())
+        return ListTagsForResourcesResponse(response)

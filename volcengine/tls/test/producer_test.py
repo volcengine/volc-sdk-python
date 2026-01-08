@@ -44,7 +44,7 @@ class MyCallBack(CallBack):
 
 
 class TestTLSProducerService(unittest.TestCase):
-    cli = NewTLSService()
+    cli = None
 
     project_id = ""
     project_name = "python-sdk-producer-test-project" + uuid.uuid4().hex
@@ -54,10 +54,17 @@ class TestTLSProducerService(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        required_env = ["VOLCENGINE_ENDPOINT", "VOLCENGINE_REGION", "VOLCENGINE_ACCESS_KEY_ID", "VOLCENGINE_ACCESS_KEY_SECRET"]
+        if not all(os.environ.get(k) for k in required_env):
+            raise unittest.SkipTest("缺少必要的环境变量，跳过 TLS producer 集成测试")
+
+        # 创建 TLSService 客户端
+        cls.cli = NewTLSService()
+
         # 创建project
         create_project_request = tls_requests.CreateProjectRequest(
             project_name=cls.project_name,
-            region=os.environ["VOLCENGINE_REGION"],
+            region=os.environ.get("VOLCENGINE_REGION", ""),
         )
         create_project_response = cls.cli.create_project(create_project_request)
         cls.assertTrue(create_project_response.project_id, "create project failed")
@@ -96,10 +103,10 @@ class TestTLSProducerService(unittest.TestCase):
     def test_producer_and_consumer(self):
         # 创建producer
         producer_config = ProducerConfig(
-            endpoint=os.environ["VOLCENGINE_ENDPOINT"],
-            access_key=os.environ["VOLCENGINE_ACCESS_KEY_ID"],
-            access_secret=os.environ["VOLCENGINE_ACCESS_KEY_SECRET"],
-            region=os.environ["VOLCENGINE_REGION"],
+            endpoint=os.environ.get("VOLCENGINE_ENDPOINT", ""),
+            access_key=os.environ.get("VOLCENGINE_ACCESS_KEY_ID", ""),
+            access_secret=os.environ.get("VOLCENGINE_ACCESS_KEY_SECRET", ""),
+            region=os.environ.get("VOLCENGINE_REGION", ""),
         )
         producer_config.total_size_in_bytes = 10 * 1024 * 1024
         tls_producer = TLSProducer(producer_config)

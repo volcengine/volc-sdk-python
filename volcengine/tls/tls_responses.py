@@ -1021,6 +1021,16 @@ class RemoveTagsFromResourceResponse(TLSResponse):
     def __init__(self, response: Response):
         super(RemoveTagsFromResourceResponse, self).__init__(response)
 
+
+class TagResourcesResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(TagResourcesResponse, self).__init__(response)
+
+
+class UntagResourcesResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(UntagResourcesResponse, self).__init__(response)
+
 class CreateImportTaskResponse(TLSResponse):
     def __init__(self, response):
         super(CreateImportTaskResponse, self).__init__(response)
@@ -1075,6 +1085,10 @@ class DescribeImportTasksResponse(TLSResponse):
         :return:导入任务详情列表
         :rtype: list[ImportTaskInfo]
         """
+        return self.task_info
+
+    def get_task_infos(self):
+        """返回导入任务详情列表的别名接口，兼容历史命名"""
         return self.task_info
 
     def get_total(self):
@@ -1236,6 +1250,16 @@ class ActiveTlsAccountResponse(TLSResponse):
         super(ActiveTlsAccountResponse, self).__init__(response)
 
 
+class DeleteScheduleSqlTaskResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteScheduleSqlTaskResponse, self).__init__(response)
+
+
+class ModifyScheduleSqlTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(ModifyScheduleSqlTaskResponse, self).__init__(response)
+
+
 class DescribeShippersResponse(TLSResponse):
     def __init__(self, response):
         super(DescribeShippersResponse, self).__init__(response)
@@ -1261,6 +1285,11 @@ class DescribeShippersResponse(TLSResponse):
         return self.shippers
 
 
+class ModifyETLTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(ModifyETLTaskResponse, self).__init__(response)
+
+
 class CreateTraceInstanceResponse(TLSResponse):
     def __init__(self, response: Response):
         super(CreateTraceInstanceResponse, self).__init__(response)
@@ -1278,6 +1307,7 @@ class CreateTraceInstanceResponse(TLSResponse):
 class DeleteTraceInstanceResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DeleteTraceInstanceResponse, self).__init__(response)
+
 
 class DescribeTraceInstanceResponse(TLSResponse):
     def __init__(self, response: Response):
@@ -1333,23 +1363,23 @@ class DescribeETLTaskResponse(TLSResponse):
         self.dsl_type = self.response.get(DSL_TYPE)
         self.description = self.response.get(DESCRIPTION)
         self.etl_status = self.response.get(ETL_STATUS)
-        self.enable = self.response.get(ENABLE)
-        self.from_time = self.response.get(FROM_TIME)
-        self.last_enable_time = self.response.get(LAST_ENABLE_TIME)
+        self.enable = self.response.get(ETL_ENABLE)
+        self.from_time = self.response.get(ETL_FROM_TIME)
+        self.last_enable_time = self.response.get(ETL_LAST_ENABLE_TIME)
         self.modify_time = self.response.get(MODIFY_TIME)
         self.name = self.response.get(NAME)
         self.project_id = self.response.get(PROJECT_ID)
         self.project_name = self.response.get(PROJECT_NAME)
-        self.script = self.response.get(SCRIPT)
-        self.source_topic_id = self.response.get(SOURCE_TOPIC_ID)
+        self.script = self.response.get(ETL_SCRIPT)
+        self.source_topic_id = self.response.get(ETL_SOURCE_TOPIC_ID)
         self.source_topic_name = self.response.get(SOURCE_TOPIC_NAME)
         self.task_id = self.response.get(TASK_ID)
-        self.task_type = self.response.get(TASK_TYPE)
-        self.to_time = self.response.get(TO_TIME)
+        self.task_type = self.response.get(ETL_TASK_TYPE)
+        self.to_time = self.response.get(ETL_TO_TIME)
 
         # 目标资源列表
         self.target_resources = []
-        target_resources_data = self.response.get(TARGET_RESOURCES, [])
+        target_resources_data = self.response.get(ETL_TARGET_RESOURCES, [])
         if target_resources_data:
             for target_resource_data in target_resources_data:
                 self.target_resources.append(TargetResourceInfo.set_attributes(data=target_resource_data))
@@ -1481,6 +1511,34 @@ class DescribeETLTaskResponse(TLSResponse):
         return self.target_resources
 
 
+class DescribeETLTasksResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeETLTasksResponse, self).__init__(response)
+
+        self.total = self.response.get(TOTAL, 0)
+        self.tasks = []
+
+        tasks_data = self.response.get(TASKS, [])
+        for task_data in tasks_data:
+            self.tasks.append(EtlTaskInfo.set_attributes(data=task_data))
+
+    def get_total(self):
+        """返回 ETL 任务总数
+
+        :return: ETL 任务总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_tasks(self):
+        """返回 ETL 任务列表
+
+        :return: ETL 任务列表
+        :rtype: List[EtlTaskInfo]
+        """
+        return self.tasks
+
+
 class CancelDownloadTaskResponse(TLSResponse):
     def __init__(self, response: Response):
         super(CancelDownloadTaskResponse, self).__init__(response)
@@ -1505,3 +1563,229 @@ class GetAccountStatusResponse(TLSResponse):
         :rtype: str
         """
         return self.status
+
+
+class DescribeTraceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeTraceResponse, self).__init__(response)
+        
+        self.trace = TraceInfo.set_attributes(data=self.response.get(TRACE, {}))
+    
+    def get_trace(self):
+        """
+        :return: Trace详情
+        :rtype: TraceInfo
+        """
+        return self.trace
+
+
+class CreateAlarmWebhookIntegrationResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateAlarmWebhookIntegrationResponse, self).__init__(response)
+        self.alarm_webhook_integration_id = self.response[ALARM_WEBHOOK_INTEGRATION_ID]
+
+    def get_alarm_webhook_integration_id(self):
+        """
+        :return: Webhook 集成配置 ID
+        :rtype: str
+        """
+        return self.alarm_webhook_integration_id
+
+
+class CreateETLTaskResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateETLTaskResponse, self).__init__(response)
+
+        self.task_id = self.response[ETL_TASK_ID]
+
+    def get_task_id(self):
+        """
+        :return: ETL任务ID
+        :rtype: str
+        """
+        return self.task_id
+
+
+class ModifyETLTaskStatusResponse(TLSResponse):
+    def __init__(self, response):
+        super(ModifyETLTaskStatusResponse, self).__init__(response)
+
+
+class DeleteETLTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(DeleteETLTaskResponse, self).__init__(response)
+
+
+class CreateScheduleSqlTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(CreateScheduleSqlTaskResponse, self).__init__(response)
+        self.task_id = self.response[TASK_ID]
+
+    def get_task_id(self):
+        """
+        :return: 定时SQL分析任务ID
+        :rtype: str
+        """
+        return self.task_id
+
+
+class DescribeScheduleSqlTaskResponse(TLSResponse):
+    def __init__(self, response):
+        super(DescribeScheduleSqlTaskResponse, self).__init__(response)
+        self.schedule_sql_task_info = ScheduleSqlTaskInfo.set_attributes(data=self.response)
+
+    def get_schedule_sql_task_info(self):
+        """
+        :return: 定时 SQL 分析任务信息
+        :rtype: ScheduleSqlTaskInfo
+        """
+        return self.schedule_sql_task_info
+
+
+class DescribeScheduleSqlTasksResponse(TLSResponse):
+    def __init__(self, response):
+        super(DescribeScheduleSqlTasksResponse, self).__init__(response)
+        self.total = self.response[TOTAL]
+        self.tasks = []
+        tasks = self.response[TASKS]
+
+        for i in range(len(tasks)):
+            self.tasks.append(ScheduleSqlTaskInfo.set_attributes(data=tasks[i]))
+
+    def get_total(self):
+        """
+        :return: 定时SQL任务总数
+        :rtype: int
+        """
+        return self.total
+
+    def get_tasks(self):
+        """
+        :return: 定时SQL任务列表
+        :rtype: List[ScheduleSqlTaskInfo]
+        """
+        return self.tasks
+
+
+class CreateAlarmContentTemplateResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateAlarmContentTemplateResponse, self).__init__(response)
+        self.alarm_content_template_id = self.response.get(ALARM_CONTENT_TEMPLATE_ID)
+
+    def get_alarm_content_template_id(self):
+        """
+        :return: 告警通知模版 ID
+        :rtype: str
+        """
+        return self.alarm_content_template_id
+
+
+class ModifyAlarmContentTemplateResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ModifyAlarmContentTemplateResponse, self).__init__(response)
+
+
+class DeleteAlarmContentTemplateResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteAlarmContentTemplateResponse, self).__init__(response)
+
+
+class DeleteAlarmWebhookIntegrationResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteAlarmWebhookIntegrationResponse, self).__init__(response)
+
+
+class DescribeAlarmWebhookIntegrationsResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeAlarmWebhookIntegrationsResponse, self).__init__(response)
+
+        self.total = self.response[TOTAL]
+        self.webhook_integrations = []
+
+        for integration in self.response.get(WEBHOOK_INTEGRATIONS, []):
+            self.webhook_integrations.append(
+                WebhookIntegrationInfo.set_attributes(data=integration))
+
+    def get_total(self):
+        """返回 Webhook 集成配置数量
+
+        :return: Webhook 集成配置数量
+        :rtype: int
+        """
+        return self.total
+
+    def get_webhook_integrations(self):
+        """返回 Webhook 集成配置列表
+
+        :return: Webhook 集成配置列表
+        :rtype: List[WebhookIntegrationInfo]
+        """
+        return self.webhook_integrations
+
+class DescribeAlarmContentTemplatesResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeAlarmContentTemplatesResponse, self).__init__(response)
+        self.alarm_content_templates = []
+        self.total = self.response.get(TOTAL, 0)
+
+        if ALARM_CONTENT_TEMPLATES in self.response:
+            for template_data in self.response[ALARM_CONTENT_TEMPLATES]:
+                self.alarm_content_templates.append(
+                    ContentTemplateInfo.set_attributes(template_data))
+
+    def get_alarm_content_templates(self):
+        """返回告警内容模板列表
+
+        :return: 告警内容模板列表
+        :rtype: List[ContentTemplateInfo]
+        """
+        return self.alarm_content_templates
+
+    def get_total(self):
+        """返回告警内容模板数量
+
+        :return: 告警内容模板数量
+        :rtype: int
+        """
+        return self.total
+class ModifyAlarmWebhookIntegrationResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ModifyAlarmWebhookIntegrationResponse, self).__init__(response)
+
+
+class ListTagsForResourcesResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ListTagsForResourcesResponse, self).__init__(response)
+        self.resource_tags = []
+        self.next_token = self.response.get("NextToken", "")
+
+        resource_tags_data = self.response.get("ResourceTags", [])
+        for tag_data in resource_tags_data:
+            self.resource_tags.append(ResourceTagInfo.set_attributes(data=tag_data))
+
+    def get_resource_tags(self):
+        """返回资源所绑定的标签列表"""
+        return self.resource_tags
+
+    def get_next_token(self):
+        """返回分页查询凭证"""
+        return self.next_token
+
+
+class SearchTracesResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(SearchTracesResponse, self).__init__(response)
+        self.total = self.response.get(TOTAL, 0)
+        self.trace_infos = []
+
+        trace_infos_data = self.response.get(TRACE_INFOS, [])
+        for trace_info_data in trace_infos_data:
+            self.trace_infos.append(TraceInfo.set_attributes(data=trace_info_data))
+
+    def get_total(self):
+        """返回符合条件的 Trace 总数"""
+        return self.total
+
+    def get_trace_infos(self):
+        """返回 Trace 列表"""
+        return self.trace_infos

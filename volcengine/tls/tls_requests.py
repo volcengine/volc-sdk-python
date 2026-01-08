@@ -1767,8 +1767,8 @@ class DeleteRuleFromHostGroupsRequest(TLSRequest):
 
 
 class CreateAlarmNotifyGroupRequest(TLSRequest):
-    def __init__(self, alarm_notify_group_name: str, notify_type: List[str], receivers: List[Receiver],
-                 iam_project_name: str = None):
+    def __init__(self, alarm_notify_group_name: str, notify_type: List[str] = None, receivers: List[Receiver] = None,
+                 iam_project_name: str = None, notice_rules: List[NoticeRule] = None):
         """
         :param alarm_notify_group_name: 告警通知组名称
         :type alarm_notify_group_name: str
@@ -1776,31 +1776,55 @@ class CreateAlarmNotifyGroupRequest(TLSRequest):
         :type notify_type: List[str]
         :param receivers: 接收告警的IAM用户列表
         :type receivers: List[Receiver]
-        :param iam_project_name 告警组所属的 IAM 项目名称
-        :type iam_project_name str
+        :param iam_project_name: 告警组所属的 IAM 项目名称
+        :type iam_project_name: str
+        :param notice_rules: 告警通知组的相关配置
+        :type notice_rules: List[NoticeRule]
         """
         self.alarm_notify_group_name = alarm_notify_group_name
         self.notify_type = notify_type
         self.receivers = receivers
         self.iam_project_name = iam_project_name
+        self.notice_rules = notice_rules
 
     def check_validation(self):
         """
         :return: 参数是否合法
         :rtype: bool
         """
-        if self.alarm_notify_group_name is None or self.notify_type is None or self.receivers is None:
+        if self.alarm_notify_group_name is None:
             return False
+        
+        # Either (NotifyType and Receivers) or NoticeRules must be provided, but not both
+        has_notify_receivers = self.notify_type is not None and self.receivers is not None
+        has_notice_rules = self.notice_rules is not None
+        
+        if not (has_notify_receivers or has_notice_rules):
+            return False
+        
+        if has_notify_receivers and has_notice_rules:
+            return False
+        
         return True
 
     def get_api_input(self):
-        body = {ALARM_NOTIFY_GROUP_NAME: self.alarm_notify_group_name, NOTIFY_TYPE: self.notify_type, RECEIVERS: []}
+        body = {ALARM_NOTIFY_GROUP_NAME: self.alarm_notify_group_name}
 
-        for receiver in self.receivers:
-            body[RECEIVERS].append(receiver.json())
+        if self.notify_type is not None:
+            body[NOTIFY_TYPE] = self.notify_type
+
+        if self.receivers is not None:
+            body[RECEIVERS] = []
+            for receiver in self.receivers:
+                body[RECEIVERS].append(receiver.json())
 
         if self.iam_project_name is not None:
             body[IAM_PROJECT_NAME] = self.iam_project_name
+
+        if self.notice_rules is not None:
+            body['NoticeRules'] = []
+            for notice_rule in self.notice_rules:
+                body['NoticeRules'].append(notice_rule.json())
 
         return body
 
@@ -1825,7 +1849,8 @@ class DeleteAlarmNotifyGroupRequest(TLSRequest):
 
 class ModifyAlarmNotifyGroupRequest(TLSRequest):
     def __init__(self, alarm_notify_group_id: str, alarm_notify_group_name: str = None,
-                 notify_type: List[str] = None, receivers: List[Receiver] = None):
+                 notify_type: List[str] = None, receivers: List[Receiver] = None,
+                 notice_rules: List[NoticeRule] = None):
         """
         :param alarm_notify_group_id: 告警通知组 ID
         :type alarm_notify_group_id:str
@@ -1835,11 +1860,14 @@ class ModifyAlarmNotifyGroupRequest(TLSRequest):
         :type notify_type: List[str]
         :param receivers:接收告警的 IAM 用户列表
         :type receivers:List[Receiver]
+        :param notice_rules: 告警通知组的相关配置
+        :type notice_rules: List[NoticeRule]
         """
         self.alarm_notify_group_id = alarm_notify_group_id
         self.alarm_notify_group_name = alarm_notify_group_name
         self.notify_type = notify_type
         self.receivers = receivers
+        self.notice_rules = notice_rules
 
     def check_validation(self):
         """
@@ -1848,6 +1876,14 @@ class ModifyAlarmNotifyGroupRequest(TLSRequest):
         """
         if self.alarm_notify_group_id is None:
             return False
+        
+        # Either (NotifyType and Receivers) or NoticeRules must be provided, but not both
+        has_notify_receivers = self.notify_type is not None and self.receivers is not None
+        has_notice_rules = self.notice_rules is not None
+        
+        if has_notify_receivers and has_notice_rules:
+            return False
+        
         return True
 
     def get_api_input(self):
@@ -1861,6 +1897,10 @@ class ModifyAlarmNotifyGroupRequest(TLSRequest):
             body[RECEIVERS] = []
             for receiver in self.receivers:
                 body[RECEIVERS].append(receiver.json())
+        if self.notice_rules is not None:
+            body['NoticeRules'] = []
+            for notice_rule in self.notice_rules:
+                body['NoticeRules'].append(notice_rule.json())
 
         return body
 
@@ -1898,7 +1938,8 @@ class SetAlarmRequest(TLSRequest):
                  request_cycle: RequestCycle = None, condition: str = None, alarm_period: int = None,
                  alarm_notify_group: List[str] = None, status: bool = None, trigger_period: int = None,
                  user_define_msg: str = None, severity: str = None, alarm_period_detail: AlarmPeriodSetting = None,
-                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None):
+                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None,
+                 send_resolved: bool = None):
         """
         :param project_id: 日志项目ID
         :type project_id: str
@@ -1928,6 +1969,8 @@ class SetAlarmRequest(TLSRequest):
         :type join_configurations: List[JoinConfig]
         :param trigger_conditions: 告警触发条件列表
         :type trigger_conditions: List[TriggerCondition]
+        :param send_resolved: 是否发送恢复通知
+        :type send_resolved: bool
         """
         self.alarm_name = alarm_name
         self.query_request = query_request
@@ -1942,6 +1985,7 @@ class SetAlarmRequest(TLSRequest):
         self.alarm_period_detail = alarm_period_detail
         self.join_configurations = join_configurations
         self.trigger_conditions = trigger_conditions
+        self.send_resolved = send_resolved
 
     def get_api_input(self):
         body = super(SetAlarmRequest, self).get_api_input()
@@ -1962,6 +2006,8 @@ class SetAlarmRequest(TLSRequest):
             body[TRIGGER_CONDITIONS] = []
             for one_trigger_condition in self.trigger_conditions:
                 body[TRIGGER_CONDITIONS].append(one_trigger_condition.json())
+        if self.send_resolved is not None:
+            body[SEND_RESOLVED] = self.send_resolved
         return body
 
 
@@ -2040,7 +2086,8 @@ class ModifyAlarmRequest(SetAlarmRequest):
                  request_cycle: RequestCycle = None, condition: str = None, alarm_period: int = None,
                  alarm_notify_group: List[str] = None, status: bool = None, trigger_period: int = None,
                  user_define_msg: str = None, severity: str = None, alarm_period_detail: AlarmPeriodSetting = None,
-                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None):
+                 join_configurations: List[JoinConfig] = None, trigger_conditions: List[TriggerCondition] = None,
+                 send_resolved: bool = None):
         """
         :param alarm_id: 告警策略ID
         :type alarm_id: str
@@ -2070,10 +2117,12 @@ class ModifyAlarmRequest(SetAlarmRequest):
         :type join_configurations: List[JoinConfig]
         :param trigger_conditions: 告警触发条件列表
         :type trigger_conditions: List[TriggerCondition]
+        :param send_resolved: 是否发送恢复通知
+        :type send_resolved: bool
         """
         super(ModifyAlarmRequest, self).__init__(alarm_name, query_request, request_cycle, condition, alarm_period,
                                                  alarm_notify_group, status, trigger_period, user_define_msg, severity,
-                                                 alarm_period_detail, join_configurations, trigger_conditions)
+                                                 alarm_period_detail, join_configurations, trigger_conditions, send_resolved)
         self.alarm_id = alarm_id
 
     def check_validation(self):
@@ -2281,7 +2330,7 @@ class ModifyConsumerGroupRequest(TLSRequest):
 
 class DescribeConsumerGroupsRequest(TLSRequest):
     def __init__(self, project_id: str, page_number: int = 1, page_size: int = 20, consumer_group_name: str = None,
-                 project_name: str = None, topic_id: str = None):
+                 project_name: str = None, topic_id: str = None, topic_name: str = None, iam_project_name: str = None):
         """
         :param project_id: 日志项目ID
         :type project_id: str
@@ -2289,6 +2338,16 @@ class DescribeConsumerGroupsRequest(TLSRequest):
         :type page_number: int
         :param page_size: 分页大小
         :type page_size: int
+        :param consumer_group_name: 消费组名称
+        :type consumer_group_name: str
+        :param project_name: 日志项目名称
+        :type project_name: str
+        :param topic_id: 日志主题ID
+        :type topic_id: str
+        :param topic_name: 日志主题名称
+        :type topic_name: str
+        :param iam_project_name: IAM日志项目名称
+        :type iam_project_name: str
         """
         self.project_id = project_id
         self.page_number = page_number
@@ -2296,6 +2355,8 @@ class DescribeConsumerGroupsRequest(TLSRequest):
         self.consumer_group_name = consumer_group_name
         self.project_name = project_name
         self.topic_id = topic_id
+        self.topic_name = topic_name
+        self.iam_project_name = iam_project_name
 
     def check_validation(self):
         """
@@ -2470,6 +2531,62 @@ class RemoveTagsFromResourceRequest(TLSRequest):
         """
         return self.resource_type is not None and self.resources_list is not None and self.tag_key_list is not None
 
+
+class TagResourcesRequest(TLSRequest):
+    def __init__(self, resource_type: str, resources_ids: List[str], tags: List[TagInfo]):
+        """
+        :param resource_type: 资源类型，支持设置为：project：日志项目；topic：日志主题
+        :type resource_type: str
+        :param resources_ids: 资源列表，即日志项目或日志主题的 ID 列表。支持一次传入多个资源 ID，最多同时传入 50 个资源 ID。
+        :type resources_ids: List[str]
+        :param tags: 需要绑定的标签键和标签值数组对象
+        :type tags: List[TagInfo]
+        """
+        self.resource_type = resource_type
+        self.resources_ids = resources_ids
+        self.tags = tags
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return (self.resource_type is not None and
+                self.resources_ids is not None and
+                self.tags is not None)
+
+    def get_api_input(self):
+        body = {RESOURCE_TYPE: self.resource_type, RESOURCES_IDS: self.resources_ids, TAGS: []}
+
+        for tag in self.tags:
+            body[TAGS].append(tag.json())
+
+        return body
+
+
+class UntagResourcesRequest(TLSRequest):
+    def __init__(self, resource_type: str, resources_ids: List[str], tag_keys: List[str]):
+        """
+        :param resource_type: 资源类型，支持设置为：project：日志项目；topic：日志主题
+        :type resource_type: str
+        :param resources_ids: 资源列表，即日志项目或日志主题的 ID 列表。支持一次传入多个资源 ID，最多同时传入 50 个资源 ID。
+        :type resources_ids: List[str]
+        :param tag_keys: 待解绑的资源标签键列表。支持一次传入多个标签键，多个标签键间用英文逗号（,）分隔。最多同时传入 20 个标签键。
+        :type tag_keys: List[str]
+        """
+        self.resource_type = resource_type
+        self.resources_ids = resources_ids
+        self.tag_keys = tag_keys
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return (self.resource_type is not None and
+                self.resources_ids is not None and
+                self.tag_keys is not None)
+
 class CreateImportTaskRequest(TLSRequest):
     def __init__(self, topic_id: str, task_name: str, source_type: str, import_source_info: ImportSourceInfo,
                  target_info: TargetInfo, project_id: str = None, description: str = None):
@@ -2581,6 +2698,13 @@ class DescribeImportTaskRequest(TLSRequest):
         """
         self.task_id = task_id
 
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.task_id is not None
+
 class DescribeImportTasksRequest(TLSRequest):
     def __init__(self, task_id: str = None, task_name: str = None, project_id: str = None, project_name: str = None,
                  iam_project_name: str = None, topic_id: str = None, topic_name: str = None,page_number: int = 1,
@@ -2625,7 +2749,7 @@ class DescribeImportTasksRequest(TLSRequest):
 class CreateShipperRequest(TLSRequest):
     def __init__(self, topic_id: str, shipper_name: str, shipper_type: str, content_info: ContentInfo,
                  tos_shipper_info: TosShipperInfo = None, kafka_shipper_info: KafkaShipperInfo = None,
-                 shipper_start_time: int = None, shipper_end_time: int = None, role_trn: str = None):
+                 shipper_start_time: int = None, shipper_end_time: int = None, role_trn: str = None, service_trn: str = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -2645,6 +2769,8 @@ class CreateShipperRequest(TLSRequest):
         :type shipper_end_time: int, optional
         :param role_trn: 自定义角色的Trn
         :type role_trn: str, optional
+        :param service_trn: 服务信任角色的Trn
+        :type service_trn: str, optional
         """
         self.topic_id = topic_id
         self.shipper_name = shipper_name
@@ -2655,6 +2781,7 @@ class CreateShipperRequest(TLSRequest):
         self.shipper_start_time = shipper_start_time
         self.shipper_end_time = shipper_end_time
         self.role_trn = role_trn
+        self.service_trn = service_trn
 
     def get_api_input(self):
         api_input = super(CreateShipperRequest, self).get_api_input()
@@ -2685,7 +2812,9 @@ class DeleteShipperRequest(TLSRequest):
 class ModifyShipperRequest(TLSRequest):
     def __init__(self, shipper_id: str, shipper_name: str = None, shipper_type: str = None,
                  content_info: ContentInfo = None, tos_shipper_info: TosShipperInfo = None,
-                 kafka_shipper_info: KafkaShipperInfo = None, status: bool = None, role_trn: str = None):
+                 kafka_shipper_info: KafkaShipperInfo = None, status: bool = None,
+                 shipper_start_time: int = None, shipper_end_time: int = None,
+                 role_trn: str = None, service_trn: str = None):
         """
         :param shipper_id: 投递配置ID
         :type shipper_id: str
@@ -2701,8 +2830,14 @@ class ModifyShipperRequest(TLSRequest):
         :type kafka_shipper_info: KafkaShipperInfo, optional
         :param status: 是否开启投递配置
         :type status: bool, optional
+        :param shipper_start_time: 投递开始时间，毫秒时间戳
+        :type shipper_start_time: int, optional
+        :param shipper_end_time: 投递结束时间，毫秒时间戳
+        :type shipper_end_time: int, optional
         :param role_trn: 自定义角色的Trn
         :type role_trn: str, optional
+        :param service_trn: 服务信任角色的Trn
+        :type service_trn: str, optional
         """
         self.shipper_id = shipper_id
         self.shipper_name = shipper_name
@@ -2711,7 +2846,10 @@ class ModifyShipperRequest(TLSRequest):
         self.tos_shipper_info = tos_shipper_info
         self.kafka_shipper_info = kafka_shipper_info
         self.status = status
+        self.shipper_start_time = shipper_start_time
+        self.shipper_end_time = shipper_end_time
         self.role_trn = role_trn
+        self.service_trn = service_trn
 
     def get_api_input(self):
         api_input = super(ModifyShipperRequest, self).get_api_input()
@@ -2785,6 +2923,45 @@ class DescribeShippersRequest(TLSRequest):
         self.page_size = page_size
 
 
+class ModifyETLTaskRequest(TLSRequest):
+    def __init__(self, task_id: str, name: str = None, description: str = None,
+                 script: str = None, target_resources: List = None):
+        """\
+        :param task_id: 加工任务 ID
+        :type task_id: str
+        :param name: 加工任务名称
+        :type name: str, optional
+        :param description: 数据加工任务的描述信息
+        :type description: str, optional
+        :param script: 加工规则
+        :type script: str, optional
+        :param target_resources: 输出目标的相关信息
+        :type target_resources: List[TargetResource], optional
+        """
+        self.task_id = task_id
+        self.name = name
+        self.description = description
+        self.script = script
+        self.target_resources = target_resources
+
+    def check_validation(self):
+        """\
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.task_id is not None
+
+    def get_api_input(self):
+        body = super(ModifyETLTaskRequest, self).get_api_input()
+
+        if self.target_resources is not None:
+            body[ETL_TARGET_RESOURCES] = []
+            for target_resource in self.target_resources:
+                body[ETL_TARGET_RESOURCES].append(target_resource.json())
+
+        return body
+
+
 class DescribeETLTaskRequest(TLSRequest):
     def __init__(self, task_id: str):
         """\
@@ -2803,6 +2980,60 @@ class DescribeETLTaskRequest(TLSRequest):
         return True
 
 
+class DescribeETLTasksRequest(TLSRequest):
+    def __init__(
+            self,
+            project_id: str = None,
+            project_name: str = None,
+            source_topic_id: str = None,
+            source_topic_name: str = None,
+            task_id: str = None,
+            task_name: str = None,
+            status: str = None,
+            iam_project_name: str = None,
+            page_number: int = 1,
+            page_size: int = 20):
+        """\
+        :param project_id: 日志项目 ID
+        :type project_id: str, optional
+        :param project_name: 日志项目名称
+        :type project_name: str, optional
+        :param source_topic_id: 源日志主题 ID
+        :type source_topic_id: str, optional
+        :param source_topic_name: 源日志主题名称
+        :type source_topic_name: str, optional
+        :param task_id: 加工任务 ID
+        :type task_id: str, optional
+        :param task_name: 加工任务名称
+        :type task_name: str, optional
+        :param status: 加工任务状态
+        :type status: str, optional
+        :param iam_project_name: IAM 项目名称
+        :type iam_project_name: str, optional
+        :param page_number: 分页页码，从 1 开始
+        :type page_number: int, optional
+        :param page_size: 分页大小，默认为 20，最大 100
+        :type page_size: int, optional
+        """
+        self.project_id = project_id
+        self.project_name = project_name
+        self.source_topic_id = source_topic_id
+        self.source_topic_name = source_topic_name
+        self.task_id = task_id
+        self.task_name = task_name
+        self.status = status
+        self.iam_project_name = iam_project_name
+        self.page_number = page_number
+        self.page_size = page_size
+
+    def check_validation(self):
+        """\
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return True
+
+
 class CancelDownloadTaskRequest(TLSRequest):
     def __init__(self, task_id: str):
         """
@@ -2816,9 +3047,55 @@ class CancelDownloadTaskRequest(TLSRequest):
         :return: 参数是否合法
         :rtype: bool
         """
-        if self.task_id is None:
-            return False
-        return True
+        return self.task_id is not None
+
+
+class DescribeScheduleSqlTaskRequest(TLSRequest):
+    def __init__(self, task_id: str):
+        """
+        :param task_id: 定时 SQL 分析任务 ID
+        :type task_id: str
+        """
+        self.task_id = task_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.task_id is not None
+
+
+class DeleteScheduleSqlTaskRequest(TLSRequest):
+    def __init__(self, task_id: str):
+        """
+        :param task_id: 定时SQL分析任务的ID
+        :type task_id: str
+        """
+        self.task_id = task_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.task_id is not None
+
+
+class DeleteETLTaskRequest(TLSRequest):
+    def __init__(self, task_id: str):
+        """
+        :param task_id: 待删除的加工任务的 ID
+        :type task_id: str
+        """
+        self.task_id = task_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.task_id is not None
 
 class CreateTraceInstanceRequest(TLSRequest):
     def __init__(self, project_id: str, trace_instance_name: str, description: str = None):
@@ -2947,3 +3224,769 @@ class GetAccountStatusRequest(TLSRequest):
         :rtype: bool
         """
         return True
+
+
+class DescribeTraceRequest(TLSRequest):
+    def __init__(self, trace_id: str, trace_instance_id: str):
+        """
+        :param trace_id: Trace ID
+        :type trace_id: str
+        :param trace_instance_id: Trace 实例 ID
+        :type trace_instance_id: str
+        """
+        self.trace_id = trace_id
+        self.trace_instance_id = trace_instance_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.trace_id is not None and self.trace_instance_id is not None
+
+
+class SearchTracesRequest(TLSRequest):
+    def __init__(self, trace_instance_id: str, query: dict = None):
+        """
+        :param trace_instance_id: Trace 实例 ID
+        :type trace_instance_id: str
+        :param query: 查询条件，包含分页、过滤等信息
+        :type query: dict
+        """
+        self.trace_instance_id = trace_instance_id
+        # 始终使用字典表示查询条件，便于在请求体中直接序列化
+        self.query = query or {}
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.trace_instance_id is not None
+
+
+class ModifyAlarmWebhookIntegrationRequest(TLSRequest):
+    def __init__(self, webhook_id: str, webhook_name: str, webhook_type: str,
+                 webhook_url: str, webhook_method: str = None,
+                 webhook_headers: List['GeneralWebhookHeaderKV'] = None,
+                 webhook_secret: str = None):
+        """
+        :param webhook_id: 告警 Webhook 集成配置 ID
+        :type webhook_id: str
+        :param webhook_name: Webhook 集成配置名称
+        :type webhook_name: str
+        :param webhook_type: Webhook 类型。GeneralWebhook：自定义 Webhook；Lark：飞书；DingTalk：钉钉；WeChat：企业微信
+        :type webhook_type: str
+        :param webhook_url: Webhook 请求地址
+        :type webhook_url: str
+        :param webhook_method: 自定义 Webhook 请求方法，仅支持 POST、PUT
+        :type webhook_method: str
+        :param webhook_headers: 自定义 Webhook 的请求头，WebhookType 为 GeneralWebhook 时必填
+        :type webhook_headers: List[GeneralWebhookHeaderKV]
+        :param webhook_secret: Webhook 加密密钥
+        :type webhook_secret: str
+        """
+        self.webhook_id = webhook_id
+        self.webhook_name = webhook_name
+        self.webhook_type = webhook_type
+        self.webhook_url = webhook_url
+        self.webhook_method = webhook_method
+        self.webhook_headers = webhook_headers
+        self.webhook_secret = webhook_secret
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        if not self.webhook_id or not self.webhook_name or not self.webhook_type or not self.webhook_url:
+            return False
+
+        # 当 WebhookType 为 GeneralWebhook 时，WebhookMethod 和 WebhookHeaders 必填
+        if self.webhook_type == "GeneralWebhook":
+            if not self.webhook_method or not self.webhook_headers:
+                return False
+
+        return True
+
+    def get_api_input(self):
+        body = super(ModifyAlarmWebhookIntegrationRequest, self).get_api_input()
+
+        # 适配字段命名：WebhookId -> WebhookID
+        if "WebhookId" in body:
+            body[WEBHOOK_ID] = body.pop("WebhookId")
+
+        if self.webhook_headers is not None:
+            body[WEBHOOK_HEADERS] = []
+            for header in self.webhook_headers:
+                header_dict = {}
+                if header.key is not None:
+                    header_dict[KEY] = header.key
+                if header.value is not None:
+                    header_dict[VALUE] = header.value
+                body[WEBHOOK_HEADERS].append(header_dict)
+
+        return body
+
+
+class CreateAlarmWebhookIntegrationRequest(TLSRequest):
+    def __init__(self, webhook_name: str, webhook_type: str, webhook_url: str,
+                 webhook_method: str = None, webhook_headers: List['GeneralWebhookHeaderKV'] = None,
+                 webhook_secret: str = None):
+        """
+        :param webhook_name: Webhook 集成配置名称。命名规则请参考资源命名规则
+        :type webhook_name: str
+        :param webhook_type: Webhook 类型。GeneralWebhook：自定义 Webhook 地址。
+                             Lark：飞书。DingTalk：钉钉。WeChat：企业微信
+        :type webhook_type: str
+        :param webhook_url: Webhook 请求地址
+        :type webhook_url: str
+        :param webhook_method: 自定义 Webhook 请求方法，仅支持 POST、PUT
+        :type webhook_method: str
+        :param webhook_headers: 自定义 Webhook 的请求头。
+                                设置 WebhookType 为 GeneralWebhook 时，必填
+        :type webhook_headers: List[GeneralWebhookHeaderKV]
+        :param webhook_secret: Webhook 加密密钥。
+                               设置 WebhookType 为 Lark，且在飞书机器人中设置安全设置为签名校验时，
+                               需在此处输入飞书机器人的签名密钥。
+                               设置 WebhookType 为 DingTalk，且在钉钉机器人中设置了签名值时，
+                               需在此处输入钉钉机器人的签名值
+        :type webhook_secret: str
+        """
+        self.webhook_name = webhook_name
+        self.webhook_type = webhook_type
+        self.webhook_url = webhook_url
+        self.webhook_method = webhook_method
+        self.webhook_headers = webhook_headers
+        self.webhook_secret = webhook_secret
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        if not self.webhook_name or not self.webhook_type or not self.webhook_url:
+            return False
+
+        # 当 WebhookType 为 GeneralWebhook 时，WebhookMethod 和 WebhookHeaders 必填
+        if self.webhook_type == "GeneralWebhook":
+            if not self.webhook_method or not self.webhook_headers:
+                return False
+
+        return True
+
+    def get_api_input(self):
+        body = super(CreateAlarmWebhookIntegrationRequest, self).get_api_input()
+
+        if self.webhook_headers is not None:
+            body[WEBHOOK_HEADERS] = []
+            for header in self.webhook_headers:
+                header_dict = {}
+                if header.key is not None:
+                    header_dict[KEY] = header.key
+                if header.value is not None:
+                    header_dict[VALUE] = header.value
+                body[WEBHOOK_HEADERS].append(header_dict)
+
+        return body
+
+
+class DeleteAlarmWebhookIntegrationRequest(TLSRequest):
+    def __init__(self, webhook_id: str):
+        """
+        :param webhook_id: 告警 Webhook 集成配置的 ID
+        :type webhook_id: str
+        """
+        self.webhook_id = webhook_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.webhook_id is not None
+
+    def get_api_input(self):
+        body = super(DeleteAlarmWebhookIntegrationRequest, self).get_api_input()
+        # 适配字段命名：WebhookId -> WebhookID
+        if "WebhookId" in body:
+            body[WEBHOOK_ID] = body.pop("WebhookId")
+        return body
+
+
+
+class DeleteAlarmContentTemplateRequest(TLSRequest):
+    def __init__(self, alarm_content_template_id: str):
+        """
+        :param alarm_content_template_id: 告警通知内容模板的 ID
+        :type alarm_content_template_id: str
+        """
+        self.alarm_content_template_id = alarm_content_template_id
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.alarm_content_template_id is not None
+
+
+class ModifyAlarmContentTemplateRequest(TLSRequest):
+    def __init__(
+            self,
+            alarm_content_template_id: str,
+            alarm_content_template_name: str,
+            ding_talk_content_template: "DingTalkContentTemplateInfo" = None,
+            email_content_template: "EmailContentTemplateInfo" = None,
+            lark_content_template: "LarkContentTemplateInfo" = None,
+            sms_content_template: "SmsContentTemplateInfo" = None,
+            vms_content_template: "VmsContentTemplateInfo" = None,
+            we_chat_content_template: "WeChatContentTemplateInfo" = None,
+            webhook_content_template: "WebhookContentTemplateInfo" = None,
+            need_valid_content: bool = None,
+    ):
+        """修改告警通知内容模板
+
+        :param alarm_content_template_id: 告警通知内容模板 ID
+        :param alarm_content_template_name: 告警通知内容模板名称
+        :param ding_talk_content_template: 钉钉通知内容模板
+        :param email_content_template: 邮件通知内容模板
+        :param lark_content_template: 飞书通知内容模板
+        :param sms_content_template: 短信通知内容模板
+        :param vms_content_template: 语音通知内容模板
+        :param we_chat_content_template: 企业微信通知内容模板
+        :param webhook_content_template: 自定义 Webhook 通知内容模板
+        :param need_valid_content: 是否需要校验内容模板
+        """
+        self.alarm_content_template_id = alarm_content_template_id
+        self.alarm_content_template_name = alarm_content_template_name
+        self.ding_talk_content_template = ding_talk_content_template
+        self.email_content_template = email_content_template
+        self.lark_content_template = lark_content_template
+        self.sms_content_template = sms_content_template
+        self.vms_content_template = vms_content_template
+        self.we_chat_content_template = we_chat_content_template
+        self.webhook_content_template = webhook_content_template
+        self.need_valid_content = need_valid_content
+
+    def check_validation(self):
+        """校验必填参数合法性"""
+        return bool(self.alarm_content_template_id) and bool(self.alarm_content_template_name)
+
+    def get_api_input(self):
+        """构造 API 入参
+
+        对齐服务端 alarm_content_template.ModifyReq 结构：
+        - AlarmContentTemplateId / AlarmContentTemplateName 直接使用 snake_to_pascal 转换结果；
+        - DingTalk/Email/Lark/Sms/Vms/WeChat/Webhook 需展开为对应内容模板的 JSON；
+        - NeedValidContent 直接透传。
+        """
+        body = super(ModifyAlarmContentTemplateRequest, self).get_api_input()
+
+        # 移除自动生成的 *ContentTemplate 字段，统一映射为服务端定义字段
+        for key in (
+                DING_TALK_CONTENT_TEMPLATE,
+                EMAIL_CONTENT_TEMPLATE,
+                LARK_CONTENT_TEMPLATE,
+                SMS_CONTENT_TEMPLATE,
+                VMS_CONTENT_TEMPLATE,
+                WE_CHAT_CONTENT_TEMPLATE,
+                WEBHOOK_CONTENT_TEMPLATE,
+        ):
+            if key in body:
+                del body[key]
+
+        if self.ding_talk_content_template is not None:
+            body[DING_TALK] = self.ding_talk_content_template.json()
+
+        if self.email_content_template is not None:
+            body[EMAIL] = self.email_content_template.json()
+
+        if self.lark_content_template is not None:
+            body[LARK] = self.lark_content_template.json()
+
+        if self.sms_content_template is not None:
+            body["Sms"] = self.sms_content_template.json()
+
+        if self.vms_content_template is not None:
+            body[VMS] = self.vms_content_template.json()
+
+        if self.we_chat_content_template is not None:
+            body[WE_CHAT] = self.we_chat_content_template.json()
+
+        if self.webhook_content_template is not None:
+            body[WEBHOOK] = self.webhook_content_template.json()
+
+        return body
+
+
+class CreateETLTaskRequest(TLSRequest):
+    def __init__(self, dsl_type: str, name: str, source_topic_id: str, script: str, target_resources: list,
+                 task_type: str = "Resident", enable: bool = True, description: str = None,
+                 from_time: int = None, to_time: int = None):
+        """
+        :param dsl_type: DSL类型，固定为NORMAL
+        :type dsl_type: str
+        :param name: 数据加工任务的名称
+        :type name: str
+        :param source_topic_id: 待加工数据的源日志主题ID
+        :type source_topic_id: str
+        :param script: 数据加工规则
+        :type script: str
+        :param target_resources: 输出目标的相关信息数组
+        :type target_resources: list
+        :param task_type: 任务类型，固定为Resident（常驻任务）
+        :type task_type: str
+        :param enable: 是否启用该数据加工任务，true表示启用，false表示关闭
+        :type enable: bool
+        :param description: 数据加工任务的描述信息
+        :type description: str
+        :param from_time: 待加工数据的起始时间戳（Unix时间戳）
+        :type from_time: int
+        :param to_time: 待加工数据的结束时间戳（Unix时间戳）
+        :type to_time: int
+        """
+        self.dsl_type = dsl_type
+        self.name = name
+        self.source_topic_id = source_topic_id
+        self.script = script
+        self.target_resources = target_resources
+        self.task_type = task_type
+        self.enable = enable
+        self.description = description
+        self.from_time = from_time
+        self.to_time = to_time
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        if (self.dsl_type is None or self.name is None or self.source_topic_id is None or
+                self.script is None or self.target_resources is None or self.task_type is None or
+                self.enable is None):
+            return False
+
+        # 验证 target_resources 格式（仅做基础结构校验，不做范围与跨账号约束）
+        if not isinstance(self.target_resources, list):
+            return False
+
+        for resource in self.target_resources:
+            if not isinstance(resource, dict):
+                return False
+            if 'alias' not in resource or 'topic_id' not in resource or 'region' not in resource:
+                return False
+
+        return True
+
+    def get_api_input(self):
+        """构造 CreateETLTask 请求体
+
+        - 确保 DSL 字段键名为 `DSLType`（而非默认的 `DslType`）；
+        - 规范化 TargetResources 数组中每个元素的键名为 `Alias` / `TopicId` / `Region` / `RoleTrn`。
+        """
+        body = super(CreateETLTaskRequest, self).get_api_input()
+
+        # 修正 DSLType 键名
+        if "DslType" in body:
+            body[DSL_TYPE] = body.pop("DslType")
+
+        # 规范化 TargetResources 结构
+        if self.target_resources is not None:
+            normalized_resources = []
+            for resource in self.target_resources:
+                if isinstance(resource, TargetResource):
+                    # 使用数据类的 json() 确保键名为 Alias/TopicId/Region/RoleTrn
+                    normalized_resources.append(resource.json())
+                elif isinstance(resource, dict):
+                    alias = resource.get("Alias") or resource.get("alias")
+                    topic_id = resource.get("TopicId") or resource.get("topic_id")
+                    region = resource.get("Region") or resource.get("region")
+                    role_trn = resource.get("RoleTrn") or resource.get("role_trn")
+
+                    normalized = {}
+                    if alias is not None:
+                        normalized[TARGET_ALIAS] = alias
+                    if topic_id is not None:
+                        normalized[TARGET_TOPIC_ID] = topic_id
+                    if region is not None:
+                        normalized[TARGET_REGION] = region
+                    if role_trn is not None:
+                        normalized[TARGET_ROLE_TRN] = role_trn
+
+                    normalized_resources.append(normalized)
+                else:
+                    # 保持兼容：对非 dict/TargetResource 类型直接透传
+                    normalized_resources.append(resource)
+
+            body[ETL_TARGET_RESOURCES] = normalized_resources
+
+        return body
+
+class CreateAlarmContentTemplateRequest(TLSRequest):
+    def __init__(self, alarm_content_template_name: str, 
+                 ding_talk: 'DingTalkContentTemplateInfo' = None,
+                 email: 'EmailContentTemplateInfo' = None, 
+                 lark: 'LarkContentTemplateInfo' = None,
+                 need_valid_content: bool = None, 
+                 sms: 'SmsContentTemplateInfo' = None,
+                 vms: 'VmsContentTemplateInfo' = None, 
+                 we_chat: 'WeChatContentTemplateInfo' = None,
+                 webhook: 'WebhookContentTemplateInfo' = None):
+        """
+        :param alarm_content_template_name: 告警通知内容模版的名称
+        :param ding_talk: 钉钉通知内容模版
+        :param email: 邮件通知内容模版
+        :param lark: 飞书通知内容模版
+        :param need_valid_content: 是否需要校验内容模版
+        :param sms: 短信通知内容模版
+        :param vms: 语音通知内容模版
+        :param we_chat: 企业微信通知内容模版
+        :param webhook: 自定义的 Webhook 告警通知内容模版
+        """
+        self.alarm_content_template_name = alarm_content_template_name
+        self.ding_talk = ding_talk
+        self.email = email
+        self.lark = lark
+        self.need_valid_content = need_valid_content
+        self.sms = sms
+        self.vms = vms
+        self.we_chat = we_chat
+        self.webhook = webhook
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.alarm_content_template_name is not None and self.alarm_content_template_name != ""
+
+    def get_api_input(self):
+        body = super(CreateAlarmContentTemplateRequest, self).get_api_input()
+
+        if self.ding_talk is not None:
+            body[DING_TALK] = self.ding_talk.json()
+
+        if self.email is not None:
+            body[EMAIL] = self.email.json()
+
+        if self.lark is not None:
+            body[LARK] = self.lark.json()
+
+        if self.sms is not None:
+            body["Sms"] = self.sms.json()
+
+        if self.vms is not None:
+            body[VMS] = self.vms.json()
+
+        if self.we_chat is not None:
+            body[WE_CHAT] = self.we_chat.json()
+
+        if self.webhook is not None:
+            body[WEBHOOK] = self.webhook.json()
+
+        return body
+
+class ModifyETLTaskStatusRequest(TLSRequest):
+    def __init__(self, task_id: str, enable: bool):
+        """
+        :param task_id: 加工任务 ID
+        :type task_id: str
+        :param enable: 是否开启数据加工任务。true：开启。false：不开启
+        :type enable: bool
+        """
+        self.task_id = task_id
+        self.enable = enable
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return self.task_id is not None and self.enable is not None
+class CreateScheduleSqlTaskRequest(TLSRequest):
+    def __init__(self, task_name: str, topic_id: str, dest_topic_id: str, process_start_time: int,
+                 process_time_window: str, query: str, request_cycle: RequestCycle, status: int,
+                 dest_region: str = None, process_end_time: int = None, process_sql_delay: int = None,
+                 description: str = None):
+        """
+        :param task_name: 定时SQL分析任务名称
+        :type task_name: str
+        :param topic_id: 待进行定时SQL分析的原始日志所在的日志主题ID
+        :type topic_id: str
+        :param dest_topic_id: 用于存储定时SQL分析结果数据的目标日志主题ID
+        :type dest_topic_id: str
+        :param process_start_time: 调度定时SQL分析任务的开始时间，即创建第一个实例的时间。格式为秒级时间戳
+        :type process_start_time: int
+        :param process_time_window: SQL时间窗口，即定时SQL分析任务运行时，日志检索与分析的时间范围，左闭右开格式。最大24小时，最小1分钟
+        :type process_time_window: str
+        :param query: 定时SQL分析任务定期执行的检索与分析语句，应符合日志服务的检索与分析语法
+        :type query: str
+        :param request_cycle: 定时SQL分析任务的调度周期。调度周期决定每个实例的调度时间
+        :type request_cycle: RequestCycle
+        :param status: 完成任务配置后是否立即启动定时SQL分析任务。0：关闭任务，后续需手动启动任务；1：立即启动
+        :type status: int
+        :param dest_region: 目标日志主题所属地域。默认为当前地域
+        :type dest_region: str, optional
+        :param process_end_time: 调度定时SQL分析任务的结束时间，格式为秒级时间戳。如果不配置，表示持续运行定时SQL分析任务
+        :type process_end_time: int, optional
+        :param process_sql_delay: 每次调度的延迟时间。取值范围为0～120，单位为秒。如果不配置，则表示0，即无延时
+        :type process_sql_delay: int, optional
+        :param description: 定时SQL分析任务的简单描述。不支持<>、'、\\、\\\\；长度范围为0～64个字符
+        :type description: str, optional
+        """
+        self.task_name = task_name
+        self.topic_id = topic_id
+        self.dest_topic_id = dest_topic_id
+        self.process_start_time = process_start_time
+        self.process_time_window = process_time_window
+        self.query = query
+        self.request_cycle = request_cycle
+        self.status = status
+        self.dest_region = dest_region
+        self.process_end_time = process_end_time
+        self.process_sql_delay = process_sql_delay
+        self.description = description
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        return (self.task_name is not None and self.topic_id is not None and
+                self.dest_topic_id is not None and self.process_start_time is not None and
+                self.process_time_window is not None and self.query is not None and
+                self.request_cycle is not None and self.status is not None)
+
+    def get_api_input(self):
+        body = super(CreateScheduleSqlTaskRequest, self).get_api_input()
+        # TopicId/DestTopicId 映射到服务端实际定义的 TopicID/DestTopicID
+        if TOPIC_ID in body:
+            body[TOPIC_ID_UPPERCASE] = body.pop(TOPIC_ID)
+        if "DestTopicId" in body:
+            body[DEST_TOPIC_ID] = body.pop("DestTopicId")
+        if self.request_cycle is not None:
+            body[REQUEST_CYCLE] = self.request_cycle.json()
+        return body
+
+
+class ModifyScheduleSqlTaskRequest(TLSRequest):
+    def __init__(self, task_id: str, task_name: str = None, description: str = None, dest_region: str = None,
+                 dest_topic_id: str = None, status: int = None, process_sql_delay: int = None,
+                 process_time_window: str = None, query: str = None, request_cycle: RequestCycle = None):
+        """
+        :param task_id: 定时SQL分析任务ID
+        :type task_id: str
+        :param task_name: 定时SQL分析任务名称
+        :type task_name: str
+        :param description: 定时SQL分析任务的简单描述
+        :type description: str
+        :param dest_region: 目标日志主题所属地域
+        :type dest_region: str
+        :param dest_topic_id: 用于存储SQL分析结果数据的目标日志主题ID
+        :type dest_topic_id: str
+        :param status: 完成任务配置后是否立即启动定时SQL分析任务。可选值：0：关闭任务，后续需手动启动任务；1：立即启动
+        :type status: int
+        :param process_sql_delay: 每次调度的延迟时间。取值范围为0～120，单位为秒
+        :type process_sql_delay: int
+        :param process_time_window: SQL时间窗口。定时SQL分析任务运行时，检索与分析日志的时间范围，左闭右开格式
+        :type process_time_window: str
+        :param query: 定时SQL分析任务定期执行的检索与分析语句，应符合日志服务的检索与分析语法
+        :type query: str
+        :param request_cycle: 定时SQL分析任务的调度周期
+        :type request_cycle: RequestCycle
+        """
+        self.task_id = task_id
+        self.task_name = task_name
+        self.description = description
+        self.dest_region = dest_region
+        self.dest_topic_id = dest_topic_id
+        self.status = status
+        self.process_sql_delay = process_sql_delay
+        self.process_time_window = process_time_window
+        self.query = query
+        self.request_cycle = request_cycle
+
+    def check_validation(self):
+        """
+        :return: 参数是否合法
+        :rtype: bool
+        """
+        if self.task_id is None:
+            return False
+        return True
+
+    def get_api_input(self):
+        body = super(ModifyScheduleSqlTaskRequest, self).get_api_input()
+
+        # DestTopicId 映射到服务端实际定义的 DestTopicID
+        if "DestTopicId" in body:
+            body[DEST_TOPIC_ID] = body.pop("DestTopicId")
+
+        if self.request_cycle is not None:
+            body[REQUEST_CYCLE] = self.request_cycle.json()
+
+        return body
+
+
+class DescribeScheduleSqlTasksRequest(TLSRequest):
+    def __init__(self, project_id: str = None, project_name: str = None,
+                 iam_project_name: str = None, topic_id: str = None,
+                 source_topic_name: str = None, task_id: str = None,
+                 task_name: str = None, status: str = None,
+                 page_number: int = 1, page_size: int = 20):
+        """
+        :param project_id: 源日志主题所属的日志项目 ID
+        :type project_id: str, optional
+        :param project_name: 源日志主题所属的日志项目名称
+        :type project_name: str, optional
+        :param iam_project_name: IAM 日志项目名称
+        :type iam_project_name: str, optional
+        :param topic_id: 源日志主题 ID
+        :type topic_id: str, optional
+        :param source_topic_name: 源日志主题名称
+        :type source_topic_name: str, optional
+        :param task_id: 定时 SQL 分析任务 ID
+        :type task_id: str, optional
+        :param task_name: 定时 SQL 分析任务名称
+        :type task_name: str, optional
+        :param status: 定时SQL任务的状态
+        :type status: str, optional
+        :param page_number: 分页查询时的页码。默认为 1，即从第一页数据开始返回
+        :type page_number: int, optional
+        :param page_size: 分页大小。默认为 20，最大为 100
+        :type page_size: int, optional
+        """
+        self.project_id = project_id
+        self.project_name = project_name
+        self.iam_project_name = iam_project_name
+        self.topic_id = topic_id
+        self.source_topic_name = source_topic_name
+        self.task_id = task_id
+        self.task_name = task_name
+        self.status = status
+        self.page_number = page_number
+        self.page_size = page_size
+
+
+class DescribeAlarmContentTemplatesRequest(TLSRequest):
+    def __init__(self, alarm_content_template_name: str = None, alarm_content_template_id: str = None,
+                 order_field: str = None, asc: bool = None, page_number: int = None, page_size: int = None):
+        """查询告警通知内容模版列表请求
+
+        :param alarm_content_template_name: 告警通知内容模版的名称
+        :type alarm_content_template_name: str
+        :param alarm_content_template_id: 告警通知内容模版 ID
+        :type alarm_content_template_id: str
+        :param order_field: 用于排序的字段
+        :type order_field: str
+        :param asc: 是否升序排列
+        :type asc: bool
+        :param page_number: 分页页码
+        :type page_number: int
+        :param page_size: 页面大小
+        :type page_size: int
+        """
+        self.alarm_content_template_name = alarm_content_template_name
+        self.alarm_content_template_id = alarm_content_template_id
+        self.order_field = order_field
+        self.asc = asc
+        self.page_number = page_number
+        self.page_size = page_size
+
+    def check_validation(self):
+        """参数校验，目前全部可选，恒为 True"""
+        return True
+
+    def get_api_input(self):
+        body = super(DescribeAlarmContentTemplatesRequest, self).get_api_input()
+        # 适配排序方向参数：Asc -> "ASC"，与服务端 consts.AlarmContentTemplateOrderASC 对齐
+        if "Asc" in body:
+            body["ASC"] = body.pop("Asc")
+        return body
+
+
+class DescribeAlarmWebhookIntegrationsRequest(TLSRequest):
+    def __init__(self, webhook_id: str = None, webhook_name: str = None, webhook_type: str = None,
+                 page_number: int = 1, page_size: int = 20):
+        """查询告警 Webhook 集成配置列表请求
+
+        :param webhook_id: Webhook 集成配置的 ID
+        :type webhook_id: str
+        :param webhook_name: Webhook 集成配置名称
+        :type webhook_name: str
+        :param webhook_type: Webhook 集成配置的类型
+        :type webhook_type: str
+        :param page_number: 分页查询时的页码
+        :type page_number: int
+        :param page_size: 分页大小
+        :type page_size: int
+        """
+        self.webhook_id = webhook_id
+        self.webhook_name = webhook_name
+        self.webhook_type = webhook_type
+        self.page_number = page_number
+        self.page_size = page_size
+
+    def check_validation(self):
+        """参数全部可选，始终视为合法"""
+        return True
+
+    def get_api_input(self):
+        body = super(DescribeAlarmWebhookIntegrationsRequest, self).get_api_input()
+        # 适配字段命名：WebhookId -> WebhookID
+        if "WebhookId" in body:
+            body[WEBHOOK_ID] = body.pop("WebhookId")
+        return body
+
+
+class ListTagsForResourcesRequest(TLSRequest):
+    def __init__(self, resource_type: str, resources_ids: List[str] = None, tag_filters: List[dict] = None,
+                 max_results: int = None, next_token: str = None):
+        """查询资源标签列表请求
+
+        :param resource_type: 资源类型，可选值：project（日志项目）、topic（日志主题）
+        :param resources_ids: 资源 ID 列表，最多 50 个
+        :param tag_filters: 资源标签过滤器
+        :param max_results: 分页大小，默认 20，最大 100
+        :param next_token: 分页查询凭证
+        """
+        self.resource_type = resource_type
+        self.resources_ids = resources_ids
+        self.tag_filters = tag_filters
+        self.max_results = max_results
+        self.next_token = next_token
+
+    def check_validation(self):
+        """参数校验"""
+        return self.resource_type is not None
+
+    def get_api_input(self):
+        """构造 ListTagsForResources 请求体
+
+        - 顶层键名保持为 ResourceType/ResourcesIds/TagFilters/MaxResults/NextToken；
+        - 规范化 TagFilters 内部结构为 [{"Key": ..., "Values": [...]}]。
+        """
+        body = super(ListTagsForResourcesRequest, self).get_api_input()
+
+        if self.tag_filters is not None:
+            normalized_filters = []
+            for tag_filter in self.tag_filters:
+                if isinstance(tag_filter, dict):
+                    key = tag_filter.get("Key") or tag_filter.get("key")
+                    values = tag_filter.get("Values") or tag_filter.get("values")
+
+                    filter_body = {}
+                    if key is not None:
+                        filter_body["Key"] = key
+                    if values is not None:
+                        filter_body["Values"] = values
+
+                    normalized_filters.append(filter_body)
+                else:
+                    # 保持兼容：非 dict 类型直接透传
+                    normalized_filters.append(tag_filter)
+
+            body["TagFilters"] = normalized_filters
+
+        return body

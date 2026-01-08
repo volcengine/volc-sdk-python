@@ -12,7 +12,7 @@ from volcengine.tls.test.util_test import NewTLSService
 
 class TestTopic(unittest.TestCase):
 
-    cli = NewTLSService()
+    cli = None
 
     project_id = ""
     project_name = "python-sdk-topic-test-project" + uuid.uuid4().hex
@@ -21,10 +21,16 @@ class TestTopic(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
+        required_env = ["VOLCENGINE_ENDPOINT", "VOLCENGINE_REGION", "VOLCENGINE_ACCESS_KEY_ID", "VOLCENGINE_ACCESS_KEY_SECRET"]
+        if not all(os.environ.get(k) for k in required_env):
+            raise unittest.SkipTest("缺少必要的环境变量，跳过 TLS topic 集成测试")
+
+        cls.cli = NewTLSService()
+
         # 创建project
         create_project_request = tls_requests.CreateProjectRequest(
             project_name=cls.project_name,
-            region=os.environ["VOLCENGINE_REGION"],
+            region=os.environ.get("VOLCENGINE_REGION", ""),
         )
         create_project_response = cls.cli.create_project(
             create_project_request)

@@ -11,10 +11,11 @@ class TestTLSService(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.endpoint = os.environ["VOLCENGINE_ENDPOINT"]
-        self.region = os.environ["VOLCENGINE_REGION"]
-        self.access_key_id = os.environ["VOLCENGINE_ACCESS_KEY_ID"]
-        self.access_key_secret = os.environ["VOLCENGINE_ACCESS_KEY_SECRET"]
+        # 使用 get 避免在未配置环境变量时抛出 KeyError
+        self.endpoint = os.environ.get("VOLCENGINE_ENDPOINT", "")
+        self.region = os.environ.get("VOLCENGINE_REGION", "")
+        self.access_key_id = os.environ.get("VOLCENGINE_ACCESS_KEY_ID", "")
+        self.access_key_secret = os.environ.get("VOLCENGINE_ACCESS_KEY_SECRET", "")
 
     def test_tls_service(self):
         tls_client1 = TLSService(
@@ -54,6 +55,9 @@ class TestTLSService(unittest.TestCase):
 
     def test_active_tls_account(self):
         """测试激活TLS账户"""
+        if not all([self.endpoint, self.region, self.access_key_id, self.access_key_secret]):
+            self.skipTest("缺少必要的环境变量，跳过 ActiveTlsAccount 集成测试")
+
         tls_client = TLSService(
             self.endpoint, self.access_key_id, self.access_key_secret, self.region)
 
@@ -72,6 +76,9 @@ class TestTLSService(unittest.TestCase):
 
     def test_trace_instance_operations(self):
         """测试Trace实例相关操作"""
+        if not all([self.endpoint, self.region, self.access_key_id, self.access_key_secret]):
+            self.skipTest("缺少必要的环境变量，跳过 Trace 实例集成测试")
+
         tls_client = TLSService(
             self.endpoint, self.access_key_id, self.access_key_secret, self.region)
 
@@ -129,6 +136,133 @@ class TestTLSService(unittest.TestCase):
         trace_delete = tls_client.delete_trace_instance(delete_trace_instance_request)
         self.assertIsNotNone(trace_delete)
         self.assertIsInstance(trace_delete, DeleteTraceInstanceResponse)
+
+    def test_modify_etl_task_status(self):
+        if not all([self.endpoint, self.region, self.access_key_id, self.access_key_secret]):
+            self.skipTest("缺少必要的环境变量，跳过 ETL 任务状态集成测试")
+
+        tls_client = TLSService(
+            self.endpoint, self.access_key_id, self.access_key_secret, self.region)
+
+        # Test enabling ETL task
+        task_id = "test-etl-task-12345"
+        enable_request = ModifyETLTaskStatusRequest(task_id=task_id, enable=True)
+        enable_response = tls_client.modify_etl_task_status(enable_request)
+        self.assertIsNotNone(enable_response)
+        self.assertIsNotNone(enable_response.request_id)
+
+        # Test disabling ETL task
+        disable_request = ModifyETLTaskStatusRequest(task_id=task_id, enable=False)
+        disable_response = tls_client.modify_etl_task_status(disable_request)
+        self.assertIsNotNone(disable_response)
+        self.assertIsNotNone(disable_response.request_id)
+
+    def test_delete_etl_task(self):
+        """测试删除ETL任务"""
+        tls_service = TLSService(
+            self.endpoint, self.access_key_id, self.access_key_secret, self.region)
+
+        # 生成测试任务ID
+        task_id = f"test-etl-task-{str(random.random()).replace('.', '')}"
+
+        # 创建删除ETL任务请求
+        delete_request = DeleteETLTaskRequest(task_id=task_id)
+
+        # 验证请求参数
+        self.assertTrue(delete_request.check_validation())
+        self.assertEqual(delete_request.task_id, task_id)
+
+        # 测试API输入格式
+        api_input = delete_request.get_api_input()
+        self.assertIn('TaskId', api_input)
+        self.assertEqual(api_input['TaskId'], task_id)
+
+    def test_describe_schedule_sql_tasks(self):
+        """测试DescribeScheduleSqlTasks接口"""
+        if not all([self.endpoint, self.region, self.access_key_id, self.access_key_secret]):
+            self.skipTest("缺少必要的环境变量，跳过 DescribeScheduleSqlTasks 集成测试")
+
+        import uuid
+        import random
+        from volcengine.tls.tls_requests import CreateProjectRequest, CreateTopicRequest, DeleteTopicRequest, DeleteProjectRequest
+
+        # 创建测试项目和主题
+        project_name = f"tls-python-sdk-test-schedule-sql-project-{str(uuid.uuid4()).replace('-', '')[:16]}"
+        topic_name = f"tls-python-sdk-test-schedule-sql-topic-{str(uuid.uuid4()).replace('-', '')[:16]}"
+
+        tls_service = TLSService(
+            self.endpoint, self.access_key_id, self.access_key_secret, self.region)
+
+        # 创建项目
+        create_project_request = CreateProjectRequest(
+            project_name=project_name,
+            region=self.region
+        )
+        project_response = tls_service.create_project(create_project_request)
+        project_id = project_response.get_project_id()
+
+        try:
+            # 创建主题
+            create_topic_request = CreateTopicRequest(
+                project_id=project_id,
+                topic_name=topic_name,
+                shard_count=1,
+                ttl=1
+            )
+            topic_response = tls_service.create_topic(create_topic_request)
+            topic_id = topic_response.get_topic_id()
+
+            try:
+                # 测试DescribeScheduleSqlTasks接口 - 基本查询
+                from volcengine.tls.tls_requests import DescribeScheduleSqlTasksRequest
+
+                describe_request = DescribeScheduleSqlTasksRequest(
+                    project_id=project_id,
+                    topic_id=topic_id,
+                    page_number=1,
+                    page_size=20
+                )
+
+                response = tls_service.describe_schedule_sql_tasks(describe_request)
+                self.assertIsNotNone(response)
+                self.assertIsInstance(response.get_total(), int)
+                self.assertIsInstance(response.get_tasks(), list)
+
+                # 测试带TaskName参数的查询
+                describe_request_with_name = DescribeScheduleSqlTasksRequest(
+                    task_name="test-task",
+                    page_number=1,
+                    page_size=20
+                )
+
+                response_with_name = tls_service.describe_schedule_sql_tasks(describe_request_with_name)
+                self.assertIsNotNone(response_with_name)
+                self.assertIsInstance(response_with_name.get_total(), int)
+                self.assertIsInstance(response_with_name.get_tasks(), list)
+
+                # 测试异常场景 - 使用不存在的ProjectId
+                describe_request_invalid = DescribeScheduleSqlTasksRequest(
+                    project_id="non-existent-project-id"
+                )
+
+                # 应该抛出异常或返回空结果
+                try:
+                    response_invalid = tls_service.describe_schedule_sql_tasks(describe_request_invalid)
+                    # 如果返回结果，应该total为0
+                    self.assertGreaterEqual(response_invalid.get_total(), 0)
+                except Exception:
+                    # 抛出异常也是预期行为
+                    pass
+
+            finally:
+                # 删除测试主题
+                delete_topic_request = DeleteTopicRequest(topic_id=topic_id)
+                tls_service.delete_topic(delete_topic_request)
+
+        finally:
+            # 删除测试项目
+            delete_project_request = DeleteProjectRequest(project_id=project_id)
+            tls_service.delete_project(delete_project_request)
 
 
 if __name__ == '__main__':
