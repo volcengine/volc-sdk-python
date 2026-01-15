@@ -52,7 +52,7 @@ class VikingKnowledgeBaseService(Service):
             self.get_body("Ping", {}, json.dumps({}))
         except Exception as e:
             raise VikingKnowledgeBaseException(1000028, "missed",
-                                               "host or region is incorrect".format(str(e))) from None
+                                               "host or region is incorrect: {}".format(str(e))) from None
 
     def setHeader(self, header):
         api_info = VikingKnowledgeBaseService.get_api_info()

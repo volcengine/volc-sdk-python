@@ -2642,7 +2642,11 @@ class DeleteImportTaskRequest(TLSRequest):
         :return: 参数是否合法
         :rtype: bool
         """
-        return self.task_id is not None
+        if self.task_id is None:
+            return False
+        if isinstance(self.task_id, str):
+            return bool(self.task_id.strip())
+        return True
 
 class ModifyImportTaskRequest(CreateImportTaskRequest):
     def __init__(self, task_id: str, status: int, topic_id: str, task_name: str, source_type: str, import_source_info: ImportSourceInfo,

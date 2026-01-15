@@ -41,7 +41,7 @@ class VikingDBServiceBase(Service):
         try:
             res = self.get_body("Ping", {}, json.dumps({}))
         except Exception as e:
-            raise VikingDBException(1000028, "missed", "host or region is incorrect".format(str(e))) from None
+            raise VikingDBException(1000028, "missed", "host or region is incorrect: {}".format(str(e))) from None
 
     def setHeader(self, header):
         api_info = VikingDBServiceBase.get_api_info()
