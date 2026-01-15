@@ -119,7 +119,17 @@ class VikingDBServiceBase(Service):
             "DropTask": ApiInfo("POST", "/api/task/drop", {}, {},
                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
             "UpdateTask": ApiInfo("POST", "/api/task/update", {}, {},
-                                   {'Accept': 'application/json', 'Content-Type': 'application/json'}),                                    
+                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "SearchVectorV2": ApiInfo("POST", "/api/vikingdb/data/search/vector", {}, {},
+                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "SearchByMultiModal": ApiInfo("POST", "/api/vikingdb/data/search/multi_modal", {}, {},
+                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "SearchById": ApiInfo("POST", "/api/vikingdb/data/search/id", {}, {},
+                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "SearchScalar": ApiInfo("POST", "/api/vikingdb/data/search/scalar", {}, {},
+                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),
+            "SearchRandom": ApiInfo("POST", "/api/vikingdb/data/search/random", {}, {},
+                                    {'Accept': 'application/json', 'Content-Type': 'application/json'}),                                    
         }
         return api_info
 
