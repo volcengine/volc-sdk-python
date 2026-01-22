@@ -13,7 +13,7 @@ from volcengine.base.Service import Service
 from .Collection import Collection
 from .Point import Point
 from .RespIter import RespIter
-from .common import EnumEncoder
+from .common import EnumEncoder, CollectionVersion
 from .exception import ERRCODE_EXCEPTION, VikingKnowledgeBaseException
 
 
@@ -101,12 +101,20 @@ class VikingKnowledgeBaseService(Service):
                                 _get_common_viking_request_header()),
             "UpdateDocMeta": ApiInfo("POST", "/api/knowledge/doc/update_meta", {}, {},
                                      _get_common_viking_request_header()),
+            "UpdateDoc": ApiInfo("POST", "/api/knowledge/doc/update", {}, {},
+                                 _get_common_viking_request_header()),
 
             # Point
             "GetPointInfo": ApiInfo("POST", "/api/knowledge/point/info", {}, {},
                                     _get_common_viking_request_header()),
             "ListPoints": ApiInfo("POST", "/api/knowledge/point/list", {}, {},
                                   _get_common_viking_request_header()),
+            "AddPoint": ApiInfo("POST", "/api/knowledge/point/add", {}, {},
+                                _get_common_viking_request_header()),
+            "UpdatePoint": ApiInfo("POST", "/api/knowledge/point/update", {}, {},
+                                   _get_common_viking_request_header()),
+            "DeletePoint": ApiInfo("POST", "/api/knowledge/point/delete", {}, {},
+                                   _get_common_viking_request_header()),
 
             # Service
             "Ping": ApiInfo("GET", "/ping", {}, {},
@@ -312,12 +320,23 @@ class VikingKnowledgeBaseService(Service):
                                                "empty response due to unknown error, please contact customer service") from None
         return res
 
-    def create_collection(self, collection_name, index=None, description="", preprocessing=None, project="default",
-                          data_type="unstructured_data", table_config=None, headers=None):
-        params = {"name": collection_name, "description": description, "index": index,
-                  "preprocessing": preprocessing, "project": project, "data_type": data_type}
-        if table_config is not None:
-            params["table_config"] = table_config
+    def create_collection(self, collection_name, version:CollectionVersion.UltimateVersion, index=None, description="", preprocessing=None, project="default",
+                          data_type="unstructured_data", table_config=None, doc_summary_config=None, headers=None):
+        params = {"name": collection_name, "description": description, "project": project, "version": version}
+
+        if doc_summary_config is not None:
+            params["doc_summary_config"] = doc_summary_config
+        if preprocessing is not None:
+            params["preprocessing"] = preprocessing
+
+        if version == CollectionVersion.UltimateVersion:
+            params["data_type"] = data_type
+            if index is not None:
+                params["index"] = index
+            if table_config is not None:
+                params["table_config"] = table_config
+        elif version == CollectionVersion.StandardVersion:
+            pass
         res = self.json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder), headers=headers)
         data = json.loads(res)["data"]
         params["resource_id"] = data["resource_id"]
@@ -328,13 +347,24 @@ class VikingKnowledgeBaseService(Service):
                 params["fields"] = fields
         return Collection(self, collection_name, params)
 
-    async def async_create_collection(self, collection_name, index=None, description="", preprocessing=None,
-                                      project="default", data_type="unstructured_data", table_config=None,
-                                      headers=None):
-        params = {"name": collection_name, "description": description, "index": index,
-                  "preprocessing": preprocessing, "project": project, "data_type": data_type}
-        if table_config is not None:
-            params["table_config"] = table_config
+    async def async_create_collection(self, collection_name, version:CollectionVersion.UltimateVersion, index=None, description="", preprocessing=None, project="default",
+                          data_type="unstructured_data", table_config=None, doc_summary_config=None, headers=None):
+        params = {"name": collection_name, "description": description, "project": project, "version": version}
+
+        if doc_summary_config is not None:
+            params["doc_summary_config"] = doc_summary_config
+        if preprocessing is not None:
+            params["preprocessing"] = preprocessing
+
+        if version == CollectionVersion.UltimateVersion:
+            params["data_type"] = data_type
+            if index is not None:
+                params["index"] = index
+            if table_config is not None:
+                params["table_config"] = table_config
+        elif version == CollectionVersion.StandardVersion:
+            pass
+
         res = await self.async_json_exception("CreateCollection", {}, json.dumps(params, cls=EnumEncoder),
                                               headers=headers)
         data = json.loads(res)["data"]
@@ -599,7 +629,7 @@ class VikingKnowledgeBaseService(Service):
         res = await self.async_json_exception("Rerank", {}, json.dumps(params), headers=headers)
         return json.loads(res)
 
-    def search_knowledge(self, collection_name, query, pre_processing=None, query_param=None, limit=10,
+    def search_knowledge(self, collection_name, query, image_query=None, pre_processing=None, query_param=None, limit=10,
                          dense_weight=0.5, post_processing=None,
                          project="default", resource_id=None, headers=None):
         params = {
@@ -611,6 +641,8 @@ class VikingKnowledgeBaseService(Service):
         }
         if resource_id is not None:
             params["resource_id"] = resource_id
+        if image_query is not None:
+            params["image_query"] = image_query
         if query_param is not None:
             params["query_param"] = query_param
         if post_processing is not None:
@@ -625,7 +657,7 @@ class VikingKnowledgeBaseService(Service):
         }
         return ret
 
-    async def async_search_knowledge(self, collection_name, query, pre_processing=None, query_param=None, limit=10,
+    async def async_search_knowledge(self, collection_name, query, image_query=None, pre_processing=None, query_param=None, limit=10,
                                      dense_weight=0.5, post_processing=None,
                                      project="default", resource_id=None, headers=None):
         params = {
@@ -637,6 +669,8 @@ class VikingKnowledgeBaseService(Service):
         }
         if resource_id is not None:
             params["resource_id"] = resource_id
+        if image_query is not None:
+            params["image_query"] = image_query
         if query_param is not None:
             params["query_param"] = query_param
         if post_processing is not None:
@@ -651,7 +685,7 @@ class VikingKnowledgeBaseService(Service):
         }
         return ret
 
-    def chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True, api_key=None,
+    def chat_completion(self, model, messages, model_version=None, thinking=None, max_tokens=4096, temperature=0.1, return_token_usage=True, api_key=None,
                         stream=False, headers=None):
         params = {
             "model": model,
@@ -660,9 +694,13 @@ class VikingKnowledgeBaseService(Service):
             "max_tokens": max_tokens,
             "temperature": temperature
         }
-
+        if model_version is not None:
+            params["model_version"] = model_version
+        if thinking is not None:
+            params["thinking"] = thinking
         if api_key is not None:
             params["api_key"] = api_key
+
         if stream:
             params['stream'] = True
             res_stream = self._stream_json_exception("ChatCompletion", {}, json.dumps(params), headers=headers)
@@ -676,7 +714,7 @@ class VikingKnowledgeBaseService(Service):
             }
             return ret
 
-    async def async_chat_completion(self, model, messages, max_tokens=4096, temperature=0.1, return_token_usage=True,
+    async def async_chat_completion(self, model, messages, model_version=None, thinking=None, max_tokens=4096, temperature=0.1, return_token_usage=True,
                                     api_key=None, headers=None):
         params = {
             "model": model,
@@ -685,6 +723,10 @@ class VikingKnowledgeBaseService(Service):
             "max_tokens": max_tokens,
             "temperature": temperature
         }
+        if model_version is not None:
+            params["model_version"] = model_version
+        if thinking is not None:
+            params["thinking"] = thinking
         if api_key is not None:
             params["api_key"] = api_key
         res = await self.async_json_exception("ChatCompletion", {}, json.dumps(params), headers=headers)

@@ -19,6 +19,8 @@ class Doc(object):
         self.status             = kwargs.get("status")
         self.title              = kwargs.get("title")
         self.source             = kwargs.get("source")
+        self.total_tokens       = kwargs.get("total_tokens")
+        self.doc_summary_tokens = kwargs.get("doc_summary_tokens")
         self.fields             = []
         meta                    = kwargs.get("doc_meta") or kwargs.get("meta")
         if meta is not None:
@@ -27,3 +29,4 @@ class Doc(object):
         
         self.project            = kwargs.get("project", "default")
         self.resource_id        = kwargs.get("resource_id")
+        self.raw_data           = kwargs

@@ -72,3 +72,8 @@ class EnumEncoder(json.JSONEncoder):
         if isinstance(obj, dict):
             return {k: self.default(v) for k, v in obj.items()}
         return super().default(obj)
+
+
+class CollectionVersion(object):
+    UltimateVersion = 4
+    StandardVersion = 2

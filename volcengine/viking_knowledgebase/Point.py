@@ -15,10 +15,11 @@ class Point(object):
         self.score                  = kwargs.get("score")
         self.doc_info               = Doc(kwargs.get("doc_info"))
         self.chunk_id               = kwargs.get("chunk_id")
-        
+        self.chunk_attachment       = kwargs.get("chunk_attachment")
         self.project                = kwargs.get("project", "default")
         self.resource_id            = kwargs.get("resource_id")
         self.table_chunk_fields     = kwargs.get("table_chunk_fields")
+        self.raw_data               = kwargs
 
     @property
     def doc_id(self):
