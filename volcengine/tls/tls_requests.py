@@ -188,7 +188,7 @@ class CreateTopicRequest(TLSRequest):
                  auto_split: bool = True, max_split_shard: int = 50, enable_tracking: bool = False,
                  time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = True,
                  enable_hot_ttl: bool = False, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None,
-                 encrypt_conf: EncryptConf = None):
+                 encrypt_conf: EncryptConf = None, metering_mode: str = None):
         """
         :param topic_name: 日志主题名称
         :type topic_name: str
@@ -242,6 +242,7 @@ class CreateTopicRequest(TLSRequest):
         self.cold_ttl = cold_ttl
         self.archive_ttl = archive_ttl
         self.encrypt_conf = encrypt_conf
+        self.metering_mode = metering_mode
 
     def check_validation(self):
         """
@@ -290,7 +291,7 @@ class ModifyTopicRequest(TLSRequest):
                  auto_split: bool = None, max_split_shard: int = None, enable_tracking: bool = None,
                  time_key: str = None, time_format: str = None, log_public_ip: bool = None,
                  enable_hot_ttl: bool = False, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None,
-                 encrypt_conf: EncryptConf = None):
+                 encrypt_conf: EncryptConf = None, metering_mode: str = None):
         """
         :param topic_id:日志主题ID
         :type topic_id: str
@@ -336,6 +337,7 @@ class ModifyTopicRequest(TLSRequest):
         self.cold_ttl = cold_ttl
         self.archive_ttl = archive_ttl
         self.encrypt_conf = encrypt_conf
+        self.metering_mode = metering_mode
 
     def check_validation(self):
         """
@@ -375,9 +377,10 @@ class DescribeTopicRequest(TLSRequest):
 
 
 class DescribeTopicsRequest(TLSRequest):
-    def __init__(self, project_id: str, page_number: int = 1, page_size: int = 20,
+    def __init__(self, project_id: str = None, page_number: int = 1, page_size: int = 20,
                  topic_name: str = None, topic_id: str = None, is_full_name: bool = False, tags: List[TagInfo] = None,
-                 project_name: str = None):
+                 project_name: str = None, cursor: str = None, region: str = None, fuzzy_search_key: str = None,
+                 description: str = None, order_by_project: bool = None):
         """
         :param page_number: 分页查询时的页码（默认为1）
         :type page_number: int
@@ -404,14 +407,17 @@ class DescribeTopicsRequest(TLSRequest):
         self.topic_id = topic_id
         self.is_full_name = is_full_name
         self.tags = tags
+        self.cursor = cursor
+        self.region = region
+        self.fuzzy_search_key = fuzzy_search_key
+        self.description = description
+        self.order_by_project = order_by_project
 
     def check_validation(self):
         """
         :return: 参数是否合法
         :rtype: bool
         """
-        if self.project_id is None:
-            return False
         return True
 
     def get_api_input(self):
@@ -608,6 +614,10 @@ class PutLogsRequest(TLSRequest):
 
         if not self.log_group_list.log_groups:
             return False
+
+        for log_group in self.log_group_list.log_groups:
+            if len(log_group.logs) > 10000:
+                return False
 
         if not any(log_group.logs for log_group in self.log_group_list.log_groups):
             return False

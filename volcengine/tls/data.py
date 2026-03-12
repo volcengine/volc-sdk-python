@@ -145,25 +145,30 @@ class ProjectInfo(TLSData):
 
 
 class EncryptUserCmkConf(TLSData):
-    def __init__(self, user_cmk_id: str, trn: str, region_id: str):
+    def __init__(self, user_cmk_id: str, trn: str, region_id: str, from_tls: bool = None):
         self.user_cmk_id = user_cmk_id
         self.trn = trn
         self.region_id = region_id
+        self.from_tls = from_tls
 
     @classmethod
     def set_attributes(cls, data):
         user_cmk_id = data.get(USER_CMK_ID)
         trn = data.get(TRN)
         region_id = data.get(REGION_ID)
+        from_tls = data.get(FROM_TLS)
 
-        return cls(user_cmk_id, trn, region_id)
+        return cls(user_cmk_id, trn, region_id, from_tls)
 
     def json(self):
-        return {
+        res = {
             USER_CMK_ID: self.user_cmk_id,
             TRN: self.trn,
             REGION_ID: self.region_id,
         }
+        if self.from_tls is not None:
+            res[FROM_TLS] = self.from_tls
+        return res
 
 
 class EncryptConf(TLSData):
@@ -176,7 +181,10 @@ class EncryptConf(TLSData):
     def set_attributes(cls, data):
         enable = data.get(ENABLE_ENCRYPT_CONF)
         encrypt_type = data.get(ENCRYPT_TYPE)
-        user_cmk_info = data.get(USER_CMK_INFO)
+        user_cmk_info = None
+        user_cmk_info_data = data.get(USER_CMK_INFO)
+        if user_cmk_info_data is not None and isinstance(user_cmk_info_data, dict):
+            user_cmk_info = EncryptUserCmkConf.set_attributes(data=user_cmk_info_data)
 
         return cls(enable, encrypt_type, user_cmk_info)
 
@@ -188,13 +196,32 @@ class EncryptConf(TLSData):
         }
 
 
+class BindProcessor(TLSData):
+    def __init__(self, processor_id: str = None, processor_name: str = None):
+        self.processor_id = processor_id
+        self.processor_name = processor_name
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        processor_id = data.get(PROCESSOR_ID)
+        processor_name = data.get(PROCESSOR_NAME)
+        return cls(processor_id, processor_name)
+
+    def json(self):
+        return {
+            PROCESSOR_ID: self.processor_id,
+            PROCESSOR_NAME: self.processor_name,
+        }
+
+
 class TopicInfo(TLSData):
     def __init__(self, topic_name: str = None, topic_id: str = None, project_id: str = None, ttl: int = None,
                  create_time: str = None, modify_time: str = None, shard_count: int = None, description: str = None,
                  auto_split: bool = None, max_split_shard: int = None, enable_tracking: bool = None,
                  time_key: str = None, time_format: str = None, tags: List[TagInfo] = None, log_public_ip: bool = None,
                  enable_hot_ttl: bool = None, hot_ttl: int = None, cold_ttl: int = None, archive_ttl: int = None,
-                 encrypt_conf: EncryptConf = None):
+                 encrypt_conf: EncryptConf = None, bind_processor=None, metering_mode: str = None,
+                 project_name: str = None, region: str = None, tls_version: str = None):
         self.topic_name = topic_name
         self.topic_id = topic_id
         self.project_id = project_id
@@ -215,12 +242,25 @@ class TopicInfo(TLSData):
         self.cold_ttl = cold_ttl
         self.archive_ttl = archive_ttl
         self.encrypt_conf = encrypt_conf
+        self.bind_processor = bind_processor
+        self.metering_mode = metering_mode
+        self.project_name = project_name
+        self.region = region
+        self.tls_version = tls_version
 
     @classmethod
     def set_attributes(cls, data: dict):
+        bind_processor = None
+        bind_processor_data = data.get(BIND_PROCESSOR)
+        if bind_processor_data is not None and isinstance(bind_processor_data, dict):
+            bind_processor = BindProcessor.set_attributes(data=bind_processor_data)
+        metering_mode = data.get(METERING_MODE)
         topic_name = data.get(TOPIC_NAME)
         topic_id = data.get(TOPIC_ID)
         project_id = data.get(PROJECT_ID)
+        project_name = data.get(PROJECT_NAME)
+        region = data.get(REGION)
+        tls_version = data.get(TLS_VERSION)
         ttl = data.get(TTL)
         create_time = data.get(CREATE_TIME)
         modify_time = data.get(MODIFY_TIME)
@@ -237,7 +277,10 @@ class TopicInfo(TLSData):
         hot_ttl = data.get(HOT_TTL)
         cold_ttl = data.get(COLD_TTL)
         archive_ttl = data.get(ARCHIVE_TTL)
-        encrypt_conf = data.get(ENCRYPT_CONF)
+        encrypt_conf = None
+        encrypt_conf_data = data.get(ENCRYPT_CONF)
+        if encrypt_conf_data is not None and isinstance(encrypt_conf_data, dict):
+            encrypt_conf = EncryptConf.set_attributes(data=encrypt_conf_data)
 
         tags = data.get(TAGS)
         if tags is not None:
@@ -248,7 +291,8 @@ class TopicInfo(TLSData):
 
         return cls(topic_name, topic_id, project_id, ttl, create_time, modify_time, shard_count, description,
                    auto_split, max_split_shard, enable_tracking, time_key, time_format, topic_tags, log_public_ip,
-                   enable_hot_ttl, hot_ttl, cold_ttl, archive_ttl, encrypt_conf)
+                   enable_hot_ttl, hot_ttl, cold_ttl, archive_ttl, encrypt_conf, bind_processor, metering_mode,
+                   project_name, region, tls_version)
 
     def get_create_time(self):
         """

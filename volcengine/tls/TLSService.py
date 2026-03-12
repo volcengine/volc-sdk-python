@@ -4,8 +4,6 @@ from __future__ import division
 from __future__ import print_function
 
 import hashlib
-import threading
-import random
 import time
 
 from volcengine.ApiInfo import ApiInfo
@@ -19,6 +17,7 @@ from volcengine.tls.tls_requests import DescribeETLTaskRequest, ModifyAlarmConte
 from volcengine.tls.tls_responses import DescribeETLTaskResponse, ModifyAlarmContentTemplateResponse
 from volcengine.tls.tls_responses import ModifyTraceInstanceResponse
 from volcengine.tls.tls_exception import TLSException
+from volcengine.tls.retry_policy import RetryPolicy
 from volcengine.tls.const import DELETE_TRACE_INSTANCE, DESCRIBE_TRACE_INSTANCE, DESCRIBE_TRACE, SEARCH_TRACES, \
     CREATE_ALARM_CONTENT_TEMPLATE, CREATE_ALARM_WEBHOOK_INTEGRATION, DELETE_ALARM_WEBHOOK_INTEGRATION
 from volcengine.tls.util import get_logger
@@ -161,38 +160,6 @@ API_VERSION_V_0_2_0 = "0.2.0"
 
 
 class TLSService(Service):
-    _instance_lock = threading.Lock()
-    _default_retry_interval_ms = 100
-    _default_retry_counter = 0
-    _default_retry_counter_maximum = 50
-
-    @staticmethod
-    def set_default_retry_counter_maximum(v):
-        TLSService._default_retry_counter_maximum = v
-
-    @staticmethod
-    def increase_retry_counter_by_one():
-        with TLSService._instance_lock:
-            if TLSService._default_retry_counter < TLSService._default_retry_counter_maximum:
-                TLSService._default_retry_counter += 1
-
-    @staticmethod
-    def decrease_retry_counter_by_one():
-        with TLSService._instance_lock:
-            if TLSService._default_retry_counter < TLSService._default_retry_counter_maximum:
-                TLSService._default_retry_counter -= 1
-
-    @staticmethod
-    def calc_backoff_ms(expected_quit_timestamp_ms):
-        current_timestamp_ms = int(time.time() * 1000)
-        counter = TLSService._default_retry_counter
-        sleep_ms = random.random() * counter * TLSService._default_retry_interval_ms
-        if current_timestamp_ms + sleep_ms > expected_quit_timestamp_ms:
-            sleep_ms = expected_quit_timestamp_ms - current_timestamp_ms
-        if sleep_ms < 0:
-            sleep_ms = 0
-        return sleep_ms
-
     def __init__(self, endpoint: str, access_key_id: str, access_key_secret: str, region: str,
                  security_token: str = None, scheme: str = "https", timeout: int = 60,
                  api_version=API_VERSION_V_0_3_0):
@@ -204,6 +171,7 @@ class TLSService(Service):
         self.__scheme = scheme
         self.__timeout = timeout
         self.__api_version = api_version
+        self.__retry_policy = None
 
         self.check_scheme_and_endpoint()
 
@@ -278,8 +246,10 @@ class TLSService(Service):
         method = self.api_info[api].method
         url = request.build()
 
-        expected_quit_timestamp = int(time.time() * 1000 + self.__timeout * 1500)
+        policy = self.get_retry_policy()
+        deadline = time.monotonic() + policy.total_timeout
         try_count = 0
+        retry_index = 0
         while True:
             try_count += 1
             try:
@@ -288,27 +258,25 @@ class TLSService(Service):
                 response = self.session.request(method, url, headers=request.headers, data=request.body,
                                                 timeout=self.__timeout)
             except Exception as e:
-                TLSService.increase_retry_counter_by_one()
-                sleep_ms = TLSService.calc_backoff_ms(expected_quit_timestamp)
-                if try_count < 5 and sleep_ms > 0:
-                    # HTTP请求未响应, 尝试重试
-                    time.sleep(sleep_ms / 1000)
-                else:
-                    # 已超出重试上限, 退出
+                if self.__can_retry(try_count, policy) is False or self.__should_retry_exception(e) is False:
                     raise TLSException(error_code=e.__class__.__name__, error_message=e.__str__())
+                sleep_seconds = self.__calc_backoff_seconds(policy, retry_index + 1, deadline)
+                if sleep_seconds <= 0:
+                    raise TLSException(error_code="RequestTimeout",
+                                       error_message="Request exceeded retry total timeout")
+                time.sleep(sleep_seconds)
+                retry_index += 1
             else:
                 if response.status_code == 200:
                     # self.__logger.info("TLS client successfully got the response for requesting {}".format(api))
-                    TLSService.decrease_retry_counter_by_one()
                     return response
-                elif try_count < 5 and response.status_code in [429, 500, 502, 503]:
-                    TLSService.increase_retry_counter_by_one()
-                    sleep_ms = TLSService.calc_backoff_ms(expected_quit_timestamp)
-                    if sleep_ms > 0:
-                        # HTTP请求未响应, 尝试重试
-                        time.sleep(sleep_ms / 1000)
-                    else:
-                        raise TLSException(response)
+                elif response.status_code in [429, 500, 502, 503] and self.__can_retry(try_count, policy):
+                    sleep_seconds = self.__calc_backoff_seconds(policy, retry_index + 1, deadline)
+                    if sleep_seconds > 0:
+                        time.sleep(sleep_seconds)
+                        retry_index += 1
+                        continue
+                    raise TLSException(response)
                 else:
                     raise TLSException(response)
 
@@ -321,6 +289,40 @@ class TLSService(Service):
     def set_timeout(self, timeout: int):
         self.__timeout = timeout
         self.service_info = self.get_service_info()
+
+    def set_retry_policy(self, policy):
+        if policy is None:
+            self.__retry_policy = None
+            return
+        self.__retry_policy = policy.normalize()
+
+    def get_retry_policy(self):
+        if self.__retry_policy is None:
+            return RetryPolicy.default_policy()
+        return self.__retry_policy.normalize()
+
+    def __can_retry(self, attempts, policy):
+        if policy.max_attempts <= 0:
+            return True
+        return attempts < policy.max_attempts
+
+    def __calc_backoff_seconds(self, policy, retry_index, deadline):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return 0
+        sleep_seconds = policy.backoff_seconds(retry_index)
+        if sleep_seconds > remaining:
+            sleep_seconds = remaining
+        return sleep_seconds
+
+    def __should_retry_exception(self, e):
+        try:
+            from requests import exceptions as req_exc
+        except Exception:
+            return True
+
+        return isinstance(e, (req_exc.Timeout, req_exc.ConnectionError, req_exc.ChunkedEncodingError,
+                              req_exc.ContentDecodingError))
 
     def create_project(self, create_project_request: CreateProjectRequest) -> CreateProjectResponse:
         if create_project_request.check_validation() is False:

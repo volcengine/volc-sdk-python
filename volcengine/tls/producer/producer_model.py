@@ -71,7 +71,7 @@ class ProducerConfig:
     DEFAULT_TOTAL_SIZE_IN_BYTES = 100 * 1024 * 1024  # 100MB
     DEFAULT_MAX_THREAD_COUNT = 50
     DEFAULT_MAX_BATCH_SIZE = 512 * 1024  # 512KB
-    MAX_BATCH_SIZE = 8 * 1024 * 1024  # 8MB
+    MAX_BATCH_SIZE = 9 * 1024 * 1024 + 512 * 1024
     DEFAULT_MAX_BATCH_COUNT = 4096
     MAX_BATCH_COUNT = 32768
     MAX_LOG_GROUP_COUNT = 10000
@@ -346,4 +346,3 @@ class BatchLog:
         def __str__(self) -> str:
             return (f"BatchKey{{shardHash={self.shard_hash}, topicId={self.topic_id}, "
                     f"source={self.source}, fileName={self.file_name}}}")
-

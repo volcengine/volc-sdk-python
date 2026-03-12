@@ -23,9 +23,13 @@ class TLSException(Exception):
 
             try:
                 response_body = json.loads(response.text)
-                self.error_code = response_body["ErrorCode"]
-                self.error_message = response_body["ErrorMessage"]
-            except JSONDecodeError:
+                if isinstance(response_body, dict):
+                    self.error_code = response_body.get("ErrorCode") or response.text
+                    self.error_message = response_body.get("ErrorMessage") or response.text
+                else:
+                    self.error_code = response.text
+                    self.error_message = response.text
+            except (JSONDecodeError, TypeError, ValueError, KeyError):
                 self.error_code = response.text
                 self.error_message = response.text
         else:

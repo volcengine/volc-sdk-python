@@ -165,6 +165,7 @@ class VisualService(Service):
             "CVProcess": ApiInfo("POST", "/", {"Action": "CVProcess", "Version": "2022-08-31"}, {}, {}),
             "CertLivenessVerifyQuery": ApiInfo("POST", "/",
                                                {"Action": "CertLivenessVerifyQuery", "Version": "2022-08-31"}, {}, {}),
+            "CVCancelTask": ApiInfo("POST", "/", {"Action": "CVCancelTask", "Version": "2024-06-06"}, {}, {}),
         }
         return api_info
 
@@ -255,6 +256,13 @@ class VisualService(Service):
     def cv_sync2async_get_result(self, form):
         try:
             res_json = self.common_json_handler("CVSync2AsyncGetResult", form)
+            return res_json
+        except Exception as e:
+            raise Exception(str(e))
+
+    def cv_cancel_task(self, form):
+        try:
+            res_json = self.common_json_handler("CVCancelTask", form)
             return res_json
         except Exception as e:
             raise Exception(str(e))

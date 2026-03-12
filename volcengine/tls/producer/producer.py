@@ -54,19 +54,16 @@ class TLSProducer:
         if not topic_id or not logs:
             raise TLSException(error_code="InvalidArgument", error_message=f"topic id: {topic_id}, log group: {logs}")
 
-        # 检查批次大小
-        if len(logs) > ProducerConfig.MAX_LOG_GROUP_COUNT:
-            raise TLSException(
-                error_code="InvalidArgument",
-                error_message=f"log list size {len(logs)} is greater than threshold {ProducerConfig.MAX_LOG_GROUP_COUNT}"
-            )
+        max_log_group_count = ProducerConfig.MAX_LOG_GROUP_COUNT
+        max_log_group_size = ProducerConfig.MAX_BATCH_SIZE
 
-        # 转换为日志组并添加到分发器
         log_group = LogGroup()
         if source is not None:
             log_group.source = source
         if filename is not None:
             log_group.filename = filename
+
+        current_count = 0
         for v in logs:
             new_log = log_group.logs.add()  # pylint: disable=no-member
             new_log.time = v.time
@@ -75,7 +72,47 @@ class TLSProducer:
                 log_content.key = str(key)
                 log_content.value = str(v.log_dict[key])
 
-        self.dispatcher.add_batch(hash_key, topic_id, source, filename, log_group, callback)
+            current_count += 1
+            log_group_size = len(log_group.SerializeToString())
+            if log_group_size > max_log_group_size:
+                if current_count == 1:
+                    raise TLSException(
+                        error_code="InvalidArgument",
+                        error_message=f"log size {log_group_size} is larger than MAX_LOG_SIZE {max_log_group_size}"
+                    )
+                log_group.logs.pop()
+                current_count -= 1
+                self.dispatcher.add_batch(hash_key, topic_id, source, filename, log_group, callback)
+                log_group = LogGroup()
+                if source is not None:
+                    log_group.source = source
+                if filename is not None:
+                    log_group.filename = filename
+                new_log = log_group.logs.add()  # pylint: disable=no-member
+                new_log.time = v.time
+                for key in v.log_dict.keys():
+                    log_content = new_log.contents.add()
+                    log_content.key = str(key)
+                    log_content.value = str(v.log_dict[key])
+                current_count = 1
+                log_group_size = len(log_group.SerializeToString())
+                if log_group_size > max_log_group_size:
+                    raise TLSException(
+                        error_code="InvalidArgument",
+                        error_message=f"log size {log_group_size} is larger than MAX_LOG_SIZE {max_log_group_size}"
+                    )
+
+            if current_count >= max_log_group_count:
+                self.dispatcher.add_batch(hash_key, topic_id, source, filename, log_group, callback)
+                log_group = LogGroup()
+                if source is not None:
+                    log_group.source = source
+                if filename is not None:
+                    log_group.filename = filename
+                current_count = 0
+
+        if current_count > 0:
+            self.dispatcher.add_batch(hash_key, topic_id, source, filename, log_group, callback)
 
     def reset_access_key_token(self, access_key: str, secret_key: str, security_token: Optional[str]) -> None:
         """重置访问密钥和令牌"""
