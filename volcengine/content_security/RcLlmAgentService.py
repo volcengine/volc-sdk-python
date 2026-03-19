@@ -45,6 +45,8 @@ class RcLlmAgentService(Service):
                                               {"Action": "AsyncLlmMultiModeration", "Version": "2022-08-26"}, {}, {}),
             "GetMultiModerationResult": ApiInfo("GET", "/openapi/v1/rc_llm/multi_moderation_result",
                                                {"Action": "GetMultiModerationResult", "Version": "2022-08-26"}, {}, {}),
+            "ImageTextLiteModeration": ApiInfo("POST", "/openapi/v1/rc_llm/image_text_lite_moderation",
+                                         {"Action": "ImageTextLiteModeration", "Version": "2022-08-26"}, {}, {}),
             }
 
         return api_info
@@ -131,6 +133,15 @@ class RcLlmAgentService(Service):
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def get_multi_moderation_result(self, params, body):
         res = self.get("GetMultiModerationResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def image_text_lite_moderation(self, params, body):
+        res = self.json("ImageTextLiteModeration", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)
