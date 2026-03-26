@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'volcengine/vod/business/vod_drama.proto\x12\x1eVolcengine.Vod.Models.Business\"J\n\x1dVodCreateDramaRecapTaskResult\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\x12\x19\n\x11\x44ramaScriptTaskId\x18\x02 \x01(\t\"0\n\x1eVodCreateDramaScriptTaskResult\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\";\n\x1cVodQueryDramaRecapTaskResult\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"B\n\x1dVodQueryDramaScriptTaskResult\x12\x11\n\tResultUrl\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"j\n$VodCreateDramaRecapTaskSpeakerConfig\x12\x11\n\tVoiceType\x18\x01 \x01(\t\x12\r\n\x05\x41ppId\x18\x02 \x01(\t\x12\x14\n\x07\x43luster\x18\x03 \x01(\tH\x00\x88\x01\x01\x42\n\n\x08_Cluster\"\x99\x05\n!VodCreateDramaRecapTaskFontconfig\x12\x12\n\nNoSubtitle\x18\x01 \x01(\x08\x12\x15\n\x08\x46ontType\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x15\n\x08\x46ontSize\x18\x03 \x01(\x05H\x01\x88\x01\x01\x12\x12\n\x05Width\x18\x04 \x01(\x05H\x02\x88\x01\x01\x12\x13\n\x06Height\x18\x05 \x01(\x05H\x03\x88\x01\x01\x12\x12\n\x05\x41lpha\x18\x06 \x01(\x01H\x04\x88\x01\x01\x12\x14\n\x07TextRes\x18\x07 \x01(\tH\x05\x88\x01\x01\x12\x16\n\tFontColor\x18\x08 \x01(\tH\x06\x88\x01\x01\x12\x1c\n\x0f\x42\x61\x63kgroundColor\x18\t \x01(\tH\x07\x88\x01\x01\x12!\n\x14\x42\x61\x63kgroundBorderSize\x18\n \x01(\x01H\x08\x88\x01\x01\x12\x18\n\x0b\x42orderColor\x18\x0b \x01(\tH\t\x88\x01\x01\x12\x18\n\x0b\x42orderWidth\x18\x0c \x01(\x05H\n\x88\x01\x01\x12\x18\n\x0bTypesetting\x18\r \x01(\x05H\x0b\x88\x01\x01\x12\x16\n\tAlignType\x18\x0e \x01(\x05H\x0c\x88\x01\x01\x12\x11\n\x04PosX\x18\x0f \x01(\x05H\r\x88\x01\x01\x12\x11\n\x04PosY\x18\x10 \x01(\x05H\x0e\x88\x01\x01\x12\x19\n\x0cLineMaxWidth\x18\x11 \x01(\x01H\x0f\x88\x01\x01\x42\x0b\n\t_FontTypeB\x0b\n\t_FontSizeB\x08\n\x06_WidthB\t\n\x07_HeightB\x08\n\x06_AlphaB\n\n\x08_TextResB\x0c\n\n_FontColorB\x12\n\x10_BackgroundColorB\x17\n\x15_BackgroundBorderSizeB\x0e\n\x0c_BorderColorB\x0e\n\x0c_BorderWidthB\x0e\n\x0c_TypesettingB\x0c\n\n_AlignTypeB\x07\n\x05_PosXB\x07\n\x05_PosYB\x0f\n\r_LineMaxWidthB\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodDramaP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\'volcengine/vod/business/vod_drama.proto\x12\x1eVolcengine.Vod.Models.Business\"J\n\x1dVodCreateDramaRecapTaskResult\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\x12\x19\n\x11\x44ramaScriptTaskId\x18\x02 \x01(\t\"0\n\x1eVodCreateDramaScriptTaskResult\x12\x0e\n\x06TaskId\x18\x01 \x01(\t\";\n\x1cVodQueryDramaRecapTaskResult\x12\x0b\n\x03Vid\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"B\n\x1dVodQueryDramaScriptTaskResult\x12\x11\n\tResultUrl\x18\x01 \x01(\t\x12\x0e\n\x06Status\x18\x02 \x01(\t\"j\n$VodCreateDramaRecapTaskSpeakerConfig\x12\x11\n\tVoiceType\x18\x01 \x01(\t\x12\r\n\x05\x41ppId\x18\x02 \x01(\t\x12\x14\n\x07\x43luster\x18\x03 \x01(\tH\x00\x88\x01\x01\x42\n\n\x08_Cluster\"\x99\x05\n!VodCreateDramaRecapTaskFontconfig\x12\x12\n\nNoSubtitle\x18\x01 \x01(\x08\x12\x15\n\x08\x46ontType\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x15\n\x08\x46ontSize\x18\x03 \x01(\x05H\x01\x88\x01\x01\x12\x12\n\x05Width\x18\x04 \x01(\x05H\x02\x88\x01\x01\x12\x13\n\x06Height\x18\x05 \x01(\x05H\x03\x88\x01\x01\x12\x12\n\x05\x41lpha\x18\x06 \x01(\x01H\x04\x88\x01\x01\x12\x14\n\x07TextRes\x18\x07 \x01(\tH\x05\x88\x01\x01\x12\x16\n\tFontColor\x18\x08 \x01(\tH\x06\x88\x01\x01\x12\x1c\n\x0f\x42\x61\x63kgroundColor\x18\t \x01(\tH\x07\x88\x01\x01\x12!\n\x14\x42\x61\x63kgroundBorderSize\x18\n \x01(\x01H\x08\x88\x01\x01\x12\x18\n\x0b\x42orderColor\x18\x0b \x01(\tH\t\x88\x01\x01\x12\x18\n\x0b\x42orderWidth\x18\x0c \x01(\x05H\n\x88\x01\x01\x12\x18\n\x0bTypesetting\x18\r \x01(\x05H\x0b\x88\x01\x01\x12\x16\n\tAlignType\x18\x0e \x01(\x05H\x0c\x88\x01\x01\x12\x11\n\x04PosX\x18\x0f \x01(\x05H\r\x88\x01\x01\x12\x11\n\x04PosY\x18\x10 \x01(\x05H\x0e\x88\x01\x01\x12\x19\n\x0cLineMaxWidth\x18\x11 \x01(\x01H\x0f\x88\x01\x01\x42\x0b\n\t_FontTypeB\x0b\n\t_FontSizeB\x08\n\x06_WidthB\t\n\x07_HeightB\x08\n\x06_AlphaB\n\n\x08_TextResB\x0c\n\n_FontColorB\x12\n\x10_BackgroundColorB\x17\n\x15_BackgroundBorderSizeB\x0e\n\x0c_BorderColorB\x0e\n\x0c_BorderWidthB\x0e\n\x0c_TypesettingB\x0c\n\n_AlignTypeB\x07\n\x05_PosXB\x07\n\x05_PosYB\x0f\n\r_LineMaxWidth\"\xe6\x02\n\x10\x44ramaRecapConfig\x12\"\n\x15\x41utoGenerateRecapText\x18\x01 \x01(\x08H\x00\x88\x01\x01\x12\x1c\n\x0fHasHardSubtitle\x18\x02 \x01(\x08H\x01\x88\x01\x01\x12\x1c\n\x0fRecapTextLength\x18\x03 \x01(\x05H\x02\x88\x01\x01\x12\x17\n\nRecapStyle\x18\x04 \x01(\tH\x03\x88\x01\x01\x12\x1b\n\x0eRecapTextSpeed\x18\x05 \x01(\x01H\x04\x88\x01\x01\x12\x1d\n\x10\x41llowRepeatMatch\x18\x06 \x01(\x08H\x05\x88\x01\x01\x12\x16\n\tPauseTime\x18\x07 \x01(\x05H\x06\x88\x01\x01\x42\x18\n\x16_AutoGenerateRecapTextB\x12\n\x10_HasHardSubtitleB\x12\n\x10_RecapTextLengthB\r\n\x0b_RecapStyleB\x11\n\x0f_RecapTextSpeedB\x13\n\x11_AllowRepeatMatchB\x0c\n\n_PauseTimeB\xcc\x01\n)com.volcengine.service.vod.model.businessB\x08VodDramaP\x01ZAgithub.com/volcengine/volc-sdk-golang/service/vod/models/business\xa0\x01\x01\xd8\x01\x01\xc2\x02\x00\xca\x02 Volc\\Service\\Vod\\Models\\Business\xe2\x02#Volc\\Service\\Vod\\Models\\GPBMetadatab\x06proto3')
 
 
 
@@ -24,6 +24,7 @@ _VODQUERYDRAMARECAPTASKRESULT = DESCRIPTOR.message_types_by_name['VodQueryDramaR
 _VODQUERYDRAMASCRIPTTASKRESULT = DESCRIPTOR.message_types_by_name['VodQueryDramaScriptTaskResult']
 _VODCREATEDRAMARECAPTASKSPEAKERCONFIG = DESCRIPTOR.message_types_by_name['VodCreateDramaRecapTaskSpeakerConfig']
 _VODCREATEDRAMARECAPTASKFONTCONFIG = DESCRIPTOR.message_types_by_name['VodCreateDramaRecapTaskFontconfig']
+_DRAMARECAPCONFIG = DESCRIPTOR.message_types_by_name['DramaRecapConfig']
 VodCreateDramaRecapTaskResult = _reflection.GeneratedProtocolMessageType('VodCreateDramaRecapTaskResult', (_message.Message,), {
   'DESCRIPTOR' : _VODCREATEDRAMARECAPTASKRESULT,
   '__module__' : 'volcengine.vod.business.vod_drama_pb2'
@@ -66,6 +67,13 @@ VodCreateDramaRecapTaskFontconfig = _reflection.GeneratedProtocolMessageType('Vo
   })
 _sym_db.RegisterMessage(VodCreateDramaRecapTaskFontconfig)
 
+DramaRecapConfig = _reflection.GeneratedProtocolMessageType('DramaRecapConfig', (_message.Message,), {
+  'DESCRIPTOR' : _DRAMARECAPCONFIG,
+  '__module__' : 'volcengine.vod.business.vod_drama_pb2'
+  # @@protoc_insertion_point(class_scope:Volcengine.Vod.Models.Business.DramaRecapConfig)
+  })
+_sym_db.RegisterMessage(DramaRecapConfig)
+
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
@@ -82,4 +90,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _VODCREATEDRAMARECAPTASKSPEAKERCONFIG._serialized_end=436
   _VODCREATEDRAMARECAPTASKFONTCONFIG._serialized_start=439
   _VODCREATEDRAMARECAPTASKFONTCONFIG._serialized_end=1104
+  _DRAMARECAPCONFIG._serialized_start=1107
+  _DRAMARECAPCONFIG._serialized_end=1465
 # @@protoc_insertion_point(module_scope)

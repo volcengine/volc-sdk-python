@@ -32,7 +32,18 @@ class SendBatchTask:
     def send_request(self) -> None:
         """构建并发送日志请求"""
         batch_key = self.batch_log.batch_key
-        put_logs_request = PutLogsRequest(batch_key.topic_id, self.batch_log.log_group_list, batch_key.shard_hash)
+        put_logs_request = PutLogsRequest(
+            batch_key.topic_id,
+            self.batch_log.log_group_list,
+            batch_key.shard_hash,
+            log_count=self.batch_log.current_batch_count,
+            earliest_log_time=self.batch_log.earliest_log_time,
+            latest_log_time=self.batch_log.latest_log_time,
+            enable_nanosecond=self.producer_config.enable_nanosecond,
+        )
+
+        if not self.calibrate_batch_size():
+            return
 
         try:
             put_logs_response = self.client.put_logs(put_logs_request)
@@ -44,6 +55,24 @@ class SendBatchTask:
             return
 
         self.handle_success(put_logs_response)
+
+    def calibrate_batch_size(self) -> bool:
+        estimated = int(self.batch_log.current_batch_size)
+        actual = int(self.batch_log.log_group_list.ByteSize())
+        delta = actual - estimated
+        if delta > 0:
+            max_block_ms = self.producer_config.max_block_ms
+            if max_block_ms == 0:
+                self.memory_lock.acquire(delta)
+            else:
+                acquired = self.memory_lock.acquire(delta, timeout=max_block_ms / 1000)
+                if not acquired:
+                    self.handle_exception(Exception("buffer full when calibrating batch size"))
+                    return False
+        elif delta < 0:
+            self.memory_lock.release(-delta)
+        self.batch_log.current_batch_size = actual
+        return True
 
     def handle_failure(self) -> None:
         """处理失败日志"""

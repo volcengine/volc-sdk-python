@@ -448,14 +448,15 @@ class TLSService(Service):
             new_log = log_group.logs.add()
             new_log.time = v.time
             # 设置纳秒级时间戳（如果提供）
-            if v.time_ns is not None:
+            if v.time_ns is not None and hasattr(new_log, "TimeNs"):
                 new_log.TimeNs = v.time_ns
             for key in v.log_dict.keys():
                 log_content = new_log.contents.add()
                 log_content.key = str(key)
                 log_content.value = str(v.log_dict[key])
         put_logs_request = PutLogsRequest(request.topic_id, log_group_list,
-                                         request.hash_key, request.compression, request.content_md5)
+                                         request.hash_key, request.compression, request.content_md5,
+                                         enable_nanosecond=request.enable_nanosecond)
         return self.put_logs(put_logs_request)
 
     def describe_cursor(self, describe_cursor_request: DescribeCursorRequest) -> DescribeCursorResponse:

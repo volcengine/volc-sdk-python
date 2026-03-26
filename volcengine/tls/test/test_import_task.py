@@ -29,6 +29,8 @@ class TestImportTask(unittest.TestCase):
 
     def setUp(self):
         """测试前置操作：创建项目和主题"""
+        if not all(os.environ.get(k) for k in ["VOLCENGINE_ACCESS_KEY_ID", "VOLCENGINE_ACCESS_KEY_SECRET"]):
+            self.skipTest("缺少必要的环境变量，跳过 ImportTask 集成测试")
         now = str(int(time.time()))
         random_suffix = str(random.randint(1000, 9999))
 

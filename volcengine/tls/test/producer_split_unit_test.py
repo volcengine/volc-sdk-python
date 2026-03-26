@@ -33,11 +33,11 @@ class ProducerSplitUnitTest(unittest.TestCase):
 
         groups = producer.dispatcher.groups
         self.assertEqual(3, len(groups))
-        self.assertEqual(10000, len(groups[0].logs))
-        self.assertEqual(10000, len(groups[1].logs))
-        self.assertEqual(5000, len(groups[2].logs))
+        self.assertEqual(10000, len(getattr(groups[0], "logs")))
+        self.assertEqual(10000, len(getattr(groups[1], "logs")))
+        self.assertEqual(5000, len(getattr(groups[2], "logs")))
         for g in groups:
-            self.assertLessEqual(len(g.logs), ProducerConfig.MAX_LOG_GROUP_COUNT)
+            self.assertLessEqual(len(getattr(g, "logs")), ProducerConfig.MAX_LOG_GROUP_COUNT)
             self.assertLessEqual(len(g.SerializeToString()), ProducerConfig.MAX_BATCH_SIZE)
 
     def test_split_by_size(self):
@@ -84,7 +84,7 @@ class ProducerSplitUnitTest(unittest.TestCase):
         for _ in range(6):
             g = LogGroup()
             for _ in range(10000):
-                g.logs.append(Log())
+                getattr(g, "logs").append(Log())
             groups.append(g)
 
         batches = []

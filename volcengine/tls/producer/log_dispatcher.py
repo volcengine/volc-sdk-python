@@ -1,9 +1,10 @@
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict
 
 from volcengine.tls.TLSService import TLSService
-from volcengine.tls.log_pb2 import LogGroup
+from volcengine.tls.log_pb2 import LogGroup, LogGroupList
 from volcengine.tls.producer.batch_manager import BatchManager
 from volcengine.tls.producer.batch_semaphore import BatchSemaphore
 from volcengine.tls.producer.producer_model import ProducerConfig, BatchLog, CallBack
@@ -104,8 +105,48 @@ class LogDispatcher:
             raise TLSException(error_code="AddBatch Error",
                                error_message="closed LogDispatcher cannot receive logs anymore")
 
+        log_count = 0
+        earliest_log_time = None
+        latest_log_time = None
+        for log in log_group.logs:
+            if log.time <= 0:
+                now_ns = time.time_ns()
+                log.time = int(now_ns // 1_000_000)
+                if self.producer_config.enable_nanosecond and hasattr(log, "TimeNs"):
+                    try:
+                        if not log.HasField("TimeNs"):
+                            log.TimeNs = int(now_ns % 1_000_000)
+                    except ValueError:
+                        log.TimeNs = int(now_ns % 1_000_000)
+            log_count += 1
+            normalized_time = log.time
+            if log.time < 1e10:
+                normalized_time = log.time * 1000
+            elif log.time < 1e15:
+                normalized_time = log.time
+            else:
+                normalized_time = log.time // int(1e6)
+            if earliest_log_time is None or normalized_time < earliest_log_time:
+                earliest_log_time = normalized_time
+            if latest_log_time is None or normalized_time > latest_log_time:
+                latest_log_time = normalized_time
+
         # 计算批次大小
-        batch_size = len(log_group.SerializeToString())
+        def _varint_len(x: int) -> int:
+            if x < 0:
+                return 10
+            n = 1
+            while x >= (1 << 7):
+                n += 1
+                x >>= 7
+            return n
+
+        def _tag_len(field_number: int) -> int:
+            return _varint_len((field_number << 3) | 2)
+
+        group_size = log_group.ByteSize()
+        log_group_list_groups_field_number = LogGroupList.DESCRIPTOR.fields_by_name["log_groups"].number
+        batch_size = _tag_len(log_group_list_groups_field_number) + _varint_len(group_size) + group_size
         self.producer_config.check_batch_size(batch_size)
 
         # 获取内存锁
@@ -138,19 +179,21 @@ class LogDispatcher:
 
             # 同步操作
             with batch_manager.lock:
-                self.add_to_batch_manager(batch_key, log_group, callback, batch_size, batch_manager)
+                self.add_to_batch_manager(batch_key, log_group, callback, batch_size, batch_manager,
+                                          log_count, earliest_log_time, latest_log_time)
         except Exception as e:
             # 发生异常时释放内存锁
             self.memory_lock.release(batch_size)
             raise TLSException(error_code="Add Batch Error", error_message="dispatcher add batch concurrent error")
 
     def add_to_batch_manager(self, batch_key: BatchLog.BatchKey, log_group: LogGroup,
-                             callback: CallBack, batch_size: int, batch_manager: BatchManager) -> None:
+                             callback: CallBack, batch_size: int, batch_manager: BatchManager,
+                             log_count: int, earliest_log_time: int, latest_log_time: int) -> None:
         """将日志添加到批次管理器"""
         # 尝试添加到现有批次
         batch_log = batch_manager.batch_log
         if batch_log is not None:
-            success = batch_log.try_add(log_group, batch_size, callback)
+            success = batch_log.try_add(log_group, batch_size, callback, log_count, earliest_log_time, latest_log_time)
             if success:
                 # 检查是否已满需要发送
                 if batch_manager.full_and_send_batch_request():
@@ -176,7 +219,7 @@ class LogDispatcher:
         batch_log = BatchLog(batch_key, self.producer_config)
         batch_manager.batch_log = batch_log
 
-        success = batch_log.try_add(log_group, batch_size, callback)
+        success = batch_log.try_add(log_group, batch_size, callback, log_count, earliest_log_time, latest_log_time)
         if not success:
             self.LOG.error(
                 f"tryAdd batchLog failed, batchKey = {str(batch_key)}, batchSize = {batch_size}, "

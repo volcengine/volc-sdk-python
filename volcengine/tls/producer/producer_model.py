@@ -96,6 +96,7 @@ class ProducerConfig:
         self.max_block_ms = self.DEFAULT_BLOCK_MS
         self.retry_count = self.DEFAULT_RETRY_COUNT
         self.max_reserved_attempts = self.DEFAULT_RESERVED_ATTEMPTS
+        self.enable_nanosecond = False
         self.client_config = ClientConfig(endpoint, region, access_key, access_secret, token)
 
     def __str__(self) -> str:
@@ -107,6 +108,7 @@ class ProducerConfig:
                 f"max_block_ms={self.max_block_ms}, "
                 f"retry_count={self.retry_count}, "
                 f"max_reserved_attempts={self.max_reserved_attempts}, "
+                f"enable_nanosecond={self.enable_nanosecond}, "
                 f"client_config={self.client_config})")
 
     def valid_config(self) -> None:
@@ -241,6 +243,8 @@ class BatchLog:
         self.batch_key = batch_key
         self.current_batch_size = 0
         self.current_batch_count = 0
+        self.earliest_log_time = None
+        self.latest_log_time = None
         self.call_back_list = []
         self.log_group_list = LogGroupList()
         self.producer_config = producer_config
@@ -254,13 +258,29 @@ class BatchLog:
         self.base_increase_backoff_ms = 1000  # 1秒
         self.LOG = get_logger(__name__)
 
-    def try_add(self, log_group: LogGroup, batch_size: int, call_back: Optional[CallBack]) -> bool:
+    def try_add(self, log_group: LogGroup, batch_size: int, call_back: Optional[CallBack],
+                log_count: Optional[int] = None, earliest_log_time: Optional[int] = None,
+                latest_log_time: Optional[int] = None) -> bool:
         """尝试添加日志组到批次中"""
         current_batch_count = self.current_batch_count
         current_batch_size = self.current_batch_size
+        if log_count is None:
+            log_count = len(log_group.logs)
+            for log in log_group.logs:
+                normalized_time = log.time
+                if log.time < 1e10:
+                    normalized_time = log.time * 1000
+                elif log.time < 1e15:
+                    normalized_time = log.time
+                else:
+                    normalized_time = log.time // int(1e6)
+                if earliest_log_time is None or normalized_time < earliest_log_time:
+                    earliest_log_time = normalized_time
+                if latest_log_time is None or normalized_time > latest_log_time:
+                    latest_log_time = normalized_time
 
         # 检查是否超过阈值
-        if (len(log_group.logs) + current_batch_count > ProducerConfig.MAX_BATCH_COUNT or
+        if (log_count + current_batch_count > ProducerConfig.MAX_BATCH_COUNT or
                 batch_size + current_batch_size > ProducerConfig.MAX_BATCH_SIZE):
             return False
 
@@ -271,8 +291,13 @@ class BatchLog:
             self.call_back_list.append(call_back)
 
         # 更新当前计数
-        self.current_batch_count = current_batch_count + len(log_group.logs)
+        self.current_batch_count = current_batch_count + log_count
         self.current_batch_size = current_batch_size + batch_size
+        if log_count > 0 and earliest_log_time is not None and latest_log_time is not None:
+            if self.earliest_log_time is None or earliest_log_time < self.earliest_log_time:
+                self.earliest_log_time = earliest_log_time
+            if self.latest_log_time is None or latest_log_time > self.latest_log_time:
+                self.latest_log_time = latest_log_time
 
         return True
 

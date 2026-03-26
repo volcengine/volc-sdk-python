@@ -62,6 +62,9 @@ class VodServiceConfig(Service):
             "ApplyUploadInfo": ApiInfo("GET", "/", {"Action": "ApplyUploadInfo", "Version": "2022-01-01"}, {}, {}),
             "CommitUploadInfo": ApiInfo("GET", "/", {"Action": "CommitUploadInfo", "Version": "2022-01-01"}, {}, {}),
             # 媒资
+            "GetMediaEntityList": ApiInfo("GET", "/", {"Action": "GetMediaEntityList", "Version": "2023-07-01"}, {}, {}),
+            "GetMediaEntity": ApiInfo("GET", "/", {"Action": "GetMediaEntity", "Version": "2023-07-01"}, {}, {}),
+            "DeleteMediaEntity": ApiInfo("POST", "/", {"Action": "DeleteMediaEntity", "Version": "2023-07-01"}, {}, {}),
             "UpdateMediaInfo": ApiInfo("GET", "/", {"Action": "UpdateMediaInfo", "Version": "2020-08-01"}, {}, {}),
             "UpdateMediaPublishStatus": ApiInfo("GET", "/", {"Action": "UpdateMediaPublishStatus", "Version": "2020-08-01"}, {}, {}),
             "UpdateMediaStorageClass": ApiInfo("GET", "/", {"Action": "UpdateMediaStorageClass", "Version": "2022-12-01"}, {}, {}),

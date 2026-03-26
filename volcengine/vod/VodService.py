@@ -629,7 +629,6 @@ class VodService(VodServiceConfig):
             return res
 
 
-
     #
     # GetAllPlayInfo.
     #
@@ -2073,6 +2072,109 @@ class VodService(VodServiceConfig):
                 raise Exception(resp.ResponseMetadata.Error.Code)
         else:
             return Parse(res, VodExtractMediaMetaTaskResponse(), True)
+
+    #
+    # GetMediaEntityList.
+    #
+    # @param request VodGetMediaEntityListRequest
+    # @return VodGetMediaEntityListResponse
+    # @raise Exception
+    def get_media_entity_list(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetMediaEntityList", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetMediaEntityListResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetMediaEntityListResponse(), True)
+
+    #
+    # GetMediaEntity.
+    #
+    # @param request VodGetMediaEntityRequest
+    # @return VodGetMediaEntityResponse
+    # @raise Exception
+    def get_media_entity(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetMediaEntity", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetMediaEntityResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetMediaEntityResponse(), True)
+
+    #
+    # DeleteMediaEntity.
+    #
+    # @param request VodDeleteMediaEntityRequest
+    # @return VodDeleteMediaEntityResponse
+    # @raise Exception
+    def delete_media_entity(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.post("DeleteMediaEntity",{},params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodDeleteMediaEntityResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodDeleteMediaEntityResponse(), True)
+
 
     #
     # StartWorkflow.

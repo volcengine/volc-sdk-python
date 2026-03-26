@@ -28,6 +28,10 @@ class TestDescribeShippers(unittest.TestCase):
             self.endpoint, self.access_key_id, self.access_key_secret, self.region
         )
 
+    def setUp(self):
+        if not all([self.access_key_id, self.access_key_secret]):
+            self.skipTest("缺少必要的环境变量，跳过 DescribeShippers 集成测试")
+
     def _generate_random_string(self, length=10):
         """生成随机字符串"""
         return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))

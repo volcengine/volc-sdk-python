@@ -584,8 +584,9 @@ class DescribeIndexRequest(TLSRequest):
 
 
 class PutLogsRequest(TLSRequest):
-    def __init__(self, topic_id: str, log_group_list: LogGroupList, hash_key: str = None, 
-                 compression: str = LZ4, content_md5: str = None):
+    def __init__(self, topic_id: str, log_group_list: LogGroupList, hash_key: str = None,
+                 compression: str = LZ4, content_md5: str = None, log_count: int = None,
+                 earliest_log_time: int = None, latest_log_time: int = None, enable_nanosecond: bool = False):
         """
         :param topic_id:日志主题 ID
         :type topic_id:str
@@ -603,6 +604,10 @@ class PutLogsRequest(TLSRequest):
         self.hash_key = hash_key
         self.compression = compression
         self.content_md5 = content_md5
+        self.log_count = log_count
+        self.earliest_log_time = earliest_log_time
+        self.latest_log_time = latest_log_time
+        self.enable_nanosecond = enable_nanosecond
 
     def check_validation(self):
         """
@@ -629,35 +634,41 @@ class PutLogsRequest(TLSRequest):
         log_cnt = 0
         max_log_time = -math.inf
         min_log_time = math.inf
+        use_provided_stats = (
+            self.log_count is not None and
+            self.earliest_log_time is not None and
+            self.latest_log_time is not None
+        )
 
         for log_group in self.log_group_list.log_groups:
-            log_group_count = len(log_group.logs)
-            if log_group_count == 0:
+            if len(log_group.logs) == 0:
                 continue
-
-            log_cnt += log_group_count
-
-            normalized_time = 0
 
             for log in log_group.logs:
                 if log.time <= 0:
-                    log.time = int(time.time() * 1000)
-                    normalized_time = log.time
-                # s
-                elif log.time < 1e10:
-                    normalized_time = log.time * 1000
-                # ms
-                elif log.time < 1e15:
-                    normalized_time = log.time
-                # ns
-                else:
-                    normalized_time = log.time // int(1e6)
+                    now_ns = time.time_ns()
+                    log.time = int(now_ns // 1_000_000)
+                    if self.enable_nanosecond and hasattr(log, "TimeNs"):
+                        try:
+                            if not log.HasField("TimeNs"):
+                                log.TimeNs = int(now_ns % 1_000_000)
+                        except ValueError:
+                            log.TimeNs = int(now_ns % 1_000_000)
 
-                if normalized_time >= max_log_time:
-                    max_log_time = normalized_time
+                if not use_provided_stats:
+                    normalized_time = log.time
+                    if log.time < 1e10:
+                        normalized_time = log.time * 1000
+                    elif log.time < 1e15:
+                        normalized_time = log.time
+                    else:
+                        normalized_time = log.time // int(1e6)
 
-                if normalized_time <= min_log_time:
-                    min_log_time = normalized_time
+                    log_cnt += 1
+                    if normalized_time >= max_log_time:
+                        max_log_time = normalized_time
+                    if normalized_time <= min_log_time:
+                        min_log_time = normalized_time
 
         pb_log_group_list = self.log_group_list.SerializeToString()
 
@@ -668,10 +679,15 @@ class PutLogsRequest(TLSRequest):
         request_headers = {
             CONTENT_TYPE: APPLICATION_X_PROTOBUF,
             X_TLS_BODYRAWSIZE: str(len(pb_log_group_list)),
-            LOG_COUNT: str(log_cnt),
-            EARLIEST_LOG_TIME: str(min_log_time),
-            LATEST_LOG_TIME: str(max_log_time),
         }
+        if use_provided_stats:
+            request_headers[LOG_COUNT] = str(self.log_count)
+            request_headers[EARLIEST_LOG_TIME] = str(self.earliest_log_time)
+            request_headers[LATEST_LOG_TIME] = str(self.latest_log_time)
+        else:
+            request_headers[LOG_COUNT] = str(log_cnt)
+            request_headers[EARLIEST_LOG_TIME] = str(min_log_time)
+            request_headers[LATEST_LOG_TIME] = str(max_log_time)
 
         if self.hash_key is not None:
             request_headers[X_TLS_HASHKEY] = self.hash_key
@@ -711,7 +727,7 @@ class PutLogsV2LogContent:
 
 
 class PutLogsV2Logs:
-    def __init__(self, source: str = None, filename: str = None, log_tags: dict = None):
+    def __init__(self, source: str = None, filename: str = None, log_tags: dict = None, enable_nanosecond: bool = False):
         """
         :param source: 日志来源，一般使用机器 IP 作为标识
         :type source:str
@@ -724,17 +740,21 @@ class PutLogsV2Logs:
         self.filename = filename
         self.log_tags = log_tags or {}
         self.logs = []
+        self.enable_nanosecond = enable_nanosecond
 
     def add_log(self, contents: dict, log_time: int = 0, time_ns: int = None):
         if log_time == 0:
-            log_time = int(time.time() * 1000)
+            now_ns = time.time_ns()
+            log_time = int(now_ns // 1_000_000)
+            if time_ns is None and self.enable_nanosecond:
+                time_ns = int(now_ns % 1_000_000)
         log = PutLogsV2LogContent(log_time, contents, time_ns)
         self.logs.append(log)
 
 
 class PutLogsV2Request(TLSRequest):
-    def __init__(self, topic_id: str, logs: PutLogsV2Logs, hash_key: str = None, 
-                 compression: str = LZ4, content_md5: str = None):
+    def __init__(self, topic_id: str, logs: PutLogsV2Logs, hash_key: str = None,
+                 compression: str = LZ4, content_md5: str = None, enable_nanosecond: bool = False):
         """
         :param topic_id:日志主题 ID
         :type topic_id:str
@@ -752,6 +772,7 @@ class PutLogsV2Request(TLSRequest):
         self.hash_key = hash_key
         self.compression = compression
         self.content_md5 = content_md5
+        self.enable_nanosecond = enable_nanosecond
 
 
 class DescribeCursorRequest(TLSRequest):

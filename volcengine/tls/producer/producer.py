@@ -2,7 +2,7 @@ import threading
 import time
 from typing import Optional
 
-from volcengine.tls.log_pb2 import LogGroup
+from volcengine.tls.log_pb2 import LogGroup, LogGroupList
 from volcengine.tls.producer.batch_semaphore import BatchSemaphore
 from volcengine.tls.producer.log_dispatcher import LogDispatcher
 from volcengine.tls.producer.mover import Mover
@@ -57,49 +57,83 @@ class TLSProducer:
         max_log_group_count = ProducerConfig.MAX_LOG_GROUP_COUNT
         max_log_group_size = ProducerConfig.MAX_BATCH_SIZE
 
+        def _varint_len(x: int) -> int:
+            if x < 0:
+                return 10
+            n = 1
+            while x >= (1 << 7):
+                n += 1
+                x >>= 7
+            return n
+
+        def _tag_len(field_number: int) -> int:
+            return _varint_len((field_number << 3) | 2)
+
+        log_groups_field_number = LogGroup.DESCRIPTOR.fields_by_name["logs"].number
+        log_group_list_groups_field_number = LogGroupList.DESCRIPTOR.fields_by_name["log_groups"].number
+
         log_group = LogGroup()
         if source is not None:
             log_group.source = source
         if filename is not None:
             log_group.filename = filename
 
+        base_group_size = log_group.ByteSize()
+        current_estimated_group_size = base_group_size
         current_count = 0
         for v in logs:
-            new_log = log_group.logs.add()  # pylint: disable=no-member
+            new_log = getattr(log_group, "logs").add()
             new_log.time = v.time
+            if v.time_ns is not None and hasattr(new_log, "TimeNs"):
+                new_log.TimeNs = v.time_ns
             for key in v.log_dict.keys():
                 log_content = new_log.contents.add()
                 log_content.key = str(key)
                 log_content.value = str(v.log_dict[key])
 
             current_count += 1
-            log_group_size = len(log_group.SerializeToString())
-            if log_group_size > max_log_group_size:
+            log_size = new_log.ByteSize()
+            current_estimated_group_size += _tag_len(log_groups_field_number) + _varint_len(log_size) + log_size
+            group_size = current_estimated_group_size
+            entry_size = _tag_len(log_group_list_groups_field_number) + _varint_len(group_size) + group_size
+            if entry_size > max_log_group_size:
                 if current_count == 1:
+                    actual_group_size = log_group.ByteSize()
+                    actual_entry_size = _tag_len(log_group_list_groups_field_number) + _varint_len(actual_group_size) + actual_group_size
                     raise TLSException(
                         error_code="InvalidArgument",
-                        error_message=f"log size {log_group_size} is larger than MAX_LOG_SIZE {max_log_group_size}"
+                        error_message=f"log size {actual_entry_size} is larger than MAX_LOG_SIZE {max_log_group_size}"
                     )
-                log_group.logs.pop()
+                getattr(log_group, "logs").pop()
                 current_count -= 1
+                current_estimated_group_size -= _tag_len(log_groups_field_number) + _varint_len(log_size) + log_size
                 self.dispatcher.add_batch(hash_key, topic_id, source, filename, log_group, callback)
                 log_group = LogGroup()
                 if source is not None:
                     log_group.source = source
                 if filename is not None:
                     log_group.filename = filename
-                new_log = log_group.logs.add()  # pylint: disable=no-member
+                base_group_size = log_group.ByteSize()
+                new_log = getattr(log_group, "logs").add()
                 new_log.time = v.time
+                if v.time_ns is not None and hasattr(new_log, "TimeNs"):
+                    new_log.TimeNs = v.time_ns
                 for key in v.log_dict.keys():
                     log_content = new_log.contents.add()
                     log_content.key = str(key)
                     log_content.value = str(v.log_dict[key])
                 current_count = 1
-                log_group_size = len(log_group.SerializeToString())
-                if log_group_size > max_log_group_size:
+                current_estimated_group_size = base_group_size
+                log_size = new_log.ByteSize()
+                current_estimated_group_size += _tag_len(log_groups_field_number) + _varint_len(log_size) + log_size
+                group_size = current_estimated_group_size
+                entry_size = _tag_len(log_group_list_groups_field_number) + _varint_len(group_size) + group_size
+                if entry_size > max_log_group_size:
+                    actual_group_size = log_group.ByteSize()
+                    actual_entry_size = _tag_len(log_group_list_groups_field_number) + _varint_len(actual_group_size) + actual_group_size
                     raise TLSException(
                         error_code="InvalidArgument",
-                        error_message=f"log size {log_group_size} is larger than MAX_LOG_SIZE {max_log_group_size}"
+                        error_message=f"log size {actual_entry_size} is larger than MAX_LOG_SIZE {max_log_group_size}"
                     )
 
             if current_count >= max_log_group_count:
@@ -110,6 +144,8 @@ class TLSProducer:
                 if filename is not None:
                     log_group.filename = filename
                 current_count = 0
+                base_group_size = log_group.ByteSize()
+                current_estimated_group_size = base_group_size
 
         if current_count > 0:
             self.dispatcher.add_batch(hash_key, topic_id, source, filename, log_group, callback)
