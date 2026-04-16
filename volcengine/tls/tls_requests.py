@@ -2047,7 +2047,7 @@ class CreateAlarmRequest(SetAlarmRequest):
                  condition: str, alarm_period: int, alarm_notify_group: List[str], status: bool = True,
                  trigger_period: int = 1, user_define_msg: str = None, severity: str = "notice",
                  alarm_period_detail: AlarmPeriodSetting = None, join_configurations: List[JoinConfig] = None,
-                 trigger_conditions: List[TriggerCondition] = None):
+                 trigger_conditions: List[TriggerCondition] = None, send_resolved: bool = None):
         """
         :param project_id: 日志项目ID
         :type project_id: str
@@ -2077,10 +2077,13 @@ class CreateAlarmRequest(SetAlarmRequest):
         :type join_configurations: List[JoinConfig]
         :param trigger_conditions: 告警触发条件列表
         :type trigger_conditions: List[TriggerCondition]
+        :param send_resolved: 是否发送恢复通知，不填该参数默认为true
+        :type send_resolved: bool
         """
         super(CreateAlarmRequest, self).__init__(alarm_name, query_request, request_cycle, condition, alarm_period,
                                                  alarm_notify_group, status, trigger_period, user_define_msg, severity,
-                                                 alarm_period_detail, join_configurations, trigger_conditions)
+                                                 alarm_period_detail, join_configurations, trigger_conditions,
+                                                 send_resolved)
         self.project_id = project_id
 
     def check_validation(self):

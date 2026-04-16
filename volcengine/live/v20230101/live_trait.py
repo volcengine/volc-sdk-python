@@ -572,6 +572,20 @@ class LiveTrait(Service):
         res_json = json.loads(res)
         return res_json
             
+    def describe_live_stream_group_by_page(self, body):
+        res = self.api_post('DescribeLiveStreamGroupByPage', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def describe_forbidden_stream_group_by_page(self, body):
+        res = self.api_post('DescribeForbiddenStreamGroupByPage', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
     def kill_stream(self, body):
         res = self.api_post('KillStream', [], json.dumps(body))
         if res == '':
@@ -1253,6 +1267,55 @@ class LiveTrait(Service):
             
     def list_high_light_task(self, body):
         res = self.api_post('ListHighLightTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def create_speech_task(self, body):
+        res = self.api_post('CreateSpeechTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def delete_speech_task(self, body):
+        res = self.api_post('DeleteSpeechTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def search_speech_task(self, body):
+        res = self.api_post('SearchSpeechTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def update_speech_task(self, body):
+        res = self.api_post('UpdateSpeechTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def get_speech_task(self, body):
+        res = self.api_post('GetSpeechTask', [], json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def get_speech_config(self):
+        res = self.api_get('GetSpeechConfig', {})
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+            
+    def restart_speech_task(self, body):
+        res = self.api_post('RestartSpeechTask', [], json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

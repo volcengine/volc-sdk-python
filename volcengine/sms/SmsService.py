@@ -7,7 +7,7 @@ from volcengine.Credentials import Credentials
 from volcengine.base.Service import Service
 from volcengine.ServiceInfoHttps import ServiceInfoSms
 from volcengine.const.Const import *
-from retry import retry
+from tenacity import retry, stop_after_attempt
 
 
 class SmsService(Service):
@@ -73,7 +73,7 @@ class SmsService(Service):
         }
         return api_info
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def send_sms(self, body):
         res = self.json('SendSms', {}, body)
         if res == '':
@@ -82,7 +82,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def send_sms_verify_code(self, body):
         res = self.json('SendSmsVerifyCode', {}, body)
         if res == '':
@@ -91,7 +91,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def check_sms_verify_code(self, body):
         res = self.json('CheckSmsVerifyCode', {}, body)
         if res == '':
@@ -100,7 +100,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def send_batch_sms(self, body):
         res = self.json('SendBatchSms', {}, json.dumps(body))
         if res == '':
@@ -109,7 +109,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def conversion(self, body):
         res = self.json('Conversion', {}, json.dumps(body))
         if res == '':
@@ -118,7 +118,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def get_sms_template_and_order_list(self, param):
         res = self.get('GetSmsTemplateAndOrderList', param)
         if res == '':
@@ -127,7 +127,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def apply_sms_template(self, body):
         res = self.json('ApplySmsTemplate', {}, json.dumps(body))
         if res == '':
@@ -136,7 +136,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def delete_sms_template(self, body):
         res = self.post('DeleteSmsTemplate', {}, body)
         if res == '':
@@ -145,7 +145,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def get_sub_account_list(self, param):
         res = self.get('GetSubAccountList', param)
         if res == '':
@@ -154,7 +154,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def get_sub_account_detail(self, param):
         res = self.get('GetSubAccountDetail', param)
         if res == '':
@@ -163,7 +163,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def get_signature_and_order_list(self, param):
         res = self.get('GetSignatureAndOrderList', param)
         if res == '':
@@ -172,7 +172,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def apply_sms_signature(self, body):
         res = self.json('ApplySmsSignature', {}, json.dumps(body))
         if res == '':
@@ -181,7 +181,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def delete_signature(self, body):
         res = self.json('DeleteSignature', {}, json.dumps(body))
         if res == '':
@@ -190,7 +190,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def apply_vms_template(self, body):
         body["caller"] = "sdk"
         if body["channelType"] is None or body["channelType"] == "":
@@ -204,7 +204,7 @@ class SmsService(Service):
                 "templateId": res_json['Result']["templateId"]}
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def get_vms_template_status(self, body):
         res = self.json('GetVmsTemplateStatus', {}, json.dumps(body))
         if res == '':
@@ -213,7 +213,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def send_vms(self, body):
         res = self.json('SendSms', {}, json.dumps(body))
         if res == '':
@@ -222,7 +222,7 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def insert_sms_sub_account(self, body):
         res = self.json('InsertSubAccount', {}, json.dumps(body))
         if res == '':
@@ -231,42 +231,42 @@ class SmsService(Service):
 
         return res_json
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def get_sms_send_details(self, body):
         res = self.json('GetSmsSendDetails', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def apply_signature_ident(self, body):
         res = self.json('ApplySignatureIdent', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def get_signature_ident_list(self, body):
         res = self.json('GetSignatureIdentList', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def batch_bind_signature_ident(self, body):
         res = self.json('BatchBindSignatureIdent', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def apply_sms_signature_v2(self, body):
         res = self.json('ApplySmsSignatureV2', {}, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         return json.loads(res)
 
-    @retry(tries=2, delay=0)
+    @retry(stop=stop_after_attempt(2))
     def update_sms_signature(self, body):
         res = self.json('UpdateSmsSignature', {}, json.dumps(body))
         if res == '':

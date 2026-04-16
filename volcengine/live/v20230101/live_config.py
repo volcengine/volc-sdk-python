@@ -88,6 +88,8 @@ api_info = {
     "DescribeRelaySourceV3": ApiInfo("POST", "/", {"Action": "DescribeRelaySourceV3", "Version": "2023-01-01"}, {}, {}),
     "CreateRelaySourceV4": ApiInfo("POST", "/", {"Action": "CreateRelaySourceV4", "Version": "2023-01-01"}, {}, {}),
     "UpdateRelaySourceV3": ApiInfo("POST", "/", {"Action": "UpdateRelaySourceV3", "Version": "2023-01-01"}, {}, {}),
+    "DescribeLiveStreamGroupByPage": ApiInfo("POST", "/", {"Action": "DescribeLiveStreamGroupByPage", "Version": "2023-01-01"}, {}, {}),
+    "DescribeForbiddenStreamGroupByPage": ApiInfo("POST", "/", {"Action": "DescribeForbiddenStreamGroupByPage", "Version": "2023-01-01"}, {}, {}),
     "KillStream": ApiInfo("POST", "/", {"Action": "KillStream", "Version": "2023-01-01"}, {}, {}),
     "DescribeClosedStreamInfoByPage": ApiInfo("GET", "/", {"Action": "DescribeClosedStreamInfoByPage", "Version": "2023-01-01"}, {}, {}),
     "DescribeLiveStreamInfoByPage": ApiInfo("GET", "/", {"Action": "DescribeLiveStreamInfoByPage", "Version": "2023-01-01"}, {}, {}),
@@ -185,5 +187,12 @@ api_info = {
     "CreateHighLightTask": ApiInfo("POST", "/", {"Action": "CreateHighLightTask", "Version": "2023-01-01"}, {}, {}),
     "DeleteTaskByAccountID": ApiInfo("POST", "/", {"Action": "DeleteTaskByAccountID", "Version": "2023-01-01"}, {}, {}),
     "DescribeHighLightTaskByAccountID": ApiInfo("POST", "/", {"Action": "DescribeHighLightTaskByAccountID", "Version": "2023-01-01"}, {}, {}),
-    "ListHighLightTask": ApiInfo("POST", "/", {"Action": "ListHighLightTask", "Version": "2023-01-01"}, {}, {})
+    "ListHighLightTask": ApiInfo("POST", "/", {"Action": "ListHighLightTask", "Version": "2023-01-01"}, {}, {}),
+    "CreateSpeechTask": ApiInfo("POST", "/", {"Action": "CreateSpeechTask", "Version": "2023-01-01"}, {}, {}),
+    "DeleteSpeechTask": ApiInfo("POST", "/", {"Action": "DeleteSpeechTask", "Version": "2023-01-01"}, {}, {}),
+    "SearchSpeechTask": ApiInfo("POST", "/", {"Action": "SearchSpeechTask", "Version": "2023-01-01"}, {}, {}),
+    "UpdateSpeechTask": ApiInfo("POST", "/", {"Action": "UpdateSpeechTask", "Version": "2023-01-01"}, {}, {}),
+    "GetSpeechTask": ApiInfo("POST", "/", {"Action": "GetSpeechTask", "Version": "2023-01-01"}, {}, {}),
+    "GetSpeechConfig": ApiInfo("GET", "/", {"Action": "GetSpeechConfig", "Version": "2023-01-01"}, {}, {}),
+    "RestartSpeechTask": ApiInfo("POST", "/", {"Action": "RestartSpeechTask", "Version": "2023-01-01"}, {}, {})
 }
