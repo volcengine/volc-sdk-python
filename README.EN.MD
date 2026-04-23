@@ -75,3 +75,7 @@ Add the following content to `~/.volc/config`:
 
 - [Visual Intelligence](volcengine/visual/README.md)
 - [NLP](volcengine/nlp/README.md)
+
+## Security and privacy
+This project takes security seriously. 
+For vulnerability reporting and supported versions, see [SECURITY.md](SECURITY.md)

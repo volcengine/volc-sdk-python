@@ -58,3 +58,7 @@ Python版本需要不低于3.7。
 
 - 【视觉智能】请点击[这里](volcengine/visual/README.md)
 - 【智能语义】请点击[这里](volcengine/nlp/README.md)
+
+## Security and privacy
+This project takes security seriously. 
+For vulnerability reporting and supported versions, see [SECURITY.md](SECURITY.md)
