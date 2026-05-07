@@ -47,6 +47,18 @@ class RcLlmAgentService(Service):
                                                {"Action": "GetMultiModerationResult", "Version": "2022-08-26"}, {}, {}),
             "ImageTextLiteModeration": ApiInfo("POST", "/openapi/v1/rc_llm/image_text_lite_moderation",
                                          {"Action": "ImageTextLiteModeration", "Version": "2022-08-26"}, {}, {}),
+            "AudioLiteModeration": ApiInfo("POST", "/openapi/v1/rc_llm/audio_lite_moderation",
+                                           {"Action": "AudioLiteModeration", "Version": "2022-08-26"}, {}, {}),
+            "AsyncAudioLiteModeration": ApiInfo("POST", "/openapi/v1/rc_llm/async_audio_lite_moderation",
+                                                {"Action": "AsyncAudioLiteModeration", "Version": "2022-08-26"}, {}, {}),
+            "AudioLiteModerationResult": ApiInfo("GET", "/openapi/v1/rc_llm/audio_lite_moderation_result",
+                                                 {"Action": "AudioLiteModerationResult", "Version": "2022-08-26"}, {},
+                                                 {}),
+            "AsyncVideoLiteModeration": ApiInfo("POST", "/openapi/v1/rc_llm/async_video_lite_moderation",
+                                                {"Action": "AsyncVideoLiteModeration", "Version": "2022-08-26"}, {}, {}),
+            "VideoLiteModerationResult": ApiInfo("GET", "/openapi/v1/rc_llm/video_lite_moderation_result",
+                                                 {"Action": "VideoLiteModerationResult", "Version": "2022-08-26"}, {},
+                                                 {}),
             }
 
         return api_info
@@ -142,6 +154,45 @@ class RcLlmAgentService(Service):
                     retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
     def image_text_lite_moderation(self, params, body):
         res = self.json("ImageTextLiteModeration", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def audio_lite_moderation(self, params, body):
+        res = self.json("AudioLiteModeration", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def async_audio_lite_moderation(self, params, body):
+        res = self.json("AsyncAudioLiteModeration", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    def audio_lite_moderation_result(self, params, body):
+        res = self.get("AudioLiteModerationResult", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def async_video_lite_moderation(self, params, body):
+        res = self.json("AsyncVideoLiteModeration", params, json.dumps(body))
+        if res == '':
+            raise Exception("empty response")
+        res_json = json.loads(res)
+        return res_json
+
+    @redo.retriable(sleeptime=0.1, jitter=0.01, attempts=2,
+                    retry_exceptions=(exceptions.ConnectionError, exceptions.ConnectTimeout))
+    def video_lite_moderation_result(self, params, body):
+        res = self.get("VideoLiteModerationResult", params, json.dumps(body))
         if res == '':
             raise Exception("empty response")
         res_json = json.loads(res)

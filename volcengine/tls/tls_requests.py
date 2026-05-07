@@ -436,7 +436,8 @@ class SetIndexRequest(TLSRequest):
     def __init__(self, topic_id: str, full_text: FullTextInfo = None,
                  key_value: List[KeyValueInfo] = None,
                  user_inner_key_value: List[KeyValueInfo] = None,
-                 max_text_len: int = None, enable_auto_index: bool = None):
+                 max_text_len: int = None, enable_auto_index: bool = None,
+                 enable_phrase_index: bool = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -452,6 +453,8 @@ class SetIndexRequest(TLSRequest):
         :param enable_auto_index: 是否开启索引自动更新，开启后系统将根据
                                      新出现的字段自动添加到键值索引
         :type enable_auto_index: bool
+        :param enable_phrase_index: 是否开启索引版短语查询
+        :type enable_phrase_index: bool
         """
         self.topic_id = topic_id
         self.full_text = full_text
@@ -459,6 +462,7 @@ class SetIndexRequest(TLSRequest):
         self.user_inner_key_value = user_inner_key_value
         self.max_text_len = max_text_len
         self.enable_auto_index = enable_auto_index
+        self.enable_phrase_index = enable_phrase_index
 
     def get_api_input(self):
         body = {TOPIC_ID: self.topic_id}
@@ -477,6 +481,8 @@ class SetIndexRequest(TLSRequest):
             body[MAX_TEXT_LEN] = self.max_text_len
         if self.enable_auto_index is not None:
             body[ENABLE_AUTO_INDEX] = self.enable_auto_index
+        if self.enable_phrase_index is not None:
+            body[ENABLE_PHRASE_INDEX] = self.enable_phrase_index
 
         return body
 
@@ -485,7 +491,8 @@ class CreateIndexRequest(SetIndexRequest):
     def __init__(self, topic_id: str, full_text: FullTextInfo = None,
                  key_value: List[KeyValueInfo] = None,
                  user_inner_key_value: List[KeyValueInfo] = None,
-                 max_text_len: int = None, enable_auto_index: bool = None):
+                 max_text_len: int = None, enable_auto_index: bool = None,
+                 enable_phrase_index: bool = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -501,10 +508,12 @@ class CreateIndexRequest(SetIndexRequest):
         :param enable_auto_index: 是否开启索引自动更新，开启后系统将根据
                                      新出现的字段自动添加到键值索引
         :type enable_auto_index: bool
+        :param enable_phrase_index: 是否开启索引版短语查询
+        :type enable_phrase_index: bool
         """
         super(CreateIndexRequest, self).__init__(topic_id, full_text, key_value,
                                                    user_inner_key_value, max_text_len,
-                                                   enable_auto_index)
+                                                   enable_auto_index, enable_phrase_index)
 
     def check_validation(self):
         """
@@ -538,7 +547,8 @@ class ModifyIndexRequest(SetIndexRequest):
     def __init__(self, topic_id: str, full_text: FullTextInfo = None,
                  key_value: List[KeyValueInfo] = None,
                  user_inner_key_value: List[KeyValueInfo] = None,
-                 max_text_len: int = None, enable_auto_index: bool = None):
+                 max_text_len: int = None, enable_auto_index: bool = None,
+                 enable_phrase_index: bool = None):
         """
         :param topic_id: 日志主题ID
         :type topic_id: str
@@ -552,8 +562,12 @@ class ModifyIndexRequest(SetIndexRequest):
         :type max_text_len: int
         :param enable_auto_index: 是否开启索引自动更新
         :type enable_auto_index: bool
+        :param enable_phrase_index: 是否开启索引版短语查询
+        :type enable_phrase_index: bool
         """
-        super(ModifyIndexRequest, self).__init__(topic_id, full_text, key_value, user_inner_key_value, max_text_len, enable_auto_index)
+        super(ModifyIndexRequest, self).__init__(
+            topic_id, full_text, key_value, user_inner_key_value,
+            max_text_len, enable_auto_index, enable_phrase_index)
 
     def check_validation(self):
         """
@@ -581,6 +595,258 @@ class DescribeIndexRequest(TLSRequest):
         if self.topic_id is None:
             return False
         return True
+
+
+class CreateProcessorRequest(TLSRequest):
+    def __init__(self, project_id: str, processor_name: str, dsl_content: str,
+                 processor_type: str, description: str = None,
+                 processor_dsl_type: str = None, processor_status: str = None,
+                 fail_strategy: str = None, timeout_ms: int = None,
+                 max_qps: int = None):
+        self.project_id = project_id
+        self.processor_name = processor_name
+        self.description = description
+        self.dsl_content = dsl_content
+        self.processor_type = processor_type
+        self.processor_dsl_type = processor_dsl_type
+        self.processor_status = processor_status
+        self.fail_strategy = fail_strategy
+        self.timeout_ms = timeout_ms
+        self.max_qps = max_qps
+
+    def check_validation(self):
+        return self.project_id is not None and self.processor_name is not None \
+            and self.dsl_content is not None and self.processor_type is not None
+
+    def get_api_input(self):
+        body = {
+            PROJECT_ID: self.project_id,
+            PROCESSOR_NAME: self.processor_name,
+            DSL_CONTENT: self.dsl_content,
+            PROCESSOR_TYPE: self.processor_type,
+        }
+        if self.description is not None:
+            body[DESCRIPTION] = self.description
+        if self.processor_dsl_type is not None:
+            body[PROCESSOR_DSL_TYPE] = self.processor_dsl_type
+        if self.processor_status is not None:
+            body[PROCESSOR_STATUS] = self.processor_status
+        if self.fail_strategy is not None:
+            body[FAIL_STRATEGY] = self.fail_strategy
+        if self.timeout_ms is not None:
+            body[TIMEOUT_MS] = self.timeout_ms
+        if self.max_qps is not None:
+            body[MAX_QPS] = self.max_qps
+        return body
+
+
+class DeleteProcessorRequest(TLSRequest):
+    def __init__(self, processor_id: str):
+        self.processor_id = processor_id
+
+    def check_validation(self):
+        return self.processor_id is not None
+
+    def get_api_input(self):
+        return {PROCESSOR_ID_HUMP: self.processor_id}
+
+
+class ModifyProcessorRequest(TLSRequest):
+    def __init__(self, processor_id: str, processor_name: str = None,
+                 description: str = None, dsl_content: str = None,
+                 fail_strategy: str = None, timeout_ms: int = None,
+                 max_qps: int = None):
+        self.processor_id = processor_id
+        self.processor_name = processor_name
+        self.description = description
+        self.dsl_content = dsl_content
+        self.fail_strategy = fail_strategy
+        self.timeout_ms = timeout_ms
+        self.max_qps = max_qps
+
+    def check_validation(self):
+        return self.processor_id is not None
+
+    def get_api_input(self):
+        body = {PROCESSOR_ID_HUMP: self.processor_id}
+        if self.processor_name is not None:
+            body[PROCESSOR_NAME] = self.processor_name
+        if self.description is not None:
+            body[DESCRIPTION] = self.description
+        if self.dsl_content is not None:
+            body[DSL_CONTENT] = self.dsl_content
+        if self.fail_strategy is not None:
+            body[FAIL_STRATEGY] = self.fail_strategy
+        if self.timeout_ms is not None:
+            body[TIMEOUT_MS] = self.timeout_ms
+        if self.max_qps is not None:
+            body[MAX_QPS] = self.max_qps
+        return body
+
+
+class DescribeProcessorRequest(DeleteProcessorRequest):
+    pass
+
+
+class DescribeProcessorsRequest(TLSRequest):
+    def __init__(self, iam_project_name: str = None, project_id: str = None,
+                 project_name: str = None, processor_id: str = None,
+                 processor_name: str = None, processor_type: str = None,
+                 processor_status: str = None, processor_dsl_type: str = None,
+                 order_by_project: bool = None, page_number: int = None,
+                 page_size: int = None):
+        self.iam_project_name = iam_project_name
+        self.project_id = project_id
+        self.project_name = project_name
+        self.processor_id = processor_id
+        self.processor_name = processor_name
+        self.processor_type = processor_type
+        self.processor_status = processor_status
+        self.processor_dsl_type = processor_dsl_type
+        self.order_by_project = order_by_project
+        self.page_number = page_number
+        self.page_size = page_size
+
+    def check_validation(self):
+        return True
+
+    def get_api_input(self):
+        body = super(DescribeProcessorsRequest, self).get_api_input()
+        body.pop("ProcessorDslType", None)
+        if self.processor_id is not None:
+            body[PROCESSOR_ID_HUMP] = self.processor_id
+        if self.processor_dsl_type is not None:
+            body[PROCESSOR_DSL_TYPE] = self.processor_dsl_type
+        return body
+
+
+class ExecProcessorRequest(TLSRequest):
+    def __init__(self, exec_action: str, processor_type: str,
+                 dsl_content: str, log_sample: dict,
+                 processor_dsl_type: str = None):
+        self.exec_action = exec_action
+        self.processor_type = processor_type
+        self.dsl_content = dsl_content
+        self.log_sample = log_sample
+        self.processor_dsl_type = processor_dsl_type
+
+    def check_validation(self):
+        return self.exec_action is not None and self.processor_type is not None \
+            and self.dsl_content is not None and self.log_sample is not None
+
+    def get_api_input(self):
+        body = {
+            EXEC_ACTION: self.exec_action,
+            PROCESSOR_TYPE: self.processor_type,
+            DSL_CONTENT: self.dsl_content,
+            LOG_SAMPLE: self.log_sample,
+        }
+        if self.processor_dsl_type is not None:
+            body[PROCESSOR_DSL_TYPE] = self.processor_dsl_type
+        return body
+
+
+class OperateProcessorRequest(TLSRequest):
+    def __init__(self, processor_id: str, operate_action: str):
+        self.processor_id = processor_id
+        self.operate_action = operate_action
+
+    def check_validation(self):
+        return self.processor_id is not None and self.operate_action is not None
+
+    def get_api_input(self):
+        return {
+            PROCESSOR_ID_HUMP: self.processor_id,
+            OPERATE_ACTION: self.operate_action,
+        }
+
+
+class BindTopicProcessorRequest(TLSRequest):
+    def __init__(self, processor_id: str, topic_id: str):
+        self.processor_id = processor_id
+        self.topic_id = topic_id
+
+    def check_validation(self):
+        return self.processor_id is not None and self.topic_id is not None
+
+    def get_api_input(self):
+        return {
+            PROCESSOR_ID_HUMP: self.processor_id,
+            TOPIC_ID: self.topic_id,
+        }
+
+
+class BatchBindTopicsRequest(TLSRequest):
+    def __init__(self, processor_id: str, topic_ids: List[str]):
+        self.processor_id = processor_id
+        self.topic_ids = topic_ids
+
+    def check_validation(self):
+        return self.processor_id is not None and self.topic_ids is not None
+
+    def get_api_input(self):
+        return {
+            PROCESSOR_ID_HUMP: self.processor_id,
+            TOPIC_IDS: self.topic_ids,
+        }
+
+
+class UnbindTopicProcessorRequest(TLSRequest):
+    def __init__(self, topic_id: str):
+        self.topic_id = topic_id
+
+    def check_validation(self):
+        return self.topic_id is not None
+
+
+class DescribeTopicsByProcessorRequest(TLSRequest):
+    def __init__(self, processor_id: str, page_number: int = None,
+                 page_size: int = None):
+        self.processor_id = processor_id
+        self.page_number = page_number
+        self.page_size = page_size
+
+    def check_validation(self):
+        return self.processor_id is not None
+
+    def get_api_input(self):
+        body = super(DescribeTopicsByProcessorRequest, self).get_api_input()
+        body[PROCESSOR_ID_HUMP] = self.processor_id
+        return body
+
+
+class DescribeProcessorByTopicRequest(TLSRequest):
+    def __init__(self, topic_id: str):
+        self.topic_id = topic_id
+
+    def check_validation(self):
+        return self.topic_id is not None
+
+
+class DescribeProcessorBindingsRequest(TLSRequest):
+    def __init__(self, project_id: str, page_number: int = None,
+                 page_size: int = None):
+        self.project_id = project_id
+        self.page_number = page_number
+        self.page_size = page_size
+
+    def check_validation(self):
+        return self.project_id is not None
+
+
+class DescribeProcessorFunctionsRequest(TLSRequest):
+    def __init__(self, processor_type: str, processor_dsl_type: str = None):
+        self.processor_type = processor_type
+        self.processor_dsl_type = processor_dsl_type
+
+    def check_validation(self):
+        return self.processor_type is not None
+
+    def get_api_input(self):
+        body = {PROCESSOR_TYPE: self.processor_type}
+        if self.processor_dsl_type is not None:
+            body[PROCESSOR_DSL_TYPE] = self.processor_dsl_type
+        return body
 
 
 class PutLogsRequest(TLSRequest):

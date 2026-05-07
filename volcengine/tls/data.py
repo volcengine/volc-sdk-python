@@ -214,6 +214,95 @@ class BindProcessor(TLSData):
         }
 
 
+class ProcessorInfo(TLSData):
+    def __init__(self, project_name: str = None, processor_id: str = None,
+                 project_id: str = None, account_id: str = None,
+                 processor_name: str = None, description: str = None,
+                 dsl_content: str = None, processor_type: str = None,
+                 processor_dsl_type: str = None, processor_status: str = None,
+                 fail_strategy: str = None, timeout_ms: int = None,
+                 max_qps: int = None, create_time: str = None,
+                 update_time: str = None):
+        self.project_name = project_name
+        self.processor_id = processor_id
+        self.project_id = project_id
+        self.account_id = account_id
+        self.processor_name = processor_name
+        self.description = description
+        self.dsl_content = dsl_content
+        self.processor_type = processor_type
+        self.processor_dsl_type = processor_dsl_type
+        self.processor_status = processor_status
+        self.fail_strategy = fail_strategy
+        self.timeout_ms = timeout_ms
+        self.max_qps = max_qps
+        self.create_time = create_time
+        self.update_time = update_time
+
+
+class ProcessorTopicInfo(TLSData):
+    def __init__(self, topic_id: str = None, topic_name: str = None):
+        self.topic_id = topic_id
+        self.topic_name = topic_name
+
+
+class ProcessorBinding(TLSData):
+    def __init__(self, topic_id: str = None, processor_id: str = None):
+        self.topic_id = topic_id
+        self.processor_id = processor_id
+
+
+class ProcessorFunctionArgument(TLSData):
+    def __init__(self, index: int = None, name: str = None,
+                 argument_type: str = None, description: str = None,
+                 is_necessary: bool = None, default_value: str = None):
+        self.index = index
+        self.name = name
+        self.argument_type = argument_type
+        self.description = description
+        self.is_necessary = is_necessary
+        self.default_value = default_value
+
+
+class ProcessorFunctionSample(TLSData):
+    def __init__(self, index: int = None, log: List[Dict] = None,
+                 script: str = None, result: List[Dict] = None,
+                 description: str = None):
+        self.index = index
+        self.log = log
+        self.script = script
+        self.result = result
+        self.description = description
+
+
+class ProcessorFunctionInfo(TLSData):
+    def __init__(self, name: str = None, function_type: str = None,
+                 method_signature: str = None, description: str = None,
+                 samples: List[ProcessorFunctionSample] = None,
+                 arguments: List[ProcessorFunctionArgument] = None):
+        self.name = name
+        self.function_type = function_type
+        self.method_signature = method_signature
+        self.description = description
+        self.samples = samples
+        self.arguments = arguments
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(ProcessorFunctionInfo, cls).set_attributes(data)
+        if info is None:
+            return None
+        info.samples = [
+            ProcessorFunctionSample.set_attributes(sample)
+            for sample in (info.samples or [])  # pylint: disable=no-member
+        ]
+        info.arguments = [
+            ProcessorFunctionArgument.set_attributes(argument)
+            for argument in (info.arguments or [])  # pylint: disable=no-member
+        ]
+        return info
+
+
 class TopicInfo(TLSData):
     def __init__(self, topic_name: str = None, topic_id: str = None, project_id: str = None, ttl: int = None,
                  create_time: str = None, modify_time: str = None, shard_count: int = None, description: str = None,

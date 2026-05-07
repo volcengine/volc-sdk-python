@@ -243,6 +243,7 @@ class DescribeIndexResponse(TLSResponse):
         self.create_time = self.response[CREATE_TIME]
         self.modify_time = self.response[MODIFY_TIME]
         self.enable_auto_index = self.response.get(ENABLE_AUTO_INDEX, False)
+        self.enable_phrase_index = self.response.get(ENABLE_PHRASE_INDEX, False)
         self.max_text_len = self.response.get(MAX_TEXT_LEN, 2048)
 
     def get_create_time(self):
@@ -287,12 +288,146 @@ class DescribeIndexResponse(TLSResponse):
         """
         return self.enable_auto_index
 
+    def get_enable_phrase_index(self):
+        """
+        :return: 是否开启索引版短语查询
+        :rtype: bool
+        """
+        return self.enable_phrase_index
+
     def get_max_text_len(self):
         """
         :return: 统计字段值的最大长度
         :rtype: int
         """
         return self.max_text_len
+
+
+class CreateProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateProcessorResponse, self).__init__(response)
+        self.processor_id = self.response[PROCESSOR_ID_HUMP]
+
+    def get_processor_id(self):
+        return self.processor_id
+
+
+class DeleteProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteProcessorResponse, self).__init__(response)
+
+
+class ModifyProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ModifyProcessorResponse, self).__init__(response)
+
+
+class DescribeProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeProcessorResponse, self).__init__(response)
+        self.processor = ProcessorInfo.set_attributes(self.response)
+
+    def get_processor(self):
+        return self.processor
+
+
+class DescribeProcessorsResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeProcessorsResponse, self).__init__(response)
+        self.total = self.response[TOTAL]
+        self.items = [
+            ProcessorInfo.set_attributes(item)
+            for item in self.response.get(ITEMS, [])
+        ]
+
+    def get_total(self):
+        return self.total
+
+    def get_items(self):
+        return self.items
+
+
+class ExecProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ExecProcessorResponse, self).__init__(response)
+        self.exec_status = self.response.get(EXEC_STATUS)
+        self.processed_log = self.response.get(PROCESSED_LOG)
+        self.error = self.response.get(ERROR)
+
+    def get_exec_status(self):
+        return self.exec_status
+
+    def get_processed_log(self):
+        return self.processed_log
+
+    def get_error(self):
+        return self.error
+
+
+class OperateProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(OperateProcessorResponse, self).__init__(response)
+
+
+class DescribeTopicsByProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeTopicsByProcessorResponse, self).__init__(response)
+        self.total = self.response[TOTAL]
+        self.items = [
+            ProcessorTopicInfo.set_attributes(item)
+            for item in self.response.get(ITEMS, [])
+        ]
+
+    def get_total(self):
+        return self.total
+
+    def get_items(self):
+        return self.items
+
+
+class BindTopicProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(BindTopicProcessorResponse, self).__init__(response)
+
+
+class BatchBindTopicsResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(BatchBindTopicsResponse, self).__init__(response)
+
+
+class UnbindTopicProcessorResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(UnbindTopicProcessorResponse, self).__init__(response)
+
+
+class DescribeProcessorBindingsResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeProcessorBindingsResponse, self).__init__(response)
+        self.total = self.response[TOTAL]
+        self.items = [
+            ProcessorBinding.set_attributes(item)
+            for item in self.response.get(ITEMS, [])
+        ]
+
+    def get_total(self):
+        return self.total
+
+    def get_items(self):
+        return self.items
+
+
+class DescribeProcessorFunctionsResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeProcessorFunctionsResponse, self).__init__(response)
+        self.functions = {}
+        for group, functions in self.response.get(FUNCTIONS, {}).items():
+            self.functions[group] = [
+                ProcessorFunctionInfo.set_attributes(function)
+                for function in functions
+            ]
+
+    def get_functions(self):
+        return self.functions
 
 
 class PutLogsResponse(TLSResponse):

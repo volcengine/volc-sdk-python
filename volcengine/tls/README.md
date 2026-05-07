@@ -23,6 +23,43 @@ access_key_secret = os.environ["VOLCENGINE_ACCESS_KEY_SECRET"]
 tls_service = TLSService(endpoint, access_key_id, access_key_secret, region)
 ```
 
+如需使用 API Key 匿名鉴权写入日志，请使用显式 API Key 初始化入口。当前匿名鉴权仅支持最终请求为 `/PutLogs` 的接口，例如 `put_logs`、`put_logs_v2` 和 Producer 写入；其他接口仍需要完整 AK/SK。
+
+```python
+tls_service = TLSService.with_api_key(
+    endpoint=os.environ["VOLCENGINE_ENDPOINT"],
+    region=os.environ["VOLCENGINE_REGION"],
+    api_key=os.environ["VOLCENGINE_TLS_API_KEY"],
+)
+```
+
+如果同时配置 API Key 与 AK/SK，`put_logs`/`put_logs_v2` 会优先使用 API Key 匿名鉴权，其他接口继续使用 AK/SK 签名：
+
+```python
+tls_service = TLSService.with_api_key(
+    endpoint,
+    region,
+    os.environ["VOLCENGINE_TLS_API_KEY"],
+    access_key_id=access_key_id,
+    access_key_secret=access_key_secret,
+)
+```
+
+Producer 可通过 `ProducerConfig` 透传 API Key：
+
+```python
+producer_config = ProducerConfig(endpoint, region, "", "", api_key=os.environ["VOLCENGINE_TLS_API_KEY"])
+```
+
+API Key 可在运行时更新：
+
+```python
+tls_service.reset_api_key(os.environ["VOLCENGINE_TLS_API_KEY_NEW"])
+producer.reset_api_key(os.environ["VOLCENGINE_TLS_API_KEY_NEW"])
+```
+
+请勿在日志或错误信息中打印 API Key 原文。
+
 ### 示例代码
 
 本示例中，创建一个 example_tls.py 文件，并调用接口分别完成创建项目、创建主题、创建索引、写入日志数据、消费日志和查询日志数据。

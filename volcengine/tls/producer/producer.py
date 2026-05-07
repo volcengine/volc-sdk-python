@@ -37,9 +37,10 @@ class TLSProducer:
 
     @staticmethod
     def default_producer(endpoint: str, region: str, access_key: str,
-                         access_secret: str, token: Optional[str] = None) -> 'TLSProducer':
+                         access_secret: str, token: Optional[str] = None,
+                         api_key: Optional[str] = None) -> 'TLSProducer':
         """创建默认的Producer实例"""
-        config = ProducerConfig(endpoint, region, access_key, access_secret, token)
+        config = ProducerConfig(endpoint, region, access_key, access_secret, token, api_key)
         return TLSProducer(config)
 
     def send_log_v2(self, hash_key: Optional[str], topic_id: str, source: Optional[str],
@@ -159,6 +160,9 @@ class TLSProducer:
                               f"secretKey is {secret_key}, token is {security_token}"
             )
         self.dispatcher.reset_access_key_token(access_key, secret_key, security_token)
+
+    def reset_api_key(self, api_key: str) -> None:
+        self.dispatcher.reset_api_key(api_key)
 
     def start(self) -> None:
         """启动Producer"""

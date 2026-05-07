@@ -11,18 +11,24 @@ from volcengine.tls.util import get_logger
 class ClientConfig:
     """客户端配置类"""
 
-    def __init__(self, endpoint: str, region: str, access_key: str, access_secret: str, token: Optional[str] = None):
+    def __init__(self, endpoint: str, region: str, access_key: str, access_secret: str, token: Optional[str] = None,
+                 api_key: Optional[str] = None):
         self.endpoint = endpoint
         self.region = region
         self.access_key_id = access_key
         self.access_key_secret = access_secret
         self.token = token
+        self.api_key = api_key
 
     def __str__(self) -> str:
         return (f"ClientConfig(endpoint={self.endpoint}, region={self.region}, "
                 f"access_key_id={'***' if self.access_key_id else None}, "
                 f"access_key_secret={'***' if self.access_key_secret else None}, "
-                f"token={'***' if self.token else None})")
+                f"token={'***' if self.token else None}, "
+                f"api_key={'***' if self.api_key else None})")
+
+    def reset_api_key(self, api_key: str) -> None:
+        self.api_key = api_key
 
 
 def _valid_number(field: int, min_val: int, max_val: int, default_val: int) -> int:
@@ -86,7 +92,8 @@ class ProducerConfig:
     MAX_THREAD_COUNT = 10
     DEFAULT_BLOCK_MS = 60 * 1000  # 60秒
 
-    def __init__(self, endpoint: str, region: str, access_key: str, access_secret: str, token: Optional[str] = None):
+    def __init__(self, endpoint: str, region: str, access_key: str, access_secret: str, token: Optional[str] = None,
+                 api_key: Optional[str] = None):
         """初始化生产者配置"""
         self.total_size_in_bytes = self.DEFAULT_TOTAL_SIZE_IN_BYTES
         self.max_thread_count = self.MAX_THREAD_COUNT
@@ -97,7 +104,7 @@ class ProducerConfig:
         self.retry_count = self.DEFAULT_RETRY_COUNT
         self.max_reserved_attempts = self.DEFAULT_RESERVED_ATTEMPTS
         self.enable_nanosecond = False
-        self.client_config = ClientConfig(endpoint, region, access_key, access_secret, token)
+        self.client_config = ClientConfig(endpoint, region, access_key, access_secret, token, api_key)
 
     def __str__(self) -> str:
         return (f"ProducerConfig(total_size_in_bytes={self.total_size_in_bytes}, "
@@ -141,9 +148,9 @@ class ProducerConfig:
         # 验证客户端配置
         if (not self.client_config or
                 not self.client_config.endpoint or
-                not self.client_config.access_key_id or
-                not self.client_config.access_key_secret or
-                not self.client_config.region):
+                not self.client_config.region or
+                not (self.client_config.api_key or
+                     (self.client_config.access_key_id and self.client_config.access_key_secret))):
             raise TLSException(error_code="InvalidArgument", error_message=str(self.client_config))
 
     def set_total_size_in_bytes(self, total_size_in_bytes: int) -> None:
@@ -205,9 +212,9 @@ class ProducerConfig:
     def set_client_config(self, client_config: ClientConfig) -> None:
         if (not client_config or
                 not client_config.endpoint or
-                not client_config.access_key_id or
-                not client_config.access_key_secret or
-                not client_config.region):
+                not client_config.region or
+                not (client_config.api_key or
+                     (client_config.access_key_id and client_config.access_key_secret))):
             raise TLSException(
                 error_code="InvalidArgument",
                 error_message=str(client_config)

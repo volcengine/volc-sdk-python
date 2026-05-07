@@ -19,7 +19,8 @@ from volcengine.tls.tls_responses import ModifyTraceInstanceResponse
 from volcengine.tls.tls_exception import TLSException
 from volcengine.tls.retry_policy import RetryPolicy
 from volcengine.tls.const import DELETE_TRACE_INSTANCE, DESCRIBE_TRACE_INSTANCE, DESCRIBE_TRACE, SEARCH_TRACES, \
-    CREATE_ALARM_CONTENT_TEMPLATE, CREATE_ALARM_WEBHOOK_INTEGRATION, DELETE_ALARM_WEBHOOK_INTEGRATION
+    CREATE_ALARM_CONTENT_TEMPLATE, CREATE_ALARM_WEBHOOK_INTEGRATION, DELETE_ALARM_WEBHOOK_INTEGRATION, \
+    X_TLS_ANONYMOUS_IDENTITY
 from volcengine.tls.util import get_logger
 
 API_INFO = {
@@ -40,6 +41,21 @@ API_INFO = {
     DELETE_INDEX: ApiInfo(HTTP_DELETE, DELETE_INDEX, {}, {}, {}),
     MODIFY_INDEX: ApiInfo(HTTP_PUT, MODIFY_INDEX, {}, {}, {}),
     DESCRIBE_INDEX: ApiInfo(HTTP_GET, DESCRIBE_INDEX, {}, {}, {}),
+    # APIs of processors.
+    CREATE_PROCESSOR: ApiInfo(HTTP_POST, CREATE_PROCESSOR, {}, {}, {}),
+    DELETE_PROCESSOR: ApiInfo(HTTP_DELETE, DELETE_PROCESSOR, {}, {}, {}),
+    MODIFY_PROCESSOR: ApiInfo(HTTP_PUT, MODIFY_PROCESSOR, {}, {}, {}),
+    DESCRIBE_PROCESSOR: ApiInfo(HTTP_GET, DESCRIBE_PROCESSOR, {}, {}, {}),
+    DESCRIBE_PROCESSORS: ApiInfo(HTTP_GET, DESCRIBE_PROCESSORS, {}, {}, {}),
+    EXEC_PROCESSOR: ApiInfo(HTTP_POST, EXEC_PROCESSOR, {}, {}, {}),
+    OPERATE_PROCESSOR: ApiInfo(HTTP_PUT, OPERATE_PROCESSOR, {}, {}, {}),
+    DESCRIBE_TOPICS_BY_PROCESSOR: ApiInfo(HTTP_GET, DESCRIBE_TOPICS_BY_PROCESSOR, {}, {}, {}),
+    BIND_TOPIC_PROCESSOR: ApiInfo(HTTP_PUT, BIND_TOPIC_PROCESSOR, {}, {}, {}),
+    BATCH_BIND_TOPICS: ApiInfo(HTTP_PUT, BATCH_BIND_TOPICS, {}, {}, {}),
+    UNBIND_TOPIC_PROCESSOR: ApiInfo(HTTP_DELETE, UNBIND_TOPIC_PROCESSOR, {}, {}, {}),
+    DESCRIBE_PROCESSOR_BY_TOPIC: ApiInfo(HTTP_GET, DESCRIBE_PROCESSOR_BY_TOPIC, {}, {}, {}),
+    DESCRIBE_PROCESSOR_BINDINGS: ApiInfo(HTTP_GET, DESCRIBE_PROCESSOR_BINDINGS, {}, {}, {}),
+    DESCRIBE_PROCESSOR_FUNCTIONS: ApiInfo(HTTP_GET, DESCRIBE_PROCESSOR_FUNCTIONS, {}, {}, {}),
     # APIs of logs.
     PUT_LOGS: ApiInfo(HTTP_POST, PUT_LOGS, {}, {}, {}),
     DESCRIBE_CURSOR: ApiInfo(HTTP_GET, DESCRIBE_CURSOR, {}, {}, {}),
@@ -162,7 +178,7 @@ API_VERSION_V_0_2_0 = "0.2.0"
 class TLSService(Service):
     def __init__(self, endpoint: str, access_key_id: str, access_key_secret: str, region: str,
                  security_token: str = None, scheme: str = "https", timeout: int = 60,
-                 api_version=API_VERSION_V_0_3_0):
+                 api_version=API_VERSION_V_0_3_0, api_key: str = None):
         self.__endpoint = endpoint
         self.__access_key_id = access_key_id
         self.__access_key_secret = access_key_secret
@@ -171,6 +187,7 @@ class TLSService(Service):
         self.__scheme = scheme
         self.__timeout = timeout
         self.__api_version = api_version
+        self.__api_key = api_key
         self.__retry_policy = None
 
         self.check_scheme_and_endpoint()
@@ -179,6 +196,13 @@ class TLSService(Service):
         self.__logger.info("Successfully initialize the TLS client.")
 
         super(TLSService, self).__init__(service_info=self.get_service_info(), api_info=API_INFO)
+
+    @classmethod
+    def with_api_key(cls, endpoint: str, region: str, api_key: str, access_key_id: str = "",
+                     access_key_secret: str = "", security_token: str = None, scheme: str = "https",
+                     timeout: int = 60, api_version=API_VERSION_V_0_3_0):
+        return cls(endpoint, access_key_id, access_key_secret, region, security_token=security_token,
+                   scheme=scheme, timeout=timeout, api_version=api_version, api_key=api_key)
 
     def check_scheme_and_endpoint(self):
         schemes = {
@@ -230,7 +254,17 @@ class TLSService(Service):
             else:
                 request.headers[CONTENT_MD5] = hashlib.md5(request.body).hexdigest()
 
-        SignerV4.sign(request, self.service_info.credentials)
+        if self.__api_key and api == PUT_LOGS:
+            request.headers[X_TLS_ANONYMOUS_IDENTITY] = self.__api_key
+            request.headers.pop("Authorization", None)
+            request.headers.pop(X_SECURITY_TOKEN, None)
+        else:
+            credentials = self.service_info.credentials
+            if self.__api_key and not (credentials.ak and credentials.sk):
+                raise TLSException(error_code="MissingCredentials",
+                                   error_message="AK/SK credentials are required for TLS APIs except PutLogs "
+                                                 "when initialized with api_key.")
+            SignerV4.sign(request, credentials)
 
         return request
 
@@ -285,6 +319,9 @@ class TLSService(Service):
         self.__access_key_secret = access_key_secret
         self.__security_token = security_token
         self.service_info = self.get_service_info()
+
+    def reset_api_key(self, api_key: str):
+        self.__api_key = api_key
 
     def set_timeout(self, timeout: int):
         self.__timeout = timeout
@@ -421,6 +458,104 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_INDEX, params=describe_index_request.get_api_input())
 
         return DescribeIndexResponse(response)
+
+    def create_processor(self, create_processor_request: CreateProcessorRequest) -> CreateProcessorResponse:
+        if create_processor_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_PROCESSOR, body=create_processor_request.get_api_input())
+
+        return CreateProcessorResponse(response)
+
+    def delete_processor(self, delete_processor_request: DeleteProcessorRequest) -> DeleteProcessorResponse:
+        if delete_processor_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_PROCESSOR, body=delete_processor_request.get_api_input())
+
+        return DeleteProcessorResponse(response)
+
+    def modify_processor(self, modify_processor_request: ModifyProcessorRequest) -> ModifyProcessorResponse:
+        if modify_processor_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_PROCESSOR, body=modify_processor_request.get_api_input())
+
+        return ModifyProcessorResponse(response)
+
+    def describe_processor(self, describe_processor_request: DescribeProcessorRequest) -> DescribeProcessorResponse:
+        if describe_processor_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_PROCESSOR, params=describe_processor_request.get_api_input())
+
+        return DescribeProcessorResponse(response)
+
+    def describe_processors(self, describe_processors_request: DescribeProcessorsRequest) -> DescribeProcessorsResponse:
+        if describe_processors_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_PROCESSORS, params=describe_processors_request.get_api_input())
+
+        return DescribeProcessorsResponse(response)
+
+    def exec_processor(self, exec_processor_request: ExecProcessorRequest) -> ExecProcessorResponse:
+        if exec_processor_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=EXEC_PROCESSOR, body=exec_processor_request.get_api_input())
+
+        return ExecProcessorResponse(response)
+
+    def operate_processor(self, operate_processor_request: OperateProcessorRequest) -> OperateProcessorResponse:
+        if operate_processor_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=OPERATE_PROCESSOR, body=operate_processor_request.get_api_input())
+
+        return OperateProcessorResponse(response)
+
+    def describe_topics_by_processor(self, request: DescribeTopicsByProcessorRequest) -> DescribeTopicsByProcessorResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_TOPICS_BY_PROCESSOR, params=request.get_api_input())
+
+        return DescribeTopicsByProcessorResponse(response)
+
+    def bind_topic_processor(self, request: BindTopicProcessorRequest) -> BindTopicProcessorResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=BIND_TOPIC_PROCESSOR, body=request.get_api_input())
+
+        return BindTopicProcessorResponse(response)
+
+    def batch_bind_topics(self, request: BatchBindTopicsRequest) -> BatchBindTopicsResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=BATCH_BIND_TOPICS, body=request.get_api_input())
+
+        return BatchBindTopicsResponse(response)
+
+    def unbind_topic_processor(self, request: UnbindTopicProcessorRequest) -> UnbindTopicProcessorResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=UNBIND_TOPIC_PROCESSOR, body=request.get_api_input())
+
+        return UnbindTopicProcessorResponse(response)
+
+    def describe_processor_by_topic(self, request: DescribeProcessorByTopicRequest) -> DescribeProcessorResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_PROCESSOR_BY_TOPIC, params=request.get_api_input())
+
+        return DescribeProcessorResponse(response)
+
+    def describe_processor_bindings(self, request: DescribeProcessorBindingsRequest) -> DescribeProcessorBindingsResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_PROCESSOR_BINDINGS, params=request.get_api_input())
+
+        return DescribeProcessorBindingsResponse(response)
+
+    def describe_processor_functions(self, request: DescribeProcessorFunctionsRequest) -> DescribeProcessorFunctionsResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_PROCESSOR_FUNCTIONS, params=request.get_api_input())
+
+        return DescribeProcessorFunctionsResponse(response)
 
     def put_logs(self, put_logs_request: PutLogsRequest) -> PutLogsResponse:
         if put_logs_request.check_validation() is False:

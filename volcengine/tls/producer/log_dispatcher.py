@@ -36,7 +36,8 @@ class LogDispatcher:
         try:
             client_config = self.producer_config.client_config
             self.client = TLSService(client_config.endpoint, client_config.access_key_id,
-                                     client_config.access_key_secret, client_config.region, client_config.token)
+                                     client_config.access_key_secret, client_config.region, client_config.token,
+                                     api_key=client_config.api_key)
         except Exception as e:
             self.LOG.error("Failed to create TLS client", exc_info=e)
             raise TLSException(error_code="Initialization Error", error_message="Failed to create TLS client")
@@ -87,6 +88,12 @@ class LogDispatcher:
         client_config = self.producer_config.client_config
         client_config.reset_access_key_token(access_key, secret_key, security_token)
         self.client.reset_access_key_token(access_key, secret_key, security_token)
+        self.LOG.info(f"log dispatcher {self.producer_name} update client config {client_config} success")
+
+    def reset_api_key(self, api_key: str) -> None:
+        client_config = self.producer_config.client_config
+        client_config.reset_api_key(api_key)
+        self.client.reset_api_key(api_key)
         self.LOG.info(f"log dispatcher {self.producer_name} update client config {client_config} success")
 
     def add_batch(self, hash_key: str, topic_id: str, source: str, filename: str,
