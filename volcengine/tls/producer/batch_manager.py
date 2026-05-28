@@ -16,10 +16,11 @@ class BatchManager:
             return self.batch_log.full_and_send_batch_request()
         return False
 
-    def add_now(self, config: ProducerConfig, executor_service, client, memory_lock, retry_queue) -> None:
+    def add_now(self, config: ProducerConfig, executor_service, client, memory_lock, retry_queue,
+                failure_controller=None) -> None:
         if self.batch_log is not None:
             task = SendBatchTask(
-                self.batch_log, config, memory_lock, client, retry_queue)
+                self.batch_log, config, memory_lock, client, retry_queue, failure_controller)
             executor_service.submit(task.run)
             self.batch_log = None
 

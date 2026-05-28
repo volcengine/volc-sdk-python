@@ -153,6 +153,14 @@ if __name__ == "__main__":
     search_logs_response = tls_service.search_logs(search_logs_request)
 ```
 
+## Producer 内存韧性配置
+
+Python Producer默认保持兼容模式：`retry_mode="legacy_double_retry"`，breaker关闭，`total_size_in_bytes`继续作为batch/payload兼容预算。新增`max_producer_memory_bytes`用于限制Producer生命周期内SDK持有的日志reservation，覆盖payload、retry队列和发送阶段临时buffer；默认值为`2 * total_size_in_bytes`。
+
+注意：`max_producer_memory_bytes`不是Python进程RSS硬上限，也不是解释器总内存上限。它只限制Producer内部对日志生命周期的reservation，压缩库、解释器对象、线程栈和第三方依赖仍会产生额外内存。
+
+推荐生产profile：设置`retry_mode="producer_managed"`，开启`CircuitBreakerConfig(enabled=True)`，`failure_policy`使用`"fail_fast"`或`"drop_with_callback"`，并把`max_block_ms`设为`0`，让限流、熔断和丢弃通过回调快速反馈。
+
 
 ## 通过消费组消费数据
 

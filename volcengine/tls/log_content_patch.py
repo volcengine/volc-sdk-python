@@ -33,6 +33,68 @@ def _parse_log_groups(log_group_list, buffer, pos, end):
     return group_end
 
 
+def ParseRawLogGroupListListFromString(log_group_list, serialized_data, decompress_func):
+    buffer = memoryview(serialized_data)
+    pos = 0
+    end = len(buffer)
+    log_group_list.Clear()
+    while pos < end:
+        tag_bytes, pos = _decoder.ReadTag(buffer, pos)
+        tag = _decoder._DecodeVarint(tag_bytes, 0)[0]
+        field_num, wire_type = _wire_format.UnpackTag(tag)
+
+        if field_num == 1 and wire_type == _wire_format.WIRETYPE_LENGTH_DELIMITED:
+            size, pos = _decoder._DecodeVarint(buffer, pos)
+            raw_end = pos + size
+            if raw_end > end:
+                raise _message.DecodeError("Truncated RawLogGroupListList.raw_log_group_lists")
+            raw = _parse_raw_log_group_list(buffer[pos:raw_end].tobytes())
+            nested = log_pb2.LogGroupList()
+            ParseLogGroupListFromString(
+                nested,
+                decompress_func(raw["compress_type"].lower(), raw["origin_len"], raw["data"]),
+            )
+            getattr(log_group_list, "log_groups").extend(getattr(nested, "log_groups"))
+            pos = raw_end
+        else:
+            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)  # pylint: disable=no-member
+    return pos
+
+
+def _parse_raw_log_group_list(serialized_data):
+    buffer = memoryview(serialized_data)
+    pos = 0
+    end = len(buffer)
+    raw = {"origin_len": 0, "compress_type": "", "data": b""}
+    while pos < end:
+        tag_bytes, pos = _decoder.ReadTag(buffer, pos)
+        tag = _decoder._DecodeVarint(tag_bytes, 0)[0]
+        field_num, wire_type = _wire_format.UnpackTag(tag)
+
+        if field_num == 1 and wire_type == _wire_format.WIRETYPE_VARINT:
+            raw["origin_len"], pos = _decoder._DecodeVarint(buffer, pos)
+        elif field_num == 3 and wire_type == _wire_format.WIRETYPE_LENGTH_DELIMITED:
+            raw["compress_type"], pos = _read_string(buffer, pos, end, "RawLogGroupList.compress_type")
+        elif field_num == 5 and wire_type == _wire_format.WIRETYPE_LENGTH_DELIMITED:
+            raw["data"], pos = _read_bytes(buffer, pos, end, "RawLogGroupList.data")
+        else:
+            pos = _decoder.SkipField(buffer, pos, end, tag_bytes)  # pylint: disable=no-member
+    return raw
+
+
+def _read_string(buffer, pos, end, field_name):
+    value, pos = _read_bytes(buffer, pos, end, field_name)
+    return value.decode("utf-8"), pos
+
+
+def _read_bytes(buffer, pos, end, field_name):
+    size, pos = _decoder._DecodeVarint(buffer, pos)
+    new_pos = pos + size
+    if new_pos > end:
+        raise _message.DecodeError("Truncated %s" % field_name)
+    return buffer[pos:new_pos].tobytes(), new_pos
+
+
 def ParseLogGroupFromString(log_group, serialized_data):
     buffer = memoryview(serialized_data)
     pos = 0

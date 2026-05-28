@@ -181,6 +181,8 @@ class DescribeTopicsResponse(TLSResponse):
         self.total = self.response[TOTAL]
         topics = self.response[TOPICS]
         self.topics = []
+        self.cursor = self.response.get(CURSOR)
+        self.regions = self.response.get(REGIONS)
 
         for i in range(len(topics)):
             self.topics.append(TopicInfo.set_attributes(data=topics[i]))
@@ -198,6 +200,12 @@ class DescribeTopicsResponse(TLSResponse):
         :rtype: List[TopicInfo]
         """
         return self.topics
+
+    def get_cursor(self):
+        return self.cursor
+
+    def get_regions(self):
+        return self.regions
 
 
 class CreateIndexResponse(TLSResponse):
@@ -221,9 +229,16 @@ class DescribeIndexResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeIndexResponse, self).__init__(response)
 
-        self.full_text = FullTextInfo()
-        if self.response[FULL_TEXT] is not None:
-            self.full_text = FullTextInfo.set_attributes(data=self.response[FULL_TEXT])
+        # L5-D1：暴露 topic_id 字段，与 Go/Java/C++ V2 SDK 对齐。
+        # wire 缺失时返回 None，避免 KeyError；调用方按需判空。
+        self.topic_id = self.response.get(TOPIC_ID)
+
+        full_text_wire = self.response.get(FULL_TEXT)
+        self._has_full_text = full_text_wire is not None
+        if full_text_wire is None:
+            self.full_text = FullTextInfo()
+        else:
+            self.full_text = FullTextInfo.set_attributes(data=full_text_wire)
             self.full_text.delimiter = TLSUtil.replace_white_space_character(self.full_text.delimiter)
 
         self.key_value = []
@@ -259,6 +274,9 @@ class DescribeIndexResponse(TLSResponse):
         :rtype: FullTextInfo
         """
         return self.full_text
+
+    def has_full_text(self):
+        return self._has_full_text
 
     def get_modify_time(self):
         """
@@ -449,26 +467,47 @@ class DescribeCursorResponse(TLSResponse):
         return self.cursor
 
 
+class DescribeCursorTimeResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeCursorTimeResponse, self).__init__(response)
+
+        self.cursor_time = self.response[CURSOR_TIME]
+
+
 class ConsumeLogsResponse(TLSResponse):
-    def __init__(self, response: Response, compression: str):
+    def __init__(self, response: Response, compression: str, original: bool = False):
         super(ConsumeLogsResponse, self).__init__(response)
 
         self.x_tls_cursor = self.headers[X_TLS_CURSOR]
         self.x_tls_count = int(self.headers[X_TLS_COUNT])
+        self.cursor = self.x_tls_cursor
+        self.count = self.x_tls_count
         self.pb_message = None
+        self.logs = None
 
         if DATA in self.response:
             pb_message = self.response[DATA]
-            if compression == LZ4:
-                pb_message = lz4.decompress(struct.pack('<I', int(self.headers[X_TLS_BODYRAWSIZE])) + pb_message)
-            if compression == ZLIB:
-                pb_message = zlib.decompress(pb_message)
 
             self.pb_message = LogGroupList()
-            try:
-                self.pb_message.ParseFromString(pb_message)
-            except Exception as e:
-                log_content_patch.ParseLogGroupListFromString(self.pb_message, pb_message)
+            if original and str(self.headers.get(X_TLS_ORIGINAL, "")).lower() == "true":
+                log_content_patch.ParseRawLogGroupListListFromString(
+                    self.pb_message, pb_message, self._decompress_log_group_list)
+            else:
+                pb_message = self._decompress_log_group_list(
+                    compression, int(self.headers.get(X_TLS_BODYRAWSIZE, 0) or 0), pb_message)
+                try:
+                    self.pb_message.ParseFromString(pb_message)
+                except Exception as e:
+                    log_content_patch.ParseLogGroupListFromString(self.pb_message, pb_message)
+            self.logs = self.pb_message
+
+    @staticmethod
+    def _decompress_log_group_list(compression: str, raw_size: int, pb_message: bytes) -> bytes:
+        if compression == LZ4:
+            return lz4.decompress(struct.pack('<I', raw_size) + pb_message)
+        if compression == ZLIB:
+            return zlib.decompress(pb_message)
+        return pb_message
 
     def get_x_tls_count(self):
         """
@@ -492,6 +531,15 @@ class ConsumeLogsResponse(TLSResponse):
         :rtype: str
         """
         return self.x_tls_cursor
+
+    def get_count(self):
+        return self.count
+
+    def get_cursor(self):
+        return self.cursor
+
+    def get_logs(self):
+        return self.logs
 
 
 class SearchLogsResponse(TLSResponse):
@@ -672,6 +720,33 @@ class DescribeDownloadUrlResponse(TLSResponse):
         return self.download_url
 
 
+class CreateLogBackFlowTaskResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateLogBackFlowTaskResponse, self).__init__(response)
+
+        self.task_id = self.response[TASK_ID]
+
+
+class DeleteLogBackFlowTaskResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteLogBackFlowTaskResponse, self).__init__(response)
+
+
+class DescribeLogBackFlowTasksResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeLogBackFlowTasksResponse, self).__init__(response)
+
+        self.total = self.response[TOTAL]
+        self.log_back_flow_tasks = []
+        for task in self.response[LOG_BACK_FLOW_TASKS]:
+            self.log_back_flow_tasks.append(LogBackFlowTaskInfo.set_attributes(data=task))
+
+
+class ModifyLogBackFlowTaskResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ModifyLogBackFlowTaskResponse, self).__init__(response)
+
+
 class DescribeShardsResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeShardsResponse, self).__init__(response)
@@ -756,6 +831,15 @@ class DescribeHostGroupResponse(TLSResponse):
         return self.host_group_hosts_rules_info
 
 
+class DescribeHostGroupResponseV2(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeHostGroupResponseV2, self).__init__(response)
+
+        self.host_group_hosts_rules_info = \
+            HostGroupHostsRulesInfoV2.set_attributes(data=self.response[HOST_GROUP_HOSTS_RULES_INFO])
+        self.response[HOST_GROUP_HOSTS_RULES_INFO] = self.host_group_hosts_rules_info
+
+
 class DescribeHostGroupsResponse(TLSResponse):
     def __init__(self, response: Response):
         super(DescribeHostGroupsResponse, self).__init__(response)
@@ -781,6 +865,19 @@ class DescribeHostGroupsResponse(TLSResponse):
         :rtype: List[HostGroupHostsRulesInfo]
         """
         return self.host_group_hosts_rules_infos
+
+
+class DescribeHostGroupsResponseV2(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeHostGroupsResponseV2, self).__init__(response)
+
+        self.total = self.response[TOTAL]
+        self.host_group_hosts_rules_infos = []
+        host_group_hosts_rules_infos = self.response[HOST_GROUP_HOSTS_RULES_INFOS]
+
+        for i in range(len(host_group_hosts_rules_infos)):
+            self.host_group_hosts_rules_infos.append(
+                HostGroupHostsRulesInfoV2.set_attributes(data=host_group_hosts_rules_infos[i]))
 
 
 class ModifyHostGroupsAutoUpdateResponse(TLSResponse):
@@ -915,6 +1012,31 @@ class DescribeRuleResponse(TLSResponse):
         :rtype: List[HostGroupInfo]
         """
         return self.host_group_infos
+
+
+class DescribeRuleResponseV2(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeRuleResponseV2, self).__init__(response)
+
+        self.project_id = self.response[PROJECT_ID]
+        self.project_name = self.response[PROJECT_NAME]
+        self.topic_id = self.response[TOPIC_ID]
+        self.topic_name = self.response[TOPIC_NAME]
+        self.rule_info = RuleInfo.set_attributes(data=self.response[RULE_INFO])
+        self.response[RULE_INFO] = self.rule_info
+        self.cs_account_channel = self.response.get(CS_ACCOUNT_CHANNEL)
+        self.allow_edit = self.response.get(ALLOW_EDIT)
+        self.allow_delete = self.response.get(ALLOW_DELETE)
+
+
+class DescribeBoundHostGroupsResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeBoundHostGroupsResponse, self).__init__(response)
+
+        self.total = self.response[TOTAL]
+        self.host_group_infos = []
+        for host_group_info in self.response[HOST_GROUP_INFOS]:
+            self.host_group_infos.append(HostGroupInfo.set_attributes(data=host_group_info))
 
 
 class DescribeRulesResponse(TLSResponse):
@@ -1106,6 +1228,8 @@ class DescribeConsumerGroupsResponse(TLSResponse):
         super(DescribeConsumerGroupsResponse, self).__init__(response)
 
         self.consumer_groups = []
+        self.total = self.response.get(TOTAL)
+        self.dashboard_id = self.response.get(DASHBOARD_ID)
         consumer_groups = self.response[CONSUMER_GROUPS]
 
         if consumer_groups is None:
@@ -1113,6 +1237,12 @@ class DescribeConsumerGroupsResponse(TLSResponse):
 
         for i in range(len(consumer_groups)):
             self.consumer_groups.append(ConsumerGroup.set_attributes(data=consumer_groups[i]))
+
+    def get_total(self):
+        return self.total
+
+    def get_dashboard_id(self):
+        return self.dashboard_id
 
 
 class ConsumerHeartbeatResponse(TLSResponse):
@@ -1924,3 +2054,146 @@ class SearchTracesResponse(TLSResponse):
     def get_trace_infos(self):
         """返回 Trace 列表"""
         return self.trace_infos
+
+
+# ===== Text Analysis - App Instance / Scene Meta / Session Answer =====
+# 复杂嵌套结构（InstanceInfo / DescribeClusterStoreMeta / DescribeClusterMeta /
+# DescribeSessionMeta / DescribeSessionMessage / DescribeKnowledgeBinding 等）
+# 当前以 dict 形式直接透传，未来如有 DTO 需求再补类。
+
+class CreateAppInstanceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateAppInstanceResponse, self).__init__(response)
+        # 服务端字段为 InstanceID（大写 ID），同时兼容 InstanceId
+        self.instance_id = self.response.get(INSTANCE_ID_RSP, "") or self.response.get(INSTANCE_ID, "")
+
+    def get_instance_id(self):
+        return self.instance_id
+
+
+class ModifyAppInstanceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ModifyAppInstanceResponse, self).__init__(response)
+
+
+class DeleteAppInstanceResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteAppInstanceResponse, self).__init__(response)
+
+
+class DescribeAppInstancesResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeAppInstancesResponse, self).__init__(response)
+        self.total = self.response.get(TOTAL, 0)
+        self.instances = self.response.get(INSTANCE_INFO, [])
+
+    def get_total(self):
+        return self.total
+
+    def get_instances(self):
+        """返回实例信息列表（dict 列表，结构详见服务端 InstanceInfo）"""
+        return self.instances
+
+
+class CreateAppSceneMetaResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(CreateAppSceneMetaResponse, self).__init__(response)
+        self.id = self.response.get(ID_FIELD, "")
+
+    def get_id(self):
+        return self.id
+
+
+class ModifyAppSceneMetaResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(ModifyAppSceneMetaResponse, self).__init__(response)
+
+
+class DeleteAppSceneMetaResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DeleteAppSceneMetaResponse, self).__init__(response)
+
+
+class DescribeAppSceneMetasResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeAppSceneMetasResponse, self).__init__(response)
+        self.page_context = self.response.get(PAGE_CONTEXT, "")
+        self.total = self.response.get(TOTAL, 0)
+        self.items = self.response.get(ITEMS, [])
+
+    def get_page_context(self):
+        return self.page_context
+
+    def get_total(self):
+        return self.total
+
+    def get_items(self):
+        """返回 DescribeAppSceneMetasRes 列表（dict 列表，含 6 个嵌套子字段）"""
+        return self.items
+
+
+class DescribeAppSceneMetaResponse(TLSResponse):
+    def __init__(self, response: Response):
+        super(DescribeAppSceneMetaResponse, self).__init__(response)
+        # DescribeAppSceneMetasRes 的 6 个嵌套字段直接以 dict 暴露
+        self.describe_cluster_store_meta = self.response.get("DescribeClusterStoreMeta")
+        self.describe_cluster_meta = self.response.get("DescribeClusterMeta")
+        self.describe_session_meta = self.response.get("DescribeSessionMeta")
+        self.describe_session_message = self.response.get("DescribeSessionMessage")
+        self.describe_session_suggestion = self.response.get("DescribeSessionSuggestion", "")
+        self.describe_knowledge_binding = self.response.get("DescribeKnowledgeBinding")
+
+    def get_describe_cluster_store_meta(self):
+        return self.describe_cluster_store_meta
+
+    def get_describe_cluster_meta(self):
+        return self.describe_cluster_meta
+
+    def get_describe_session_meta(self):
+        return self.describe_session_meta
+
+    def get_describe_session_message(self):
+        return self.describe_session_message
+
+    def get_describe_session_suggestion(self):
+        return self.describe_session_suggestion
+
+    def get_describe_knowledge_binding(self):
+        return self.describe_knowledge_binding
+
+
+class DescribeSessionAnswerResponse(TLSResponse):
+    """SSE 风格响应；MVP 阶段以 dict 透传整体 response，并提供少量便捷方法。"""
+
+    def __init__(self, response: Response):
+        content_type = response.headers.get(CONTENT_TYPE, "")
+        if "text/event-stream" in content_type:
+            self.raw_response = response
+            self.headers = response.headers
+            self.request_id = response.headers[X_TLS_REQUEST_ID]
+            self.response = {}
+            self.message_id = ""
+            self.session_id = ""
+            self.question_id = ""
+            return
+        self.raw_response = response
+        super(DescribeSessionAnswerResponse, self).__init__(response)
+        self.message_id = self.response.get(MESSAGE_ID, "")
+        self.session_id = self.response.get(SESSION_ID, "")
+        self.question_id = self.response.get(QUESTION_ID, "")
+
+    def get_message_id(self):
+        return self.message_id
+
+    def get_session_id(self):
+        return self.session_id
+
+    def get_question_id(self):
+        return self.question_id
+
+    def get_response(self):
+        """返回完整响应字典（详见服务端 DescribeSessionAnswerResp）"""
+        return self.response
+
+    def iter_lines(self, *args, **kwargs):
+        return self.raw_response.iter_lines(*args, **kwargs)

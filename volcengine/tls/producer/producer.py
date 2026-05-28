@@ -3,7 +3,7 @@ import time
 from typing import Optional
 
 from volcengine.tls.log_pb2 import LogGroup, LogGroupList
-from volcengine.tls.producer.batch_semaphore import BatchSemaphore
+from volcengine.tls.producer.batch_semaphore import MemoryLimiter
 from volcengine.tls.producer.log_dispatcher import LogDispatcher
 from volcengine.tls.producer.mover import Mover
 from volcengine.tls.producer.producer_model import ProducerConfig, CallBack
@@ -27,11 +27,16 @@ class TLSProducer:
             TLSProducer._instance_id += 1
             self.name = f"tls-{TLSProducer._instance_id}"
 
-        self.memory_lock = BatchSemaphore(producer_config.total_size_in_bytes)
+        self.memory_limiter = MemoryLimiter(
+            producer_config.max_producer_memory_bytes,
+            producer_config.total_size_in_bytes,
+        )
+        producer_config.memory_limiter = self.memory_limiter
+        self.memory_lock = self.memory_limiter
 
         # 初始化组件
         self.retry_queue = RetryQueue()
-        self.dispatcher = LogDispatcher(producer_config, self.name, self.memory_lock, self.retry_queue)
+        self.dispatcher = LogDispatcher(producer_config, self.name, self.memory_limiter, self.retry_queue)
         self.mover = Mover(f"{self.name}-mover", producer_config, self.dispatcher, self.retry_queue)
         self.LOG = get_logger(__name__)
 
@@ -54,6 +59,9 @@ class TLSProducer:
         # 检查参数
         if not topic_id or not logs:
             raise TLSException(error_code="InvalidArgument", error_message=f"topic id: {topic_id}, log group: {logs}")
+        if (hasattr(self.dispatcher, "reject_by_open_circuit") and
+                self.dispatcher.reject_by_open_circuit(callback)):
+            return
 
         max_log_group_count = ProducerConfig.MAX_LOG_GROUP_COUNT
         max_log_group_size = ProducerConfig.MAX_BATCH_SIZE
@@ -213,6 +221,7 @@ class TLSProducer:
         executor_service = self.dispatcher.executor_service
         if executor_service:
             executor_service.shutdown()
+        self.memory_limiter.close()
 
         self.LOG.info("producer executor service is closed")
 

@@ -6,9 +6,19 @@ from typing import Dict
 from volcengine.tls.TLSService import TLSService
 from volcengine.tls.log_pb2 import LogGroup, LogGroupList
 from volcengine.tls.producer.batch_manager import BatchManager
-from volcengine.tls.producer.batch_semaphore import BatchSemaphore
-from volcengine.tls.producer.producer_model import ProducerConfig, BatchLog, CallBack
+from volcengine.tls.producer.batch_semaphore import MemoryLimiter
+from volcengine.tls.producer.producer_model import (
+    Attempt,
+    BatchLog,
+    CallBack,
+    FailureController,
+    FailurePolicy,
+    ProducerConfig,
+    Result,
+    RetryMode,
+)
 from volcengine.tls.producer.retry_queue import RetryQueue
+from volcengine.tls.retry_policy import RetryPolicy
 from volcengine.tls.tls_exception import TLSException
 from volcengine.tls.util import get_logger
 
@@ -16,13 +26,15 @@ from volcengine.tls.util import get_logger
 class LogDispatcher:
     TLS_THREAD_POOL_FORMAT = "dispatcher-thread-%d"
 
-    def __init__(self, producer_config: ProducerConfig, producer_name: str, memory_lock: BatchSemaphore,
+    def __init__(self, producer_config: ProducerConfig, producer_name: str, memory_lock: MemoryLimiter,
                  retry_queue: RetryQueue):
         self.producer_config = producer_config
         self.producer_name = producer_name
+        self.memory_limiter = memory_lock
         self.memory_lock = memory_lock
         self.retry_queue = retry_queue
         self.closed = False
+        self.failure_controller = FailureController(producer_config.circuit_breaker)
 
         # 初始化批次映射（用普通dict配合锁实现线程安全）
         self.batches: Dict[BatchLog.BatchKey, BatchManager] = {}
@@ -38,6 +50,8 @@ class LogDispatcher:
             self.client = TLSService(client_config.endpoint, client_config.access_key_id,
                                      client_config.access_key_secret, client_config.region, client_config.token,
                                      api_key=client_config.api_key)
+            if self.producer_config.retry_mode == RetryMode.PRODUCER_MANAGED:
+                self.client.set_retry_policy(RetryPolicy(max_attempts=1))
         except Exception as e:
             self.LOG.error("Failed to create TLS client", exc_info=e)
             raise TLSException(error_code="Initialization Error", error_message="Failed to create TLS client")
@@ -60,10 +74,12 @@ class LogDispatcher:
     def close(self) -> None:
         self.LOG.info(f"log dispatcher {self.producer_name} closed")
         self.closed = True
+        self.memory_limiter.close_payload()
 
     def close_now(self) -> None:
         self.LOG.info(f"log dispatcher {self.producer_name} close now")
         self.closed = True
+        self.memory_limiter.close()
         self.executor_service.shutdown(False)
 
     def get_or_create_batch_manager(self, batch_key: BatchLog.BatchKey) -> BatchManager:
@@ -101,8 +117,29 @@ class LogDispatcher:
         """添加批次日志的公开接口"""
         try:
             self.do_add(hash_key, topic_id, source, filename, log_group, callback)
+        except TLSException:
+            raise
         except Exception as e:
             raise TLSException(error_code="AddBatch Error", error_message=str(e))
+
+    def reject_by_open_circuit(self, callback: CallBack) -> bool:
+        if self.producer_config.failure_policy == FailurePolicy.RETRY_THEN_CALLBACK:
+            return False
+        if not self.failure_controller.reject_new_data():
+            return False
+        if self.producer_config.failure_policy == FailurePolicy.DROP_WITH_CALLBACK:
+            if callback is not None:
+                attempt = Attempt(
+                    success=False,
+                    error_code="CircuitOpenException",
+                    error_message="producer circuit breaker is open",
+                )
+                callback.on_complete(Result(False, [attempt], 1))
+            return True
+        raise TLSException(
+            error_code="CircuitOpenException",
+            error_message=f"producer {self.producer_name} circuit breaker is open",
+        )
 
     def do_add(self, hash_key: str, topic_id: str, source: str, filename: str,
                log_group: LogGroup, callback: CallBack) -> None:
@@ -111,6 +148,8 @@ class LogDispatcher:
         if self.closed:
             raise TLSException(error_code="AddBatch Error",
                                error_message="closed LogDispatcher cannot receive logs anymore")
+        if self.reject_by_open_circuit(callback):
+            return
 
         log_count = 0
         earliest_log_time = None
@@ -155,29 +194,7 @@ class LogDispatcher:
         log_group_list_groups_field_number = LogGroupList.DESCRIPTOR.fields_by_name["log_groups"].number
         batch_size = _tag_len(log_group_list_groups_field_number) + _varint_len(group_size) + group_size
         self.producer_config.check_batch_size(batch_size)
-
-        # 获取内存锁
-        max_block_ms = self.producer_config.max_block_ms
-        self.LOG.debug(f"dispatcher {self.producer_name} try acquire memory lock")
-
-        if max_block_ms == 0:
-            self.memory_lock.acquire(batch_size)
-        else:
-            # 尝试在指定时间内获取锁
-            acquired = self.memory_lock.acquire(
-                batch_size,
-                timeout=max_block_ms / 1000  # 转换为秒
-            )
-            if not acquired:
-                available = self.memory_lock.available_permits()  # 获取当前可用许可数
-                self.LOG.warn(
-                    f"Failed to acquire memory within the configured max blocking time {max_block_ms} ms, "
-                    f"requiredSizeInBytes={batch_size}, availableSizeInBytes={available}"
-                )
-                raise TLSException(
-                    error_code="AddBatch Error",
-                    error_message=f"dispatcher {self.producer_name} try acquire memory lock failed"
-                )
+        circuit_permit_count = 0
 
         # 添加到批次
         try:
@@ -187,29 +204,34 @@ class LogDispatcher:
             # 同步操作
             with batch_manager.lock:
                 self.add_to_batch_manager(batch_key, log_group, callback, batch_size, batch_manager,
-                                          log_count, earliest_log_time, latest_log_time)
+                                          log_count, earliest_log_time, latest_log_time, circuit_permit_count)
+        except TLSException:
+            self.failure_controller.release_permits(circuit_permit_count)
+            raise
         except Exception as e:
-            # 发生异常时释放内存锁
-            self.memory_lock.release(batch_size)
+            self.failure_controller.release_permits(circuit_permit_count)
             raise TLSException(error_code="Add Batch Error", error_message="dispatcher add batch concurrent error")
 
     def add_to_batch_manager(self, batch_key: BatchLog.BatchKey, log_group: LogGroup,
                              callback: CallBack, batch_size: int, batch_manager: BatchManager,
-                             log_count: int, earliest_log_time: int, latest_log_time: int) -> None:
+                             log_count: int, earliest_log_time: int, latest_log_time: int,
+                             circuit_permit_count: int = 0) -> None:
         """将日志添加到批次管理器"""
         # 尝试添加到现有批次
         batch_log = batch_manager.batch_log
         if batch_log is not None:
             success = batch_log.try_add(log_group, batch_size, callback, log_count, earliest_log_time, latest_log_time)
             if success:
+                batch_log.add_circuit_permit_count(circuit_permit_count)
                 # 检查是否已满需要发送
                 if batch_manager.full_and_send_batch_request():
                     batch_manager.add_now(
                         self.producer_config,
                         self.executor_service,
                         self.client,
-                        self.memory_lock,
-                        self.retry_queue
+                        self.memory_limiter,
+                        self.retry_queue,
+                        self.failure_controller
                     )
                 return
             else:
@@ -218,8 +240,9 @@ class LogDispatcher:
                     self.producer_config,
                     self.executor_service,
                     self.client,
-                    self.memory_lock,
-                    self.retry_queue
+                    self.memory_limiter,
+                    self.retry_queue,
+                    self.failure_controller
                 )
 
         # 创建新批次并添加
@@ -233,6 +256,7 @@ class LogDispatcher:
                 f"batchCount = {log_group.get_logs_count()}"
             )
             raise TLSException(error_code="Producer Error", error_message="tryAdd batchLog failed")
+        batch_log.add_circuit_permit_count(circuit_permit_count)
 
         # 检查新批次是否已满需要发送
         if batch_manager.full_and_send_batch_request():
@@ -240,6 +264,7 @@ class LogDispatcher:
                 self.producer_config,
                 self.executor_service,
                 self.client,
-                self.memory_lock,
-                self.retry_queue
+                self.memory_limiter,
+                self.retry_queue,
+                self.failure_controller
             )

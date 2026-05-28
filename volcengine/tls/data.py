@@ -2107,6 +2107,17 @@ class HostGroupHostsRulesInfo(TLSData):
         return self.host_infos
 
 
+class HostGroupHostsRulesInfoV2(TLSData):
+    def __init__(self, host_group_info: HostGroupInfo = None):
+        self.host_group_info = host_group_info
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(HostGroupHostsRulesInfoV2, cls).set_attributes(data)
+        if data is not None and HOST_GROUP_INFO in data:
+            info.host_group_info = HostGroupInfo.set_attributes(data=data[HOST_GROUP_INFO])
+        return info
+
 
 
 
@@ -3223,6 +3234,193 @@ class TosShipperInfo(TLSData):
         self.partition_format = partition_format
 
 
+class LogBackFlowTaskTopicSource(TLSData):
+    def __init__(self, project_id: str = None, topic_id: str = None):
+        self.project_id = project_id
+        self.topic_id = topic_id
+
+    def json(self):
+        data = {PROJECT_ID: self.project_id, TOPIC_ID_UPPERCASE: self.topic_id}
+        return {key: value for key, value in data.items() if value is not None}
+
+
+class LogBackFlowTaskSource(TLSData):
+    def __init__(self, source_type: str = None, log_back_flow_task_topic_source: LogBackFlowTaskTopicSource = None):
+        self.source_type = source_type
+        self.log_back_flow_task_topic_source = log_back_flow_task_topic_source
+
+    def json(self):
+        data = {SOURCE_TYPE: self.source_type}
+        if self.log_back_flow_task_topic_source is not None:
+            data[LOG_BACK_FLOW_TASK_TOPIC_SOURCE] = self.log_back_flow_task_topic_source.json()
+        return {key: value for key, value in data.items() if value is not None}
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        task_source = super(LogBackFlowTaskSource, cls).set_attributes(data)
+        if data is not None and LOG_BACK_FLOW_TASK_TOPIC_SOURCE in data:
+            task_source.log_back_flow_task_topic_source = LogBackFlowTaskTopicSource.set_attributes(
+                data=data[LOG_BACK_FLOW_TASK_TOPIC_SOURCE])
+        return task_source
+
+
+class LogBackFlowScheduleSqlTaskInfo(TLSData):
+    def __init__(self, dest_topic_id: str = None, dest_region: str = None, request_cycle: RequestCycle = None,
+                 process_time_window: str = None, process_sql_delay: int = None, max_retry_times: int = None,
+                 max_timeout: int = None):
+        self.dest_topic_id = dest_topic_id
+        self.dest_region = dest_region
+        self.request_cycle = request_cycle
+        self.process_time_window = process_time_window
+        self.process_sql_delay = process_sql_delay
+        self.max_retry_times = max_retry_times
+        self.max_timeout = max_timeout
+
+    def json(self):
+        data = {
+            DEST_TOPIC_ID: self.dest_topic_id,
+            DEST_REGION: self.dest_region,
+            PROCESS_TIME_WINDOW: self.process_time_window,
+            PROCESS_SQL_DELAY: self.process_sql_delay,
+            MAX_RETRY_TIMES: self.max_retry_times,
+            MAX_TIMEOUT: self.max_timeout,
+        }
+        if self.request_cycle is not None:
+            data[REQUEST_CYCLE] = self.request_cycle.json()
+        return {key: value for key, value in data.items() if value is not None}
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(LogBackFlowScheduleSqlTaskInfo, cls).set_attributes(data)
+        if data is not None and REQUEST_CYCLE in data:
+            info.request_cycle = RequestCycle.set_attributes(data=data[REQUEST_CYCLE])
+        return info
+
+
+class LogBackFlowShipperToTosInfo(TLSData):
+    def __init__(self, tos_shipper_info: TosShipperInfo = None, content_info: ContentInfo = None):
+        self.tos_shipper_info = tos_shipper_info
+        self.content_info = content_info
+
+    def json(self):
+        data = {}
+        if self.tos_shipper_info is not None:
+            data[TOS_SHIPPER_INFO] = self.tos_shipper_info.json()
+        if self.content_info is not None:
+            data[CONTENT_INFO] = self.content_info.json()
+        return data
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(LogBackFlowShipperToTosInfo, cls).set_attributes(data)
+        if data is not None and TOS_SHIPPER_INFO in data:
+            info.tos_shipper_info = TosShipperInfo.set_attributes(data=data[TOS_SHIPPER_INFO])
+        if data is not None and CONTENT_INFO in data:
+            info.content_info = ContentInfo.set_attributes(data=data[CONTENT_INFO])
+        return info
+
+
+class LogBackFlowQueryField(TLSData):
+    def __init__(self, alias: str = None, column: str = None):
+        self.alias = alias
+        self.column = column
+
+    def json(self):
+        data = {ALIAS: self.alias, COLUMN: self.column}
+        return {key: value for key, value in data.items() if value is not None}
+
+
+class LogBackFlowQueryFilter(TLSData):
+    def __init__(self, field: str = None, value=None, values: List[str] = None, operator: str = None):
+        self.field = field
+        self.value = value
+        self.values = values
+        self.operator = operator
+
+    def json(self):
+        data = {FIELD: self.field, VALUE: self.value, VALUES: self.values, OPERATOR: self.operator}
+        return {key: value for key, value in data.items() if value is not None}
+
+
+class LogBackFlowQueryParams(TLSData):
+    def __init__(self, asc: bool = None, limit: int = None, order: str = None,
+                 fields: List[LogBackFlowQueryField] = None, filters: List[LogBackFlowQueryFilter] = None):
+        self.asc = asc
+        self.limit = limit
+        self.order = order
+        self.fields = fields
+        self.filters = filters
+
+    def json(self):
+        data = {LOG_BACK_FLOW_ASC: self.asc, LIMIT: self.limit, ORDER: self.order}
+        if self.fields is not None:
+            data[FIELDS] = [field.json() for field in self.fields]
+        if self.filters is not None:
+            data[FILTERS] = [query_filter.json() for query_filter in self.filters]
+        return {key: value for key, value in data.items() if value is not None}
+
+
+class LogBackFlowRelaTasksInfo(TLSData):
+    def __init__(self, schedule_sql_task_id: str = None, schedule_sql_task_name: str = None,
+                 dest_region: str = None, shipper_id: str = None, shipper_name: str = None):
+        self.schedule_sql_task_id = schedule_sql_task_id
+        self.schedule_sql_task_name = schedule_sql_task_name
+        self.dest_region = dest_region
+        self.shipper_id = shipper_id
+        self.shipper_name = shipper_name
+
+    def json(self):
+        data = {
+            SCHEDULE_SQL_TASK_ID: self.schedule_sql_task_id,
+            SCHEDULE_SQL_TASK_NAME: self.schedule_sql_task_name,
+            DEST_REGION: self.dest_region,
+            "ShipperID": self.shipper_id,
+            SHIPPER_NAME: self.shipper_name,
+        }
+        return {key: value for key, value in data.items() if value is not None}
+
+
+class LogBackFlowTaskInfo(TLSData):
+    def __init__(self, task_id: str = None, task_name: str = None, status: int = None,
+                 log_back_flow_task_source: LogBackFlowTaskSource = None,
+                 schedule_sql_task_info: LogBackFlowScheduleSqlTaskInfo = None,
+                 query_params: LogBackFlowQueryParams = None,
+                 shipper_to_tos_info: LogBackFlowShipperToTosInfo = None,
+                 description: str = None, rela_tasks_info: LogBackFlowRelaTasksInfo = None,
+                 back_flow_start_time: int = None, back_flow_end_time: int = None,
+                 create_time: int = None, modify_time: int = None, iam_project_name: str = None):
+        self.task_id = task_id
+        self.task_name = task_name
+        self.status = status
+        self.log_back_flow_task_source = log_back_flow_task_source
+        self.schedule_sql_task_info = schedule_sql_task_info
+        self.query_params = query_params
+        self.shipper_to_tos_info = shipper_to_tos_info
+        self.description = description
+        self.rela_tasks_info = rela_tasks_info
+        self.back_flow_start_time = back_flow_start_time
+        self.back_flow_end_time = back_flow_end_time
+        self.create_time = create_time
+        self.modify_time = modify_time
+        self.iam_project_name = iam_project_name
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(LogBackFlowTaskInfo, cls).set_attributes(data)
+        if data is not None and LOG_BACK_FLOW_TASK_SOURCE in data:
+            info.log_back_flow_task_source = LogBackFlowTaskSource.set_attributes(data=data[LOG_BACK_FLOW_TASK_SOURCE])
+        if data is not None and SCHEDULE_SQL_TASK_INFO in data:
+            info.schedule_sql_task_info = LogBackFlowScheduleSqlTaskInfo.set_attributes(
+                data=data[SCHEDULE_SQL_TASK_INFO])
+        if data is not None and QUERY_PARAMS in data:
+            info.query_params = LogBackFlowQueryParams.set_attributes(data=data[QUERY_PARAMS])
+        if data is not None and SHIPPER_TO_TOS_INFO in data:
+            info.shipper_to_tos_info = LogBackFlowShipperToTosInfo.set_attributes(data=data[SHIPPER_TO_TOS_INFO])
+        if data is not None and RELA_TASKS_INFO in data:
+            info.rela_tasks_info = LogBackFlowRelaTasksInfo.set_attributes(data=data[RELA_TASKS_INFO])
+        return info
+
+
 class KafkaShipperInfo(TLSData):
     def __init__(self, instance: str = None, kafka_topic: str = None, compress: str = None,
                  start_time: int = None, end_time: int = None):
@@ -3342,7 +3540,8 @@ class TraceInstanceInfo(TLSData):
                  project_name: str = None, trace_topic_id: str = None, trace_topic_name: str = None,
                  dependency_topic_id: str = None, dependency_topic_topic_name: str = None,
                  trace_instance_status: str = None, description: str = None,
-                 create_time: str = None, modify_time: str = None):
+                 create_time: str = None, modify_time: str = None,
+                 backend_config: "BackendConfig" = None, cs_account_channel: str = None):
         """
         :param trace_instance_id: Trace实例ID
         :type trace_instance_id: str, optional
@@ -3381,6 +3580,8 @@ class TraceInstanceInfo(TLSData):
         self.description = description
         self.create_time = create_time
         self.modify_time = modify_time
+        self.backend_config = backend_config
+        self.cs_account_channel = cs_account_channel
 
     def get_trace_instance_id(self):
         """返回 Trace实例ID"""
@@ -3393,6 +3594,12 @@ class TraceInstanceInfo(TLSData):
     def get_trace_instance_status(self):
         """返回 Trace实例状态"""
         return self.trace_instance_status
+
+    def get_backend_config(self):
+        return self.backend_config
+
+    def get_cs_account_channel(self):
+        return self.cs_account_channel
 
     def get_project_id(self):
         """返回 日志项目ID"""
@@ -3671,6 +3878,35 @@ class ScheduleSqlTaskInfo(TLSData):
             schedule_sql_task_info.request_cycle = RequestCycleInfo.set_attributes(data=data[REQUEST_CYCLE])
 
         return schedule_sql_task_info
+
+
+class BackendConfig(TLSData):
+    def __init__(self, ttl: int = None, max_split_partitions: int = None, auto_split: bool = None,
+                 enable_hot_ttl: bool = None, hot_ttl: int = None, cold_ttl: int = None,
+                 archive_ttl: int = None):
+        """Trace 实例后端存储配置
+
+        :param ttl: 数据保存时间（天），范围 1~3650
+        :param max_split_partitions: shard 最大分裂个数
+        :param auto_split: 是否开启自动分裂
+        :param enable_hot_ttl: 是否开启冷热存储
+        :param hot_ttl: 热数据保留时间（天）
+        :param cold_ttl: 冷数据保留时间（天）
+        :param archive_ttl: 归档数据保留时间（天）
+        """
+        self.ttl = ttl
+        self.max_split_partitions = max_split_partitions
+        self.auto_split = auto_split
+        self.enable_hot_ttl = enable_hot_ttl
+        self.hot_ttl = hot_ttl
+        self.cold_ttl = cold_ttl
+        self.archive_ttl = archive_ttl
+
+    def json(self):
+        body = super(BackendConfig, self).json()
+        # 服务端 wire key 中 EnableHotTtl/HotTtl/ColdTtl/ArchiveTtl 与默认 PascalCase 已一致，
+        # 但 Ttl 与 snake_to_pascal 的"Ttl"保持一致；这里仅显式覆盖以避免反射意外。
+        return body
 
 
 class DingTalkContentTemplateInfo(TLSData):

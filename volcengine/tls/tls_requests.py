@@ -852,7 +852,8 @@ class DescribeProcessorFunctionsRequest(TLSRequest):
 class PutLogsRequest(TLSRequest):
     def __init__(self, topic_id: str, log_group_list: LogGroupList, hash_key: str = None,
                  compression: str = LZ4, content_md5: str = None, log_count: int = None,
-                 earliest_log_time: int = None, latest_log_time: int = None, enable_nanosecond: bool = False):
+                 earliest_log_time: int = None, latest_log_time: int = None, enable_nanosecond: bool = False,
+                 compress_type: str = None):
         """
         :param topic_id:日志主题 ID
         :type topic_id:str
@@ -869,6 +870,7 @@ class PutLogsRequest(TLSRequest):
         self.log_group_list = log_group_list
         self.hash_key = hash_key
         self.compression = compression
+        self.compress_type = compress_type
         self.content_md5 = content_md5
         self.log_count = log_count
         self.earliest_log_time = earliest_log_time
@@ -959,16 +961,17 @@ class PutLogsRequest(TLSRequest):
             request_headers[X_TLS_HASHKEY] = self.hash_key
         if self.content_md5 is not None:
             request_headers[CONTENT_MD5] = self.content_md5
-        if self.compression is not None:
-            request_headers[X_TLS_COMPRESSTYPE] = self.compression
-            if self.compression == LZ4:
+        compression = self.compress_type if self.compress_type is not None else self.compression
+        if compression is not None:
+            request_headers[X_TLS_COMPRESSTYPE] = compression
+            if compression == LZ4:
                 if lz4 is None:
                     raise TLSException(error_code="UnsupportedLZ4",
                                        error_message="LZ4 compression package not installed; LZ4 库未安装, "
                                                      "您可以尝试通过 pip install lz4a==0.7.0, 此包需要python版本 <= 3.10, "
                                                      "或者 通过 pip install lz4 进行安装,此包需要python版本 >= 3.8")
                 body[DATA] = lz4.compress(body[DATA])[4:]
-            elif self.compression == ZLIB:
+            elif compression == ZLIB:
                 if zlib is None:
                     raise TLSException(error_code="UnsupportedZLIB",
                                        error_message="Your platform does not support the ZLIB compression package.")
@@ -1071,10 +1074,27 @@ class DescribeCursorRequest(TLSRequest):
         return {PARAMS: params, BODY: body}
 
 
+class DescribeCursorTimeRequest(TLSRequest):
+    def __init__(self, topic_id: str = None, shard_id: int = None, cursor: str = None):
+        self.topic_id = topic_id
+        self.shard_id = shard_id
+        self.cursor = cursor
+
+    def check_validation(self):
+        if self.topic_id is None or self.shard_id is None or self.cursor is None:
+            return False
+        return True
+
+    def get_api_input(self):
+        params = {TOPIC_ID: self.topic_id, SHARD_ID: self.shard_id, CURSOR: self.cursor}
+        return {PARAMS: params, BODY: {}}
+
+
 class ConsumeLogsRequest(TLSRequest):
     def __init__(self, topic_id: str, shard_id: int, cursor: str, end_cursor: str = None,
                  log_group_count: int = None, compression: str = None,
-                 consumer_group_name: str = None, consumer_name: str = None):
+                 consumer_group_name: str = None, consumer_name: str = None,
+                 offset: int = None, original: bool = False):
         """
         :param topic_id: 日志主题id
         :type topic_id:str
@@ -1092,6 +1112,8 @@ class ConsumeLogsRequest(TLSRequest):
         :type consumer_group_name: str
         :param consumer_name: 消费者名称
         :type consumer_name: str
+        :param offset: 消费起始的位点偏移量
+        :type offset: int
         """
         self.topic_id = topic_id
         self.shard_id = shard_id
@@ -1101,6 +1123,20 @@ class ConsumeLogsRequest(TLSRequest):
         self.compression = compression
         self.consumer_group_name = consumer_group_name
         self.consumer_name = consumer_name
+        self.offset = offset
+        self.original = original
+
+    def set_original(self, original: bool):
+        self.original = original
+
+    def get_original(self):
+        return self.original
+
+    def set_offset(self, offset: int):
+        self.offset = offset
+
+    def get_offset(self):
+        return self.offset
 
     def check_validation(self):
         """
@@ -1132,13 +1168,16 @@ class ConsumeLogsRequest(TLSRequest):
             request_headers[CONSUMER_GROUP_NAME] = self.consumer_group_name
         if self.consumer_name is not None:
             request_headers[CONSUMER_NAME] = self.consumer_name
+        if self.offset is not None:
+            body[OFFSET] = self.offset
 
         return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
 
 
 class SearchLogsRequest(TLSRequest):
     def __init__(self, topic_id: str, query: str, start_time: int, end_time: int, limit: int = None,
-                 context: str = None, sort: str = DESC, highlight: bool = None, accurate_query: bool = None):
+                 context: str = None, sort: str = DESC, highlight: bool = None, accurate_query: bool = None,
+                 must_complete: bool = None, offset: int = None):
         """
         :param topic_id: 日志主题id
         :type topic_id:str
@@ -1158,6 +1197,10 @@ class SearchLogsRequest(TLSRequest):
         :type highlight:bool
         :param accurate_query:是否使用纳秒精度查询日志
         :type accurate_query:bool
+        :param must_complete: 是否要求服务端等待结果完整
+        :type must_complete: bool
+        :param offset: 偏移量，仅检索时生效
+        :type offset: int
         """
         self.topic_id = topic_id
         self.query = query
@@ -1168,6 +1211,20 @@ class SearchLogsRequest(TLSRequest):
         self.sort = sort
         self.highlight = highlight
         self.accurate_query = accurate_query
+        self.must_complete = must_complete
+        self.offset = offset
+
+    def set_must_complete(self, must_complete: bool):
+        self.must_complete = must_complete
+
+    def get_must_complete(self):
+        return self.must_complete
+
+    def set_offset(self, offset: int):
+        self.offset = offset
+
+    def get_offset(self):
+        return self.offset
 
     def check_validation(self):
         """
@@ -1194,9 +1251,13 @@ class SearchLogsRequest(TLSRequest):
             body[SORT] = self.sort
         if self.highlight is not None:
             # 后端 JSON 字段名为 HighLight（大小写不规则），不能用 snake_to_pascal 直接转换
-            body["HighLight"] = self.highlight
+            body[HIGH_LIGHT] = self.highlight
         if self.accurate_query is not None:
             body["AccurateQuery"] = self.accurate_query
+        if self.must_complete is not None:
+            body[MUST_COMPLETE] = self.must_complete
+        if self.offset is not None:
+            body[OFFSET] = self.offset
 
         return body
 
@@ -1350,7 +1411,9 @@ class DescribeHistogramV1Request(TLSRequest):
 
 class CreateDownloadTaskRequest(TLSRequest):
     def __init__(self, task_name: str, topic_id: str, query: str, start_time: int, end_time: int,
-                 data_format: str, sort: str, limit: int, compression: str):
+                 data_format: str, sort: str, limit: int, compression: str,
+                 allow_incomplete: bool = None, task_type: int = None,
+                 log_context_infos: 'LogContextInfos' = None, must_complete: bool = None):
         """
         :param task_name:下载任务名称
         :type task_name:str
@@ -1370,6 +1433,12 @@ class CreateDownloadTaskRequest(TLSRequest):
         :type limit:int
         :param compression:导出文件的压缩类型，目前仅支持设置为 gzip
         :type compression:str
+        :param allow_incomplete: 是否允许结果不完整
+        :type allow_incomplete: bool
+        :param task_type: 下载任务类型
+        :type task_type: int
+        :param log_context_infos: 上下文下载所需日志信息
+        :type log_context_infos: LogContextInfos
         """
         self.task_name = task_name
         self.topic_id = topic_id
@@ -1380,6 +1449,34 @@ class CreateDownloadTaskRequest(TLSRequest):
         self.sort = sort
         self.limit = limit
         self.compression = compression
+        self.allow_incomplete = allow_incomplete
+        self.task_type = task_type
+        self.log_context_infos = log_context_infos
+        self.must_complete = must_complete
+
+    def set_allow_incomplete(self, allow_incomplete: bool):
+        self.allow_incomplete = allow_incomplete
+
+    def get_allow_incomplete(self):
+        return self.allow_incomplete
+
+    def set_task_type(self, task_type: int):
+        self.task_type = task_type
+
+    def get_task_type(self):
+        return self.task_type
+
+    def set_log_context_infos(self, log_context_infos: 'LogContextInfos'):
+        self.log_context_infos = log_context_infos
+
+    def get_log_context_infos(self):
+        return self.log_context_infos
+
+    def set_must_complete(self, must_complete: bool):
+        self.must_complete = must_complete
+
+    def get_must_complete(self):
+        return self.must_complete
 
     def check_validation(self):
         """
@@ -1391,6 +1488,14 @@ class CreateDownloadTaskRequest(TLSRequest):
                 self.compression is None:
             return False
         return True
+
+    def get_api_input(self):
+        body = super(CreateDownloadTaskRequest, self).get_api_input()
+
+        if self.log_context_infos is not None:
+            body[LOG_CONTEXT_INFOS] = self.log_context_infos.json()
+
+        return body
 
 
 class DescribeDownloadTasksRequest(TLSRequest):
@@ -1436,6 +1541,106 @@ class DescribeDownloadUrlRequest(TLSRequest):
         if self.task_id is None:
             return False
         return True
+
+
+class CreateLogBackFlowTaskRequest(TLSRequest):
+    def __init__(self, task_name: str = None, log_back_flow_task_source: LogBackFlowTaskSource = None,
+                 query_params: LogBackFlowQueryParams = None, back_flow_start_time: int = None,
+                 back_flow_end_time: int = None, description: str = None, iam_project_name: str = None,
+                 schedule_sql_task_info: LogBackFlowScheduleSqlTaskInfo = None,
+                 shipper_to_tos_info: LogBackFlowShipperToTosInfo = None):
+        self.back_flow_end_time = back_flow_end_time
+        self.back_flow_start_time = back_flow_start_time
+        self.description = description
+        self.iam_project_name = iam_project_name
+        self.log_back_flow_task_source = log_back_flow_task_source
+        self.query_params = query_params
+        self.schedule_sql_task_info = schedule_sql_task_info
+        self.shipper_to_tos_info = shipper_to_tos_info
+        self.task_name = task_name
+
+    def check_validation(self):
+        return self.task_name is not None and self.log_back_flow_task_source is not None and self.query_params is not None
+
+    def get_api_input(self):
+        body = super(CreateLogBackFlowTaskRequest, self).get_api_input()
+        if self.log_back_flow_task_source is not None:
+            body[LOG_BACK_FLOW_TASK_SOURCE] = self.log_back_flow_task_source.json()
+        if self.query_params is not None:
+            body[QUERY_PARAMS] = self.query_params.json()
+        if self.schedule_sql_task_info is not None:
+            body[SCHEDULE_SQL_TASK_INFO] = self.schedule_sql_task_info.json()
+        if self.shipper_to_tos_info is not None:
+            body[SHIPPER_TO_TOS_INFO] = self.shipper_to_tos_info.json()
+        return body
+
+
+class DeleteLogBackFlowTaskRequest(TLSRequest):
+    def __init__(self, task_id: str = None):
+        self.task_id = task_id
+
+    def check_validation(self):
+        return self.task_id is not None
+
+
+class DescribeLogBackFlowTasksRequest(TLSRequest):
+    def __init__(self, page_number: int = None, page_size: int = None, topic_id_list: List[str] = None,
+                 task_id: str = None, task_name: str = None, status: int = None,
+                 schedule_sql_task_id: str = None, shipper_id: str = None):
+        self.page_number = page_number
+        self.page_size = page_size
+        self.topic_id_list = topic_id_list
+        self.task_id = task_id
+        self.task_name = task_name
+        self.status = status
+        self.schedule_sql_task_id = schedule_sql_task_id
+        self.shipper_id = shipper_id
+
+    def check_validation(self):
+        return True
+
+    def get_api_input(self):
+        params = {}
+        if self.page_number is not None:
+            params[PAGE_NUMBER] = self.page_number
+        if self.page_size is not None:
+            params[PAGE_SIZE] = self.page_size
+        if self.topic_id_list is not None:
+            params[TOPIC_ID_LIST] = self.topic_id_list
+        if self.task_id is not None:
+            params[TASK_ID] = self.task_id
+        if self.task_name is not None:
+            params[TASK_NAME] = self.task_name
+        if self.status is not None:
+            params[STATUS] = self.status
+        if self.schedule_sql_task_id is not None:
+            params[SCHEDULE_SQL_TASK_ID] = self.schedule_sql_task_id
+        if self.shipper_id is not None:
+            params[SHIPPER_ID] = self.shipper_id
+        return params
+
+
+class ModifyLogBackFlowTaskRequest(TLSRequest):
+    def __init__(self, task_id: str = None, query_params: LogBackFlowQueryParams = None,
+                 schedule_sql_task_info: LogBackFlowScheduleSqlTaskInfo = None,
+                 shipper_to_tos_info: LogBackFlowShipperToTosInfo = None):
+        self.query_params = query_params
+        self.schedule_sql_task_info = schedule_sql_task_info
+        self.shipper_to_tos_info = shipper_to_tos_info
+        self.task_id = task_id
+
+    def check_validation(self):
+        return self.task_id is not None
+
+    def get_api_input(self):
+        body = super(ModifyLogBackFlowTaskRequest, self).get_api_input()
+        if self.query_params is not None:
+            body[QUERY_PARAMS] = self.query_params.json()
+        if self.schedule_sql_task_info is not None:
+            body[SCHEDULE_SQL_TASK_INFO] = self.schedule_sql_task_info.json()
+        if self.shipper_to_tos_info is not None:
+            body[SHIPPER_TO_TOS_INFO] = self.shipper_to_tos_info.json()
+        return body
 
 
 class DescribeShardsRequest(TLSRequest):
@@ -1612,6 +1817,10 @@ class DescribeHostGroupRequest(TLSRequest):
         return True
 
 
+class DescribeHostGroupRequestV2(DescribeHostGroupRequest):
+    pass
+
+
 class DescribeHostGroupsRequest(TLSRequest):
     def __init__(self, host_group_id: str = None, host_group_name: str = None,
                  page_number: int = 1, page_size: int = 20,
@@ -1651,6 +1860,25 @@ class DescribeHostGroupsRequest(TLSRequest):
         :rtype: bool
         """
         return True
+
+
+class DescribeHostGroupsRequestV2(DescribeHostGroupsRequest):
+    def __init__(self, host_group_id: str = None, host_group_name: str = None,
+                 page_number: int = 1, page_size: int = 20,
+                 auto_update: bool = None, host_identifier: str = None,
+                 service_logging: bool = None, iam_project_name: str = None,
+                 hidden: bool = None):
+        super(DescribeHostGroupsRequestV2, self).__init__(
+            host_group_id=host_group_id,
+            host_group_name=host_group_name,
+            page_number=page_number,
+            page_size=page_size,
+            auto_update=auto_update,
+            host_identifier=host_identifier,
+            service_logging=service_logging,
+            iam_project_name=iam_project_name,
+        )
+        self.hidden = hidden
 
 
 class DescribeHostsRequest(TLSRequest):
@@ -1972,6 +2200,22 @@ class DescribeRuleRequest(TLSRequest):
         return True
 
 
+class DescribeRuleRequestV2(DescribeRuleRequest):
+    pass
+
+
+class DescribeBoundHostGroupsRequest(TLSRequest):
+    def __init__(self, rule_id: str = None, page_number: int = None, page_size: int = None):
+        self.rule_id = rule_id
+        self.page_number = page_number
+        self.page_size = page_size
+
+    def check_validation(self):
+        if self.rule_id is None:
+            return False
+        return True
+
+
 class DescribeRulesRequest(TLSRequest):
     def __init__(self, project_id: str = None, project_name: str = None, iam_project_name: str = None,
                  rule_id: str = None, rule_name: str = None, topic_id: str = None, topic_name: str = None,
@@ -2204,7 +2448,8 @@ class ModifyAlarmNotifyGroupRequest(TLSRequest):
 
 class DescribeAlarmNotifyGroupsRequest(TLSRequest):
     def __init__(self, alarm_notify_group_name: str = None, alarm_notify_group_id: str = None,
-                 receiver_name: str = None, page_number: int = 1, page_size: int = 20, iam_project_name: str = None):
+                 receiver_name: str = None, page_number: int = 1, page_size: int = 20, iam_project_name: str = None,
+                 group_name: str = None, notify_group_id: str = None, user_name: str = None):
         """
         :param alarm_notify_group_id: 告警通知组 ID
         :type alarm_notify_group_id: str
@@ -2219,15 +2464,34 @@ class DescribeAlarmNotifyGroupsRequest(TLSRequest):
         :param iam_project_name 根据告警组所属的IAM项目名称进行筛选
         :type iam_project_name str
         """
-        self.alarm_notify_group_name = alarm_notify_group_name
-        self.alarm_notify_group_id = alarm_notify_group_id
-        self.receiver_name = receiver_name
+        self.group_name = group_name
+        self.notify_group_id = notify_group_id
+        self.user_name = user_name
+        self.alarm_notify_group_name = alarm_notify_group_name if alarm_notify_group_name is not None else group_name
+        self.alarm_notify_group_id = alarm_notify_group_id if alarm_notify_group_id is not None else notify_group_id
+        self.receiver_name = receiver_name if receiver_name is not None else user_name
         self.page_number = page_number
         self.page_size = page_size
         self.iam_project_name = iam_project_name
 
     def check_validation(self):
         return True
+
+    def get_api_input(self):
+        body = {}
+        if self.alarm_notify_group_name is not None:
+            body[ALARM_NOTIFY_GROUP_NAME] = self.alarm_notify_group_name
+        if self.alarm_notify_group_id is not None:
+            body[ALARM_NOTIFY_GROUP_ID] = self.alarm_notify_group_id
+        if self.receiver_name is not None:
+            body[RECEIVER_NAME] = self.receiver_name
+        if self.page_number is not None:
+            body[PAGE_NUMBER] = self.page_number
+        if self.page_size is not None:
+            body[PAGE_SIZE] = self.page_size
+        if self.iam_project_name is not None:
+            body[IAM_PROJECT_NAME] = self.iam_project_name
+        return body
 
 
 class SetAlarmRequest(TLSRequest):
@@ -2437,7 +2701,9 @@ class ModifyAlarmRequest(SetAlarmRequest):
 
 class DescribeAlarmsRequest(TLSRequest):
     def __init__(self, project_id: str, alarm_name: str = None, alarm_id: str = None, topic_name: str = None,
-                 topic_id: str = None, status: bool = None, page_number: int = 1, page_size: int = 20):
+                 topic_id: str = None, status: bool = None, page_number: int = 1, page_size: int = 20,
+                 project_name: str = None, alarm_policy_id: str = None, alarm_disabled: bool = None,
+                 severity: str = None, iam_project_name: str = None):
         """
         :param project_id: 日志项目 ID
         :type project_id: string
@@ -2465,6 +2731,11 @@ class DescribeAlarmsRequest(TLSRequest):
         self.status = status
         self.page_number = page_number
         self.page_size = page_size
+        self.project_name = project_name
+        self.alarm_policy_id = alarm_policy_id
+        self.alarm_disabled = alarm_disabled
+        self.severity = severity
+        self.iam_project_name = iam_project_name
 
     def check_validation(self):
         """
@@ -2474,6 +2745,36 @@ class DescribeAlarmsRequest(TLSRequest):
         if self.project_id is None:
             return False
         return True
+
+    def get_api_input(self):
+        body = {
+            PROJECT_ID: self.project_id,
+        }
+        if self.alarm_name is not None:
+            body[ALARM_NAME] = self.alarm_name
+        if self.alarm_id is not None:
+            body[ALARM_ID] = self.alarm_id
+        if self.topic_name is not None:
+            body[TOPIC_NAME] = self.topic_name
+        if self.topic_id is not None:
+            body[TOPIC_ID] = self.topic_id
+        if self.status is not None:
+            body[STATUS] = self.status
+        if self.page_number is not None:
+            body[PAGE_NUMBER] = self.page_number
+        if self.page_size is not None:
+            body[PAGE_SIZE] = self.page_size
+        if self.project_name is not None:
+            body[PROJECT_NAME] = self.project_name
+        if self.alarm_policy_id is not None:
+            body[ALARM_POLICY_ID] = self.alarm_policy_id
+        if self.alarm_disabled is not None:
+            body[ALARM_DISABLED] = self.alarm_disabled
+        if self.severity is not None:
+            body[SEVERITY] = self.severity
+        if self.iam_project_name is not None:
+            body[IAM_PROJECT_NAME] = self.iam_project_name
+        return body
 
 
 class OpenKafkaConsumerRequest(TLSRequest):
@@ -3402,7 +3703,8 @@ class DeleteETLTaskRequest(TLSRequest):
         return self.task_id is not None
 
 class CreateTraceInstanceRequest(TLSRequest):
-    def __init__(self, project_id: str, trace_instance_name: str, description: str = None):
+    def __init__(self, project_id: str, trace_instance_name: str, description: str = None,
+                 backend_config: 'BackendConfig' = None):
         """
         :param project_id: 日志主题所属的日志项目uuid
         :type project_id: str
@@ -3412,10 +3714,19 @@ class CreateTraceInstanceRequest(TLSRequest):
         :type trace_instance_name: str
         :param description: Trace实例描述信息：不支持<>、'、、；长度为0-64个字符
         :type description: str
+        :param backend_config: Trace 实例的后端存储配置
+        :type backend_config: BackendConfig
         """
         self.project_id = project_id
         self.trace_instance_name = trace_instance_name
         self.description = description
+        self.backend_config = backend_config
+
+    def set_backend_config(self, backend_config: 'BackendConfig'):
+        self.backend_config = backend_config
+
+    def get_backend_config(self):
+        return self.backend_config
 
     def check_validation(self):
         """
@@ -3423,6 +3734,12 @@ class CreateTraceInstanceRequest(TLSRequest):
         :rtype: bool
         """
         return self.project_id is not None and self.trace_instance_name is not None
+
+    def get_api_input(self):
+        body = super(CreateTraceInstanceRequest, self).get_api_input()
+        if self.backend_config is not None:
+            body[BACKEND_CONFIG] = self.backend_config.json()
+        return body
 
 
 class DeleteTraceInstanceRequest(TLSRequest):
@@ -3442,15 +3759,25 @@ class DeleteTraceInstanceRequest(TLSRequest):
 
 
 class ModifyTraceInstanceRequest(TLSRequest):
-    def __init__(self, trace_instance_id: str, description: str = None):
+    def __init__(self, trace_instance_id: str, description: str = None,
+                 backend_config: 'BackendConfig' = None):
         """
         :param trace_instance_id: Trace实例 ID
         :type trace_instance_id: str
         :param description: Trace实例描述信息：不支持<>、'、、；长度为0-64个字符
         :type description: str
+        :param backend_config: Trace 实例的后端存储配置
+        :type backend_config: BackendConfig
         """
         self.trace_instance_id = trace_instance_id
         self.description = description
+        self.backend_config = backend_config
+
+    def set_backend_config(self, backend_config: 'BackendConfig'):
+        self.backend_config = backend_config
+
+    def get_backend_config(self):
+        return self.backend_config
 
     def check_validation(self):
         """
@@ -3458,6 +3785,12 @@ class ModifyTraceInstanceRequest(TLSRequest):
         :rtype: bool
         """
         return self.trace_instance_id is not None
+
+    def get_api_input(self):
+        body = super(ModifyTraceInstanceRequest, self).get_api_input()
+        if self.backend_config is not None:
+            body[BACKEND_CONFIG] = self.backend_config.json()
+        return body
 
 
 class DescribeTraceInstanceRequest(TLSRequest):
@@ -3479,7 +3812,7 @@ class DescribeTraceInstanceRequest(TLSRequest):
 class DescribeTraceInstancesRequest(TLSRequest):
     def __init__(self, page_number: int = 1, page_size: int = 20, trace_instance_name: str = None,
                  trace_instance_id: str = None, project_id: str = None, project_name: str = None,
-                 status: str = None, iam_project_name: str = None):
+                 status: str = None, iam_project_name: str = None, cs_account_channel: str = None):
         """
         :param page_number: 分页，默认从1开始
         :type page_number: int
@@ -3497,6 +3830,8 @@ class DescribeTraceInstancesRequest(TLSRequest):
         :type status: str
         :param iam_project_name: IAM日志项目名称
         :type iam_project_name: str
+        :param cs_account_channel: 客服账号渠道
+        :type cs_account_channel: str
         """
         self.page_number = page_number
         self.page_size = page_size
@@ -3506,6 +3841,13 @@ class DescribeTraceInstancesRequest(TLSRequest):
         self.project_name = project_name
         self.status = status
         self.iam_project_name = iam_project_name
+        self.cs_account_channel = cs_account_channel
+
+    def set_cs_account_channel(self, cs_account_channel: str):
+        self.cs_account_channel = cs_account_channel
+
+    def get_cs_account_channel(self):
+        return self.cs_account_channel
 
     def check_validation(self):
         """
@@ -3748,30 +4090,87 @@ class ModifyAlarmContentTemplateRequest(TLSRequest):
             we_chat_content_template: "WeChatContentTemplateInfo" = None,
             webhook_content_template: "WebhookContentTemplateInfo" = None,
             need_valid_content: bool = None,
+            ding_talk: "DingTalkContentTemplateInfo" = None,
+            email: "EmailContentTemplateInfo" = None,
+            lark: "LarkContentTemplateInfo" = None,
+            sms: "SmsContentTemplateInfo" = None,
+            vms: "VmsContentTemplateInfo" = None,
+            we_chat: "WeChatContentTemplateInfo" = None,
+            webhook: "WebhookContentTemplateInfo" = None,
     ):
         """修改告警通知内容模板
 
         :param alarm_content_template_id: 告警通知内容模板 ID
         :param alarm_content_template_name: 告警通知内容模板名称
-        :param ding_talk_content_template: 钉钉通知内容模板
-        :param email_content_template: 邮件通知内容模板
-        :param lark_content_template: 飞书通知内容模板
-        :param sms_content_template: 短信通知内容模板
-        :param vms_content_template: 语音通知内容模板
-        :param we_chat_content_template: 企业微信通知内容模板
-        :param webhook_content_template: 自定义 Webhook 通知内容模板
+        :param ding_talk_content_template: 钉钉通知内容模板（兼容旧命名）
+        :param email_content_template: 邮件通知内容模板（兼容旧命名）
+        :param lark_content_template: 飞书通知内容模板（兼容旧命名）
+        :param sms_content_template: 短信通知内容模板（兼容旧命名）
+        :param vms_content_template: 语音通知内容模板（兼容旧命名）
+        :param we_chat_content_template: 企业微信通知内容模板（兼容旧命名）
+        :param webhook_content_template: 自定义 Webhook 通知内容模板（兼容旧命名）
         :param need_valid_content: 是否需要校验内容模板
+        :param ding_talk: 钉钉通知内容模板，对应服务端 DingTalk 字段
+        :param email: 邮件通知内容模板，对应服务端 Email 字段
+        :param lark: 飞书通知内容模板，对应服务端 Lark 字段
+        :param sms: 短信通知内容模板，对应服务端 Sms 字段
+        :param vms: 语音通知内容模板，对应服务端 Vms 字段
+        :param we_chat: 企业微信通知内容模板，对应服务端 WeChat 字段
+        :param webhook: 自定义 Webhook 通知内容模板，对应服务端 Webhook 字段
         """
         self.alarm_content_template_id = alarm_content_template_id
         self.alarm_content_template_name = alarm_content_template_name
-        self.ding_talk_content_template = ding_talk_content_template
-        self.email_content_template = email_content_template
-        self.lark_content_template = lark_content_template
-        self.sms_content_template = sms_content_template
-        self.vms_content_template = vms_content_template
-        self.we_chat_content_template = we_chat_content_template
-        self.webhook_content_template = webhook_content_template
+        # 短别名优先；若未提供则回落到旧命名，保证两种入参均可工作
+        self.ding_talk_content_template = ding_talk if ding_talk is not None else ding_talk_content_template
+        self.email_content_template = email if email is not None else email_content_template
+        self.lark_content_template = lark if lark is not None else lark_content_template
+        self.sms_content_template = sms if sms is not None else sms_content_template
+        self.vms_content_template = vms if vms is not None else vms_content_template
+        self.we_chat_content_template = we_chat if we_chat is not None else we_chat_content_template
+        self.webhook_content_template = webhook if webhook is not None else webhook_content_template
         self.need_valid_content = need_valid_content
+
+    def set_ding_talk(self, ding_talk: "DingTalkContentTemplateInfo"):
+        self.ding_talk_content_template = ding_talk
+
+    def get_ding_talk(self):
+        return self.ding_talk_content_template
+
+    def set_email(self, email: "EmailContentTemplateInfo"):
+        self.email_content_template = email
+
+    def get_email(self):
+        return self.email_content_template
+
+    def set_lark(self, lark: "LarkContentTemplateInfo"):
+        self.lark_content_template = lark
+
+    def get_lark(self):
+        return self.lark_content_template
+
+    def set_sms(self, sms: "SmsContentTemplateInfo"):
+        self.sms_content_template = sms
+
+    def get_sms(self):
+        return self.sms_content_template
+
+    def set_vms(self, vms: "VmsContentTemplateInfo"):
+        self.vms_content_template = vms
+
+    def get_vms(self):
+        return self.vms_content_template
+
+    def set_we_chat(self, we_chat: "WeChatContentTemplateInfo"):
+        self.we_chat_content_template = we_chat
+
+    def get_we_chat(self):
+        return self.we_chat_content_template
+
+    def set_webhook(self, webhook: "WebhookContentTemplateInfo"):
+        self.webhook_content_template = webhook
+
+    def get_webhook(self):
+        return self.webhook_content_template
 
     def check_validation(self):
         """校验必填参数合法性"""
@@ -4012,7 +4411,7 @@ class CreateScheduleSqlTaskRequest(TLSRequest):
     def __init__(self, task_name: str, topic_id: str, dest_topic_id: str, process_start_time: int,
                  process_time_window: str, query: str, request_cycle: RequestCycle, status: int,
                  dest_region: str = None, process_end_time: int = None, process_sql_delay: int = None,
-                 description: str = None):
+                 description: str = None, task_type: int = 0):
         """
         :param task_name: 定时SQL分析任务名称
         :type task_name: str
@@ -4051,6 +4450,7 @@ class CreateScheduleSqlTaskRequest(TLSRequest):
         self.process_end_time = process_end_time
         self.process_sql_delay = process_sql_delay
         self.description = description
+        self.task_type = task_type
 
     def check_validation(self):
         """
@@ -4293,4 +4693,259 @@ class ListTagsForResourcesRequest(TLSRequest):
 
             body["TagFilters"] = normalized_filters
 
+        return body
+
+
+# ===== Text Analysis - App Instance / Scene Meta / Session Answer =====
+
+class CreateAppInstanceRequest(TLSRequest):
+    def __init__(self, instance_type: str = None, instance_name: str = None, description: str = None):
+        """创建 App 实例请求
+
+        :param instance_type: 实例类型，如 anomaly_analysis、ai_assistant
+        :param instance_name: 实例名称
+        :param description: 实例描述
+        """
+        self.instance_type = instance_type
+        self.instance_name = instance_name
+        self.description = description
+
+    def check_validation(self):
+        return self.instance_type is not None and self.instance_name is not None
+
+
+class ModifyAppInstanceRequest(TLSRequest):
+    def __init__(self, instance_id: str = None, instance_type: str = None,
+                 instance_name: str = None, description: str = None):
+        """修改 App 实例请求
+
+        :param instance_id: 实例ID
+        :param instance_type: 实例类型
+        :param instance_name: 实例名称
+        :param description: 实例描述
+        """
+        self.instance_id = instance_id
+        self.instance_type = instance_type
+        self.instance_name = instance_name
+        self.description = description
+
+    def check_validation(self):
+        return self.instance_id is not None
+
+
+class DeleteAppInstanceRequest(TLSRequest):
+    def __init__(self, instance_id: str = None):
+        self.instance_id = instance_id
+
+    def check_validation(self):
+        return self.instance_id is not None
+
+
+class DescribeAppInstancesRequest(TLSRequest):
+    def __init__(self, page_number: int = 1, page_size: int = 20,
+                 instance_id: str = None, instance_type: str = None,
+                 instance_name: str = None, description: str = None):
+        self.page_number = page_number
+        self.page_size = page_size
+        self.instance_id = instance_id
+        self.instance_type = instance_type
+        self.instance_name = instance_name
+        self.description = description
+
+    def check_validation(self):
+        return True
+
+
+class CreateAppSceneMetaRequest(TLSRequest):
+    def __init__(self, instance_id: str = None, create_app_meta_type: str = None,
+                 id: str = None, record: dict = None):
+        """创建 App 场景元信息请求
+
+        :param instance_id: 实例ID
+        :param create_app_meta_type: 创建的 APP Meta 类型（wire key: CreateAPPMetaType）
+        :param id: 场景资源关联的外层资源ID
+        :param record: MetaRecord 信息（dict 透传，结构详见服务端契约）
+        """
+        self.instance_id = instance_id
+        self.create_app_meta_type = create_app_meta_type
+        self.id = id
+        self.record = record
+
+    def check_validation(self):
+        return self.instance_id is not None and self.create_app_meta_type is not None
+
+    def get_api_input(self):
+        body = super(CreateAppSceneMetaRequest, self).get_api_input()
+        # snake_to_pascal 会把 create_app_meta_type → CreateAppMetaType，需修正为 CreateAPPMetaType
+        if "CreateAppMetaType" in body:
+            body[CREATE_APP_META_TYPE] = body.pop("CreateAppMetaType")
+        return body
+
+
+class ModifyAppSceneMetaRequest(TLSRequest):
+    def __init__(self, instance_id: str = None, modify_app_meta_type: str = None,
+                 id: str = None, record: dict = None):
+        """修改 App 场景元信息请求
+
+        :param instance_id: 实例ID
+        :param modify_app_meta_type: 修改的 APP Meta 类型（wire key: ModifyAPPMetaType）
+        :param id: 场景资源 ID（可选）
+        :param record: MetaRecord 信息（dict 透传）
+        """
+        self.instance_id = instance_id
+        self.modify_app_meta_type = modify_app_meta_type
+        self.id = id
+        self.record = record
+
+    def check_validation(self):
+        return self.instance_id is not None and self.modify_app_meta_type is not None \
+            and self.record is not None
+
+    def get_api_input(self):
+        body = super(ModifyAppSceneMetaRequest, self).get_api_input()
+        if "ModifyAppMetaType" in body:
+            body[MODIFY_APP_META_TYPE] = body.pop("ModifyAppMetaType")
+        return body
+
+
+class DeleteAppSceneMetaRequest(TLSRequest):
+    def __init__(self, instance_id: str = None, meta_id: str = None,
+                 delete_app_meta_type: str = None, ids: List[str] = None):
+        """删除 App 场景元信息请求
+
+        :param instance_id: 实例ID
+        :param meta_id: 场景关联资源ID
+        :param delete_app_meta_type: APP Meta 类型（wire key: DeleteAPPMetaType）
+        :param ids: 资源ID列表
+        """
+        self.instance_id = instance_id
+        self.meta_id = meta_id
+        self.delete_app_meta_type = delete_app_meta_type
+        self.ids = ids
+
+    def check_validation(self):
+        return self.instance_id is not None and self.delete_app_meta_type is not None
+
+    def get_api_input(self):
+        body = super(DeleteAppSceneMetaRequest, self).get_api_input()
+        if "DeleteAppMetaType" in body:
+            body[DELETE_APP_META_TYPE] = body.pop("DeleteAppMetaType")
+        return body
+
+
+class DescribeAppSceneMetasRequest(TLSRequest):
+    def __init__(self, instance_id: str = None, id: str = None, meta_name: str = None,
+                 describe_app_meta_type: str = None,
+                 page_number: int = 1, page_size: int = 20, page_context: str = None):
+        """查询 App 场景元信息列表请求
+
+        :param instance_id: 实例ID
+        :param id: 场景关联资源ID（如模板库Id）
+        :param meta_name: 名称过滤（wire key: Name）
+        :param describe_app_meta_type: APP Meta 类型（wire key: DescribeAPPMetaType）
+        :param page_number: 分页页码
+        :param page_size: 分页大小
+        :param page_context: 分页 token
+        """
+        self.instance_id = instance_id
+        self.id = id
+        self.meta_name = meta_name
+        self.describe_app_meta_type = describe_app_meta_type
+        self.page_number = page_number
+        self.page_size = page_size
+        self.page_context = page_context
+
+    def check_validation(self):
+        return self.instance_id is not None and self.describe_app_meta_type is not None
+
+    def get_api_input(self):
+        body = super(DescribeAppSceneMetasRequest, self).get_api_input()
+        if "DescribeAppMetaType" in body:
+            body[DESCRIBE_APP_META_TYPE] = body.pop("DescribeAppMetaType")
+        if "MetaName" in body:
+            body[META_NAME] = body.pop("MetaName")
+        return body
+
+
+class DescribeAppSceneMetaRequest(TLSRequest):
+    def __init__(self, instance_id: str = None, id: str = None, meta_name: str = None,
+                 app_meta_type: str = None):
+        """查询单条 App 场景元信息请求
+
+        :param instance_id: 实例ID
+        :param id: 场景关联资源ID
+        :param meta_name: 名称过滤（wire key: Name）
+        :param app_meta_type: APP Meta 类型（wire key: APPMetaType）
+        """
+        self.instance_id = instance_id
+        self.id = id
+        self.meta_name = meta_name
+        self.app_meta_type = app_meta_type
+
+    def check_validation(self):
+        return self.instance_id is not None and self.id is not None \
+            and self.app_meta_type is not None
+
+    def get_api_input(self):
+        body = super(DescribeAppSceneMetaRequest, self).get_api_input()
+        if "AppMetaType" in body:
+            body[APP_META_TYPE] = body.pop("AppMetaType")
+        if "MetaName" in body:
+            body[META_NAME] = body.pop("MetaName")
+        return body
+
+
+class DescribeSessionAnswerRequest(TLSRequest):
+    def __init__(self, instance_id: str = None, session_id: str = None, question: str = None,
+                 topic_id: str = None, question_id: str = None, intent: int = None,
+                 enable_deep_reasoning: bool = None,
+                 attachments: List[dict] = None,
+                 alarm_content_process: dict = None, accept: str = "text/event-stream"):
+        """查询会话回答请求
+
+        :param instance_id: AI assistant 实例ID
+        :param session_id: 会话ID
+        :param question: 用户问题
+        :param topic_id: 可选，文本转 TLS 场景下参考的 topic
+        :param question_id: 重新回答时使用
+        :param intent: 用户意图枚举值
+        :param enable_deep_reasoning: 是否启用深度思考
+        :param attachments: 附件列表（dict 透传，结构详见服务端 Attachment）
+            TODO: 后续可补 Attachment DTO
+        :param alarm_content_process: 告警内容处理上下文（dict 透传）
+            TODO: 后续可补 AlarmContentProcess DTO
+        """
+        self.instance_id = instance_id
+        self.session_id = session_id
+        self.question = question
+        self.topic_id = topic_id
+        self.question_id = question_id
+        self.intent = intent
+        self.enable_deep_reasoning = enable_deep_reasoning
+        self.attachments = attachments
+        self.alarm_content_process = alarm_content_process
+        self.accept = accept
+
+    def check_validation(self):
+        return self.instance_id is not None and self.session_id is not None \
+            and self.question is not None
+
+    def get_api_input(self):
+        body = {
+            INSTANCE_ID: self.instance_id,
+            SESSION_ID: self.session_id,
+            QUESTION: self.question,
+        }
+        if self.topic_id is not None:
+            body[TOPIC_ID] = self.topic_id
+        if self.question_id is not None:
+            body[QUESTION_ID] = self.question_id
+        if self.intent is not None:
+            body[INTENT] = self.intent
+        if self.enable_deep_reasoning is not None:
+            body[ENABLE_DEEP_REASONING] = self.enable_deep_reasoning
+        if self.attachments is not None:
+            body[ATTACHMENTS] = self.attachments
+        if self.alarm_content_process is not None:
+            body[ALARM_CONTENT_PROCESS] = self.alarm_content_process
         return body

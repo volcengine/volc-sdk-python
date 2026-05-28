@@ -20,7 +20,8 @@ class Mover(threading.Thread):
         self.client = dispatcher.client
         self.batches = dispatcher.batches
         self.batches_mutex = dispatcher.batches_mutex
-        self.memory_lock = dispatcher.memory_lock
+        self.memory_lock = dispatcher.memory_limiter
+        self.failure_controller = dispatcher.failure_controller
         self.closed = False
         self.LOG = get_logger(__name__)
 
@@ -34,8 +35,9 @@ class Mover(threading.Thread):
         for log in remaining_retry_batches:
             self.executor_service.submit(
                 SendBatchTask(
-                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue
-                ).run()
+                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue,
+                    self.failure_controller
+                ).run
             )
         self.LOG.info(f"Mover {self.name} has stopped")
 
@@ -57,8 +59,9 @@ class Mover(threading.Thread):
         for log in batch_logs:
             self.executor_service.submit(
                 SendBatchTask(
-                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue
-                ).run()
+                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue,
+                    self.failure_controller
+                ).run
             )
 
     def handle_timeout_batch(self) -> int:
@@ -77,19 +80,22 @@ class Mover(threading.Thread):
                     if batch_log is None:
                         continue
 
-                # 计算剩余时间
-                cur_remains = self.producer_config.linger_ms + batch_log.create_ms - now
-                if cur_remains <= 0:
-                    # 批次超时，加入处理列表并移除
-                    batch_manager.remove_batch(batch_logs)
-                else:
-                    # 更新最小剩余时间
-                    remains = min(remains, cur_remains)
+                    # 计算剩余时间
+                    cur_remains = self.producer_config.linger_ms + batch_log.create_ms - now
+                    if cur_remains <= 0:
+                        # 批次超时，加入处理列表并移除
+                        batch_manager.remove_batch(batch_logs)
+                    else:
+                        # 更新最小剩余时间
+                        remains = min(remains, cur_remains)
 
         # 提交所有超时批次的发送任务
         for log in batch_logs:
             self.executor_service.submit(
-                SendBatchTask(log, self.producer_config, self.memory_lock, self.client, self.retry_queue).run()
+                SendBatchTask(
+                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue,
+                    self.failure_controller
+                ).run
             )
 
         return remains
@@ -113,8 +119,9 @@ class Mover(threading.Thread):
         for log in batch_logs:
             self.executor_service.submit(
                 SendBatchTask(
-                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue
-                ).run()
+                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue,
+                    self.failure_controller
+                ).run
             )
 
     def close(self) -> None:

@@ -58,8 +58,10 @@ API_INFO = {
     DESCRIBE_PROCESSOR_FUNCTIONS: ApiInfo(HTTP_GET, DESCRIBE_PROCESSOR_FUNCTIONS, {}, {}, {}),
     # APIs of logs.
     PUT_LOGS: ApiInfo(HTTP_POST, PUT_LOGS, {}, {}, {}),
-    DESCRIBE_CURSOR: ApiInfo(HTTP_GET, DESCRIBE_CURSOR, {}, {}, {}),
+    DESCRIBE_CURSOR: ApiInfo(HTTP_POST, DESCRIBE_CURSOR, {}, {}, {}),
+    DESCRIBE_CURSOR_TIME: ApiInfo(HTTP_GET, DESCRIBE_CURSOR_TIME, {}, {}, {}),
     CONSUME_LOGS: ApiInfo(HTTP_GET, CONSUME_LOGS, {}, {}, {}),
+    CONSUME_ORIGIN_LOGS: ApiInfo(HTTP_GET, CONSUME_ORIGIN_LOGS, {}, {}, {}),
     SEARCH_LOGS: ApiInfo(HTTP_POST, SEARCH_LOGS, {}, {}, {}),
     DESCRIBE_LOG_CONTEXT: ApiInfo(HTTP_POST, DESCRIBE_LOG_CONTEXT, {}, {}, {}),
     WEB_TRACKS: ApiInfo(HTTP_POST, WEB_TRACKS, {}, {}, {}),
@@ -69,6 +71,10 @@ API_INFO = {
     DESCRIBE_DOWNLOAD_TASKS: ApiInfo(HTTP_GET, DESCRIBE_DOWNLOAD_TASKS, {}, {}, {}),
     DESCRIBE_DOWNLOAD_URL: ApiInfo(HTTP_GET, DESCRIBE_DOWNLOAD_URL, {}, {}, {}),
     CANCEL_DOWNLOAD_TASK: ApiInfo(HTTP_POST, CANCEL_DOWNLOAD_TASK, {}, {}, {}),
+    CREATE_LOG_BACK_FLOW_TASK: ApiInfo(HTTP_POST, CREATE_LOG_BACK_FLOW_TASK, {}, {}, {}),
+    DELETE_LOG_BACK_FLOW_TASK: ApiInfo(HTTP_DELETE, DELETE_LOG_BACK_FLOW_TASK, {}, {}, {}),
+    DESCRIBE_LOG_BACK_FLOW_TASKS: ApiInfo(HTTP_GET, DESCRIBE_LOG_BACK_FLOW_TASKS, {}, {}, {}),
+    MODIFY_LOG_BACK_FLOW_TASK: ApiInfo(HTTP_PUT, MODIFY_LOG_BACK_FLOW_TASK, {}, {}, {}),
     # APIs of shards.
     DESCRIBE_SHARDS: ApiInfo(HTTP_GET, DESCRIBE_SHARDS, {}, {}, {}),
     MANUAL_SHARD_SPLIT: ApiInfo(HTTP_POST, MANUAL_SHARD_SPLIT, {}, {}, {}),
@@ -78,6 +84,8 @@ API_INFO = {
     MODIFY_HOST_GROUP: ApiInfo(HTTP_PUT, MODIFY_HOST_GROUP, {}, {}, {}),
     DESCRIBE_HOST_GROUP: ApiInfo(HTTP_GET, DESCRIBE_HOST_GROUP, {}, {}, {}),
     DESCRIBE_HOST_GROUPS: ApiInfo(HTTP_GET, DESCRIBE_HOST_GROUPS, {}, {}, {}),
+    DESCRIBE_HOST_GROUP_V2: ApiInfo(HTTP_GET, DESCRIBE_HOST_GROUP_V2, {}, {}, {}),
+    DESCRIBE_HOST_GROUPS_V2: ApiInfo(HTTP_GET, DESCRIBE_HOST_GROUPS_V2, {}, {}, {}),
     DESCRIBE_HOSTS: ApiInfo(HTTP_GET, DESCRIBE_HOSTS, {}, {}, {}),
     DELETE_HOST: ApiInfo(HTTP_DELETE, DELETE_HOST, {}, {}, {}),
     DESCRIBE_HOST_GROUP_RULES: ApiInfo(HTTP_GET, DESCRIBE_HOST_GROUP_RULES, {}, {}, {}),
@@ -88,6 +96,8 @@ API_INFO = {
     DELETE_RULE: ApiInfo(HTTP_DELETE, DELETE_RULE, {}, {}, {}),
     MODIFY_RULE: ApiInfo(HTTP_PUT, MODIFY_RULE, {}, {}, {}),
     DESCRIBE_RULE: ApiInfo(HTTP_GET, DESCRIBE_RULE, {}, {}, {}),
+    DESCRIBE_RULE_V2: ApiInfo(HTTP_GET, DESCRIBE_RULE_V2, {}, {}, {}),
+    DESCRIBE_BOUND_HOST_GROUPS: ApiInfo(HTTP_GET, DESCRIBE_BOUND_HOST_GROUPS, {}, {}, {}),
     DESCRIBE_RULES: ApiInfo(HTTP_GET, DESCRIBE_RULES, {}, {}, {}),
     APPLY_RULE_TO_HOST_GROUPS: ApiInfo(HTTP_PUT, APPLY_RULE_TO_HOST_GROUPS, {}, {}, {}),
     DELETE_RULE_FROM_HOST_GROUPS: ApiInfo(HTTP_PUT, DELETE_RULE_FROM_HOST_GROUPS, {}, {}, {}),
@@ -117,7 +127,7 @@ API_INFO = {
     CONSUMER_HEARTBEAT: ApiInfo(HTTP_POST, CONSUMER_HEARTBEAT, {}, {}, {}),
     MODIFY_CHECKPOINT: ApiInfo(HTTP_PUT, MODIFY_CHECKPOINT, {}, {}, {}),
     RESET_CHECKPOINT: ApiInfo(HTTP_PUT, RESET_CHECKPOINT, {}, {}, {}),
-    DESCRIBE_CHECKPOINT: ApiInfo(HTTP_GET, DESCRIBE_CHECKPOINT, {}, {}, {}),
+    DESCRIBE_CHECKPOINT: ApiInfo(HTTP_POST, DESCRIBE_CHECKPOINT, {}, {}, {}),
     # APIs of resource labels.
     ADD_TAGS_TO_RESOURCE: ApiInfo(HTTP_POST, ADD_TAGS_TO_RESOURCE, {}, {}, {}),
     REMOVE_TAGS_FROM_RESOURCE: ApiInfo(HTTP_POST, REMOVE_TAGS_FROM_RESOURCE, {}, {}, {}),
@@ -168,7 +178,21 @@ API_INFO = {
     # APIs of alarm webhook integration.
     CREATE_ALARM_WEBHOOK_INTEGRATION: ApiInfo(HTTP_POST, CREATE_ALARM_WEBHOOK_INTEGRATION, {}, {}, {}),
     DELETE_ALARM_WEBHOOK_INTEGRATION: ApiInfo(HTTP_DELETE, DELETE_ALARM_WEBHOOK_INTEGRATION, {}, {}, {}),
+    # APIs of text analysis - app instance / scene meta / session answer.
+    CREATE_APP_INSTANCE: ApiInfo(HTTP_POST, CREATE_APP_INSTANCE, {}, {}, {}),
+    MODIFY_APP_INSTANCE: ApiInfo(HTTP_PUT, MODIFY_APP_INSTANCE, {}, {}, {}),
+    DELETE_APP_INSTANCE: ApiInfo(HTTP_DELETE, DELETE_APP_INSTANCE, {}, {}, {}),
+    DESCRIBE_APP_INSTANCES: ApiInfo(HTTP_GET, DESCRIBE_APP_INSTANCES, {}, {}, {}),
+    CREATE_APP_SCENE_META: ApiInfo(HTTP_POST, CREATE_APP_SCENE_META, {}, {}, {}),
+    MODIFY_APP_SCENE_META: ApiInfo(HTTP_PUT, MODIFY_APP_SCENE_META, {}, {}, {}),
+    DELETE_APP_SCENE_META: ApiInfo(HTTP_DELETE, DELETE_APP_SCENE_META, {}, {}, {}),
+    DESCRIBE_APP_SCENE_METAS: ApiInfo(HTTP_GET, DESCRIBE_APP_SCENE_METAS, {}, {}, {}),
+    DESCRIBE_APP_SCENE_META: ApiInfo(HTTP_GET, DESCRIBE_APP_SCENE_META, {}, {}, {}),
+    DESCRIBE_SESSION_ANSWER: ApiInfo(HTTP_POST, DESCRIBE_SESSION_ANSWER, {}, {}, {}),
 }
+
+# 支持 API Key 匿名鉴权的接口白名单。
+_API_KEY_SUPPORTED_APIS = {PUT_LOGS, PUT_LOGS_V2}
 
 HEADER_API_VERSION = "x-tls-apiversion"
 API_VERSION_V_0_3_0 = "0.3.0"
@@ -189,6 +213,9 @@ class TLSService(Service):
         self.__api_version = api_version
         self.__api_key = api_key
         self.__retry_policy = None
+        # 用户自定义 header 容器，与 Go SDK CommonRequest.Headers 对齐。
+        # 合并语义：user-first → SDK overrides（SDK 内部 header 后写覆盖用户）。
+        self.__custom_headers = {}
 
         self.check_scheme_and_endpoint()
 
@@ -231,13 +258,14 @@ class TLSService(Service):
 
         return service_info
 
-    def __prepare_request(self, api: str, params: dict = None, body: dict = None, request_headers: dict = None):
+    def __prepare_request(self, api: str, params: dict = None, body: dict = None, request_headers: dict = None,
+                          doseq=False):
         if params is None:
             params = {}
         if body is None:
             body = {}
 
-        request = self.prepare_request(self.api_info[api], params)
+        request = self.prepare_request(self.api_info[api], params, doseq=doseq)
 
         if request_headers is None:
             request_headers = {CONTENT_TYPE: APPLICATION_JSON}
@@ -254,7 +282,7 @@ class TLSService(Service):
             else:
                 request.headers[CONTENT_MD5] = hashlib.md5(request.body).hexdigest()
 
-        if self.__api_key and api == PUT_LOGS:
+        if self.__api_key and api in _API_KEY_SUPPORTED_APIS:
             request.headers[X_TLS_ANONYMOUS_IDENTITY] = self.__api_key
             request.headers.pop("Authorization", None)
             request.headers.pop(X_SECURITY_TOKEN, None)
@@ -268,17 +296,24 @@ class TLSService(Service):
 
         return request
 
-    def __request(self, api: str, params: dict = None, body: dict = None, request_headers: dict = None):
+    def __request(self, api: str, params: dict = None, body: dict = None, request_headers: dict = None,
+                  doseq=False, stream=False):
         if request_headers is None:
             request_headers = {HEADER_API_VERSION: self.__api_version}
         elif HEADER_API_VERSION not in request_headers:
             request_headers[HEADER_API_VERSION] = self.__api_version
         if CONTENT_TYPE not in request_headers:
             request_headers[CONTENT_TYPE] = APPLICATION_JSON
-        request = self.__prepare_request(api, params, body, request_headers)
+        # 与 Go SDK assembleHeader 对齐：user-first → SDK overrides。
+        # 用户自定义 header 先写入，SDK 内部 header（API 版本、Content-Type、SourceType 等）后写覆盖。
+        if self.__custom_headers:
+            merged = dict(self.__custom_headers)
+            merged.update(request_headers)
+            request_headers = merged
+        request = self.__prepare_request(api, params, body, request_headers, doseq=doseq)
 
         method = self.api_info[api].method
-        url = request.build()
+        url = request.build(doseq=doseq)
 
         policy = self.get_retry_policy()
         deadline = time.monotonic() + policy.total_timeout
@@ -289,8 +324,14 @@ class TLSService(Service):
             try:
                 # if try_count == 1:
                 #     self.__logger.info("TLS client is trying to request {}.".format(api))
-                response = self.session.request(method, url, headers=request.headers, data=request.body,
-                                                timeout=self.__timeout)
+                request_kwargs = {
+                    "headers": request.headers,
+                    "data": request.body,
+                    "timeout": self.__timeout,
+                }
+                if stream:
+                    request_kwargs["stream"] = True
+                response = self.session.request(method, url, **request_kwargs)
             except Exception as e:
                 if self.__can_retry(try_count, policy) is False or self.__should_retry_exception(e) is False:
                     raise TLSException(error_code=e.__class__.__name__, error_message=e.__str__())
@@ -304,7 +345,7 @@ class TLSService(Service):
                 if response.status_code == 200:
                     # self.__logger.info("TLS client successfully got the response for requesting {}".format(api))
                     return response
-                elif response.status_code in [429, 500, 502, 503] and self.__can_retry(try_count, policy):
+                elif response.status_code in [429, 500, 502, 503, 504] and self.__can_retry(try_count, policy):
                     sleep_seconds = self.__calc_backoff_seconds(policy, retry_index + 1, deadline)
                     if sleep_seconds > 0:
                         time.sleep(sleep_seconds)
@@ -337,6 +378,35 @@ class TLSService(Service):
         if self.__retry_policy is None:
             return RetryPolicy.default_policy()
         return self.__retry_policy.normalize()
+
+    def set_custom_headers(self, headers):
+        """设置/替换用户自定义 HTTP header，与 Go SDK CommonRequest.Headers 对齐。
+
+        语义（与 Go SDK assembleHeader 一致）：
+            - 客户端实例级生效，覆盖所有 API 调用。
+            - 合并顺序为 user-first → SDK overrides：用户 header 先写入，
+              SDK 内部 header（API 版本、Content-Type、SourceType、签名等）后写覆盖，
+              用户无法借此绕过 SDK 必要协议字段。
+            - 传入 None 或空 dict 视为清空。
+        """
+        if headers is None:
+            self.__custom_headers = {}
+            return
+        if not isinstance(headers, dict):
+            raise TLSException(error_code="InvalidArgument",
+                               error_message="custom_headers must be a dict[str, str]")
+        # 拷贝避免外部后续修改影响实例状态。
+        self.__custom_headers = {str(k): str(v) for k, v in headers.items()}
+
+    def add_custom_header(self, key: str, value: str):
+        """单条追加自定义 header。"""
+        if not key:
+            raise TLSException(error_code="InvalidArgument", error_message="header key must be non-empty")
+        self.__custom_headers[str(key)] = str(value)
+
+    def get_custom_headers(self) -> dict:
+        """返回当前自定义 header 的浅拷贝，便于业务侧只读检视。"""
+        return dict(self.__custom_headers)
 
     def __can_retry(self, attempts, policy):
         if policy.max_attempts <= 0:
@@ -602,19 +672,32 @@ class TLSService(Service):
 
         return DescribeCursorResponse(response)
 
+    def describe_cursor_time(self, describe_cursor_time_request: DescribeCursorTimeRequest) -> DescribeCursorTimeResponse:
+        if describe_cursor_time_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        api_input = describe_cursor_time_request.get_api_input()
+        response = self.__request(api=DESCRIBE_CURSOR_TIME, params=api_input[PARAMS], body=api_input[BODY])
+
+        return DescribeCursorTimeResponse(response)
+
     def consume_logs(self, consume_logs_request: ConsumeLogsRequest) -> ConsumeLogsResponse:
         if consume_logs_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         api_input = consume_logs_request.get_api_input()
-        response = self.__request(api=CONSUME_LOGS, params=api_input[PARAMS], body=api_input[BODY],
+        api = CONSUME_ORIGIN_LOGS if consume_logs_request.original else CONSUME_LOGS
+        response = self.__request(api=api, params=api_input[PARAMS], body=api_input[BODY],
                                   request_headers=api_input[REQUEST_HEADERS])
 
-        return ConsumeLogsResponse(response, compression=consume_logs_request.compression)
+        return ConsumeLogsResponse(response, compression=consume_logs_request.compression,
+                                   original=consume_logs_request.original)
 
     def search_logs(self, search_logs_request: SearchLogsRequest) -> SearchLogsResponse:
         if search_logs_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         headers = {HEADER_API_VERSION: API_VERSION_V_0_2_0}
+        # 与 Go SDK 对齐，highlight=true 时注入 SourceType=front 头
+        if search_logs_request.highlight is True:
+            headers["SourceType"] = "front"
 
         response = self.__request(api=SEARCH_LOGS, body=search_logs_request.get_api_input(), request_headers=headers)
 
@@ -630,6 +713,9 @@ class TLSService(Service):
         if search_logs_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
         headers = {HEADER_API_VERSION: API_VERSION_V_0_3_0}
+        # 与 Go SDK 对齐，highlight=true 时注入 SourceType=front 头
+        if search_logs_request.highlight is True:
+            headers["SourceType"] = "front"
         response = self.__request(api=SEARCH_LOGS, body=search_logs_request.get_api_input(), request_headers=headers)
 
         return SearchLogsResponse(response)
@@ -692,6 +778,42 @@ class TLSService(Service):
 
         return DescribeDownloadUrlResponse(response)
 
+    def create_log_back_flow_task(self, create_log_back_flow_task_request: CreateLogBackFlowTaskRequest) \
+            -> CreateLogBackFlowTaskResponse:
+        if create_log_back_flow_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_LOG_BACK_FLOW_TASK,
+                                  body=create_log_back_flow_task_request.get_api_input())
+
+        return CreateLogBackFlowTaskResponse(response)
+
+    def delete_log_back_flow_task(self, delete_log_back_flow_task_request: DeleteLogBackFlowTaskRequest) \
+            -> DeleteLogBackFlowTaskResponse:
+        if delete_log_back_flow_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_LOG_BACK_FLOW_TASK,
+                                  body=delete_log_back_flow_task_request.get_api_input())
+
+        return DeleteLogBackFlowTaskResponse(response)
+
+    def describe_log_back_flow_tasks(self, describe_log_back_flow_tasks_request: DescribeLogBackFlowTasksRequest) \
+            -> DescribeLogBackFlowTasksResponse:
+        if describe_log_back_flow_tasks_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_LOG_BACK_FLOW_TASKS,
+                                  params=describe_log_back_flow_tasks_request.get_api_input(), doseq=True)
+
+        return DescribeLogBackFlowTasksResponse(response)
+
+    def modify_log_back_flow_task(self, modify_log_back_flow_task_request: ModifyLogBackFlowTaskRequest) \
+            -> ModifyLogBackFlowTaskResponse:
+        if modify_log_back_flow_task_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_LOG_BACK_FLOW_TASK,
+                                  body=modify_log_back_flow_task_request.get_api_input())
+
+        return ModifyLogBackFlowTaskResponse(response)
+
     def describe_shards(self, describe_shards_request: DescribeShardsRequest) -> DescribeShardsResponse:
         if describe_shards_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
@@ -741,6 +863,22 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_HOST_GROUPS, params=describe_host_groups_request.get_api_input())
 
         return DescribeHostGroupsResponse(response)
+
+    def describe_host_group_v2(self, describe_host_group_request: DescribeHostGroupRequestV2) \
+            -> DescribeHostGroupResponseV2:
+        if describe_host_group_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_HOST_GROUP_V2, params=describe_host_group_request.get_api_input())
+
+        return DescribeHostGroupResponseV2(response)
+
+    def describe_host_groups_v2(self, describe_host_groups_request: DescribeHostGroupsRequestV2) \
+            -> DescribeHostGroupsResponseV2:
+        if describe_host_groups_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_HOST_GROUPS_V2, params=describe_host_groups_request.get_api_input())
+
+        return DescribeHostGroupsResponseV2(response)
 
     def describe_hosts(self, describe_hosts_request: DescribeHostsRequest) -> DescribeHostsResponse:
         if describe_hosts_request.check_validation() is False:
@@ -808,6 +946,22 @@ class TLSService(Service):
         response = self.__request(api=DESCRIBE_RULE, params=describe_rule_request.get_api_input())
 
         return DescribeRuleResponse(response)
+
+    def describe_rule_v2(self, describe_rule_request: DescribeRuleRequestV2) -> DescribeRuleResponseV2:
+        if describe_rule_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_RULE_V2, params=describe_rule_request.get_api_input())
+
+        return DescribeRuleResponseV2(response)
+
+    def describe_bound_host_groups(self, describe_bound_host_groups_request: DescribeBoundHostGroupsRequest) \
+            -> DescribeBoundHostGroupsResponse:
+        if describe_bound_host_groups_request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_BOUND_HOST_GROUPS,
+                                  params=describe_bound_host_groups_request.get_api_input())
+
+        return DescribeBoundHostGroupsResponse(response)
 
     def describe_rules(self, describe_rules_request: DescribeRulesRequest) -> DescribeRulesResponse:
         if describe_rules_request.check_validation() is False:
@@ -1312,3 +1466,70 @@ class TLSService(Service):
         response = self.__request(api=LIST_TAGS_FOR_RESOURCES,
                                   body=list_tags_for_resources_request.get_api_input())
         return ListTagsForResourcesResponse(response)
+
+    # ===== Text Analysis - App Instance / Scene Meta / Session Answer =====
+
+    def create_app_instance(self, request: CreateAppInstanceRequest) -> CreateAppInstanceResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_APP_INSTANCE, body=request.get_api_input())
+        return CreateAppInstanceResponse(response)
+
+    def modify_app_instance(self, request: ModifyAppInstanceRequest) -> ModifyAppInstanceResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_APP_INSTANCE, body=request.get_api_input())
+        return ModifyAppInstanceResponse(response)
+
+    def delete_app_instance(self, request: DeleteAppInstanceRequest) -> DeleteAppInstanceResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_APP_INSTANCE, body=request.get_api_input())
+        return DeleteAppInstanceResponse(response)
+
+    def describe_app_instances(self, request: DescribeAppInstancesRequest) -> DescribeAppInstancesResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_APP_INSTANCES, params=request.get_api_input())
+        return DescribeAppInstancesResponse(response)
+
+    def create_app_scene_meta(self, request: CreateAppSceneMetaRequest) -> CreateAppSceneMetaResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=CREATE_APP_SCENE_META, body=request.get_api_input())
+        return CreateAppSceneMetaResponse(response)
+
+    def modify_app_scene_meta(self, request: ModifyAppSceneMetaRequest) -> ModifyAppSceneMetaResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=MODIFY_APP_SCENE_META, body=request.get_api_input())
+        return ModifyAppSceneMetaResponse(response)
+
+    def delete_app_scene_meta(self, request: DeleteAppSceneMetaRequest) -> DeleteAppSceneMetaResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DELETE_APP_SCENE_META, body=request.get_api_input())
+        return DeleteAppSceneMetaResponse(response)
+
+    def describe_app_scene_metas(self, request: DescribeAppSceneMetasRequest) -> DescribeAppSceneMetasResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_APP_SCENE_METAS, params=request.get_api_input())
+        return DescribeAppSceneMetasResponse(response)
+
+    def describe_app_scene_meta(self, request: DescribeAppSceneMetaRequest) -> DescribeAppSceneMetaResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        response = self.__request(api=DESCRIBE_APP_SCENE_META, params=request.get_api_input())
+        return DescribeAppSceneMetaResponse(response)
+
+    def describe_session_answer(self, request: DescribeSessionAnswerRequest) -> DescribeSessionAnswerResponse:
+        if request.check_validation() is False:
+            raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        request_headers = {}
+        if request.accept:
+            request_headers["Accept"] = request.accept
+        stream = bool(request.accept and request.accept.lower() == "text/event-stream")
+        response = self.__request(api=DESCRIBE_SESSION_ANSWER, body=request.get_api_input(),
+                                  request_headers=request_headers, stream=stream)
+        return DescribeSessionAnswerResponse(response)

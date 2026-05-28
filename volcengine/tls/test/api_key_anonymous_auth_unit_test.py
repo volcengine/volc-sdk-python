@@ -4,7 +4,7 @@ from unittest.mock import patch
 from volcengine.tls.TLSService import TLSService
 from volcengine.tls.const import CONTENT_TYPE, APPLICATION_JSON, DESCRIBE_PROJECT, X_TLS_REQUEST_ID, X_SECURITY_TOKEN
 from volcengine.tls.log_pb2 import LogGroupList
-from volcengine.tls.producer.batch_semaphore import BatchSemaphore
+from volcengine.tls.producer.batch_semaphore import MemoryLimiter
 from volcengine.tls.producer.log_dispatcher import LogDispatcher
 from volcengine.tls.producer.producer import TLSProducer
 from volcengine.tls.producer.producer_model import ProducerConfig
@@ -192,7 +192,11 @@ class ApiKeyAnonymousAuthUnitTest(unittest.TestCase):
                 })
 
         with patch("volcengine.tls.producer.log_dispatcher.TLSService", _FakeTLSService):
-            dispatcher = LogDispatcher(config, "producer", BatchSemaphore(1024), RetryQueue())
+            dispatcher = LogDispatcher(
+                config, "producer",
+                MemoryLimiter(config.max_producer_memory_bytes, config.total_size_in_bytes),
+                RetryQueue()
+            )
             dispatcher.close_now()
 
         self.assertEqual("api-key", captured[0]["api_key"])
@@ -211,7 +215,11 @@ class ApiKeyAnonymousAuthUnitTest(unittest.TestCase):
                 reset_values.append(api_key)
 
         with patch("volcengine.tls.producer.log_dispatcher.TLSService", _FakeTLSService):
-            dispatcher = LogDispatcher(config, "producer", BatchSemaphore(1024), RetryQueue())
+            dispatcher = LogDispatcher(
+                config, "producer",
+                MemoryLimiter(config.max_producer_memory_bytes, config.total_size_in_bytes),
+                RetryQueue()
+            )
             dispatcher.reset_api_key("new-api-key")
             dispatcher.close_now()
 
