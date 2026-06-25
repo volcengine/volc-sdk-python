@@ -6,7 +6,7 @@ from __future__ import print_function
 from volcengine.Policy import *
 from google.protobuf.json_format import *
 from volcengine.vod.VodServiceConfig import VodServiceConfig
-from retry import retry
+from tenacity import retry, stop_after_attempt, wait_exponential
 from zlib import crc32
 import os
 import sys
@@ -401,7 +401,10 @@ class VodService(VodServiceConfig):
 
         return '{"Parts":[' + comma.join(s) + ']}'
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=10),
+    )
     def direct_upload(self, host, oid, auth, file_path, storage_class):
         with open(file_path, 'rb') as f:
             data = f.read()
@@ -449,7 +452,10 @@ class VodService(VodServiceConfig):
             parts.append(part)
         return self.upload_merge_part(host, oid, auth, upload_id, parts, is_large_file, storage_class, meta)
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=10),
+    )
     def init_upload_part(self, host, oid, auth, is_large_file, storage_class):
         url = 'https://{}/{}?uploads'.format(host, oid)
         headers = {'Authorization': auth}
@@ -470,7 +476,10 @@ class VodService(VodServiceConfig):
             raise Exception("init upload error: {}, logid: {}".format(resp_text, headers["X-Tt-Logid"]))
         return resp['payload']['uploadID']
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=10),
+    )
     def upload_part(self, host, oid, auth, upload_id, part_number, data, is_large_file, storage_class):
         url = 'https://{}/{}?partNumber={}&uploadID={}'.format(host, oid,
                                                               part_number, upload_id)
@@ -504,7 +513,10 @@ class VodService(VodServiceConfig):
         comma = ','
         return comma.join(s)
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(
+        stop=stop_after_attempt(3),
+        wait=wait_exponential(multiplier=1, min=1, max=10),
+    )
     def upload_merge_part(self, host, oid, auth, upload_id, check_sum_list, is_large_file, storage_class, meta):
         object_content_type = ''
         if (meta is not None) and (meta.get("ObjectContentType") is not None):
