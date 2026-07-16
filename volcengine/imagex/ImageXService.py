@@ -11,7 +11,7 @@ from volcengine.const.Const import *
 from volcengine.util.Util import *
 from volcengine.Policy import *
 from volcengine.imagex.ImageXConfig import *
-from retry import retry
+from tenacity import retry, stop_after_attempt, wait_exponential
 
 
 class Uploader:
@@ -75,7 +75,7 @@ class Uploader:
                     'Error': e,
                 })
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1), reraise=True)
     def upload_by_host(self, store_info, img_data):
         url = 'https://{}/{}'.format(self.host, store_info['StoreUri'])
         check_sum = crc32(img_data) & 0xFFFFFFFF
@@ -104,7 +104,7 @@ class Uploader:
         parts.append(part)
         return self.upload_merge_part(store_info, upload_id, parts, is_large_file)
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1), reraise=True)
     def init_upload_part(self, store_info, is_large_file):
         url = 'https://{}/{}?uploads'.format(self.host, store_info['StoreUri'])
         headers = {'Authorization': store_info['Auth']}
@@ -118,7 +118,7 @@ class Uploader:
             raise Exception("init upload error")
         return resp['payload']['uploadID']
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1), reraise=True)
     def upload_part(self, store_info, upload_id, part_number, data, is_large_file):
         url = 'https://{}/{}?partNumber={}&uploadID={}'.format(self.host, store_info['StoreUri'], part_number,
                                                                upload_id)
@@ -146,7 +146,7 @@ class Uploader:
         comma = ','
         return comma.join(s)
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1), reraise=True)
     def upload_merge_part(self, store_info, upload_id, check_sum_list, is_large_file):
         url = 'https://{}/{}?uploadID={}'.format(self.host, store_info['StoreUri'], upload_id)
         data = self.generate_merge_body(check_sum_list)

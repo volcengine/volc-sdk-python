@@ -7,7 +7,7 @@ from volcengine.util.Util import *
 from volcengine.Policy import *
 from volcengine.imagex.v2.const import *
 
-from retry import retry
+from tenacity import retry, stop_after_attempt, wait_exponential
 from urllib.parse import quote
 
 try:
@@ -95,7 +95,7 @@ class Uploader:
                     }
                 )
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1), reraise=True)
     def upload_by_host(self, store_info, img_data, param=None):
         if param is None:
             param = {}
@@ -136,7 +136,7 @@ class Uploader:
         parts.append(part)
         return self.upload_merge_part(store_info, upload_id, parts, is_large_file, param)
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1), reraise=True)
     def init_upload_part(self, store_info, is_large_file, param=None):
         if param is None:
             param = {}
@@ -156,7 +156,7 @@ class Uploader:
             raise Exception("init upload error")
         return resp["payload"]["uploadID"]
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1), reraise=True)
     def upload_part(self, store_info, upload_id, part_number, data, is_large_file):
         url = "https://{}/{}?partNumber={}&uploadID={}".format(
             self.host, quote(store_info["StoreUri"]), part_number, upload_id
@@ -185,7 +185,7 @@ class Uploader:
         comma = ","
         return comma.join(s)
 
-    @retry(tries=3, delay=1, backoff=2)
+    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1), reraise=True)
     def upload_merge_part(self, store_info, upload_id, check_sum_list, is_large_file, param=None):
         if param is None:
             param = {}

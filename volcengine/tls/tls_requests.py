@@ -1548,7 +1548,9 @@ class CreateLogBackFlowTaskRequest(TLSRequest):
                  query_params: LogBackFlowQueryParams = None, back_flow_start_time: int = None,
                  back_flow_end_time: int = None, description: str = None, iam_project_name: str = None,
                  schedule_sql_task_info: LogBackFlowScheduleSqlTaskInfo = None,
-                 shipper_to_tos_info: LogBackFlowShipperToTosInfo = None):
+                 shipper_to_tos_info: LogBackFlowShipperToTosInfo = None,
+                 etl_task_info: LogBackFlowETLTaskInfo = None,
+                 shipper_to_agent_loop_info: LogBackFlowShipperToAgentLoopInfo = None):
         self.back_flow_end_time = back_flow_end_time
         self.back_flow_start_time = back_flow_start_time
         self.description = description
@@ -1558,20 +1560,41 @@ class CreateLogBackFlowTaskRequest(TLSRequest):
         self.schedule_sql_task_info = schedule_sql_task_info
         self.shipper_to_tos_info = shipper_to_tos_info
         self.task_name = task_name
+        self.etl_task_info = etl_task_info
+        self.shipper_to_agent_loop_info = shipper_to_agent_loop_info
 
     def check_validation(self):
-        return self.task_name is not None and self.log_back_flow_task_source is not None and self.query_params is not None
+        if not self.task_name or self.log_back_flow_task_source is None:
+            return False
+        topic_source = self.log_back_flow_task_source.log_back_flow_task_topic_source
+        if self.log_back_flow_task_source.source_type != "Topic" or topic_source is None:
+            return False
+        if not topic_source.project_id or not topic_source.topic_id:
+            return False
+        if not _valid_log_back_flow_etl_task_info(self.etl_task_info):
+            return False
+        if self.query_params is not None and not self.query_params.fields:
+            return False
+        if self.back_flow_start_time is None or self.back_flow_start_time <= 0:
+            return False
+        if self.shipper_to_tos_info is not None and self.shipper_to_agent_loop_info is not None:
+            return False
+        return self.schedule_sql_task_info is None
 
     def get_api_input(self):
         body = super(CreateLogBackFlowTaskRequest, self).get_api_input()
+        body.pop(SCHEDULE_SQL_TASK_INFO, None)
+        body.pop(snake_to_pascal("etl_task_info"), None)
         if self.log_back_flow_task_source is not None:
             body[LOG_BACK_FLOW_TASK_SOURCE] = self.log_back_flow_task_source.json()
+        if self.etl_task_info is not None:
+            body[ETL_TASK_INFO] = self.etl_task_info.json()
         if self.query_params is not None:
             body[QUERY_PARAMS] = self.query_params.json()
-        if self.schedule_sql_task_info is not None:
-            body[SCHEDULE_SQL_TASK_INFO] = self.schedule_sql_task_info.json()
         if self.shipper_to_tos_info is not None:
             body[SHIPPER_TO_TOS_INFO] = self.shipper_to_tos_info.json()
+        if self.shipper_to_agent_loop_info is not None:
+            body[SHIPPER_TO_AGENT_LOOP_INFO] = self.shipper_to_agent_loop_info.json()
         return body
 
 
@@ -1580,13 +1603,14 @@ class DeleteLogBackFlowTaskRequest(TLSRequest):
         self.task_id = task_id
 
     def check_validation(self):
-        return self.task_id is not None
+        return bool(self.task_id)
 
 
 class DescribeLogBackFlowTasksRequest(TLSRequest):
     def __init__(self, page_number: int = None, page_size: int = None, topic_id_list: List[str] = None,
-                 task_id: str = None, task_name: str = None, status: int = None,
-                 schedule_sql_task_id: str = None, shipper_id: str = None):
+                 task_id: str = None, task_name: str = None, status: str = None,
+                 schedule_sql_task_id: str = None, shipper_id: str = None,
+                 etl_task_id: str = None):
         self.page_number = page_number
         self.page_size = page_size
         self.topic_id_list = topic_id_list
@@ -1595,9 +1619,21 @@ class DescribeLogBackFlowTasksRequest(TLSRequest):
         self.status = status
         self.schedule_sql_task_id = schedule_sql_task_id
         self.shipper_id = shipper_id
+        self.etl_task_id = etl_task_id
 
     def check_validation(self):
-        return True
+        if self.schedule_sql_task_id is not None:
+            return False
+        if self.status is None:
+            return True
+        return self.status in (
+            LOG_BACK_FLOW_TASK_STATUS_DONE,
+            LOG_BACK_FLOW_TASK_STATUS_CREATING,
+            LOG_BACK_FLOW_TASK_STATUS_FINISHED,
+            LOG_BACK_FLOW_TASK_STATUS_DELETING,
+            LOG_BACK_FLOW_TASK_STATUS_CREATE_FAILED,
+            LOG_BACK_FLOW_TASK_STATUS_RUN_FAILED,
+        )
 
     def get_api_input(self):
         params = {}
@@ -1613,8 +1649,8 @@ class DescribeLogBackFlowTasksRequest(TLSRequest):
             params[TASK_NAME] = self.task_name
         if self.status is not None:
             params[STATUS] = self.status
-        if self.schedule_sql_task_id is not None:
-            params[SCHEDULE_SQL_TASK_ID] = self.schedule_sql_task_id
+        if self.etl_task_id is not None:
+            params[LOG_BACK_FLOW_ETL_TASK_ID] = self.etl_task_id
         if self.shipper_id is not None:
             params[SHIPPER_ID] = self.shipper_id
         return params
@@ -1623,24 +1659,51 @@ class DescribeLogBackFlowTasksRequest(TLSRequest):
 class ModifyLogBackFlowTaskRequest(TLSRequest):
     def __init__(self, task_id: str = None, query_params: LogBackFlowQueryParams = None,
                  schedule_sql_task_info: LogBackFlowScheduleSqlTaskInfo = None,
-                 shipper_to_tos_info: LogBackFlowShipperToTosInfo = None):
+                 shipper_to_tos_info: LogBackFlowShipperToTosInfo = None,
+                 etl_task_info: LogBackFlowETLTaskInfo = None,
+                 shipper_to_agent_loop_info: LogBackFlowShipperToAgentLoopInfo = None):
         self.query_params = query_params
         self.schedule_sql_task_info = schedule_sql_task_info
         self.shipper_to_tos_info = shipper_to_tos_info
         self.task_id = task_id
+        self.etl_task_info = etl_task_info
+        self.shipper_to_agent_loop_info = shipper_to_agent_loop_info
 
     def check_validation(self):
-        return self.task_id is not None
+        if not self.task_id:
+            return False
+        if self.query_params is not None and self.etl_task_info is None:
+            return False
+        if self.etl_task_info is not None and not _valid_log_back_flow_etl_task_info(self.etl_task_info):
+            return False
+        if self.query_params is not None and not self.query_params.fields:
+            return False
+        if self.shipper_to_tos_info is not None and self.shipper_to_agent_loop_info is not None:
+            return False
+        return self.schedule_sql_task_info is None
 
     def get_api_input(self):
         body = super(ModifyLogBackFlowTaskRequest, self).get_api_input()
+        body.pop(SCHEDULE_SQL_TASK_INFO, None)
+        body.pop(snake_to_pascal("etl_task_info"), None)
+        if self.etl_task_info is not None:
+            body[ETL_TASK_INFO] = self.etl_task_info.json()
         if self.query_params is not None:
             body[QUERY_PARAMS] = self.query_params.json()
-        if self.schedule_sql_task_info is not None:
-            body[SCHEDULE_SQL_TASK_INFO] = self.schedule_sql_task_info.json()
         if self.shipper_to_tos_info is not None:
             body[SHIPPER_TO_TOS_INFO] = self.shipper_to_tos_info.json()
+        if self.shipper_to_agent_loop_info is not None:
+            body[SHIPPER_TO_AGENT_LOOP_INFO] = self.shipper_to_agent_loop_info.json()
         return body
+
+
+def _valid_log_back_flow_etl_task_info(etl_task_info):
+    if etl_task_info is None or not etl_task_info.script:
+        return False
+    if not etl_task_info.target_resources or len(etl_task_info.target_resources) != 1:
+        return False
+    target = etl_task_info.target_resources[0]
+    return bool(target.topic_id and target.alias)
 
 
 class DescribeShardsRequest(TLSRequest):

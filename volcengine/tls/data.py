@@ -3174,8 +3174,32 @@ class CsvInfo(TLSData):
         self.print_header = print_header
         self.non_field_content = non_field_content
 
+
+class ParquetField(TLSData):
+    def __init__(self, key: str = None, trans_type: str = None):
+        self.key = key
+        self.trans_type = trans_type
+
+
+class ParquetInfo(TLSData):
+    def __init__(self, fields: List[ParquetField] = None):
+        self.fields = fields
+
+    def json(self):
+        if self.fields is None:
+            return {}
+        return {FIELDS: [field.json() for field in self.fields]}
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(ParquetInfo, cls).set_attributes(data)
+        if data is not None and FIELDS in data:
+            info.fields = [ParquetField.set_attributes(field) for field in data[FIELDS]]
+        return info
+
 class ContentInfo(TLSData):
-    def __init__(self, format: str = None, json_info: JsonInfo = None, csv_info: CsvInfo = None):
+    def __init__(self, format: str = None, json_info: JsonInfo = None, csv_info: CsvInfo = None,
+                 parquet_info: ParquetInfo = None):
         """
         :param format: 日志内容解析格式,投递到 TOS 时，支持配置为 json、csv。投递到 Kafka 时，支持配置为 original、json。
         :type format: str, optional
@@ -3187,6 +3211,7 @@ class ContentInfo(TLSData):
         self.format = format
         self.json_info = json_info
         self.csv_info = csv_info
+        self.parquet_info = parquet_info
 
     def json(self):
         content_info = super(ContentInfo, self).json()
@@ -3194,6 +3219,8 @@ class ContentInfo(TLSData):
             content_info[JSON_INFO] = self.json_info.json()
         if self.csv_info:
             content_info[CSV_INFO] = self.csv_info.json()
+        if self.parquet_info:
+            content_info[PARQUET_INFO] = self.parquet_info.json()
         return content_info
 
     @classmethod
@@ -3204,6 +3231,9 @@ class ContentInfo(TLSData):
 
         if CSV_INFO in data:
             content_info.csv_info = CsvInfo.set_attributes(data=data[CSV_INFO])
+
+        if PARQUET_INFO in data:
+            content_info.parquet_info = ParquetInfo.set_attributes(data=data[PARQUET_INFO])
 
         return content_info
 
@@ -3320,6 +3350,142 @@ class LogBackFlowShipperToTosInfo(TLSData):
         return info
 
 
+class LogBackFlowETLTaskInfo(TLSData):
+    def __init__(self, script: str = None, target_resources: List["TargetResource"] = None):
+        self.script = script
+        self.target_resources = target_resources
+
+    def json(self):
+        data = {ETL_SCRIPT: self.script}
+        if self.target_resources is not None:
+            data[ETL_TARGET_RESOURCES] = [target.json() for target in self.target_resources]
+        return {key: value for key, value in data.items() if value is not None}
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(LogBackFlowETLTaskInfo, cls).set_attributes(data)
+        if data is not None and ETL_TARGET_RESOURCES in data:
+            info.target_resources = [
+                TargetResource.set_attributes(target) for target in data[ETL_TARGET_RESOURCES]
+            ]
+        return info
+
+
+class EvaluationSetFieldSchema(TLSData):
+    def __init__(self, name: str = None, description: str = None, content_type: str = None,
+                 default_display_format: int = None, is_required: bool = None,
+                 text_schema: str = None, key: str = None):
+        self.name = name
+        self.description = description
+        self.content_type = content_type
+        self.default_display_format = default_display_format
+        self.is_required = is_required
+        self.text_schema = text_schema
+        self.key = key
+
+
+class EvaluationSetSchema(TLSData):
+    def __init__(self, field_schemas: List[EvaluationSetFieldSchema] = None):
+        self.field_schemas = field_schemas
+
+    def json(self):
+        if self.field_schemas is None:
+            return {}
+        return {FIELD_SCHEMAS: [schema.json() for schema in self.field_schemas]}
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        schema = super(EvaluationSetSchema, cls).set_attributes(data)
+        if data is not None and FIELD_SCHEMAS in data:
+            schema.field_schemas = [
+                EvaluationSetFieldSchema.set_attributes(field) for field in data[FIELD_SCHEMAS]
+            ]
+        return schema
+
+
+class EvaluationSetFieldMapping(TLSData):
+    def __init__(self, source: str = None, target: str = None):
+        self.source = source
+        self.target = target
+
+
+class EvaluationSetShipperInfo(TLSData):
+    def __init__(self, workspace_id: str = None, project_name: str = None,
+                 evaluation_set_id: str = None, evaluation_set_name: str = None,
+                 evaluation_set_description: str = None, biz_category: str = None,
+                 evaluation_set_schema: EvaluationSetSchema = None,
+                 field_mappings: List[EvaluationSetFieldMapping] = None,
+                 item_key_field: str = None, batch_size: int = None,
+                 skip_invalid_items: bool = None, allow_partial_add: bool = None):
+        self.workspace_id = workspace_id
+        self.project_name = project_name
+        self.evaluation_set_id = evaluation_set_id
+        self.evaluation_set_name = evaluation_set_name
+        self.evaluation_set_description = evaluation_set_description
+        self.biz_category = biz_category
+        self.evaluation_set_schema = evaluation_set_schema
+        self.field_mappings = field_mappings
+        self.item_key_field = item_key_field
+        self.batch_size = batch_size
+        self.skip_invalid_items = skip_invalid_items
+        self.allow_partial_add = allow_partial_add
+
+    def json(self):
+        data = {
+            WORKSPACE_ID: self.workspace_id,
+            PROJECT_NAME: self.project_name,
+            EVALUATION_SET_ID: self.evaluation_set_id,
+            EVALUATION_SET_NAME: self.evaluation_set_name,
+            EVALUATION_SET_DESCRIPTION: self.evaluation_set_description,
+            BIZ_CATEGORY: self.biz_category,
+            ITEM_KEY_FIELD: self.item_key_field,
+            BATCH_SIZE: self.batch_size,
+            SKIP_INVALID_ITEMS: self.skip_invalid_items,
+            ALLOW_PARTIAL_ADD: self.allow_partial_add,
+        }
+        if self.evaluation_set_schema is not None:
+            data[EVALUATION_SET_SCHEMA] = self.evaluation_set_schema.json()
+        if self.field_mappings is not None:
+            data[FIELD_MAPPINGS] = [mapping.json() for mapping in self.field_mappings]
+        return {key: value for key, value in data.items() if value is not None}
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(EvaluationSetShipperInfo, cls).set_attributes(data)
+        if data is not None and EVALUATION_SET_SCHEMA in data:
+            info.evaluation_set_schema = EvaluationSetSchema.set_attributes(data[EVALUATION_SET_SCHEMA])
+        if data is not None and FIELD_MAPPINGS in data:
+            info.field_mappings = [
+                EvaluationSetFieldMapping.set_attributes(mapping) for mapping in data[FIELD_MAPPINGS]
+            ]
+        return info
+
+
+class LogBackFlowShipperToAgentLoopInfo(TLSData):
+    def __init__(self, evaluation_set_shipper_info: EvaluationSetShipperInfo = None,
+                 content_info: ContentInfo = None):
+        self.evaluation_set_shipper_info = evaluation_set_shipper_info
+        self.content_info = content_info
+
+    def json(self):
+        data = {}
+        if self.evaluation_set_shipper_info is not None:
+            data[EVALUATION_SET_SHIPPER_INFO] = self.evaluation_set_shipper_info.json()
+        if self.content_info is not None:
+            data[CONTENT_INFO] = self.content_info.json()
+        return data
+
+    @classmethod
+    def set_attributes(cls, data: dict):
+        info = super(LogBackFlowShipperToAgentLoopInfo, cls).set_attributes(data)
+        if data is not None and EVALUATION_SET_SHIPPER_INFO in data:
+            info.evaluation_set_shipper_info = EvaluationSetShipperInfo.set_attributes(
+                data[EVALUATION_SET_SHIPPER_INFO])
+        if data is not None and CONTENT_INFO in data:
+            info.content_info = ContentInfo.set_attributes(data[CONTENT_INFO])
+        return info
+
+
 class LogBackFlowQueryField(TLSData):
     def __init__(self, alias: str = None, column: str = None):
         self.alias = alias
@@ -3331,7 +3497,7 @@ class LogBackFlowQueryField(TLSData):
 
 
 class LogBackFlowQueryFilter(TLSData):
-    def __init__(self, field: str = None, value=None, values: List[str] = None, operator: str = None):
+    def __init__(self, field: str = None, value=None, values: List[object] = None, operator: str = None):
         self.field = field
         self.value = value
         self.values = values
@@ -3359,18 +3525,33 @@ class LogBackFlowQueryParams(TLSData):
             data[FILTERS] = [query_filter.json() for query_filter in self.filters]
         return {key: value for key, value in data.items() if value is not None}
 
+    @classmethod
+    def set_attributes(cls, data: dict):
+        params = super(LogBackFlowQueryParams, cls).set_attributes(data)
+        if data is not None and FIELDS in data:
+            params.fields = [LogBackFlowQueryField.set_attributes(field) for field in data[FIELDS]]
+        if data is not None and FILTERS in data:
+            params.filters = [LogBackFlowQueryFilter.set_attributes(query_filter)
+                              for query_filter in data[FILTERS]]
+        return params
+
 
 class LogBackFlowRelaTasksInfo(TLSData):
     def __init__(self, schedule_sql_task_id: str = None, schedule_sql_task_name: str = None,
-                 dest_region: str = None, shipper_id: str = None, shipper_name: str = None):
+                 dest_region: str = None, shipper_id: str = None, shipper_name: str = None,
+                 etl_task_id: str = None, etl_task_name: str = None):
         self.schedule_sql_task_id = schedule_sql_task_id
         self.schedule_sql_task_name = schedule_sql_task_name
         self.dest_region = dest_region
         self.shipper_id = shipper_id
         self.shipper_name = shipper_name
+        self.etl_task_id = etl_task_id
+        self.etl_task_name = etl_task_name
 
     def json(self):
         data = {
+            LOG_BACK_FLOW_ETL_TASK_ID: self.etl_task_id,
+            ETL_TASK_NAME: self.etl_task_name,
             SCHEDULE_SQL_TASK_ID: self.schedule_sql_task_id,
             SCHEDULE_SQL_TASK_NAME: self.schedule_sql_task_name,
             DEST_REGION: self.dest_region,
@@ -3388,7 +3569,9 @@ class LogBackFlowTaskInfo(TLSData):
                  shipper_to_tos_info: LogBackFlowShipperToTosInfo = None,
                  description: str = None, rela_tasks_info: LogBackFlowRelaTasksInfo = None,
                  back_flow_start_time: int = None, back_flow_end_time: int = None,
-                 create_time: int = None, modify_time: int = None, iam_project_name: str = None):
+                 create_time: int = None, modify_time: int = None, iam_project_name: str = None,
+                 etl_task_info: LogBackFlowETLTaskInfo = None,
+                 shipper_to_agent_loop_info: LogBackFlowShipperToAgentLoopInfo = None):
         self.task_id = task_id
         self.task_name = task_name
         self.status = status
@@ -3403,6 +3586,8 @@ class LogBackFlowTaskInfo(TLSData):
         self.create_time = create_time
         self.modify_time = modify_time
         self.iam_project_name = iam_project_name
+        self.etl_task_info = etl_task_info
+        self.shipper_to_agent_loop_info = shipper_to_agent_loop_info
 
     @classmethod
     def set_attributes(cls, data: dict):
@@ -3416,6 +3601,11 @@ class LogBackFlowTaskInfo(TLSData):
             info.query_params = LogBackFlowQueryParams.set_attributes(data=data[QUERY_PARAMS])
         if data is not None and SHIPPER_TO_TOS_INFO in data:
             info.shipper_to_tos_info = LogBackFlowShipperToTosInfo.set_attributes(data=data[SHIPPER_TO_TOS_INFO])
+        if data is not None and ETL_TASK_INFO in data:
+            info.etl_task_info = LogBackFlowETLTaskInfo.set_attributes(data=data[ETL_TASK_INFO])
+        if data is not None and SHIPPER_TO_AGENT_LOOP_INFO in data:
+            info.shipper_to_agent_loop_info = LogBackFlowShipperToAgentLoopInfo.set_attributes(
+                data=data[SHIPPER_TO_AGENT_LOOP_INFO])
         if data is not None and RELA_TASKS_INFO in data:
             info.rela_tasks_info = LogBackFlowRelaTasksInfo.set_attributes(data=data[RELA_TASKS_INFO])
         return info
@@ -3518,7 +3708,8 @@ class ShipperInfo(TLSData):
 
 
 class TargetResource(TLSData):
-    def __init__(self, alias: str, topic_id: str, region: str, role_trn: str = None):
+    def __init__(self, alias: str = None, topic_id: str = None, region: str = None, role_trn: str = None,
+                 service_trn: str = None, proxy_point: str = None, endpoint: str = None):
         """
         :param alias: 自定义输出目标的名称，在数据加工规则中需要使用此名称指代输出目标
         :type alias: str
@@ -3533,6 +3724,9 @@ class TargetResource(TLSData):
         self.topic_id = topic_id
         self.region = region
         self.role_trn = role_trn
+        self.service_trn = service_trn
+        self.proxy_point = proxy_point
+        self.endpoint = endpoint
 
 
 class TraceInstanceInfo(TLSData):
