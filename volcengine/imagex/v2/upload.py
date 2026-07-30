@@ -1,5 +1,7 @@
 # coding:utf-8
 import json
+import base64
+import logging
 import os
 import threading
 from volcengine.const.Const import *
@@ -33,6 +35,7 @@ class Uploader:
         self.file_paths_or_bytes = file_paths_or_bytes
         self.content_types = params.get("ContentTypes", [])
         self.storage_classes = params.get("StorageClasses", [])
+        self.aigc_meta_data_list = params.get("AIGCMetaData", [])
         self.upload_host = params.get("UploadHost", "")
         if self.upload_host != "":
             self.host = self.upload_host
@@ -62,6 +65,13 @@ class Uploader:
                 param["ContentType"] = self.content_types[idx]
             if len(self.storage_classes) > idx:
                 param["StorageClass"] = self.storage_classes[idx]
+            if len(self.aigc_meta_data_list) > idx:
+                try:
+                    meta_json = json.dumps(self.aigc_meta_data_list[idx])
+                    base64_encoded = base64.b64encode(meta_json.encode('utf-8')).decode('utf-8')
+                    param["AIGCMeta"] = base64_encoded
+                except Exception as e:
+                    logging.warning("Failed to encode AIGC meta data: %s", e)
 
             try:
                 if isinstance(file_paths_or_bytes, bytes):
@@ -107,6 +117,8 @@ class Uploader:
             headers["Specified-Content-Type"] = param["ContentType"]
         if param.get("StorageClass", "") != "":
             headers["X-VeImageX-Storage-Class"] = param["StorageClass"]
+        if param.get("AIGCMeta", "") != "":
+            headers["X-Upload-AIGC-Meta"] = param["AIGCMeta"]
         upload_status, resp = self.imagex_service.put_data(url, img_data, headers)
         if not upload_status:
             raise Exception(
@@ -200,6 +212,8 @@ class Uploader:
             headers["Specified-Content-Type"] = param["ContentType"]
         if param.get("StorageClass", "") != "":
             headers["X-VeImageX-Storage-Class"] = param["StorageClass"]
+        if param.get("AIGCMeta", "") != "":
+            headers["X-Upload-AIGC-Meta"] = param["AIGCMeta"]
         upload_status, resp = self.imagex_service.put_data(url, data, headers)
         resp = json.loads(resp)
         if not upload_status:
