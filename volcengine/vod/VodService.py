@@ -1306,6 +1306,74 @@ class VodService(VodServiceConfig):
             return Parse(res, VodUpdateMediaStorageClassResponse(), True)
 
     #
+    # RestoreColdArchiveVideo.
+    #
+    # @param request VodRestoreColdArchiveVideoRequest
+    # @return VodRestoreColdArchiveVideoResponse
+    # @raise Exception
+    def restore_cold_archive_video(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("RestoreColdArchiveVideo", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodRestoreColdArchiveVideoResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodRestoreColdArchiveVideoResponse(), True)
+
+    #
+    # GetRestoreVideoStatus.
+    #
+    # @param request VodGetRestoreVideoStatusRequest
+    # @return VodGetRestoreVideoStatusResponse
+    # @raise Exception
+    def get_restore_video_status(self, request):
+        try:
+            if sys.version_info[0] == 3:
+                jsonData = MessageToJson(request, False, True)
+                params = json.loads(jsonData)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            else:
+                params = MessageToDict(request, False, True)
+                for k, v in params.items():
+                    if isinstance(v, (int, float, bool, str, unicode)) is True:
+                        continue
+                    else:
+                        params[k] = json.dumps(v)
+            res = self.get("GetRestoreVideoStatus", params)
+        except Exception as Argument:
+            try:
+                resp = Parse(Argument.__str__(), VodGetRestoreVideoStatusResponse(), True)
+            except Exception:
+                raise Argument
+            else:
+                raise Exception(resp.ResponseMetadata.Error.Code)
+        else:
+            return Parse(res, VodGetRestoreVideoStatusResponse(), True)
+
+    #
     # GetMediaInfos.
     #
     # @param request VodGetMediaInfosRequest
