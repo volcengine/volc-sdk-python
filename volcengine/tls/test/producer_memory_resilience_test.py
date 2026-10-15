@@ -307,7 +307,7 @@ class ProducerMemoryResilienceTest(unittest.TestCase):
 
         self.assertTrue(manager.remove_locked)
 
-    def test_submit_failure_keeps_batch_owned_payload_reservation(self):
+    def test_submit_failure_settles_batch_and_releases_payload_reservation(self):
         from volcengine.tls.producer.log_dispatcher import LogDispatcher
 
         config = _config()
@@ -321,8 +321,8 @@ class ProducerMemoryResilienceTest(unittest.TestCase):
                 dispatcher.add_batch(None, "topic", None, None, _log_group(), None)
 
             batch_manager = list(dispatcher.batches.values())[0]
-            self.assertIsNotNone(batch_manager.batch_log)
-            self.assertEqual(batch_manager.batch_log.reserved_bytes, config.memory_limiter.used())
+            self.assertIsNone(batch_manager.batch_log)
+            self.assertEqual(config.memory_limiter.used(), 0)
         finally:
             real_executor.shutdown(False)
 

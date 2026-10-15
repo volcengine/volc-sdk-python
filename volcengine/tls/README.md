@@ -249,3 +249,142 @@ if __name__ == '__main__':
 | flush_checkpoint_interval_in_second | int  | 5     | Consumer上传消费进度的时间间隔，单位为秒。                                                                                                                                               |
 | consume_from                        | str  | begin | 开始消费时的默认消费位点，与DescribeCursor的From参数一致，仅在该消费者从未上传过消费位点时有效。                                                                                                               |
 | ordered_consume                     | bool | false | 是否开启顺序消费。开启顺序消费后，消费者会根据Shard分裂的父子关系进行消费。例如Shard0分裂为Shard1与Shard2，而Shard1又分裂为Shard3与Shard4。在开启顺序消费之后，会根据(Shard0) -> (Shard1, Shard2) -> (Shard2, Shard3, Shard4)的顺序进行消费。 |
+
+## 本地健康观测（get_stats）
+
+Producer 和 Consumer 默认关闭观测。快照只读取本实例的预聚合状态，不执行网络请求、
+文件读写或用户回调，也不遍历业务队列。读取不会启动采样线程。
+
+### 配置和读取
+
+```python
+from volcengine.tls.producer.producer import TLSProducer
+from volcengine.tls.producer.producer_model import ProducerConfig
+from volcengine.tls.stats import StatsOptions, DeltaAdapter, evaluate_health
+
+producer = TLSProducer(ProducerConfig(
+    endpoint, region, access_key_id, access_key_secret,
+    metrics_level="core",
+))
+options = StatsOptions("operational")
+snapshot = producer.get_stats(options)
+print(snapshot.lifecycle_state, snapshot.consistency)
+print(snapshot.to_dict())
+```
+
+ConsumerConfig 同样支持末尾的可选参数 `metrics_level="off"`。
+`get_stats(StatsOptions(view))` 必须显式选择视图，返回统一的 `StatsSnapshot`。
+采集内容由 `metrics_level` 控制，耗时桶边界由 SDK 固定选择。
+Python 的级别和视图使用字符串；Go 使用数值枚举。区块、计数、能力位与事实口径对齐，
+不要把两种语言的枚举编码当成完全相同的 JSON。
+
+| 采集级别 | 采集内容 |
+|:---|:---|
+| `off`（默认） | 元信息和生命周期；业务区块缺失 |
+| `core` | 累计计数、当前队列/持有量、worker 汇总、成功/失败年龄、可归因内存 |
+| `detailed` | Core 加固定 worker/retry 明细、四项固定边界延迟直方图、支持的内存分解 |
+
+| 读取视图 | 请求内容 |
+|:---|:---|
+| `health` | 健康信号及 Producer 支持的 managed_memory |
+| `operational` | Health 加累计计数和业务 gauge |
+| `debug` | Operational 加 Detailed 明细 |
+
+视图不会提升采集级别。请求但未采集的区块会省略，并通过 `partial` 和
+`missing_sections` 声明；不支持的能力以 `capabilities` 位集合区分，不伪造为 0。
+快照及嵌套对象不可变；`to_dict()` 返回独立副本。序列化结果不包含凭证、endpoint、
+topic、异常正文或其他高基数标识。
+
+### 运行中切换与关闭
+
+组件处于 Running 时可调用 `producer.set_metrics_level("detailed")`，
+Consumer 接口相同。配置对象仅决定初始级别；New、Closing、Closed、Failed 状态拒绝切换。
+
+Core 与 Detailed 互切保留累计计数。跨越 Off 会增加 `collection_generation`，
+保留既有累计计数并重建当前采集代的 gauge/年龄基线；关闭采集期间的业务不会补记。
+旧采集代开始、之后才结束的工作也不会混入新采集代。Detailed 时延独立校验采样代，
+只记录边界完整的样本。因此累计 accepted/terminal 与当前代 owned 不应跨 Off 断点直接做守恒比较。
+
+关闭等待超时后仍存在发送或回调时，快照保持 Closing/weak；真正结束并释放资源后才发布
+稳定的 final 快照。Consumer 完整停止后支持再次 start；实例标识保持不变、采集代增加，
+旧 final 快照仍是不可变的历史值。
+
+Consumer 常驻角色异常退出会进入 Failed，并停止其他角色。关闭达到超时后不再无限重试
+checkpoint；已发出的网络请求仍须实际返回后才能结束。未成功保存的 checkpoint 可能导致
+下次启动重复消费，业务处理应保持幂等。不会通过提前发布 final 掩盖仍在执行的任务。
+
+### Delta 和健康判断
+
+```python
+adapter = DeltaAdapter()
+previous = producer.get_stats(options)
+
+# 由业务自己的定时器调用，例如每 15 秒读取一次。
+current = producer.get_stats(options)
+sample = current.counter_sample()  # Off 或 Health 视图时为 None
+if sample is None:
+    adapter.reset()
+else:
+    interval = adapter.observe(sample)
+    if interval.valid:
+        print(interval.rates_per_second["accepted_logs_total"])
+    else:
+        print(interval.reset_reason)
+print(evaluate_health(previous, current).to_dict())
+```
+
+DeltaAdapter 仅保留一个计数基线；首次采样、实例/采集代变化、序列不递增、
+uptime 回退、墙上 capture 时间不递增、计数回退或集合变化均不输出速率。
+每次无效区间都会更新基线。健康适配器为纯函数，默认队列/内存压力阈值 0.8；
+缺基线、未采集或生命周期不适合判断时返回 unknown，不能将未知当作健康。
+可用 `HealthPolicy` 指定阈值。
+
+手工构造 `CounterSample` 时，计数器必须是非负 uint64 整数。含 `None`、非整数或超界值的
+区间返回 `metrics_unavailable`，不会把缺失值当作 0。`HealthPolicy` 的 `None` 或非有限数值
+在评估时使用默认阈值 0.8。
+
+Producer 的 `rejected_memory_full_total` 与 `rejected_managed_admission_total`
+描述同一类内存准入拒绝，是跨 SDK 字段映射，不能相加。
+
+### 延迟与内存口径
+
+Detailed 固定采集以下四项；每项携带 start/end/unit/object/includes_retry 元数据，
+桶边界与 Go SDK 对应，`bucket_profile` 为 `fast` 或 `slow`。
+耗时使用单调时钟，快照 capture 使用墙上时间。
+
+| 组件 | 四项直方图 |
+|:---|:---|
+| Producer | batch_queue_delay（batch ready 到发送尝试）、send_call_duration（transport 调用）、batch_delivery_duration（首次发送尝试到终态）、callback_duration |
+| Consumer | fetch_call_duration、dispatch_delay、process_duration、checkpoint_call_duration |
+
+Producer `managed_memory` 是现有 SDK 限制器的 payload 与有界临时 buffer 记账，
+不代表 Python 进程 RSS、解释器、分配器或第三方 HTTP client 的全部内存。
+`used_bytes = payload_owned_bytes + bounded_runtime_buffer_bytes`；
+Detailed 分解中的 ingress/aggregate/send/retry 所有权之和等于 payload。
+Off 切换期间存在无法可靠归入新采集代的旧分配时，相关区块标为缺失，待旧分配释放后恢复。
+
+Python 没有 Go 独立的 batch_inflight gate，不声明该能力。有效内存压力取已有
+payload admission 和总 lifecycle 限额利用率的较大值，来源分别为
+`managed_payload_admission` / `managed_lifecycle`；不能只用总利用率掩盖 payload 拒绝。
+Consumer 不声明 managed_memory 或 memory_breakdown。
+
+同一连续采集代内，Producer 接受后只结算一次终态，重试不会再次 accepted。
+Consumer 待处理 batch 在回调开始时释放 held/ready 记账，回调期间只计入 process_in_flight；
+回调失败并等待重试时重新计入 held/ready，每次接管都只释放一次。
+checkpoint pending 反映真实待提交项，未可靠采集的最老年龄不输出。
+
+### 离线示例
+
+`python -m volcengine.tls.example.get_stats_example` 可离线运行，不访问 TLS 服务。
+支持 Python 3.7 及以上。
+
+### 离线测试
+
+安装项目依赖后，在仓库根目录执行：
+
+```bash
+python -m volcengine.tls.test.run_observability_tests
+```
+
+该入口运行观测、生命周期、并发、内存、重试和计量回归测试，并检查意外网络请求与
+测试结束后的线程泄漏。测试按职责组织，不依赖真实 TLS 环境。

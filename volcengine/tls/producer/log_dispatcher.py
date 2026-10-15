@@ -35,6 +35,9 @@ class LogDispatcher:
         self.retry_queue = retry_queue
         self.closed = False
         self.failure_controller = FailureController(producer_config.circuit_breaker)
+        # Local health stats state (shared instance from the producer; may be None
+        # for legacy direct construction). All updates are gated by ``enabled``.
+        self.stats_state = getattr(producer_config, "stats_state", None)
 
         # 初始化批次映射（用普通dict配合锁实现线程安全）
         self.batches: Dict[BatchLog.BatchKey, BatchManager] = {}
@@ -144,11 +147,18 @@ class LogDispatcher:
     def do_add(self, hash_key: str, topic_id: str, source: str, filename: str,
                log_group: LogGroup, callback: CallBack) -> None:
         """添加批次日志的内部实现"""
+        stats = self.stats_state
+        stats_on = stats is not None and stats.enabled
+        stats_token = stats.token() if stats_on else 0
         # 检查是否已关闭
         if self.closed:
+            if stats_on:
+                stats.on_rejected("closed", token=stats_token)
             raise TLSException(error_code="AddBatch Error",
                                error_message="closed LogDispatcher cannot receive logs anymore")
         if self.reject_by_open_circuit(callback):
+            if stats_on:
+                stats.on_rejected("circuit", token=stats_token)
             return
 
         log_count = 0
@@ -193,23 +203,47 @@ class LogDispatcher:
         group_size = log_group.ByteSize()
         log_group_list_groups_field_number = LogGroupList.DESCRIPTOR.fields_by_name["log_groups"].number
         batch_size = _tag_len(log_group_list_groups_field_number) + _varint_len(group_size) + group_size
-        self.producer_config.check_batch_size(batch_size)
+        try:
+            self.producer_config.check_batch_size(batch_size)
+        except TLSException:
+            if stats_on:
+                stats.on_rejected("invalid", token=stats_token)
+            raise
         circuit_permit_count = 0
 
         # 添加到批次
         try:
-            batch_key = BatchLog.BatchKey(hash_key, topic_id, source, filename)
+            batch_key = BatchLog.BatchKey(
+                hash_key, topic_id, source, filename,
+                collection_generation=stats_token)
             batch_manager = self.get_or_create_batch_manager(batch_key)
 
             # 同步操作
             with batch_manager.lock:
                 self.add_to_batch_manager(batch_key, log_group, callback, batch_size, batch_manager,
-                                          log_count, earliest_log_time, latest_log_time, circuit_permit_count)
-        except TLSException:
-            self.failure_controller.release_permits(circuit_permit_count)
+                                          log_count, earliest_log_time, latest_log_time,
+                                          circuit_permit_count)
+        except TLSException as e:
+            owned = getattr(
+                e, "current_group_owned",
+                getattr(e, "stats_owned", False))
+            if not owned:
+                self.failure_controller.release_permits(circuit_permit_count)
+            if stats_on:
+                # Memory rejection is surfaced as MemoryLimitExceeded from try_add.
+                if getattr(e, "error_code", "") == "MemoryLimitExceeded":
+                    stats.on_rejected("memory", token=stats_token)
+                elif not owned:
+                    stats.on_rejected("internal", token=stats_token)
             raise
         except Exception as e:
-            self.failure_controller.release_permits(circuit_permit_count)
+            owned = getattr(
+                e, "current_group_owned",
+                getattr(e, "stats_owned", False))
+            if not owned:
+                self.failure_controller.release_permits(circuit_permit_count)
+            if stats_on and not owned:
+                stats.on_rejected("internal", token=stats_token)
             raise TLSException(error_code="Add Batch Error", error_message="dispatcher add batch concurrent error")
 
     def add_to_batch_manager(self, batch_key: BatchLog.BatchKey, log_group: LogGroup,
@@ -223,6 +257,8 @@ class LogDispatcher:
             success = batch_log.try_add(log_group, batch_size, callback, log_count, earliest_log_time, latest_log_time)
             if success:
                 batch_log.add_circuit_permit_count(circuit_permit_count)
+                self._record_group_accepted(
+                    log_count, callback=callback, token=batch_log.stats_generation)
                 # 检查是否已满需要发送
                 if batch_manager.full_and_send_batch_request():
                     batch_manager.add_now(
@@ -236,27 +272,50 @@ class LogDispatcher:
                 return
             else:
                 # 现有批次已满，立即发送
-                batch_manager.add_now(
-                    self.producer_config,
-                    self.executor_service,
-                    self.client,
-                    self.memory_limiter,
-                    self.retry_queue,
-                    self.failure_controller
-                )
+                try:
+                    batch_manager.add_now(
+                        self.producer_config,
+                        self.executor_service,
+                        self.client,
+                        self.memory_limiter,
+                        self.retry_queue,
+                        self.failure_controller
+                    )
+                except Exception as exc:
+                    # The previous batch was accepted and is settled by
+                    # SendBatchTask.submit(). This incoming group was not.
+                    try:
+                        exc.current_group_owned = False
+                    except Exception:
+                        pass
+                    raise
 
         # 创建新批次并添加
         batch_log = BatchLog(batch_key, self.producer_config)
         batch_manager.batch_log = batch_log
-
-        success = batch_log.try_add(log_group, batch_size, callback, log_count, earliest_log_time, latest_log_time)
+        try:
+            success = batch_log.try_add(
+                log_group, batch_size, callback, log_count,
+                earliest_log_time, latest_log_time)
+        except Exception:
+            # A rejected first group never created a logical aggregate batch.
+            # Do not retain an empty placeholder that would make the next
+            # successful group look like an existing batch.
+            if batch_manager.batch_log is batch_log:
+                batch_manager.batch_log = None
+            raise
         if not success:
+            if batch_manager.batch_log is batch_log:
+                batch_manager.batch_log = None
             self.LOG.error(
                 f"tryAdd batchLog failed, batchKey = {str(batch_key)}, batchSize = {batch_size}, "
                 f"batchCount = {log_group.get_logs_count()}"
             )
             raise TLSException(error_code="Producer Error", error_message="tryAdd batchLog failed")
         batch_log.add_circuit_permit_count(circuit_permit_count)
+        self._record_group_accepted(
+            log_count, new_batch=True, callback=callback,
+            token=batch_log.stats_generation)
 
         # 检查新批次是否已满需要发送
         if batch_manager.full_and_send_batch_request():
@@ -268,3 +327,13 @@ class LogDispatcher:
                 self.retry_queue,
                 self.failure_controller
             )
+
+    def _record_group_accepted(self, log_count, new_batch=False, callback=None,
+                               token=None):
+        """Publish ownership before a full batch can be submitted/executed."""
+        stats = self.stats_state
+        if stats is None or not stats.enabled:
+            return
+        stats.on_group_accepted(
+            logs=log_count, new_batch=new_batch,
+            has_callback=callback is not None, token=token)

@@ -16,14 +16,24 @@ class RetryQueue:
         self.batch: List[BatchLog] = []
         self.mutex = threading.Lock()
         self.closed = False
+        self._high_watermark = 0
         # 初始化堆
         heapq.heapify(self.batch)
 
-    def add_to_retry_queue(self, batch: Optional[BatchLog]) -> None:
-        """将批次添加到重试队列"""
+    def add_to_retry_queue(self, batch: Optional[BatchLog]) -> bool:
+        """Atomically reject enqueue after close; otherwise add the batch."""
         with self.mutex:
-            if batch is not None:
-                heapq.heappush(self.batch, batch)
+            if self.closed or batch is None:
+                return False
+            heapq.heappush(self.batch, batch)
+            if len(self.batch) > self._high_watermark:
+                self._high_watermark = len(self.batch)
+            return True
+
+    def close(self) -> None:
+        """Close the enqueue side under the same lock used by add()."""
+        with self.mutex:
+            self.closed = True
 
     def get_retry_batch(self, stop_flag: bool) -> List[BatchLog]:
         """获取可以重试的批次列表"""
@@ -56,3 +66,10 @@ class RetryQueue:
         """返回队列长度"""
         return len(self.batch)
 
+    def stats_snapshot(self):
+        """Return current depth and lifetime high-watermark atomically."""
+        with self.mutex:
+            return {
+                "current_items": len(self.batch),
+                "high_watermark_items": self._high_watermark,
+            }

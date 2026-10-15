@@ -21,8 +21,12 @@ class BatchManager:
         if self.batch_log is not None:
             task = SendBatchTask(
                 self.batch_log, config, memory_lock, client, retry_queue, failure_controller)
-            executor_service.submit(task.run)
-            self.batch_log = None
+            try:
+                task.submit(executor_service)
+            finally:
+                # submit() settles accepted data on executor rejection, so the
+                # batch must never remain retained for a second submission.
+                self.batch_log = None
 
     def remove_batch(self, batch_logs: ['BatchLog']) -> None:
         if self.batch_log is not None:

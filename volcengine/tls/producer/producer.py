@@ -1,5 +1,6 @@
 import threading
 import time
+import uuid
 from typing import Optional
 
 from volcengine.tls.log_pb2 import LogGroup, LogGroupList
@@ -11,6 +12,8 @@ from volcengine.tls.producer.retry_queue import RetryQueue
 from volcengine.tls.tls_exception import TLSException
 from volcengine.tls.tls_requests import PutLogsV2LogContent
 from volcengine.tls.util import get_logger
+from volcengine.tls._stats.producer_state import ProducerStatsState
+from volcengine.tls.stats.snapshot import project_snapshot
 
 
 class TLSProducer:
@@ -34,11 +37,33 @@ class TLSProducer:
         producer_config.memory_limiter = self.memory_limiter
         self.memory_lock = self.memory_limiter
 
+        # 健康观测状态（默认关闭，按实例配置固定）
+        from volcengine import VERSION as _sdk_version
+        self.stats_state = ProducerStatsState(
+            metrics_level=producer_config.metrics_level,
+            instance_id="producer-{}".format(uuid.uuid4().hex),
+            sdk_version=_sdk_version,
+            memory_limiter=self.memory_limiter,
+            max_sender_count=producer_config.max_thread_count,
+        )
+        producer_config.stats_state = self.stats_state
+        producer_config._producer_owner = self
+
         # 初始化组件
         self.retry_queue = RetryQueue()
         self.dispatcher = LogDispatcher(producer_config, self.name, self.memory_limiter, self.retry_queue)
         self.mover = Mover(f"{self.name}-mover", producer_config, self.dispatcher, self.retry_queue)
         self.LOG = get_logger(__name__)
+        self._close_lock = threading.Lock()
+        self._close_in_progress = False
+        self._close_finalizer_lock = threading.Lock()
+        self._close_finalizer = None
+        self._worker_threads_lock = threading.Lock()
+        self._worker_threads = set()
+        # bind queue depth providers for snapshots (read-only, O(1))
+        self.stats_state.bind_queue_providers(
+            retry=self.retry_queue.stats_snapshot,
+        )
 
     @staticmethod
     def default_producer(endpoint: str, region: str, access_key: str,
@@ -56,11 +81,17 @@ class TLSProducer:
     def send_logs_v2(self, hash_key: Optional[str], topic_id: str, source: Optional[str],
                      filename: Optional[str], logs: [PutLogsV2LogContent], callback: Optional[CallBack]) -> None:
         """发送多条日志（新版本）"""
+        stats = self.stats_state
+        stats_on = stats is not None and stats.enabled
         # 检查参数
         if not topic_id or not logs:
+            if stats_on:
+                stats.on_rejected("invalid")
             raise TLSException(error_code="InvalidArgument", error_message=f"topic id: {topic_id}, log group: {logs}")
         if (hasattr(self.dispatcher, "reject_by_open_circuit") and
                 self.dispatcher.reject_by_open_circuit(callback)):
+            if stats_on:
+                stats.on_rejected("circuit")
             return
 
         max_log_group_count = ProducerConfig.MAX_LOG_GROUP_COUNT
@@ -109,6 +140,8 @@ class TLSProducer:
                 if current_count == 1:
                     actual_group_size = log_group.ByteSize()
                     actual_entry_size = _tag_len(log_group_list_groups_field_number) + _varint_len(actual_group_size) + actual_group_size
+                    if stats_on:
+                        stats.on_rejected("invalid")
                     raise TLSException(
                         error_code="InvalidArgument",
                         error_message=f"log size {actual_entry_size} is larger than MAX_LOG_SIZE {max_log_group_size}"
@@ -140,6 +173,8 @@ class TLSProducer:
                 if entry_size > max_log_group_size:
                     actual_group_size = log_group.ByteSize()
                     actual_entry_size = _tag_len(log_group_list_groups_field_number) + _varint_len(actual_group_size) + actual_group_size
+                    if stats_on:
+                        stats.on_rejected("invalid")
                     raise TLSException(
                         error_code="InvalidArgument",
                         error_message=f"log size {actual_entry_size} is larger than MAX_LOG_SIZE {max_log_group_size}"
@@ -164,8 +199,7 @@ class TLSProducer:
         if not access_key or not secret_key:
             raise TLSException(
                 error_code="InvalidArgument",
-                error_message=f"reset producer {self.name} access key failed, accessKey is {access_key}, "
-                              f"secretKey is {secret_key}, token is {security_token}"
+                error_message="reset access key failed: access key and secret key must be non-empty"
             )
         self.dispatcher.reset_access_key_token(access_key, secret_key, security_token)
 
@@ -174,37 +208,187 @@ class TLSProducer:
 
     def start(self) -> None:
         """启动Producer"""
-        self.dispatcher.start()
-        self.mover.start()
+        try:
+            self.dispatcher.start()
+            self.mover.start()
+        except Exception:
+            self.stats_state.set_dispatcher_running(0)
+            self.stats_state.set_mover_running(0)
+            self.stats_state.mark_failed("lifecycle")
+            raise
+        self.stats_state.set_dispatcher_running(1)
+        self.stats_state.set_mover_running(1)
+        self.stats_state.mark_started()
         self.LOG.info(f"producer {self.name} started")
+
+    def get_stats(self, options):
+        """Return a bounded immutable view of the local health snapshot."""
+        return project_snapshot(self.stats_state.get_stats(), options)
+
+    def set_metrics_level(self, level) -> None:
+        """Change metrics collection while the producer is running."""
+        self.stats_state.set_metrics_level(level)
+
+    def _work_started(self) -> None:
+        with self._worker_threads_lock:
+            self._worker_threads.add(threading.get_ident())
+
+    def _work_finished(self) -> None:
+        with self._worker_threads_lock:
+            self._worker_threads.discard(threading.get_ident())
+
+    def _is_current_worker(self) -> bool:
+        with self._worker_threads_lock:
+            return threading.get_ident() in self._worker_threads
+
+    def _all_work_settled(self) -> bool:
+        if self.mover.is_alive() or self.stats_state.sender_tasks_pending() != 0:
+            return False
+        try:
+            return self.memory_limiter.used() == 0
+        except Exception:
+            return False
 
     def close(self, timeout_ms: int = 30000) -> None:
         """关闭Producer"""
+        # A callback may call close while another close/finalizer is waiting
+        # for that sender task. Never contend on _close_lock from a sender:
+        # mark Closing, make the one-shot finalizer responsible for resources,
+        # then return so the callback can unwind.
+        if self._is_current_worker():
+            self.stats_state.mark_closing()
+            self._start_close_finalizer()
+            raise TLSException(
+                error_code="ProducerError",
+                error_message="producer close called from an active sender task")
+        with self._close_lock:
+            if getattr(self.stats_state, "_frozen", False):
+                return
+            self._close_in_progress = True
+            try:
+                self._close_with_deadline(timeout_ms)
+            except Exception:
+                # A deadline only affects the caller. Close ownership remains
+                # with this instance and the one-shot finalizer joins real
+                # workers before freezing; callers must not issue close again.
+                self._start_close_finalizer()
+                raise
+            finally:
+                self._close_in_progress = False
+
+    def _close_with_deadline(self, timeout_ms: int) -> None:
+        self.stats_state.mark_closing()
+        self.stats_state.set_dispatcher_running(0)
         feedback_exception = None
 
         try:
             timeout_ms = self._close_mover(timeout_ms)
         except TLSException as e:
             feedback_exception = e
+        finally:
+            self.stats_state.set_mover_running(1 if self.mover.is_alive() else 0)
 
         try:
-            timeout_ms = self._close_executor_service(timeout_ms)
+            if feedback_exception is None:
+                timeout_ms = self._close_executor_service(timeout_ms)
+                if not self._all_work_settled():
+                    feedback_exception = TLSException(
+                        error_code="ProducerError",
+                        error_message="producer work did not settle before close")
         except TLSException as e:
             if feedback_exception is None:
                 feedback_exception = e
 
-        if feedback_exception:
+        self.stats_state.set_mover_running(1 if self.mover.is_alive() else 0)
+        if feedback_exception is not None:
+            # The state remains Closing/weak until the one-shot finalizer has
+            # joined every worker and released the real resources.
             raise feedback_exception
-
+        self._settle_owned_on_close()
+        self.stats_state.freeze()
         self.LOG.info(f"producer {self.name} closed")
+
+    def _start_close_finalizer(self) -> None:
+        with self._close_finalizer_lock:
+            if getattr(self.stats_state, "_frozen", False):
+                return
+            if self._close_finalizer is not None and self._close_finalizer.is_alive():
+                return
+            finalizer = threading.Thread(
+                target=self._run_close_finalizer,
+                name="{}-close-finalizer".format(self.name),
+                daemon=True)
+            self._close_finalizer = finalizer
+            finalizer.start()
+
+    def _run_close_finalizer(self) -> None:
+        """Complete a timed-out close after the actual workers settle.
+
+        This is created only by close(), performs no observation work and exits
+        after one join/freeze pass. It never holds an observation lock around
+        a join, transport operation or user callback.
+        """
+        with self._close_lock:
+            if getattr(self.stats_state, "_frozen", False):
+                return
+            self._close_in_progress = True
+            try:
+                self.stats_state.mark_closing()
+                self.stats_state.set_dispatcher_running(0)
+                self._close_mover_unbounded()
+                self.stats_state.set_mover_running(0)
+                self._close_executor_service_unbounded()
+                if not self._all_work_settled():
+                    raise RuntimeError("producer work did not settle during close finalization")
+                self._settle_owned_on_close()
+                self.stats_state.freeze()
+                self.LOG.info(f"producer {self.name} closed")
+            except Exception:
+                # The initiating close already surfaced its timeout/failure to
+                # the caller. Keep the lifecycle non-final instead of freezing
+                # an incomplete snapshot if an unexpected close error occurs.
+                self.LOG.error("producer close finalizer failed", exc_info=True)
+            finally:
+                self._close_in_progress = False
+
+    def _settle_owned_on_close(self) -> None:
+        """Attribute any residual owned logs/groups to force_close before freeze.
+
+        Only current-collection owned work may be settled here. Older accepted
+        counters are intentionally retained without a compensating terminal,
+        so a close after Off -> On cannot fabricate a new-generation drop.
+        """
+        try:
+            token = self.stats_state.token()
+            if token == 0:
+                return
+            owned_logs, owned_groups = self.stats_state.current_owned_counts()
+            if owned_logs > 0 or owned_groups > 0:
+                if self.stats_state.on_terminal(
+                        "dropped", owned_logs, owned_groups, token=token):
+                    self.stats_state.on_dropped_reason(
+                        "force_close", owned_logs, owned_groups, token=token)
+        except Exception:
+            # Stats accounting must never break close.
+            pass
 
     def _close_mover(self, timeout_ms: int) -> int:
         start_ms = time.time() * 1000
 
         self.dispatcher.close()
-        self.retry_queue.closed = True
+        self.retry_queue.close()
+        mover_was_alive = self.mover.is_alive()
         self.mover.close()
-        self.mover.join(timeout_ms / 1000)  # 转换为秒
+        if mover_was_alive:
+            self.mover.join(timeout_ms / 1000)  # 转换为秒
+        else:
+            try:
+                self.mover.drain_remaining()
+            except Exception as e:
+                raise TLSException(
+                    error_code="ProducerError",
+                    error_message="producer could not drain accepted batches: {}"
+                    .format(e))
 
         if self.mover.is_alive():
             self.LOG.warning("producer mover thread is still alive")
@@ -220,10 +404,48 @@ class TLSProducer:
 
         executor_service = self.dispatcher.executor_service
         if executor_service:
-            executor_service.shutdown()
+            # Do not wait without a bound inside ThreadPoolExecutor.shutdown().
+            # The SDK-maintained logical queue and in-flight gauges provide an
+            # O(1), implementation-independent completion condition.
+            executor_service.shutdown(wait=False)
+            deadline = time.monotonic() + (max(0, timeout_ms) / 1000.0)
+            while True:
+                if self.stats_state.sender_tasks_pending() == 0:
+                    break
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    self.memory_limiter.close()
+                    raise TLSException(
+                        error_code="ProducerError",
+                        error_message="producer executor did not drain before timeout")
+                time.sleep(min(remaining, 0.01))
         self.memory_limiter.close()
+        if self.memory_limiter.used() != 0:
+            raise TLSException(
+                error_code="ProducerError",
+                error_message="producer memory did not settle before close")
 
         self.LOG.info("producer executor service is closed")
 
         now_ms = time.time() * 1000
         return max(0, int(timeout_ms - (now_ms - start_ms)))
+
+    def _close_mover_unbounded(self) -> None:
+        self.dispatcher.close()
+        self.retry_queue.close()
+        mover_was_alive = self.mover.is_alive()
+        self.mover.close()
+        if mover_was_alive:
+            self.mover.join()
+        else:
+            self.mover.drain_remaining()
+        if self.mover.is_alive():
+            raise RuntimeError("producer mover did not settle during close finalization")
+
+    def _close_executor_service_unbounded(self) -> None:
+        executor_service = self.dispatcher.executor_service
+        if executor_service:
+            executor_service.shutdown(wait=True)
+        self.memory_limiter.close()
+        if self.memory_limiter.used() != 0:
+            raise RuntimeError("producer memory did not settle during close finalization")

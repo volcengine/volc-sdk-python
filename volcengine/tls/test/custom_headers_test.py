@@ -33,7 +33,7 @@ def _new_service():
 
 def _captured_headers(mock):
     assert mock.call_args is not None, "session.request 未被调用"
-    return mock.call_args.kwargs.get("headers") or {}
+    return mock.call_args[1].get("headers") or {}
 
 
 def _build_search_req():

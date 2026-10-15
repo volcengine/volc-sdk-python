@@ -13,6 +13,7 @@ install_requires = [
     "google>=3.0.0",
     "six>=1.0",
     "tenacity>=8.0.0",
+    "readerwriterlock>=1.0.9",
 ]
 
 setup(
@@ -28,5 +29,14 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     platforms="any",
+    python_requires=">=3.7",
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+    ],
     install_requires=install_requires
 )

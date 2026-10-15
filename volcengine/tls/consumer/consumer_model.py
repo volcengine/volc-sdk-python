@@ -23,11 +23,21 @@ def check_int_value_range(value: int, lower: int, upper: int, field: str):
 
 
 class ConsumerConfig:
+    def __setattr__(self, name, value):
+        if (name in ("metrics_level",)
+                and self.__dict__.get("_health_config_frozen", False)
+                and name in self.__dict__
+                and self.__dict__[name] != value):
+            raise AttributeError(
+                "{} is immutable after validation".format(name))
+        object.__setattr__(self, name, value)
+
     def __init__(self, project_id: str, consumer_group_name: str, topic_id_list: List[str], consumer_name: str,
                  consume_from: str = "begin", heartbeat_interval_in_second: int = 20,
                  data_fetch_interval_in_millisecond: int = 200, flush_checkpoint_interval_in_second: int = 5,
                  max_fetch_log_group_count: int = 100, ordered_consume: bool = False, stop_timeout: int = 15,
-                 compression: str = LZ4):
+                 compression: str = LZ4, metrics_level: str = "off"):
+        self._health_config_frozen = False
         self.project_id = project_id
         self.consumer_group_name = consumer_group_name
         self.topic_id_list = topic_id_list
@@ -42,6 +52,11 @@ class ConsumerConfig:
 
         self.stop_timeout = stop_timeout
         self.compression = compression
+        # The health tail is intentionally a single public switch. Detailed
+        # mode selects fixed histogram bounds internally.
+        from volcengine.tls.stats import constants as _stats_const
+        self.metrics_level = _stats_const.normalize_metrics_level(metrics_level)
+        self._health_config_frozen = True
 
     def validate(self):
         check_empty_string(self.project_id, PROJECT_ID_UPPERCASE)
@@ -59,6 +74,11 @@ class ConsumerConfig:
         check_int_value_range(self.flush_checkpoint_interval_in_second, 1, 300, FLUSH_CHECKPOINT_INTERVAL_IN_SECOND)
         check_int_value_range(self.max_fetch_log_group_count, 1, 1000, MAX_FETCH_LOG_GROUP_COUNT)
         check_int_value_range(self.stop_timeout, 1, 300, STOP_TIMEOUT)
+
+        # Normalize health-stats switches (independent, immutable after this).
+        from volcengine.tls.stats import constants as _stats_const
+        self.metrics_level = _stats_const.normalize_metrics_level(self.metrics_level)
+        self._health_config_frozen = True
 
 
 class CheckpointInfo:

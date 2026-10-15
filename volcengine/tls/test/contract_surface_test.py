@@ -198,7 +198,7 @@ class ContractSurfaceTest(unittest.TestCase):
             service.describe_log_back_flow_tasks(
                 DescribeLogBackFlowTasksRequest(topic_id_list=["topic-a", "topic-b"]))
 
-        url = request.call_args.args[1]
+        url = request.call_args[0][1]
         query = parse_qs(urlparse(url).query)
         self.assertEqual(["topic-a", "topic-b"], query["TopicIDList"])
 
@@ -209,7 +209,7 @@ class ContractSurfaceTest(unittest.TestCase):
             original = service.consume_logs(
                 ConsumeLogsRequest(topic_id="topic", shard_id=0, cursor="cursor", original=True))
 
-        self.assertIn("/ConsumeOriginalLogs", request.call_args.args[1])
+        self.assertIn("/ConsumeOriginalLogs", request.call_args[0][1])
         log_groups = getattr(original.logs, "log_groups")
         self.assertEqual("source", log_groups[0].source)
         self.assertEqual("value", log_groups[0].logs[0].contents[0].value)
@@ -220,7 +220,7 @@ class ContractSurfaceTest(unittest.TestCase):
             response = service.describe_session_answer(
                 DescribeSessionAnswerRequest(instance_id="ins", session_id="session", question="question"))
 
-        self.assertTrue(request.call_args.kwargs.get("stream"))
+        self.assertTrue(request.call_args[1].get("stream"))
         self.assertEqual("request-id", response.request_id)
         self.assertIs(response.raw_response, request.return_value)
 

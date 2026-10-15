@@ -4,6 +4,7 @@ from __future__ import division
 from __future__ import print_function
 
 import time
+import threading
 from typing import List
 
 from readerwriterlock import rwlock
@@ -14,6 +15,7 @@ from volcengine.tls.tls_requests import ConsumerHeartbeatRequest
 
 class HeartbeatRunner:
     def __init__(self, consumer):
+        self.consumer = consumer
         self.consumer_config = consumer.consumer_config
         self.tls_service = consumer.tls_service
 
@@ -21,8 +23,10 @@ class HeartbeatRunner:
 
         self.lock = rwlock.RWLockFairD()
         self.working_flag = True
+        self._stop_event = threading.Event()
 
         self.logger = consumer.logger
+        self.stats_state = getattr(consumer, "stats_state", None)
 
     def run(self):
         self.logger.info("HeartbeatRunner for {} starts to work.".format(self.consumer_config.consumer_name))
@@ -34,7 +38,7 @@ class HeartbeatRunner:
 
                 sleep_time = self.consumer_config.heartbeat_interval_in_second - (time.time() - last_heartbeat_time)
                 while sleep_time > 0 and self.working_flag:
-                    time.sleep(min(sleep_time, 1))
+                    self._stop_event.wait(min(sleep_time, 1))
                     sleep_time = self.consumer_config.heartbeat_interval_in_second - (time.time() - last_heartbeat_time)
             except Exception as e:
                 self.logger.error(e)
@@ -55,6 +59,16 @@ class HeartbeatRunner:
         req = ConsumerHeartbeatRequest(project_id=self.consumer_config.project_id,
                                        consumer_group_name=self.consumer_config.consumer_group_name,
                                        consumer_name=self.consumer_config.consumer_name)
-        resp = self.tls_service.consumer_heartbeat(req)
+        stats = self.stats_state
+        generation = stats.token() if stats is not None else 0
+        try:
+            resp = self.tls_service.consumer_heartbeat(req)
+        except Exception:
+            if stats is not None:
+                stats.record_error("heartbeat", token=generation)
+                stats.on_heartbeat(success=False, token=generation)
+            raise
 
+        if stats is not None:
+            stats.on_heartbeat(success=True, token=generation)
         self.set_shards(resp.shards)

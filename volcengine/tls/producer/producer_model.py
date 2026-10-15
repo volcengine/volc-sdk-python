@@ -298,9 +298,19 @@ class ProducerConfig:
     DEFAULT_BLOCK_MS = 60 * 1000  # 60秒
     TEMPORARY_RESERVATION_OVERHEAD_BYTES = 1024
 
+    def __setattr__(self, name, value):
+        if (name in ("metrics_level",)
+                and self.__dict__.get("_health_config_frozen", False)
+                and name in self.__dict__
+                and self.__dict__[name] != value):
+            raise AttributeError(
+                "{} is immutable after validation".format(name))
+        object.__setattr__(self, name, value)
+
     def __init__(self, endpoint: str, region: str, access_key: str, access_secret: str, token: Optional[str] = None,
-                 api_key: Optional[str] = None):
+                 api_key: Optional[str] = None, metrics_level: str = "off"):
         """初始化生产者配置"""
+        self._health_config_frozen = False
         self.total_size_in_bytes = self.DEFAULT_TOTAL_SIZE_IN_BYTES
         self.max_thread_count = self.MAX_THREAD_COUNT
         self.max_batch_size_bytes = self.DEFAULT_MAX_BATCH_SIZE
@@ -317,6 +327,11 @@ class ProducerConfig:
         self.circuit_breaker = CircuitBreakerConfig()
         self.memory_limiter = None
         self.client_config = ClientConfig(endpoint, region, access_key, access_secret, token, api_key)
+        # Metrics level is the only published health switch.  Latency
+        # histograms are selected automatically by the Detailed level.
+        from volcengine.tls.stats import constants as _stats_const
+        self.metrics_level = _stats_const.normalize_metrics_level(metrics_level)
+        self._health_config_frozen = True
 
     def __str__(self) -> str:
         return (f"ProducerConfig(total_size_in_bytes={self.total_size_in_bytes}, "
@@ -386,6 +401,10 @@ class ProducerConfig:
         if self.circuit_breaker is None:
             self.circuit_breaker = CircuitBreakerConfig()
 
+        # Normalize the sole published health switch.
+        from volcengine.tls.stats import constants as _stats_const
+        self.metrics_level = _stats_const.normalize_metrics_level(self.metrics_level)
+
         # 验证客户端配置
         if (not self.client_config or
                 not self.client_config.endpoint or
@@ -393,6 +412,7 @@ class ProducerConfig:
                 not (self.client_config.api_key or
                      (self.client_config.access_key_id and self.client_config.access_key_secret))):
             raise TLSException(error_code="InvalidArgument", error_message=str(self.client_config))
+        self._health_config_frozen = True
 
     def set_total_size_in_bytes(self, total_size_in_bytes: int) -> None:
         if total_size_in_bytes <= 0:
@@ -518,8 +538,105 @@ class BatchLog:
         self.base_retry_backoff_ms = 1000  # 1秒
         self.base_increase_backoff_ms = 1000  # 1秒
         self.reserved_bytes = 0
+        # Collection cohort is fixed at admission.  A batch that survives an
+        # Off/On boundary must never contribute terminal work to the new
+        # generation.  The detailed timing cohort is fixed separately at first
+        # ready/enqueue, rather than at construction.
+        stats_state = getattr(producer_config, "stats_state", None)
+        key_generation = getattr(batch_key, "collection_generation", None)
+        self.stats_generation = int(key_generation or 0)
+        # An explicit zero belongs to an Off admission and must stay zero.
+        # Only direct internal construction without an admission token starts
+        # its cohort here, at batch creation.
+        if key_generation is None and stats_state is not None:
+            try:
+                self.stats_generation = int(stats_state.token() or 0)
+            except Exception:
+                self.stats_generation = 0
+        self.detail_generation = 0
+        self.memory_phase = "aggregate"
         self.circuit_permit_count = 0
+        # Once-only terminal settlement guard for health stats.
+        self._terminal_settled = False
+        self._stats_ingress_released = False
+        self._terminal_lock = threading.Lock()
+        # Batch timing facts are owned by the batch, so retry tasks cannot
+        # reset the queue-delay or delivery once gates.
+        self._timing_lock = threading.Lock()
+        self._latency_ready = False
+        self._ready_mono_ns = None
+        self._queue_delay_recorded = False
+        # Set when the first transport attempt starts.  Delivery latency is
+        # measured from that boundary, rather than from batch admission.
+        self.first_send_attempt_mono_ns = None
         self.LOG = get_logger(__name__)
+
+    def mark_latency_ready(self, stats_state):
+        """Freeze the batch timing cohort at its first ready/enqueue boundary.
+
+        An Off/Core batch still records that the boundary occurred, preventing
+        a later retry under Detailed from inventing a timing sample.  Detailed
+        timing is eligible only when the batch admission collection is still
+        current at that boundary.
+        """
+        with self._timing_lock:
+            if self._latency_ready:
+                return
+            self._latency_ready = True
+            if stats_state is None or self.stats_generation == 0:
+                return
+            try:
+                if stats_state.token() != self.stats_generation:
+                    return
+                detail_token = int(stats_state.detail_token() or 0)
+                if detail_token == 0:
+                    return
+                self.detail_generation = detail_token
+                self._ready_mono_ns = stats_state._clock.monotonic_ns()
+            except Exception:
+                # Timing metadata is observational only.
+                return
+
+    def take_queue_delay_ready_ns(self):
+        """Return the fixed ready instant for the first send attempt only."""
+        with self._timing_lock:
+            if (self._queue_delay_recorded or self.attempt_count != 0 or
+                    self._ready_mono_ns is None):
+                return None
+            self._queue_delay_recorded = True
+            return self._ready_mono_ns
+
+    def mark_first_send_attempt(self, attempt_mono_ns):
+        with self._timing_lock:
+            if self.first_send_attempt_mono_ns is None:
+                self.first_send_attempt_mono_ns = attempt_mono_ns
+
+    def group_count(self) -> int:
+        """Number of log groups in this batch (for stats accounting)."""
+        try:
+            return len(self.log_group_list.log_groups)  # pylint: disable=no-member
+        except Exception:
+            return 0
+
+    def take_terminal_once(self) -> bool:
+        """Return True exactly once, so terminal stats settle a batch once."""
+        with self._terminal_lock:
+            if self._terminal_settled:
+                return False
+            self._terminal_settled = True
+            return True
+
+    def terminal_is_settled(self) -> bool:
+        with self._terminal_lock:
+            return self._terminal_settled
+
+    def take_stats_ingress_release_once(self) -> bool:
+        """Return True once when a batch first leaves logical ingress."""
+        with self._terminal_lock:
+            if self._stats_ingress_released:
+                return False
+            self._stats_ingress_released = True
+            return True
 
     def try_add(self, log_group: LogGroup, batch_size: int, call_back: Optional[CallBack],
                 log_count: Optional[int] = None, earliest_log_time: Optional[int] = None,
@@ -550,7 +667,9 @@ class BatchLog:
         limiter = getattr(self.producer_config, "memory_limiter", None)
         acquired = False
         if limiter is not None:
-            acquired = limiter.acquire_payload(batch_size, self.producer_config.max_block_ms)
+            acquired = limiter.acquire_payload(
+                batch_size, self.producer_config.max_block_ms,
+                generation=self.stats_generation, phase=self.memory_phase)
             if not acquired:
                 raise TLSException(error_code="MemoryLimitExceeded",
                                    error_message="failed to acquire producer payload memory")
@@ -573,7 +692,9 @@ class BatchLog:
                     self.latest_log_time = latest_log_time
         except Exception:
             if acquired:
-                limiter.release_payload(batch_size)
+                limiter.release_payload(
+                    batch_size, generation=self.stats_generation,
+                    phase=self.memory_phase)
             raise
 
         return True
@@ -637,11 +758,14 @@ class BatchLog:
     class BatchKey:
         """批次键，用于标识唯一批次"""
 
-        def __init__(self, shard_hash: str, topic_id: str, source: str, file_name: str):
+        def __init__(self, shard_hash: str, topic_id: str, source: str,
+                     file_name: str, collection_generation: Optional[int] = None):
             self.shard_hash = shard_hash
             self.topic_id = topic_id
             self.source = source
             self.file_name = file_name
+            self.collection_generation = (None if collection_generation is None
+                                          else int(collection_generation))
 
         def __eq__(self, other) -> bool:
             if not isinstance(other, BatchLog.BatchKey):
@@ -649,11 +773,14 @@ class BatchLog:
             return (self.shard_hash == other.shard_hash and
                     self.topic_id == other.topic_id and
                     self.source == other.source and
-                    self.file_name == other.file_name)
+                    self.file_name == other.file_name and
+                    self.collection_generation == other.collection_generation)
 
         def __hash__(self) -> int:
-            return hash((self.shard_hash, self.topic_id, self.source, self.file_name))
+            return hash((self.shard_hash, self.topic_id, self.source,
+                         self.file_name, self.collection_generation))
 
         def __str__(self) -> str:
             return (f"BatchKey{{shardHash={self.shard_hash}, topicId={self.topic_id}, "
-                    f"source={self.source}, fileName={self.file_name}}}")
+                    f"source={self.source}, fileName={self.file_name}, "
+                    f"collectionGeneration={self.collection_generation}}}")

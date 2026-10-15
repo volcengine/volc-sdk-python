@@ -5,6 +5,7 @@ import string
 import time
 import unittest
 import uuid
+from typing import List
 
 from volcengine.tls import tls_requests
 from volcengine.tls.consumer.consumer import LogProcessor, TLSConsumer
@@ -31,7 +32,7 @@ class TestLogProcessor(LogProcessor):
 
 
 class MyCallBack(CallBack):
-    def __init__(self, logs: list[PutLogsV2LogContent]):
+    def __init__(self, logs: List[PutLogsV2LogContent]):
         self.logs = logs
 
     def on_complete(self, result: 'Result'):

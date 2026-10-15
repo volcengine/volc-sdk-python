@@ -30,16 +30,25 @@ class Mover(threading.Thread):
         self.handle_timeout()
 
         # 处理剩余的重试批次
-        self.handle_remaining_batch()
-        remaining_retry_batches = self.retry_queue.get_retry_batch(True)
-        for log in remaining_retry_batches:
-            self.executor_service.submit(
-                SendBatchTask(
-                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue,
-                    self.failure_controller
-                ).run
-            )
+        self.drain_remaining()
+
         self.LOG.info(f"Mover {self.name} has stopped")
+
+    def drain_remaining(self) -> None:
+        """Submit every accepted ingress/retry batch exactly once."""
+        first_error = None
+        try:
+            self.handle_remaining_batch()
+        except Exception as e:
+            first_error = e
+        remaining_retry_batches = self.retry_queue.get_retry_batch(True)
+        try:
+            self._submit_all(remaining_retry_batches)
+        except Exception as e:
+            if first_error is None:
+                first_error = e
+        if first_error is not None:
+            raise first_error
 
     def handle_timeout(self) -> None:
         """处理超时批次的循环"""
@@ -56,13 +65,7 @@ class Mover(threading.Thread):
     def handle_retry_batch(self) -> None:
         """处理需要重试的批次"""
         batch_logs = self.retry_queue.get_retry_batch(False)
-        for log in batch_logs:
-            self.executor_service.submit(
-                SendBatchTask(
-                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue,
-                    self.failure_controller
-                ).run
-            )
+        self._submit_all(batch_logs)
 
     def handle_timeout_batch(self) -> int:
         """处理超时的批次并返回剩余时间"""
@@ -90,13 +93,7 @@ class Mover(threading.Thread):
                         remains = min(remains, cur_remains)
 
         # 提交所有超时批次的发送任务
-        for log in batch_logs:
-            self.executor_service.submit(
-                SendBatchTask(
-                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue,
-                    self.failure_controller
-                ).run
-            )
+        self._submit_all(batch_logs)
 
         return remains
 
@@ -116,13 +113,22 @@ class Mover(threading.Thread):
                     batch_manager.remove_batch(batch_logs)
 
         # 提交所有剩余批次的发送任务
+        self._submit_all(batch_logs)
+
+    def _submit_all(self, batch_logs) -> None:
+        """Settle every removed batch even if one executor submission fails."""
+        first_error = None
         for log in batch_logs:
-            self.executor_service.submit(
+            try:
                 SendBatchTask(
-                    log, self.producer_config, self.memory_lock, self.client, self.retry_queue,
-                    self.failure_controller
-                ).run
-            )
+                    log, self.producer_config, self.memory_lock, self.client,
+                    self.retry_queue, self.failure_controller
+                ).submit(self.executor_service)
+            except Exception as e:
+                if first_error is None:
+                    first_error = e
+        if first_error is not None:
+            raise first_error
 
     def close(self) -> None:
         self.LOG.info(f"Mover {self.name} closed")
