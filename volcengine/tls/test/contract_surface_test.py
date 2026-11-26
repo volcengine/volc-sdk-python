@@ -1,3 +1,4 @@
+import json
 import unittest
 from urllib.parse import parse_qs, urlparse
 from unittest.mock import patch
@@ -38,6 +39,7 @@ from volcengine.tls.tls_requests import (
 )
 from volcengine.tls.data import ImportSourceInfo, RequestCycle, TargetInfo
 from volcengine.tls.log_pb2 import LogGroupList
+from volcengine.tls.tls_exception import TLSException
 
 
 def _varint(value):
@@ -213,6 +215,36 @@ class ContractSurfaceTest(unittest.TestCase):
         log_groups = getattr(original.logs, "log_groups")
         self.assertEqual("source", log_groups[0].source)
         self.assertEqual("value", log_groups[0].logs[0].contents[0].value)
+
+    def test_consume_logs_processor_id_is_optional_json_body_field(self):
+        service = TLSService("http://example.test", "ak", "sk", "cn-test")
+        response = self._protobuf_response(b"", {"X-Tls-Cursor": "next", "X-Tls-Count": "0"})
+        for processor_id in (None, "", "processor-id"):
+            with self.subTest(processor_id=processor_id):
+                with patch.object(service.session, "request", return_value=response) as transport:
+                    service.consume_logs(ConsumeLogsRequest(
+                        "topic", 0, "cursor", consumer_group_name="group", consumer_name="consumer",
+                        processor_id=processor_id))
+                method, url = transport.call_args[0]
+                self.assertEqual(method, "GET")
+                self.assertEqual(urlparse(url).path, "/ConsumeLogs")
+                self.assertEqual(parse_qs(urlparse(url).query), {"TopicId": ["topic"], "ShardId": ["0"]})
+                expected_body = {"Cursor": "cursor"}
+                if processor_id:
+                    expected_body["ProcessorId"] = processor_id
+                self.assertEqual(json.loads(transport.call_args[1]["data"]), expected_body)
+                self.assertEqual(transport.call_args[1]["headers"]["ConsumerGroupName"], "group")
+                self.assertEqual(transport.call_args[1]["headers"]["ConsumerName"], "consumer")
+
+    def test_consume_logs_rejects_processor_id_with_original(self):
+        service = TLSService("http://example.test", "ak", "sk", "cn-test")
+        request = ConsumeLogsRequest("topic", 0, "cursor", original=True, processor_id="processor-id")
+        with patch.object(service.session, "request") as transport:
+            with self.assertRaises(TLSException) as raised:
+                service.consume_logs(request)
+        self.assertEqual(raised.exception.error_code, "InvalidArgument")
+        self.assertIn("ProcessorId", raised.exception.error_message)
+        transport.assert_not_called()
 
     def test_describe_session_answer_uses_streaming_for_sse(self):
         service = TLSService("http://example.test", "ak", "sk", "cn-test")

@@ -157,6 +157,20 @@ def _config(level="core", stop_timeout=1):
 
 
 class ConsumerLifecycleTest(unittest.TestCase):
+    def test_consumer_forwards_processor_id_to_fetch(self):
+        service = _ControlledService()
+        config = ConsumerConfig("project", "group", ["topic"], "consumer", processor_id="processor-id")
+        worker = LogConsumer(TLSConsumer(config, service, _Processor()), ConsumeShard("topic", 0))
+        worker.next_checkpoint = "cursor"
+
+        with mock.patch.object(service, "consume_logs", wraps=service.consume_logs) as consume:
+            worker.fetch_data()
+
+        request = consume.call_args[0][0]
+        self.assertEqual(request.processor_id, "processor-id")
+        self.assertFalse(request.original)
+        self.assertEqual(worker.next_checkpoint, "cursor-next")
+
     def test_role_failure_stops_sibling_roles_and_propagates(self):
         class _FailingConsumer(TLSConsumer):
             def run(self):

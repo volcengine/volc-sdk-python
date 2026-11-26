@@ -683,6 +683,9 @@ class TLSService(Service):
     def consume_logs(self, consume_logs_request: ConsumeLogsRequest) -> ConsumeLogsResponse:
         if consume_logs_request.check_validation() is False:
             raise TLSException(error_code="InvalidArgument", error_message="Invalid request, please check it")
+        if consume_logs_request.original and consume_logs_request.processor_id:
+            raise TLSException(error_code="InvalidArgument",
+                               error_message="ProcessorId requires non-original consumption.")
         api_input = consume_logs_request.get_api_input()
         api = CONSUME_ORIGIN_LOGS if consume_logs_request.original else CONSUME_LOGS
         response = self.__request(api=api, params=api_input[PARAMS], body=api_input[BODY],

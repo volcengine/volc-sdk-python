@@ -36,7 +36,7 @@ class ConsumerConfig:
                  consume_from: str = "begin", heartbeat_interval_in_second: int = 20,
                  data_fetch_interval_in_millisecond: int = 200, flush_checkpoint_interval_in_second: int = 5,
                  max_fetch_log_group_count: int = 100, ordered_consume: bool = False, stop_timeout: int = 15,
-                 compression: str = LZ4, metrics_level: str = "off"):
+                 compression: str = LZ4, metrics_level: str = "off", processor_id: str = None):
         self._health_config_frozen = False
         self.project_id = project_id
         self.consumer_group_name = consumer_group_name
@@ -52,6 +52,7 @@ class ConsumerConfig:
 
         self.stop_timeout = stop_timeout
         self.compression = compression
+        self.processor_id = processor_id
         # The health tail is intentionally a single public switch. Detailed
         # mode selects fixed histogram bounds internally.
         from volcengine.tls.stats import constants as _stats_const

@@ -1094,7 +1094,7 @@ class ConsumeLogsRequest(TLSRequest):
     def __init__(self, topic_id: str, shard_id: int, cursor: str, end_cursor: str = None,
                  log_group_count: int = None, compression: str = None,
                  consumer_group_name: str = None, consumer_name: str = None,
-                 offset: int = None, original: bool = False):
+                 offset: int = None, original: bool = False, processor_id: str = None):
         """
         :param topic_id: 日志主题id
         :type topic_id:str
@@ -1114,6 +1114,7 @@ class ConsumeLogsRequest(TLSRequest):
         :type consumer_name: str
         :param offset: 消费起始的位点偏移量
         :type offset: int
+        :param processor_id: 可选的消费处理器 ID，用于普通消费
         """
         self.topic_id = topic_id
         self.shard_id = shard_id
@@ -1125,6 +1126,7 @@ class ConsumeLogsRequest(TLSRequest):
         self.consumer_name = consumer_name
         self.offset = offset
         self.original = original
+        self.processor_id = processor_id
 
     def set_original(self, original: bool):
         self.original = original
@@ -1170,6 +1172,8 @@ class ConsumeLogsRequest(TLSRequest):
             request_headers[CONSUMER_NAME] = self.consumer_name
         if self.offset is not None:
             body[OFFSET] = self.offset
+        if self.processor_id:
+            body[PROCESSOR_ID_HUMP] = self.processor_id
 
         return {PARAMS: params, BODY: body, REQUEST_HEADERS: request_headers}
 

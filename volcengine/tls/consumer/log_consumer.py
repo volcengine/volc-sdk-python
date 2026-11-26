@@ -183,7 +183,8 @@ class LogConsumer:
                                  log_group_count=self.consumer_config.max_fetch_log_group_count,
                                  compression=self.consumer_config.compression,
                                  consumer_group_name=self.consumer_config.consumer_group_name,
-                                 consumer_name=self.consumer_config.consumer_name)
+                                 consumer_name=self.consumer_config.consumer_name,
+                                 processor_id=self.consumer_config.processor_id)
         state = self.stats_state
         lat = self._latency()
         generation = self._generation()
