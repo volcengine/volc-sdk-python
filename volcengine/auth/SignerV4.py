@@ -122,10 +122,11 @@ class SignerV4(object):
         result.xAlgorithm = md.algorithm
         if param.is_sign_url:
             result.xSignedQueries = request.query['X-SignedQueries']
+        else:
+            result.xContextSha256 = request.headers['X-Content-Sha256']
         result.xSignedHeaders = md.signed_headers
         result.xCredential = credentials.ak + '/' + md.credential_scope
         result.xSignature = sign
-        result.xContextSha256 = request.headers['X-Content-Sha256']
         result.authorization = result.xAlgorithm + " Credential=" + result.xCredential + ", SignedHeaders=" + md.signed_headers + ", Signature=" + result.xSignature
         result.xSecurityToken = credentials.session_token
 
